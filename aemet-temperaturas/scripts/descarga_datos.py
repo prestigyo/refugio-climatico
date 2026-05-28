@@ -33,7 +33,7 @@ if not API_KEY:
     sys.exit(1)
 
 BASE = "https://opendata.aemet.es/opendata/api"
-DIAS_RETROCESO = 20
+DIAS_RETROCESO = 14
 
 ROOT = Path(__file__).resolve().parent.parent
 DATOS_DIR = ROOT / "datos"

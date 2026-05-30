@@ -1,0 +1,62 @@
+name: Backfill histórico AEMET
+
+on:
+  workflow_dispatch:
+    inputs:
+      anios:
+        description: "Años hacia atrás a descargar"
+        required: true
+        default: "1"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r aemet-temperaturas/requirements.txt
+
+      - name: Configurar git
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Backfill año por año (commit incremental)
+        working-directory: aemet-temperaturas
+        env:
+          AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
+        run: |
+          set -e
+          ANIOS=${{ inputs.anios }}
+          AÑO_BASE=$(date -u +%Y)
+          for i in $(seq 0 $((ANIOS - 1))); do
+            AÑO=$((AÑO_BASE - i))
+            echo "===== Año $AÑO ====="
+            python scripts/backfill_historico.py \
+              --desde "$AÑO-01-01" \
+              --hasta "$AÑO-12-31"
+            # commit parcial para no perder progreso si algo falla luego
+            cd ..
+            git add aemet-temperaturas/datos/
+            if ! git diff --cached --quiet; then
+              git commit -m "Backfill año $AÑO"
+              git push
+            else
+              echo "Sin cambios en $AÑO"
+            fi
+            cd aemet-temperaturas
+          done

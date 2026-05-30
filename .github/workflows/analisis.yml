@@ -3,7 +3,7 @@ name: Análisis refugios climáticos
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 6 1 * *"   # día 1 de cada mes a las 06:00 UTC
+    - cron: "0 6 1 * *"
 
 permissions:
   contents: write
@@ -22,10 +22,10 @@ jobs:
 
       - run: pip install -r aemet-temperaturas/requirements.txt
 
-       - name: Ejecutar análisis diurno (Tmax)
+      - name: Ejecutar análisis diurno (Tmax)
         working-directory: aemet-temperaturas
         run: python scripts/analisis_refugios.py
-      
+
       - name: Ejecutar análisis nocturno (Tmin)
         working-directory: aemet-temperaturas
         run: python scripts/analisis_refugios_nocturnos.py

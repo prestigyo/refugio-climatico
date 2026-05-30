@@ -245,7 +245,7 @@ def analizar_estacion(query: str) -> int:
     fig, ax = plt.subplots(figsize=(11, 6))
     datos_box = [verano[verano["anio"] == a]["tmin"].dropna().values
                  for a in anual["anio"]]
-    bp = ax.boxplot(datos_box, labels=anual["anio"].astype(str), patch_artist=True)
+    bp = ax.boxplot(datos_box, tick_labels=anual["anio"].astype(str), patch_artist=True)
     for patch in bp["boxes"]:
         patch.set_facecolor("#a8c5e6")
         patch.set_edgecolor("navy")
@@ -285,8 +285,8 @@ def analizar_estacion(query: str) -> int:
     for _, r in anual.iterrows():
         resumen.append(
             f"{int(r['anio']):>4}  {r['tmin_media']:>8.2f}  "
-            f"{r['tmax_media']:>8.2f}  {r['n_trop']:>6d}  "
-            f"{r['n_ecua']:>7d}  {r['n_dias']:>6d}"
+            f"{r['tmax_media']:>8.2f}  {int(r['n_trop']):>6d}  "
+            f"{int(r['n_ecua']):>7d}  {int(r['n_dias']):>6d}"
         )
 
     texto = "\n".join(resumen)

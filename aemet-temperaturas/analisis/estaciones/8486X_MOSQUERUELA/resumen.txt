@@ -1,0 +1,25 @@
+ESTACIÓN: 8486X — MOSQUERUELA
+Provincia: TERUEL    Altitud: 1515 m
+Coordenadas: 402145N 002716W
+
+Periodo analizado: 2017 → 2025
+Veranos completos: 9
+
+TENDENCIAS DE VERANO (junio-agosto)
+----------------------------------------
+  Tmin: +0.126 °C/año (+1.00 °C en el periodo)
+  Tmax: +0.174 °C/año (+1.39 °C en el periodo)
+  Noches tropicales: +0.07 /año
+
+TABLA AÑO POR AÑO
+------------------------------------------------------------
+ Año  Tmin med  Tmax med  N.trop  N.ecuat  N días
+2017     13.47     25.29       0        0      92
+2018     12.42     23.75       0        0      85
+2019     12.84     24.80       1        0      89
+2020     12.42     24.45       0        0      92
+2021     12.13     23.73       3        0      92
+2022     14.25     26.60       0        0      91
+2023     13.47     25.13       3        0      92
+2024     13.23     24.89       0        0      92
+2025     13.96     26.35       0        0      92

@@ -35,28 +35,27 @@ jobs:
           git config --global user.name  "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Backfill año por año (commit incremental)
+      - name: Backfill anio por anio (commit incremental)
         working-directory: aemet-temperaturas
         env:
           AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
         run: |
           set -e
           ANIOS=${{ inputs.anios }}
-          AÑO_BASE=$(date -u +%Y)
+          ANIO_BASE=$(date -u +%Y)
           for i in $(seq 0 $((ANIOS - 1))); do
-            AÑO=$((AÑO_BASE - i))
-            echo "===== Año $AÑO ====="
+            ANIO=$((ANIO_BASE - i))
+            echo "===== Anio $ANIO ====="
             python scripts/backfill_historico.py \
-              --desde "$AÑO-01-01" \
-              --hasta "$AÑO-12-31"
-            # commit parcial para no perder progreso si algo falla luego
+              --desde "$ANIO-01-01" \
+              --hasta "$ANIO-12-31"
             cd ..
             git add aemet-temperaturas/datos/
             if ! git diff --cached --quiet; then
-              git commit -m "Backfill año $AÑO"
+              git commit -m "Backfill anio $ANIO"
               git push
             else
-              echo "Sin cambios en $AÑO"
+              echo "Sin cambios en $ANIO"
             fi
             cd aemet-temperaturas
           done

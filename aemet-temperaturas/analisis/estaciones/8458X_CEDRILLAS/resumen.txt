@@ -1,0 +1,25 @@
+ESTACIÓN: 8458X — CEDRILLAS
+Provincia: TERUEL    Altitud: 1380 m
+Coordenadas: 402550N 005058W
+
+Periodo analizado: 2017 → 2025
+Veranos completos: 9
+
+TENDENCIAS DE VERANO (junio-agosto)
+----------------------------------------
+  Tmin: +0.087 °C/año (+0.69 °C en el periodo)
+  Tmax: +0.219 °C/año (+1.75 °C en el periodo)
+  Noches tropicales: +0.00 /año
+
+TABLA AÑO POR AÑO
+------------------------------------------------------------
+ Año  Tmin med  Tmax med  N.trop  N.ecuat  N días
+2017     12.12     26.46       0        0      92
+2018     10.77     24.99       0        0      92
+2019     11.33     26.44       0        0      92
+2020     11.12     26.41       0        0      92
+2021     11.11     25.30       0        0      92
+2022     12.54     28.26       0        0      92
+2023     12.35     26.57       0        0      92
+2024     11.59     27.15       0        0      92
+2025     11.93     27.58       0        0      92

@@ -139,13 +139,14 @@
   .share a,.share button{flex:1;min-width:96px;text-align:center;text-decoration:none;border:1px solid var(--line);
     background:var(--bg);color:var(--paper);font-size:13px;font-weight:600;padding:11px 8px;border-radius:11px;cursor:pointer;transition:.15s}
   .share a:hover,.share button:hover{border-color:var(--teja);color:var(--teja2)}
-  .lead{margin-top:20px;border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:18px 16px}
-  .lead-h{font-family:var(--fd);font-weight:600;font-size:16.5px;margin-bottom:12px;color:var(--paper);line-height:1.25}
+  .capture{margin-top:20px;border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:18px 16px}
+  .lead-h{font-family:var(--fd);font-weight:600;font-size:16.5px;margin-bottom:8px;color:var(--paper);line-height:1.25}
+  .lead-sub{font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5}
   .leadform{display:flex;flex-direction:column;gap:9px}
   .leadform input[type=email],.leadform input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--paper);font-size:14.5px;padding:11px 12px;border-radius:10px}
   .leadform input:focus{outline:none;border-color:var(--teja)}
-  .lead .lrgpd{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0;margin:2px 0;font-weight:400}
-  .lead .lrgpd input{margin-top:3px;width:auto}
+  .capture .lrgpd{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0;margin:2px 0;font-weight:400}
+  .capture .lrgpd input{margin-top:3px;width:auto}
   .leadform button{background:var(--teja);border:none;color:#1a1209;font-weight:700;font-size:15px;padding:12px;border-radius:10px;cursor:pointer;transition:.15s}
   .leadform button:hover{background:var(--teja2)}
   .bridge{display:inline-block;margin-top:12px;color:var(--teal);font-size:13.5px;text-decoration:none}
@@ -388,7 +389,22 @@ function render(id,distKm){
   const distTxt=distKm?`<div class="res-meta">📍 Estación más cercana a ${distKm.toFixed(0)} km de ti</div>`:"";
   const url="https://prestigyo.github.io/refugio-climatico/";
   const shareTxt=`En ${e.loc} (${e.prov}) se sufren ${txt} noches tropicales al año — puesto ${e.rank} de ${T} de España. ¿Y en tu pueblo?`;
-  const leadHead = e.nt>=30 ? "¿Y si pudieras dormir fresco? Te ayudamos a encontrar tu refugio." : "¿Quieres el informe de tu zona y aviso si entra en ola de calor?";
+  const modo = e.nt < 10 ? "propietario" : "comprador";
+  let leadHead, leadSub, opts, bridgeTxt, zonaPh;
+  if(modo==="propietario"){
+    leadHead = "Tienes una casa donde se duerme fresco. Hoy eso es un tesoro.";
+    leadSub  = "Cada vez más gente huye del calor. Si te planteas venderla, te ponemos en contacto con compradores que buscan exactamente esto.";
+    opts = '<option value="tasacion">Quiero una tasación gratuita</option><option value="vender">Me planteo vender</option><option value="info">Solo información de mi zona</option><option value="agente">Soy agente inmobiliario</option>';
+    bridgeTxt = "Vendemos sin pasar por Idealista — cómo trabajamos →";
+    zonaPh = "¿Dónde está tu casa? (opcional)";
+  } else {
+    leadHead = e.nt>=30 ? "¿Y si pudieras dormir fresco? Te ayudamos a encontrar tu refugio." : "¿Quieres el informe de tu zona y aviso si entra en ola de calor?";
+    leadSub  = "";
+    opts = '<option value="info">Quiero el informe + alertas de calor</option><option value="comprar">Me interesa comprar en un refugio</option><option value="alquilar">Me interesa alquilar o veranear</option><option value="agente">Soy agente inmobiliario</option>';
+    bridgeTxt = "O conoce La Virgen de la Vega, un refugio a 75 min de Valencia →";
+    zonaPh = "¿En qué zona te gustaría? (opcional)";
+  }
+  const leadSubHTML = leadSub ? `<p class="lead-sub">${leadSub}</p>` : "";
   $("#res").innerHTML=`
     <div class="res-loc">${e.loc}</div>
     <div class="res-meta">${e.prov} · ${e.alt.toLocaleString("es")} m de altitud</div>${distTxt}
@@ -406,21 +422,17 @@ function render(id,distKm){
       <a href="https://wa.me/?text=${encodeURIComponent(shareTxt+" "+url)}" target="_blank" rel="noopener">WhatsApp</a>
       <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTxt)}&url=${encodeURIComponent(url)}" target="_blank" rel="noopener">X / Twitter</a>
       <button type="button" id="copy">Copiar enlace</button></div>
-    <div class="lead">
+    <div class="capture">
       <div class="lead-h">${leadHead}</div>
+      ${leadSubHTML}
       <form id="leadf" class="leadform">
         <input type="email" id="lemail" placeholder="Tu email" required>
-        <select id="lwhat">
-          <option value="info">Quiero el informe + alertas de calor</option>
-          <option value="comprar">Me interesa comprar en un refugio</option>
-          <option value="alquilar">Me interesa alquilar o veranear</option>
-          <option value="agente">Soy agente inmobiliario</option>
-        </select>
-        <input type="text" id="lzona" placeholder="¿En qué zona te gustaría? (opcional)">
+        <select id="lwhat">${opts}</select>
+        <input type="text" id="lzona" placeholder="${zonaPh}">
         <label class="lrgpd"><input type="checkbox" id="lrgpd" required> Acepto que me contactéis sobre esto.</label>
         <button type="submit">Enviar</button>
       </form>
-      <a class="bridge" href="https://lavirgendelavega.es" target="_blank" rel="noopener">O conoce La Virgen de la Vega, un refugio a 75 min de Valencia →</a>
+      <a class="bridge" href="https://lavirgendelavega.es" target="_blank" rel="noopener">${bridgeTxt}</a>
     </div>`;
   $("#res").classList.add("show");
   $("#copy").addEventListener("click",()=>{navigator.clipboard?.writeText(shareTxt+" "+url);
@@ -429,7 +441,7 @@ function render(id,distKm){
   if(lf) lf.addEventListener("submit",ev=>{
     ev.preventDefault();
     const lead={timestamp:new Date().toISOString(),email:$("#lemail").value.trim(),
-      busca:$("#lwhat").value,zona_interes:$("#lzona").value.trim(),
+      modo:modo,busca:$("#lwhat").value,zona_interes:$("#lzona").value.trim(),
       estacion:e.loc,provincia:e.prov,noches_trop:e.nt,veredicto:etq,
       rgpd:$("#lrgpd").checked?"si":"",source:"refugio-climatico",user_agent:navigator.userAgent};
     const gracias=()=>{const h=document.querySelector("#res .lead-h");if(h)h.textContent="¡Gracias! Te escribimos pronto.";if(lf)lf.remove();};

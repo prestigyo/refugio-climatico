@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>El mapa del calor que no te deja dormir · Refugio Climático</title>
 <meta name="description" content="Reportaje con 10 veranos de datos de AEMET: dónde se duerme fresco en España y dónde se suda hasta el amanecer. Y la calculadora de tu pueblo.">
-<meta name="google-site-verification" content="C-tXc8Nw6mB4EBZAdx0sTx_oBjCl9m_uLAMeMTAe7x0" />
 <meta property="og:title" content="El mapa del calor que no te deja dormir">
 <meta property="og:description" content="848 estaciones, diez veranos de AEMET. ¿Cuántas noches tropicales aguanta tu pueblo?">
 <meta property="og:type" content="website">
@@ -71,11 +70,21 @@
   .pueblo.hot{border-color:#4a2a1d} .pueblo.hot .big{color:var(--rojo)}
   .vs-line{text-align:center;margin-top:18px;color:var(--muted);font-size:14px}
   .vs-line b{color:var(--teja2)}
+  .lt-note{display:inline-block;font-family:var(--fb);font-size:12px;font-weight:600;color:var(--muted);
+    text-transform:none;letter-spacing:0;margin-left:10px;vertical-align:middle;line-height:1.1}
+  .metodo{margin-top:30px;border-left:3px solid var(--teja);background:var(--bg2);
+    border-radius:0 12px 12px 0;padding:16px 18px}
+  .metodo h4{font:600 11px/1 var(--fb);letter-spacing:.12em;text-transform:uppercase;color:var(--teja);margin-bottom:8px}
+  .metodo p{color:var(--muted);font-size:14.5px;line-height:1.55}
+  .metodo b{color:var(--paper)}
 
   /* MAPA */
   #map{width:100%;height:auto;display:block;margin-top:26px;
     filter:drop-shadow(0 20px 60px rgba(0,0,0,.5))}
   #map circle{transition:opacity .5s}
+  .gifs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+  @media(max-width:640px){.gifs{grid-template-columns:1fr}}
+  .gif{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px}
   .legend{display:flex;align-items:center;gap:14px;margin-top:16px;font-size:12.5px;color:var(--muted);
     flex-wrap:wrap}
   .legend .bar{flex:1;min-width:160px;height:9px;border-radius:6px;
@@ -194,6 +203,10 @@
       </div>
     </div>
     <p class="vs-line" id="c-line">—</p>
+    <div class="metodo">
+      <h4>Por qué contamos noches, no medias</h4>
+      <p>La media de las mínimas engaña: unas noches frescas y otras tórridas pueden dar un promedio "agradable" que esconde las noches insoportables. Por eso aquí no usamos medias — medimos algo que no miente: <b>cuántas noches al año la temperatura no baja de 20&nbsp;°C</b>.</p>
+    </div>
   </div>
 </section>
 
@@ -216,9 +229,22 @@
   </div>
 </section>
 
+<section id="s-ola">
+  <div class="wrap reveal">
+    <div class="secnum">03 — La ola, día a día</div>
+    <h2 class="st">De día todos sufren. <em>De noche, no.</em></h2>
+    <p class="lead">Las máximas del día y las mínimas de la noche, día a día este verano. Cuando llega el calor, casi toda España arde de día — pero las sierras del interior se mantienen frescas al anochecer.</p>
+    <div class="gifs">
+      <img class="gif" src="ola-maximas.gif" alt="Mapa diario de temperaturas máximas de AEMET durante la ola de calor" loading="lazy">
+      <img class="gif" src="ola-minimas.gif" alt="Mapa diario de temperaturas mínimas de AEMET durante la ola de calor" loading="lazy">
+    </div>
+    <p class="barnote">Fuente: AEMET · un fotograma por día. Recarga la página para verlo desde el principio.</p>
+  </div>
+</section>
+
 <section>
   <div class="wrap reveal" id="rei">
-    <div class="secnum">03 — Refugios e infiernos</div>
+    <div class="secnum">04 — Refugios e infiernos</div>
     <h2 class="st">Dónde dormir tapado, <em>dónde no pegar ojo</em></h2>
     <p class="lead">En un extremo, las sierras del interior: prácticamente cero noches tropicales en diez veranos. En el otro, el litoral y las islas, donde casi todo el verano se suda.</p>
     <div class="bars">
@@ -231,7 +257,7 @@
 
 <section>
   <div class="wrap reveal">
-    <div class="secnum">04 — Búscalo tú</div>
+    <div class="secnum">05 — Búscalo tú</div>
     <h2 class="st">Y en tu pueblo, <em>¿se duerme tapado?</em></h2>
     <div class="calc">
       <p class="sub">Una <b>noche tropical</b> es cuando la temperatura no baja de 20&nbsp;°C. Elige tu provincia y la estación más cercana: te decimos cuántas sufre al año, de unas 92 noches de verano.</p>
@@ -287,12 +313,13 @@ const anios = Math.max(...TODAS.map(e=>e.anios));
 $("#anios").textContent = anios>=9 ? "diez veranos" : anios.toFixed(0)+" veranos";
 
 function ntTxt(nt){ return nt<1 ? "<1" : (nt<10 ? nt.toFixed(1) : Math.round(nt)); }
+function ntBig(nt){ return nt<1 ? '&lt;1<span class="lt-note">menos de 1</span>' : String(ntTxt(nt)); }
 
 const cr=M.contraste.refugio, ch=M.contraste.horno;
 $("#c-ref-loc").textContent=cr.loc; $("#c-ref-meta").textContent=`${cr.prov} · ${cr.alt.toLocaleString("es")} m`;
-$("#c-ref-nt").textContent=ntTxt(cr.nt);
+$("#c-ref-nt").innerHTML=ntBig(cr.nt);
 $("#c-hor-loc").textContent=ch.loc; $("#c-hor-meta").textContent=`${ch.prov} · ${ch.alt.toLocaleString("es")} m`;
-$("#c-hor-nt").textContent=ntTxt(ch.nt);
+$("#c-hor-nt").innerHTML=ntBig(ch.nt);
 $("#c-line").innerHTML = `Mismo país, misma semana de agosto: en <b>${cr.loc}</b> duermes con manta; en <b>${ch.loc}</b> sudas <b>${ntTxt(ch.nt)}</b> de cada 92 noches.`;
 const fo=M.foehn;
 $("#f-loc").textContent=fo.loc.split(",")[0]; $("#f-alt").textContent=fo.alt.toLocaleString("es")+" m"; $("#f-nt").textContent=ntTxt(fo.nt);
@@ -381,15 +408,9 @@ function bandas(nt){
 function render(id,distKm){
   const e=TODAS.find(x=>x.id===id);if(!e)return;
   const [etq,col,bg,cls]=bandas(e.nt);
-  const pctMejor=Math.round((T-e.rank)/(T-1)*100);
   const txt=e.nt<1?"menos de 1":(e.nt<10?e.nt.toFixed(1):Math.round(e.nt));
-  const bigT=e.nt<1?"&lt;1":txt;
+  const bigT=e.nt<1?'&lt;1<span class="lt-note">menos de 1</span>':txt;
   const pos=Math.min(100,e.nt/90*100);
-  let cmp;const v=M.valencia;
-  if(v&&e.nt>=1&&v.nt/e.nt>=2) cmp=`Por cada noche tropical aquí, <b>${v.loc}</b> sufre <b>${Math.round(v.nt/e.nt)}</b>.`;
-  else if(e.nt<1) cmp=`Prácticamente <b>cero</b> noches tropicales: de los mejores sitios de España para dormir en verano.`;
-  else if(pctMejor>=50) cmp=`Se duerme mejor aquí que en el <b>${pctMejor}%</b> de las estaciones de España.`;
-  else cmp=`El <b>${100-pctMejor}%</b> de España duerme mejor que aquí: de los sitios donde peor se pasa la noche en verano.`;
   const distTxt=distKm?`<div class="res-meta">📍 Estación más cercana a ${distKm.toFixed(0)} km de ti</div>`:"";
   const url="https://prestigyo.github.io/refugio-climatico/";
   const shareTxt=`En ${e.loc} (${e.prov}) se sufren ${txt} noches tropicales al año — puesto ${e.rank} de ${T} de España. ¿Y en tu pueblo?`;
@@ -427,7 +448,6 @@ function render(id,distKm){
       <div class="fact"><b>${e.rank} / ${T}</b><span>puesto en España (1 = mejor refugio)</span></div>
       <div class="fact"><b>${e.ne<1?"<1":Math.round(e.ne)}</b><span>noches ecuatoriales/año (&gt;25&nbsp;°C)</span></div>
     </div>
-    <div class="cmp">${cmp}</div>
     <div class="share">
       <a href="https://wa.me/?text=${encodeURIComponent(shareTxt+" "+url)}" target="_blank" rel="noopener">WhatsApp</a>
       <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTxt)}&url=${encodeURIComponent(url)}" target="_blank" rel="noopener">X / Twitter</a>
@@ -439,6 +459,7 @@ function render(id,distKm){
         <input type="email" id="lemail" placeholder="Tu email" required>
         <select id="lwhat">${opts}</select>
         <input type="text" id="lzona" placeholder="${zonaPh}">
+        <input type="text" id="lpet" placeholder="¿Qué dato te gustaría ver? (opcional)">
         <label class="lrgpd"><input type="checkbox" id="lrgpd" required> Acepto que me contactéis sobre esto.</label>
         <button type="submit">Enviar</button>
       </form>
@@ -451,7 +472,7 @@ function render(id,distKm){
   if(lf) lf.addEventListener("submit",ev=>{
     ev.preventDefault();
     const lead={timestamp:new Date().toISOString(),email:$("#lemail").value.trim(),
-      modo:modo,busca:$("#lwhat").value,zona_interes:$("#lzona").value.trim(),
+      modo:modo,busca:$("#lwhat").value,zona_interes:$("#lzona").value.trim(),peticion:$("#lpet").value.trim(),
       estacion:e.loc,provincia:e.prov,noches_trop:e.nt,veredicto:etq,
       rgpd:$("#lrgpd").checked?"si":"",source:"refugio-climatico",user_agent:navigator.userAgent};
     const gracias=()=>{const h=document.querySelector("#res .lead-h");if(h)h.textContent="¡Gracias! Te escribimos pronto.";if(lf)lf.remove();};

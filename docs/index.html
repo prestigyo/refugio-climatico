@@ -50,7 +50,9 @@
     border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:13px;color:var(--muted)}
   .chip b{color:var(--teal);font-family:var(--fm);font-weight:700}
   .cue{margin-top:auto;padding-top:40px;color:var(--muted);font-size:12px;letter-spacing:.14em;
-    text-transform:uppercase;display:flex;align-items:center;gap:10px}
+    text-transform:uppercase;display:flex;align-items:center;gap:10px;width:fit-content;
+    text-decoration:none;cursor:pointer;transition:color .2s}
+  .cue:hover{color:var(--teja2)}
   .cue span{display:inline-block;width:1px;height:34px;background:linear-gradient(var(--teja),transparent);
     animation:cue 1.8s ease-in-out infinite}
   @keyframes cue{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
@@ -165,11 +167,11 @@
     <p class="q">¿Cuántas <b>noches tropicales</b> tienes que aguantar tú?</p>
     <p class="intro"><span id="h-total" class="num">848</span> estaciones meteorológicas. Diez veranos de datos de AEMET. Una sola pregunta: en tu pueblo, ¿se duerme tapado o se suda hasta el amanecer?</p>
     <div class="chip">Noche tropical: <b>la mínima no baja de 20&nbsp;°C</b></div>
-    <div class="cue"><span></span> Desliza para descubrirlo</div>
+    <a class="cue" href="#s1"><span></span> Desliza o pulsa para descubrirlo</a>
   </div>
 </header>
 
-<section>
+<section id="s1">
   <div class="wrap reveal">
     <div class="secnum">01 — El contraste</div>
     <h2 class="st">Dos pueblos, <em>dos veranos distintos</em></h2>

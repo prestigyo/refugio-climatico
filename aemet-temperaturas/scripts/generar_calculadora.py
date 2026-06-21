@@ -34,6 +34,12 @@ def clave_orden(texto: str) -> str:
                    if unicodedata.category(c) != "Mn")
 
 
+def slug(texto: str) -> str:
+    """'A Coruña' -> 'a-coruna', 'Illes Balears' -> 'illes-balears'."""
+    base = clave_orden(texto)
+    return re.sub(r"[^a-z0-9]+", "-", base).strip("-")
+
+
 # ---------------------------------------------------------------------------
 # Rutas (este script vive en aemet-temperaturas/scripts/)
 # ---------------------------------------------------------------------------
@@ -470,6 +476,9 @@ TEMPLATE = r"""<!DOCTYPE html>
   .leadform button:hover{background:var(--teja2)}
   .bridge{display:inline-block;margin-top:12px;color:var(--teal);font-size:13.5px;text-decoration:none}
   .bridge:hover{color:#b5cfdb;text-decoration:underline}
+  .provnav{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:18px;font-size:14px}
+  .provnav a{color:var(--teal);text-decoration:none}
+  .provnav a:hover{color:var(--teja2);text-decoration:underline}
   footer{border-top:1px solid var(--line);padding:34px 0 60px;color:#82745d;font-size:12.5px;line-height:1.6}
   footer a{color:#9a8a6f}
   @media(max-width:430px){.vs{grid-template-columns:1fr}}
@@ -579,6 +588,15 @@ TEMPLATE = r"""<!DOCTYPE html>
       </div>
       <div id="res" aria-live="polite"></div>
     </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap reveal">
+    <div class="secnum">Explora por provincia</div>
+    <h2 class="st">Las noches tropicales, <em>provincia a provincia</em></h2>
+    <p class="lead">Mira cuántas noches tropicales sufre cada pueblo de tu provincia, de la más fresca a la más calurosa.</p>
+    <nav class="provnav">__PROV_NAV__</nav>
   </div>
 </section>
 
@@ -798,29 +816,204 @@ document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 """
 
 
+# ---------------------------------------------------------------------------
+# Capa 3 SEO: una página por provincia, con los datos en HTML (indexable)
+# ---------------------------------------------------------------------------
+PAGINA_PROVINCIA = r"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__CANONICAL__">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__OGTITLE__">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__CANONICAL__">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2288%22>🌙</text></svg>">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--rojo:#cf6b54;--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--fm:"JetBrains Mono",monospace}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.6;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:min(92vw,920px);margin:0 auto;padding:0 22px}
+ a{color:var(--teal);text-decoration:none}
+ a:hover{text-decoration:underline}
+ header.h{padding:46px 0 12px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:18px 0 8px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(30px,6vw,48px);line-height:1.05;letter-spacing:-.01em}
+ h1 em{font-style:italic;color:var(--teja2)}
+ .intro{color:var(--muted);font-size:clamp(15px,2.4vw,18px);margin:18px 0 0;max-width:720px}
+ .intro b{color:var(--paper)}
+ section{padding:30px 0}
+ table{width:100%;border-collapse:collapse;font-size:15px}
+ th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+ th{font:600 11px/1 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+ th.r,td.n{text-align:right}
+ td.n{font-family:var(--fm);font-weight:700}
+ td.loc{font-weight:600}
+ .v{display:inline-block;font:600 11px/1 var(--fb);padding:5px 9px;border-radius:999px}
+ .note{font-size:12.5px;color:var(--muted);margin-top:12px}
+ .cta{margin:26px 0;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px;text-align:center}
+ .cta b{font-family:var(--fd);font-weight:600;font-size:19px}
+ .cta a.btn{display:inline-block;margin-top:12px;background:var(--teja);color:#1a1209;font-weight:700;padding:12px 20px;border-radius:11px}
+ .cta a.btn:hover{background:var(--teja2);text-decoration:none}
+ .provnav{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:14px;font-size:13.5px}
+ footer{border-top:1px solid var(--line);padding:30px 0 60px;color:#82745d;font-size:12.5px;margin-top:18px}
+ footer a{color:#9a8a6f}
+ @media(max-width:520px){th.hide,td.hide{display:none}}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <div class="crumb"><a href="__HOME__">Refugio Climático</a> · __PROVNAME__</div>
+  <div class="kick">Noches tropicales · Datos AEMET</div>
+  <h1>__H1__</h1>
+  <p class="intro">__INTRO__</p>
+</div></header>
+
+<section><div class="wrap">
+  <table>
+    <thead><tr><th>Localidad</th><th class="hide">Altitud</th><th class="r">Noches tropicales/año</th><th>Cómo se duerme</th></tr></thead>
+    <tbody>__TABLE__</tbody>
+  </table>
+  <p class="note">Una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. Media anual, veranos 2017–2026. Fuente: AEMET.</p>
+
+  <div class="cta">
+    <b>¿Quieres comparar con cualquier pueblo de España?</b><br>
+    <a class="btn" href="__HOME__">Abre el mapa y la calculadora →</a>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kick">Todas las provincias</div>
+  <nav class="provnav">__PROVNAV__</nav>
+</div></section>
+
+<footer><div class="wrap">
+  Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting.
+</div></footer>
+</body>
+</html>
+"""
+
+
+def bandas_py(nt: float):
+    if nt < 1:
+        return ("Refugio", "var(--verde)", "#1e2a17")
+    if nt < 10:
+        return ("Se duerme bien", "var(--teal)", "#16242b")
+    if nt < 30:
+        return ("Templado", "var(--teja2)", "#2c2114")
+    if nt < 60:
+        return ("Se suda", "var(--teja)", "#2c1a12")
+    return ("Horno", "var(--rojo)", "#2c1411")
+
+
+def ntfmt(nt: float) -> str:
+    if nt < 1:
+        return "&lt;1"
+    return f"{nt:.1f}" if nt < 10 else f"{round(nt)}"
+
+
+def construir_schema_provincia(prov: str, site: str, sl: str, n: int) -> dict:
+    return {"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": prov, "item": f"{site}/{sl}/"}]},
+        {"@type": "Dataset",
+         "name": f"Noches tropicales en {prov} (AEMET, 2017–2026)",
+         "description": f"Noches tropicales al año en las {n} estaciones de AEMET de {prov}, veranos 2017–2026.",
+         "url": f"{site}/{sl}/", "isBasedOn": "https://opendata.aemet.es",
+         "spatialCoverage": {"@type": "Place", "name": prov}, "temporalCoverage": "2017/2026",
+         "creator": {"@type": "Person", "name": "Ramón J. Lowesting"}}]}
+
+
+def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str) -> str:
+    sl = slug(prov)
+    ordenadas = sorted(lista, key=lambda x: (x["nt"], -x["alt"]))
+    mejor, peor, n = ordenadas[0], max(lista, key=lambda x: x["nt"]), len(lista)
+    filas = []
+    for e in ordenadas:
+        etq, col, bg = bandas_py(e["nt"])
+        alt = f"{e['alt']:,}".replace(",", ".")
+        filas.append(
+            f'<tr><td class="loc">{e["loc"]}</td><td class="hide">{alt} m</td>'
+            f'<td class="n">{ntfmt(e["nt"])}</td>'
+            f'<td><span class="v" style="color:{col};background:{bg}">{etq}</span></td></tr>')
+    mtxt = ("prácticamente no hay noches tropicales" if mejor["nt"] < 1
+            else f'son unas {round(mejor["nt"])} al año')
+    alt_mejor = f"{mejor['alt']:,}".replace(",", ".")
+    intro = (f'En <b>{prov}</b>, en <b>{mejor["loc"]}</b> ({alt_mejor} m) {mtxt}, '
+             f'mientras que en <b>{peor["loc"]}</b> se cuentan unas <b>{round(peor["nt"])}</b>. '
+             f'Estas son sus {n} estaciones de AEMET, de la más fresca a la más calurosa.')
+    title = f"Noches tropicales en {prov}: dónde se duerme fresco | Refugio Climático"
+    desc = (f"Cuántas noches tropicales sufre cada pueblo de {prov} al año, según 10 veranos de "
+            f"AEMET. {mejor['loc']} es de los más frescos; {peor['loc']}, donde peor se duerme.")
+    schema = json.dumps(construir_schema_provincia(prov, site, sl, n), ensure_ascii=False)
+    return (PAGINA_PROVINCIA
+            .replace("__OGTITLE__", f"Noches tropicales en {prov}")
+            .replace("__TITLE__", title)
+            .replace("__DESC__", desc)
+            .replace("__CANONICAL__", f"{site}/{sl}/")
+            .replace("__SITE__", site)
+            .replace("__HOME__", site + "/")
+            .replace("__PROVNAME__", prov)
+            .replace("__H1__", f'¿Se duerme bien en verano en <em>{prov}</em>?')
+            .replace("__INTRO__", intro)
+            .replace("__TABLE__", "".join(filas))
+            .replace("__PROVNAV__", provnav)
+            .replace("__SCHEMA__", schema))
+
+
 def main() -> int:
     estaciones, total = cargar_estaciones()
     datos = construir_datos(estaciones, total)
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     site = SITE_URL.rstrip("/")
+    provnav = "".join(f'<a href="{site}/{slug(p)}/">{p}</a>' for p in datos["provincias"])
     payload = json.dumps(datos, ensure_ascii=False, separators=(",", ":"))
     schema = json.dumps(construir_schema(datos, site), ensure_ascii=False)
     html = (TEMPLATE.replace("__DATA__", payload)
             .replace("__APPS_URL__", APPS_SCRIPT_URL)
             .replace("__MODO_PRENSA__", "true" if MODO_PRENSA else "false")
             .replace("__SITE_URL__", site)
-            .replace("__SCHEMA__", schema))
+            .replace("__SCHEMA__", schema)
+            .replace("__PROV_NAV__", provnav))
     OUT_HTML.write_text(html, encoding="utf-8")
-    # Ficheros SEO: desactivar Jekyll, robots y sitemap.
+    # Ficheros SEO: desactivar Jekyll y robots.
     (DOCS_DIR / ".nojekyll").write_text("", encoding="utf-8")
     (DOCS_DIR / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {site}/sitemap.xml\n", encoding="utf-8")
+    # Capa 3: una página indexable por provincia.
+    urls = [site + "/"]
+    for prov, lista in datos["provincias"].items():
+        sl = slug(prov)
+        carpeta = DOCS_DIR / sl
+        carpeta.mkdir(parents=True, exist_ok=True)
+        (carpeta / "index.html").write_text(
+            construir_pagina_provincia(prov, lista, site, provnav), encoding="utf-8")
+        urls.append(f"{site}/{sl}/")
+    hoy = date.today().isoformat()
+    filas = "\n".join(
+        f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'
+        f'<priority>{"1.0" if u == site + "/" else "0.7"}</priority></url>' for u in urls)
     (DOCS_DIR / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f'  <url><loc>{site}/</loc><lastmod>{date.today().isoformat()}</lastmod>'
-        '<changefreq>weekly</changefreq><priority>1.0</priority></url>\n'
-        '</urlset>\n', encoding="utf-8")
+        + filas + "\n</urlset>\n", encoding="utf-8")
+    print(f"   {len(urls) - 1} páginas de provincia · sitemap con {len(urls)} URLs")
     c = datos["meta"]["contraste"]
     print(f"OK -> {OUT_HTML}")
     print(f"   {total} estaciones en {len(datos['provincias'])} provincias")

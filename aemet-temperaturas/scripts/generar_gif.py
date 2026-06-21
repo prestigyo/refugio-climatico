@@ -144,10 +144,75 @@ def gif_dual(salida: Path) -> None:
     print(f"  OK {salida.name}: {len(frames)} frames, {salida.stat().st_size/1024:.0f} KB")
 
 
+def gif_vertical(salida: Path) -> None:
+    """Doble panel apilado (máximas arriba, mínimas abajo): formato vertical
+    para que se vea bien en móvil (WhatsApp, stories)."""
+    fmax = {p.name: p for p in archivos("maxima")}
+    fmin = {p.name: p for p in archivos("minima")}
+    comunes = sorted(set(fmax) & set(fmin))
+    if not comunes:
+        print("  (sin fechas comunes máx/mín)")
+        return
+    base = Image.open(fmin[comunes[0]]).convert("RGB")
+    w, h = base.size
+    band, strip = 46, 28
+    H = band + strip + h + strip + h
+    f_fecha, f_lbl = fuente(24), fuente(15)
+    frames = []
+    for nombre in comunes:
+        arriba = Image.open(fmax[nombre]).convert("RGB").resize((w, h))
+        abajo = Image.open(fmin[nombre]).convert("RGB").resize((w, h))
+        lienzo = Image.new("RGB", (w, H), BG)
+        lienzo.paste(arriba, (0, band + strip))
+        lienzo.paste(abajo, (0, band + strip + h + strip))
+        d = ImageDraw.Draw(lienzo)
+        d.text((16, 14), "Refugio Climático", font=f_lbl, fill=TEJA)
+        texto_derecha(d, w - 16, 9, fecha_bonita(nombre), f_fecha, PAPER)
+        d.line([(0, band - 1), (w, band - 1)], fill=TEJA, width=2)
+        d.text((16, band + 6), "DÍA · máximas", font=f_lbl, fill=TEJA)
+        d.text((16, band + strip + h + 6), "NOCHE · mínimas", font=f_lbl, fill=TEAL)
+        frames.append(lienzo)
+    salida.parent.mkdir(parents=True, exist_ok=True)
+    frames[0].save(salida, save_all=True, append_images=frames[1:],
+                   duration=duraciones(len(frames)), loop=0, optimize=True)
+    print(f"  OK {salida.name}: {len(frames)} frames, {salida.stat().st_size/1024:.0f} KB")
+
+
+def og_image(salida: Path) -> None:
+    """Imagen 1200x630 para og:image (preview al compartir en redes/buscadores)."""
+    W, H = 1200, 630
+    canvas = Image.new("RGB", (W, H), BG)
+    d = ImageDraw.Draw(canvas)
+    fmin = archivos("minima")
+    if fmin:
+        m = Image.open(fmin[-1]).convert("RGB")
+        mw = 600
+        mh = int(m.height * mw / m.width)
+        canvas.paste(m.resize((mw, mh)), (W - mw, (H - mh) // 2))
+    f_k, f_h, f_s, f_m = fuente(22), fuente(54), fuente(26), fuente(22)
+    x = 60
+    d.text((x, 70), "REFUGIO CLIMÁTICO · DATOS AEMET", font=f_k, fill=TEJA)
+    d.line([(x, 106), (x + 320, 106)], fill=TEJA, width=2)
+    d.text((x, 136), "El mapa del calor", font=f_h, fill=PAPER)
+    d.text((x, 198), "que no te deja dormir", font=f_h, fill=(232, 154, 115))
+    d.text((x, 300), "¿Cuántas noches tropicales", font=f_s, fill=PAPER)
+    d.text((x, 334), "aguanta tu pueblo?", font=f_s, fill=PAPER)
+    d.text((x, 432), "848 estaciones · 10 veranos de AEMET", font=f_m, fill=MUTED)
+    salida.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(salida)
+    print(f"  OK {salida.name}: {salida.stat().st_size/1024:.0f} KB")
+
+
 def main() -> int:
     print("Generando GIFs de la ola de calor...")
-    gif_simple("minima", "Mínimas nocturnas · AEMET", DOCS_DIR / "ola-minimas.gif", TEAL)
-    gif_dual(DOCS_DIR / "ola-dia-noche.gif")
+    # GIFs independientes (para embeber responsive: lado a lado en escritorio,
+    # apilados en móvil).
+    gif_simple("maxima", "Máximas · de día", DOCS_DIR / "ola-maximas.gif", TEJA)
+    gif_simple("minima", "Mínimas · de noche", DOCS_DIR / "ola-minimas.gif", TEAL)
+    # Doble panel en un solo archivo para compartir (horizontal y vertical).
+    gif_dual(DOCS_DIR / "ola-dia-noche.gif")               # horizontal: X, escritorio
+    gif_vertical(DOCS_DIR / "ola-dia-noche-vertical.gif")  # vertical: WhatsApp, móvil
+    og_image(DOCS_DIR / "og.png")                          # imagen social / og:image
     return 0
 
 

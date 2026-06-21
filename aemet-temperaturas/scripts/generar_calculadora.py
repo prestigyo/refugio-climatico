@@ -24,6 +24,7 @@ import csv
 import json
 import re
 import unicodedata
+from datetime import date
 from pathlib import Path
 
 
@@ -42,6 +43,25 @@ REPO_ROOT = AEMET_DIR.parent                  # raíz del repo
 RANKING_CSV = AEMET_DIR / "analisis" / "refugios_nocturnos_ranking.csv"
 DOCS_DIR = REPO_ROOT / "docs"                 # GitHub Pages sirve /docs en raíz
 OUT_HTML = DOCS_DIR / "index.html"
+
+# URL pública del sitio, sin barra final. Cámbiala si pasas a dominio propio.
+SITE_URL = "https://prestigyo.github.io/refugio-climatico"
+
+# URL /exec del Apps Script que recibe los leads (ver apps_script_refugio.gs).
+# Déjalo vacío hasta desplegar el backend: el formulario funcionará igual y
+# volcará el lead a la consola hasta que pegues aquí la URL real.
+APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbws_0q0zwYdFNh_NAvA-mAJYH0Jkrg9d0dkFurITnYdHFR3kx8GbeqC8u9YI_PCQpuJ/exec"
+
+# Modo prensa: en True la página se presenta como proyecto de datos neutral
+# (capta solo "informe + alertas de calor" y "soy periodista"; sin compra/venta
+# ni enlaces comerciales). Ponlo en False para activar el modo comercial.
+MODO_PRENSA = True
+
+# Correcciones de nombres de estación (AEMET los guarda sin acentos). Clave =
+# indicativo. Solo hace falta para los nombres que se muestran destacados.
+CORRECCIONES = {
+    "C623I": "San Bartolomé de Tirajana",
+}
 
 # ---------------------------------------------------------------------------
 # Normalización de provincias (el CSV trae duplicados y sin acentos)
@@ -110,9 +130,10 @@ def cargar_estaciones() -> tuple[list[dict], int]:
     for f in filas:
         prov_raw = f["provincia"].strip().upper()
         provincia = PROVINCIAS.get(prov_raw, titular(prov_raw))
+        ind = f["indicativo"]
         estaciones.append({
-            "id": f["indicativo"],
-            "loc": titular(f["nombre"]),
+            "id": ind,
+            "loc": CORRECCIONES.get(ind, titular(f["nombre"])),
             "prov": provincia,
             "alt": int(round(float(f["altitud_m"]))),
             "nt": round(float(f["noches_trop_anio"]), 1),
@@ -162,6 +183,22 @@ def construir_datos(estaciones: list[dict], total: int) -> dict:
     altas_gc = [e for e in estaciones if e["prov"] == "Las Palmas" and e["alt"] >= 700]
     foehn = max(altas_gc, key=lambda x: x["nt"]) if altas_gc else peor
 
+    # Barras "refugios e infiernos": top/bottom por noches tropicales, máximo
+    # una estación por provincia para que la lista tenga variedad geográfica.
+    def seleccionar(key, n=8):
+        vistos: dict[str, int] = {}
+        out = []
+        for e in sorted(estaciones, key=key):
+            if vistos.get(e["prov"], 0) >= 1:
+                continue
+            vistos[e["prov"]] = 1
+            out.append(_slim(e))
+            if len(out) >= n:
+                break
+        return out
+    refugios = seleccionar(lambda x: (x["nt"], -x["alt"]))
+    infiernos = seleccionar(lambda x: -x["nt"])
+
     return {
         "meta": {
             "total": total,
@@ -173,8 +210,80 @@ def construir_datos(estaciones: list[dict], total: int) -> dict:
                          if valencia else None),
             "contraste": {"refugio": _slim(refugio), "horno": _slim(horno)},
             "foehn": _slim(foehn),
+            "refugios": refugios,
+            "infiernos": infiernos,
         },
         "provincias": provincias,
+    }
+
+
+def construir_schema(datos: dict, site: str) -> dict:
+    """Datos estructurados JSON-LD: Dataset + WebApplication + FAQPage + WebSite.
+    Para resultados enriquecidos en Google y para que la IA cite la fuente."""
+    m = datos["meta"]
+    mejor, peor, foehn = m["mejor"], m["peor"], m["foehn"]
+    faq = [
+        ("¿Qué es una noche tropical?",
+         "Una noche tropical es aquella en la que la temperatura mínima no baja de "
+         "20 °C. Es el indicador que mejor refleja si se descansa bien en verano."),
+        ("¿Dónde se duerme mejor en verano en España?",
+         f"En las sierras del interior. Estaciones como {mejor['loc']} ({mejor['prov']}) "
+         "registran prácticamente cero noches tropicales al año, frente a la costa "
+         "mediterránea y las islas."),
+        ("¿Cuál es el peor sitio de España para dormir en verano?",
+         f"La costa mediterránea y las islas. {peor['loc']} ({peor['prov']}) llega a unas "
+         f"{round(peor['nt'])} noches tropicales al año: casi todo el verano sin que la "
+         "temperatura baje de 20 °C."),
+        ("¿Por qué hace tanto calor de noche en la montaña de Gran Canaria?",
+         "Por el efecto foehn: el aire baja de la cumbre, se comprime y se recalienta. "
+         f"En {foehn['loc']}, a {foehn['alt']} m de altitud, se cuentan unas "
+         f"{round(foehn['nt'])} noches tropicales al año, más que en muchos pueblos de costa."),
+    ]
+    return {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Dataset",
+                "name": "Noches tropicales en España (AEMET, 2017–2026)",
+                "description": (
+                    f"Número de noches tropicales (temperatura mínima ≥ 20 °C) al año en "
+                    f"{m['total']} estaciones meteorológicas de AEMET, veranos de 2017 a 2026. "
+                    "Identifica los refugios climáticos donde mejor se duerme en verano."),
+                "url": site + "/",
+                "creator": {"@type": "Person", "name": "Ramón J. Lowesting"},
+                "isBasedOn": "https://opendata.aemet.es",
+                "temporalCoverage": "2017/2026",
+                "spatialCoverage": {"@type": "Place", "name": "España"},
+                "keywords": ["noches tropicales", "ola de calor", "refugio climático",
+                             "AEMET", "temperatura mínima", "clima España"],
+            },
+            {
+                "@type": "WebApplication",
+                "name": "Calculadora de noches tropicales por pueblo",
+                "url": site + "/",
+                "applicationCategory": "ReferenceApplication",
+                "operatingSystem": "Web",
+                "browserRequirements": "Requires JavaScript",
+                "description": ("Elige tu provincia y la estación más cercana y descubre cuántas "
+                                "noches tropicales sufre tu pueblo al año y si es un refugio climático."),
+                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {"@type": "Question", "name": q,
+                     "acceptedAnswer": {"@type": "Answer", "text": a}}
+                    for q, a in faq
+                ],
+            },
+            {
+                "@type": "WebSite",
+                "name": "Refugio Climático",
+                "url": site + "/",
+                "inLanguage": "es-ES",
+                "publisher": {"@type": "Person", "name": "Ramón J. Lowesting"},
+            },
+        ],
     }
 
 
@@ -191,6 +300,21 @@ TEMPLATE = r"""<!DOCTYPE html>
 <meta property="og:title" content="El mapa del calor que no te deja dormir">
 <meta property="og:description" content="848 estaciones, diez veranos de AEMET. ¿Cuántas noches tropicales aguanta tu pueblo?">
 <meta property="og:type" content="website">
+<link rel="canonical" href="__SITE_URL__/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:url" content="__SITE_URL__/">
+<meta property="og:site_name" content="Refugio Climático">
+<meta property="og:locale" content="es_ES">
+<meta property="og:image" content="__SITE_URL__/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="El mapa del calor que no te deja dormir">
+<meta name="twitter:description" content="848 estaciones, diez veranos de AEMET. ¿Cuántas noches tropicales aguanta tu pueblo?">
+<meta name="twitter:image" content="__SITE_URL__/og.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2288%22>🌙</text></svg>">
+<script type="application/ld+json">__SCHEMA__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -206,12 +330,12 @@ TEMPLATE = r"""<!DOCTYPE html>
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.6;
     -webkit-font-smoothing:antialiased;overflow-x:hidden}
-  .wrap{max-width:680px;margin:0 auto;padding:0 22px}
+  .wrap{max-width:min(92vw,1080px);margin:0 auto;padding:0 22px}
   .kicker{font:600 12px/1 var(--fb);letter-spacing:.18em;text-transform:uppercase;color:var(--teja)}
   h2.st{font-family:var(--fd);font-weight:900;font-size:clamp(26px,5.5vw,40px);line-height:1.06;
     letter-spacing:-.01em;margin:0 0 6px}
   h2.st em{font-style:italic;color:var(--teja2)}
-  .lead{color:var(--muted);font-size:clamp(15px,2.4vw,17px);margin:14px 0 0}
+  .lead{color:var(--muted);font-size:clamp(15px,2.4vw,17px);margin:14px 0 0;max-width:720px}
   .num{font-family:var(--fm);font-weight:700;letter-spacing:-.02em}
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,1,.36,1)}
   .reveal.in{opacity:1;transform:none}
@@ -233,7 +357,9 @@ TEMPLATE = r"""<!DOCTYPE html>
     border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:13px;color:var(--muted)}
   .chip b{color:var(--teal);font-family:var(--fm);font-weight:700}
   .cue{margin-top:auto;padding-top:40px;color:var(--muted);font-size:12px;letter-spacing:.14em;
-    text-transform:uppercase;display:flex;align-items:center;gap:10px}
+    text-transform:uppercase;display:flex;align-items:center;gap:10px;width:fit-content;
+    text-decoration:none;cursor:pointer;transition:color .2s}
+  .cue:hover{color:var(--teja2)}
   .cue span{display:inline-block;width:1px;height:34px;background:linear-gradient(var(--teja),transparent);
     animation:cue 1.8s ease-in-out infinite}
   @keyframes cue{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
@@ -251,25 +377,51 @@ TEMPLATE = r"""<!DOCTYPE html>
   .pueblo.hot{border-color:#4a2a1d} .pueblo.hot .big{color:var(--rojo)}
   .vs-line{text-align:center;margin-top:18px;color:var(--muted);font-size:14px}
   .vs-line b{color:var(--teja2)}
+  .lt-note{display:inline-block;font-family:var(--fb);font-size:12px;font-weight:600;color:var(--muted);
+    text-transform:none;letter-spacing:0;margin-left:10px;vertical-align:middle;line-height:1.1}
+  .metodo{margin-top:30px;border-left:3px solid var(--teja);background:var(--bg2);
+    border-radius:0 12px 12px 0;padding:16px 18px;max-width:780px}
+  .metodo h4{font:600 11px/1 var(--fb);letter-spacing:.12em;text-transform:uppercase;color:var(--teja);margin-bottom:8px}
+  .metodo p{color:var(--muted);font-size:14.5px;line-height:1.55}
+  .metodo b{color:var(--paper)}
 
   /* MAPA */
   #map{width:100%;height:auto;display:block;margin-top:26px;
     filter:drop-shadow(0 20px 60px rgba(0,0,0,.5))}
   #map circle{transition:opacity .5s}
+  .gifs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+  @media(max-width:640px){.gifs{grid-template-columns:1fr}}
+  .gif{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px}
   .legend{display:flex;align-items:center;gap:14px;margin-top:16px;font-size:12.5px;color:var(--muted);
     flex-wrap:wrap}
   .legend .bar{flex:1;min-width:160px;height:9px;border-radius:6px;
     background:linear-gradient(90deg,#86b0c4,#d9a05e,#d9744e,#bf3b22)}
   .foehn{margin-top:34px;background:linear-gradient(180deg,var(--bg2),var(--panel));
-    border:1px solid #4a2a1d;border-radius:16px;padding:24px 22px}
+    border:1px solid #4a2a1d;border-radius:16px;padding:24px 22px;max-width:780px}
   .foehn .tag{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja)}
   .foehn h3{font-family:var(--fd);font-weight:600;font-size:22px;margin:8px 0 10px;line-height:1.15}
   .foehn p{color:var(--muted);font-size:15px}
   .foehn b{color:var(--paper)}
 
+  /* REFUGIOS E INFIERNOS */
+  .bars{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px}
+  .barcol h4{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+  .barcol.ref h4{color:var(--teal)} .barcol.inf h4{color:var(--rojo)}
+  .barcol .csub{font-size:12px;color:var(--muted);margin-bottom:18px}
+  .barrow{margin-bottom:14px}
+  .barrow-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .bn{font-size:13.5px;color:var(--paper);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bv{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--muted)}
+  .bartrack{height:8px;border-radius:5px;background:#2c2114;overflow:hidden;margin:5px 0 2px}
+  .bartrack>i{display:block;height:100%;width:0;border-radius:5px;transition:width 1.1s cubic-bezier(.22,1,.36,1)}
+  .reveal.in .bartrack>i{width:var(--w)}
+  .bp{font-size:11.5px;color:var(--muted)}
+  .barnote{margin-top:8px;font-size:12px;color:var(--muted)}
+  @media(max-width:560px){.bars{grid-template-columns:1fr;gap:34px}}
+
   /* CALCULADORA */
   .calc{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);
-    border-radius:20px;padding:30px 26px 24px;margin-top:28px;box-shadow:0 30px 80px -30px #000}
+    border-radius:20px;padding:30px 26px 24px;margin-top:28px;box-shadow:0 30px 80px -30px #000;max-width:620px}
   .calc .sub{color:var(--muted);font-size:14.5px;margin:10px 0 22px}
   .calc label{display:block;font:600 12px/1 var(--fb);letter-spacing:.04em;text-transform:uppercase;
     color:var(--muted);margin:0 2px 7px}
@@ -306,6 +458,18 @@ TEMPLATE = r"""<!DOCTYPE html>
   .share a,.share button{flex:1;min-width:96px;text-align:center;text-decoration:none;border:1px solid var(--line);
     background:var(--bg);color:var(--paper);font-size:13px;font-weight:600;padding:11px 8px;border-radius:11px;cursor:pointer;transition:.15s}
   .share a:hover,.share button:hover{border-color:var(--teja);color:var(--teja2)}
+  .capture{margin-top:20px;border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:18px 16px}
+  .lead-h{font-family:var(--fd);font-weight:600;font-size:16.5px;margin-bottom:8px;color:var(--paper);line-height:1.25}
+  .lead-sub{font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.5}
+  .leadform{display:flex;flex-direction:column;gap:9px}
+  .leadform input[type=email],.leadform input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--paper);font-size:14.5px;padding:11px 12px;border-radius:10px}
+  .leadform input:focus{outline:none;border-color:var(--teja)}
+  .capture .lrgpd{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0;margin:2px 0;font-weight:400}
+  .capture .lrgpd input{margin-top:3px;width:auto}
+  .leadform button{background:var(--teja);border:none;color:#1a1209;font-weight:700;font-size:15px;padding:12px;border-radius:10px;cursor:pointer;transition:.15s}
+  .leadform button:hover{background:var(--teja2)}
+  .bridge{display:inline-block;margin-top:12px;color:var(--teal);font-size:13.5px;text-decoration:none}
+  .bridge:hover{color:#b5cfdb;text-decoration:underline}
   footer{border-top:1px solid var(--line);padding:34px 0 60px;color:#82745d;font-size:12.5px;line-height:1.6}
   footer a{color:#9a8a6f}
   @media(max-width:430px){.vs{grid-template-columns:1fr}}
@@ -320,11 +484,11 @@ TEMPLATE = r"""<!DOCTYPE html>
     <p class="q">¿Cuántas <b>noches tropicales</b> tienes que aguantar tú?</p>
     <p class="intro"><span id="h-total" class="num">848</span> estaciones meteorológicas. Diez veranos de datos de AEMET. Una sola pregunta: en tu pueblo, ¿se duerme tapado o se suda hasta el amanecer?</p>
     <div class="chip">Noche tropical: <b>la mínima no baja de 20&nbsp;°C</b></div>
-    <div class="cue"><span></span> Desliza para descubrirlo</div>
+    <a class="cue" href="#s1"><span></span> Desliza o pulsa para descubrirlo</a>
   </div>
 </header>
 
-<section>
+<section id="s1">
   <div class="wrap reveal">
     <div class="secnum">01 — El contraste</div>
     <h2 class="st">Dos pueblos, <em>dos veranos distintos</em></h2>
@@ -346,6 +510,10 @@ TEMPLATE = r"""<!DOCTYPE html>
       </div>
     </div>
     <p class="vs-line" id="c-line">—</p>
+    <div class="metodo">
+      <h4>Por qué contamos noches, no medias</h4>
+      <p>La media de las mínimas engaña: unas noches frescas y otras tórridas pueden dar un promedio "agradable" que esconde las noches insoportables. Por eso aquí no usamos medias — medimos algo que no miente: <b>cuántas noches al año la temperatura no baja de 20&nbsp;°C</b>.</p>
+    </div>
   </div>
 </section>
 
@@ -368,9 +536,35 @@ TEMPLATE = r"""<!DOCTYPE html>
   </div>
 </section>
 
+<section id="s-ola">
+  <div class="wrap reveal">
+    <div class="secnum">03 — La ola, día a día</div>
+    <h2 class="st">De día todos sufren. <em>De noche, no.</em></h2>
+    <p class="lead">Las máximas del día y las mínimas de la noche, día a día este verano. Cuando llega el calor, casi toda España arde de día — pero las sierras del interior se mantienen frescas al anochecer.</p>
+    <div class="gifs">
+      <img class="gif" src="ola-maximas.gif" alt="Mapa diario de temperaturas máximas de AEMET durante la ola de calor" loading="lazy">
+      <img class="gif" src="ola-minimas.gif" alt="Mapa diario de temperaturas mínimas de AEMET durante la ola de calor" loading="lazy">
+    </div>
+    <p class="barnote">Fuente: AEMET · un fotograma por día. Recarga la página para verlo desde el principio.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap reveal" id="rei">
+    <div class="secnum">04 — Refugios e infiernos</div>
+    <h2 class="st">Dónde dormir tapado, <em>dónde no pegar ojo</em></h2>
+    <p class="lead">En un extremo, las sierras del interior: prácticamente cero noches tropicales en diez veranos. En el otro, el litoral y las islas, donde casi todo el verano se suda.</p>
+    <div class="bars">
+      <div class="barcol ref"><h4>Los refugios</h4><div class="csub">se duerme tapado</div><div id="rl"></div></div>
+      <div class="barcol inf"><h4>Los infiernos</h4><div class="csub">el verano entero sudando</div><div id="il"></div></div>
+    </div>
+    <p class="barnote">Cada barra, sobre 92 noches de verano · una estación por provincia.</p>
+  </div>
+</section>
+
 <section>
   <div class="wrap reveal">
-    <div class="secnum">03 — Búscalo tú</div>
+    <div class="secnum">05 — Búscalo tú</div>
     <h2 class="st">Y en tu pueblo, <em>¿se duerme tapado?</em></h2>
     <div class="calc">
       <p class="sub">Una <b>noche tropical</b> es cuando la temperatura no baja de 20&nbsp;°C. Elige tu provincia y la estación más cercana: te decimos cuántas sufre al año, de unas 92 noches de verano.</p>
@@ -399,6 +593,8 @@ TEMPLATE = r"""<!DOCTYPE html>
 
 <script>
 const DATA = __DATA__;
+const APPS_SCRIPT_URL = "__APPS_URL__";
+const MODO_PRENSA = __MODO_PRENSA__;
 const M = DATA.meta, T = M.total;
 const $ = s => document.querySelector(s);
 
@@ -424,12 +620,13 @@ const anios = Math.max(...TODAS.map(e=>e.anios));
 $("#anios").textContent = anios>=9 ? "diez veranos" : anios.toFixed(0)+" veranos";
 
 function ntTxt(nt){ return nt<1 ? "<1" : (nt<10 ? nt.toFixed(1) : Math.round(nt)); }
+function ntBig(nt){ return nt<1 ? '&lt;1<span class="lt-note">menos de 1</span>' : String(ntTxt(nt)); }
 
 const cr=M.contraste.refugio, ch=M.contraste.horno;
 $("#c-ref-loc").textContent=cr.loc; $("#c-ref-meta").textContent=`${cr.prov} · ${cr.alt.toLocaleString("es")} m`;
-$("#c-ref-nt").textContent=ntTxt(cr.nt);
+$("#c-ref-nt").innerHTML=ntBig(cr.nt);
 $("#c-hor-loc").textContent=ch.loc; $("#c-hor-meta").textContent=`${ch.prov} · ${ch.alt.toLocaleString("es")} m`;
-$("#c-hor-nt").textContent=ntTxt(ch.nt);
+$("#c-hor-nt").innerHTML=ntBig(ch.nt);
 $("#c-line").innerHTML = `Mismo país, misma semana de agosto: en <b>${cr.loc}</b> duermes con manta; en <b>${ch.loc}</b> sudas <b>${ntTxt(ch.nt)}</b> de cada 92 noches.`;
 const fo=M.foehn;
 $("#f-loc").textContent=fo.loc.split(",")[0]; $("#f-alt").textContent=fo.alt.toLocaleString("es")+" m"; $("#f-nt").textContent=ntTxt(fo.nt);
@@ -461,6 +658,20 @@ function project(lat, lon){
     svg.appendChild(c);
   });
 })();
+
+// ---------- Barras: refugios / infiernos ----------
+function barras(cont, lista){
+  cont.innerHTML = lista.map(e=>{
+    const w = Math.max(1.5, Math.min(100, e.nt/92*100));
+    const v = e.nt<1 ? "&lt;1" : (e.nt<10 ? e.nt.toFixed(1) : Math.round(e.nt));
+    return `<div class="barrow">
+      <div class="barrow-top"><span class="bn">${e.loc}</span><span class="bv">${v}</span></div>
+      <div class="bartrack"><i style="--w:${w}%;background:${colorNT(e.nt)}"></i></div>
+      <div class="bp">${e.prov} · ${e.alt.toLocaleString("es")} m</div></div>`;
+  }).join("");
+}
+barras($("#rl"), M.refugios);
+barras($("#il"), M.infiernos);
 
 // ---------- Calculadora ----------
 const selP=$("#prov"), selE=$("#est");
@@ -504,18 +715,34 @@ function bandas(nt){
 function render(id,distKm){
   const e=TODAS.find(x=>x.id===id);if(!e)return;
   const [etq,col,bg,cls]=bandas(e.nt);
-  const pctMejor=Math.round((T-e.rank)/(T-1)*100);
   const txt=e.nt<1?"menos de 1":(e.nt<10?e.nt.toFixed(1):Math.round(e.nt));
-  const bigT=e.nt<1?"&lt;1":txt;
+  const bigT=e.nt<1?'&lt;1<span class="lt-note">menos de 1</span>':txt;
   const pos=Math.min(100,e.nt/90*100);
-  let cmp;const v=M.valencia;
-  if(v&&e.nt>=1&&v.nt/e.nt>=2) cmp=`Por cada noche tropical aquí, <b>${v.loc}</b> sufre <b>${Math.round(v.nt/e.nt)}</b>.`;
-  else if(e.nt<1) cmp=`Prácticamente <b>cero</b> noches tropicales: de los mejores sitios de España para dormir en verano.`;
-  else if(pctMejor>=50) cmp=`Se duerme mejor aquí que en el <b>${pctMejor}%</b> de las estaciones de España.`;
-  else cmp=`El <b>${100-pctMejor}%</b> de España duerme mejor que aquí: de los sitios donde peor se pasa la noche en verano.`;
   const distTxt=distKm?`<div class="res-meta">📍 Estación más cercana a ${distKm.toFixed(0)} km de ti</div>`:"";
   const url="https://prestigyo.github.io/refugio-climatico/";
   const shareTxt=`En ${e.loc} (${e.prov}) se sufren ${txt} noches tropicales al año — puesto ${e.rank} de ${T} de España. ¿Y en tu pueblo?`;
+  const modo = MODO_PRENSA ? "prensa" : (e.nt < 10 ? "propietario" : "comprador");
+  let leadHead, leadSub, opts, bridgeTxt, zonaPh;
+  if(modo==="prensa"){
+    leadHead = "¿Quieres el informe de tu zona y aviso si entra en ola de calor?";
+    leadSub  = "";
+    opts = '<option value="info">Quiero el informe + alertas de calor</option><option value="periodista">Soy periodista o medio</option>';
+    bridgeTxt = "";
+    zonaPh = "Tu provincia (opcional)";
+  } else if(modo==="propietario"){
+    leadHead = "Tienes una casa donde se duerme fresco. Hoy eso es un tesoro.";
+    leadSub  = "Cada vez más gente huye del calor. Si te planteas venderla, te ponemos en contacto con compradores que buscan exactamente esto.";
+    opts = '<option value="tasacion">Quiero una tasación gratuita</option><option value="vender">Me planteo vender</option><option value="info">Solo información de mi zona</option><option value="agente">Soy agente inmobiliario</option>';
+    bridgeTxt = "Vendemos sin pasar por Idealista — cómo trabajamos →";
+    zonaPh = "¿Dónde está tu casa? (opcional)";
+  } else {
+    leadHead = e.nt>=30 ? "¿Y si pudieras dormir fresco? Te ayudamos a encontrar tu refugio." : "¿Quieres el informe de tu zona y aviso si entra en ola de calor?";
+    leadSub  = "";
+    opts = '<option value="info">Quiero el informe + alertas de calor</option><option value="comprar">Me interesa comprar en un refugio</option><option value="alquilar">Me interesa alquilar o veranear</option><option value="agente">Soy agente inmobiliario</option>';
+    bridgeTxt = "O conoce La Virgen de la Vega, un refugio a 75 min de Valencia →";
+    zonaPh = "¿En qué zona te gustaría? (opcional)";
+  }
+  const leadSubHTML = leadSub ? `<p class="lead-sub">${leadSub}</p>` : "";
   $("#res").innerHTML=`
     <div class="res-loc">${e.loc}</div>
     <div class="res-meta">${e.prov} · ${e.alt.toLocaleString("es")} m de altitud</div>${distTxt}
@@ -528,14 +755,38 @@ function render(id,distKm){
       <div class="fact"><b>${e.rank} / ${T}</b><span>puesto en España (1 = mejor refugio)</span></div>
       <div class="fact"><b>${e.ne<1?"<1":Math.round(e.ne)}</b><span>noches ecuatoriales/año (&gt;25&nbsp;°C)</span></div>
     </div>
-    <div class="cmp">${cmp}</div>
     <div class="share">
       <a href="https://wa.me/?text=${encodeURIComponent(shareTxt+" "+url)}" target="_blank" rel="noopener">WhatsApp</a>
       <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTxt)}&url=${encodeURIComponent(url)}" target="_blank" rel="noopener">X / Twitter</a>
-      <button type="button" id="copy">Copiar enlace</button></div>`;
+      <button type="button" id="copy">Copiar enlace</button></div>
+    <div class="capture">
+      <div class="lead-h">${leadHead}</div>
+      ${leadSubHTML}
+      <form id="leadf" class="leadform">
+        <input type="email" id="lemail" placeholder="Tu email" required>
+        <select id="lwhat">${opts}</select>
+        <input type="text" id="lzona" placeholder="${zonaPh}">
+        <input type="text" id="lpet" placeholder="¿Qué dato te gustaría ver? (opcional)">
+        <label class="lrgpd"><input type="checkbox" id="lrgpd" required> Acepto que me contactéis sobre esto.</label>
+        <button type="submit">Enviar</button>
+      </form>
+      ${bridgeTxt ? `<a class="bridge" href="https://lavirgendelavega.es" target="_blank" rel="noopener">${bridgeTxt}</a>` : ""}
+    </div>`;
   $("#res").classList.add("show");
   $("#copy").addEventListener("click",()=>{navigator.clipboard?.writeText(shareTxt+" "+url);
     $("#copy").textContent="¡Copiado!";setTimeout(()=>{const b=$("#copy");if(b)b.textContent="Copiar enlace";},1800);});
+  const lf=$("#leadf");
+  if(lf) lf.addEventListener("submit",ev=>{
+    ev.preventDefault();
+    const lead={timestamp:new Date().toISOString(),email:$("#lemail").value.trim(),
+      modo:modo,busca:$("#lwhat").value,zona_interes:$("#lzona").value.trim(),peticion:$("#lpet").value.trim(),
+      estacion:e.loc,provincia:e.prov,noches_trop:e.nt,veredicto:etq,
+      rgpd:$("#lrgpd").checked?"si":"",source:"refugio-climatico",user_agent:navigator.userAgent};
+    const gracias=()=>{const h=document.querySelector("#res .lead-h");if(h)h.textContent="¡Gracias! Te escribimos pronto.";if(lf)lf.remove();};
+    if(APPS_SCRIPT_URL){
+      fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(lead)}).then(gracias).catch(gracias);
+    } else { console.log("LEAD (sin endpoint configurado):",lead); gracias(); }
+  });
 }
 
 // ---------- Scroll reveal ----------
@@ -551,9 +802,25 @@ def main() -> int:
     estaciones, total = cargar_estaciones()
     datos = construir_datos(estaciones, total)
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    site = SITE_URL.rstrip("/")
     payload = json.dumps(datos, ensure_ascii=False, separators=(",", ":"))
-    html = TEMPLATE.replace("__DATA__", payload)
+    schema = json.dumps(construir_schema(datos, site), ensure_ascii=False)
+    html = (TEMPLATE.replace("__DATA__", payload)
+            .replace("__APPS_URL__", APPS_SCRIPT_URL)
+            .replace("__MODO_PRENSA__", "true" if MODO_PRENSA else "false")
+            .replace("__SITE_URL__", site)
+            .replace("__SCHEMA__", schema))
     OUT_HTML.write_text(html, encoding="utf-8")
+    # Ficheros SEO: desactivar Jekyll, robots y sitemap.
+    (DOCS_DIR / ".nojekyll").write_text("", encoding="utf-8")
+    (DOCS_DIR / "robots.txt").write_text(
+        f"User-agent: *\nAllow: /\nSitemap: {site}/sitemap.xml\n", encoding="utf-8")
+    (DOCS_DIR / "sitemap.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f'  <url><loc>{site}/</loc><lastmod>{date.today().isoformat()}</lastmod>'
+        '<changefreq>weekly</changefreq><priority>1.0</priority></url>\n'
+        '</urlset>\n', encoding="utf-8")
     c = datos["meta"]["contraste"]
     print(f"OK -> {OUT_HTML}")
     print(f"   {total} estaciones en {len(datos['provincias'])} provincias")

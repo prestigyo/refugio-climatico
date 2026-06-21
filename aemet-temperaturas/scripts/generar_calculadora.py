@@ -319,7 +319,7 @@ TEMPLATE = r"""<!DOCTYPE html>
 <meta name="twitter:title" content="El mapa del calor que no te deja dormir">
 <meta name="twitter:description" content="848 estaciones, diez veranos de AEMET. ¿Cuántas noches tropicales aguanta tu pueblo?">
 <meta name="twitter:image" content="__SITE_URL__/og.png">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2288%22>🌙</text></svg>">
+<link rel="icon" type="image/svg+xml" href="__SITE_URL__/favicon.svg">
 <script type="application/ld+json">__SCHEMA__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -837,7 +837,7 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="__SITE__/og.png">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2288%22>🌙</text></svg>">
+<link rel="icon" type="image/svg+xml" href="__SITE_URL__/favicon.svg">
 <script type="application/ld+json">__SCHEMA__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -968,6 +968,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str) 
             .replace("__DESC__", desc)
             .replace("__CANONICAL__", f"{site}/{sl}/")
             .replace("__SITE__", site)
+            .replace("__SITE_URL__", site)
             .replace("__HOME__", site + "/")
             .replace("__PROVNAME__", prov)
             .replace("__H1__", f'¿Se duerme bien en verano en <em>{prov}</em>?')
@@ -975,6 +976,16 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str) 
             .replace("__TABLE__", "".join(filas))
             .replace("__PROVNAV__", provnav)
             .replace("__SCHEMA__", schema))
+
+
+# Favicon dibujado (no emoji): cuadro oscuro + luna creciente + estrella teja.
+FAVICON_SVG = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<rect width="100" height="100" rx="24" fill="#1f1810"/>
+<circle cx="45" cy="52" r="30" fill="#efe6d6"/>
+<circle cx="60" cy="44" r="29" fill="#1f1810"/>
+<circle cx="73" cy="34" r="6.5" fill="#d9744e"/>
+</svg>
+'''
 
 
 def main() -> int:
@@ -996,6 +1007,7 @@ def main() -> int:
     (DOCS_DIR / ".nojekyll").write_text("", encoding="utf-8")
     (DOCS_DIR / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {site}/sitemap.xml\n", encoding="utf-8")
+    (DOCS_DIR / "favicon.svg").write_text(FAVICON_SVG, encoding="utf-8")
     # Capa 3: una página indexable por provincia.
     urls = [site + "/"]
     for prov, lista in datos["provincias"].items():

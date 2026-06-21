@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://prestigyo.github.io/refugio-climatico/sitemap.xml

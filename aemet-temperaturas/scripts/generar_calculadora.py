@@ -98,6 +98,77 @@ PROVINCIAS = {
 MINUSCULAS = {"de", "del", "la", "las", "los", "el", "y", "e", "o", "u",
               "da", "do", "dos", "das", "i", "a", "lo"}
 
+# Provincias colindantes, para el bloque de interlinking "Provincias vecinas"
+# de cada landing. Para las insulares y las ciudades autónomas (sin frontera
+# terrestre) se usan las provincias más próximas o del mismo archipiélago.
+VECINAS = {
+    "A Coruña": ["Lugo", "Pontevedra"],
+    "Albacete": ["Murcia", "Alicante", "Valencia", "Cuenca", "Jaén", "Ciudad Real"],
+    "Alicante": ["Murcia", "Albacete", "Valencia"],
+    "Almería": ["Granada", "Murcia", "Jaén"],
+    "Araba/Álava": ["Bizkaia", "Gipuzkoa", "Navarra", "Burgos", "La Rioja"],
+    "Asturias": ["Lugo", "León", "Cantabria"],
+    "Ávila": ["Salamanca", "Valladolid", "Segovia", "Madrid", "Toledo", "Cáceres"],
+    "Badajoz": ["Cáceres", "Ciudad Real", "Córdoba", "Sevilla", "Huelva"],
+    "Illes Balears": ["Barcelona", "Valencia", "Alicante"],
+    "Barcelona": ["Girona", "Lleida", "Tarragona"],
+    "Bizkaia": ["Cantabria", "Burgos", "Araba/Álava", "Gipuzkoa"],
+    "Burgos": ["Cantabria", "Palencia", "Valladolid", "Segovia", "Soria", "La Rioja", "Araba/Álava"],
+    "Cáceres": ["Salamanca", "Ávila", "Toledo", "Ciudad Real", "Badajoz"],
+    "Cádiz": ["Sevilla", "Málaga"],
+    "Cantabria": ["Asturias", "León", "Palencia", "Burgos", "Bizkaia"],
+    "Castellón": ["Tarragona", "Teruel", "Valencia"],
+    "Ceuta": ["Cádiz", "Málaga"],
+    "Ciudad Real": ["Toledo", "Cuenca", "Albacete", "Jaén", "Córdoba", "Badajoz", "Cáceres"],
+    "Córdoba": ["Badajoz", "Sevilla", "Málaga", "Granada", "Jaén", "Ciudad Real"],
+    "Cuenca": ["Guadalajara", "Teruel", "Valencia", "Albacete", "Ciudad Real", "Madrid"],
+    "Gipuzkoa": ["Bizkaia", "Araba/Álava", "Navarra"],
+    "Girona": ["Barcelona", "Lleida"],
+    "Granada": ["Málaga", "Córdoba", "Jaén", "Almería"],
+    "Guadalajara": ["Madrid", "Segovia", "Soria", "Zaragoza", "Teruel", "Cuenca"],
+    "Huelva": ["Badajoz", "Sevilla"],
+    "Huesca": ["Navarra", "Zaragoza", "Lleida"],
+    "Jaén": ["Córdoba", "Ciudad Real", "Albacete", "Granada"],
+    "La Rioja": ["Burgos", "Araba/Álava", "Navarra", "Soria"],
+    "Las Palmas": ["Santa Cruz de Tenerife"],
+    "León": ["Asturias", "Lugo", "Ourense", "Zamora", "Valladolid", "Palencia", "Cantabria"],
+    "Lleida": ["Huesca", "Zaragoza", "Tarragona", "Barcelona"],
+    "Lugo": ["A Coruña", "Pontevedra", "Ourense", "Asturias", "León"],
+    "Madrid": ["Segovia", "Ávila", "Toledo", "Cuenca", "Guadalajara"],
+    "Málaga": ["Cádiz", "Sevilla", "Córdoba", "Granada"],
+    "Melilla": ["Almería", "Málaga"],
+    "Murcia": ["Almería", "Albacete", "Alicante"],
+    "Navarra": ["Gipuzkoa", "Araba/Álava", "La Rioja", "Zaragoza", "Huesca"],
+    "Ourense": ["Lugo", "Pontevedra", "León", "Zamora"],
+    "Palencia": ["León", "Cantabria", "Burgos", "Valladolid"],
+    "Pontevedra": ["A Coruña", "Lugo", "Ourense"],
+    "Salamanca": ["Zamora", "Valladolid", "Ávila", "Cáceres"],
+    "Santa Cruz de Tenerife": ["Las Palmas"],
+    "Segovia": ["Burgos", "Soria", "Guadalajara", "Madrid", "Ávila", "Valladolid"],
+    "Sevilla": ["Huelva", "Badajoz", "Córdoba", "Málaga", "Cádiz"],
+    "Soria": ["Burgos", "La Rioja", "Zaragoza", "Guadalajara", "Segovia"],
+    "Tarragona": ["Barcelona", "Lleida", "Castellón", "Teruel"],
+    "Teruel": ["Castellón", "Tarragona", "Zaragoza", "Guadalajara", "Cuenca", "Valencia"],
+    "Toledo": ["Madrid", "Ávila", "Cáceres", "Ciudad Real", "Cuenca"],
+    "Valencia": ["Castellón", "Cuenca", "Albacete", "Alicante", "Teruel"],
+    "Valladolid": ["Palencia", "Burgos", "Segovia", "Ávila", "Salamanca", "Zamora", "León"],
+    "Zamora": ["León", "Salamanca", "Valladolid", "Ourense"],
+    "Zaragoza": ["Navarra", "Huesca", "Teruel", "Guadalajara", "Soria", "Lleida", "Tarragona"],
+}
+
+MESES_ES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
+            "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+
+# Fecha en la que se amplió la landing de provincia con prosa, FAQ y JSON-LD
+# Article/FAQPage. Fija (no se regenera cada vez): un "datePublished" de
+# artículo no debe cambiar solo porque se vuelve a ejecutar el script.
+FECHA_PUBLICACION_LANDINGS = "2026-06-22"
+
+
+def fecha_es(fecha: date) -> str:
+    """date(2026, 6, 22) -> 'junio de 2026'."""
+    return f"{MESES_ES[fecha.month - 1]} de {fecha.year}"
+
 
 def titular(nombre: str) -> str:
     """Pasa 'NAUT ARAN, ARTIES ' -> 'Naut Aran, Arties' respetando acentos,
@@ -872,19 +943,35 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
  .provnav{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:14px;font-size:13.5px}
  footer{border-top:1px solid var(--line);padding:30px 0 60px;color:#82745d;font-size:12.5px;margin-top:18px}
  footer a{color:#9a8a6f}
+ caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600}
+ .prose{margin:28px 0;max-width:760px}
+ .prose h2{font-family:var(--fd);font-weight:700;font-size:clamp(20px,3.6vw,25px);line-height:1.2;margin:30px 0 10px}
+ .prose h2:first-child{margin-top:0}
+ .prose p{color:var(--muted);font-size:15px;margin:0 0 14px}
+ .prose p b{color:var(--paper)}
+ .prose p.note{font-size:12.5px}
+ .faq{margin-top:6px;max-width:760px}
+ .faqitem{padding:16px 0;border-bottom:1px solid var(--line)}
+ .faqitem:first-child{padding-top:0}
+ .faqitem h3{font-family:var(--fd);font-weight:600;font-size:16.5px;margin-bottom:6px}
+ .faqitem p{color:var(--muted);font-size:14.5px}
+ .vecinas{font-size:13.5px;margin:8px 0 4px}
  @media(max-width:520px){th.hide,td.hide{display:none}}
 </style>
 </head>
 <body>
 <header class="h"><div class="wrap">
-  <div class="crumb"><a href="__HOME__">Refugio Climático</a> · __PROVNAME__</div>
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · __PROVNAME__</nav>
   <div class="kick">Noches tropicales · Datos AEMET</div>
   <h1>__H1__</h1>
   <p class="intro">__INTRO__</p>
 </div></header>
 
 <section><div class="wrap">
+  <div class="prose">__PROSA__</div>
+
   <table>
+    <caption>__CAPTION__</caption>
     <thead><tr><th>Localidad</th><th class="hide">Altitud</th><th class="r">Noches tropicales/año</th><th>Cómo se duerme</th></tr></thead>
     <tbody>__TABLE__</tbody>
   </table>
@@ -897,12 +984,19 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
 </div></section>
 
 <section><div class="wrap">
+  <div class="kick">Preguntas frecuentes</div>
+  <div class="faq">__FAQ__</div>
+</div></section>
+
+<section><div class="wrap">
+  __VECINAS__
   <div class="kick">Todas las provincias</div>
-  <nav class="provnav">__PROVNAV__</nav>
+  <nav class="provnav" aria-label="Todas las provincias">__PROVNAV__</nav>
 </div></section>
 
 <footer><div class="wrap">
-  Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting.
+  Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting.<br>
+  Última actualización de los datos: __FECHA_FOOTER__.
 </div></footer>
 </body>
 </html>
@@ -927,20 +1021,147 @@ def ntfmt(nt: float) -> str:
     return f"{nt:.1f}" if nt < 10 else f"{round(nt)}"
 
 
-def construir_schema_provincia(prov: str, site: str, sl: str, n: int) -> dict:
+def construir_schema_provincia(prov: str, site: str, sl: str, n: int, desc: str,
+                                faq: list[tuple[str, str]], fecha_mod: str) -> dict:
+    url = f"{site}/{sl}/"
     return {"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
-            {"@type": "ListItem", "position": 2, "name": prov, "item": f"{site}/{sl}/"}]},
+            {"@type": "ListItem", "position": 2, "name": prov, "item": url}]},
+        {"@type": "Article",
+         "headline": f"Noches tropicales en {prov}: dónde se duerme fresco",
+         "description": desc,
+         "image": site + "/og.png",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "Refugio Climático",
+                       "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
+         "datePublished": FECHA_PUBLICACION_LANDINGS,
+         "dateModified": fecha_mod,
+         "mainEntityOfPage": url},
         {"@type": "Dataset",
          "name": f"Noches tropicales en {prov} (AEMET, 2017–2026)",
-         "description": f"Noches tropicales al año en las {n} estaciones de AEMET de {prov}, veranos 2017–2026.",
-         "url": f"{site}/{sl}/", "isBasedOn": "https://opendata.aemet.es",
+         "description": (f"Noches tropicales al año en la única estación de AEMET de {prov}"
+                          if n == 1 else
+                          f"Noches tropicales al año en las {n} estaciones de AEMET de {prov}")
+                         + ", veranos 2017–2026.",
+         "url": url, "isBasedOn": "https://opendata.aemet.es",
          "spatialCoverage": {"@type": "Place", "name": prov}, "temporalCoverage": "2017/2026",
-         "creator": {"@type": "Person", "name": "Ramón J. Lowesting"}}]}
+         "variableMeasured": "Noches tropicales por estación meteorológica",
+         "license": "https://creativecommons.org/licenses/by/4.0/",
+         "creator": {"@type": "Person", "name": "Ramón J. Lowesting"}},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+            for q, a in faq]},
+    ]}
 
 
-def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str) -> str:
+def prosa_contraste(prov: str, mejor: dict, peor: dict, n: int) -> str:
+    if n <= 1:
+        return (f"<h2>Una sola estación con datos suficientes</h2>"
+                f"<p>{prov} solo tiene una estación de AEMET con cobertura suficiente para este "
+                f"análisis: <b>{mejor['loc']}</b>, a {miles(mejor['alt'])} m de altitud, con "
+                f"{ntfmt(mejor['nt'])} noches tropicales al año de media. No hay aquí más puntos "
+                f"de comparación dentro de la provincia.</p>")
+    ratio = (f" — unas {round(peor['nt'] / mejor['nt'], 1)} veces más"
+             if mejor["nt"] >= 1 else "")
+    alt_mejor = miles(mejor["alt"])
+    alt_peor = miles(peor["alt"])
+    return (f"<h2>El contraste en {prov}</h2>"
+            f"<p>{prov} tiene {n} estaciones de AEMET con datos suficientes. En <b>{mejor['loc']}</b> "
+            f"({alt_mejor} m) se cuentan {ntfmt(mejor['nt'])} noches tropicales al año, mientras que "
+            f"en <b>{peor['loc']}</b> ({alt_peor} m) suben hasta {ntfmt(peor['nt'])}{ratio}. Cuanto "
+            f"más alta y más alejada de la costa está una estación, más fácil que el aire se enfríe "
+            f"de noche; cuanto más próxima al mar o en una cubeta de baja altitud, más cuesta que la "
+            f"temperatura baje de los 20&nbsp;°C.</p>")
+
+
+def prosa_refugios(prov: str, refugios: list) -> str:
+    if not refugios:
+        return (f"<h2>Los refugios climáticos de {prov}</h2>"
+                f"<p>Ninguna estación de {prov} baja de 1 noche tropical al año de media, así que "
+                f"no hay aquí un refugio en sentido estricto. La tabla de arriba está ordenada de la "
+                f"más fresca a la más calurosa: las primeras filas son las que mejor concilian el "
+                f"sueño en la provincia.</p>")
+    nombres = ", ".join(f"<b>{e['loc']}</b> ({e['alt']:,} m)".replace(",", ".")
+                         for e in refugios[:6])
+    plural = "estaciones" if len(refugios) > 1 else "estación"
+    return (f"<h2>Los refugios climáticos de {prov}</h2>"
+            f"<p>{len(refugios)} {plural} de {prov} no llegan a 1 noche tropical al año de media: "
+            f"{nombres}. Son los puntos donde, incluso en pleno verano, la temperatura nocturna baja "
+            f"con fiabilidad de los 20&nbsp;°C — normalmente por la altitud, la lejanía del mar o "
+            f"ambas cosas a la vez.</p>")
+
+
+def prosa_peores(prov: str, peores: list, mejor: dict) -> str:
+    nombres = ", ".join(f"<b>{e['loc']}</b> ({ntfmt(e['nt'])} noches/año)" for e in peores)
+    return (f"<h2>Las localidades donde peor se duerme</h2>"
+            f"<p>En el otro extremo, donde peor se duerme en {prov}: {nombres}. Frente a las "
+            f"{ntfmt(mejor['nt'])} noches tropicales de {mejor['loc']}, la diferencia suele "
+            f"explicarse por la cercanía al mar, la baja altitud o el efecto urbano: el asfalto y el "
+            f"cemento retienen el calor del día y lo devuelven por la noche.</p>")
+
+
+def prosa_metodologia(prov: str, n: int, fecha_txt: str) -> str:
+    de_n_estaciones = f"de la única estación" if n == 1 else f"de las {n} estaciones"
+    return (f"<h2>Metodología</h2>"
+            f"<p>Una <b>noche tropical</b> es aquella en la que la temperatura mínima no baja de "
+            f"20&nbsp;°C: el indicador que mejor refleja si se descansa bien en verano, mejor que "
+            f"la media (que esconde los picos). Los datos de {prov} proceden {de_n_estaciones} "
+            f'de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> '
+            f"con cobertura suficiente (al menos 3 veranos con datos y, dentro de cada verano, al "
+            f"menos 60 días con mínima registrada), promediando los veranos (junio–agosto) de 2017 a "
+            f"2026. Limitación: el dato es de la estación, no del municipio entero — en zonas de "
+            f"montaña la temperatura puede cambiar mucho en pocos kilómetros según el desnivel.</p>"
+            f"<p class=\"note\">Última actualización de los datos: {fecha_txt}.</p>")
+
+
+def miles(n: int) -> str:
+    """1699 -> '1.699' (separador de miles con punto, como el resto de la página)."""
+    return f"{n:,}".replace(",", ".")
+
+
+def construir_faq_provincia(prov: str, mejor: dict, peor: dict, n: int) -> list[tuple[str, str]]:
+    faq = [
+        (f"¿Dónde se duerme mejor en {prov} en verano?",
+         f"En {mejor['loc']} ({miles(mejor['alt'])} m de altitud), con unas {ntfmt(mejor['nt'])} noches "
+         "tropicales al año según los datos de AEMET."),
+        ("¿Qué es exactamente una noche tropical?",
+         "Una noche en la que la temperatura mínima no baja de 20 °C. Es el indicador que mejor "
+         "refleja si se descansa bien, porque no se diluye en una media como pasaría con la "
+         "temperatura mínima media."),
+        (f"¿Cuál es el pueblo más fresco de {prov}?",
+         f"{mejor['loc']}, a {miles(mejor['alt'])} m de altitud, con unas {ntfmt(mejor['nt'])} noches "
+         "tropicales al año de media."),
+    ]
+    if n > 1:
+        faq.append((f"¿Cuál es el pueblo donde peor se duerme en {prov}?",
+                     f"{peor['loc']}, con unas {ntfmt(peor['nt'])} noches tropicales al año — frente "
+                     f"a las {ntfmt(mejor['nt'])} de {mejor['loc']}."))
+    faq.append(("¿De dónde salen los datos?",
+                "De AEMET OpenData, la API pública de la Agencia Estatal de Meteorología. Se usan los "
+                "datos diarios de temperatura mínima de los veranos (junio–agosto) de 2017 a 2026."))
+    faq.append(("¿Por qué la altitud o la cercanía al mar cambian tanto las noches?",
+                "El aire frío es más denso y se acumula en las zonas altas durante la noche, mientras "
+                "que el mar libera de noche el calor que ha acumulado de día, lo que mantiene templado "
+                "el aire costero. Por eso, en general, cuanto más alta y más alejada de la costa está "
+                "una estación, más noches frescas tiene."))
+    return faq
+
+
+def faq_html(faq: list[tuple[str, str]]) -> str:
+    return "".join(f'<div class="faqitem"><h3>{q}</h3><p>{a}</p></div>' for q, a in faq)
+
+
+def vecinas_html(prov: str, site: str) -> str:
+    vecinas = VECINAS.get(prov, [])
+    if not vecinas:
+        return ""
+    enlaces = " · ".join(f'<a href="{site}/{slug(v)}/">{v}</a>' for v in vecinas)
+    return f'<div class="kick">Provincias vecinas</div><p class="vecinas">{enlaces}</p>'
+
+
+def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
+                                fecha_mod: str, fecha_mod_txt: str) -> str:
     sl = slug(prov)
     ordenadas = sorted(lista, key=lambda x: (x["nt"], -x["alt"]))
     mejor, peor, n = ordenadas[0], max(lista, key=lambda x: x["nt"]), len(lista)
@@ -955,13 +1176,28 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str) 
     mtxt = ("prácticamente no hay noches tropicales" if mejor["nt"] < 1
             else f'son unas {round(mejor["nt"])} al año')
     alt_mejor = f"{mejor['alt']:,}".replace(",", ".")
-    intro = (f'En <b>{prov}</b>, en <b>{mejor["loc"]}</b> ({alt_mejor} m) {mtxt}, '
-             f'mientras que en <b>{peor["loc"]}</b> se cuentan unas <b>{round(peor["nt"])}</b>. '
-             f'Estas son sus {n} estaciones de AEMET, de la más fresca a la más calurosa.')
+    if n <= 1:
+        intro = (f'En <b>{prov}</b>, en su única estación de AEMET con datos suficientes — '
+                 f'<b>{mejor["loc"]}</b> ({alt_mejor} m) — {mtxt}.')
+    else:
+        intro = (f'En <b>{prov}</b>, en <b>{mejor["loc"]}</b> ({alt_mejor} m) {mtxt}, '
+                 f'mientras que en <b>{peor["loc"]}</b> se cuentan unas <b>{round(peor["nt"])}</b>. '
+                 f'Estas son sus {n} estaciones de AEMET, de la más fresca a la más calurosa.')
     title = f"Noches tropicales en {prov}: dónde se duerme fresco | Refugio Climático"
     desc = (f"Cuántas noches tropicales sufre cada pueblo de {prov} al año, según 10 veranos de "
             f"AEMET. {mejor['loc']} es de los más frescos; {peor['loc']}, donde peor se duerme.")
-    schema = json.dumps(construir_schema_provincia(prov, site, sl, n), ensure_ascii=False)
+
+    refugios = [e for e in ordenadas if e["nt"] < 1]
+    peores = sorted(lista, key=lambda x: -x["nt"])[:3] if n > 1 else []
+    prosa = (prosa_contraste(prov, mejor, peor, n)
+             + prosa_refugios(prov, refugios)
+             + (prosa_peores(prov, peores, mejor) if peores else "")
+             + prosa_metodologia(prov, n, fecha_mod_txt))
+
+    faq = construir_faq_provincia(prov, mejor, peor, n)
+    schema = json.dumps(
+        construir_schema_provincia(prov, site, sl, n, desc, faq, fecha_mod), ensure_ascii=False)
+
     return (PAGINA_PROVINCIA
             .replace("__OGTITLE__", f"Noches tropicales en {prov}")
             .replace("__TITLE__", title)
@@ -974,6 +1210,11 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str) 
             .replace("__H1__", f'¿Se duerme bien en verano en <em>{prov}</em>?')
             .replace("__INTRO__", intro)
             .replace("__TABLE__", "".join(filas))
+            .replace("__CAPTION__", f"Estaciones de AEMET en {prov}, de la más fresca a la más calurosa")
+            .replace("__PROSA__", prosa)
+            .replace("__FAQ__", faq_html(faq))
+            .replace("__VECINAS__", vecinas_html(prov, site))
+            .replace("__FECHA_FOOTER__", fecha_mod_txt)
             .replace("__PROVNAV__", provnav)
             .replace("__SCHEMA__", schema))
 
@@ -1009,13 +1250,16 @@ def main() -> int:
         f"User-agent: *\nAllow: /\nSitemap: {site}/sitemap.xml\n", encoding="utf-8")
     (DOCS_DIR / "favicon.svg").write_text(FAVICON_SVG, encoding="utf-8")
     # Capa 3: una página indexable por provincia.
+    fecha_mod = date.fromtimestamp(RANKING_CSV.stat().st_mtime)
+    fecha_mod_iso, fecha_mod_txt = fecha_mod.isoformat(), fecha_es(fecha_mod)
     urls = [site + "/"]
     for prov, lista in datos["provincias"].items():
         sl = slug(prov)
         carpeta = DOCS_DIR / sl
         carpeta.mkdir(parents=True, exist_ok=True)
         (carpeta / "index.html").write_text(
-            construir_pagina_provincia(prov, lista, site, provnav), encoding="utf-8")
+            construir_pagina_provincia(prov, lista, site, provnav, fecha_mod_iso, fecha_mod_txt),
+            encoding="utf-8")
         urls.append(f"{site}/{sl}/")
     hoy = date.today().isoformat()
     filas = "\n".join(

@@ -65,8 +65,9 @@ def fecha_bonita(nombre: str) -> str:
     return f"{d} {MESES[mes]} {a}"
 
 
-def archivos(tipo: str) -> list[Path]:
-    return sorted(Path(p) for p in glob.glob(str(IMG_DIR / tipo / "*.png")))
+def archivos(tipo: str, zona: str = "peninsula") -> list[Path]:
+    base = AEMET_DIR / "images" / zona
+    return sorted(Path(p) for p in glob.glob(str(base / tipo / "*.png")))
 
 
 def texto_centrado(draw, cx, y, txt, fnt, fill):
@@ -87,8 +88,8 @@ def duraciones(n: int, normal=380, ultimo=1700, primero=900) -> list[int]:
     return d
 
 
-def gif_simple(tipo: str, etiqueta: str, salida: Path, color_etq) -> None:
-    fs = archivos(tipo)
+def gif_simple(tipo: str, etiqueta: str, salida: Path, color_etq, zona: str = "peninsula") -> None:
+    fs = archivos(tipo, zona)
     if not fs:
         print(f"  (sin imágenes en {tipo})")
         return
@@ -209,6 +210,9 @@ def main() -> int:
     # apilados en móvil).
     gif_simple("maxima", "Máximas · de día", DOCS_DIR / "ola-maximas.gif", TEJA)
     gif_simple("minima", "Mínimas · de noche", DOCS_DIR / "ola-minimas.gif", TEAL)
+    # Canarias (también España): solo mínimas, que es el dato que importa de noche.
+    gif_simple("minima", "Mínimas · de noche · Canarias",
+               DOCS_DIR / "ola-canarias-minimas.gif", TEAL, zona="canarias")
     # Doble panel en un solo archivo para compartir (horizontal y vertical).
     gif_dual(DOCS_DIR / "ola-dia-noche.gif")               # horizontal: X, escritorio
     gif_vertical(DOCS_DIR / "ola-dia-noche-vertical.gif")  # vertical: WhatsApp, móvil

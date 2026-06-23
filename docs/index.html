@@ -64,13 +64,13 @@
   .chip{display:inline-flex;gap:10px;align-items:center;margin-top:34px;background:var(--bg2);
     border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:13px;color:var(--muted)}
   .chip b{color:var(--teal);font-family:var(--fm);font-weight:700}
-  .cue{margin-top:auto;padding-top:40px;color:var(--muted);font-size:12px;letter-spacing:.14em;
-    text-transform:uppercase;display:flex;align-items:center;gap:10px;width:fit-content;
-    text-decoration:none;cursor:pointer;transition:color .2s}
-  .cue:hover{color:var(--teja2)}
-  .cue span{display:inline-block;width:1px;height:34px;background:linear-gradient(var(--teja),transparent);
-    animation:cue 1.8s ease-in-out infinite}
-  @keyframes cue{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+  .cue{display:inline-flex;align-items:center;gap:10px;width:fit-content;margin-top:40px;
+    background:rgba(217,116,78,.14);border:1px solid var(--teja);color:var(--teja2);
+    padding:13px 24px;border-radius:999px;font-size:14.5px;font-weight:600;letter-spacing:.02em;
+    text-decoration:none;cursor:pointer;transition:background .2s,color .2s}
+  .cue:hover{background:var(--teja);color:#1a1209}
+  .cue .chev{display:inline-block;font-size:17px;animation:bounce 1.5s ease-in-out infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 
   /* CONTRASTE */
   .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}
@@ -100,6 +100,9 @@
   .gifs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
   @media(max-width:640px){.gifs{grid-template-columns:1fr}}
   .gif{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px}
+  .gif-solo{max-width:780px;margin-top:18px}
+  .subh{font-family:var(--fd);font-weight:600;font-size:clamp(20px,3.6vw,27px);line-height:1.15;margin-top:44px}
+  .subh + .lead{margin-top:10px}
   .legend{display:flex;align-items:center;gap:14px;margin-top:16px;font-size:12.5px;color:var(--muted);
     flex-wrap:wrap}
   .legend .bar{flex:1;min-width:160px;height:9px;border-radius:6px;
@@ -160,6 +163,9 @@
   .fact{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
   .fact b{display:block;font-family:var(--fm);font-size:20px;font-weight:700}
   .fact span{font-size:12px;color:var(--muted)}
+  .minimap-h{font-size:13.5px;color:var(--muted);margin-top:18px}
+  .minimap-h b{color:var(--paper)}
+  .minimap{width:100%;max-width:420px;height:auto;display:block;margin-top:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
   .cmp{font-size:14px;background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:13px 15px;margin-top:14px}
   .cmp b{color:var(--teja2)}
   .share{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
@@ -195,7 +201,7 @@
     <p class="q">¿Cuántas <b>noches tropicales</b> tienes que aguantar tú?</p>
     <p class="intro"><span id="h-total" class="num">848</span> estaciones meteorológicas. Diez veranos de datos de AEMET. Una sola pregunta: en tu pueblo, ¿se duerme tapado o se suda hasta el amanecer?</p>
     <div class="chip">Noche tropical: <b>la mínima no baja de 20&nbsp;°C</b></div>
-    <a class="cue" href="#s1"><span></span> Desliza o pulsa para descubrirlo</a>
+    <a class="cue" href="#s1">Desliza o pulsa para descubrirlo <span class="chev">↓</span></a>
   </div>
 </header>
 
@@ -257,6 +263,10 @@
       <img class="gif" src="ola-minimas.gif" alt="Mapa diario de temperaturas mínimas de AEMET durante la ola de calor" loading="lazy">
     </div>
     <p class="barnote">Fuente: AEMET · un fotograma por día. Recarga la página para verlo desde el principio.</p>
+
+    <h3 class="subh">¿Y Canarias? También es España — y de noche, más complicada.</h3>
+    <p class="lead">En las islas el efecto foehn recalienta hasta la montaña: el interior de Gran Canaria es de los peores sitios de España para dormir. Estas son sus mínimas nocturnas, noche a noche.</p>
+    <img class="gif gif-solo" src="ola-canarias-minimas.gif" alt="Mapa diario de temperaturas mínimas de Canarias (AEMET)" loading="lazy">
   </div>
 </section>
 
@@ -379,6 +389,11 @@ function project(lat, lon){
   });
 })();
 
+// Basemap del mini-mapa del resultado (todas las estaciones, tenues).
+const MAPA_BASE = TODAS.map(s=>{const [x,y]=project(s.lat,s.lon);
+  return `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="2.3" fill="${colorNT(s.nt)}" opacity=".45"/>`;}).join("")
+  + '<rect x="45" y="582" width="225" height="112" rx="8" fill="none" stroke="#3a2c1c"/>';
+
 // ---------- Barras: refugios / infiernos ----------
 function barras(cont, lista){
   cont.innerHTML = lista.map(e=>{
@@ -463,6 +478,11 @@ function render(id,distKm){
     zonaPh = "¿En qué zona te gustaría? (opcional)";
   }
   const leadSubHTML = leadSub ? `<p class="lead-sub">${leadSub}</p>` : "";
+  const [mmx, mmy] = project(e.lat, e.lon);
+  const mini = `<div class="minimap-h">📍 <b>${e.loc}</b> en el mapa de España</div>`
+    + `<svg class="minimap" viewBox="0 0 760 700" role="img" aria-label="Posición de ${e.loc} en España">${MAPA_BASE}`
+    + `<circle cx="${mmx.toFixed(0)}" cy="${mmy.toFixed(0)}" r="9" fill="none" stroke="#fff" stroke-width="3"><animate attributeName="r" values="7;17;7" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite"/></circle>`
+    + `<circle cx="${mmx.toFixed(0)}" cy="${mmy.toFixed(0)}" r="5.5" fill="#fff" stroke="#161009" stroke-width="1.5"/></svg>`;
   $("#res").innerHTML=`
     <div class="res-loc">${e.loc}</div>
     <div class="res-meta">${e.prov} · ${e.alt.toLocaleString("es")} m de altitud</div>${distTxt}
@@ -475,6 +495,7 @@ function render(id,distKm){
       <div class="fact"><b>${e.rank} / ${T}</b><span>puesto en España (1 = mejor refugio)</span></div>
       <div class="fact"><b>${e.ne<1?"<1":Math.round(e.ne)}</b><span>noches ecuatoriales/año (&gt;25&nbsp;°C)</span></div>
     </div>
+    ${mini}
     <div class="share">
       <a href="https://wa.me/?text=${encodeURIComponent(shareTxt+" "+url)}" target="_blank" rel="noopener">WhatsApp</a>
       <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTxt)}&url=${encodeURIComponent(url)}" target="_blank" rel="noopener">X / Twitter</a>

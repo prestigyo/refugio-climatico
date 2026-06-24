@@ -464,6 +464,13 @@ TEMPLATE = r"""<!DOCTYPE html>
   .minimap-h{font-size:13.5px;color:var(--muted);margin-top:18px}
   .minimap-h b{color:var(--paper)}
   .minimap{width:100%;height:auto;display:block;margin-top:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+  .calbtn{margin-top:18px;width:100%;background:var(--bg);border:1px solid var(--line);color:var(--teal);font-weight:600;font-size:14px;padding:12px;border-radius:11px;cursor:pointer;transition:.15s}
+  .calbtn:hover{border-color:var(--teja);color:var(--teja2)}
+  .calcv{width:100%;height:auto;display:block;margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+  .calleg{display:flex;gap:7px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:7px;align-items:center}
+  .calleg .b{height:10px;width:74px;border-radius:3px;display:inline-block}
+  .calleg .bmin{background:linear-gradient(90deg,#1e4670,#eaebf0 60%,#c8281e)}
+  .calleg .bmax{background:linear-gradient(90deg,#fff7bc,#96140a)}
   .minimap-leg{font-size:11.5px;color:var(--muted);margin-top:7px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
   .minimap-leg .d{display:inline-block;width:11px;height:11px;border-radius:3px;margin:0 2px 0 6px}
   .cmp{font-size:14px;background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:13px 15px;margin-top:14px}
@@ -777,6 +784,35 @@ function bandas(nt){
   if(nt<60) return["Se suda","var(--teja)","#2c1a12","warm"];
   return["Horno: casi todo el verano","var(--rojo)","#2c1411","hot"];
 }
+// ---------- Calendario de calor (canvas, responsive) ----------
+function jslug(s){return s.normalize("NFD").replace(/\p{Diacritic}/gu,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+function clerp(a,b,u){u=Math.max(0,Math.min(1,u));return `rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*u)).join(",")})`;}
+function cMin(t){if(t==null)return "#241b11";return t<=20?clerp([30,70,112],[234,235,240],(t-6)/14):clerp([234,235,240],[200,40,30],(t-20)/8);}
+function cMax(t){if(t==null)return "#241b11";return clerp([255,247,188],[150,20,10],(t-18)/24);}
+const CMES=[["may",0],["jun",31],["jul",61],["ago",92],["sep",123]];
+function dibujaCal(cv, est, A, N){
+  const ctx=cv.getContext("2d"), NY=A.length, dpr=Math.min(2,window.devicePixelRatio||1);
+  const W=Math.min(620, cv.parentElement.clientWidth||560), vert=window.innerWidth<700;
+  const setup=h=>{cv.style.width=W+"px";cv.width=Math.round(W*dpr);cv.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.textBaseline="alphabetic";ctx.clearRect(0,0,W,h);};
+  if(!vert){
+    const mL=42,mR=50,ch=12,tH=22,mH=18,gap=22,cw=(W-mL-mR)/N,pH=tH+NY*ch+mH;setup(pH*2+gap);
+    const panel=(yT,arr,tit,cf,nt)=>{ctx.fillStyle="#efe6d6";ctx.font="600 12px sans-serif";ctx.fillText(tit,mL,yT+14);const gy=yT+tH;
+      for(let r=0;r<NY;r++){const y=gy+r*ch;ctx.fillStyle="#b3a48c";ctx.font="9px monospace";ctx.fillText(A[r],3,y+ch-3);
+        for(let d=0;d<N;d++){ctx.fillStyle=cf(arr[r][d]);ctx.fillRect(mL+d*cw,y,cw+0.4,ch-1.1);}
+        if(nt){ctx.fillStyle=nt[r]>0?"#e89a73":"#6b6150";ctx.font="700 9px monospace";ctx.fillText(nt[r],mL+N*cw+6,y+ch-3);}}
+      ctx.fillStyle="#b3a48c";ctx.font="9px sans-serif";for(const[l,o]of CMES)ctx.fillText(l,mL+o*cw,gy+NY*ch+12);};
+    panel(0,est.tmax,"MÁX día",cMax,null);panel(pH+gap,est.tmin,"MÍN noche (NT/año →)",cMin,est.nt);
+  }else{
+    const mL=26,gB=10,tL=36,bN=20,bW=(W-mL-gB)/2,colW=bW/NY,cH=Math.max(3,Math.min(5,520/N)),gH=N*cH;setup(tL+gH+bN);
+    const blo=(x0,arr,tit,cf,nt)=>{ctx.fillStyle="#efe6d6";ctx.font="600 11px sans-serif";ctx.fillText(tit,x0,12);
+      ctx.fillStyle="#b3a48c";ctx.font="8px monospace";for(let c=0;c<NY;c++)ctx.fillText("'"+String(A[c]%100).padStart(2,"0"),x0+c*colW,tL-5);
+      for(let c=0;c<NY;c++)for(let r=0;r<N;r++){ctx.fillStyle=cf(arr[c][r]);ctx.fillRect(x0+c*colW,tL+r*cH,colW-0.4,cH+0.3);}
+      if(nt){ctx.font="700 7px monospace";for(let c=0;c<NY;c++){ctx.fillStyle=nt[c]>0?"#e89a73":"#6b6150";ctx.fillText(nt[c],x0+c*colW,tL+gH+11);}}};
+    blo(mL,est.tmax,"MÁX",cMax,null);blo(mL+bW+gB,est.tmin,"MÍN",cMin,est.nt);
+    ctx.fillStyle="#b3a48c";ctx.font="8px sans-serif";for(const[l,o]of CMES)ctx.fillText(l,0,tL+o*cH+7);
+  }
+}
+
 function render(id,distKm){
   const e=TODAS.find(x=>x.id===id);if(!e)return;
   const [etq,col,bg,cls]=bandas(e.nt);
@@ -822,6 +858,9 @@ function render(id,distKm){
       <div class="fact"><b>${e.ne<1?"<1":Math.round(e.ne)}</b><span>noches ecuatoriales/año (&gt;25&nbsp;°C)</span></div>
     </div>
     ${mini}
+    <button class="calbtn" id="calbtn" type="button">📅 Ver su calendario de calor (10 veranos)</button>
+    <canvas class="calcv" id="calcv" style="display:none"></canvas>
+    <div class="calleg" id="calleg" style="display:none"><span>Noche:</span><span class="b bmin"></span>fresco·20°·no refresca<span style="margin-left:8px">Día:</span><span class="b bmax"></span>18°–42°</div>
     <div class="share">
       <a href="https://wa.me/?text=${encodeURIComponent(shareTxt+" "+url)}" target="_blank" rel="noopener">WhatsApp</a>
       <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTxt)}&url=${encodeURIComponent(url)}" target="_blank" rel="noopener">X / Twitter</a>
@@ -854,11 +893,25 @@ function render(id,distKm){
       fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(lead)}).then(gracias).catch(gracias);
     } else { console.log("LEAD (sin endpoint configurado):",lead); gracias(); }
   });
+  const cbtn=$("#calbtn");
+  if(cbtn) cbtn.addEventListener("click", async ()=>{
+    const sl=jslug(e.prov);
+    cbtn.textContent="Cargando calendario…"; cbtn.disabled=true;
+    try{
+      window.__cal=window.__cal||{};
+      if(!window.__cal[sl]) window.__cal[sl]=await (await fetch("datos/"+sl+".json")).json();
+      const pr=window.__cal[sl], est=pr.est[e.id];
+      if(!est){ cbtn.textContent="Sin calendario para esta estación"; return; }
+      const _c=$("#calcv"); _c.__d={est,a:pr.anios,n:pr.ndias}; dibujaCal(_c, est, pr.anios, pr.ndias);
+      _c.style.display="block"; $("#calleg").style.display="flex"; cbtn.style.display="none";
+    }catch(err){ cbtn.textContent="No se pudo cargar el calendario"; cbtn.disabled=false; }
+  });
 }
 
 // ---------- Scroll reveal ----------
 const io=new IntersectionObserver((es)=>{es.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target);}});},{threshold:.15});
 document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+let __rt; addEventListener("resize",()=>{clearTimeout(__rt);__rt=setTimeout(()=>{const c=document.querySelector("#calcv");if(c&&c.style.display!=="none"&&c.__d)dibujaCal(c,c.__d.est,c.__d.a,c.__d.n);},200);});
 </script>
 </body>
 </html>

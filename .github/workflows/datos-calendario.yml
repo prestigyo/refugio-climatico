@@ -1,0 +1,48 @@
+name: Datos del calendario por estación
+
+# Genera los 52 JSON de docs/datos/{provincia}.json (Tmín/Tmáx diarias de verano
+# por estación + noches tropicales/año) que consume el calendario de calor de la
+# calculadora. Pesado (lee los diarios_*.csv), por eso va aparte del build diario:
+# semanal + a mano + cuando cambian los datos diarios.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * 1"        # lunes 05:00 UTC
+  push:
+    paths:
+      - "aemet-temperaturas/datos/diarios_*.csv"
+      - "aemet-temperaturas/scripts/generar_calendario_datos.py"
+
+permissions:
+  contents: write
+
+jobs:
+  datos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repo
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar pandas
+        run: pip install pandas
+
+      - name: Generar los JSON por provincia
+        run: python aemet-temperaturas/scripts/generar_calendario_datos.py
+
+      - name: Commit si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/datos
+          if git diff --staged --quiet; then
+            echo "Sin cambios en docs/datos/."
+          else
+            git commit -m "Actualizar datos del calendario ($(date -u +%Y-%m-%d))"
+            git push
+          fi

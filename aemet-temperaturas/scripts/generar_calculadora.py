@@ -552,6 +552,9 @@ TEMPLATE = r"""<!DOCTYPE html>
       <span class="bar"></span>
       <span>no refresca</span>
     </div>
+    <div style="text-align:center">
+      <a class="cue" href="__SITE_URL__/mapa-estaciones/" style="margin-top:22px">Ver el mapa interactivo · pulsa cada punto →</a>
+    </div>
     <div class="foehn reveal">
       <div class="tag">La sorpresa · el efecto foehn</div>
       <h3>Subes a la montaña buscando el fresco. En Gran Canaria lo encuentras <em>al revés</em>.</h3>
@@ -1254,10 +1257,13 @@ def faq_html(faq: list[tuple[str, str]]) -> str:
 
 def vecinas_html(prov: str, site: str) -> str:
     vecinas = VECINAS.get(prov, [])
-    if not vecinas:
-        return ""
-    enlaces = " · ".join(f'<a href="{site}/{slug(v)}/">{v}</a>' for v in vecinas)
-    return f'<div class="kick">Provincias vecinas</div><p class="vecinas">{enlaces}</p>'
+    bloque = ""
+    if vecinas:
+        enlaces = " · ".join(f'<a href="{site}/{slug(v)}/">{v}</a>' for v in vecinas)
+        bloque = f'<div class="kick">Provincias vecinas</div><p class="vecinas">{enlaces}</p>'
+    bloque += (f'<p class="vecinas"><a href="{site}/mapa-estaciones/">'
+               f'Ver el mapa interactivo de toda España →</a></p>')
+    return bloque
 
 
 def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
@@ -1361,6 +1367,7 @@ def main() -> int:
             construir_pagina_provincia(prov, lista, site, provnav, fecha_mod_iso, fecha_mod_txt),
             encoding="utf-8")
         urls.append(f"{site}/{sl}/")
+    urls.append(site + "/mapa-estaciones/")
     hoy = date.today().isoformat()
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'
@@ -1369,7 +1376,7 @@ def main() -> int:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + filas + "\n</urlset>\n", encoding="utf-8")
-    print(f"   {len(urls) - 1} páginas de provincia · sitemap con {len(urls)} URLs")
+    print(f"   {len(datos['provincias'])} provincias + mapa interactivo · sitemap con {len(urls)} URLs")
     c = datos["meta"]["contraste"]
     print(f"OK -> {OUT_HTML}")
     print(f"   {total} estaciones en {len(datos['provincias'])} provincias")

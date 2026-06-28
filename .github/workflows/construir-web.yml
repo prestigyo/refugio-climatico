@@ -9,8 +9,10 @@ on:
   push:                        # al cambiar el generador o los datos
     paths:
       - "aemet-temperaturas/scripts/generar_calculadora.py"
+      - "aemet-temperaturas/scripts/generar_pagina_mapa.py"
       - "aemet-temperaturas/scripts/generar_gif.py"
       - "aemet-temperaturas/analisis/refugios_nocturnos_ranking.csv"
+      - "aemet-temperaturas/datos/spain-provinces.geojson"
   schedule:
     - cron: "0 11 * * *"       # refresco diario de los GIFs (tras la descarga de mapas)
 
@@ -37,6 +39,9 @@ jobs:
 
       - name: Generar web (calculadora + provincias + sitemap + robots)
         run: python aemet-temperaturas/scripts/generar_calculadora.py
+
+      - name: Generar mapa interactivo de estaciones
+        run: python aemet-temperaturas/scripts/generar_pagina_mapa.py
 
       - name: Commit si hay cambios
         run: |

@@ -806,13 +806,21 @@ function dibujaCal(cv, est, A, N){
       ctx.fillStyle="#b3a48c";ctx.font="9px sans-serif";for(const[l,o]of CMES)ctx.fillText(l,mL+o*cw,gy+NY*ch+12);};
     panel(0,est.tmax,"MÁX día",cMax,null);panel(pH+gap,est.tmin,"MÍN noche (NT/año →)",cMin,est.nt);
   }else{
-    const mL=26,gB=10,tL=36,bN=20,bW=(W-mL-gB)/2,colW=bW/NY,cH=Math.max(3,Math.min(5,520/N)),gH=N*cH;setup(tL+gH+bN);
-    const blo=(x0,arr,tit,cf,nt)=>{ctx.fillStyle="#efe6d6";ctx.font="600 11px sans-serif";ctx.fillText(tit,x0,12);
-      ctx.fillStyle="#b3a48c";ctx.font="8px monospace";for(let c=0;c<NY;c++)ctx.fillText("'"+String(A[c]%100).padStart(2,"0"),x0+c*colW,tL-5);
+    const mL=26,gB=10,tL=48,bN=32,bW=(W-mL-gB)/2,colW=bW/NY,cH=Math.max(3,Math.min(5,520/N)),gH=N*cH;setup(tL+gH+bN);
+    const blo=(x0,arr,tit,cf,nt)=>{ctx.fillStyle="#efe6d6";ctx.font="600 11px sans-serif";ctx.textAlign="left";ctx.fillText(tit,x0,12);
+      // años: escalonados en dos alturas + línea guía a su columna (en móvil no caben en una fila)
+      ctx.textAlign="center";ctx.font="8px monospace";
+      for(let c=0;c<NY;c++){const cx=x0+c*colW+colW/2,ly=(c%2?34:23);
+        ctx.strokeStyle="#5a4d3a";ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(cx,ly+2);ctx.lineTo(cx,tL-1);ctx.stroke();
+        ctx.fillStyle="#b3a48c";ctx.fillText("'"+String(A[c]%100).padStart(2,"0"),cx,ly);}
       for(let c=0;c<NY;c++)for(let r=0;r<N;r++){ctx.fillStyle=cf(arr[c][r]);ctx.fillRect(x0+c*colW,tL+r*cH,colW-0.4,cH+0.3);}
-      if(nt){ctx.font="700 7px monospace";for(let c=0;c<NY;c++){ctx.fillStyle=nt[c]>0?"#e89a73":"#6b6150";ctx.fillText(nt[c],x0+c*colW,tL+gH+11);}}};
+      if(nt){ctx.font="700 8px monospace";const by=tL+gH;
+        for(let c=0;c<NY;c++){const cx=x0+c*colW+colW/2,ly=by+(c%2?22:11);
+          ctx.strokeStyle="#5a4d3a";ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(cx,by+1);ctx.lineTo(cx,ly-7);ctx.stroke();
+          ctx.fillStyle=nt[c]>0?"#e89a73":"#6b6150";ctx.fillText(nt[c],cx,ly);}}
+      ctx.textAlign="left";};
     blo(mL,est.tmax,"MÁX",cMax,null);blo(mL+bW+gB,est.tmin,"MÍN",cMin,est.nt);
-    ctx.fillStyle="#b3a48c";ctx.font="8px sans-serif";for(const[l,o]of CMES)ctx.fillText(l,0,tL+o*cH+7);
+    ctx.fillStyle="#b3a48c";ctx.font="8px sans-serif";ctx.textAlign="left";for(const[l,o]of CMES)ctx.fillText(l,0,tL+o*cH+7);
   }
 }
 

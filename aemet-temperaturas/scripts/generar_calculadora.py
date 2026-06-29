@@ -627,7 +627,8 @@ TEMPLATE = r"""<!DOCTYPE html>
     Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> ·
     verano (jun–ago) · <span id="anios">diez veranos</span> · <span id="f-total" class="num">848</span> estaciones.<br>
     Dato medido en la estación, no en el municipio: si tu pueblo no tiene estación, elige la más cercana
-    (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).
+    (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).<br><br>
+    Lee también: <a href="__SITE_URL__/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a>
   </div>
 </footer>
 
@@ -1376,6 +1377,7 @@ def main() -> int:
             encoding="utf-8")
         urls.append(f"{site}/{sl}/")
     urls.append(site + "/mapa-estaciones/")
+    urls.append(site + "/refugio-climatico-natural/")
     hoy = date.today().isoformat()
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'

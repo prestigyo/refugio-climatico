@@ -628,7 +628,9 @@ TEMPLATE = r"""<!DOCTYPE html>
     verano (jun–ago) · <span id="anios">diez veranos</span> · <span id="f-total" class="num">848</span> estaciones.<br>
     Dato medido en la estación, no en el municipio: si tu pueblo no tiene estación, elige la más cercana
     (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).<br><br>
-    Lee también: <a href="__SITE_URL__/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a>
+    Lee también: <a href="__SITE_URL__/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a><br>
+    <a href="__SITE_URL__/ranking-noches-tropicales/" style="color:var(--teja2)">Ranking: dónde se duerme mejor y peor →</a>
+    &nbsp;·&nbsp;<a href="__SITE_URL__/prensa/" style="color:var(--teja2)">Sala de prensa</a>
   </div>
 </footer>
 
@@ -1344,6 +1346,327 @@ FAVICON_SVG = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
 '''
 
 
+# ===========================================================================
+# Páginas complementarias data-driven: Sala de prensa y Ranking nacional.
+# Se generan desde los mismos datos del reportaje; sin scripts ni deps nuevas.
+# ===========================================================================
+
+# Material descargable que vive en docs/ (lo crea generar_gif.py).
+ASSETS_PRENSA = [
+    ("ola-dia-noche.gif", "GIF · La ola, día y noche", "Panel doble, ideal para X/Twitter"),
+    ("ola-maximas.gif", "GIF · Máximas, día a día", "La península, verano en curso"),
+    ("ola-minimas.gif", "GIF · Mínimas, día a día", "Lo que de verdad importa de noche"),
+    ("ola-canarias-minimas.gif", "GIF · Mínimas en Canarias", "El archipiélago aparte"),
+    ("og.png", "Imagen de portada", "1200×630, para abrir piezas"),
+    ("og-cuadrada.png", "Imagen cuadrada", "1080×1080, para redes"),
+]
+
+_CSS_CHROME = (
+    ':root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;'
+    '--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;'
+    '--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;'
+    '--fm:"JetBrains Mono",monospace}'
+    '*{margin:0;padding:0;box-sizing:border-box}'
+    'body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.7;-webkit-font-smoothing:antialiased}'
+    'a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}'
+    'header.h{padding:48px 0 14px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}'
+    '.crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}'
+    '.kick{font:600 12px/1 var(--fb);letter-spacing:.15em;text-transform:uppercase;color:var(--teja);margin:10px 0 10px}'
+    'h1{font-family:var(--fd);font-weight:900;font-size:clamp(30px,6vw,46px);line-height:1.06;letter-spacing:-.01em}'
+    'h1 em{font-style:italic;color:var(--teja2)}'
+    '.intro{color:#e7dcc8;font-size:clamp(16px,2.5vw,18px);margin:18px 0 0}.intro b{color:var(--paper)}'
+    '.cta{margin:10px 0;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}'
+    '.cta b{font-family:var(--fd);font-size:19px}'
+    '.botones{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}'
+    '.btn{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px}'
+    '.btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}'
+    '.btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}'
+    'footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#82745d;font-size:12.5px;margin-top:24px}'
+    'footer a{color:#9a8a6f}'
+)
+
+PAGINA_PRENSA = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sala de prensa · Refugio Climático (datos de noches tropicales, AEMET)</title>
+<meta name="description" content="Material para prensa del proyecto Refugio Climático: 5 datos para titular, titulares sugeridos, gráficos descargables, metodología y contacto. Datos de AEMET, 2017–2026.">
+<link rel="canonical" href="__SITE__/prensa/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sala de prensa · Refugio Climático">
+<meta property="og:description" content="5 datos para titular, gráficos descargables, metodología y contacto. Datos de AEMET.">
+<meta property="og:url" content="__SITE__/prensa/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+ section{padding:24px 0;border-top:1px solid var(--line)}
+ section:first-of-type{border-top:none}
+ p{font-size:clamp(15.5px,2.3vw,17px);color:#e3d8c4;margin:0 0 14px}p b{color:var(--paper)}
+ .big{font-family:var(--fd);font-size:clamp(19px,3vw,24px);line-height:1.35;color:#efe6d6}
+ .note{font-size:12.5px;color:var(--muted)}
+ ol.datos{margin:6px 0 0;padding:0;list-style:none;counter-reset:d}
+ ol.datos li{counter-increment:d;position:relative;padding:13px 0 13px 42px;border-bottom:1px solid var(--line);font-size:clamp(15px,2.3vw,16.5px);color:#e3d8c4;line-height:1.55}
+ ol.datos li::before{content:counter(d);position:absolute;left:0;top:13px;width:26px;height:26px;display:grid;place-items:center;background:var(--teja);color:#1a1209;font-family:var(--fm);font-weight:700;border-radius:50%;font-size:13px}
+ ol.datos li b{color:var(--paper)} ol.datos li em{font-style:italic;color:var(--teal)}
+ ul.tit{list-style:none;padding:0;margin:0}
+ ul.tit li{padding:11px 0 11px 20px;position:relative;color:#e7dcc8;font-family:var(--fd);font-size:clamp(16px,2.4vw,18px);line-height:1.3;border-bottom:1px solid var(--line)}
+ ul.tit li::before{content:"\00ab";position:absolute;left:0;color:var(--teja)}
+ .descargas{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0}
+ .card{display:block;padding:14px 16px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:12px;color:var(--teja2);font-weight:700;font-size:14px}
+ .card:hover{border-color:var(--teja);text-decoration:none}
+ .card span{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:3px}
+ .cita{font-family:var(--fm);font-size:13px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px;color:#e3d8c4;line-height:1.5}
+ @media(max-width:520px){.descargas{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Sala de prensa</nav>
+  <div class="kick">Para periodistas · Datos abiertos AEMET</div>
+  <h1>Sala de prensa</h1>
+  <p class="intro"><b>Refugio Climático</b> analiza 10 veranos de datos de AEMET (2017–2026) para mostrar dónde se duerme fresco en España y dónde no refresca de noche. Proyecto de datos de interés público; todo el material es libre citando la fuente.</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="kick">En una frase</div>
+  <p class="big">No todos los veranos españoles se sufren igual de noche: mientras en las sierras del interior se sigue durmiendo tapado, en buena parte del litoral y de las islas la temperatura no baja de 20&nbsp;°C casi ninguna noche.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kick">Cinco datos para titular</div>
+  <ol class="datos">__DATOS__</ol>
+  <p class="note">Fuente: AEMET OpenData · veranos 2017–2026 · __TOTAL__ estaciones.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kick">Titulares que puedes usar</div>
+  <ul class="tit">
+    <li>El mapa del calor que no te deja dormir: dónde se duerme fresco en España y dónde se suda hasta el amanecer.</li>
+    <li>La costa mediterránea y las islas, entre los peores sitios de España para dormir en verano.</li>
+    <li>Hay pueblos en España con cero noches tropicales y otros con más de 80: el mapa que lo demuestra.</li>
+    <li>El punto más caliente de noche no está en el sur peninsular, sino en la montaña de Gran Canaria.</li>
+  </ul>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kick">Material descargable</div>
+  <div class="descargas">__DESCARGAS__</div>
+  <p class="note">Puede publicarse citando «Fuente: AEMET · Refugio Climático».</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kick">Metodología</div>
+  <p>Una <b>noche tropical</b> es aquella en que la temperatura mínima no baja de 20&nbsp;°C. Se cuentan sobre los datos diarios de temperatura mínima de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a>, en los veranos (junio–agosto) de 2017 a 2026, para __TOTAL__ estaciones con cobertura suficiente. El proceso es reproducible y los datos proceden íntegramente de fuentes públicas de AEMET. Importante: el dato es de la <b>estación</b>, no del municipio; en montaña la noche cambia mucho con la altitud.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kick">Cómo citar</div>
+  <p class="cita">Refugio Climático (2026). <i>El mapa del calor que no te deja dormir.</i> Análisis de noches tropicales con datos de AEMET (2017–2026). __HOME__</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="cta">
+    <b>¿Quieres datos en bruto, gráficos en alta o una entrevista?</b><br>
+    Ramón J. Lowesting · <a href="mailto:lowesting@gmail.com">lowesting@gmail.com</a>
+    <div class="botones">
+      <a class="btn pri" href="__SITE__/mapa-estaciones/">Mapa interactivo</a>
+      <a class="btn sec" href="__SITE__/ranking-noches-tropicales/">El ranking</a>
+      <a class="btn sec" href="__HOME__">La calculadora</a>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · proyecto Refugio Climático de Ramón J. Lowesting · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.
+</div></footer>
+</body>
+</html>
+"""
+
+PAGINA_RANKING = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dónde se duerme mejor y peor en verano en España (ranking de noches tropicales) | Refugio Climático</title>
+<meta name="description" content="Ranking de noches tropicales en España con 10 veranos de datos de AEMET: los lugares donde peor se duerme (más noches con la mínima sobre 20 °C) y los refugios donde mejor.">
+<link rel="canonical" href="__SITE__/ranking-noches-tropicales/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dónde se duerme mejor y peor en verano en España">
+<meta property="og:description" content="El ranking de noches tropicales con 10 veranos de datos de AEMET.">
+<meta property="og:url" content="__SITE__/ranking-noches-tropicales/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ .wrap{max-width:880px;margin:0 auto;padding:0 22px}
+ section{padding:24px 0}
+ h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,4vw,28px);margin:6px 0 6px;letter-spacing:-.01em}
+ .note{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+ table{width:100%;border-collapse:collapse;font-size:14.5px}
+ th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line)}
+ th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+ th.r,td.n{text-align:right}
+ td.n{font-family:var(--fm);font-weight:700}
+ td.pos{font-family:var(--fm);color:var(--teja2);width:34px}
+ td.loc{font-weight:600}
+ tbody tr:hover{background:rgba(217,116,78,.05)}
+ @media(max-width:520px){th.hide,td.hide{display:none}}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Ranking</nav>
+  <div class="kick">Ranking · Datos AEMET 2017–2026</div>
+  <h1>Dónde se duerme <em>mejor</em> y <em>peor</em> en verano en España</h1>
+  <p class="intro">El ranking de <b>noches tropicales</b> —noches en que la mínima no baja de 20&nbsp;°C— de __TOTAL__ estaciones de AEMET, con diez veranos de datos. Cuantas más noches tropicales, peor se duerme.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Los 30 lugares donde peor se duerme</h2>
+  <p class="note">Más noches tropicales al año = más noches sin que baje de 20&nbsp;°C. Dato de la estación de AEMET.</p>
+  <table>
+    <thead><tr><th>#</th><th>Lugar</th><th>Provincia</th><th class="r hide">Altitud</th><th class="r">Noches trop./año</th></tr></thead>
+    <tbody>__PEOR__</tbody>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Los refugios: donde mejor se duerme</h2>
+  <p class="note"><b>__CERO__ estaciones</b> no registran ni una noche tropical al año de media. Estas son 30 de ellas, las de mayor altitud entre las de cero.</p>
+  <table>
+    <thead><tr><th>Lugar</th><th>Provincia</th><th class="r hide">Altitud</th><th class="r">Noches trop./año</th></tr></thead>
+    <tbody>__MEJOR__</tbody>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <div class="cta">
+    <b>¿Y tu pueblo en qué puesto está?</b><br>
+    <div class="botones">
+      <a class="btn pri" href="__HOME__">Búscalo en la calculadora →</a>
+      <a class="btn sec" href="__SITE__/mapa-estaciones/">Ver el mapa interactivo</a>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.
+</div></footer>
+</body>
+</html>
+"""
+
+
+def construir_pagina_prensa(datos: dict, estaciones: list, site: str,
+                            fecha_iso: str, fecha_txt: str) -> str:
+    m = datos["meta"]
+    total = m["total"]
+    cero = sum(1 for e in estaciones if e["nt"] < 1)
+    top = sorted(estaciones, key=lambda x: -x["nt"])[:4]
+    top_txt = ", ".join(f"{e['loc']} (~{round(e['nt'])})" for e in top)
+    cr, ch, fo = m["contraste"]["refugio"], m["contraste"]["horno"], m["foehn"]
+    items = [
+        f"<b>España duerme partida en dos:</b> {cero} estaciones no llegan ni a una noche "
+        "tropical al año, frente a costa e islas donde la mínima no baja de 20&nbsp;°C casi todo el verano.",
+        f"<b>Donde peor se duerme:</b> {top_txt} noches tropicales al año.",
+        f"<b>El peor no está en el sur peninsular:</b> está en Canarias. Y por el <em>efecto "
+        f"foehn</em>, hasta la montaña de Gran Canaria no refresca: {fo['loc'].split(',')[0]} "
+        f"(a {miles(fo['alt'])}&nbsp;m) suma unas {round(fo['nt'])} noches tropicales al año.",
+        "<b>Los refugios son montaña interior:</b> sierras de Teruel, Pirineos, Gredos o "
+        "Sierra Nevada apenas registran noches tropicales en una década.",
+        f"<b>El contraste de manual:</b> {cr['loc']} ({ntfmt(cr['nt'])} noches/año) frente a "
+        f"{ch['loc']} (~{round(ch['nt'])}). Mismo país, dos veranos distintos.",
+    ]
+    datos_html = "".join(f"<li>{x}</li>" for x in items)
+    desc_html = "".join(
+        f'<a class="card" href="{site}/{f}" download>{lbl}<span>{sub}</span></a>'
+        for f, lbl, sub in ASSETS_PRENSA)
+    url = site + "/prensa/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Sala de prensa", "item": url}]},
+        {"@type": "WebPage", "name": "Sala de prensa · Refugio Climático", "url": url,
+         "description": "Material para prensa: datos, titulares, gráficos descargables, metodología y contacto.",
+         "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
+        ensure_ascii=False)
+    return (PAGINA_PRENSA
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__DATOS__", datos_html)
+            .replace("__DESCARGAS__", desc_html)
+            .replace("__TOTAL__", str(total))
+            .replace("__FECHA__", fecha_txt)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
+def construir_pagina_ranking(estaciones: list, site: str,
+                             fecha_iso: str, fecha_txt: str) -> str:
+    peor = sorted(estaciones, key=lambda x: -x["nt"])[:30]
+    refus = [e for e in estaciones if e["nt"] < 1]
+    cero = len(refus)
+    mejor = sorted(refus, key=lambda x: (x["nt"], -x["alt"]))[:30]
+    filas_peor = "".join(
+        f'<tr><td class="pos">{i}</td><td class="loc">{e["loc"]}</td>'
+        f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
+        f'<td class="n hide">{miles(e["alt"])}&nbsp;m</td>'
+        f'<td class="n">{ntfmt(e["nt"])}</td></tr>'
+        for i, e in enumerate(peor, 1))
+    filas_mejor = "".join(
+        f'<tr><td class="loc">{e["loc"]}</td>'
+        f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
+        f'<td class="n hide">{miles(e["alt"])}&nbsp;m</td>'
+        f'<td class="n">{ntfmt(e["nt"])}</td></tr>'
+        for e in mejor)
+    url = site + "/ranking-noches-tropicales/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Ranking de noches tropicales", "item": url}]},
+        {"@type": "Article",
+         "headline": "Dónde se duerme mejor y peor en verano en España",
+         "description": "Ranking de noches tropicales en España con 10 veranos de datos de AEMET.",
+         "image": site + "/og.png",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "Refugio Climático",
+                       "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
+         "datePublished": FECHA_PUBLICACION_LANDINGS, "dateModified": fecha_iso,
+         "mainEntityOfPage": url}]}, ensure_ascii=False)
+    return (PAGINA_RANKING
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__PEOR__", filas_peor)
+            .replace("__MEJOR__", filas_mejor)
+            .replace("__CERO__", str(cero))
+            .replace("__TOTAL__", str(len(estaciones)))
+            .replace("__FECHA__", fecha_txt)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
 def main() -> int:
     estaciones, total = cargar_estaciones()
     datos = construir_datos(estaciones, total)
@@ -1378,6 +1701,17 @@ def main() -> int:
         urls.append(f"{site}/{sl}/")
     urls.append(site + "/mapa-estaciones/")
     urls.append(site + "/refugio-climatico-natural/")
+    # Páginas complementarias data-driven: sala de prensa y ranking nacional.
+    (DOCS_DIR / "prensa").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "prensa" / "index.html").write_text(
+        construir_pagina_prensa(datos, estaciones, site, fecha_mod_iso, fecha_mod_txt),
+        encoding="utf-8")
+    urls.append(site + "/prensa/")
+    (DOCS_DIR / "ranking-noches-tropicales").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "ranking-noches-tropicales" / "index.html").write_text(
+        construir_pagina_ranking(estaciones, site, fecha_mod_iso, fecha_mod_txt),
+        encoding="utf-8")
+    urls.append(site + "/ranking-noches-tropicales/")
     hoy = date.today().isoformat()
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'

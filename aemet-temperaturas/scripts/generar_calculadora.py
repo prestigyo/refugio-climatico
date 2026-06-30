@@ -262,6 +262,7 @@ def construir_schema(datos: dict, site: str) -> dict:
                 "spatialCoverage": {"@type": "Place", "name": "España"},
                 "keywords": ["noches tropicales", "ola de calor", "refugio climático",
                              "AEMET", "temperatura mínima", "clima España"],
+                "license": "https://creativecommons.org/licenses/by/4.0/",
             },
             {
                 "@type": "WebApplication",
@@ -628,7 +629,8 @@ TEMPLATE = r"""<!DOCTYPE html>
     verano (jun–ago) · <span id="anios">diez veranos</span> · <span id="f-total" class="num">848</span> estaciones.<br>
     Dato medido en la estación, no en el municipio: si tu pueblo no tiene estación, elige la más cercana
     (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).<br><br>
-    Lee también: <a href="__SITE_URL__/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a><br>
+    Lee también: <a href="__SITE_URL__/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a>
+    &nbsp;·&nbsp;<a href="__SITE_URL__/microclimas/" style="color:var(--teja2)">Microclimas: dónde el aire se queda fresco →</a><br>
     <a href="__SITE_URL__/ranking-noches-tropicales/" style="color:var(--teja2)">Ranking: dónde se duerme mejor y peor →</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/prensa/" style="color:var(--teja2)">Sala de prensa</a>
   </div>
@@ -1701,6 +1703,7 @@ def main() -> int:
         urls.append(f"{site}/{sl}/")
     urls.append(site + "/mapa-estaciones/")
     urls.append(site + "/refugio-climatico-natural/")
+    urls.append(site + "/microclimas/")
     # Páginas complementarias data-driven: sala de prensa y ranking nacional.
     (DOCS_DIR / "prensa").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "prensa" / "index.html").write_text(

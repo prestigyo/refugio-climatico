@@ -632,6 +632,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     Lee también: <a href="__SITE_URL__/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/microclimas/" style="color:var(--teja2)">Microclimas: dónde el aire se queda fresco →</a><br>
     <a href="__SITE_URL__/ranking-noches-tropicales/" style="color:var(--teja2)">Ranking: dónde se duerme mejor y peor →</a>
+    &nbsp;·&nbsp;<a href="__SITE_URL__/ola-de-calor/" style="color:var(--teja2)">La ola de calor, día y noche →</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/prensa/" style="color:var(--teja2)">Sala de prensa</a>
   </div>
 </footer>
@@ -1669,6 +1670,202 @@ def construir_pagina_ranking(estaciones: list, site: str,
             .replace("__SITE__", site))
 
 
+# ===========================================================================
+# Página /ola-de-calor/: los GIFs de AEMET (máx de día / mín de noche) con una
+# CAPA de flechas hacia 8 refugios climáticos, activable con un botón.
+#
+# CALIBRACIÓN lat/lon -> píxel del GIF (630x546). Transformación afín
+# (equirectangular) ajustada visualmente sobre el mapa de AEMET. Si en el futuro
+# AEMET cambia el encuadre de sus mapas, reajusta SOLO estas 4 parejas:
+_OLA_W, _OLA_H = 630, 546          # dimensiones del GIF
+_CAL_LON_W, _CAL_X_W = -10.2, 24   # borde oeste  (lon -> x)
+_CAL_LON_E, _CAL_X_E = 4.9, 596    # borde este
+_CAL_LAT_N, _CAL_Y_N = 44.3, 42    # borde norte  (lat -> y, y crece hacia abajo)
+_CAL_LAT_S, _CAL_Y_S = 34.8, 540   # borde sur
+# ===========================================================================
+
+# 8 refugios a señalar: (nombre, lat, lon, slug de provincia). La punta de la
+# flecha cae en (lat, lon). Ninguno está en Canarias (que va en recuadro aparte).
+REFUGIOS_OLA = [
+    ("Puerto del Pico", 40.3211, -5.0125, "avila"),
+    ("Sanabria", 42.1069, -6.6350, "zamora"),
+    ("Rascafría", 40.9053, -3.8811, "madrid"),
+    ("Villablino", 42.9394, -6.3186, "leon"),
+    ("Benasque", 42.6042, 0.5231, "huesca"),
+    ("Vall de Boí", 42.5183, 0.8464, "lleida"),
+    ("Beariz", 42.4661, -8.2708, "ourense"),
+    ("La Virgen de La Vega", 40.37181, -0.7197202, "teruel"),
+    ("Sierra Nevada", 37.0555, -3.3656, "granada"),
+]
+
+
+def _px_ola(lat: float, lon: float) -> tuple[float, float]:
+    x = _CAL_X_W + (lon - _CAL_LON_W) / (_CAL_LON_E - _CAL_LON_W) * (_CAL_X_E - _CAL_X_W)
+    y = _CAL_Y_N + (_CAL_LAT_N - lat) / (_CAL_LAT_N - _CAL_LAT_S) * (_CAL_Y_S - _CAL_Y_N)
+    return round(x, 1), round(y, 1)
+
+
+def construir_marcadores_ola(site: str) -> str:
+    """SVG de los 8 marcadores (flecha + tooltip + enlace a provincia)."""
+    out = []
+    for nombre, lat, lon, sl in REFUGIOS_OLA:
+        x, y = _px_ola(lat, lon)
+        w = int(len(nombre) * 6.6 + 16)
+        out.append(
+            f'<a class="marca" href="{site}/{sl}/" data-slug="{sl}" '
+            f'role="link" aria-label="{nombre} (abrir {sl})">'
+            f'<path class="flecha" d="M{x},{y} L{x - 7},{y - 18} L{x + 7},{y - 18} Z"/>'
+            f'<g class="tt" transform="translate({x},{y - 18})">'
+            f'<rect x="{-w // 2}" y="-16" width="{w}" height="14" rx="3"/>'
+            f'<text x="0" y="-5" text-anchor="middle">{nombre}</text></g></a>')
+    return "\n".join(out)
+
+
+PAGINA_OLA = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La ola de calor sobre España, día y noche (mapa animado de AEMET) | Refugio Climático</title>
+<meta name="description" content="Los mapas diarios de AEMET, animados: máximas de día y mínimas de noche. Activa la capa de refugios climáticos y descubre dónde se sigue durmiendo fresco durante la ola de calor.">
+<link rel="canonical" href="__SITE__/ola-de-calor/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="La ola de calor sobre España, día y noche">
+<meta property="og:description" content="Los mapas animados de AEMET con la capa de refugios climáticos nocturnos.">
+<meta property="og:url" content="__SITE__/ola-de-calor/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ .wrap{max-width:720px;margin:0 auto;padding:0 22px}
+ p{font-size:clamp(15.5px,2.3vw,17px);color:#e3d8c4;margin:0 0 14px}p b{color:var(--paper)}
+ .toggle-refugios{display:inline-flex;align-items:center;gap:8px;background:rgba(217,116,78,.14);border:1px solid var(--teja);color:var(--teja2);padding:11px 20px;border-radius:999px;font-family:var(--fb);font-weight:600;font-size:14.5px;cursor:pointer;transition:.2s;margin:8px 0 20px}
+ .toggle-refugios:hover,.toggle-refugios.on{background:var(--teja);color:#1a1209}
+ .mapa{margin:0 0 26px}
+ .mapa h2{font-family:var(--fd);font-weight:600;font-size:clamp(16px,2.6vw,19px);color:var(--teja2);margin:0 0 8px;text-align:center}
+ .gifwrap{position:relative;max-width:630px;margin:0 auto;border-radius:8px;overflow:hidden}
+ .gifwrap img{width:100%;height:auto;display:block}
+ .capa{position:absolute;inset:0;width:100%;height:100%;transition:opacity .25s ease;pointer-events:none}
+ .capa.oculta{opacity:0}
+ .marca{pointer-events:auto;cursor:pointer}
+ .capa.oculta .marca{pointer-events:none}
+ .flecha{fill:#111;stroke:#fff;stroke-width:1.2;stroke-linejoin:round}
+ .marca:hover .flecha,.marca.activa .flecha{fill:var(--teja)}
+ .tt{opacity:0;transition:opacity .12s ease}
+ .marca:hover .tt,.marca.activa .tt{opacity:1}
+ .tt rect{fill:rgba(20,14,8,.94);stroke:#5a4d3a;stroke-width:.7}
+ .tt text{fill:#efe6d6;font-family:var(--fm);font-size:11px;font-weight:700}
+ .note{font-size:13px;color:var(--muted);text-align:center;margin:0 0 18px}
+ .aviso{font-size:13.5px;color:var(--muted);line-height:1.65;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:8px auto 24px;max-width:600px}
+ .aviso b{color:#e7dcc8}
+ .cierre{margin:40px 0 10px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:28px 24px;text-align:center}
+ .cierre b{font-family:var(--fd);font-size:19px}
+ footer p{margin:0 0 8px}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · La ola, día y noche</nav>
+  <div class="kick">Mapa animado · Datos AEMET</div>
+  <h1>La ola de calor sobre España, <em>día y noche</em></h1>
+  <p class="intro">Los mapas diarios de AEMET, animados: las <b>máximas de día</b> y las <b>mínimas de noche</b>, un fotograma por jornada. De día casi toda España arde; de noche, unas pocas zonas siguen refrescando. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
+</div></header>
+
+<section><div class="wrap">
+  <button class="toggle-refugios" id="toggle" aria-pressed="false">📍 Mostrar refugios climáticos</button>
+
+  <div class="mapa">
+    <h2>De noche · temperaturas mínimas</h2>
+    <div class="gifwrap">
+      <img src="__SITE__/ola-minimas.gif" width="630" height="546" alt="Mapa animado de AEMET de las temperaturas mínimas (de noche) sobre España durante la ola de calor" loading="lazy">
+      <svg class="capa oculta" viewBox="0 0 630 546" aria-label="Refugios climáticos señalados sobre el mapa">__MARCADORES__</svg>
+    </div>
+  </div>
+
+  <div class="mapa">
+    <h2>De día · temperaturas máximas</h2>
+    <div class="gifwrap">
+      <img src="__SITE__/ola-maximas.gif" width="630" height="546" alt="Mapa animado de AEMET de las temperaturas máximas (de día) sobre España durante la ola de calor" loading="lazy">
+      <svg class="capa oculta" viewBox="0 0 630 546" aria-label="Refugios climáticos señalados sobre el mapa">__MARCADORES__</svg>
+    </div>
+  </div>
+
+  <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona: señalan lugares donde, durante la ola, los colores se mantienen <b>lejos de los rojos más intensos</b>. Son la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar las olas de calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos precisos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
+
+  <div class="cierre">
+    <b>¿Y tu pueblo, aguanta fresco de noche?</b><br>
+    <div class="botones">
+      <a class="btn pri" href="__HOME__">Búscalo en la calculadora →</a>
+      <a class="btn sec" href="__SITE__/mapa-estaciones/">Ver el mapa interactivo</a>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <p>Mapas: <b>AEMET</b> (© Agencia Estatal de Meteorología), animados por el proyecto <a href="__HOME__">Refugio Climático</a>. Un fotograma por día. Datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.</p>
+</div></footer>
+
+<script>
+const SITE="__SITE__";
+const capas=[...document.querySelectorAll(".capa")];
+const boton=document.getElementById("toggle");
+boton.addEventListener("click",()=>{
+  const mostrar=capas[0].classList.contains("oculta");
+  capas.forEach(c=>c.classList.toggle("oculta",!mostrar));
+  boton.classList.toggle("on",mostrar);
+  boton.setAttribute("aria-pressed",mostrar?"true":"false");
+  boton.textContent=mostrar?"✕ Ocultar refugios":"📍 Mostrar refugios climáticos";
+});
+const tactil=window.matchMedia("(hover:none)").matches;
+document.querySelectorAll(".marca").forEach(g=>{
+  g.addEventListener("click",e=>{
+    if(tactil && !g.classList.contains("activa")){
+      e.preventDefault();
+      document.querySelectorAll(".marca.activa").forEach(m=>m.classList.remove("activa"));
+      g.classList.add("activa");
+    }
+    // en escritorio (o segundo toque en móvil) el enlace <a> navega solo
+  });
+});
+</script>
+</body>
+</html>
+"""
+
+
+def construir_pagina_ola(site: str, fecha_iso: str, fecha_txt: str) -> str:
+    url = site + "/ola-de-calor/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "La ola de calor, día y noche", "item": url}]},
+        {"@type": "Article",
+         "headline": "La ola de calor sobre España, día y noche",
+         "description": "Los mapas animados de AEMET (máximas de día y mínimas de noche) con la capa de refugios climáticos nocturnos.",
+         "image": site + "/og.png",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "Refugio Climático",
+                       "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
+         "datePublished": FECHA_PUBLICACION_LANDINGS, "dateModified": fecha_iso,
+         "mainEntityOfPage": url}]}, ensure_ascii=False)
+    return (PAGINA_OLA
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__MARCADORES__", construir_marcadores_ola(site))
+            .replace("__FECHA__", fecha_txt)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
 def main() -> int:
     estaciones, total = cargar_estaciones()
     datos = construir_datos(estaciones, total)
@@ -1715,6 +1912,10 @@ def main() -> int:
         construir_pagina_ranking(estaciones, site, fecha_mod_iso, fecha_mod_txt),
         encoding="utf-8")
     urls.append(site + "/ranking-noches-tropicales/")
+    (DOCS_DIR / "ola-de-calor").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "ola-de-calor" / "index.html").write_text(
+        construir_pagina_ola(site, fecha_mod_iso, fecha_mod_txt), encoding="utf-8")
+    urls.append(site + "/ola-de-calor/")
     hoy = date.today().isoformat()
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'

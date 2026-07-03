@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La ola de calor sobre España, día y noche (mapa animado de AEMET) | Refugio Climático</title>
+<meta name="description" content="Los mapas diarios de AEMET, animados: máximas de día y mínimas de noche. Activa la capa de refugios climáticos y descubre dónde se sigue durmiendo fresco durante la ola de calor.">
+<link rel="canonical" href="https://prestigyo.github.io/refugio-climatico/ola-de-calor/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="La ola de calor sobre España, día y noche">
+<meta property="og:description" content="Los mapas animados de AEMET con la capa de refugios climáticos nocturnos.">
+<meta property="og:url" content="https://prestigyo.github.io/refugio-climatico/ola-de-calor/">
+<meta property="og:image" content="https://prestigyo.github.io/refugio-climatico/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://prestigyo.github.io/refugio-climatico/og.png">
+<link rel="icon" type="image/svg+xml" href="https://prestigyo.github.io/refugio-climatico/favicon.svg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": "https://prestigyo.github.io/refugio-climatico/"}, {"@type": "ListItem", "position": 2, "name": "La ola de calor, día y noche", "item": "https://prestigyo.github.io/refugio-climatico/ola-de-calor/"}]}, {"@type": "Article", "headline": "La ola de calor sobre España, día y noche", "description": "Los mapas animados de AEMET (máximas de día y mínimas de noche) con la capa de refugios climáticos nocturnos.", "image": "https://prestigyo.github.io/refugio-climatico/og.png", "author": {"@type": "Person", "name": "Ramón J. Lowesting"}, "publisher": {"@type": "Organization", "name": "Refugio Climático", "logo": {"@type": "ImageObject", "url": "https://prestigyo.github.io/refugio-climatico/favicon.svg"}}, "datePublished": "2026-06-22", "dateModified": "2026-07-03", "mainEntityOfPage": "https://prestigyo.github.io/refugio-climatico/ola-de-calor/"}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--fm:"JetBrains Mono",monospace}*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.7;-webkit-font-smoothing:antialiased}a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}header.h{padding:48px 0 14px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}.crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}.kick{font:600 12px/1 var(--fb);letter-spacing:.15em;text-transform:uppercase;color:var(--teja);margin:10px 0 10px}h1{font-family:var(--fd);font-weight:900;font-size:clamp(30px,6vw,46px);line-height:1.06;letter-spacing:-.01em}h1 em{font-style:italic;color:var(--teja2)}.intro{color:#e7dcc8;font-size:clamp(16px,2.5vw,18px);margin:18px 0 0}.intro b{color:var(--paper)}.cta{margin:10px 0;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}.cta b{font-family:var(--fd);font-size:19px}.botones{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}.btn{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px}.btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}.btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#82745d;font-size:12.5px;margin-top:24px}footer a{color:#9a8a6f}
+ .wrap{max-width:720px;margin:0 auto;padding:0 22px}
+ p{font-size:clamp(15.5px,2.3vw,17px);color:#e3d8c4;margin:0 0 14px}p b{color:var(--paper)}
+ .toggle-refugios{display:inline-flex;align-items:center;gap:8px;background:rgba(217,116,78,.14);border:1px solid var(--teja);color:var(--teja2);padding:11px 20px;border-radius:999px;font-family:var(--fb);font-weight:600;font-size:14.5px;cursor:pointer;transition:.2s;margin:8px 0 20px}
+ .toggle-refugios:hover,.toggle-refugios.on{background:var(--teja);color:#1a1209}
+ .mapa{margin:0 0 26px}
+ .mapa h2{font-family:var(--fd);font-weight:600;font-size:clamp(16px,2.6vw,19px);color:var(--teja2);margin:0 0 8px;text-align:center}
+ .gifwrap{position:relative;max-width:630px;margin:0 auto;border-radius:8px;overflow:hidden}
+ .gifwrap img{width:100%;height:auto;display:block}
+ .capa{position:absolute;inset:0;width:100%;height:100%;transition:opacity .25s ease;pointer-events:none}
+ .capa.oculta{opacity:0}
+ .marca{pointer-events:auto;cursor:pointer}
+ .capa.oculta .marca{pointer-events:none}
+ .flecha{fill:#111;stroke:#fff;stroke-width:1.2;stroke-linejoin:round}
+ .marca:hover .flecha,.marca.activa .flecha{fill:var(--teja)}
+ .tt{opacity:0;transition:opacity .12s ease}
+ .marca:hover .tt,.marca.activa .tt{opacity:1}
+ .tt rect{fill:rgba(20,14,8,.94);stroke:#5a4d3a;stroke-width:.7}
+ .tt text{fill:#efe6d6;font-family:var(--fm);font-size:11px;font-weight:700}
+ .note{font-size:13px;color:var(--muted);text-align:center;margin:0 0 18px}
+ .aviso{font-size:13.5px;color:var(--muted);line-height:1.65;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:8px auto 24px;max-width:600px}
+ .aviso b{color:#e7dcc8}
+ .cierre{margin:40px 0 10px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:28px 24px;text-align:center}
+ .cierre b{font-family:var(--fd);font-size:19px}
+ footer p{margin:0 0 8px}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="https://prestigyo.github.io/refugio-climatico/">Refugio Climático</a> · La ola, día y noche</nav>
+  <div class="kick">Mapa animado · Datos AEMET</div>
+  <h1>La ola de calor sobre España, <em>día y noche</em></h1>
+  <p class="intro">Los mapas diarios de AEMET, animados: las <b>máximas de día</b> y las <b>mínimas de noche</b>, un fotograma por jornada. De día casi toda España arde; de noche, unas pocas zonas siguen refrescando. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
+</div></header>
+
+<section><div class="wrap">
+  <button class="toggle-refugios" id="toggle" aria-pressed="false">📍 Mostrar refugios climáticos</button>
+
+  <div class="mapa">
+    <h2>De noche · temperaturas mínimas</h2>
+    <div class="gifwrap">
+      <img src="https://prestigyo.github.io/refugio-climatico/ola-minimas.gif" width="630" height="546" alt="Mapa animado de AEMET de las temperaturas mínimas (de noche) sobre España durante la ola de calor" loading="lazy">
+      <svg class="capa oculta" viewBox="0 0 630 546" aria-label="Refugios climáticos señalados sobre el mapa"><a class="marca" href="https://prestigyo.github.io/refugio-climatico/avila/" data-slug="avila" role="link" aria-label="Puerto del Pico (abrir avila)"><path class="flecha" d="M220.5,250.6 L213.5,232.6 L227.5,232.6 Z"/><g class="tt" transform="translate(220.5,232.6)"><rect x="-58" y="-16" width="115" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Puerto del Pico</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/zamora/" data-slug="zamora" role="link" aria-label="Sanabria (abrir zamora)"><path class="flecha" d="M159.0,157.0 L152.0,139.0 L166.0,139.0 Z"/><g class="tt" transform="translate(159.0,139.0)"><rect x="-34" y="-16" width="68" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Sanabria</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/madrid/" data-slug="madrid" role="link" aria-label="Rascafría (abrir madrid)"><path class="flecha" d="M263.4,220.0 L256.4,202.0 L270.4,202.0 Z"/><g class="tt" transform="translate(263.4,202.0)"><rect x="-38" y="-16" width="75" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Rascafría</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/leon/" data-slug="leon" role="link" aria-label="Villablino (abrir leon)"><path class="flecha" d="M171.0,113.3 L164.0,95.3 L178.0,95.3 Z"/><g class="tt" transform="translate(171.0,95.3)"><rect x="-41" y="-16" width="82" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Villablino</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/huesca/" data-slug="huesca" role="link" aria-label="Benasque (abrir huesca)"><path class="flecha" d="M430.2,130.9 L423.2,112.9 L437.2,112.9 Z"/><g class="tt" transform="translate(430.2,112.9)"><rect x="-34" y="-16" width="68" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Benasque</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/lleida/" data-slug="lleida" role="link" aria-label="Vall de Boí (abrir lleida)"><path class="flecha" d="M442.4,135.4 L435.4,117.4 L449.4,117.4 Z"/><g class="tt" transform="translate(442.4,117.4)"><rect x="-44" y="-16" width="88" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Vall de Boí</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/ourense/" data-slug="ourense" role="link" aria-label="Beariz (abrir ourense)"><path class="flecha" d="M97.1,138.1 L90.1,120.1 L104.1,120.1 Z"/><g class="tt" transform="translate(97.1,120.1)"><rect x="-28" y="-16" width="55" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Beariz</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/teruel/" data-slug="teruel" role="link" aria-label="La Virgen de La Vega (abrir teruel)"><path class="flecha" d="M383.1,247.9 L376.1,229.9 L390.1,229.9 Z"/><g class="tt" transform="translate(383.1,229.9)"><rect x="-74" y="-16" width="148" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">La Virgen de La Vega</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/granada/" data-slug="granada" role="link" aria-label="Sierra Nevada (abrir granada)"><path class="flecha" d="M282.9,421.8 L275.9,403.8 L289.9,403.8 Z"/><g class="tt" transform="translate(282.9,403.8)"><rect x="-51" y="-16" width="101" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Sierra Nevada</text></g></a></svg>
+    </div>
+  </div>
+
+  <div class="mapa">
+    <h2>De día · temperaturas máximas</h2>
+    <div class="gifwrap">
+      <img src="https://prestigyo.github.io/refugio-climatico/ola-maximas.gif" width="630" height="546" alt="Mapa animado de AEMET de las temperaturas máximas (de día) sobre España durante la ola de calor" loading="lazy">
+      <svg class="capa oculta" viewBox="0 0 630 546" aria-label="Refugios climáticos señalados sobre el mapa"><a class="marca" href="https://prestigyo.github.io/refugio-climatico/avila/" data-slug="avila" role="link" aria-label="Puerto del Pico (abrir avila)"><path class="flecha" d="M220.5,250.6 L213.5,232.6 L227.5,232.6 Z"/><g class="tt" transform="translate(220.5,232.6)"><rect x="-58" y="-16" width="115" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Puerto del Pico</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/zamora/" data-slug="zamora" role="link" aria-label="Sanabria (abrir zamora)"><path class="flecha" d="M159.0,157.0 L152.0,139.0 L166.0,139.0 Z"/><g class="tt" transform="translate(159.0,139.0)"><rect x="-34" y="-16" width="68" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Sanabria</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/madrid/" data-slug="madrid" role="link" aria-label="Rascafría (abrir madrid)"><path class="flecha" d="M263.4,220.0 L256.4,202.0 L270.4,202.0 Z"/><g class="tt" transform="translate(263.4,202.0)"><rect x="-38" y="-16" width="75" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Rascafría</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/leon/" data-slug="leon" role="link" aria-label="Villablino (abrir leon)"><path class="flecha" d="M171.0,113.3 L164.0,95.3 L178.0,95.3 Z"/><g class="tt" transform="translate(171.0,95.3)"><rect x="-41" y="-16" width="82" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Villablino</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/huesca/" data-slug="huesca" role="link" aria-label="Benasque (abrir huesca)"><path class="flecha" d="M430.2,130.9 L423.2,112.9 L437.2,112.9 Z"/><g class="tt" transform="translate(430.2,112.9)"><rect x="-34" y="-16" width="68" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Benasque</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/lleida/" data-slug="lleida" role="link" aria-label="Vall de Boí (abrir lleida)"><path class="flecha" d="M442.4,135.4 L435.4,117.4 L449.4,117.4 Z"/><g class="tt" transform="translate(442.4,117.4)"><rect x="-44" y="-16" width="88" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Vall de Boí</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/ourense/" data-slug="ourense" role="link" aria-label="Beariz (abrir ourense)"><path class="flecha" d="M97.1,138.1 L90.1,120.1 L104.1,120.1 Z"/><g class="tt" transform="translate(97.1,120.1)"><rect x="-28" y="-16" width="55" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Beariz</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/teruel/" data-slug="teruel" role="link" aria-label="La Virgen de La Vega (abrir teruel)"><path class="flecha" d="M383.1,247.9 L376.1,229.9 L390.1,229.9 Z"/><g class="tt" transform="translate(383.1,229.9)"><rect x="-74" y="-16" width="148" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">La Virgen de La Vega</text></g></a>
+<a class="marca" href="https://prestigyo.github.io/refugio-climatico/granada/" data-slug="granada" role="link" aria-label="Sierra Nevada (abrir granada)"><path class="flecha" d="M282.9,421.8 L275.9,403.8 L289.9,403.8 Z"/><g class="tt" transform="translate(282.9,403.8)"><rect x="-51" y="-16" width="101" height="14" rx="3"/><text x="0" y="-5" text-anchor="middle">Sierra Nevada</text></g></a></svg>
+    </div>
+  </div>
+
+  <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona: señalan lugares donde, durante la ola, los colores se mantienen <b>lejos de los rojos más intensos</b>. Son la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar las olas de calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos precisos, pueblo a pueblo, están en la <a href="https://prestigyo.github.io/refugio-climatico/">calculadora</a>.</p>
+
+  <div class="cierre">
+    <b>¿Y tu pueblo, aguanta fresco de noche?</b><br>
+    <div class="botones">
+      <a class="btn pri" href="https://prestigyo.github.io/refugio-climatico/">Búscalo en la calculadora →</a>
+      <a class="btn sec" href="https://prestigyo.github.io/refugio-climatico/mapa-estaciones/">Ver el mapa interactivo</a>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <p>Mapas: <b>AEMET</b> (© Agencia Estatal de Meteorología), animados por el proyecto <a href="https://prestigyo.github.io/refugio-climatico/">Refugio Climático</a>. Un fotograma por día. Datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en julio de 2026.</p>
+</div></footer>
+
+<script>
+const SITE="https://prestigyo.github.io/refugio-climatico";
+const capas=[...document.querySelectorAll(".capa")];
+const boton=document.getElementById("toggle");
+boton.addEventListener("click",()=>{
+  const mostrar=capas[0].classList.contains("oculta");
+  capas.forEach(c=>c.classList.toggle("oculta",!mostrar));
+  boton.classList.toggle("on",mostrar);
+  boton.setAttribute("aria-pressed",mostrar?"true":"false");
+  boton.textContent=mostrar?"✕ Ocultar refugios":"📍 Mostrar refugios climáticos";
+});
+const tactil=window.matchMedia("(hover:none)").matches;
+document.querySelectorAll(".marca").forEach(g=>{
+  g.addEventListener("click",e=>{
+    if(tactil && !g.classList.contains("activa")){
+      e.preventDefault();
+      document.querySelectorAll(".marca.activa").forEach(m=>m.classList.remove("activa"));
+      g.classList.add("activa");
+    }
+    // en escritorio (o segundo toque en móvil) el enlace <a> navega solo
+  });
+});
+</script>
+</body>
+</html>

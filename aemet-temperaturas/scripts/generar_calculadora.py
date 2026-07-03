@@ -1694,7 +1694,7 @@ REFUGIOS_OLA = [
     ("Benasque", 42.6042, 0.5231, "huesca"),
     ("Vall de Boí", 42.5183, 0.8464, "lleida"),
     ("Beariz", 42.4661, -8.2708, "ourense"),
-    ("La Virgen de La Vega", 40.37181, -0.7197202, "teruel"),
+    ("Cedrillas", 40.431, -0.849, "teruel"),
     ("Sierra Nevada", 37.0555, -3.3656, "granada"),
 ]
 
@@ -1799,7 +1799,7 @@ PAGINA_OLA = r"""<!doctype html>
     </div>
   </div>
 
-  <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona: señalan lugares donde, durante la ola, los colores se mantienen <b>lejos de los rojos más intensos</b>. Son la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar las olas de calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos precisos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
+  <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona. Cada punto es la <b>estación meteorológica</b> y la población donde está; eso <b>no significa que los pueblos de alrededor no pertenezcan a ese mismo refugio climático</b> —el fresco no entiende de límites municipales—. <b>Cedrillas</b>, por ejemplo, abarca también Gúdar, Cabra de Mora, Alcalá de la Selva, Valdelinares, Allepuz o El Castellar. Señalan zonas donde, durante la ola, los colores se mantienen <b>lejos de los rojos más intensos</b>: la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar el calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
 
   <div class="cierre">
     <b>¿Y tu pueblo, aguanta fresco de noche?</b><br>

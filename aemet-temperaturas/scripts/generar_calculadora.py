@@ -50,8 +50,11 @@ RANKING_CSV = AEMET_DIR / "analisis" / "refugios_nocturnos_ranking.csv"
 DOCS_DIR = REPO_ROOT / "docs"                 # GitHub Pages sirve /docs en raíz
 OUT_HTML = DOCS_DIR / "index.html"
 
-# URL pública del sitio, sin barra final. Cámbiala si pasas a dominio propio.
-SITE_URL = "https://prestigyo.github.io/refugio-climatico"
+# URL pública del sitio, sin barra final. Dominio propio desde jul 2026;
+# el github.io antiguo redirige (301) aquí. DOMINIO_ANTIGUO se usa para
+# migrar los enlaces de las páginas estáticas de docs/ que no genera este script.
+SITE_URL = "https://nochetropical.es"
+DOMINIO_ANTIGUO = "https://prestigyo.github.io/refugio-climatico"
 
 # URL /exec del Apps Script que recibe los leads (ver apps_script_refugio.gs).
 # Déjalo vacío hasta desplegar el backend: el formulario funcionará igual y
@@ -837,7 +840,7 @@ function render(id,distKm){
   const bigT=e.nt<1?'&lt;1<span class="lt-note">menos de 1</span>':txt;
   const pos=Math.min(100,e.nt/90*100);
   const distTxt=distKm?`<div class="res-meta">📍 Estación más cercana a ${distKm.toFixed(0)} km de ti</div>`:"";
-  const url="https://prestigyo.github.io/refugio-climatico/";
+  const url="__SITE_URL__/";
   const shareTxt=`En ${e.loc} (${e.prov}) se sufren ${txt} noches tropicales al año — puesto ${e.rank} de ${T} de España. ¿Y en tu pueblo?`;
   const modo = MODO_PRENSA ? "prensa" : (e.nt < 10 ? "propietario" : "comprador");
   let leadHead, leadSub, opts, bridgeTxt, zonaPh;
@@ -1889,7 +1892,6 @@ def main() -> int:
     # Capa 3: una página indexable por provincia.
     fecha_mod = date.fromtimestamp(RANKING_CSV.stat().st_mtime)
     fecha_mod_iso, fecha_mod_txt = fecha_mod.isoformat(), fecha_es(fecha_mod)
-    urls = [site + "/"]
     for prov, lista in datos["provincias"].items():
         sl = slug(prov)
         carpeta = DOCS_DIR / sl
@@ -1897,26 +1899,33 @@ def main() -> int:
         (carpeta / "index.html").write_text(
             construir_pagina_provincia(prov, lista, site, provnav, fecha_mod_iso, fecha_mod_txt),
             encoding="utf-8")
-        urls.append(f"{site}/{sl}/")
-    urls.append(site + "/mapa-estaciones/")
-    urls.append(site + "/refugio-climatico-natural/")
-    urls.append(site + "/microclimas/")
-    # Páginas complementarias data-driven: sala de prensa y ranking nacional.
+    # Páginas complementarias data-driven: sala de prensa, ranking y ola de calor.
     (DOCS_DIR / "prensa").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "prensa" / "index.html").write_text(
         construir_pagina_prensa(datos, estaciones, site, fecha_mod_iso, fecha_mod_txt),
         encoding="utf-8")
-    urls.append(site + "/prensa/")
     (DOCS_DIR / "ranking-noches-tropicales").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "ranking-noches-tropicales" / "index.html").write_text(
         construir_pagina_ranking(estaciones, site, fecha_mod_iso, fecha_mod_txt),
         encoding="utf-8")
-    urls.append(site + "/ranking-noches-tropicales/")
     (DOCS_DIR / "ola-de-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "ola-de-calor" / "index.html").write_text(
         construir_pagina_ola(site, fecha_mod_iso, fecha_mod_txt), encoding="utf-8")
-    urls.append(site + "/ola-de-calor/")
+    # Dominio propio: fija el CNAME de GitHub Pages (sobrevive a los builds) y
+    # migra los enlaces del dominio antiguo en las páginas ESTÁTICAS de docs/
+    # (las que no genera este script, p. ej. microclimas).
+    (DOCS_DIR / "CNAME").write_text(SITE_URL.split("//")[1] + "\n", encoding="utf-8")
+    migradas = 0
+    for f in DOCS_DIR.glob("*/index.html"):
+        html_est = f.read_text(encoding="utf-8")
+        if DOMINIO_ANTIGUO in html_est:
+            f.write_text(html_est.replace(DOMINIO_ANTIGUO, site), encoding="utf-8")
+            migradas += 1
+    # Sitemap AUTOMÁTICO: descubre todas las páginas publicadas escaneando docs/
+    # (la home + cada carpeta con un index.html). Ninguna página se queda fuera.
     hoy = date.today().isoformat()
+    urls = [site + "/"] + sorted(
+        f"{site}/{f.parent.name}/" for f in DOCS_DIR.glob("*/index.html"))
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'
         f'<priority>{"1.0" if u == site + "/" else "0.7"}</priority></url>' for u in urls)
@@ -1924,7 +1933,8 @@ def main() -> int:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + filas + "\n</urlset>\n", encoding="utf-8")
-    print(f"   {len(datos['provincias'])} provincias + mapa interactivo · sitemap con {len(urls)} URLs")
+    print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"
+          + (f" · {migradas} páginas estáticas migradas de dominio" if migradas else ""))
     c = datos["meta"]["contraste"]
     print(f"OK -> {OUT_HTML}")
     print(f"   {total} estaciones en {len(datos['provincias'])} provincias")

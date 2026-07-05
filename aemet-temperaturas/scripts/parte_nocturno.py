@@ -130,6 +130,93 @@ def dec(v: float) -> str:
     return f"{v:.1f}".replace(".", ",")
 
 
+# --- Histórico: una línea por noche, para la curva del verano y los récords ---
+HISTORIAL_CSV = OUT_DIR / "historial.csv"
+DIARIOS_CSV = g.AEMET_DIR / "datos" / "diarios_estaciones.csv"
+CAMPOS_HIST = ["fecha", "total", "tropicales", "ecuatoriales",
+               "peor", "peor_prov", "peor_min", "mejor", "mejor_prov", "mejor_min"]
+
+
+def backfill_desde_diarios(historial: list[dict], hoy_iso: str) -> list[dict]:
+    """Completa y AFINA el histórico con los datos climatológicos VALIDADOS de
+    AEMET (diarios_estaciones.csv, llegan con 3-5 días de retraso): las noches
+    pasadas se sobrescriben con el dato consolidado cuando está disponible.
+    El parte de hoy (observación provisional) no se toca aquí."""
+    if not DIARIOS_CSV.exists():
+        return historial
+    por_fecha: dict[str, list] = {}
+    with open(DIARIOS_CSV, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            fecha = r.get("fecha", "")
+            if not fecha or fecha >= hoy_iso:
+                continue
+            try:
+                tmin = float(r["tmin"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            por_fecha.setdefault(fecha, []).append((tmin, r))
+    filas = {h["fecha"]: h for h in historial}
+    for fecha, lst in por_fecha.items():
+        if len(lst) < MIN_ESTACIONES:
+            continue
+        trop = sum(1 for t, _ in lst if t >= 20)
+        ecua = sum(1 for t, _ in lst if t >= 25)
+        tp, rp = max(lst, key=lambda x: x[0])
+        tm, rm = min(lst, key=lambda x: x[0])
+        filas[fecha] = {"fecha": fecha, "total": len(lst),
+                        "tropicales": trop, "ecuatoriales": ecua,
+                        "peor": g.titular(rp["nombre"]), "peor_prov": canon_provincia(rp["provincia"]),
+                        "peor_min": tp,
+                        "mejor": g.titular(rm["nombre"]), "mejor_prov": canon_provincia(rm["provincia"]),
+                        "mejor_min": tm}
+    return sorted(filas.values(), key=lambda x: x["fecha"])
+
+
+def cargar_historial() -> list[dict]:
+    if not HISTORIAL_CSV.exists():
+        return []
+    with open(HISTORIAL_CSV, encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def guardar_historial(filas: list[dict]) -> None:
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    with open(HISTORIAL_CSV, "w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=CAMPOS_HIST)
+        w.writeheader()
+        for fila in sorted(filas, key=lambda x: x["fecha"]):
+            w.writerow(fila)
+
+
+def svg_historial(filas: list[dict]) -> str:
+    """La curva del verano: una barra por noche = estaciones en noche tropical."""
+    if not filas:
+        return ""
+    filas = sorted(filas, key=lambda x: x["fecha"])[-70:]   # hasta ~10 semanas
+    vals = [int(f["tropicales"]) for f in filas]
+    vmax = max(max(vals), 1)
+    W, H, mB = 700, 150, 22
+    n = len(filas)
+    paso = W / n
+    bw = max(2.0, paso - 2)
+    barras, etiquetas = [], []
+    cada = max(1, n // 7)      # ~7 etiquetas de fecha
+    for i, (f, v) in enumerate(zip(filas, vals)):
+        h = (H - mB - 14) * v / vmax
+        x = i * paso + (paso - bw) / 2
+        record = ' class="rec"' if v == vmax else ""
+        barras.append(f'<rect{record} x="{x:.1f}" y="{H - mB - h:.1f}" '
+                      f'width="{bw:.1f}" height="{max(h, 1):.1f}" rx="1"/>')
+        if i % cada == 0 or i == n - 1:
+            d = f["fecha"][8:10].lstrip("0") + "/" + f["fecha"][5:7].lstrip("0")
+            etiquetas.append(f'<text x="{x + bw / 2:.1f}" y="{H - 6}">{d}</text>')
+    return (f'<svg viewBox="0 0 {W} {H}" role="img" '
+            f'aria-label="Estaciones en noche tropical, noche a noche">'
+            f'<text class="ymax" x="2" y="12">máx {vmax}</text>'
+            f'<g class="barras">{"".join(barras)}</g>'
+            f'<g class="ejes">{"".join(etiquetas)}</g></svg>')
+
+
 def fila_html(e: dict, site: str) -> str:
     prov = e["prov"]
     enlace = (f'<a href="{site}/{g.slug(prov)}/">{prov}</a>' if prov else "—")
@@ -190,6 +277,14 @@ PLANTILLA = r"""<!doctype html>
  th{font:600 10.5px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
  td.n{text-align:right;font-family:var(--fm);font-weight:700}
  td.loc{font-weight:600}
+ .histwrap{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px 14px 8px;margin:6px 0 8px}
+ .histwrap svg{width:100%;height:auto;display:block}
+ .histwrap .barras rect{fill:var(--teja)}
+ .histwrap .barras rect.rec{fill:var(--teja2)}
+ .histwrap .ejes text{fill:var(--muted);font-family:var(--fm);font-size:10px;text-anchor:middle}
+ .histwrap .ymax{fill:var(--muted);font-family:var(--fm);font-size:10px}
+ .hist-nota{font-size:13.5px;color:var(--muted);margin:0 0 10px}
+ .hist-nota b{color:#e7dcc8}
  .comparte{margin:34px 0;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px}
  .comparte .t{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:10px}
  .comparte pre{white-space:pre-wrap;font-family:var(--fm);font-size:13px;color:#e3d8c4;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
@@ -232,6 +327,8 @@ PLANTILLA = r"""<!doctype html>
   <h2>Donde mejor se durmió</h2>
   <table><thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Mínima</th></tr></thead>
   <tbody>__TOP_FRESCO__</tbody></table>
+
+  __SECCION_HISTORIAL__
 
   <div class="comparte">
     <div class="t">Comparte el parte</div>
@@ -337,8 +434,44 @@ def main() -> int:
             .replace("__TUIT__", tuit)
             .replace("__SITE__", site))
 
+    # Histórico: upsert de la noche de hoy + curva del verano + archivo del día.
+    fecha_iso = ahora.strftime("%Y-%m-%d")
+    fila_hoy = {"fecha": fecha_iso, "total": total, "tropicales": trop,
+                "ecuatoriales": ecua,
+                "peor": peor["nombre"], "peor_prov": peor["prov"], "peor_min": peor["min"],
+                "mejor": mejor["nombre"], "mejor_prov": mejor["prov"], "mejor_min": mejor["min"]}
+    base = [f for f in cargar_historial() if f["fecha"] != fecha_iso]
+    base = backfill_desde_diarios(base, fecha_iso)
+    historial = base + [fila_hoy]
+    if not demo:
+        guardar_historial(historial)
+    if demo and len(historial) < 5:   # datos de relleno SOLO para ver el gráfico en local
+        historial = [{"fecha": (ahora - timedelta(days=d)).strftime("%Y-%m-%d"),
+                      "tropicales": str(int(100 + 140 * abs((25 - d) / 25) + d % 7 * 9))}
+                     for d in range(30, 0, -1)] + [fila_hoy]
+    seccion_hist = ""
+    if len(historial) >= 2:
+        vmax_fila = max(historial, key=lambda x: int(x["tropicales"]))
+        rec_txt = ""
+        if vmax_fila["fecha"] == fecha_iso:
+            rec_txt = " <b>Anoche se marcó el récord del verano.</b>"
+        seccion_hist = (
+            '<h2>El verano, noche a noche</h2>'
+            f'<p class="hist-nota">Cada barra es una noche: cuántas estaciones quedaron en '
+            f'noche tropical. Llevamos <b>{len(historial)}</b> noches contadas; el récord, '
+            f'<b>{vmax_fila["tropicales"]}</b> estaciones ({vmax_fila["fecha"][8:10].lstrip("0")}/'
+            f'{vmax_fila["fecha"][5:7].lstrip("0")}).{rec_txt}</p>'
+            f'<div class="histwrap">{svg_historial(historial)}</div>')
+    html = html.replace("__SECCION_HISTORIAL__", seccion_hist)
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / "index.html").write_text(html, encoding="utf-8")
+    # Archivo del día (detalle completo, uno por fecha): la memoria del verano.
+    (OUT_DIR / "dias").mkdir(exist_ok=True)
+    (OUT_DIR / "dias" / f"{fecha_iso}.json").write_text(json.dumps(
+        {"fecha": fecha_iso, "total": total, "tropicales": trop, "ecuatoriales": ecua,
+         "peor": peor, "mejor": mejor, "top_calor": top_calor, "top_fresco": top_fresco},
+        ensure_ascii=False), encoding="utf-8")
     (OUT_DIR / "parte.txt").write_text(tuit + "\n", encoding="utf-8")
     (OUT_DIR / "parte.json").write_text(json.dumps(
         {"fecha": ahora.strftime("%Y-%m-%d"), "total": total, "tropicales": trop,

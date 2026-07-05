@@ -1,0 +1,52 @@
+fecha,total,tropicales,ecuatoriales,peor,peor_prov,peor_min,mejor,mejor_prov,mejor_min
+2026-05-13,786,0,0,"Las Palmas de Gran Canaria, Pl. de la Feria",Las Palmas,18.4,Cap de Vaquèira,Lleida,-4.8
+2026-05-14,795,0,0,San Sebastián de la Gomera,Santa Cruz de Tenerife,18.8,Cap de Vaquèira,Lleida,-5.6
+2026-05-15,793,0,0,Pájara,Las Palmas,18.7,Cap de Vaquèira,Lleida,-7.1
+2026-05-16,797,0,0,Pájara,Las Palmas,18.5,Port Ainé,Lleida,-8.6
+2026-05-17,794,0,0,"Maspalomas, C. Insular Turismo",Las Palmas,18.7,Cap de Vaquèira,Lleida,-3.2
+2026-05-18,793,0,0,Hierro Aeropuerto,Santa Cruz de Tenerife,18.3,Sierra Nevada 'radiotelescopio',Granada,-1.9
+2026-05-19,795,0,0,"Frontera, Sabinosa",Santa Cruz de Tenerife,18.9,Puerto del Pico,Ávila,0.0
+2026-05-20,790,0,0,Valverde del Camino,Huelva,18.9,"Sanabria, Robleda-Cervantes",Zamora,1.0
+2026-05-21,796,5,0,Cabo de Gata,Almería,23.2,Puerto del Pico,Ávila,4.0
+2026-05-22,800,12,0,Cabo de Gata,Almería,23.9,Puerto del Pico,Ávila,4.6
+2026-05-23,797,17,0,Cabo de Gata,Almería,23.0,Puerto del Pico,Ávila,3.8
+2026-05-24,795,27,0,Las Cabezas de San Juan,Sevilla,23.4,Villena,Alicante,5.7
+2026-05-25,786,58,1,Irun,Gipuzkoa,25.8,Salvacañete,Cuenca,3.2
+2026-05-26,787,53,2,"San Bartolome Tirajana, Lomo Pedro Alfonso",Las Palmas,27.0,Cedrillas,Teruel,3.4
+2026-05-27,791,30,0,Tejeda,Las Palmas,24.1,Villadepera,Zamora,0.0
+2026-05-28,793,27,1,Cabo de Creus,Girona,26.2,Nerpio,Albacete,5.1
+2026-05-29,791,34,0,Cabo de Creus,Girona,22.4,Puerto del Pico,Ávila,5.6
+2026-05-30,799,58,0,Castuera,Badajoz,23.0,Puerto de Leitariegos,Asturias,6.7
+2026-05-31,797,62,0,Alajar,Huelva,23.7,Sobrado,A Coruña,5.1
+2026-06-01,791,72,1,Osuna,Sevilla,25.2,Reinosa,Cantabria,4.0
+2026-06-02,793,74,0,Benahavís,Málaga,22.6,Astún- la Raca,Huesca,-0.3
+2026-06-03,798,59,0,San Javier Aeropuerto,Murcia,22.9,Cap de Vaquèira,Lleida,-0.7
+2026-06-04,798,38,0,Alicante-Elche Aeropuerto,Alicante,21.6,Cap de Vaquèira,Lleida,-0.2
+2026-06-05,798,27,0,Rincón de la Victoria,Málaga,21.9,Astún- la Raca,Huesca,-1.4
+2026-06-06,798,39,0,Cabo de Gata,Almería,22.3,Puerto de San Isidro,León,2.4
+2026-06-07,797,50,0,Melilla,Melilla,22.2,Beariz,Ourense,3.4
+2026-06-08,793,26,0,Almería Aeropuerto,Almería,21.6,Navasfrías,Salamanca,4.1
+2026-06-09,792,46,0,Osuna,Sevilla,22.3,Cap de Vaquèira,Lleida,2.1
+2026-06-10,793,65,0,Almería Aeropuerto,Almería,23.1,"Coriscao, Parque Nacional Picos de Europa",Cantabria,0.0
+2026-06-11,793,70,0,Cádiz,Cádiz,23.7,Cap de Vaquèira,Lleida,-1.3
+2026-06-12,796,97,0,Cañaveral,Cáceres,24.2,Puerto del Pico,Ávila,3.6
+2026-06-13,797,89,0,Valverde del Fresno,Cáceres,24.5,"Valderredible, Cubillo de Ebro",Cantabria,5.1
+2026-06-14,790,42,0,Cabo de Creus,Girona,22.7,Sierra Nevada 'radiotelescopio',Granada,4.8
+2026-06-15,786,62,0,"Barcelona, Fabra",Barcelona,23.3,Sierra Nevada 'radiotelescopio',Granada,5.1
+2026-06-16,786,77,0,Cabo de Creus,Girona,24.4,Cap de Rec,Lleida,5.8
+2026-06-17,792,146,1,Cabo de Gata,Almería,25.4,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,7.9
+2026-06-18,790,182,0,Cabo de Gata,Almería,24.8,Puerto del Pico,Ávila,7.0
+2026-06-19,782,181,0,Benidorm,Alicante,23.6,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,6.8
+2026-06-20,787,272,6,Cañaveral,Cáceres,26.5,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,6.8
+2026-06-21,773,369,31,Almería Aeropuerto,Almería,30.8,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,8.4
+2026-06-22,761,378,29,Cabo de Gata,Almería,31.2,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,7.8
+2026-06-23,764,375,24,Almería Aeropuerto,Almería,29.1,Salvacañete,Cuenca,10.0
+2026-06-24,765,317,12,Cabo de Gata,Almería,26.9,"Vallehermoso, Alto Igualero",Santa Cruz de Tenerife,9.2
+2026-06-25,774,188,1,Capdepera,Illes Balears,25.0,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,7.5
+2026-06-26,788,157,0,Capdepera,Illes Balears,24.7,Puerto del Pico,Ávila,5.2
+2026-06-27,788,215,0,València,Valencia,24.9,Puerto del Pico,Ávila,6.9
+2026-06-28,777,237,3,"Barcelona, Fabra",Barcelona,25.5,Puerto del Pico,Ávila,7.5
+2026-06-29,774,221,9,Figueres,Girona,26.5,Puerto del Pico,Ávila,6.6
+2026-06-30,781,314,14,"San Bartolome Tirajana, Cuevas del Pinar",Las Palmas,28.6,Port Ainé,Lleida,8.9
+2026-07-01,782,313,14,Serradilla,Cáceres,26.8,Port Ainé,Lleida,4.5
+2026-07-05,820,315,35,Evc_noia,,28.2,Cubillo de Ebro,Cantabria,7.1

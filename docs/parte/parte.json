@@ -1,13 +1,13 @@
 {
  "fecha": "2026-07-05",
- "total": 822,
- "tropicales": 314,
- "ecuatoriales": 31,
+ "total": 820,
+ "tropicales": 315,
+ "ecuatoriales": 35,
  "peor": {
-  "id": "3475X",
-  "nombre": "Ca�averal",
-  "min": 28.1,
-  "prov": "Cáceres"
+  "id": "1437P",
+  "nombre": "Evc_noia",
+  "min": 28.2,
+  "prov": ""
  },
  "mejor": {
   "id": "9016X",
@@ -16,6 +16,12 @@
   "prov": "Cantabria"
  },
  "top_calor": [
+  {
+   "id": "1437P",
+   "nombre": "Evc_noia",
+   "min": 28.2,
+   "prov": ""
+  },
   {
    "id": "3475X",
    "nombre": "Ca�averal",
@@ -29,12 +35,6 @@
    "prov": "Cádiz"
   },
   {
-   "id": "1437P",
-   "nombre": "Evc_noia",
-   "min": 27.4,
-   "prov": ""
-  },
-  {
    "id": "0433D",
    "nombre": "Evc_cabo de Creus",
    "min": 27.2,
@@ -45,6 +45,18 @@
    "nombre": "Castuera",
    "min": 27.1,
    "prov": "Badajoz"
+  },
+  {
+   "id": "3448X",
+   "nombre": "Serradilla (Automatica)",
+   "min": 26.8,
+   "prov": "Cáceres"
+  },
+  {
+   "id": "0429X",
+   "nombre": "Figueres Els Aspres",
+   "min": 26.7,
+   "prov": "Girona"
   },
   {
    "id": "4347X",
@@ -63,18 +75,6 @@
    "nombre": "San Fernando Roa",
    "min": 26.6,
    "prov": ""
-  },
-  {
-   "id": "3448X",
-   "nombre": "Serradilla (Automatica)",
-   "min": 26.5,
-   "prov": "Cáceres"
-  },
-  {
-   "id": "3565X",
-   "nombre": "Brozas (Automatica)",
-   "min": 26.5,
-   "prov": "Cáceres"
   }
  ],
  "top_fresco": [

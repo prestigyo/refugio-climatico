@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El parte de la noche: 314 estaciones no bajaron de 20 °C | Noche Tropical</title>
+<title>El parte de la noche: 315 estaciones no bajaron de 20 °C | Noche Tropical</title>
 <meta name="description" content="El parte diario de las noches tropicales en España, con la observación de AEMET de anoche: cuántas estaciones no bajaron de 20 °C, la más tórrida y la más fresca. Actualizado cada mañana.">
 <link rel="canonical" href="https://nochetropical.es/parte/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
 <meta property="og:type" content="article">
 <meta property="og:title" content="El parte de la noche · 5 jul">
-<meta property="og:description" content="314 estaciones de AEMET no bajaron de 20 °C anoche. La más tórrida: Ca�averal (28,1 °C).">
+<meta property="og:description" content="315 estaciones de AEMET no bajaron de 20 °C anoche. La más tórrida: Evc_noia (28,2 °C).">
 <meta property="og:url" content="https://nochetropical.es/parte/">
 <meta property="og:image" content="https://nochetropical.es/og.png">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://nochetropical.es/og.png">
 <link rel="icon" type="image/svg+xml" href="https://nochetropical.es/favicon.svg">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": "https://nochetropical.es/"}, {"@type": "ListItem", "position": 2, "name": "El parte de la noche", "item": "https://nochetropical.es/parte/"}]}, {"@type": "Article", "headline": "El parte de la noche: 314 estaciones no bajaron de 20 °C", "description": "El parte diario de las noches tropicales en España con la observación de AEMET. La más tórrida: Ca�averal (28,1 °C).", "image": "https://nochetropical.es/og.png", "author": {"@type": "Person", "name": "Ramón J. Lowesting"}, "publisher": {"@type": "Organization", "name": "Refugio Climático", "logo": {"@type": "ImageObject", "url": "https://nochetropical.es/favicon.svg"}}, "datePublished": "2026-07-06", "dateModified": "2026-07-05", "mainEntityOfPage": "https://nochetropical.es/parte/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": "https://nochetropical.es/"}, {"@type": "ListItem", "position": 2, "name": "El parte de la noche", "item": "https://nochetropical.es/parte/"}]}, {"@type": "Article", "headline": "El parte de la noche: 315 estaciones no bajaron de 20 °C", "description": "El parte diario de las noches tropicales en España con la observación de AEMET. La más tórrida: Evc_noia (28,2 °C).", "image": "https://nochetropical.es/og.png", "author": {"@type": "Person", "name": "Ramón J. Lowesting"}, "publisher": {"@type": "Organization", "name": "Refugio Climático", "logo": {"@type": "ImageObject", "url": "https://nochetropical.es/favicon.svg"}}, "datePublished": "2026-07-06", "dateModified": "2026-07-05", "mainEntityOfPage": "https://nochetropical.es/parte/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -51,6 +51,14 @@
  th{font:600 10.5px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
  td.n{text-align:right;font-family:var(--fm);font-weight:700}
  td.loc{font-weight:600}
+ .histwrap{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px 14px 8px;margin:6px 0 8px}
+ .histwrap svg{width:100%;height:auto;display:block}
+ .histwrap .barras rect{fill:var(--teja)}
+ .histwrap .barras rect.rec{fill:var(--teja2)}
+ .histwrap .ejes text{fill:var(--muted);font-family:var(--fm);font-size:10px;text-anchor:middle}
+ .histwrap .ymax{fill:var(--muted);font-family:var(--fm);font-size:10px}
+ .hist-nota{font-size:13.5px;color:var(--muted);margin:0 0 10px}
+ .hist-nota b{color:#e7dcc8}
  .comparte{margin:34px 0;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px}
  .comparte .t{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:10px}
  .comparte pre{white-space:pre-wrap;font-family:var(--fm);font-size:13px;color:#e3d8c4;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
@@ -76,29 +84,31 @@
 
 <section><div class="wrap">
   <div class="nums">
-    <div class="num trop"><div class="v">314</div><div class="l">estaciones en <b>noche tropical</b> (mínima ≥ 20 °C)</div></div>
-    <div class="num ecua"><div class="v">31</div><div class="l">en <b>noche ecuatorial</b> (mínima ≥ 25 °C)</div></div>
-    <div class="num tot"><div class="v">822</div><div class="l">estaciones con datos esta noche</div></div>
+    <div class="num trop"><div class="v">315</div><div class="l">estaciones en <b>noche tropical</b> (mínima ≥ 20 °C)</div></div>
+    <div class="num ecua"><div class="v">35</div><div class="l">en <b>noche ecuatorial</b> (mínima ≥ 25 °C)</div></div>
+    <div class="num tot"><div class="v">820</div><div class="l">estaciones con datos esta noche</div></div>
   </div>
 
   <div class="duelo">
-    <div class="card calor"><div class="t">🥵 La más tórrida</div><div class="loc">Ca�averal</div><div class="m">28,1 °C</div><div class="p">de mínima · Cáceres</div></div>
+    <div class="card calor"><div class="t">🥵 La más tórrida</div><div class="loc">Evc_noia</div><div class="m">28,2 °C</div><div class="p">de mínima · —</div></div>
     <div class="card fresco"><div class="t">🥶 La más fresca</div><div class="loc">Cubillo de Ebro</div><div class="m">7,1 °C</div><div class="p">de mínima · Cantabria</div></div>
   </div>
 
   <h2>Donde peor se durmió</h2>
   <table><thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Mínima</th></tr></thead>
-  <tbody><tr><td class="loc">Ca�averal</td><td><a href="https://nochetropical.es/caceres/">Cáceres</a></td><td class="n">28,1&nbsp;°C</td></tr><tr><td class="loc">San Jose del Valle-Pt Guadalcac�n</td><td><a href="https://nochetropical.es/cadiz/">Cádiz</a></td><td class="n">27,9&nbsp;°C</td></tr><tr><td class="loc">Evc_noia</td><td>—</td><td class="n">27,4&nbsp;°C</td></tr><tr><td class="loc">Evc_cabo de Creus</td><td><a href="https://nochetropical.es/girona/">Girona</a></td><td class="n">27,2&nbsp;°C</td></tr><tr><td class="loc">Castuera</td><td><a href="https://nochetropical.es/badajoz/">Badajoz</a></td><td class="n">27,1&nbsp;°C</td></tr><tr><td class="loc">Zorita</td><td><a href="https://nochetropical.es/caceres/">Cáceres</a></td><td class="n">26,7&nbsp;°C</td></tr><tr><td class="loc">L?estartit</td><td><a href="https://nochetropical.es/girona/">Girona</a></td><td class="n">26,6&nbsp;°C</td></tr><tr><td class="loc">San Fernando Roa</td><td>—</td><td class="n">26,6&nbsp;°C</td></tr><tr><td class="loc">Serradilla (Automatica)</td><td><a href="https://nochetropical.es/caceres/">Cáceres</a></td><td class="n">26,5&nbsp;°C</td></tr><tr><td class="loc">Brozas (Automatica)</td><td><a href="https://nochetropical.es/caceres/">Cáceres</a></td><td class="n">26,5&nbsp;°C</td></tr></tbody></table>
+  <tbody><tr><td class="loc">Evc_noia</td><td>—</td><td class="n">28,2&nbsp;°C</td></tr><tr><td class="loc">Ca�averal</td><td><a href="https://nochetropical.es/caceres/">Cáceres</a></td><td class="n">28,1&nbsp;°C</td></tr><tr><td class="loc">San Jose del Valle-Pt Guadalcac�n</td><td><a href="https://nochetropical.es/cadiz/">Cádiz</a></td><td class="n">27,9&nbsp;°C</td></tr><tr><td class="loc">Evc_cabo de Creus</td><td><a href="https://nochetropical.es/girona/">Girona</a></td><td class="n">27,2&nbsp;°C</td></tr><tr><td class="loc">Castuera</td><td><a href="https://nochetropical.es/badajoz/">Badajoz</a></td><td class="n">27,1&nbsp;°C</td></tr><tr><td class="loc">Serradilla (Automatica)</td><td><a href="https://nochetropical.es/caceres/">Cáceres</a></td><td class="n">26,8&nbsp;°C</td></tr><tr><td class="loc">Figueres Els Aspres</td><td><a href="https://nochetropical.es/girona/">Girona</a></td><td class="n">26,7&nbsp;°C</td></tr><tr><td class="loc">Zorita</td><td><a href="https://nochetropical.es/caceres/">Cáceres</a></td><td class="n">26,7&nbsp;°C</td></tr><tr><td class="loc">L?estartit</td><td><a href="https://nochetropical.es/girona/">Girona</a></td><td class="n">26,6&nbsp;°C</td></tr><tr><td class="loc">San Fernando Roa</td><td>—</td><td class="n">26,6&nbsp;°C</td></tr></tbody></table>
 
   <h2>Donde mejor se durmió</h2>
   <table><thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Mínima</th></tr></thead>
   <tbody><tr><td class="loc">Cubillo de Ebro</td><td><a href="https://nochetropical.es/cantabria/">Cantabria</a></td><td class="n">7,1&nbsp;°C</td></tr><tr><td class="loc">El Puente (Casa Forestal)</td><td><a href="https://nochetropical.es/zamora/">Zamora</a></td><td class="n">7,6&nbsp;°C</td></tr><tr><td class="loc">Soto de Valde�n (Automatica)</td><td><a href="https://nochetropical.es/leon/">León</a></td><td class="n">7,8&nbsp;°C</td></tr><tr><td class="loc">Polientes (Valderredible)</td><td>—</td><td class="n">7,8&nbsp;°C</td></tr><tr><td class="loc">Ria�o-Ermita Quintanilla</td><td><a href="https://nochetropical.es/leon/">León</a></td><td class="n">8,1&nbsp;°C</td></tr><tr><td class="loc">San Pedro Manrique</td><td><a href="https://nochetropical.es/soria/">Soria</a></td><td class="n">8,3&nbsp;°C</td></tr><tr><td class="loc">Cap de Rec</td><td><a href="https://nochetropical.es/lleida/">Lleida</a></td><td class="n">8,5&nbsp;°C</td></tr><tr><td class="loc">Villablino</td><td><a href="https://nochetropical.es/leon/">León</a></td><td class="n">9,0&nbsp;°C</td></tr><tr><td class="loc">Puerto el Pico</td><td><a href="https://nochetropical.es/avila/">Ávila</a></td><td class="n">9,0&nbsp;°C</td></tr><tr><td class="loc">Esterri D?aneu</td><td><a href="https://nochetropical.es/lleida/">Lleida</a></td><td class="n">9,0&nbsp;°C</td></tr></tbody></table>
 
+  <h2>El verano, noche a noche</h2><p class="hist-nota">Cada barra es una noche: cuántas estaciones quedaron en noche tropical. Llevamos <b>51</b> noches contadas; el récord, <b>378</b> estaciones (22/6).</p><div class="histwrap"><svg viewBox="0 0 700 150" role="img" aria-label="Estaciones en noche tropical, noche a noche"><text class="ymax" x="2" y="12">máx 378</text><g class="barras"><rect x="1.0" y="128.0" width="11.7" height="1.0" rx="1"/><rect x="14.7" y="128.0" width="11.7" height="1.0" rx="1"/><rect x="28.5" y="128.0" width="11.7" height="1.0" rx="1"/><rect x="42.2" y="128.0" width="11.7" height="1.0" rx="1"/><rect x="55.9" y="128.0" width="11.7" height="1.0" rx="1"/><rect x="69.6" y="128.0" width="11.7" height="1.0" rx="1"/><rect x="83.4" y="128.0" width="11.7" height="1.0" rx="1"/><rect x="97.1" y="128.0" width="11.7" height="1.0" rx="1"/><rect x="110.8" y="126.5" width="11.7" height="1.5" rx="1"/><rect x="124.5" y="124.4" width="11.7" height="3.6" rx="1"/><rect x="138.3" y="122.9" width="11.7" height="5.1" rx="1"/><rect x="152.0" y="119.9" width="11.7" height="8.1" rx="1"/><rect x="165.7" y="110.5" width="11.7" height="17.5" rx="1"/><rect x="179.4" y="112.0" width="11.7" height="16.0" rx="1"/><rect x="193.2" y="119.0" width="11.7" height="9.0" rx="1"/><rect x="206.9" y="119.9" width="11.7" height="8.1" rx="1"/><rect x="220.6" y="117.7" width="11.7" height="10.3" rx="1"/><rect x="234.3" y="110.5" width="11.7" height="17.5" rx="1"/><rect x="248.1" y="109.3" width="11.7" height="18.7" rx="1"/><rect x="261.8" y="106.3" width="11.7" height="21.7" rx="1"/><rect x="275.5" y="105.7" width="11.7" height="22.3" rx="1"/><rect x="289.2" y="110.2" width="11.7" height="17.8" rx="1"/><rect x="303.0" y="116.5" width="11.7" height="11.5" rx="1"/><rect x="316.7" y="119.9" width="11.7" height="8.1" rx="1"/><rect x="330.4" y="116.2" width="11.7" height="11.8" rx="1"/><rect x="344.1" y="112.9" width="11.7" height="15.1" rx="1"/><rect x="357.9" y="120.2" width="11.7" height="7.8" rx="1"/><rect x="371.6" y="114.1" width="11.7" height="13.9" rx="1"/><rect x="385.3" y="108.4" width="11.7" height="19.6" rx="1"/><rect x="399.0" y="106.9" width="11.7" height="21.1" rx="1"/><rect x="412.8" y="98.7" width="11.7" height="29.3" rx="1"/><rect x="426.5" y="101.2" width="11.7" height="26.8" rx="1"/><rect x="440.2" y="115.3" width="11.7" height="12.7" rx="1"/><rect x="453.9" y="109.3" width="11.7" height="18.7" rx="1"/><rect x="467.7" y="104.8" width="11.7" height="23.2" rx="1"/><rect x="481.4" y="84.0" width="11.7" height="44.0" rx="1"/><rect x="495.1" y="73.1" width="11.7" height="54.9" rx="1"/><rect x="508.8" y="73.4" width="11.7" height="54.6" rx="1"/><rect x="522.6" y="46.0" width="11.7" height="82.0" rx="1"/><rect x="536.3" y="16.7" width="11.7" height="111.3" rx="1"/><rect class="rec" x="550.0" y="14.0" width="11.7" height="114.0" rx="1"/><rect x="563.7" y="14.9" width="11.7" height="113.1" rx="1"/><rect x="577.5" y="32.4" width="11.7" height="95.6" rx="1"/><rect x="591.2" y="71.3" width="11.7" height="56.7" rx="1"/><rect x="604.9" y="80.7" width="11.7" height="47.3" rx="1"/><rect x="618.6" y="63.2" width="11.7" height="64.8" rx="1"/><rect x="632.4" y="56.5" width="11.7" height="71.5" rx="1"/><rect x="646.1" y="61.3" width="11.7" height="66.7" rx="1"/><rect x="659.8" y="33.3" width="11.7" height="94.7" rx="1"/><rect x="673.5" y="33.6" width="11.7" height="94.4" rx="1"/><rect x="687.3" y="33.0" width="11.7" height="95.0" rx="1"/></g><g class="ejes"><text x="6.9" y="144">13/5</text><text x="102.9" y="144">20/5</text><text x="199.0" y="144">27/5</text><text x="295.1" y="144">3/6</text><text x="391.2" y="144">10/6</text><text x="487.3" y="144">17/6</text><text x="583.3" y="144">24/6</text><text x="679.4" y="144">1/7</text><text x="693.1" y="144">5/7</text></g></svg></div>
+
   <div class="comparte">
     <div class="t">Comparte el parte</div>
     <pre id="txt">🌙 El parte de la noche · 5 jul
-314 estaciones de AEMET no bajaron de 20 °C anoche (31 ni de 25 °C).
-🥵 La más tórrida: Ca�averal (Cáceres), mínima 28,1 °C.
+315 estaciones de AEMET no bajaron de 20 °C anoche (35 ni de 25 °C).
+🥵 La más tórrida: Evc_noia, mínima 28,2 °C.
 🥶 La más fresca: Cubillo de Ebro (Cantabria), 7,1 °C.
 Tu pueblo, noche a noche → nochetropical.es</pre>
     <div class="acciones">

@@ -1,0 +1,41 @@
+name: Certificados para ayuntamientos
+
+# Genera los 25 diplomas "Refugio Climático de España 2026" en docs/certificados/
+# (quedan servidos en nochetropical.es/certificados/...). Solo a mano: es una
+# acción puntual, no un proceso periódico.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  certificados:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repo
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar Pillow
+        run: pip install pillow
+
+      - name: Generar los certificados
+        run: python aemet-temperaturas/scripts/generar_certificados.py
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/certificados
+          if git diff --staged --quiet; then
+            echo "Sin cambios."
+          else
+            git commit -m "Certificados Refugio Climático de España 2026"
+            git push
+          fi

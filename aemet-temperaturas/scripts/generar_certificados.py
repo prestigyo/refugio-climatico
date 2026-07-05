@@ -185,8 +185,8 @@ PAGINA_CERT = r"""<!doctype html>
   </div>
 
   <div class="verifica">
-    <div class="t">Cómo verificar este certificado</div>
-    Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. El dato procede de los valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> (veranos 2017–2026) medidos en la estación de __LOC__. Puede contrastarse en el <a href="__SITE__/ranking-noches-tropicales/">ranking nacional</a> y en la página de <a href="__SITE__/__PROVSLUG__/">__PROV__</a>. El certificado es de uso libre citando la fuente (CC&nbsp;BY&nbsp;4.0).
+    <div class="t">Por qué se otorga este certificado</div>
+    Se certifica como <b>Refugio Climático de España</b> a las estaciones de AEMET con <b>menos de una noche tropical al año</b> de media en los últimos diez veranos (2017–2026) — una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Lo consiguen <b>218 de las 848</b> estaciones analizadas; el <b>Top 25</b> reúne, de entre ellas, las de mayor altitud. El dato de __LOC__ procede de los valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> y puede contrastarse en el <a href="__SITE__/ranking-noches-tropicales/">ranking nacional</a> y en la página de <a href="__SITE__/__PROVSLUG__/">__PROV__</a>. Certificado de uso libre citando la fuente (CC&nbsp;BY&nbsp;4.0).
   </div>
 </div></section>
 
@@ -290,8 +290,8 @@ def construir_indice(top: list[dict], site: str) -> str:
 </div></header>
 <section><div class="wrap">
   <ul class="lista">{filas}</ul>
-  <div class="verifica"><div class="t">Metodología</div>
-  Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Selección: estaciones con menos de una noche tropical al año de media, ordenadas por altitud. Datos: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · <a href="{site}/ranking-noches-tropicales/">ranking completo</a>.</div>
+  <div class="verifica"><div class="t">Cómo se otorga</div>
+  Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Se certifica a las estaciones con <b>menos de una noche tropical al año</b> de media (2017–2026): lo logran <b>218 de las 848</b> analizadas. Este Top 25 reúne, de entre ellas, las de mayor altitud. Solo podemos certificar donde hay estación de AEMET con datos suficientes: que un pueblo no aparezca no significa que no sea un refugio — significa que aún no podemos medirlo. Datos: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · <a href="{site}/ranking-noches-tropicales/">ranking completo</a>.</div>
 </div></section>
 <footer><div class="wrap">
   Proyecto <a href="{site}/">Refugio Climático · nochetropical.es</a> · Datos: AEMET OpenData · <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>

@@ -639,6 +639,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     &nbsp;·&nbsp;<a href="https://x.com/nochetropicales" target="_blank" rel="noopener" style="color:var(--teja2)">Síguenos en X: @nochetropicales</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/ranking-noches-tropicales/" style="color:var(--teja2)">Ranking: dónde se duerme mejor y peor →</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/ola-de-calor/" style="color:var(--teja2)">La ola de calor, día y noche →</a>
+    &nbsp;·&nbsp;<a href="__SITE_URL__/certificados/" style="color:var(--teja2)">Los 25 refugios certificados →</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/prensa/" style="color:var(--teja2)">Sala de prensa</a>
   </div>
 </footer>

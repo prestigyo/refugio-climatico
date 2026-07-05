@@ -1,0 +1,47 @@
+name: El parte de la noche
+
+# Cada mañana: lee la observación en tiempo real de AEMET (últimas 24 h) y
+# publica docs/parte/ (página + texto listo para tuitear). Es el arma diaria:
+# los datos de ANOCHE, sin el retraso de 3-5 días de los climatológicos.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 7 * * *"       # 07:15 UTC = 09:15 hora peninsular en verano
+
+permissions:
+  contents: write
+
+jobs:
+  parte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Descargar repo
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar requests
+        run: pip install requests
+
+      - name: Generar el parte de la noche
+        working-directory: aemet-temperaturas/scripts
+        env:
+          AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
+        run: python parte_nocturno.py
+
+      - name: Commit si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/parte
+          if git diff --staged --quiet; then
+            echo "Sin cambios en docs/parte/."
+          else
+            git commit -m "El parte de la noche ($(date -u +%Y-%m-%d))"
+            git push
+          fi

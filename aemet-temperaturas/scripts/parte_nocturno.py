@@ -79,17 +79,19 @@ def obtener_observaciones() -> list[dict]:
 
 
 def observaciones_demo() -> list[dict]:
-    """Datos sintéticos para probar el render en local sin clave de la API."""
+    """Datos sintéticos para probar el render en local sin clave de la API.
+    Los fint caen SIEMPRE dentro de la ventana nocturna, sea la hora que sea."""
     random.seed(5)
-    ahora = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
+    hoy = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    inicio = hoy - timedelta(days=1) + timedelta(hours=H_INICIO)
     obs = []
     nombres = [("CABO DE GATA", "B000"), ("PUERTO DEL PICO", "D001"),
                ("CEDRILLAS", "9381X"), ("VALENCIA AEROPUERTO", "8414A")]
     nombres += [(f"ESTACION {i}", f"S{i:03d}") for i in range(300)]
     for nombre, idema in nombres:
         base = random.uniform(9, 27)
-        for h in range(14):
-            t = ahora - timedelta(hours=h)
+        for h in range(13):    # 18:00 de ayer a 07:00 de hoy, hora a hora
+            t = inicio + timedelta(hours=h)
             obs.append({"idema": idema, "ubi": nombre,
                         "fint": t.strftime("%Y-%m-%dT%H:%M:%S"),
                         "ta": round(base + random.uniform(-1.5, 4), 1)})
@@ -312,6 +314,8 @@ PLANTILLA = r"""<!doctype html>
  .comparte button,.comparte a.b{background:transparent;border:1px solid var(--teja);color:var(--teja2);font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:9px;cursor:pointer;text-decoration:none}
  .comparte button:hover,.comparte a.b:hover{background:var(--teja);color:#1a1209}
  .nota{font-size:12.5px;color:var(--muted);margin:22px 0}
+ .archivo{font-size:13px;color:var(--muted);margin:18px 0 0}
+ .archivo a{font-family:var(--fm);font-size:12.5px}
  .cta{margin:26px 0;text-align:center}
  .cta a{display:inline-block;background:var(--teja);color:#1a1209;font-weight:700;padding:13px 22px;border-radius:12px}
  .cta a:hover{background:var(--teja2);text-decoration:none}
@@ -359,6 +363,8 @@ PLANTILLA = r"""<!doctype html>
       <a class="b" id="tw" href="#" target="_blank" rel="noopener">X / Twitter</a>
     </div>
   </div>
+
+  __ARCHIVO__
 
   <p class="nota">Datos de la red de observación de AEMET (últimas 24 h, provisionales y sin validar; ventana nocturna 18:00–08:00 UTC). La media histórica, pueblo a pueblo y con diez veranos validados, está en la <a href="__SITE__/">calculadora</a>.</p>
 
@@ -417,12 +423,17 @@ def main() -> int:
               "prov": prov_de.get(k, "")} for k, v in minimas.items()]
     lista.sort(key=lambda e: -e["min"])
 
+    # Los RECUENTOS usan todas las estaciones; los PROTAGONISTAS (más tórrida,
+    # más fresca, tops) solo las de nombre y provincia conocidos, para evitar
+    # códigos feos tipo "Evc_noia" en titulares y tuits.
     total = len(lista)
     trop = sum(1 for e in lista if e["min"] >= 20)
     ecua = sum(1 for e in lista if e["min"] >= 25)
-    peor, mejor = lista[0], lista[-1]
-    top_calor = lista[:10]
-    top_fresco = sorted(lista, key=lambda e: e["min"])[:10]
+    conocidas = [e for e in lista if e["prov"] and "_" not in e["nombre"]]
+    sel = conocidas if len(conocidas) >= 100 else lista
+    peor, mejor = sel[0], sel[-1]
+    top_calor = sel[:10]
+    top_fresco = sorted(sel, key=lambda e: e["min"])[:10]
 
     ahora = datetime.now(timezone.utc)
     ayer = ahora - timedelta(days=1)
@@ -437,12 +448,13 @@ def main() -> int:
     dominio = site.split("//")[1]
     pp = f" ({peor['prov']})" if peor["prov"] else ""
     mp = f" ({mejor['prov']})" if mejor["prov"] else ""
+    fecha_iso_tuit = ahora.strftime("%Y-%m-%d")
     tuit = (f"🌙 El parte de la noche · {fecha_corta}\n"
             f"{trop} estaciones de AEMET no bajaron de 20 °C anoche"
             + (f" ({ecua} ni de 25 °C)." if ecua else ".") + "\n"
             f"🥵 La más tórrida: {peor['nombre']}{pp}, mínima {dec(peor['min'])} °C.\n"
             f"🥶 La más fresca: {mejor['nombre']}{mp}, {dec(mejor['min'])} °C.\n"
-            f"Tu pueblo, noche a noche → {dominio}")
+            f"El parte completo → {dominio}/parte/{fecha_iso_tuit}/")
 
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
@@ -508,7 +520,20 @@ def main() -> int:
     html = html.replace("__SECCION_HISTORIAL__", seccion_hist)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    # Archivo navegable: enlaces a los últimos partes fechados (más el de hoy).
+    fechas_previas = sorted(d.name for d in OUT_DIR.glob("????-??-??") if d.is_dir())
+    fechas_arch = sorted(set(fechas_previas + [fecha_iso]))[-12:]
+    enlaces_arch = " · ".join(
+        f'<a href="{site}/parte/{f}/">{int(f[8:10])} {MESES[int(f[5:7]) - 1][:3]}</a>'
+        for f in fechas_arch)
+    html = html.replace("__ARCHIVO__",
+                        f'<p class="archivo">Archivo del parte: {enlaces_arch}</p>')
     (OUT_DIR / "index.html").write_text(html, encoding="utf-8")
+    # Página FECHADA del día: URL propia por noche (/parte/AAAA-MM-DD/), con su
+    # canonical/og propios -> cada tuit enlaza a SU noche y X trae tarjeta fresca.
+    html_fecha = html.replace(f'{site}/parte/"', f'{site}/parte/{fecha_iso}/"')
+    (OUT_DIR / fecha_iso).mkdir(exist_ok=True)
+    (OUT_DIR / fecha_iso / "index.html").write_text(html_fecha, encoding="utf-8")
     # Archivo del día (detalle completo, uno por fecha): la memoria del verano.
     (OUT_DIR / "dias").mkdir(exist_ok=True)
     (OUT_DIR / "dias" / f"{fecha_iso}.json").write_text(json.dumps(

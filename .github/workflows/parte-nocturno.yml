@@ -25,14 +25,24 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instalar requests
-        run: pip install requests
+      - name: Instalar requests y tweepy
+        run: pip install requests tweepy
 
       - name: Generar el parte de la noche
         working-directory: aemet-temperaturas/scripts
         env:
           AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
         run: python parte_nocturno.py
+
+      - name: Publicar en X (@nochetropicales)
+        working-directory: aemet-temperaturas/scripts
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: python publicar_x.py
+        continue-on-error: true
 
       - name: Commit si hay cambios
         run: |

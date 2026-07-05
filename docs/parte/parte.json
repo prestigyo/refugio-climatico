@@ -1,13 +1,13 @@
 {
  "fecha": "2026-07-05",
- "total": 823,
- "tropicales": 323,
- "ecuatoriales": 32,
+ "total": 822,
+ "tropicales": 314,
+ "ecuatoriales": 31,
  "peor": {
-  "id": "1400",
-  "nombre": "Fisterra",
-  "min": 28.4,
-  "prov": "A Coruña"
+  "id": "3475X",
+  "nombre": "Ca�averal",
+  "min": 28.1,
+  "prov": "Cáceres"
  },
  "mejor": {
   "id": "9016X",
@@ -16,12 +16,6 @@
   "prov": "Cantabria"
  },
  "top_calor": [
-  {
-   "id": "1400",
-   "nombre": "Fisterra",
-   "min": 28.4,
-   "prov": "A Coruña"
-  },
   {
    "id": "3475X",
    "nombre": "Ca�averal",
@@ -43,7 +37,7 @@
   {
    "id": "0433D",
    "nombre": "Evc_cabo de Creus",
-   "min": 27.3,
+   "min": 27.2,
    "prov": "Girona"
   },
   {
@@ -71,10 +65,16 @@
    "prov": ""
   },
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 26.6,
-   "prov": "Sevilla"
+   "id": "3448X",
+   "nombre": "Serradilla (Automatica)",
+   "min": 26.5,
+   "prov": "Cáceres"
+  },
+  {
+   "id": "3565X",
+   "nombre": "Brozas (Automatica)",
+   "min": 26.5,
+   "prov": "Cáceres"
   }
  ],
  "top_fresco": [
@@ -105,7 +105,7 @@
   {
    "id": "2624C",
    "nombre": "Ria�o-Ermita Quintanilla",
-   "min": 8.2,
+   "min": 8.1,
    "prov": "León"
   },
   {
@@ -121,22 +121,22 @@
    "prov": "Lleida"
   },
   {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 9.0,
+   "prov": "León"
+  },
+  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
    "min": 9.0,
    "prov": "Ávila"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 9.1,
-   "prov": "León"
-  },
-  {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 9.1,
-   "prov": "Cantabria"
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 9.0,
+   "prov": "Lleida"
   }
  ]
 }

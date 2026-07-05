@@ -1926,7 +1926,9 @@ def main() -> int:
     # (la home + cada carpeta con un index.html). Ninguna página se queda fuera.
     hoy = date.today().isoformat()
     urls = [site + "/"] + sorted(
-        f"{site}/{f.parent.name}/" for f in DOCS_DIR.glob("*/index.html"))
+        f"{site}/{f.parent.relative_to(DOCS_DIR).as_posix()}/"
+        for patron in ("*/index.html", "*/*/index.html")
+        for f in DOCS_DIR.glob(patron))
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'
         f'<priority>{"1.0" if u == site + "/" else "0.7"}</priority></url>' for u in urls)

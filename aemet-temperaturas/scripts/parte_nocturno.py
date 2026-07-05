@@ -94,11 +94,26 @@ def observaciones_demo() -> list[dict]:
 
 
 def parsear_fint(s: str) -> datetime | None:
+    """Tolerante con los formatos de fecha de la API (con/sin zona, con 'Z')."""
     try:
-        limpio = s.strip().replace("Z", "").split("+")[0]
-        return datetime.fromisoformat(limpio).replace(tzinfo=timezone.utc)
-    except (ValueError, AttributeError):
+        t = datetime.fromisoformat(str(s).strip().replace("Z", "+00:00"))
+        if t.tzinfo is None:
+            t = t.replace(tzinfo=timezone.utc)
+        return t.astimezone(timezone.utc)
+    except (ValueError, AttributeError, TypeError):
         return None
+
+
+def _num(v) -> float | None:
+    """Valor numérico venga como venga (12.3, '12.3' o '12,3')."""
+    if isinstance(v, (int, float)):
+        return float(v)
+    if isinstance(v, str):
+        try:
+            return float(v.replace(",", "."))
+        except ValueError:
+            return None
+    return None
 
 
 def minimas_de_la_noche(obs: list[dict]) -> dict[str, dict]:
@@ -108,10 +123,12 @@ def minimas_de_la_noche(obs: list[dict]) -> dict[str, dict]:
     fin = hoy + timedelta(hours=H_FIN)
     est: dict[str, dict] = {}
     for o in obs:
+        if not isinstance(o, dict):
+            continue
         t = parsear_fint(o.get("fint", ""))
         if t is None or not (ini <= t <= fin):
             continue
-        candidatos = [o.get(k) for k in ("tamin", "ta") if isinstance(o.get(k), (int, float))]
+        candidatos = [x for x in (_num(o.get("tamin")), _num(o.get("ta"))) if x is not None]
         if not candidatos:
             continue
         v = min(candidatos)
@@ -367,6 +384,19 @@ def main() -> int:
     if len(minimas) < MIN_ESTACIONES:
         print(f"ERROR: solo {len(minimas)} estaciones con datos; no se publica el parte.",
               file=sys.stderr)
+        # Diagnóstico: qué devuelve la API de verdad, para afinar el parser.
+        print(f"DEBUG: {len(obs) if isinstance(obs, list) else type(obs)} observaciones recibidas.",
+              file=sys.stderr)
+        if isinstance(obs, list) and obs and isinstance(obs[0], dict):
+            ej = obs[0]
+            muestra = {k: ej.get(k) for k in list(ej)[:14]}
+            print("DEBUG ejemplo de observación:", muestra, file=sys.stderr)
+            fints = sorted(str(o.get("fint")) for o in obs[:5000]
+                           if isinstance(o, dict) and o.get("fint"))
+            if fints:
+                print(f"DEBUG rango de fint: {fints[0]} → {fints[-1]}", file=sys.stderr)
+            print(f"DEBUG ventana buscada: últimas {H_INICIO}:00 UTC de ayer → "
+                  f"{H_FIN}:00 UTC de hoy", file=sys.stderr)
         return 1
 
     prov_de = cargar_provincias()

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Virgen de La Vega: por qué se enfría al instante al caer el sol | Refugio Climático</title>
+<meta name="description" content="La trilogía del frescor de La Virgen de La Vega (Alcalá de la Selva, Teruel, 1.400 m): el efecto botijo de los pinares, el aire seco que no retiene el calor y la irradiación nocturna. Por qué aquí se duerme tapado en pleno julio.">
+<link rel="canonical" href="https://nochetropical.es/la-virgen-de-la-vega/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="La trilogía del frescor: por qué La Vega se enfría al instante">
+<meta property="og:description" content="El efecto botijo de los pinares, el aire seco y la irradiación nocturna: la física del refugio climático de la sierra de Gúdar (Teruel, 1.400 m).">
+<meta property="og:url" content="https://nochetropical.es/la-virgen-de-la-vega/">
+<meta property="og:image" content="https://nochetropical.es/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="La trilogía del frescor: por qué La Vega se enfría al instante">
+<meta name="twitter:description" content="La física del refugio climático de la sierra de Gúdar (Teruel, 1.400 m).">
+<meta name="twitter:image" content="https://nochetropical.es/og.png">
+<link rel="icon" type="image/svg+xml" href="https://nochetropical.es/favicon.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Refugio Climático","item":"https://nochetropical.es/"},{"@type":"ListItem","position":2,"name":"La Virgen de La Vega","item":"https://nochetropical.es/la-virgen-de-la-vega/"}]},{"@type":"Article","headline":"La trilogía del frescor: por qué La Vega se enfría al instante","description":"El efecto botijo de los pinares, el aire seco que no retiene el calor y la irradiación nocturna: la física del refugio climático de La Virgen de La Vega (Alcalá de la Selva, Teruel, 1.400 m).","image":"https://nochetropical.es/og.png","author":{"@type":"Person","name":"Ramón J. Lowesting"},"publisher":{"@type":"Organization","name":"Refugio Climático","logo":{"@type":"ImageObject","url":"https://nochetropical.es/favicon.svg"}},"datePublished":"2026-07-05","dateModified":"2026-07-05","mainEntityOfPage":"https://nochetropical.es/la-virgen-de-la-vega/"}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--fm:"JetBrains Mono",monospace}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.75;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:720px;margin:0 auto;padding:0 22px}
+ a{color:var(--teal);text-decoration:none}
+ a:hover{text-decoration:underline}
+ header.h{padding:48px 0 14px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:20px 0 12px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(28px,5.6vw,44px);line-height:1.08;letter-spacing:-.01em}
+ .lead{margin:22px 0 0}
+ .lead p{font-size:clamp(17px,2.7vw,19px);color:#e7dcc8;margin:0 0 16px}
+ .lead p b{color:var(--paper)}
+ article{padding:8px 0 10px}
+ article h2{font-family:var(--fd);font-weight:700;font-size:clamp(22px,4.2vw,30px);line-height:1.15;letter-spacing:-.01em;margin:44px 0 14px}
+ article h2 .n{display:inline-grid;place-items:center;width:34px;height:34px;background:var(--teja);color:#1a1209;font-family:var(--fm);font-size:17px;border-radius:50%;margin-right:10px;vertical-align:-6px}
+ article p{font-size:clamp(16px,2.4vw,18px);color:#e3d8c4;margin:0 0 18px}
+ article p b,article p strong{color:var(--paper);font-weight:700}
+ article em{font-style:italic;color:var(--teal)}
+ .resultado{margin:24px 0;padding:18px 22px;border-left:3px solid var(--teja);background:linear-gradient(180deg,rgba(217,116,78,.09),transparent);border-radius:0 14px 14px 0}
+ .resultado .rk{font:600 11px/1 var(--fb);letter-spacing:.15em;text-transform:uppercase;color:var(--teja);margin-bottom:8px}
+ .resultado p{font-family:var(--fd);font-size:clamp(16.5px,2.6vw,19px);font-style:italic;line-height:1.55;color:#efe6d6;margin:0}
+ .resultado p b{font-style:normal;color:var(--teja2)}
+ .dato{margin:36px 0;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px 24px;text-align:center}
+ .dato .num{font-family:var(--fm);font-weight:700;font-size:clamp(34px,7vw,48px);color:var(--verde);line-height:1.1}
+ .dato .lbl{font-size:14.5px;color:var(--muted);max-width:44ch;margin:6px auto 0}
+ .dato .lbl b{color:#e7dcc8}
+ .capture{margin:42px 0 10px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid #54402a;border-radius:18px;padding:28px 24px}
+ .capture h2{font-family:var(--fd);font-weight:700;font-size:clamp(20px,3.6vw,26px);margin:0 0 8px;text-align:center}
+ .capture .sub{font-size:15px;color:var(--muted);text-align:center;max-width:52ch;margin:0 auto 20px}
+ .capture form{display:grid;gap:12px;max-width:460px;margin:0 auto}
+ .capture input[type=email],.capture select,.capture input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--paper);font-family:var(--fb);font-size:15px;padding:12px 14px}
+ .capture input:focus,.capture select:focus{outline:none;border-color:var(--teja)}
+ .capture .rgpd{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--muted);line-height:1.5}
+ .capture .rgpd input{margin-top:3px}
+ .capture button{background:var(--teja);color:#1a1209;font-weight:700;font-size:15.5px;border:none;border-radius:11px;padding:14px;cursor:pointer}
+ .capture button:hover{background:var(--teja2)}
+ .capture .ok{font-family:var(--fd);font-size:19px;text-align:center;color:var(--verde);padding:20px 0}
+ .otros{text-align:center;font-size:13.5px;color:var(--muted);margin-top:14px}
+ .botones{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:34px 0 8px}
+ .btn{display:inline-block;padding:13px 20px;border-radius:12px;font-weight:700;font-size:15px;line-height:1.2}
+ .btn.pri{background:var(--teja);color:#1a1209}
+ .btn.pri:hover{background:var(--teja2);text-decoration:none}
+ .btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}
+ .btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
+ footer{border-top:1px solid var(--line);padding:32px 0 64px;color:#82745d;font-size:12.5px;margin-top:36px}
+ footer a{color:#9a8a6f}
+ footer p{margin:0 0 8px;max-width:680px}
+ @media(max-width:520px){.wrap{padding:0 18px}}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="https://nochetropical.es/">Refugio Climático</a> · La Virgen de La Vega</nav>
+  <div class="kick">Anatomía de un refugio · Sierra de Gúdar (Teruel)</div>
+  <h1>La trilogía del frescor: por qué La Vega se enfría al instante</h1>
+  <div class="lead">
+    <p><b>La Virgen de La Vega</b> (Alcalá de la Selva, Teruel) está a unos <b>1.400 metros de altitud</b>, en un valle rodeado de pinares. De día el sol pega con fuerza; pero en el momento en que se esconde tras la montaña, la temperatura se desploma y toca <b>dormir tapado en pleno julio</b>. No es magia: son tres mecanismos físicos trabajando a la vez.</p>
+  </div>
+</div></header>
+
+<article><div class="wrap">
+
+  <h2><span class="n">1</span>El «efecto botijo» de los pinares y el secreto de las hojas</h2>
+  <p>Es una gran observación: el sol pega con fuerza a 1.400 metros de altitud, pero las hojas de los árboles no se queman ni se calientan. ¿Por qué? Por la <b>evapotranspiración</b>.</p>
+  <p>Los pinos actúan como un <b>sistema de refrigeración líquida continuo</b>. Absorben agua subterránea fría y la liberan en forma de vapor microscópico a través de sus acículas (hojas) para regular su temperatura. Las hojas sacrifican el calor sensible convirtiéndolo en <em>calor latente</em>.</p>
+  <div class="resultado">
+    <div class="rk">El resultado</div>
+    <p>La densa sombra que proyectan sobre el suelo del valle no es una sombra «seca» como la de un toldo de plástico: es una sombra cargada de humedad microclimática que imita exactamente el mecanismo de un <b>botijo de arcilla</b>. El suelo del bosque nunca llega a calentarse durante el día.</p>
+  </div>
+
+  <h2><span class="n">2</span>El aire seco es un pésimo retenedor de calor</h2>
+  <p>Aquí está la gran diferencia con Valencia o Alicante. En la costa, el aire está sobresaturado de humedad. El agua suspendida en el ambiente tiene una capacidad calorífica brutal: actúa como una <b>esponja térmica</b> que absorbe el calor del día y lo retiene por la noche — el temido efecto <em>«manta tropical»</em>.</p>
+  <p>En La Virgen de La Vega, el ambiente es <b>extraordinariamente seco</b>. El aire seco tiene una masa térmica bajísima: no tiene «esponjas» (vapor de agua) que guarden el calor.</p>
+  <div class="resultado">
+    <div class="rk">El resultado</div>
+    <p>Mientras el sol incide, sus rayos calientan la superficie de las rocas y los tejados. Pero en el instante en que el sol se esconde tras la montaña, el único motor de calor desaparece. Al no haber humedad que actúe de freno o reserva, <b>el ambiente se enfría en cuestión de minutos</b>.</p>
+  </div>
+
+  <h2><span class="n">3</span>La ausencia de partículas: una ventana abierta al espacio exterior</h2>
+  <p>A la altitud de La Vega, el aire es puro y limpio: carece de la contaminación, el polvo en suspensión y los aerosoles típicos de las grandes urbes o las zonas costeras bajas. En física, esto se traduce en una <b>máxima transparencia atmosférica</b>.</p>
+  <p>Durante la noche, la Tierra devuelve el calor recibido en forma de radiación infrarroja hacia el espacio. En las ciudades, las partículas contaminantes y la humedad rebotan esa radiación de vuelta al suelo — un <em>efecto invernadero local</em>.</p>
+  <div class="resultado">
+    <div class="rk">El resultado</div>
+    <p>En La Vega, al no haber partículas ni humedad que frenen esa radiación, el calor escapa directamente y sin obstáculos hacia el espacio exterior. Es un proceso de <b>irradiación nocturna masiva y limpísima</b>.</p>
+  </div>
+
+  <div class="dato">
+    <div class="num">&lt;1</div>
+    <p class="lbl">noches tropicales al año registra la estación de AEMET de <b>Cedrillas</b>, la de esta comarca (media de los veranos 2017–2026). En <b>Valencia</b>, a poco más de 100 km, son unas <b>64</b>. La trilogía del frescor no es una teoría: está medida.</p>
+  </div>
+
+  <div class="capture">
+    <h2>¿Quieres saber más de este microclima?</h2>
+    <p class="sub">Déjanos tu email y te enviamos el informe del microclima de la sierra de Gúdar: los datos de la zona, cómo se duerme cada verano y qué pueblos comparten este refugio.</p>
+    <form id="leadf">
+      <input type="email" id="lemail" placeholder="tu@email.com" required>
+      <select id="lwhat">
+        <option value="informe">Quiero el informe del microclima</option>
+        <option value="comprar">Busco casa fresca en la zona</option>
+        <option value="alquilar">Me interesa veranear aquí</option>
+        <option value="vender">Tengo una propiedad en la zona</option>
+      </select>
+      <input type="text" id="lpet" placeholder="¿Algo que quieras contarnos? (opcional)">
+      <label class="rgpd"><input type="checkbox" id="lrgpd" required> Acepto que me contactéis sobre esto. Sin spam: solo la información pedida.</label>
+      <button type="submit">Recibir el informe</button>
+    </form>
+  </div>
+
+  <div class="botones">
+    <a class="btn pri" href="https://nochetropical.es/">Compara con tu pueblo en la calculadora →</a>
+    <a class="btn sec" href="https://nochetropical.es/microclimas/">Leer: los microclimas y cómo buscarlos</a>
+  </div>
+
+</div></article>
+
+<footer><div class="wrap">
+  <p>Pieza del proyecto <a href="https://nochetropical.es/">Refugio Climático</a>. Texto: Ramón J. Lowesting, vecino de la zona.</p>
+  <p>Dato de noches tropicales: estación de AEMET de Cedrillas, veranos 2017–2026 (<a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a>, <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>). El dato es de la estación, no del municipio.</p>
+</div></footer>
+
+<script>
+const APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycbws_0q0zwYdFNh_NAvA-mAJYH0Jkrg9d0dkFurITnYdHFR3kx8GbeqC8u9YI_PCQpuJ/exec";
+const lf=document.getElementById("leadf");
+lf.addEventListener("submit",ev=>{
+  ev.preventDefault();
+  const lead={timestamp:new Date().toISOString(),
+    email:document.getElementById("lemail").value.trim(),
+    modo:"landing",
+    busca:document.getElementById("lwhat").value,
+    zona_interes:"La Virgen de La Vega / Sierra de Gúdar",
+    peticion:document.getElementById("lpet").value.trim(),
+    estacion:"Cedrillas",provincia:"Teruel",noches_trop:0,veredicto:"refugio",
+    rgpd:document.getElementById("lrgpd").checked?"si":"",
+    source:"la-virgen-de-la-vega",user_agent:navigator.userAgent};
+  const gracias=()=>{lf.parentElement.querySelector(".sub").textContent="Revisa tu bandeja de entrada en los próximos días.";lf.outerHTML='<p class="ok">¡Gracias! Te escribimos pronto.</p>';};
+  fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(lead)}).then(gracias).catch(gracias);
+});
+</script>
+</body>
+</html>

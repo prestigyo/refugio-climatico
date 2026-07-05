@@ -1,0 +1,142 @@
+{
+ "fecha": "2026-07-05",
+ "total": 823,
+ "tropicales": 323,
+ "ecuatoriales": 32,
+ "peor": {
+  "id": "1400",
+  "nombre": "Fisterra",
+  "min": 28.4,
+  "prov": "A Coruña"
+ },
+ "mejor": {
+  "id": "9016X",
+  "nombre": "Cubillo de Ebro",
+  "min": 7.1,
+  "prov": "Cantabria"
+ },
+ "top_calor": [
+  {
+   "id": "1400",
+   "nombre": "Fisterra",
+   "min": 28.4,
+   "prov": "A Coruña"
+  },
+  {
+   "id": "3475X",
+   "nombre": "Ca�averal",
+   "min": 28.1,
+   "prov": "Cáceres"
+  },
+  {
+   "id": "5950X",
+   "nombre": "San Jose del Valle-Pt Guadalcac�n",
+   "min": 27.9,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "1437P",
+   "nombre": "Evc_noia",
+   "min": 27.4,
+   "prov": ""
+  },
+  {
+   "id": "0433D",
+   "nombre": "Evc_cabo de Creus",
+   "min": 27.3,
+   "prov": "Girona"
+  },
+  {
+   "id": "4325Y",
+   "nombre": "Castuera",
+   "min": 27.1,
+   "prov": "Badajoz"
+  },
+  {
+   "id": "4347X",
+   "nombre": "Zorita",
+   "min": 26.7,
+   "prov": "Cáceres"
+  },
+  {
+   "id": "0385X",
+   "nombre": "L?estartit",
+   "min": 26.6,
+   "prov": "Girona"
+  },
+  {
+   "id": "5972Y",
+   "nombre": "San Fernando Roa",
+   "min": 26.6,
+   "prov": ""
+  },
+  {
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 26.6,
+   "prov": "Sevilla"
+  }
+ ],
+ "top_fresco": [
+  {
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 7.1,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 7.6,
+   "prov": "Zamora"
+  },
+  {
+   "id": "1178Y",
+   "nombre": "Soto de Valde�n (Automatica)",
+   "min": 7.8,
+   "prov": "León"
+  },
+  {
+   "id": "9019X",
+   "nombre": "Polientes (Valderredible)",
+   "min": 7.8,
+   "prov": ""
+  },
+  {
+   "id": "2624C",
+   "nombre": "Ria�o-Ermita Quintanilla",
+   "min": 8.2,
+   "prov": "León"
+  },
+  {
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 8.3,
+   "prov": "Soria"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 8.5,
+   "prov": "Lleida"
+  },
+  {
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 9.0,
+   "prov": "Ávila"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 9.1,
+   "prov": "León"
+  },
+  {
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 9.1,
+   "prov": "Cantabria"
+  }
+ ]
+}

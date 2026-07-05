@@ -71,8 +71,11 @@ def obtener_observaciones() -> list[dict]:
         sys.exit(1)
     r2 = requests.get(datos_url, timeout=120)
     r2.raise_for_status()
-    r2.encoding = "utf-8"
-    return r2.json()
+    # AEMET sirve este JSON en codificación latina a veces: probar utf-8 y caer a latin-1
+    try:
+        return json.loads(r2.content.decode("utf-8"))
+    except UnicodeDecodeError:
+        return json.loads(r2.content.decode("latin-1"))
 
 
 def observaciones_demo() -> list[dict]:
@@ -382,6 +385,16 @@ def main() -> int:
     obs = observaciones_demo() if demo else obtener_observaciones()
     minimas = minimas_de_la_noche(obs)
     if len(minimas) < MIN_ESTACIONES:
+        # La API de observación solo conserva ~12 horas: por la tarde-noche la
+        # última madrugada ya no está disponible. No es un fallo: simplemente
+        # el parte se genera por la mañana (cron de las 07:15 UTC).
+        hora = datetime.now(timezone.utc).hour
+        if hora >= 12 or hora < 4:
+            print(f"AVISO: solo {len(minimas)} estaciones en la ventana nocturna. "
+                  "La observación de AEMET conserva ~12 h, así que fuera de la mañana "
+                  "la última noche ya no está disponible. No se publica nada ahora; "
+                  "el run automático de las 07:15 UTC generará el parte de mañana.")
+            return 0
         print(f"ERROR: solo {len(minimas)} estaciones con datos; no se publica el parte.",
               file=sys.stderr)
         # Diagnóstico: qué devuelve la API de verdad, para afinar el parser.
@@ -391,10 +404,10 @@ def main() -> int:
             ej = obs[0]
             muestra = {k: ej.get(k) for k in list(ej)[:14]}
             print("DEBUG ejemplo de observación:", muestra, file=sys.stderr)
-            fints = sorted(str(o.get("fint")) for o in obs[:5000]
-                           if isinstance(o, dict) and o.get("fint"))
+            fints = [str(o.get("fint")) for o in obs
+                     if isinstance(o, dict) and o.get("fint")]
             if fints:
-                print(f"DEBUG rango de fint: {fints[0]} → {fints[-1]}", file=sys.stderr)
+                print(f"DEBUG rango de fint: {min(fints)} → {max(fints)}", file=sys.stderr)
             print(f"DEBUG ventana buscada: últimas {H_INICIO}:00 UTC de ayer → "
                   f"{H_FIN}:00 UTC de hoy", file=sys.stderr)
         return 1

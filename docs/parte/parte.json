@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-05",
- "total": 820,
- "tropicales": 315,
- "ecuatoriales": 35,
+ "fecha": "2026-07-06",
+ "total": 821,
+ "tropicales": 353,
+ "ecuatoriales": 29,
  "peor": {
-  "id": "1437P",
-  "nombre": "Evc_noia",
-  "min": 28.2,
-  "prov": ""
+  "id": "C614H",
+  "nombre": "Tejeda Casco",
+  "min": 29.5,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "9016X",
-  "nombre": "Cubillo de Ebro",
+  "id": "9657X",
+  "nombre": "Esterri D?aneu",
   "min": 7.1,
-  "prov": "Cantabria"
+  "prov": "Lleida"
  },
  "top_calor": [
   {
-   "id": "1437P",
-   "nombre": "Evc_noia",
-   "min": 28.2,
-   "prov": ""
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
+   "min": 29.5,
+   "prov": "Las Palmas"
   },
   {
-   "id": "3475X",
-   "nombre": "Ca�averal",
-   "min": 28.1,
-   "prov": "Cáceres"
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 27.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C623I",
+   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "min": 27.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "5304Y",
+   "nombre": "Puertollano",
+   "min": 26.8,
+   "prov": "Ciudad Real"
   },
   {
    "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcac�n",
-   "min": 27.9,
+   "nombre": "San Jose del Valle-Pt Guadalcacín",
+   "min": 26.6,
    "prov": "Cádiz"
   },
   {
-   "id": "0433D",
-   "nombre": "Evc_cabo de Creus",
-   "min": 27.2,
-   "prov": "Girona"
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 26.6,
+   "prov": "Sevilla"
   },
   {
-   "id": "4325Y",
-   "nombre": "Castuera",
-   "min": 27.1,
-   "prov": "Badajoz"
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 26.5,
+   "prov": "Almería"
   },
   {
-   "id": "3448X",
-   "nombre": "Serradilla (Automatica)",
-   "min": 26.8,
+   "id": "3562X",
+   "nombre": "Aliseda la Umbría",
+   "min": 26.4,
    "prov": "Cáceres"
   },
   {
-   "id": "0429X",
-   "nombre": "Figueres Els Aspres",
-   "min": 26.7,
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 26.3,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "0421X",
+   "nombre": "Espolla Les Alberes",
+   "min": 26.2,
    "prov": "Girona"
-  },
-  {
-   "id": "4347X",
-   "nombre": "Zorita",
-   "min": 26.7,
-   "prov": "Cáceres"
-  },
-  {
-   "id": "0385X",
-   "nombre": "L?estartit",
-   "min": 26.6,
-   "prov": "Girona"
-  },
-  {
-   "id": "5972Y",
-   "nombre": "San Fernando Roa",
-   "min": 26.6,
-   "prov": ""
   }
  ],
  "top_fresco": [
   {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
    "min": 7.1,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 7.6,
-   "prov": "Zamora"
-  },
-  {
-   "id": "1178Y",
-   "nombre": "Soto de Valde�n (Automatica)",
-   "min": 7.8,
-   "prov": "León"
-  },
-  {
-   "id": "9019X",
-   "nombre": "Polientes (Valderredible)",
-   "min": 7.8,
-   "prov": ""
-  },
-  {
-   "id": "2624C",
-   "nombre": "Ria�o-Ermita Quintanilla",
-   "min": 8.1,
-   "prov": "León"
-  },
-  {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 8.3,
-   "prov": "Soria"
-  },
-  {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 8.5,
    "prov": "Lleida"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 8.9,
+   "prov": "Lleida"
+  },
+  {
+   "id": "0312X",
+   "nombre": "Sant Pau de Seguries",
    "min": 9.0,
-   "prov": "León"
+   "prov": "Girona"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 9.0,
+   "prov": "Segovia"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 9.0,
+   "min": 9.4,
    "prov": "Ávila"
   },
   {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 9.0,
-   "prov": "Lleida"
+   "id": "9218A",
+   "nombre": "Isaba/Izaba",
+   "min": 9.5,
+   "prov": "Navarra"
+  },
+  {
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 9.5,
+   "prov": "Soria"
+  },
+  {
+   "id": "9238X",
+   "nombre": "Navascués/Nabaskoze",
+   "min": 9.6,
+   "prov": "Navarra"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 9.8,
+   "prov": "León"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 9.8,
+   "prov": "Zamora"
   }
  ]
 }

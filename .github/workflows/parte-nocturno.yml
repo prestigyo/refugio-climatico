@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "15 7 * * *"       # 07:15 UTC = 09:15 hora peninsular en verano
+    - cron: "50 8 * * *"       # red de seguridad: GitHub a veces se salta un cron.
+                               # Si el primero ya publicó, este no duplica nada
+                               # (candado de publicar_x.py + upsert del histórico).
 
 permissions:
   contents: write

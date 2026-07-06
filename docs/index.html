@@ -166,6 +166,9 @@
   .minimap-h{font-size:13.5px;color:var(--muted);margin-top:18px}
   .minimap-h b{color:var(--paper)}
   .minimap{width:100%;height:auto;display:block;margin-top:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+  .certbadge{display:block;margin-top:18px;text-align:center;background:rgba(143,176,122,.12);border:1px solid var(--verde);color:var(--verde);font-weight:600;font-size:14px;padding:12px;border-radius:11px;text-decoration:none;transition:.15s}
+  .certbadge b{font-weight:700}
+  .certbadge:hover{background:var(--verde);color:#1a1209}
   .calbtn{margin-top:18px;width:100%;background:var(--bg);border:1px solid var(--line);color:var(--teal);font-weight:600;font-size:14px;padding:12px;border-radius:11px;cursor:pointer;transition:.15s}
   .calbtn:hover{border-color:var(--teja);color:var(--teja2)}
   .calcv{width:100%;height:auto;display:block;margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
@@ -329,14 +332,16 @@
     Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> ·
     verano (jun–ago) · <span id="anios">diez veranos</span> · <span id="f-total" class="num">848</span> estaciones.<br>
     Dato medido en la estación, no en el municipio: si tu pueblo no tiene estación, elige la más cercana
-    (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).<br><br>
+    (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).
+    <a href="https://nochetropical.es/tu-pueblo/" style="color:var(--teja2)">¿Tu pueblo no aparece? →</a><br><br>
     Lee también: <a href="https://nochetropical.es/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a>
     &nbsp;·&nbsp;<a href="https://nochetropical.es/microclimas/" style="color:var(--teja2)">Microclimas: dónde el aire se queda fresco →</a><br>
     <a href="https://nochetropical.es/parte/" style="color:var(--teja2)">El parte de la noche (hoy) →</a>
     &nbsp;·&nbsp;<a href="https://x.com/nochetropicales" target="_blank" rel="noopener" style="color:var(--teja2)">Síguenos en X: @nochetropicales</a>
     &nbsp;·&nbsp;<a href="https://nochetropical.es/ranking-noches-tropicales/" style="color:var(--teja2)">Ranking: dónde se duerme mejor y peor →</a>
     &nbsp;·&nbsp;<a href="https://nochetropical.es/ola-de-calor/" style="color:var(--teja2)">La ola de calor, día y noche →</a>
-    &nbsp;·&nbsp;<a href="https://nochetropical.es/certificados/" style="color:var(--teja2)">Los 25 refugios certificados →</a>
+    &nbsp;·&nbsp;<a href="https://nochetropical.es/certificados/" style="color:var(--teja2)">Los refugios certificados →</a>
+    &nbsp;·&nbsp;<a href="https://nochetropical.es/metodologia/" style="color:var(--teja2)">Metodología y glosario</a>
     &nbsp;·&nbsp;<a href="https://nochetropical.es/prensa/" style="color:var(--teja2)">Sala de prensa</a>
   </div>
 </footer>
@@ -579,6 +584,7 @@ function render(id,distKm){
       <div class="fact"><b>${e.ne<1?"<1":Math.round(e.ne)}</b><span>noches ecuatoriales/año (&gt;25&nbsp;°C)</span></div>
     </div>
     ${mini}
+    ${e.nt<1?`<a class="certbadge" href="https://nochetropical.es/certificados/${jslug(e.loc)}/">🏅 Refugio climático certificado — <b>ver su certificado</b></a>`:""}
     <button class="calbtn" id="calbtn" type="button">📅 Ver su calendario de calor (10 veranos)</button>
     <canvas class="calcv" id="calcv" style="display:none"></canvas>
     <div class="calleg" id="calleg" style="display:none"><span>Noche:</span><span class="b bmin"></span>fresco·20°·no refresca<span style="margin-left:8px">Día:</span><span class="b bmax"></span>18°–42°</div>

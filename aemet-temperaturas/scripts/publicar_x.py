@@ -16,11 +16,13 @@ from __future__ import annotations
 
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import generar_calculadora as g
 
 PARTE_TXT = g.DOCS_DIR / "parte" / "parte.txt"
+MARCA_X = g.DOCS_DIR / "parte" / "ultimo-tuit.txt"   # candado anti-duplicados
 LIMITE = 275  # margen bajo los 280 de X
 
 
@@ -33,6 +35,12 @@ def main() -> int:
     if not PARTE_TXT.exists():
         print("No hay parte.txt que publicar.", file=sys.stderr)
         return 1
+    # Candado: si el parte de HOY ya se tuiteó (p. ej. por el cron de respaldo
+    # o un run manual), no publicar dos veces.
+    hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    if MARCA_X.exists() and MARCA_X.read_text(encoding="utf-8").strip() == hoy:
+        print(f"El parte de {hoy} ya se publicó en X: no se duplica.")
+        return 0
     texto = PARTE_TXT.read_text(encoding="utf-8").strip()
     if len(texto) > LIMITE:
         texto = texto[:LIMITE - 1].rstrip() + "…"
@@ -41,6 +49,7 @@ def main() -> int:
     cliente = tweepy.Client(consumer_key=claves[0], consumer_secret=claves[1],
                             access_token=claves[2], access_token_secret=claves[3])
     r = cliente.create_tweet(text=texto)
+    MARCA_X.write_text(hoy + "\n", encoding="utf-8")   # el commit del workflow lo persiste
     print(f"Publicado en X: https://x.com/nochetropicales/status/{r.data['id']}")
     return 0
 

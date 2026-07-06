@@ -469,6 +469,9 @@ TEMPLATE = r"""<!DOCTYPE html>
   .minimap-h{font-size:13.5px;color:var(--muted);margin-top:18px}
   .minimap-h b{color:var(--paper)}
   .minimap{width:100%;height:auto;display:block;margin-top:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+  .certbadge{display:block;margin-top:18px;text-align:center;background:rgba(143,176,122,.12);border:1px solid var(--verde);color:var(--verde);font-weight:600;font-size:14px;padding:12px;border-radius:11px;text-decoration:none;transition:.15s}
+  .certbadge b{font-weight:700}
+  .certbadge:hover{background:var(--verde);color:#1a1209}
   .calbtn{margin-top:18px;width:100%;background:var(--bg);border:1px solid var(--line);color:var(--teal);font-weight:600;font-size:14px;padding:12px;border-radius:11px;cursor:pointer;transition:.15s}
   .calbtn:hover{border-color:var(--teja);color:var(--teja2)}
   .calcv{width:100%;height:auto;display:block;margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
@@ -632,14 +635,16 @@ TEMPLATE = r"""<!DOCTYPE html>
     Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> ·
     verano (jun–ago) · <span id="anios">diez veranos</span> · <span id="f-total" class="num">848</span> estaciones.<br>
     Dato medido en la estación, no en el municipio: si tu pueblo no tiene estación, elige la más cercana
-    (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).<br><br>
+    (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).
+    <a href="__SITE_URL__/tu-pueblo/" style="color:var(--teja2)">¿Tu pueblo no aparece? →</a><br><br>
     Lee también: <a href="__SITE_URL__/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/microclimas/" style="color:var(--teja2)">Microclimas: dónde el aire se queda fresco →</a><br>
     <a href="__SITE_URL__/parte/" style="color:var(--teja2)">El parte de la noche (hoy) →</a>
     &nbsp;·&nbsp;<a href="https://x.com/nochetropicales" target="_blank" rel="noopener" style="color:var(--teja2)">Síguenos en X: @nochetropicales</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/ranking-noches-tropicales/" style="color:var(--teja2)">Ranking: dónde se duerme mejor y peor →</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/ola-de-calor/" style="color:var(--teja2)">La ola de calor, día y noche →</a>
-    &nbsp;·&nbsp;<a href="__SITE_URL__/certificados/" style="color:var(--teja2)">Los 25 refugios certificados →</a>
+    &nbsp;·&nbsp;<a href="__SITE_URL__/certificados/" style="color:var(--teja2)">Los refugios certificados →</a>
+    &nbsp;·&nbsp;<a href="__SITE_URL__/metodologia/" style="color:var(--teja2)">Metodología y glosario</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/prensa/" style="color:var(--teja2)">Sala de prensa</a>
   </div>
 </footer>
@@ -882,6 +887,7 @@ function render(id,distKm){
       <div class="fact"><b>${e.ne<1?"<1":Math.round(e.ne)}</b><span>noches ecuatoriales/año (&gt;25&nbsp;°C)</span></div>
     </div>
     ${mini}
+    ${e.nt<1?`<a class="certbadge" href="__SITE_URL__/certificados/${jslug(e.loc)}/">🏅 Refugio climático certificado — <b>ver su certificado</b></a>`:""}
     <button class="calbtn" id="calbtn" type="button">📅 Ver su calendario de calor (10 veranos)</button>
     <canvas class="calcv" id="calcv" style="display:none"></canvas>
     <div class="calleg" id="calleg" style="display:none"><span>Noche:</span><span class="b bmin"></span>fresco·20°·no refresca<span style="margin-left:8px">Día:</span><span class="b bmax"></span>18°–42°</div>
@@ -1678,6 +1684,249 @@ def construir_pagina_ranking(estaciones: list, site: str,
 
 
 # ===========================================================================
+# Página /metodologia/: cómo se mide todo + GLOSARIO de términos (fase 1).
+# ===========================================================================
+
+PAGINA_METODOLOGIA = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metodología y glosario: cómo medimos dónde se duerme fresco | Noche Tropical</title>
+<meta name="description" content="Qué es una noche tropical, de dónde salen los datos (AEMET OpenData, 2017–2026, 848 estaciones), cómo se otorga el certificado de Refugio Climático y qué diferencia un refugio climático medido, uno natural y uno publicitario.">
+<link rel="canonical" href="__SITE__/metodologia/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Metodología y glosario · Noche Tropical">
+<meta property="og:description" content="Cómo medimos dónde se duerme fresco en España: fuente, criterio del certificado y glosario.">
+<meta property="og:url" content="__SITE__/metodologia/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ .wrap{max-width:720px;margin:0 auto;padding:0 22px}
+ section{padding:8px 0}
+ h2{font-family:var(--fd);font-weight:700;font-size:clamp(20px,3.6vw,26px);margin:34px 0 10px}
+ p{font-size:clamp(15.5px,2.3vw,17px);color:#e3d8c4;margin:0 0 14px;line-height:1.7}
+ p b{color:var(--paper)}
+ .glosario{margin:14px 0}
+ .termino{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:0 0 12px}
+ .termino h3{font-family:var(--fd);font-weight:600;font-size:18px;color:var(--teja2);margin:0 0 6px}
+ .termino p{font-size:14.5px;color:var(--muted);margin:0}
+ .termino p b{color:#e7dcc8}
+ .cita{font-family:var(--fm);font-size:13px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px;color:#e3d8c4;line-height:1.5;margin:8px 0 18px}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Metodología y glosario</nav>
+  <div class="kick">Metodología · Datos abiertos</div>
+  <h1>Cómo medimos dónde se duerme fresco</h1>
+  <p class="intro">Todo lo que publica este proyecto sale de datos públicos y de un método que cabe en una página. Esta es esa página.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>El dato: la noche tropical</h2>
+  <p>Una <b>noche tropical</b> es aquella en que la temperatura mínima <b>no baja de 20&nbsp;°C</b>; una <b>noche ecuatorial</b>, cuando no baja de 25&nbsp;°C. Es el indicador que mejor refleja si se descansa: por encima de esos umbrales, el cuerpo no disipa bien el calor y el sueño se fragmenta. Usamos <b>recuentos</b> de noches, nunca medias de temperatura: una media esconde noches horno compensadas por noches frescas.</p>
+
+  <h2>La fuente y el periodo</h2>
+  <p>Valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> (temperatura mínima por estación y día), veranos <b>2017–2026</b> (junio–agosto), en <b>__TOTAL__ estaciones</b> con cobertura suficiente. <a href="__SITE__/parte/">El parte de la noche</a> usa además la red de observación en tiempo real de AEMET (datos provisionales de las últimas horas, ventana nocturna 18:00–08:00 UTC), y se consolida después con los valores validados.</p>
+
+  <h2>Los límites (léelos antes de citar)</h2>
+  <p>El dato es de la <b>estación</b>, no del municipio: si tu pueblo no tiene estación, la más cercana es una referencia, no una medición local — y en montaña la noche cambia mucho con la altitud. Hay <b>muchos pueblos frescos sin estación</b> que no podemos certificar por falta de datos: que un pueblo no aparezca no significa que no sea un refugio, significa que aún no podemos medirlo. Si conoces una estación que no controlamos, <a href="__SITE__/tu-pueblo/">cuéntanoslo aquí</a>.</p>
+
+  <h2>El certificado de Refugio Climático</h2>
+  <p>Se certifica a las estaciones con <b>menos de una noche tropical al año</b> de media en los diez veranos analizados. Lo consiguen <b>__NREF__ de las __TOTAL__</b>; el <b>Top 25</b> reúne, de entre ellas, las de mayor altitud. Cada certificado es <a href="__SITE__/certificados/">público, verificable e imprimible</a>.</p>
+
+  <h2>Glosario: tres «refugios» que no son lo mismo</h2>
+  <div class="glosario">
+    <div class="termino"><h3>Refugio climático (medido)</h3>
+    <p>Lugar donde la noche refresca de verdad, <b>acreditado con datos</b>: menos de una noche tropical al año de media (AEMET, 2017–2026). Es lo que certifica este proyecto.</p></div>
+    <div class="termino"><h3>Refugio climático natural</h3>
+    <p>El que <b>construye la naturaleza</b>: altitud, aire seco, bosques que transpiran, valles con inversión térmica, cielo limpio que deja escapar el calor. Lo contamos en <a href="__SITE__/microclimas/">Microclimas</a> y en <a href="__SITE__/refugio-climatico-natural/">Refugio climático natural</a>. Todo refugio medido lo es gracias a estos mecanismos.</p></div>
+    <div class="termino"><h3>Refugio climático «de cartel»</h3>
+    <p>El que solo existe en la placa: una lona que se recalienta, un nebulizador que sube el bochorno, una sala con aire acondicionado que enfría dentro y <b>calienta la calle</b>. Si no mueve la física (sombra viva, evaporación, inercia, ventilación), es decoración.</p></div>
+  </div>
+
+  <h2>Reproducibilidad y licencia</h2>
+  <p>Los datos proceden íntegramente de fuentes públicas de AEMET y el proceso es reproducible. Todo el material del proyecto puede usarse citando la fuente (<a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>).</p>
+  <div class="cita">Noche Tropical (2026). <i>El mapa del calor que no te deja dormir.</i> Análisis de noches tropicales con datos de AEMET (2017–2026). __HOME__</div>
+
+  <div class="cta">
+    <b>¿Dudas con un dato? ¿Eres periodista?</b><br>
+    <div class="botones">
+      <a class="btn pri" href="__SITE__/prensa/">Sala de prensa</a>
+      <a class="btn sec" href="__HOME__">La calculadora</a>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  Proyecto <a href="__HOME__">Refugio Climático · nochetropical.es</a> · Datos: AEMET OpenData · <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.
+</div></footer>
+</body>
+</html>
+"""
+
+
+def construir_pagina_metodologia(estaciones: list, total: int, site: str,
+                                 fecha_iso: str, fecha_txt: str) -> str:
+    nref = sum(1 for e in estaciones if e["nt"] < 1)
+    url = site + "/metodologia/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Metodología y glosario", "item": url}]},
+        {"@type": "Article",
+         "headline": "Metodología y glosario: cómo medimos dónde se duerme fresco",
+         "description": "Fuente, periodo, criterio del certificado y glosario de términos del proyecto.",
+         "image": site + "/og.png",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "Refugio Climático",
+                       "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
+         "datePublished": FECHA_PUBLICACION_LANDINGS, "dateModified": fecha_iso,
+         "mainEntityOfPage": url}]}, ensure_ascii=False)
+    return (PAGINA_METODOLOGIA
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__TOTAL__", str(total))
+            .replace("__NREF__", str(nref))
+            .replace("__FECHA__", fecha_txt)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
+# ===========================================================================
+# Página /tu-pueblo/: honestidad convertida en captación (fase 1). Aviso de
+# los pueblos sin estación + formulario doble (nueva estación / estudio).
+# ===========================================================================
+
+PAGINA_TUPUEBLO = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Tu pueblo no aparece? Ayúdanos a medirlo | Noche Tropical</title>
+<meta name="description" content="Solo podemos certificar refugios climáticos donde hay estación meteorológica con datos suficientes. Si tu pueblo no aparece, cuéntanos: ¿conoces una estación que no controlamos? ¿Quieres que estudiemos tu zona?">
+<link rel="canonical" href="__SITE__/tu-pueblo/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="¿Tu pueblo no aparece? Ayúdanos a medirlo">
+<meta property="og:description" content="Que un pueblo no aparezca no significa que no sea un refugio: significa que aún no podemos medirlo.">
+<meta property="og:url" content="__SITE__/tu-pueblo/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ .wrap{max-width:680px;margin:0 auto;padding:0 22px}
+ section{padding:8px 0}
+ p{font-size:clamp(15.5px,2.3vw,17px);color:#e3d8c4;margin:0 0 14px;line-height:1.7}
+ p b{color:var(--paper)}
+ .capture{margin:26px 0;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid #54402a;border-radius:18px;padding:26px 24px}
+ .capture h2{font-family:var(--fd);font-weight:700;font-size:clamp(19px,3.4vw,24px);margin:0 0 14px;text-align:center}
+ .capture form{display:grid;gap:12px;max-width:440px;margin:0 auto}
+ .capture input,.capture select,.capture textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--paper);font-family:var(--fb);font-size:15px;padding:12px 14px}
+ .capture textarea{min-height:88px;resize:vertical}
+ .capture input:focus,.capture select:focus,.capture textarea:focus{outline:none;border-color:var(--teja)}
+ .capture .rgpd{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--muted);line-height:1.5}
+ .capture .rgpd input{width:auto;margin-top:3px}
+ .capture button{background:var(--teja);color:#1a1209;font-weight:700;font-size:15.5px;border:none;border-radius:11px;padding:14px;cursor:pointer}
+ .capture button:hover{background:var(--teja2)}
+ .capture .ok{font-family:var(--fd);font-size:19px;text-align:center;color:var(--verde,#8fb07a);padding:18px 0}
+ .nota{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · ¿Tu pueblo no aparece?</nav>
+  <div class="kick">Pueblos sin estación · Ayúdanos a medir</div>
+  <h1>¿Tu pueblo no aparece?</h1>
+  <p class="intro">Solo podemos acreditar refugios climáticos donde hay una <b>estación meteorológica con datos suficientes</b>. España tiene muchos más pueblos frescos que estaciones: <b>que el tuyo no aparezca no significa que no sea un refugio — significa que aún no podemos medirlo</b>.</p>
+</div></header>
+
+<section><div class="wrap">
+  <p>Sabemos que hay refugios sin certificar en sierras enteras. Nos faltan datos, y ahí puedes ayudar tú: redes municipales, estaciones agrarias, aficionados con estación propia que publican sus registros… Si el dato existe y es serio, queremos conocerlo. Las estaciones que no son de AEMET no pueden certificar con el mismo rigor, pero sí entrar como <b>«en estudio»</b>.</p>
+
+  <div class="capture">
+    <h2>Cuéntanoslo</h2>
+    <form id="leadf">
+      <select id="ltipo">
+        <option value="estacion">Conozco una estación meteorológica que no controláis</option>
+        <option value="estudio">Quiero que estudiéis mi pueblo o mi zona</option>
+        <option value="otro">Otra cosa (te leemos)</option>
+      </select>
+      <input type="text" id="lzona" placeholder="Pueblo o zona (y provincia)" required>
+      <textarea id="lpet" placeholder="Cuéntanos: ¿dónde publica sus datos esa estación? ¿Qué sabes del clima de tu pueblo?"></textarea>
+      <input type="email" id="lemail" placeholder="tu@email.com" required>
+      <label class="rgpd"><input type="checkbox" id="lrgpd" required> Acepto que me contactéis sobre esto. Sin spam.</label>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <p class="nota">Mientras tanto, tu referencia más honesta es la estación más cercana (en la <a href="__HOME__">calculadora</a>) — con cuidado: en montaña la noche cambia mucho con la altitud. El método completo, en <a href="__SITE__/metodologia/">metodología</a>.</p>
+</div></section>
+
+<footer><div class="wrap">
+  Proyecto <a href="__HOME__">Refugio Climático · nochetropical.es</a> · Datos: AEMET OpenData · <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>
+</div></footer>
+
+<script>
+const APPS_SCRIPT_URL="__APPS_URL__";
+const lf=document.getElementById("leadf");
+lf.addEventListener("submit",ev=>{
+  ev.preventDefault();
+  const lead={timestamp:new Date().toISOString(),
+    email:document.getElementById("lemail").value.trim(),
+    modo:"tu-pueblo",
+    busca:document.getElementById("ltipo").value,
+    zona_interes:document.getElementById("lzona").value.trim(),
+    peticion:document.getElementById("lpet").value.trim(),
+    estacion:"",provincia:"",noches_trop:"",veredicto:"",
+    rgpd:document.getElementById("lrgpd").checked?"si":"",
+    source:"tu-pueblo",user_agent:navigator.userAgent};
+  const gracias=()=>{lf.outerHTML='<p class="ok">¡Gracias! Lo revisamos y te escribimos.</p>';};
+  fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(lead)}).then(gracias).catch(gracias);
+});
+</script>
+</body>
+</html>
+"""
+
+
+def construir_pagina_tupueblo(site: str) -> str:
+    url = site + "/tu-pueblo/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "¿Tu pueblo no aparece?", "item": url}]},
+        {"@type": "WebPage", "name": "¿Tu pueblo no aparece? Ayúdanos a medirlo", "url": url,
+         "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
+        ensure_ascii=False)
+    return (PAGINA_TUPUEBLO
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__APPS_URL__", APPS_SCRIPT_URL)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
+# ===========================================================================
 # Página /ola-de-calor/: los GIFs de AEMET (máx de día / mín de noche) con una
 # CAPA de flechas hacia 8 refugios climáticos, activable con un botón.
 #
@@ -1915,6 +2164,13 @@ def main() -> int:
     (DOCS_DIR / "ola-de-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "ola-de-calor" / "index.html").write_text(
         construir_pagina_ola(site, fecha_mod_iso, fecha_mod_txt), encoding="utf-8")
+    (DOCS_DIR / "metodologia").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "metodologia" / "index.html").write_text(
+        construir_pagina_metodologia(estaciones, total, site, fecha_mod_iso, fecha_mod_txt),
+        encoding="utf-8")
+    (DOCS_DIR / "tu-pueblo").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "tu-pueblo" / "index.html").write_text(
+        construir_pagina_tupueblo(site), encoding="utf-8")
     # Dominio propio: fija el CNAME de GitHub Pages (sobrevive a los builds) y
     # migra los enlaces del dominio antiguo en las páginas ESTÁTICAS de docs/
     # (las que no genera este script, p. ej. microclimas).

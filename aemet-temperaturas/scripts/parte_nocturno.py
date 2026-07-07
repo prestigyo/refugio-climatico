@@ -284,7 +284,7 @@ PLANTILLA = r"""<!doctype html>
  .num{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center}
  .num .v{font-family:var(--fm);font-weight:700;font-size:clamp(26px,5.5vw,38px);line-height:1.1}
  .num .l{font-size:12.5px;color:var(--muted);margin-top:4px}
- .num.trop .v{color:var(--teja2)} .num.ecua .v{color:#cf4b34} .num.tot .v{color:var(--muted)}
+ .num.fresco .v{color:var(--verde)} .num.trop .v{color:var(--teja2)} .num.ecua .v{color:#cf4b34} .num.tot .v{color:var(--muted)}
  .duelo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:6px 0 26px}
  .card{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:16px 18px}
  .card .t{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
@@ -314,6 +314,9 @@ PLANTILLA = r"""<!doctype html>
  .comparte button,.comparte a.b{background:transparent;border:1px solid var(--teja);color:var(--teja2);font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:9px;cursor:pointer;text-decoration:none}
  .comparte button:hover,.comparte a.b:hover{background:var(--teja);color:#1a1209}
  .nota{font-size:12.5px;color:var(--muted);margin:22px 0}
+ .mision{margin:26px 0;background:linear-gradient(180deg,rgba(143,176,122,.10),transparent);border:1px solid var(--line);border-left:3px solid var(--verde);border-radius:0 14px 14px 0;padding:16px 20px}
+ .mision .mt{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--verde);margin-bottom:8px}
+ .mision p{font-size:14.5px;color:#e3d8c4;margin:0;line-height:1.6}.mision p b{color:var(--paper)}
  .archivo{font-size:13px;color:var(--muted);margin:18px 0 0}
  .archivo a{font-family:var(--fm);font-size:12.5px}
  .cta{margin:26px 0;text-align:center}
@@ -334,10 +337,11 @@ PLANTILLA = r"""<!doctype html>
 
 <section><div class="wrap">
   <div class="nums">
-    <div class="num trop"><div class="v">__TROP__</div><div class="l">estaciones en <b>noche tropical</b> (mínima ≥ 20 °C)</div></div>
+    <div class="num fresco"><div class="v">__FRESCAS__</div><div class="l">estaciones donde <b>se durmió fresco</b> (mínima &lt; 20 °C)</div></div>
+    <div class="num trop"><div class="v">__TROP__</div><div class="l">en <b>noche tropical</b> (mínima ≥ 20 °C)</div></div>
     <div class="num ecua"><div class="v">__ECUA__</div><div class="l">en <b>noche ecuatorial</b> (mínima ≥ 25 °C)</div></div>
-    <div class="num tot"><div class="v">__TOTAL__</div><div class="l">estaciones con datos esta noche</div></div>
   </div>
+  <p class="nota" style="margin-top:-14px">De __TOTAL__ estaciones con datos esta noche.</p>
 
   <div class="duelo">
     <div class="card calor"><div class="t">🥵 La más tórrida</div><div class="loc">__PEOR_LOC__</div><div class="m">__PEOR_MIN__ °C</div><div class="p">de mínima · __PEOR_PROV__</div></div>
@@ -351,6 +355,11 @@ PLANTILLA = r"""<!doctype html>
   <h2>Donde mejor se durmió</h2>
   <table><thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Mínima</th></tr></thead>
   <tbody>__TOP_FRESCO__</tbody></table>
+
+  <div class="mision">
+    <div class="mt">Aún hay refugios</div>
+    <p>Incluso en plena ola de calor, en estos pueblos —casi todos de montaña interior— se sigue durmiendo tapado. Son la España que el calor no ha rendido. Muchos coinciden con la <b>España vaciada</b>: el frío que un día los despobló es hoy su mayor activo. → <a href="__SITE__/refugios-y-espana-vaciada/">Refugios climáticos y España vaciada</a></p>
+  </div>
 
   __SECCION_HISTORIAL__
 
@@ -429,6 +438,7 @@ def main() -> int:
     total = len(lista)
     trop = sum(1 for e in lista if e["min"] >= 20)
     ecua = sum(1 for e in lista if e["min"] >= 25)
+    frescas = total - trop
     conocidas = [e for e in lista if e["prov"] and "_" not in e["nombre"]]
     sel = conocidas if len(conocidas) >= 100 else lista
     peor, mejor = sel[0], sel[-1]
@@ -450,11 +460,10 @@ def main() -> int:
     mp = f" ({mejor['prov']})" if mejor["prov"] else ""
     fecha_iso_tuit = ahora.strftime("%Y-%m-%d")
     tuit = (f"🌙 El parte de la noche · {fecha_corta}\n"
-            f"{trop} estaciones de AEMET no bajaron de 20 °C anoche"
-            + (f" ({ecua} ni de 25 °C)." if ecua else ".") + "\n"
-            f"🥵 La más tórrida: {peor['nombre']}{pp}, mínima {dec(peor['min'])} °C.\n"
-            f"🥶 La más fresca: {mejor['nombre']}{mp}, {dec(mejor['min'])} °C.\n"
-            f"El parte completo → {dominio}/parte/{fecha_iso_tuit}/")
+            f"{trop} estaciones de AEMET no bajaron de 20 °C anoche; "
+            f"en {frescas} sí se durmió fresco 🌲\n"
+            f"🥵 {peor['nombre']} {dec(peor['min'])}° · 🥶 {mejor['nombre']} {dec(mejor['min'])}°\n"
+            f"Aún hay refugios → {dominio}/parte/{fecha_iso_tuit}/")
 
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
@@ -475,6 +484,7 @@ def main() -> int:
             .replace("__SCHEMA__", schema)
             .replace("__FECHA_LARGA__", fecha_larga)
             .replace("__FECHA_CORTA__", fecha_corta)
+            .replace("__FRESCAS__", str(frescas))
             .replace("__TROP__", str(trop))
             .replace("__ECUA__", str(ecua))
             .replace("__TOTAL__", str(total))

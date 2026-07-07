@@ -638,7 +638,8 @@ TEMPLATE = r"""<!DOCTYPE html>
     (y ojo al desnivel: en montaña la noche cambia mucho con la altitud).
     <a href="__SITE_URL__/tu-pueblo/" style="color:var(--teja2)">¿Tu pueblo no aparece? →</a><br><br>
     Lee también: <a href="__SITE_URL__/refugio-climatico-natural/" style="color:var(--teja2)">Cómo combatir el calor sin aire acondicionado →</a>
-    &nbsp;·&nbsp;<a href="__SITE_URL__/microclimas/" style="color:var(--teja2)">Microclimas: dónde el aire se queda fresco →</a><br>
+    &nbsp;·&nbsp;<a href="__SITE_URL__/microclimas/" style="color:var(--teja2)">Microclimas: dónde el aire se queda fresco →</a>
+    &nbsp;·&nbsp;<a href="__SITE_URL__/refugios-y-espana-vaciada/" style="color:var(--teja2)">Refugios y España vaciada →</a><br>
     <a href="__SITE_URL__/parte/" style="color:var(--teja2)">El parte de la noche (hoy) →</a>
     &nbsp;·&nbsp;<a href="https://x.com/nochetropicales" target="_blank" rel="noopener" style="color:var(--teja2)">Síguenos en X: @nochetropicales</a>
     &nbsp;·&nbsp;<a href="__SITE_URL__/ranking-noches-tropicales/" style="color:var(--teja2)">Ranking: dónde se duerme mejor y peor →</a>
@@ -1927,6 +1928,152 @@ def construir_pagina_tupueblo(site: str) -> str:
 
 
 # ===========================================================================
+# Página /refugios-y-espana-vaciada/: artículo con datos. Cruza los refugios
+# (nt<1) con la geografía de la despoblación. Tesis: el frío que despobló
+# estos pueblos es hoy su mayor activo frente al calor.
+# ===========================================================================
+
+# Núcleo de la Serranía Celtibérica (la "Laponia del sur"): las 4 provincias
+# más emblemáticas de la España vaciada por su bajísima densidad.
+_CELTIBERICA = ("Teruel", "Soria", "Cuenca", "Guadalajara")
+
+PAGINA_VACIADA = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refugios climáticos y España vaciada: el frío que los despobló es hoy su activo | Noche Tropical</title>
+<meta name="description" content="Muchos de los pueblos de España donde mejor se duerme en verano están en la España vaciada. El mismo frío de montaña que un día los despobló es hoy, con el cambio climático, su mayor activo. Análisis con datos de AEMET.">
+<link rel="canonical" href="__SITE__/refugios-y-espana-vaciada/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Refugios climáticos y España vaciada">
+<meta property="og:description" content="El frío que despobló la España vaciada es hoy, frente al calor, su mayor activo. Con datos de AEMET.">
+<meta property="og:url" content="__SITE__/refugios-y-espana-vaciada/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ .wrap{max-width:720px;margin:0 auto;padding:0 22px}
+ .lead{margin:22px 0 0}.lead p{font-size:clamp(17px,2.7vw,19px);color:#e7dcc8;margin:0 0 16px}.lead p b{color:var(--paper)}
+ article{padding:8px 0 10px}
+ article h2{font-family:var(--fd);font-weight:700;font-size:clamp(22px,4.2vw,30px);line-height:1.15;letter-spacing:-.01em;margin:44px 0 14px}
+ article p{font-size:clamp(16px,2.4vw,18px);color:#e3d8c4;margin:0 0 18px}
+ article p b{color:var(--paper)} article em{font-style:italic;color:var(--teal)}
+ .datos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0}
+ .datos .c{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center}
+ .datos .v{font-family:var(--fm);font-weight:700;font-size:clamp(24px,5vw,34px);color:var(--verde);line-height:1.1}
+ .datos .l{font-size:12px;color:var(--muted);margin-top:5px}
+ .reflexion{margin:32px 0;padding:22px 26px;border-left:3px solid var(--teja);background:linear-gradient(180deg,rgba(217,116,78,.09),transparent);border-radius:0 14px 14px 0}
+ .reflexion p{font-family:var(--fd);font-size:clamp(17px,2.7vw,20px);font-style:italic;line-height:1.6;color:#efe6d6;margin:0}
+ .reflexion p b{font-style:normal;color:var(--teja2)}
+ .provs{font-size:14.5px;color:var(--muted);line-height:2;margin:6px 0 18px}
+ .provs b{color:#e7dcc8}
+ @media(max-width:560px){.datos{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Refugios y España vaciada</nav>
+  <div class="kick">Análisis · Despoblación y clima</div>
+  <h1>Los refugios del calor están, muchas veces, en la España vaciada</h1>
+  <div class="lead">
+    <p>Hemos analizado diez veranos de datos de AEMET para encontrar dónde no se suda de noche. Y al poner los <b>__NREF__ pueblos donde apenas hay noches tropicales</b> sobre el mapa, aparece una coincidencia que da que pensar: muchos son los mismos que llevan décadas perdiendo habitantes. <b>El frío que un día los vació es hoy, frente al calor, su mayor activo.</b></p>
+  </div>
+</div></header>
+
+<article><div class="wrap">
+
+  <div class="datos">
+    <div class="c"><div class="v">__NREF__</div><div class="l">pueblos donde <b>casi no hay</b> noches tropicales</div></div>
+    <div class="c"><div class="v">__ALTMEDIA__ m</div><div class="l">altitud media de esos refugios</div></div>
+    <div class="c"><div class="v">__CELTIB__</div><div class="l">solo en la Serranía Celtibérica</div></div>
+  </div>
+
+  <h2>Hay dos Españas donde se duerme fresco</h2>
+  <p>No todos los refugios son iguales. Una familia es la <b>España verde atlántica</b> —Asturias, Galicia, Cantabria—, donde el mar templa las noches de verano; son frescas, pero no están vacías. La otra es la <b>España de interior y altura</b>: las sierras de León, el Pirineo de Huesca y Lleida, los páramos de Soria y Burgos, las muelas de Teruel. Aquí la noche fresca no la trae el mar, sino la <em>altitud</em> y la <em>continentalidad</em> — y aquí es donde el mapa del frescor se superpone, casi calcado, con el mapa de la despoblación.</p>
+
+  <h2>La paradoja de la Serranía Celtibérica</h2>
+  <p>El caso extremo es la <b>Serranía Celtibérica</b> (Teruel, Soria, Cuenca, Guadalajara y su entorno): con una densidad en torno a <b>7-8 habitantes por km²</b>, de las más bajas de toda la Unión Europea, se la conoce como <em>«la Laponia del sur»</em>. Es de los territorios más despoblados del continente. Y a la vez concentra <b>__CELTIB__ de nuestros refugios</b>: pueblos donde, en plena ola de calor, sigue haciendo falta una manta por la noche.</p>
+
+  <div class="reflexion">
+    <p>Lo que durante siglos fue una condena —inviernos durísimos, aislamiento, tierras difíciles— es exactamente lo que hoy convierte a estos pueblos en <b>refugios frente al calor</b>. El clima le ha dado la vuelta al signo.</p>
+  </div>
+
+  <h2>El clima cambia el signo</h2>
+  <p>Mientras la costa mediterránea encadena noches sin bajar de 20&nbsp;°C y el aire acondicionado se vuelve imprescindible, estos pueblos ofrecen gratis lo que allí se paga a precio de oro: <b>dormir tapado en agosto</b>. En un país que se calienta, eso deja de ser una anécdota rural para convertirse en un activo real —para el turismo climático, para el teletrabajo, para quien se plantea dónde envejecer—. La España vaciada tiene, sin saberlo del todo, una carta que jugar: <b>el confort térmico</b>.</p>
+  <p>No es la solución a la despoblación —hacen falta servicios, trabajo, conexión—, pero sí un argumento nuevo y medible a favor de estos territorios, justo cuando más lo necesitan.</p>
+
+  <h2>Los datos, provincia a provincia</h2>
+  <p>De los __NREF__ refugios (estaciones de AEMET con menos de una noche tropical al año de media, 2017–2026), estas son las provincias que más aportan:</p>
+  <p class="provs">__PROVS__</p>
+  <p class="note" style="font-size:12.5px;color:var(--muted)">Nota: el dato es por estación meteorológica, no por municipio; y «España vaciada» se usa aquí en sentido amplio (provincias de baja densidad del interior). Muchos pueblos frescos sin estación no aparecen — <a href="__SITE__/tu-pueblo/">ayúdanos a medirlos</a>.</p>
+
+  <div class="cierre">
+    <h2 style="margin:0 0 12px">¿Y tu pueblo?</h2>
+    <p>Busca si es uno de los refugios, mira su certificado, o cuéntanos el tuyo si aún no lo medimos.</p>
+    <div class="botones">
+      <a class="btn pri" href="__HOME__">Buscar en la calculadora →</a>
+      <a class="btn sec" href="__SITE__/certificados/">Los refugios certificados</a>
+    </div>
+  </div>
+
+</div></article>
+
+<footer><div class="wrap">
+  <p>Pieza de divulgación del proyecto <a href="__HOME__">Refugio Climático</a>. Datos: <b>AEMET</b> OpenData (2017–2026). Densidades: fuentes públicas (INE, Red SSPA). Bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.</p>
+</div></footer>
+</body>
+</html>
+"""
+
+
+def construir_pagina_vaciada(estaciones: list, site: str,
+                             fecha_iso: str, fecha_txt: str) -> str:
+    ref = [e for e in estaciones if e["nt"] < 1]
+    nref = len(ref)
+    altmedia = round(sum(e["alt"] for e in ref) / nref) if ref else 0
+    cuenta: dict[str, int] = {}
+    for e in ref:
+        cuenta[e["prov"]] = cuenta.get(e["prov"], 0) + 1
+    celtib = sum(cuenta.get(p, 0) for p in _CELTIBERICA)
+    top = sorted(cuenta.items(), key=lambda kv: (-kv[1], clave_orden(kv[0])))[:14]
+    provs = " · ".join(f'<a href="{site}/{slug(p)}/"><b>{p}</b></a> ({n})' for p, n in top)
+    url = site + "/refugios-y-espana-vaciada/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Refugios y España vaciada", "item": url}]},
+        {"@type": "Article",
+         "headline": "Refugios climáticos y España vaciada: el frío que los despobló es hoy su activo",
+         "description": "Muchos de los pueblos donde mejor se duerme en verano están en la España vaciada; el frío que los despobló es hoy su mayor activo frente al calor.",
+         "image": site + "/og.png",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "Refugio Climático",
+                       "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
+         "datePublished": "2026-07-06", "dateModified": fecha_iso,
+         "mainEntityOfPage": url}]}, ensure_ascii=False)
+    return (PAGINA_VACIADA
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__NREF__", str(nref))
+            .replace("__ALTMEDIA__", str(altmedia))
+            .replace("__CELTIB__", str(celtib))
+            .replace("__PROVS__", provs)
+            .replace("__FECHA__", fecha_txt)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
+# ===========================================================================
 # Página /ola-de-calor/: los GIFs de AEMET (máx de día / mín de noche) con una
 # CAPA de flechas hacia 8 refugios climáticos, activable con un botón.
 #
@@ -2171,6 +2318,10 @@ def main() -> int:
     (DOCS_DIR / "tu-pueblo").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "tu-pueblo" / "index.html").write_text(
         construir_pagina_tupueblo(site), encoding="utf-8")
+    (DOCS_DIR / "refugios-y-espana-vaciada").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "refugios-y-espana-vaciada" / "index.html").write_text(
+        construir_pagina_vaciada(estaciones, site, fecha_mod_iso, fecha_mod_txt),
+        encoding="utf-8")
     # Dominio propio: fija el CNAME de GitHub Pages (sobrevive a los builds) y
     # migra los enlaces del dominio antiguo en las páginas ESTÁTICAS de docs/
     # (las que no genera este script, p. ej. microclimas).

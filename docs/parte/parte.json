@@ -41,6 +41,12 @@
    "prov": "Las Palmas"
   },
   {
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 27.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
    "id": "4325Y",
    "nombre": "Castuera",
    "min": 27.4,
@@ -55,12 +61,6 @@
   {
    "id": "C316I",
    "nombre": "Arure Cementerio",
-   "min": 27.2,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C917E",
-   "nombre": "Dehesa-Refugio",
    "min": 27.2,
    "prov": "Santa Cruz de Tenerife"
   },

@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-06",
- "total": 821,
- "tropicales": 352,
- "ecuatoriales": 29,
+ "fecha": "2026-07-07",
+ "total": 820,
+ "tropicales": 395,
+ "ecuatoriales": 24,
  "peor": {
-  "id": "C614H",
-  "nombre": "Tejeda Casco",
-  "min": 29.5,
+  "id": "C625O",
+  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+  "min": 30.4,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "9657X",
-  "nombre": "Esterri D?aneu",
-  "min": 7.1,
-  "prov": "Lleida"
+  "id": "9016X",
+  "nombre": "Cubillo de Ebro",
+  "min": 9.7,
+  "prov": "Cantabria"
  },
  "top_calor": [
   {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 29.5,
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 30.4,
    "prov": "Las Palmas"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 27.9,
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
+   "min": 29.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+   "min": 28.7,
    "prov": "Las Palmas"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 27.0,
+   "min": 28.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "5304Y",
-   "nombre": "Puertollano",
-   "min": 26.8,
-   "prov": "Ciudad Real"
+   "id": "4325Y",
+   "nombre": "Castuera",
+   "min": 27.4,
+   "prov": "Badajoz"
   },
   {
-   "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 26.6,
-   "prov": "Cádiz"
+   "id": "9772X",
+   "nombre": "La Pobla de Cervoles",
+   "min": 27.4,
+   "prov": "Lleida"
   },
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 26.6,
-   "prov": "Sevilla"
+   "id": "C316I",
+   "nombre": "Arure Cementerio",
+   "min": 27.2,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 26.5,
-   "prov": "Almería"
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 27.2,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "3562X",
-   "nombre": "Aliseda la Umbría",
+   "id": "3254Y",
+   "nombre": "Mora de Toledo (Automática)",
    "min": 26.4,
-   "prov": "Cáceres"
+   "prov": "Toledo"
   },
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
+   "id": "5612X",
+   "nombre": "Lora de Estepa (Automatica)",
    "min": 26.3,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "0421X",
-   "nombre": "Espolla Les Alberes",
-   "min": 26.2,
-   "prov": "Girona"
+   "prov": "Sevilla"
   }
  ],
  "top_fresco": [
   {
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 9.7,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 10.2,
+   "prov": "Ávila"
+  },
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 10.8,
+   "prov": "Ourense"
+  },
+  {
    "id": "9657X",
    "nombre": "Esterri D?aneu",
-   "min": 7.1,
+   "min": 11.0,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": 11.1,
    "prov": "Lleida"
   },
   {
    "id": "9590",
    "nombre": "Martinet",
-   "min": 8.9,
+   "min": 11.2,
    "prov": "Lleida"
   },
   {
-   "id": "0312X",
-   "nombre": "Sant Pau de Seguries",
-   "min": 9.0,
-   "prov": "Girona"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 9.0,
-   "prov": "Segovia"
-  },
-  {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 9.4,
-   "prov": "Ávila"
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": 11.3,
+   "prov": "Palencia"
   },
   {
    "id": "9218A",
    "nombre": "Isaba/Izaba",
-   "min": 9.5,
+   "min": 11.3,
    "prov": "Navarra"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 9.5,
-   "prov": "Soria"
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 11.4,
+   "prov": "Ourense"
   },
   {
-   "id": "9238X",
-   "nombre": "Navascués/Nabaskoze",
-   "min": 9.6,
-   "prov": "Navarra"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 9.8,
-   "prov": "León"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 9.8,
-   "prov": "Zamora"
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 11.6,
+   "prov": "Salamanca"
   }
  ]
 }

@@ -1,43 +1,43 @@
 {
  "fecha": "2026-07-07",
  "total": 820,
- "tropicales": 395,
+ "tropicales": 376,
  "ecuatoriales": 24,
  "peor": {
   "id": "C625O",
   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-  "min": 30.4,
+  "min": 30.3,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "9016X",
-  "nombre": "Cubillo de Ebro",
-  "min": 9.7,
-  "prov": "Cantabria"
+  "id": "1696O",
+  "nombre": "Beariz",
+  "min": 8.1,
+  "prov": "Ourense"
  },
  "top_calor": [
   {
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 30.4,
+   "min": 30.3,
    "prov": "Las Palmas"
   },
   {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 29.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C635B",
-   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 28.7,
+   "min": 29.8,
    "prov": "Las Palmas"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
    "min": 28.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+   "min": 28.2,
    "prov": "Las Palmas"
   },
   {
@@ -65,19 +65,31 @@
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "3254Y",
-   "nombre": "Mora de Toledo (Automática)",
-   "min": 26.4,
-   "prov": "Toledo"
-  },
-  {
    "id": "5612X",
    "nombre": "Lora de Estepa (Automatica)",
    "min": 26.3,
    "prov": "Sevilla"
+  },
+  {
+   "id": "C117Z",
+   "nombre": "Tijarafe-Mirador Time",
+   "min": 26.1,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 8.1,
+   "prov": "Ourense"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 9.0,
+   "prov": "Lleida"
+  },
   {
    "id": "9016X",
    "nombre": "Cubillo de Ebro",
@@ -91,18 +103,6 @@
    "prov": "Ávila"
   },
   {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 10.8,
-   "prov": "Ourense"
-  },
-  {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 11.0,
-   "prov": "Lleida"
-  },
-  {
    "id": "9744B",
    "nombre": "Barruera",
    "min": 11.1,
@@ -113,6 +113,12 @@
    "nombre": "Martinet",
    "min": 11.2,
    "prov": "Lleida"
+  },
+  {
+   "id": "1410X",
+   "nombre": "Sobrado dos Monxes",
+   "min": 11.3,
+   "prov": "A Coruña"
   },
   {
    "id": "2243A",
@@ -131,12 +137,6 @@
    "nombre": "Xinzo de Limia",
    "min": 11.4,
    "prov": "Ourense"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 11.6,
-   "prov": "Salamanca"
   }
  ]
 }

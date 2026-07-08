@@ -1,11 +1,13 @@
-name: Certificados para ayuntamientos
+name: Actualizar GIFs de la ola de calor
 
-# Genera los 25 diplomas "Refugio Climático de España 2026" en docs/certificados/
-# (quedan servidos en nochetropical.es/certificados/...). Solo a mano: es una
-# acción puntual, no un proceso periódico.
+# Regenera los GIFs animados (máximas, mínimas y doble panel) a partir de los
+# mapas diarios que descarga descarga_aemet.py. Se ejecuta tras la descarga
+# diaria; commitea solo si los GIFs han cambiado.
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: "0 11 * * *"   # 11:00 UTC, después de la descarga diaria (10:30 UTC)
+  workflow_dispatch:        # ejecutar a mano desde la pestaña Actions
 
 permissions:
   contents: write
@@ -15,7 +17,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  certificados:
+  gifs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repo
@@ -24,23 +26,23 @@ jobs:
       - name: Preparar Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.11"
 
       - name: Instalar Pillow
         run: pip install pillow
 
-      - name: Generar los certificados
-        run: python aemet-temperaturas/scripts/generar_certificados.py
+      - name: Regenerar GIFs
+        run: python aemet-temperaturas/scripts/generar_gif.py
 
-      - name: Commit
+      - name: Commit si hay cambios
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/certificados
+          git add docs/*.gif docs/og.png
           if git diff --staged --quiet; then
-            echo "Sin cambios."
+            echo "Sin cambios en los GIFs."
           else
-            git commit -m "Certificados Refugio Climático de España 2026"
+            git commit -m "Actualizar GIFs ola de calor ($(date -u +%Y-%m-%d))"
             for i in 1 2 3 4 5; do
               git pull --rebase --autostash origin main && git push && exit 0
               echo "push rechazado (colisión con otro workflow), reintento $i…"; sleep 4

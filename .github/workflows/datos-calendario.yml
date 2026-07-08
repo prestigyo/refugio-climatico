@@ -17,6 +17,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: commit-docs
+  cancel-in-progress: false
+
 jobs:
   datos:
     runs-on: ubuntu-latest
@@ -44,5 +48,9 @@ jobs:
             echo "Sin cambios en docs/datos/."
           else
             git commit -m "Actualizar datos del calendario ($(date -u +%Y-%m-%d))"
-            git push
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash origin main && git push && exit 0
+              echo "push rechazado (colisión con otro workflow), reintento $i…"; sleep 4
+            done
+            echo "No se pudo empujar tras 5 intentos"; exit 1
           fi

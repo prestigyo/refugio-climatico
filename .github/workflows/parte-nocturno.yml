@@ -15,6 +15,11 @@ on:
 permissions:
   contents: write
 
+# Un solo run a la vez de este workflow (los que se solapan se encolan).
+concurrency:
+  group: commit-docs
+  cancel-in-progress: false
+
 jobs:
   parte:
     runs-on: ubuntu-latest
@@ -56,5 +61,9 @@ jobs:
             echo "Sin cambios en docs/parte/."
           else
             git commit -m "El parte de la noche ($(date -u +%Y-%m-%d))"
-            git push
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash origin main && git push && exit 0
+              echo "push rechazado (colisión con otro workflow), reintento $i…"; sleep 4
+            done
+            echo "No se pudo empujar tras 5 intentos"; exit 1
           fi

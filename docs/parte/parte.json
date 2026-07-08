@@ -1,12 +1,12 @@
 {
  "fecha": "2026-07-08",
- "total": 817,
+ "total": 819,
  "tropicales": 327,
  "ecuatoriales": 27,
  "peor": {
   "id": "C614H",
   "nombre": "Tejeda Casco",
-  "min": 30.3,
+  "min": 30.6,
   "prov": "Las Palmas"
  },
  "mejor": {
@@ -19,7 +19,7 @@
   {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 30.3,
+   "min": 30.6,
    "prov": "Las Palmas"
   },
   {
@@ -31,13 +31,13 @@
   {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 28.8,
+   "min": 29.4,
    "prov": "Las Palmas"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 28.7,
+   "min": 28.8,
    "prov": "Las Palmas"
   },
   {

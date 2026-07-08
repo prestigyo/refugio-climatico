@@ -1,94 +1,100 @@
 {
- "fecha": "2026-07-07",
- "total": 820,
- "tropicales": 376,
- "ecuatoriales": 24,
+ "fecha": "2026-07-08",
+ "total": 817,
+ "tropicales": 327,
+ "ecuatoriales": 27,
  "peor": {
-  "id": "C625O",
-  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+  "id": "C614H",
+  "nombre": "Tejeda Casco",
   "min": 30.3,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "1696O",
-  "nombre": "Beariz",
-  "min": 8.1,
-  "prov": "Ourense"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 7.6,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
    "min": 30.3,
    "prov": "Las Palmas"
   },
   {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 29.8,
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 30.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 28.8,
    "prov": "Las Palmas"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 28.6,
+   "min": 28.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 28.0,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "C628B",
+   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "min": 27.3,
    "prov": "Las Palmas"
   },
   {
    "id": "C635B",
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 28.2,
+   "min": 27.3,
    "prov": "Las Palmas"
   },
   {
-   "id": "C917E",
-   "nombre": "Dehesa-Refugio",
-   "min": 27.8,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "5427X",
+   "nombre": "Doña Mencia",
+   "min": 26.9,
+   "prov": "Córdoba"
   },
   {
-   "id": "4325Y",
-   "nombre": "Castuera",
-   "min": 27.4,
-   "prov": "Badajoz"
-  },
-  {
-   "id": "9772X",
-   "nombre": "La Pobla de Cervoles",
-   "min": 27.4,
-   "prov": "Lleida"
+   "id": "8416",
+   "nombre": "Valencia Dt",
+   "min": 26.3,
+   "prov": "Valencia"
   },
   {
    "id": "C316I",
    "nombre": "Arure Cementerio",
-   "min": 27.2,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "5612X",
-   "nombre": "Lora de Estepa (Automatica)",
    "min": 26.3,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "C117Z",
-   "nombre": "Tijarafe-Mirador Time",
-   "min": 26.1,
    "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 8.1,
-   "prov": "Ourense"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 7.6,
+   "prov": "Ávila"
   },
   {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 9.0,
-   "prov": "Lleida"
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 8.6,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 8.8,
+   "prov": "León"
   },
   {
    "id": "9016X",
@@ -97,46 +103,40 @@
    "prov": "Cantabria"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 10.0,
+   "prov": "Madrid"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
    "min": 10.2,
-   "prov": "Ávila"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": 11.1,
    "prov": "Lleida"
-  },
-  {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 11.2,
-   "prov": "Lleida"
-  },
-  {
-   "id": "1410X",
-   "nombre": "Sobrado dos Monxes",
-   "min": 11.3,
-   "prov": "A Coruña"
   },
   {
    "id": "2243A",
    "nombre": "Aguilar de Campoo",
-   "min": 11.3,
+   "min": 10.5,
    "prov": "Palencia"
   },
   {
-   "id": "9218A",
-   "nombre": "Isaba/Izaba",
-   "min": 11.3,
-   "prov": "Navarra"
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 10.5,
+   "prov": "Cantabria"
   },
   {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 11.4,
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 10.6,
    "prov": "Ourense"
+  },
+  {
+   "id": "2624C",
+   "nombre": "Riaño-Ermita Quintanilla",
+   "min": 10.6,
+   "prov": "León"
   }
  ]
 }

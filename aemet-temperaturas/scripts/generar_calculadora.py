@@ -581,6 +581,7 @@ TEMPLATE = r"""<!DOCTYPE html>
       <img class="gif" src="ola-minimas.gif" alt="Mapa diario de temperaturas mínimas de AEMET durante la ola de calor" loading="lazy">
     </div>
     <p class="barnote">Fuente: AEMET · un fotograma por día. Recarga la página para verlo desde el principio.</p>
+    <p style="margin:16px 0 0"><a href="__SITE_URL__/ola-de-calor/" style="font-weight:700;color:var(--teja2)">Ver el mapa animado a pantalla completa, con las flechas hacia los refugios →</a></p>
 
     <h3 class="subh">¿Y Canarias? También es España — y de noche, más complicada.</h3>
     <p class="lead">En las islas el efecto foehn recalienta hasta la montaña: el interior de Gran Canaria es de los peores sitios de España para dormir. Estas son sus mínimas nocturnas, noche a noche.</p>
@@ -1106,7 +1107,7 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
     <thead><tr><th>Localidad</th><th class="hide">Altitud</th><th class="r">Noches tropicales/año</th><th>Cómo se duerme</th></tr></thead>
     <tbody>__TABLE__</tbody>
   </table>
-  <p class="note">Una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. Media anual, veranos 2017–2026. Fuente: AEMET.</p>
+  <p class="note">Una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. Media anual, veranos 2017–2026. Fuente: AEMET. · <a href="datos.csv" download>Descargar estos datos (CSV)</a></p>
 
   <div class="cta">
     <b>¿Quieres comparar con cualquier pueblo de España?</b><br>
@@ -1292,6 +1293,20 @@ def vecinas_html(prov: str, site: str) -> str:
     bloque += (f'<p class="vecinas"><a href="{site}/mapa-estaciones/">'
                f'Ver el mapa interactivo de toda España →</a></p>')
     return bloque
+
+
+def csv_provincia(lista: list[dict]) -> str:
+    """CSV limpio de una provincia (una fila por estación) para descarga en la
+    web y para prensa. Formato máquina: decimales con punto. Usa csv.writer por
+    si algún nombre lleva coma (p. ej. «Sóller, Puerto»)."""
+    import io
+    buf = io.StringIO()
+    w = csv.writer(buf)
+    w.writerow(["estacion", "altitud_m", "noches_tropicales_anio",
+                "noches_ecuatoriales_anio", "latitud", "longitud", "anios_datos"])
+    for e in sorted(lista, key=lambda x: (x["nt"], -x["alt"])):
+        w.writerow([e["loc"], e["alt"], e["nt"], e["ne"], e["lat"], e["lon"], e["anios"]])
+    return buf.getvalue()
 
 
 def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
@@ -2212,6 +2227,7 @@ PAGINA_OLA = r"""<!doctype html>
     <div class="botones">
       <a class="btn pri" href="__HOME__">Búscalo en la calculadora →</a>
       <a class="btn sec" href="__SITE__/mapa-estaciones/">Ver el mapa interactivo</a>
+      <a class="btn sec" href="__SHARE_X__" target="_blank" rel="noopener">Compartir en X</a>
     </div>
   </div>
 </div></section>
@@ -2249,7 +2265,13 @@ document.querySelectorAll(".marca").forEach(g=>{
 
 
 def construir_pagina_ola(site: str, fecha_iso: str, fecha_txt: str) -> str:
+    from urllib.parse import quote
     url = site + "/ola-de-calor/"
+    tuit_ola = ("En plena ola de calor, España conserva refugios climáticos naturales "
+                "donde de noche se duerme fresco, sin aire acondicionado. "
+                "El mapa animado de AEMET, de día y de noche:")
+    share_x = ("https://twitter.com/intent/tweet?text=" + quote(tuit_ola)
+               + "&url=" + quote(url))
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
@@ -2265,6 +2287,7 @@ def construir_pagina_ola(site: str, fecha_iso: str, fecha_txt: str) -> str:
          "mainEntityOfPage": url}]}, ensure_ascii=False)
     return (PAGINA_OLA
             .replace("__SCHEMA__", schema)
+            .replace("__SHARE_X__", share_x)
             .replace("__CSS__", _CSS_CHROME)
             .replace("__MARCADORES__", construir_marcadores_ola(site))
             .replace("__FECHA__", fecha_txt)
@@ -2302,6 +2325,7 @@ def main() -> int:
         (carpeta / "index.html").write_text(
             construir_pagina_provincia(prov, lista, site, provnav, fecha_mod_iso, fecha_mod_txt),
             encoding="utf-8")
+        (carpeta / "datos.csv").write_text(csv_provincia(lista), encoding="utf-8")
     # Páginas complementarias data-driven: sala de prensa, ranking y ola de calor.
     (DOCS_DIR / "prensa").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "prensa" / "index.html").write_text(

@@ -2013,7 +2013,7 @@ PAGINA_VACIADA = r"""<!doctype html>
   <p>No es la solución a la despoblación —hacen falta servicios, trabajo, conexión—, pero sí un argumento nuevo y medible a favor de estos territorios, justo cuando más lo necesitan.</p>
 
   <h2>Los datos, provincia a provincia</h2>
-  <p>De los __NREF__ refugios (estaciones de AEMET con menos de una noche tropical al año de media, 2017–2026), estas son las provincias que más aportan:</p>
+  <p>De los __NREF__ refugios (estaciones de AEMET con menos de una noche tropical al año de media, 2017–2026), así se reparten por provincia (número de estaciones-refugio):</p>
   <p class="provs">__PROVS__</p>
   <p class="note" style="font-size:12.5px;color:var(--muted)">Nota: el dato es por estación meteorológica, no por municipio; y «España vaciada» se usa aquí en sentido amplio (provincias de baja densidad del interior). Muchos pueblos frescos sin estación no aparecen — <a href="__SITE__/tu-pueblo/">ayúdanos a medirlos</a>.</p>
 
@@ -2045,7 +2045,10 @@ def construir_pagina_vaciada(estaciones: list, site: str,
     for e in ref:
         cuenta[e["prov"]] = cuenta.get(e["prov"], 0) + 1
     celtib = sum(cuenta.get(p, 0) for p in _CELTIBERICA)
-    top = sorted(cuenta.items(), key=lambda kv: (-kv[1], clave_orden(kv[0])))[:14]
+    # TODAS las provincias con refugios (antes se cortaba a 14 y quedaban fuera
+    # provincias emblemáticas de la España vaciada con pocas estaciones —Teruel,
+    # Cuenca, Guadalajara—, justo las que el artículo ensalza).
+    top = sorted(cuenta.items(), key=lambda kv: (-kv[1], clave_orden(kv[0])))
     provs = " · ".join(f'<a href="{site}/{slug(p)}/"><b>{p}</b></a> ({n})' for p, n in top)
     url = site + "/refugios-y-espana-vaciada/"
     schema = json.dumps({"@context": "https://schema.org", "@graph": [

@@ -308,7 +308,7 @@ def seccion_temporada_html(a: dict | None, site: str) -> str:
     racha, hot = a["racha"], a["hot"]
     hot_html = ""
     if hot and hot[0] >= 20:
-        hot_html = (f'<p class="hist-nota">🥵 <b>Récord de calor</b> de la temporada: '
+        hot_html = (f'<p class="hist-nota"><b>Récord de calor</b> de la temporada: '
                     f'{hot[1]} ({hot[2]}) no bajó de <b>{dec(hot[0])} °C</b> '
                     f'la noche del {_fecha_corta(hot[3])}.</p>')
     pct = round(100 * a["refugios"] / a["estaciones"]) if a["estaciones"] else 0
@@ -321,7 +321,7 @@ def seccion_temporada_html(a: dict | None, site: str) -> str:
         '<table><thead><tr><th>Estación</th><th>Provincia</th>'
         '<th style="text-align:right">Noches</th></tr></thead>'
         f'<tbody>{filas}</tbody></table>'
-        f'<p class="hist-nota">🔥 <b>La racha más larga:</b> {racha["nombre"]} '
+        f'<p class="hist-nota"><b>La racha más larga:</b> {racha["nombre"]} '
         f'({racha["prov"]}) encadenó <b>{racha["racha"]} noches tropicales seguidas</b>.</p>'
         f'{hot_html}'
         '<div class="mision"><div class="mt">Los refugios resisten</div>'
@@ -553,10 +553,13 @@ def main() -> int:
     pp = f" ({peor['prov']})" if peor["prov"] else ""
     mp = f" ({mejor['prov']})" if mejor["prov"] else ""
     fecha_iso_tuit = ahora.strftime("%Y-%m-%d")
-    tuit = (f"🌙 El parte de la noche · {fecha_corta}\n"
-            f"{trop} estaciones de AEMET no bajaron de 20 °C anoche; "
-            f"en {frescas} sí se durmió fresco 🌲\n"
-            f"🥵 {peor['nombre']} {dec(peor['min'])}° · 🥶 {mejor['nombre']} {dec(mejor['min'])}°\n"
+    # Orden: primero el dato favorable (dónde se durmió fresco), luego lo crítico
+    # (las noches tropicales). Sin emojis, para un tono más serio.
+    tuit = (f"El parte de la noche · {fecha_corta}\n"
+            f"Anoche se durmió fresco en {frescas} estaciones de AEMET "
+            f"(mínima por debajo de 20 °C). En {trop} fue noche tropical.\n"
+            f"La más fresca: {mejor['nombre']} {dec(mejor['min'])}°. "
+            f"La más cálida: {peor['nombre']} {dec(peor['min'])}°.\n"
             f"Aún hay refugios → {dominio}/parte/{fecha_iso_tuit}/")
 
     schema = json.dumps({"@context": "https://schema.org", "@graph": [

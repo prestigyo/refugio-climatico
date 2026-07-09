@@ -40,18 +40,20 @@ fecha,total,tropicales,ecuatoriales,peor,peor_prov,peor_min,mejor,mejor_prov,mej
 2026-06-20,787,272,6,Cañaveral,Cáceres,26.5,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,6.8
 2026-06-21,773,369,31,Almería Aeropuerto,Almería,30.8,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,8.4
 2026-06-22,762,379,29,Cabo de Gata,Almería,31.2,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,7.8
-2026-06-23,765,376,24,Almería Aeropuerto,Almería,29.1,Salvacañete,Cuenca,10.0
-2026-06-24,766,318,12,Cabo de Gata,Almería,26.9,"Vallehermoso, Alto Igualero",Santa Cruz de Tenerife,9.2
-2026-06-25,775,189,1,Capdepera,Illes Balears,25.0,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,7.5
-2026-06-26,789,157,0,Capdepera,Illes Balears,24.7,Puerto del Pico,Ávila,5.2
-2026-06-27,789,216,0,València,Valencia,24.9,Puerto del Pico,Ávila,6.9
-2026-06-28,778,237,3,"Barcelona, Fabra",Barcelona,25.5,Puerto del Pico,Ávila,7.5
-2026-06-29,775,221,9,Figueres,Girona,26.5,Puerto del Pico,Ávila,6.6
-2026-06-30,782,314,14,"San Bartolome Tirajana, Cuevas del Pinar",Las Palmas,28.6,Port Ainé,Lleida,8.9
+2026-06-23,768,377,25,Almería Aeropuerto,Almería,29.1,Salvacañete,Cuenca,10.0
+2026-06-24,769,319,13,Cabo de Gata,Almería,26.9,"Vallehermoso, Alto Igualero",Santa Cruz de Tenerife,9.2
+2026-06-25,777,190,1,Capdepera,Illes Balears,25.0,"La Orotava, Cañadas Teide",Santa Cruz de Tenerife,7.5
+2026-06-26,791,158,0,Capdepera,Illes Balears,24.7,Puerto del Pico,Ávila,5.2
+2026-06-27,791,217,0,València,Valencia,24.9,Puerto del Pico,Ávila,6.9
+2026-06-28,780,238,3,"Barcelona, Fabra",Barcelona,25.5,Puerto del Pico,Ávila,7.5
+2026-06-29,777,223,9,Figueres,Girona,26.5,Puerto del Pico,Ávila,6.6
+2026-06-30,784,315,14,"San Bartolome Tirajana, Cuevas del Pinar",Las Palmas,28.6,Port Ainé,Lleida,8.9
 2026-07-01,784,314,14,Serradilla,Cáceres,26.8,Port Ainé,Lleida,4.5
 2026-07-02,774,269,20,Osuna,Sevilla,27.0,Port Ainé,Lleida,3.7
-2026-07-03,777,273,25,"Rota, Base Naval",Cádiz,27.2,Reinosa,Cantabria,6.1
+2026-07-03,779,273,25,"Rota, Base Naval",Cádiz,27.2,Reinosa,Cantabria,6.1
+2026-07-04,786,262,17,Castuera,Badajoz,27.6,Palacios de la Sierra,Burgos,5.9
 2026-07-05,820,315,35,Evc_noia,,28.2,Cubillo de Ebro,Cantabria,7.1
 2026-07-06,821,352,29,Tejeda Casco,Las Palmas,29.5,Esterri D?aneu,Lleida,7.1
 2026-07-07,820,376,24,San Bartolome Tirajana-Lomo Pedro Alfonso,Las Palmas,30.3,Beariz,Ourense,8.1
 2026-07-08,819,327,27,Tejeda Casco,Las Palmas,30.6,Puerto el Pico,Ávila,7.6
+2026-07-09,827,341,29,Espolla Les Alberes,Girona,30.8,Puerto el Pico,Ávila,7.2

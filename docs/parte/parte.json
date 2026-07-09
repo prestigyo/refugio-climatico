@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-08",
- "total": 819,
- "tropicales": 327,
- "ecuatoriales": 27,
+ "fecha": "2026-07-09",
+ "total": 827,
+ "tropicales": 341,
+ "ecuatoriales": 29,
  "peor": {
-  "id": "C614H",
-  "nombre": "Tejeda Casco",
-  "min": 30.6,
-  "prov": "Las Palmas"
+  "id": "0421X",
+  "nombre": "Espolla Les Alberes",
+  "min": 30.8,
+  "prov": "Girona"
  },
  "mejor": {
   "id": "3319D",
   "nombre": "Puerto el Pico",
-  "min": 7.6,
+  "min": 7.2,
   "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 30.6,
-   "prov": "Las Palmas"
+   "id": "0421X",
+   "nombre": "Espolla Les Alberes",
+   "min": 30.8,
+   "prov": "Girona"
+  },
+  {
+   "id": "0413A",
+   "nombre": "Maçanet de Cabrenys",
+   "min": 30.1,
+   "prov": "Girona"
   },
   {
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 30.0,
+   "min": 27.7,
    "prov": "Las Palmas"
   },
   {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 29.4,
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
+   "min": 27.6,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "6332Y",
+   "nombre": "Carboneras - Faro Mesa Roldán",
+   "min": 27.0,
+   "prov": "Almería"
+  },
+  {
+   "id": "B087X",
+   "nombre": "Banyalbufar",
+   "min": 26.8,
+   "prov": "Illes Balears"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 28.8,
+   "min": 26.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 28.0,
-   "prov": "Sevilla"
+   "id": "0281Y",
+   "nombre": "Blanes Jardin Botanico",
+   "min": 26.4,
+   "prov": "Girona"
   },
   {
-   "id": "C628B",
-   "nombre": "San Nicolas T.-Tasarte/Coparlita",
-   "min": 27.3,
-   "prov": "Las Palmas"
+   "id": "6272X",
+   "nombre": "Castell del Ferro",
+   "min": 26.1,
+   "prov": "Granada"
   },
   {
-   "id": "C635B",
-   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 27.3,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "5427X",
-   "nombre": "Doña Mencia",
-   "min": 26.9,
-   "prov": "Córdoba"
-  },
-  {
-   "id": "8416",
-   "nombre": "Valencia Dt",
-   "min": 26.3,
-   "prov": "Valencia"
-  },
-  {
-   "id": "C316I",
-   "nombre": "Arure Cementerio",
-   "min": 26.3,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "0158X",
+   "nombre": "Montserrat",
+   "min": 25.9,
+   "prov": "Barcelona"
   }
  ],
  "top_fresco": [
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 7.6,
+   "min": 7.2,
    "prov": "Ávila"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 8.6,
+   "min": 9.2,
    "prov": "Salamanca"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 9.4,
+   "prov": "Segovia"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 8.8,
+   "min": 9.7,
    "prov": "León"
   },
   {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 9.7,
-   "prov": "Cantabria"
+   "id": "1410X",
+   "nombre": "Sobrado dos Monxes",
+   "min": 9.8,
+   "prov": "A Coruña"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 10.0,
-   "prov": "Madrid"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 9.8,
+   "prov": "Zamora"
   },
   {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 10.2,
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 9.8,
+   "prov": "Granada"
+  },
+  {
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": 9.8,
    "prov": "Lleida"
   },
   {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": 10.5,
-   "prov": "Palencia"
+   "id": "9838B",
+   "nombre": "Benasque",
+   "min": 9.8,
+   "prov": "Huesca"
   },
   {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 10.5,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 10.6,
-   "prov": "Ourense"
-  },
-  {
-   "id": "2624C",
-   "nombre": "Riaño-Ermita Quintanilla",
-   "min": 10.6,
-   "prov": "León"
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 10.0,
+   "prov": "Lleida"
   }
  ]
 }

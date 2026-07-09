@@ -1,7 +1,7 @@
 {
  "fecha": "2026-07-09",
- "total": 827,
- "tropicales": 341,
+ "total": 803,
+ "tropicales": 336,
  "ecuatoriales": 29,
  "peor": {
   "id": "0421X",
@@ -10,22 +10,16 @@
   "prov": "Girona"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 7.2,
-  "prov": "Ávila"
+  "id": "2930Y",
+  "nombre": "Navasfrias",
+  "min": 9.2,
+  "prov": "Salamanca"
  },
  "top_calor": [
   {
    "id": "0421X",
    "nombre": "Espolla Les Alberes",
    "min": 30.8,
-   "prov": "Girona"
-  },
-  {
-   "id": "0413A",
-   "nombre": "Maçanet de Cabrenys",
-   "min": 30.1,
    "prov": "Girona"
   },
   {
@@ -41,9 +35,15 @@
    "prov": "Las Palmas"
   },
   {
+   "id": "0158X",
+   "nombre": "Montserrat",
+   "min": 27.5,
+   "prov": "Barcelona"
+  },
+  {
    "id": "6332Y",
    "nombre": "Carboneras - Faro Mesa Roldán",
-   "min": 27.0,
+   "min": 27.1,
    "prov": "Almería"
   },
   {
@@ -65,25 +65,19 @@
    "prov": "Girona"
   },
   {
-   "id": "6272X",
-   "nombre": "Castell del Ferro",
-   "min": 26.1,
-   "prov": "Granada"
+   "id": "0244X",
+   "nombre": "Vilassar de Dalt",
+   "min": 26.3,
+   "prov": "Barcelona"
   },
   {
-   "id": "0158X",
-   "nombre": "Montserrat",
-   "min": 25.9,
+   "id": "0252D",
+   "nombre": "Arenys de Mar",
+   "min": 26.3,
    "prov": "Barcelona"
   }
  ],
  "top_fresco": [
-  {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 7.2,
-   "prov": "Ávila"
-  },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
@@ -115,12 +109,6 @@
    "prov": "Zamora"
   },
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 9.8,
-   "prov": "Granada"
-  },
-  {
    "id": "9744B",
    "nombre": "Barruera",
    "min": 9.8,
@@ -137,6 +125,18 @@
    "nombre": "Martinet",
    "min": 10.0,
    "prov": "Lleida"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 10.0,
+   "prov": "Lleida"
+  },
+  {
+   "id": "0312X",
+   "nombre": "Sant Pau de Seguries",
+   "min": 10.1,
+   "prov": "Girona"
   }
  ]
 }

@@ -1321,14 +1321,12 @@ def vecinas_html(prov: str, site: str) -> str:
 
 
 def barra_compartir(url: str, texto: str) -> str:
-    """Barra de compartir reutilizable: WhatsApp, LinkedIn, X, Copiar enlace y
-    Compartir nativo (móvil). LinkedIn solo admite la URL (construye la tarjeta
-    con las etiquetas OG); WhatsApp y X llevan el texto pre-rellenado. El texto
-    debe ir sin emojis y con el dato favorable primero."""
+    """Barra de compartir reutilizable: WhatsApp, X, Copiar enlace y Compartir
+    nativo (móvil). WhatsApp y X llevan el texto pre-rellenado. El texto debe
+    ir sin emojis y con el dato favorable primero."""
     from urllib.parse import quote
     import html as _html
     wa = "https://wa.me/?text=" + quote(texto + " " + url)
-    li = "https://www.linkedin.com/sharing/share-offsite/?url=" + quote(url)
     tw = ("https://twitter.com/intent/tweet?text=" + quote(texto)
           + "&amp;url=" + quote(url))
     ta, ua = _html.escape(texto, quote=True), _html.escape(url, quote=True)
@@ -1336,7 +1334,6 @@ def barra_compartir(url: str, texto: str) -> str:
         f'<div class="compartir" data-url="{ua}" data-text="{ta}">'
         '<span class="ct">Comparte estos datos</span><div class="cbtns">'
         f'<a class="cb" href="{wa}" target="_blank" rel="noopener">WhatsApp</a>'
-        f'<a class="cb" href="{li}" target="_blank" rel="noopener">LinkedIn</a>'
         f'<a class="cb" href="{tw}" target="_blank" rel="noopener">X</a>'
         '<button class="cb" id="cb-copiar" type="button">Copiar enlace</button>'
         '<button class="cb" id="cb-share" type="button" hidden>Compartir…</button>'

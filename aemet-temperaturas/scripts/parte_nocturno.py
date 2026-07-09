@@ -463,7 +463,6 @@ PLANTILLA = r"""<!doctype html>
     <div class="acciones">
       <button id="copiar">Copiar</button>
       <a class="b" id="wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
-      <a class="b" id="li" href="#" target="_blank" rel="noopener">LinkedIn</a>
       <a class="b" id="tw" href="#" target="_blank" rel="noopener">X / Twitter</a>
       <button id="nativo" hidden>Compartir…</button>
     </div>
@@ -486,7 +485,6 @@ document.getElementById("copiar").addEventListener("click",e=>{navigator.clipboa
 const pageurl=location.href.split("#")[0];
 document.getElementById("wa").href="https://wa.me/?text="+encodeURIComponent(txt);
 document.getElementById("tw").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(txt);
-document.getElementById("li").href="https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(pageurl);
 const nativo=document.getElementById("nativo");
 if(nativo&&navigator.share){nativo.hidden=false;nativo.addEventListener("click",()=>{navigator.share({text:txt,url:pageurl}).catch(()=>{});});}
 </script>

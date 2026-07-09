@@ -1469,6 +1469,11 @@ _CSS_CHROME = (
     '.btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}'
     'footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#82745d;font-size:12.5px;margin-top:24px}'
     'footer a{color:#9a8a6f}'
+    '.compartir{margin:22px 0;padding:15px 18px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}'
+    '.compartir .ct{display:block;font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:11px}'
+    '.compartir .cbtns{display:flex;flex-wrap:wrap;gap:9px}'
+    '.compartir .cb{font:600 13.5px/1 var(--fb);padding:9px 15px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--paper);cursor:pointer;text-decoration:none;display:inline-block}'
+    '.compartir .cb:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none;background:rgba(217,116,78,.10)}'
 )
 
 PAGINA_PRENSA = r"""<!doctype html>
@@ -1647,6 +1652,8 @@ PAGINA_RANKING = r"""<!doctype html>
   </table>
 </div></section>
 
+<section><div class="wrap">__COMPARTIR__</div></section>
+
 <section><div class="wrap">
   <div class="cta">
     <b>¿Y tu pueblo en qué puesto está?</b><br>
@@ -1660,6 +1667,24 @@ PAGINA_RANKING = r"""<!doctype html>
 <footer><div class="wrap">
   Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.
 </div></footer>
+<script>
+(function(){
+ var box=document.querySelector(".compartir"); if(!box) return;
+ var url=box.getAttribute("data-url"), text=box.getAttribute("data-text");
+ var cp=document.getElementById("cb-copiar");
+ if(cp&&navigator.clipboard) cp.addEventListener("click",function(){
+   navigator.clipboard.writeText(url).then(function(){
+     cp.textContent="Enlace copiado"; setTimeout(function(){cp.textContent="Copiar enlace";},1600);
+   });
+ });
+ var sh=document.getElementById("cb-share");
+ if(sh&&navigator.share){ sh.hidden=false;
+   sh.addEventListener("click",function(){
+     navigator.share({title:document.title,text:text,url:url}).catch(function(){});
+   });
+ }
+})();
+</script>
 </body>
 </html>
 """
@@ -1741,8 +1766,12 @@ def construir_pagina_ranking(estaciones: list, site: str,
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
          "datePublished": FECHA_PUBLICACION_LANDINGS, "dateModified": fecha_iso,
          "mainEntityOfPage": url}]}, ensure_ascii=False)
+    texto_comp = ("Buena parte de España sigue durmiendo fresco en verano, aunque el litoral "
+                  "y las islas se pasan la noche sudando. El ranking nacional de noches "
+                  "tropicales, con diez veranos de datos de AEMET:")
     return (PAGINA_RANKING
             .replace("__SCHEMA__", schema)
+            .replace("__COMPARTIR__", barra_compartir(url, texto_comp))
             .replace("__CSS__", _CSS_CHROME)
             .replace("__PEOR__", filas_peor)
             .replace("__MEJOR__", filas_mejor)

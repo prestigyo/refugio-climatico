@@ -239,6 +239,98 @@ def svg_historial(filas: list[dict]) -> str:
             f'<g class="ejes">{"".join(etiquetas)}</g></svg>')
 
 
+# --- Análisis de la temporada en curso (desde los diarios VALIDADOS) -----------
+def _fecha_corta(iso: str) -> str:
+    return f"{int(iso[8:10])} {MESES[int(iso[5:7]) - 1][:3]}"
+
+
+def analisis_temporada() -> dict | None:
+    """Recuento por estación desde diarios_estaciones.csv (validado, una fila por
+    estación y noche): noches tropicales acumuladas, racha más larga de noches
+    tropicales seguidas, récord de calor y nº de refugios (0 NT). Solo recuentos
+    y récords —nunca medias—. Devuelve None si aún no hay datos suficientes."""
+    if not DIARIOS_CSV.exists():
+        return None
+    por_est: dict[str, list] = {}
+    fechas: set[str] = set()
+    with open(DIARIOS_CSV, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            try:
+                tmin = float(r["tmin"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            fechas.add(r["fecha"])
+            por_est.setdefault(r["indicativo"], []).append(
+                (r["fecha"], tmin, g.titular(r.get("nombre", "")),
+                 canon_provincia(r.get("provincia", ""))))
+    if len(fechas) < 10:
+        return None
+
+    def dias(a: str, b: str) -> int:
+        return (datetime.fromisoformat(a) - datetime.fromisoformat(b)).days
+
+    rank = []
+    for regs in por_est.values():
+        regs.sort()
+        trop = sum(1 for _, t, *_ in regs if t >= 20)
+        nombre, prov = regs[-1][2], regs[-1][3]
+        mejor = cur = 0
+        prev = None
+        for fe, t, *_ in regs:
+            if t >= 20:
+                cur = cur + 1 if (prev is not None and dias(fe, prev) == 1) else 1
+                mejor = max(mejor, cur)
+                prev = fe
+            else:
+                cur, prev = 0, None
+        rank.append({"trop": trop, "racha": mejor, "nombre": nombre, "prov": prov})
+    rank.sort(key=lambda x: -x["trop"])
+    hot = max(((t, g.titular(n), canon_provincia(p), fe)
+               for regs in por_est.values() for fe, t, n, p in regs), default=None)
+    return {"desde": min(fechas), "hasta": max(fechas), "noches": len(fechas),
+            "estaciones": len(rank),
+            "top": [r for r in rank if r["trop"] > 0][:12],
+            "racha": max(rank, key=lambda x: x["racha"]),
+            "refugios": sum(1 for r in rank if r["trop"] == 0),
+            "hot": hot}
+
+
+def seccion_temporada_html(a: dict | None, site: str) -> str:
+    """La sección 'La temporada en curso': ranking de noches tropicales, la racha
+    más larga, el récord de calor y el contador de refugios (mensaje positivo)."""
+    if not a or not a["top"]:
+        return ""
+    filas = "".join(
+        f'<tr><td class="loc">{r["nombre"]}</td>'
+        f'<td><a href="{site}/{g.slug(r["prov"])}/">{r["prov"]}</a></td>'
+        f'<td class="n">{r["trop"]}</td></tr>'
+        for r in a["top"])
+    racha, hot = a["racha"], a["hot"]
+    hot_html = ""
+    if hot and hot[0] >= 20:
+        hot_html = (f'<p class="hist-nota">🥵 <b>Récord de calor</b> de la temporada: '
+                    f'{hot[1]} ({hot[2]}) no bajó de <b>{dec(hot[0])} °C</b> '
+                    f'la noche del {_fecha_corta(hot[3])}.</p>')
+    pct = round(100 * a["refugios"] / a["estaciones"]) if a["estaciones"] else 0
+    return (
+        '<h2>La temporada en curso</h2>'
+        f'<p class="hist-nota">Recuento con datos <b>validados</b> de AEMET, del '
+        f'{_fecha_corta(a["desde"])} al {_fecha_corta(a["hasta"])} '
+        f'({a["noches"]} noches, {a["estaciones"]} estaciones). Noches tropicales '
+        f'(mínima ≥ 20 °C) acumuladas por estación:</p>'
+        '<table><thead><tr><th>Estación</th><th>Provincia</th>'
+        '<th style="text-align:right">Noches</th></tr></thead>'
+        f'<tbody>{filas}</tbody></table>'
+        f'<p class="hist-nota">🔥 <b>La racha más larga:</b> {racha["nombre"]} '
+        f'({racha["prov"]}) encadenó <b>{racha["racha"]} noches tropicales seguidas</b>.</p>'
+        f'{hot_html}'
+        '<div class="mision"><div class="mt">Los refugios resisten</div>'
+        f'<p><b>{a["refugios"]} de {a["estaciones"]}</b> estaciones ({pct} %) no han '
+        f'tenido <b>ni una sola noche tropical</b> esta temporada: siguen durmiendo '
+        f'fresco. Son los <a href="{site}/refugios-y-espana-vaciada/">refugios '
+        f'climáticos</a> que el calor no ha rendido.</p></div>')
+
+
 def fila_html(e: dict, site: str) -> str:
     prov = e["prov"]
     enlace = (f'<a href="{site}/{g.slug(prov)}/">{prov}</a>' if prov else "—")
@@ -362,6 +454,8 @@ PLANTILLA = r"""<!doctype html>
   </div>
 
   __SECCION_HISTORIAL__
+
+  __SECCION_TEMPORADA__
 
   <div class="comparte">
     <div class="t">Comparte el parte</div>
@@ -528,6 +622,8 @@ def main() -> int:
             f'{vmax_fila["fecha"][5:7].lstrip("0")}).{rec_txt}</p>'
             f'<div class="histwrap">{svg_historial(historial)}</div>')
     html = html.replace("__SECCION_HISTORIAL__", seccion_hist)
+    html = html.replace("__SECCION_TEMPORADA__",
+                        seccion_temporada_html(analisis_temporada(), site))
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     # Archivo navegable: enlaces a los últimos partes fechados (más el de hoy).
@@ -544,11 +640,16 @@ def main() -> int:
     html_fecha = html.replace(f'{site}/parte/"', f'{site}/parte/{fecha_iso}/"')
     (OUT_DIR / fecha_iso).mkdir(exist_ok=True)
     (OUT_DIR / fecha_iso / "index.html").write_text(html_fecha, encoding="utf-8")
-    # Archivo del día (detalle completo, uno por fecha): la memoria del verano.
+    # Archivo del día = LA MEMORIA DE LO EFÍMERO. La observación de AEMET solo
+    # conserva ~12 h; aquí guardamos la mínima de TODAS las estaciones de esta
+    # noche para siempre (no solo el top 10). Es la materia prima de los análisis
+    # de temporada (rachas, ranking del verano en curso, récords…).
     (OUT_DIR / "dias").mkdir(exist_ok=True)
     (OUT_DIR / "dias" / f"{fecha_iso}.json").write_text(json.dumps(
         {"fecha": fecha_iso, "total": total, "tropicales": trop, "ecuatoriales": ecua,
-         "peor": peor, "mejor": mejor, "top_calor": top_calor, "top_fresco": top_fresco},
+         "peor": peor, "mejor": mejor, "top_calor": top_calor, "top_fresco": top_fresco,
+         "estaciones": [{"id": e["id"], "nombre": e["nombre"], "prov": e["prov"],
+                         "min": round(e["min"], 1)} for e in lista]},
         ensure_ascii=False), encoding="utf-8")
     (OUT_DIR / "parte.txt").write_text(tuit + "\n", encoding="utf-8")
     (OUT_DIR / "parte.json").write_text(json.dumps(

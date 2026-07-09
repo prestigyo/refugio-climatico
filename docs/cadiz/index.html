@@ -48,6 +48,11 @@
  .cta b{font-family:var(--fd);font-weight:600;font-size:19px}
  .cta a.btn{display:inline-block;margin-top:12px;background:var(--teja);color:#1a1209;font-weight:700;padding:12px 20px;border-radius:11px}
  .cta a.btn:hover{background:var(--teja2);text-decoration:none}
+ .compartir{margin:22px 0;padding:15px 18px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}
+ .compartir .ct{display:block;font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:11px}
+ .compartir .cbtns{display:flex;flex-wrap:wrap;gap:9px}
+ .compartir .cb{font:600 13.5px/1 var(--fb);padding:9px 15px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--paper);cursor:pointer;text-decoration:none;display:inline-block}
+ .compartir .cb:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none;background:rgba(217,116,78,.10)}
  .provnav{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:14px;font-size:13.5px}
  footer{border-top:1px solid var(--line);padding:30px 0 60px;color:#82745d;font-size:12.5px;margin-top:18px}
  footer a{color:#9a8a6f}
@@ -85,6 +90,8 @@
   </table>
   <p class="note">Una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. Media anual, veranos 2017–2026. Fuente: AEMET. · <a href="datos.csv" download>Descargar estos datos (CSV)</a></p>
 
+  <div class="compartir" data-url="https://nochetropical.es/cadiz/" data-text="¿Cuántas noches tropicales sufre cada pueblo de Cádiz? El mapa del calor nocturno, con diez veranos de datos de AEMET. ¿Y tu pueblo?"><span class="ct">Comparte estos datos</span><div class="cbtns"><a class="cb" href="https://wa.me/?text=%C2%BFCu%C3%A1ntas%20noches%20tropicales%20sufre%20cada%20pueblo%20de%20C%C3%A1diz%3F%20El%20mapa%20del%20calor%20nocturno%2C%20con%20diez%20veranos%20de%20datos%20de%20AEMET.%20%C2%BFY%20tu%20pueblo%3F%20https%3A//nochetropical.es/cadiz/" target="_blank" rel="noopener">WhatsApp</a><a class="cb" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//nochetropical.es/cadiz/" target="_blank" rel="noopener">LinkedIn</a><a class="cb" href="https://twitter.com/intent/tweet?text=%C2%BFCu%C3%A1ntas%20noches%20tropicales%20sufre%20cada%20pueblo%20de%20C%C3%A1diz%3F%20El%20mapa%20del%20calor%20nocturno%2C%20con%20diez%20veranos%20de%20datos%20de%20AEMET.%20%C2%BFY%20tu%20pueblo%3F&amp;url=https%3A//nochetropical.es/cadiz/" target="_blank" rel="noopener">X</a><button class="cb" id="cb-copiar" type="button">Copiar enlace</button><button class="cb" id="cb-share" type="button" hidden>Compartir…</button></div></div>
+
   <div class="cta">
     <b>¿Quieres comparar con cualquier pueblo de España?</b><br>
     <a class="btn" href="https://nochetropical.es/">Abre el mapa y la calculadora →</a>
@@ -106,5 +113,23 @@
   Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="https://nochetropical.es/">Refugio Climático</a> de Ramón J. Lowesting.<br>
   Última actualización de los datos: julio de 2026.
 </div></footer>
+<script>
+(function(){
+ var box=document.querySelector(".compartir"); if(!box) return;
+ var url=box.getAttribute("data-url"), text=box.getAttribute("data-text");
+ var cp=document.getElementById("cb-copiar");
+ if(cp&&navigator.clipboard) cp.addEventListener("click",function(){
+   navigator.clipboard.writeText(url).then(function(){
+     cp.textContent="Enlace copiado"; setTimeout(function(){cp.textContent="Copiar enlace";},1600);
+   });
+ });
+ var sh=document.getElementById("cb-share");
+ if(sh&&navigator.share){ sh.hidden=false;
+   sh.addEventListener("click",function(){
+     navigator.share({title:document.title,text:text,url:url}).catch(function(){});
+   });
+ }
+})();
+</script>
 </body>
 </html>

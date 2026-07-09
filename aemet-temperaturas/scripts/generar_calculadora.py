@@ -1072,6 +1072,11 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
  .cta b{font-family:var(--fd);font-weight:600;font-size:19px}
  .cta a.btn{display:inline-block;margin-top:12px;background:var(--teja);color:#1a1209;font-weight:700;padding:12px 20px;border-radius:11px}
  .cta a.btn:hover{background:var(--teja2);text-decoration:none}
+ .compartir{margin:22px 0;padding:15px 18px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}
+ .compartir .ct{display:block;font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:11px}
+ .compartir .cbtns{display:flex;flex-wrap:wrap;gap:9px}
+ .compartir .cb{font:600 13.5px/1 var(--fb);padding:9px 15px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--paper);cursor:pointer;text-decoration:none;display:inline-block}
+ .compartir .cb:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none;background:rgba(217,116,78,.10)}
  .provnav{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:14px;font-size:13.5px}
  footer{border-top:1px solid var(--line);padding:30px 0 60px;color:#82745d;font-size:12.5px;margin-top:18px}
  footer a{color:#9a8a6f}
@@ -1109,6 +1114,8 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
   </table>
   <p class="note">Una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. Media anual, veranos 2017–2026. Fuente: AEMET. · <a href="datos.csv" download>Descargar estos datos (CSV)</a></p>
 
+  __COMPARTIR__
+
   <div class="cta">
     <b>¿Quieres comparar con cualquier pueblo de España?</b><br>
     <a class="btn" href="__HOME__">Abre el mapa y la calculadora →</a>
@@ -1130,6 +1137,24 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
   Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting.<br>
   Última actualización de los datos: __FECHA_FOOTER__.
 </div></footer>
+<script>
+(function(){
+ var box=document.querySelector(".compartir"); if(!box) return;
+ var url=box.getAttribute("data-url"), text=box.getAttribute("data-text");
+ var cp=document.getElementById("cb-copiar");
+ if(cp&&navigator.clipboard) cp.addEventListener("click",function(){
+   navigator.clipboard.writeText(url).then(function(){
+     cp.textContent="Enlace copiado"; setTimeout(function(){cp.textContent="Copiar enlace";},1600);
+   });
+ });
+ var sh=document.getElementById("cb-share");
+ if(sh&&navigator.share){ sh.hidden=false;
+   sh.addEventListener("click",function(){
+     navigator.share({title:document.title,text:text,url:url}).catch(function(){});
+   });
+ }
+})();
+</script>
 </body>
 </html>
 """
@@ -1295,6 +1320,29 @@ def vecinas_html(prov: str, site: str) -> str:
     return bloque
 
 
+def barra_compartir(url: str, texto: str) -> str:
+    """Barra de compartir reutilizable: WhatsApp, LinkedIn, X, Copiar enlace y
+    Compartir nativo (móvil). LinkedIn solo admite la URL (construye la tarjeta
+    con las etiquetas OG); WhatsApp y X llevan el texto pre-rellenado. El texto
+    debe ir sin emojis y con el dato favorable primero."""
+    from urllib.parse import quote
+    import html as _html
+    wa = "https://wa.me/?text=" + quote(texto + " " + url)
+    li = "https://www.linkedin.com/sharing/share-offsite/?url=" + quote(url)
+    tw = ("https://twitter.com/intent/tweet?text=" + quote(texto)
+          + "&amp;url=" + quote(url))
+    ta, ua = _html.escape(texto, quote=True), _html.escape(url, quote=True)
+    return (
+        f'<div class="compartir" data-url="{ua}" data-text="{ta}">'
+        '<span class="ct">Comparte estos datos</span><div class="cbtns">'
+        f'<a class="cb" href="{wa}" target="_blank" rel="noopener">WhatsApp</a>'
+        f'<a class="cb" href="{li}" target="_blank" rel="noopener">LinkedIn</a>'
+        f'<a class="cb" href="{tw}" target="_blank" rel="noopener">X</a>'
+        '<button class="cb" id="cb-copiar" type="button">Copiar enlace</button>'
+        '<button class="cb" id="cb-share" type="button" hidden>Compartir…</button>'
+        '</div></div>')
+
+
 def csv_provincia(lista: list[dict]) -> str:
     """CSV limpio de una provincia (una fila por estación) para descarga en la
     web y para prensa. Formato máquina: decimales con punto. Usa csv.writer por
@@ -1347,6 +1395,14 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
     schema = json.dumps(
         construir_schema_provincia(prov, site, sl, n, desc, faq, fecha_mod), ensure_ascii=False)
 
+    url_comp = f"{site}/{sl}/"
+    if mejor["nt"] < 1:
+        texto_comp = (f"En {prov} se duerme fresco: {mejor['loc']} apenas tiene noches "
+                      f"tropicales, según diez veranos de datos de AEMET. ¿Y tu pueblo?")
+    else:
+        texto_comp = (f"¿Cuántas noches tropicales sufre cada pueblo de {prov}? El mapa del "
+                      f"calor nocturno, con diez veranos de datos de AEMET. ¿Y tu pueblo?")
+
     return (PAGINA_PROVINCIA
             .replace("__OGTITLE__", f"Noches tropicales en {prov}")
             .replace("__TITLE__", title)
@@ -1359,6 +1415,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             .replace("__H1__", f'¿Se duerme bien en verano en <em>{prov}</em>?')
             .replace("__INTRO__", intro)
             .replace("__TABLE__", "".join(filas))
+            .replace("__COMPARTIR__", barra_compartir(url_comp, texto_comp))
             .replace("__CAPTION__", f"Estaciones de AEMET en {prov}, de la más fresca a la más calurosa")
             .replace("__PROSA__", prosa)
             .replace("__FAQ__", faq_html(faq))

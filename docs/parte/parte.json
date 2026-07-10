@@ -1,6 +1,6 @@
 {
  "fecha": "2026-07-10",
- "total": 826,
+ "total": 828,
  "tropicales": 311,
  "ecuatoriales": 21,
  "peor": {
@@ -21,6 +21,12 @@
    "nombre": "Torremolinos",
    "min": 28.4,
    "prov": "Málaga"
+  },
+  {
+   "id": "3182Y",
+   "nombre": "Arganda del Rey",
+   "min": 26.8,
+   "prov": "Madrid"
   },
   {
    "id": "3195",
@@ -69,12 +75,6 @@
    "nombre": "Colònia Sant Pere-Can Mengol",
    "min": 25.6,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "3194Y",
-   "nombre": "Pozuelo de Alarcon (Automática)",
-   "min": 25.5,
-   "prov": "Madrid"
   }
  ],
  "top_fresco": [

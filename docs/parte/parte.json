@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-09",
- "total": 803,
- "tropicales": 336,
- "ecuatoriales": 29,
+ "fecha": "2026-07-10",
+ "total": 826,
+ "tropicales": 311,
+ "ecuatoriales": 21,
  "peor": {
-  "id": "0421X",
-  "nombre": "Espolla Les Alberes",
-  "min": 30.8,
-  "prov": "Girona"
+  "id": "6088X",
+  "nombre": "Torremolinos",
+  "min": 28.4,
+  "prov": "Málaga"
  },
  "mejor": {
-  "id": "2930Y",
-  "nombre": "Navasfrias",
-  "min": 9.2,
-  "prov": "Salamanca"
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": 6.8,
+  "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "0421X",
-   "nombre": "Espolla Les Alberes",
-   "min": 30.8,
-   "prov": "Girona"
+   "id": "6088X",
+   "nombre": "Torremolinos",
+   "min": 28.4,
+   "prov": "Málaga"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 27.7,
-   "prov": "Las Palmas"
+   "id": "3195",
+   "nombre": "Madrid Retiro",
+   "min": 26.7,
+   "prov": "Madrid"
   },
   {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 27.6,
-   "prov": "Las Palmas"
+   "id": "3129",
+   "nombre": "Madrid/Barajas",
+   "min": 26.4,
+   "prov": "Madrid"
   },
   {
-   "id": "0158X",
-   "nombre": "Montserrat",
-   "min": 27.5,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "6332Y",
-   "nombre": "Carboneras - Faro Mesa Roldán",
-   "min": 27.1,
-   "prov": "Almería"
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 26.4,
+   "prov": "Illes Balears"
   },
   {
    "id": "B087X",
    "nombre": "Banyalbufar",
-   "min": 26.8,
+   "min": 26.1,
    "prov": "Illes Balears"
   },
   {
-   "id": "C623I",
-   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 26.6,
-   "prov": "Las Palmas"
+   "id": "3125Y",
+   "nombre": "San Sebastian de los Reyes",
+   "min": 25.8,
+   "prov": "Madrid"
   },
   {
-   "id": "0281Y",
-   "nombre": "Blanes Jardin Botanico",
-   "min": 26.4,
-   "prov": "Girona"
+   "id": "3245Y",
+   "nombre": "Tembleque",
+   "min": 25.7,
+   "prov": "Toledo"
   },
   {
-   "id": "0244X",
-   "nombre": "Vilassar de Dalt",
-   "min": 26.3,
-   "prov": "Barcelona"
+   "id": "3191E",
+   "nombre": "Colmenar Viejo/Famet",
+   "min": 25.6,
+   "prov": "Madrid"
   },
   {
-   "id": "0252D",
-   "nombre": "Arenys de Mar",
-   "min": 26.3,
-   "prov": "Barcelona"
+   "id": "B603X",
+   "nombre": "Colònia Sant Pere-Can Mengol",
+   "min": 25.6,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "3194Y",
+   "nombre": "Pozuelo de Alarcon (Automática)",
+   "min": 25.5,
+   "prov": "Madrid"
   }
  ],
  "top_fresco": [
   {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 6.8,
+   "prov": "Granada"
+  },
+  {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 9.2,
+   "min": 7.8,
    "prov": "Salamanca"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 9.4,
-   "prov": "Segovia"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 8.7,
+   "prov": "Ávila"
+  },
+  {
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 8.7,
+   "prov": "Granada"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 9.7,
+   "min": 9.0,
    "prov": "León"
-  },
-  {
-   "id": "1410X",
-   "nombre": "Sobrado dos Monxes",
-   "min": 9.8,
-   "prov": "A Coruña"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 9.8,
+   "min": 10.7,
    "prov": "Zamora"
   },
   {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": 9.8,
-   "prov": "Lleida"
+   "id": "C430E",
+   "nombre": "Izaña",
+   "min": 10.7,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "9838B",
-   "nombre": "Benasque",
-   "min": 9.8,
-   "prov": "Huesca"
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 10.8,
+   "prov": "Cuenca"
   },
   {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 10.0,
-   "prov": "Lleida"
+   "id": "C101A",
+   "nombre": "Roque de los Muchachos",
+   "min": 10.9,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "9657X",
    "nombre": "Esterri D?aneu",
-   "min": 10.0,
+   "min": 11.1,
    "prov": "Lleida"
-  },
-  {
-   "id": "0312X",
-   "nombre": "Sant Pau de Seguries",
-   "min": 10.1,
-   "prov": "Girona"
   }
  ]
 }

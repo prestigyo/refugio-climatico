@@ -2507,6 +2507,8 @@ PAGINA_BETA = r"""<!doctype html>
  .result{font-size:15.5px;color:var(--ink);margin:14px 0 0;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
  .result b{font-weight:700}
  .result .chip{display:inline-block;font-weight:700;font-size:12.5px;padding:4px 11px;border-radius:999px;color:#160f08;margin-right:10px}
+ .certbadge{display:block;margin-top:12px;background:rgba(99,182,154,.12);border:1px solid var(--c-bien);color:#8fd7bd;font-size:14px;font-weight:600;padding:10px 14px;border-radius:10px;text-decoration:none;line-height:1.4}
+ .certbadge:hover{background:rgba(99,182,154,.2)}
  .foot-note{font-size:12.5px;color:var(--muted2);margin-top:10px}
  footer{margin-top:54px;border-top:1px solid var(--line);background:var(--surface)}
  .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding:44px 0 28px}
@@ -2624,6 +2626,7 @@ PAGINA_BETA = r"""<!doctype html>
 </div>
 <script>
 const DATA=__DATA__;
+const SITE="__SITE__";
 function banda(nt){if(nt<1)return["Refugio","var(--c-ref)"];if(nt<10)return["Se duerme bien","var(--c-bien)"];if(nt<30)return["Templado","var(--c-temp)"];if(nt<60)return["Se suda","var(--c-suda)"];return["Horno","var(--c-horno)"];}
 function num(nt){return nt===0?"0":(nt<10?nt.toFixed(1).replace(".",","):Math.round(nt)+"");}
 var prov=document.getElementById("prov"),est=document.getElementById("est");
@@ -2643,7 +2646,8 @@ function mostrar(){
   tv.style.bottom=pos+"%"; tv.style.display="block"; document.getElementById("tuv-val").textContent=num(e.nt);
   var r=document.getElementById("result");
   r.hidden=false;
-  r.innerHTML="<span class='chip' style='background:"+b[1]+"'>"+b[0]+"</span><b>"+e.l+"</b> ("+prov.value+"), "+e.a+" m — <b>"+num(e.nt)+"</b> noches tropicales al año.";
+  var cert=e.c?"<a class='certbadge' href='"+SITE+"/certificados/"+e.c+"/'>Este pueblo es un refugio climático certificado. Ver su certificado →</a>":"";
+  r.innerHTML="<span class='chip' style='background:"+b[1]+"'>"+b[0]+"</span><b>"+e.l+"</b> ("+prov.value+"), "+e.a+" m — <b>"+num(e.nt)+"</b> noches tropicales al año."+cert;
   // En móvil la escala queda arriba, fuera de pantalla: la traemos a la vista
   // para que se aprecie el pin de tu pueblo al seleccionar.
   if(window.matchMedia("(max-width:660px)").matches){
@@ -2659,7 +2663,8 @@ est.addEventListener("change",mostrar);
 
 
 def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> str:
-    beta = {prov: [{"l": e["loc"], "nt": e["nt"], "a": e["alt"]}
+    beta = {prov: [dict(l=e["loc"], nt=e["nt"], a=e["alt"],
+                        **({"c": slug(e["loc"])} if e["nt"] < 1 else {}))
                    for e in sorted(lista, key=lambda x: (x["nt"], -x["alt"]))]
             for prov, lista in datos["provincias"].items()}
     data_json = json.dumps(beta, ensure_ascii=False, separators=(",", ":"))

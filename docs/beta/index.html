@@ -90,6 +90,18 @@
  .fcol a:hover{opacity:1;color:var(--brand)}
  .fabout{font-size:14.5px;color:var(--muted);max-width:34ch}
  .fbar{border-top:1px solid var(--line);padding:18px 0;font-size:13px;color:var(--muted)}
+ .sec-h{font-family:var(--font-d);font-weight:700;font-size:clamp(20px,3.5vw,26px);margin:46px 0 4px}
+ .sec-s{color:var(--muted);font-size:15px;margin:0 0 14px;max-width:60ch}
+ .gifmod{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:14px 0}
+ .gifmod img{width:100%;height:auto;display:block;border-bottom:1px solid var(--line)}
+ .gifmod .gm-b{padding:15px 18px}
+ .gifmod .gm-b a{color:var(--brand);font-weight:600;text-decoration:none}
+ .gifmod .gm-b a:hover{text-decoration:underline}
+ .mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:14px 0}
+ .card2{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;color:var(--ink)}
+ .card2:hover{border-color:var(--brand)}
+ .card2 h3{font-family:var(--font-d);font-weight:700;font-size:18px;margin:0 0 6px}
+ .card2 p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.5}
  @media(max-width:660px){.scale-h-wrap{display:none}.scale-v-wrap{display:block}.fgrid{grid-template-columns:1fr 1fr}}
  @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
 </style>
@@ -100,7 +112,7 @@
   <nav class="nav"><div class="in">
     <a class="brand" href="https://nochetropical.es/"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg>nochetropical.es</a>
     <div class="menu">
-      <a href="https://nochetropical.es/" aria-current="page">Inicio</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking</a><a href="https://nochetropical.es/parte/">El parte</a><a href="https://nochetropical.es/certificados/">Certificados</a><a href="https://nochetropical.es/refugios-y-espana-vaciada/">Artículos</a><a href="https://nochetropical.es/metodologia/">Metodología</a>
+      <a href="https://nochetropical.es/" aria-current="page">Inicio</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa</a><a href="https://nochetropical.es/ola-de-calor/">Ola de calor</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking</a><a href="https://nochetropical.es/parte/">El parte</a><a href="https://nochetropical.es/certificados/">Certificados</a><a href="#articulos">Artículos</a><a href="https://nochetropical.es/metodologia/">Metodología</a>
     </div>
   </div></nav>
   <header class="hero"><div class="in">
@@ -137,10 +149,30 @@
     <div class="find">
       <div class="field sel"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
       <div class="field sel"><select id="est" aria-label="Estación"><option value="">…y tu estación</option></select></div>
-      <button type="button" id="ver">Ver mi pueblo →</button>
     </div>
     <p class="result" id="result" hidden></p>
     <p class="foot-note">Con las 848 estaciones de AEMET · media de los veranos 2017–2026.</p>
+  </div></section>
+  <section><div class="in">
+    <h2 class="sec-h">La ola de calor, noche a noche</h2>
+    <p class="sec-s">De día casi toda España arde; de noche, no. El mapa que dio origen al proyecto, con datos de AEMET día a día.</p>
+    <div class="gifmod">
+      <img src="https://nochetropical.es/ola-minimas.gif" alt="Mapa animado de las temperaturas mínimas nocturnas de AEMET durante la ola de calor" loading="lazy">
+      <div class="gm-b"><a href="https://nochetropical.es/ola-de-calor/">Ver el mapa animado completo, con Canarias y las flechas a los refugios →</a></div>
+    </div>
+    <h2 class="sec-h">Explora los datos</h2>
+    <div class="mods">
+      <a class="card2" href="https://nochetropical.es/mapa-estaciones/"><h3>Mapa interactivo</h3><p>Las 848 estaciones de AEMET sobre el mapa de España.</p></a>
+      <a class="card2" href="https://nochetropical.es/ranking-noches-tropicales/"><h3>Ranking nacional</h3><p>Dónde se duerme mejor y peor de toda España.</p></a>
+      <a class="card2" href="https://nochetropical.es/parte/"><h3>El parte de la noche</h3><p>Quién durmió fresco anoche. Cada mañana.</p></a>
+      <a class="card2" href="https://nochetropical.es/certificados/"><h3>Certificados</h3><p>Los pueblos acreditados como refugio climático.</p></a>
+    </div>
+    <h2 class="sec-h" id="articulos">Artículos</h2>
+    <div class="mods">
+      <a class="card2" href="https://nochetropical.es/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
+      <a class="card2" href="https://nochetropical.es/refugio-climatico-natural/"><h3>Refugio climático natural</h3><p>Combatir el calor sin aire acondicionado, como se hacía antes.</p></a>
+      <a class="card2" href="https://nochetropical.es/refugios-y-espana-vaciada/"><h3>Refugios y España vaciada</h3><p>El frío que despobló estos pueblos es hoy su mayor activo.</p></a>
+    </div>
   </div></section>
   <footer>
     <div class="in fgrid">
@@ -164,6 +196,9 @@ Object.keys(DATA).forEach(function(p){var o=document.createElement("option");o.v
 prov.addEventListener("change",function(){
   est.innerHTML='<option value="">…y tu estación</option>';
   (DATA[prov.value]||[]).forEach(function(e,i){var o=document.createElement("option");o.value=i;o.textContent=e.l+" ("+e.a+" m)";est.appendChild(o);});
+  document.getElementById("result").hidden=true;
+  document.getElementById("tu-h").style.display="none";
+  document.getElementById("tu-v").style.display="none";
 });
 function mostrar(){
   var lst=DATA[prov.value]; if(!lst||est.value==="")return;
@@ -175,7 +210,6 @@ function mostrar(){
   r.hidden=false;
   r.innerHTML="<span class='chip' style='background:"+b[1]+"'>"+b[0]+"</span><b>"+e.l+"</b> ("+prov.value+"), "+e.a+" m — <b>"+num(e.nt)+"</b> noches tropicales al año.";
 }
-document.getElementById("ver").addEventListener("click",mostrar);
 est.addEventListener("change",mostrar);
 </script>
 </body>

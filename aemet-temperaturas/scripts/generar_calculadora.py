@@ -2418,10 +2418,20 @@ PAGINA_BETA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Beta · El termómetro de las noches tropicales | nochetropical.es</title>
-<meta name="description" content="Versión en pruebas del nuevo diseño de nochetropical.es.">
+<title>El termómetro de las noches tropicales: ¿dónde se duerme fresco en España? | nochetropical.es</title>
+<meta name="description" content="¿Dónde se duerme fresco en España? Diez veranos de datos de AEMET (2017–2026) sobre las noches tropicales, pueblo a pueblo. Busca tu pueblo en el termómetro, mira el mapa animado de la ola de calor y aprende a localizar los refugios climáticos naturales.">
 <meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="__SITE__/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="El termómetro de las noches tropicales">
+<meta property="og:description" content="¿Dónde se duerme fresco en España? Diez veranos de datos de AEMET, pueblo a pueblo.">
+<meta property="og:url" content="__SITE__/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
 <link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
 <style>
  :root{
    --bg:#080705; --surface:#16120c; --panel:#211a12; --ink:#f2eae0;
@@ -2517,6 +2527,11 @@ PAGINA_BETA = r"""<!doctype html>
  .card2:hover{border-color:var(--brand)}
  .card2 h3{font-family:var(--font-d);font-weight:700;font-size:18px;margin:0 0 6px}
  .card2 p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.5}
+ .leer{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:0 14px 14px 0;padding:18px 20px;margin:16px 0 0}
+ .leer h3{font-family:var(--font-d);font-weight:700;font-size:19px;margin:0 0 8px}
+ .leer p{font-size:15px;color:var(--muted);margin:0 0 10px;line-height:1.6}
+ .leer p:last-child{margin-bottom:0}
+ .leer b{color:var(--ink)}
  @media(max-width:660px){.scale-h-wrap{display:none}.scale-v-wrap{display:block}.fgrid{grid-template-columns:1fr 1fr}}
  @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
 </style>
@@ -2575,6 +2590,11 @@ PAGINA_BETA = r"""<!doctype html>
       <img src="__SITE__/ola-minimas.gif" alt="Mapa animado de las temperaturas mínimas nocturnas de AEMET durante la ola de calor" loading="lazy">
       <div class="gm-b"><a href="__SITE__/ola-de-calor/">Ver el mapa animado completo, con Canarias y las flechas a los refugios →</a></div>
     </div>
+    <div class="leer">
+      <h3>Cómo leer el mapa para encontrar un refugio</h3>
+      <p>La clave está en el <b>color</b>. En el mapa de mínimas nocturnas, busca las zonas que se quedan <b>azules</b> mientras todo alrededor se pone verde, amarillo o rojo. El <b>verde empieza en los 18&nbsp;°C</b>; el azul es más fresco todavía.</p>
+      <p>Un <b>refugio climático natural</b> es justo eso: un punto que <b>aguanta azul</b> —por debajo de 18&nbsp;°C de madrugada— noche tras noche, incluso en plena ola de calor, sin llegar al verde y mucho menos al amarillo. Si tu zona sigue azul cuando la costa arde en rojo, ahí se duerme fresco de verdad.</p>
+    </div>
     <h2 class="sec-h">Explora los datos</h2>
     <div class="mods">
       <a class="card2" href="__SITE__/mapa-estaciones/"><h3>Mapa interactivo</h3><p>Las 848 estaciones de AEMET sobre el mapa de España.</p></a>
@@ -2624,6 +2644,12 @@ function mostrar(){
   var r=document.getElementById("result");
   r.hidden=false;
   r.innerHTML="<span class='chip' style='background:"+b[1]+"'>"+b[0]+"</span><b>"+e.l+"</b> ("+prov.value+"), "+e.a+" m — <b>"+num(e.nt)+"</b> noches tropicales al año.";
+  // En móvil la escala queda arriba, fuera de pantalla: la traemos a la vista
+  // para que se aprecie el pin de tu pueblo al seleccionar.
+  if(window.matchMedia("(max-width:660px)").matches){
+    var rm=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    tv.scrollIntoView({behavior:rm?"auto":"smooth",block:"center"});
+  }
 }
 est.addEventListener("change",mostrar);
 </script>
@@ -2637,8 +2663,10 @@ def construir_pagina_beta(datos: dict, site: str) -> str:
                    for e in sorted(lista, key=lambda x: (x["nt"], -x["alt"]))]
             for prov, lista in datos["provincias"].items()}
     data_json = json.dumps(beta, ensure_ascii=False, separators=(",", ":"))
+    schema = json.dumps(construir_schema(datos, site), ensure_ascii=False)
     return (PAGINA_BETA
             .replace("__DATA__", data_json)
+            .replace("__SCHEMA__", schema)
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
 

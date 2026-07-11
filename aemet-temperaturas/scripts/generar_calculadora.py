@@ -2378,6 +2378,202 @@ def construir_pagina_ola(site: str, fecha_iso: str, fecha_txt: str) -> str:
             .replace("__SITE__", site))
 
 
+PAGINA_BETA = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beta · El termómetro de las noches tropicales | nochetropical.es</title>
+<meta name="description" content="Versión en pruebas del nuevo diseño de nochetropical.es.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<style>
+ :root{
+   --bg:#080705; --surface:#16120c; --panel:#211a12; --ink:#f2eae0;
+   --muted:#c3b6a2; --muted2:#9a8d79; --line:#3a3122;
+   --brand:#ee9769; --brand-ink:#160f08;
+   --shadow:0 1px 2px rgba(0,0,0,.5),0 12px 34px rgba(0,0,0,.45);
+   --c-ref:#3f9aa8; --c-bien:#63b6a0; --c-temp:#e6b64e; --c-suda:#e6873f; --c-horno:#d8462e;
+   --font-d:Georgia,"Times New Roman",serif;
+   --font-b:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+   --font-m:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+ }
+ *{box-sizing:border-box}
+ body{margin:0}
+ .betabar{background:#2a1c0f;color:#e6c9a8;font-size:12.5px;text-align:center;padding:7px 16px;border-bottom:1px solid #4a3420}
+ .betabar a{color:var(--brand)}
+ .pg{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height:1.55}
+ .in{max-width:1100px;margin:0 auto;padding:0 24px}
+ .nav{position:sticky;top:0;z-index:20;background:rgba(8,7,5,.85);backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid var(--line)}
+ .nav .in{display:flex;align-items:center;gap:20px;height:60px}
+ .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;white-space:nowrap}
+ .menu{margin-left:auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+ .menu::-webkit-scrollbar{display:none}
+ .menu a{font-size:14.5px;color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;white-space:nowrap}
+ .menu a:hover{color:var(--ink);background:rgba(238,151,105,.14)}
+ .menu a[aria-current]{color:var(--brand);font-weight:600}
+ .hero{padding:50px 0 6px}
+ .kick{font:600 12px/1 var(--font-b);letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin:0 0 14px}
+ h1{font-family:var(--font-d);font-weight:700;font-size:clamp(30px,5vw,50px);line-height:1.06;margin:0;letter-spacing:-.01em;text-wrap:balance}
+ .lede{font-size:clamp(16.5px,2.2vw,19px);color:var(--muted);max-width:56ch;margin:18px 0 0}
+ .scale-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:28px 26px 22px;margin:38px 0}
+ .scale-h2{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:56px}
+ .scale-h2 .t{font-family:var(--font-d);font-weight:700;font-size:20px}
+ .scale-h2 .s{font-size:13.5px;color:var(--muted)}
+ .howto{font-size:14px;color:var(--muted);border-top:1px dashed var(--line);padding-top:14px;margin-top:6px}
+ .howto b{color:var(--ink)}
+ .lab{font-size:12.5px;font-weight:600;white-space:nowrap;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px 10px;display:inline-block;box-shadow:var(--shadow);color:var(--ink)}
+ .lab .val{font-family:var(--font-m);color:var(--muted);font-size:11.5px;font-weight:400;margin-left:3px}
+ .scale{position:relative;height:210px}
+ .track{position:absolute;left:0;right:0;top:96px;height:26px;border-radius:13px;background:linear-gradient(90deg,var(--c-ref),var(--c-bien) 18%,var(--c-temp) 46%,var(--c-suda) 72%,var(--c-horno));box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+ .band{position:absolute;top:130px;transform:translateX(-50%);font-size:12px;color:var(--muted);text-align:center;width:96px;line-height:1.25}
+ .divi{position:absolute;top:90px;height:38px;width:1px;background:rgba(242,234,224,.25)}
+ .pin{position:absolute;top:60px;transform:translateX(-50%);text-align:center}
+ .pin .stem{width:2px;height:34px;background:var(--ink);margin:5px auto 0;opacity:.5}
+ .pin .dot{width:13px;height:13px;border-radius:50%;background:var(--panel);border:3px solid var(--ink);margin:-6px auto 0;position:relative;top:2px}
+ .pin.tu .dot{background:var(--brand);border-color:var(--brand);width:16px;height:16px}
+ .pin.tu .lab{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+ .pin.tu .lab .val{color:var(--brand-ink)}
+ .axis{position:absolute;left:0;right:0;top:170px;display:flex;justify-content:space-between;font-family:var(--font-m);font-size:11.5px;color:var(--muted)}
+ .scale-v-wrap{display:none}
+ .scale-v{position:relative;height:440px;margin:2px 0 16px}
+ .vtrack{position:absolute;left:56px;top:0;bottom:0;width:26px;border-radius:13px;background:linear-gradient(to top,var(--c-ref),var(--c-bien) 18%,var(--c-temp) 46%,var(--c-suda) 72%,var(--c-horno));box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+ .vaxis-top{position:absolute;left:6px;top:-4px;font-family:var(--font-m);font-size:11.5px;color:var(--muted)}
+ .vaxis-bot{position:absolute;left:6px;bottom:-4px;font-family:var(--font-m);font-size:11.5px;color:var(--muted);white-space:nowrap}
+ .vpin{position:absolute;left:0;transform:translateY(50%)}
+ .vpin .vdot{position:absolute;left:69px;transform:translateX(-50%);bottom:-7px;width:14px;height:14px;border-radius:50%;background:var(--panel);border:3px solid var(--ink);box-shadow:0 0 0 3px var(--bg)}
+ .vpin .vstem{position:absolute;left:82px;bottom:-1px;width:18px;height:2px;background:var(--ink);opacity:.5}
+ .vpin .lab{position:absolute;left:106px;bottom:-12px}
+ .vpin.tu .vdot{background:var(--brand);border-color:var(--brand);width:16px;height:16px}
+ .vpin.tu .lab{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+ .vpin.tu .lab .val{color:var(--brand-ink)}
+ .legend{display:flex;flex-wrap:wrap;gap:9px 15px;font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:14px}
+ .legend span{display:inline-flex;align-items:center}
+ .legend i{width:12px;height:12px;border-radius:3px;margin-right:6px}
+ .find{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;margin:30px 0 8px}
+ .field{position:relative;flex:1;min-width:190px}
+ .field select,.find input{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--ink);font-size:15px;padding:13px 14px;font-family:var(--font-b);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+ .field select:hover,.find input:hover{border-color:#7d6a49}
+ .field.sel select{appearance:none;-webkit-appearance:none;padding-right:40px;cursor:pointer}
+ .field.sel::after{content:"";position:absolute;right:16px;top:50%;width:9px;height:9px;border-right:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+ .find select:focus,.find input:focus{outline:2px solid var(--brand);outline-offset:1px}
+ .find button{background:var(--brand);color:var(--brand-ink);border:0;border-radius:11px;font-weight:700;font-size:15px;padding:13px 20px;cursor:pointer;white-space:nowrap}
+ .find button:hover{filter:brightness(1.08)}
+ .result{font-size:15.5px;color:var(--ink);margin:14px 0 0;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+ .result b{font-weight:700}
+ .result .chip{display:inline-block;font-weight:700;font-size:12.5px;padding:4px 11px;border-radius:999px;color:#160f08;margin-right:10px}
+ .foot-note{font-size:12.5px;color:var(--muted2);margin-top:10px}
+ footer{margin-top:54px;border-top:1px solid var(--line);background:var(--surface)}
+ .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding:44px 0 28px}
+ .fcol h4{font:600 11px/1 var(--font-b);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+ .fcol a{display:block;color:var(--ink);text-decoration:none;font-size:15px;margin:0 0 9px;opacity:.9}
+ .fcol a:hover{opacity:1;color:var(--brand)}
+ .fabout{font-size:14.5px;color:var(--muted);max-width:34ch}
+ .fbar{border-top:1px solid var(--line);padding:18px 0;font-size:13px;color:var(--muted)}
+ @media(max-width:660px){.scale-h-wrap{display:none}.scale-v-wrap{display:block}.fgrid{grid-template-columns:1fr 1fr}}
+ @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="betabar">Versión <b>beta</b> del nuevo diseño · en pruebas · <a href="__HOME__">volver a la web actual</a></div>
+<div class="pg">
+  <nav class="nav"><div class="in">
+    <a class="brand" href="__HOME__"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg>nochetropical.es</a>
+    <div class="menu">
+      <a href="__HOME__" aria-current="page">Inicio</a><a href="__SITE__/mapa-estaciones/">Mapa</a><a href="__SITE__/ranking-noches-tropicales/">Ranking</a><a href="__SITE__/parte/">El parte</a><a href="__SITE__/certificados/">Certificados</a><a href="__SITE__/refugios-y-espana-vaciada/">Artículos</a><a href="__SITE__/metodologia/">Metodología</a>
+    </div>
+  </div></nav>
+  <header class="hero"><div class="in">
+    <p class="kick">¿Dónde se duerme fresco en España?</p>
+    <h1>El termómetro de las noches tropicales</h1>
+    <p class="lede">Cuántas noches al año no baja de 20&nbsp;°C, según diez veranos de datos de AEMET (2017–2026). Cuantas más noches tropicales, peor se duerme. Elige tu pueblo y mira en qué zona cae:</p>
+  </div></header>
+  <section><div class="in">
+    <div class="scale-card">
+      <div class="scale-h2"><span class="t">Noches tropicales al año</span><span class="s">De ~92 noches de verano · media 2017–2026</span></div>
+      <div class="scale-h-wrap"><div class="scale" role="img" aria-label="Escala de noches tropicales de 0 a 90.">
+        <div class="track"></div>
+        <div class="divi" style="left:1.1%"></div><div class="divi" style="left:11%"></div><div class="divi" style="left:33%"></div><div class="divi" style="left:67%"></div>
+        <div class="band" style="left:6%">Refugio</div><div class="band" style="left:22%">Se duerme bien</div><div class="band" style="left:50%">Templado</div><div class="band" style="left:67%">Se suda</div><div class="band" style="left:84%">Horno</div>
+        <div class="pin" style="left:0%"><span class="lab">Cedrillas<span class="val">0</span></span><div class="stem"></div><div class="dot"></div></div>
+        <div class="pin" style="left:71%;top:0"><span class="lab">Valencia<span class="val">64</span></span><div class="stem" style="height:70px"></div><div class="dot"></div></div>
+        <div class="pin tu" id="tu-h" style="left:0%;display:none"><span class="lab">Tu pueblo<span class="val" id="tuh-val"></span></span><div class="stem"></div><div class="dot"></div></div>
+        <div class="axis"><span>0 noches</span><span>90</span></div>
+      </div></div>
+      <div class="scale-v-wrap">
+        <div class="scale-v" role="img" aria-label="Termómetro vertical de noches tropicales.">
+          <span class="vaxis-top">90</span><span class="vaxis-bot">0 noches</span>
+          <div class="vtrack"></div>
+          <div class="vpin" style="bottom:0%"><span class="vdot"></span><span class="vstem"></span><span class="lab">Cedrillas<span class="val">0</span></span></div>
+          <div class="vpin" style="bottom:71%"><span class="vdot"></span><span class="vstem"></span><span class="lab">Valencia<span class="val">64</span></span></div>
+          <div class="vpin tu" id="tu-v" style="bottom:0%;display:none"><span class="vdot"></span><span class="vstem"></span><span class="lab">Tu pueblo<span class="val" id="tuv-val"></span></span></div>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--c-ref)"></i>Refugio</span><span><i style="background:var(--c-bien)"></i>Se duerme bien</span><span><i style="background:var(--c-temp)"></i>Templado</span><span><i style="background:var(--c-suda)"></i>Se suda</span><span><i style="background:var(--c-horno)"></i>Horno</span>
+        </div>
+      </div>
+      <p class="howto">Cómo leerlo: cuanto más <b>abajo/izquierda</b>, más fresco (un <b>refugio</b> es &lt;1 noche tropical al año); cuanto más <b>arriba/derecha</b>, más se suda. Cada pueblo cae en una de las cinco <b>zonas</b>.</p>
+    </div>
+    <div class="find">
+      <div class="field sel"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
+      <div class="field sel"><select id="est" aria-label="Estación"><option value="">…y tu estación</option></select></div>
+      <button type="button" id="ver">Ver mi pueblo →</button>
+    </div>
+    <p class="result" id="result" hidden></p>
+    <p class="foot-note">Con las 848 estaciones de AEMET · media de los veranos 2017–2026.</p>
+  </div></section>
+  <footer>
+    <div class="in fgrid">
+      <div class="fcol">
+        <a class="brand" href="__HOME__" style="margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--surface)"/></svg>nochetropical.es</a>
+        <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p>
+      </div>
+      <div class="fcol"><h4>Explora</h4><a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a><a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a><a href="__SITE__/parte/">El parte de la noche</a><a href="__SITE__/certificados/">Certificados</a></div>
+      <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a><a href="__SITE__/prensa/">Sala de prensa</a><a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a><a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">Licencia CC BY 4.0</a></div>
+      <div class="fcol"><h4>Proyecto</h4><a href="__HOME__">Sobre el proyecto</a><a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a><a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>
+    </div>
+    <div class="in fbar">© 2026 nochetropical.es · Datos de AEMET bajo CC BY 4.0 · Ramón J. Lowesting</div>
+  </footer>
+</div>
+<script>
+const DATA=__DATA__;
+function banda(nt){if(nt<1)return["Refugio","var(--c-ref)"];if(nt<10)return["Se duerme bien","var(--c-bien)"];if(nt<30)return["Templado","var(--c-temp)"];if(nt<60)return["Se suda","var(--c-suda)"];return["Horno","var(--c-horno)"];}
+function num(nt){return nt===0?"0":(nt<10?nt.toFixed(1).replace(".",","):Math.round(nt)+"");}
+var prov=document.getElementById("prov"),est=document.getElementById("est");
+Object.keys(DATA).forEach(function(p){var o=document.createElement("option");o.value=p;o.textContent=p;prov.appendChild(o);});
+prov.addEventListener("change",function(){
+  est.innerHTML='<option value="">…y tu estación</option>';
+  (DATA[prov.value]||[]).forEach(function(e,i){var o=document.createElement("option");o.value=i;o.textContent=e.l+" ("+e.a+" m)";est.appendChild(o);});
+});
+function mostrar(){
+  var lst=DATA[prov.value]; if(!lst||est.value==="")return;
+  var e=lst[+est.value], pos=Math.min(e.nt,90)/90*100, b=banda(e.nt);
+  var th=document.getElementById("tu-h"),tv=document.getElementById("tu-v");
+  th.style.left=pos+"%"; th.style.display="block"; document.getElementById("tuh-val").textContent=num(e.nt);
+  tv.style.bottom=pos+"%"; tv.style.display="block"; document.getElementById("tuv-val").textContent=num(e.nt);
+  var r=document.getElementById("result");
+  r.hidden=false;
+  r.innerHTML="<span class='chip' style='background:"+b[1]+"'>"+b[0]+"</span><b>"+e.l+"</b> ("+prov.value+"), "+e.a+" m — <b>"+num(e.nt)+"</b> noches tropicales al año.";
+}
+document.getElementById("ver").addEventListener("click",mostrar);
+est.addEventListener("change",mostrar);
+</script>
+</body>
+</html>
+"""
+
+
+def construir_pagina_beta(datos: dict, site: str) -> str:
+    beta = {prov: [{"l": e["loc"], "nt": e["nt"], "a": e["alt"]}
+                   for e in sorted(lista, key=lambda x: (x["nt"], -x["alt"]))]
+            for prov, lista in datos["provincias"].items()}
+    data_json = json.dumps(beta, ensure_ascii=False, separators=(",", ":"))
+    return (PAGINA_BETA
+            .replace("__DATA__", data_json)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
 def main() -> int:
     estaciones, total = cargar_estaciones()
     datos = construir_datos(estaciones, total)
@@ -2421,6 +2617,11 @@ def main() -> int:
     (DOCS_DIR / "ola-de-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "ola-de-calor" / "index.html").write_text(
         construir_pagina_ola(site, fecha_mod_iso, fecha_mod_txt), encoding="utf-8")
+    # Portada BETA (nuevo diseño en pruebas): docs/beta/, con noindex y SIN
+    # enlazar desde el sitio ni el sitemap. Para validar en real antes de promover.
+    (DOCS_DIR / "beta").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "beta" / "index.html").write_text(
+        construir_pagina_beta(datos, site), encoding="utf-8")
     (DOCS_DIR / "metodologia").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "metodologia" / "index.html").write_text(
         construir_pagina_metodologia(estaciones, total, site, fecha_mod_iso, fecha_mod_txt),
@@ -2446,9 +2647,10 @@ def main() -> int:
     # (la home + cada carpeta con un index.html). Ninguna página se queda fuera.
     hoy = date.today().isoformat()
     urls = [site + "/"] + sorted(
-        f"{site}/{f.parent.relative_to(DOCS_DIR).as_posix()}/"
+        f"{site}/{rel}/"
         for patron in ("*/index.html", "*/*/index.html")
-        for f in DOCS_DIR.glob(patron))
+        for f in DOCS_DIR.glob(patron)
+        if not (rel := f.parent.relative_to(DOCS_DIR).as_posix()).startswith("beta"))
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'
         f'<priority>{"1.0" if u == site + "/" else "0.7"}</priority></url>' for u in urls)

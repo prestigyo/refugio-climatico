@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-10",
- "total": 828,
- "tropicales": 311,
- "ecuatoriales": 21,
+ "fecha": "2026-07-11",
+ "total": 831,
+ "tropicales": 232,
+ "ecuatoriales": 4,
  "peor": {
-  "id": "6088X",
-  "nombre": "Torremolinos",
-  "min": 28.4,
-  "prov": "Málaga"
+  "id": "B569X",
+  "nombre": "Capdepera-Faro",
+  "min": 25.4,
+  "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "5511",
-  "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 6.8,
-  "prov": "Granada"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 5.9,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "6088X",
-   "nombre": "Torremolinos",
-   "min": 28.4,
-   "prov": "Málaga"
-  },
-  {
-   "id": "3182Y",
-   "nombre": "Arganda del Rey",
-   "min": 26.8,
-   "prov": "Madrid"
-  },
-  {
-   "id": "3195",
-   "nombre": "Madrid Retiro",
-   "min": 26.7,
-   "prov": "Madrid"
-  },
-  {
-   "id": "3129",
-   "nombre": "Madrid/Barajas",
-   "min": 26.4,
-   "prov": "Madrid"
-  },
-  {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 26.4,
+   "min": 25.4,
    "prov": "Illes Balears"
   },
   {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 26.1,
-   "prov": "Illes Balears"
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 25.1,
+   "prov": "Almería"
   },
   {
-   "id": "3125Y",
-   "nombre": "San Sebastian de los Reyes",
-   "min": 25.8,
-   "prov": "Madrid"
+   "id": "7031X",
+   "nombre": "Murcia/San Javier",
+   "min": 25.1,
+   "prov": "Murcia"
   },
   {
-   "id": "3245Y",
-   "nombre": "Tembleque",
-   "min": 25.7,
-   "prov": "Toledo"
+   "id": "7002Y",
+   "nombre": "Águilas",
+   "min": 24.9,
+   "prov": "Murcia"
   },
   {
-   "id": "3191E",
-   "nombre": "Colmenar Viejo/Famet",
-   "min": 25.6,
-   "prov": "Madrid"
+   "id": "7178I",
+   "nombre": "Murcia",
+   "min": 24.9,
+   "prov": "Murcia"
   },
   {
-   "id": "B603X",
-   "nombre": "Colònia Sant Pere-Can Mengol",
-   "min": 25.6,
-   "prov": "Illes Balears"
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
+   "min": 24.8,
+   "prov": "Murcia"
+  },
+  {
+   "id": "0002I",
+   "nombre": "Vandellós",
+   "min": 24.7,
+   "prov": "Tarragona"
+  },
+  {
+   "id": "7244X",
+   "nombre": "Orihuela Desamparados",
+   "min": 24.7,
+   "prov": "Alicante"
+  },
+  {
+   "id": "0076",
+   "nombre": "Barcelona Aeropuerto",
+   "min": 24.6,
+   "prov": "Barcelona"
+  },
+  {
+   "id": "6325O",
+   "nombre": "Almería/Aeropuerto",
+   "min": 24.6,
+   "prov": "Almería"
   }
  ],
  "top_fresco": [
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 6.8,
-   "prov": "Granada"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 5.9,
+   "prov": "Ávila"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 8.4,
+   "prov": "Soria"
+  },
+  {
+   "id": "C406G",
+   "nombre": "Cañadas Parador",
+   "min": 8.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 9.0,
+   "prov": "Segovia"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 7.8,
+   "min": 9.0,
    "prov": "Salamanca"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 8.7,
-   "prov": "Ávila"
-  },
-  {
-   "id": "5516D",
-   "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 8.7,
-   "prov": "Granada"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
    "min": 9.0,
-   "prov": "León"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 10.7,
-   "prov": "Zamora"
-  },
-  {
-   "id": "C430E",
-   "nombre": "Izaña",
-   "min": 10.7,
-   "prov": "Santa Cruz de Tenerife"
+   "prov": "Madrid"
   },
   {
    "id": "8210Y",
    "nombre": "Salvacañete",
-   "min": 10.8,
+   "min": 9.0,
    "prov": "Cuenca"
   },
   {
-   "id": "C101A",
-   "nombre": "Roque de los Muchachos",
-   "min": 10.9,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "3013",
+   "nombre": "Molina de Aragón",
+   "min": 9.3,
+   "prov": "Guadalajara"
   },
   {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 11.1,
-   "prov": "Lleida"
+   "id": "2135A",
+   "nombre": "Fresno de Cantiespino",
+   "min": 9.4,
+   "prov": "Segovia"
+  },
+  {
+   "id": "9998X",
+   "nombre": "Bello",
+   "min": 9.4,
+   "prov": "Teruel"
   }
  ]
 }

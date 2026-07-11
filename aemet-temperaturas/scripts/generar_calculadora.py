@@ -1519,6 +1519,12 @@ PAGINA_PRENSA = r"""<!doctype html>
  .card:hover{border-color:var(--teja);text-decoration:none}
  .card span{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:3px}
  .cita{font-family:var(--fm);font-size:13px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px;color:#e3d8c4;line-height:1.5}
+ ul.medios{list-style:none;margin:6px 0 0;padding:0}
+ ul.medios li{padding:14px 0;border-bottom:1px solid var(--line)}
+ ul.medios li:last-child{border-bottom:none}
+ ul.medios a{display:block;color:var(--teja2);font-family:var(--fd);font-weight:600;font-size:clamp(16px,2.4vw,18.5px);line-height:1.3;text-decoration:none}
+ ul.medios a:hover{text-decoration:underline}
+ ul.medios .meta{display:block;font-family:var(--fm);font-size:12px;color:var(--muted);margin-top:6px}
  @media(max-width:520px){.descargas{grid-template-columns:1fr}}
 </style>
 </head>
@@ -1533,6 +1539,11 @@ PAGINA_PRENSA = r"""<!doctype html>
 <section><div class="wrap">
   <div class="kick">En una frase</div>
   <p class="big">No todos los veranos españoles se sufren igual de noche: mientras en las sierras del interior se sigue durmiendo tapado, en buena parte del litoral y de las islas la temperatura no baja de 20&nbsp;°C casi ninguna noche.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kick">Nos han citado</div>
+  <ul class="medios">__MEDIOS__</ul>
 </div></section>
 
 <section><div class="wrap">
@@ -1690,6 +1701,17 @@ PAGINA_RANKING = r"""<!doctype html>
 """
 
 
+# Medios que han citado el proyecto (crece con cada aparición; el más reciente
+# arriba). SOLO entradas con enlace real y verificado — nunca inventar.
+MEDIOS = [
+    {"medio": "iLeon", "grupo": "eldiario.es", "fecha": "10 jul 2026",
+     "titular": "León, uno de los sitios donde mejor se duerme de España pese al "
+                "calor, aunque cada vez más extremo durante la noche",
+     "url": "https://ileon.eldiario.es/provincia/leon-sitios-mejor-duerme-espana-"
+            "pese-calor-vez-extremo-durante-noche_1_13368230.html"},
+]
+
+
 def construir_pagina_prensa(datos: dict, estaciones: list, site: str,
                             fecha_iso: str, fecha_txt: str) -> str:
     m = datos["meta"]
@@ -1723,8 +1745,13 @@ def construir_pagina_prensa(datos: dict, estaciones: list, site: str,
          "description": "Material para prensa: datos, titulares, gráficos descargables, metodología y contacto.",
          "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
         ensure_ascii=False)
+    medios_html = "".join(
+        f'<li><a href="{md["url"]}" target="_blank" rel="noopener">{md["titular"]}</a>'
+        f'<span class="meta">{md["medio"]} · {md["grupo"]} · {md["fecha"]}</span></li>'
+        for md in MEDIOS)
     return (PAGINA_PRENSA
             .replace("__SCHEMA__", schema)
+            .replace("__MEDIOS__", medios_html)
             .replace("__CSS__", _CSS_CHROME)
             .replace("__DATOS__", datos_html)
             .replace("__DESCARGAS__", desc_html)
@@ -2303,6 +2330,14 @@ PAGINA_OLA = r"""<!doctype html>
     </div>
   </div>
 
+  <div class="mapa">
+    <h2>Canarias · mínimas de noche</h2>
+    <div class="gifwrap">
+      <img src="__SITE__/ola-canarias-minimas.gif" alt="Mapa animado de las temperaturas mínimas nocturnas de Canarias (AEMET)" loading="lazy" style="width:100%;height:auto;display:block">
+    </div>
+    <p style="font-size:14px;color:var(--muted);margin-top:12px">En las islas el <b>efecto foehn</b> recalienta hasta la montaña: el interior de Gran Canaria es de los peores sitios de España para dormir de noche. Por eso va en su propio mapa.</p>
+  </div>
+
   <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona. Cada punto es la <b>estación meteorológica</b> y la población donde está; eso <b>no significa que los pueblos de alrededor no pertenezcan a ese mismo refugio climático</b> —el fresco no entiende de límites municipales—. <b>Cedrillas</b>, por ejemplo, abarca también Gúdar, Cabra de Mora, Alcalá de la Selva, Valdelinares, Allepuz o El Castellar. Señalan zonas donde, durante la ola, los colores se mantienen <b>lejos de los rojos más intensos</b>: la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar el calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
 
   <div class="cierre">
@@ -2470,6 +2505,18 @@ PAGINA_BETA = r"""<!doctype html>
  .fcol a:hover{opacity:1;color:var(--brand)}
  .fabout{font-size:14.5px;color:var(--muted);max-width:34ch}
  .fbar{border-top:1px solid var(--line);padding:18px 0;font-size:13px;color:var(--muted)}
+ .sec-h{font-family:var(--font-d);font-weight:700;font-size:clamp(20px,3.5vw,26px);margin:46px 0 4px}
+ .sec-s{color:var(--muted);font-size:15px;margin:0 0 14px;max-width:60ch}
+ .gifmod{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:14px 0}
+ .gifmod img{width:100%;height:auto;display:block;border-bottom:1px solid var(--line)}
+ .gifmod .gm-b{padding:15px 18px}
+ .gifmod .gm-b a{color:var(--brand);font-weight:600;text-decoration:none}
+ .gifmod .gm-b a:hover{text-decoration:underline}
+ .mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:14px 0}
+ .card2{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;color:var(--ink)}
+ .card2:hover{border-color:var(--brand)}
+ .card2 h3{font-family:var(--font-d);font-weight:700;font-size:18px;margin:0 0 6px}
+ .card2 p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.5}
  @media(max-width:660px){.scale-h-wrap{display:none}.scale-v-wrap{display:block}.fgrid{grid-template-columns:1fr 1fr}}
  @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
 </style>
@@ -2480,7 +2527,7 @@ PAGINA_BETA = r"""<!doctype html>
   <nav class="nav"><div class="in">
     <a class="brand" href="__HOME__"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg>nochetropical.es</a>
     <div class="menu">
-      <a href="__HOME__" aria-current="page">Inicio</a><a href="__SITE__/mapa-estaciones/">Mapa</a><a href="__SITE__/ranking-noches-tropicales/">Ranking</a><a href="__SITE__/parte/">El parte</a><a href="__SITE__/certificados/">Certificados</a><a href="__SITE__/refugios-y-espana-vaciada/">Artículos</a><a href="__SITE__/metodologia/">Metodología</a>
+      <a href="__HOME__" aria-current="page">Inicio</a><a href="__SITE__/mapa-estaciones/">Mapa</a><a href="__SITE__/ola-de-calor/">Ola de calor</a><a href="__SITE__/ranking-noches-tropicales/">Ranking</a><a href="__SITE__/parte/">El parte</a><a href="__SITE__/certificados/">Certificados</a><a href="#articulos">Artículos</a><a href="__SITE__/metodologia/">Metodología</a>
     </div>
   </div></nav>
   <header class="hero"><div class="in">
@@ -2517,10 +2564,30 @@ PAGINA_BETA = r"""<!doctype html>
     <div class="find">
       <div class="field sel"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
       <div class="field sel"><select id="est" aria-label="Estación"><option value="">…y tu estación</option></select></div>
-      <button type="button" id="ver">Ver mi pueblo →</button>
     </div>
     <p class="result" id="result" hidden></p>
     <p class="foot-note">Con las 848 estaciones de AEMET · media de los veranos 2017–2026.</p>
+  </div></section>
+  <section><div class="in">
+    <h2 class="sec-h">La ola de calor, noche a noche</h2>
+    <p class="sec-s">De día casi toda España arde; de noche, no. El mapa que dio origen al proyecto, con datos de AEMET día a día.</p>
+    <div class="gifmod">
+      <img src="__SITE__/ola-minimas.gif" alt="Mapa animado de las temperaturas mínimas nocturnas de AEMET durante la ola de calor" loading="lazy">
+      <div class="gm-b"><a href="__SITE__/ola-de-calor/">Ver el mapa animado completo, con Canarias y las flechas a los refugios →</a></div>
+    </div>
+    <h2 class="sec-h">Explora los datos</h2>
+    <div class="mods">
+      <a class="card2" href="__SITE__/mapa-estaciones/"><h3>Mapa interactivo</h3><p>Las 848 estaciones de AEMET sobre el mapa de España.</p></a>
+      <a class="card2" href="__SITE__/ranking-noches-tropicales/"><h3>Ranking nacional</h3><p>Dónde se duerme mejor y peor de toda España.</p></a>
+      <a class="card2" href="__SITE__/parte/"><h3>El parte de la noche</h3><p>Quién durmió fresco anoche. Cada mañana.</p></a>
+      <a class="card2" href="__SITE__/certificados/"><h3>Certificados</h3><p>Los pueblos acreditados como refugio climático.</p></a>
+    </div>
+    <h2 class="sec-h" id="articulos">Artículos</h2>
+    <div class="mods">
+      <a class="card2" href="__SITE__/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
+      <a class="card2" href="__SITE__/refugio-climatico-natural/"><h3>Refugio climático natural</h3><p>Combatir el calor sin aire acondicionado, como se hacía antes.</p></a>
+      <a class="card2" href="__SITE__/refugios-y-espana-vaciada/"><h3>Refugios y España vaciada</h3><p>El frío que despobló estos pueblos es hoy su mayor activo.</p></a>
+    </div>
   </div></section>
   <footer>
     <div class="in fgrid">
@@ -2544,6 +2611,9 @@ Object.keys(DATA).forEach(function(p){var o=document.createElement("option");o.v
 prov.addEventListener("change",function(){
   est.innerHTML='<option value="">…y tu estación</option>';
   (DATA[prov.value]||[]).forEach(function(e,i){var o=document.createElement("option");o.value=i;o.textContent=e.l+" ("+e.a+" m)";est.appendChild(o);});
+  document.getElementById("result").hidden=true;
+  document.getElementById("tu-h").style.display="none";
+  document.getElementById("tu-v").style.display="none";
 });
 function mostrar(){
   var lst=DATA[prov.value]; if(!lst||est.value==="")return;
@@ -2555,7 +2625,6 @@ function mostrar(){
   r.hidden=false;
   r.innerHTML="<span class='chip' style='background:"+b[1]+"'>"+b[0]+"</span><b>"+e.l+"</b> ("+prov.value+"), "+e.a+" m — <b>"+num(e.nt)+"</b> noches tropicales al año.";
 }
-document.getElementById("ver").addEventListener("click",mostrar);
 est.addEventListener("change",mostrar);
 </script>
 </body>

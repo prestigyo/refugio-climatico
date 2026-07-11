@@ -2658,13 +2658,20 @@ est.addEventListener("change",mostrar);
 """
 
 
-def construir_pagina_beta(datos: dict, site: str) -> str:
+def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> str:
     beta = {prov: [{"l": e["loc"], "nt": e["nt"], "a": e["alt"]}
                    for e in sorted(lista, key=lambda x: (x["nt"], -x["alt"]))]
             for prov, lista in datos["provincias"].items()}
     data_json = json.dumps(beta, ensure_ascii=False, separators=(",", ":"))
     schema = json.dumps(construir_schema(datos, site), ensure_ascii=False)
-    return (PAGINA_BETA
+    plantilla = PAGINA_BETA
+    if es_portada:
+        # Como portada real: indexable y sin la barra superior de "beta".
+        plantilla = (plantilla
+                     .replace('<meta name="robots" content="noindex,nofollow">',
+                              '<meta name="robots" content="index,follow,max-image-preview:large">')
+                     .replace('<div class="betabar">Versión <b>beta</b> del nuevo diseño · en pruebas · <a href="__HOME__">volver a la web actual</a></div>\n', ''))
+    return (plantilla
             .replace("__DATA__", data_json)
             .replace("__SCHEMA__", schema)
             .replace("__HOME__", site + "/")
@@ -2677,15 +2684,11 @@ def main() -> int:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     site = SITE_URL.rstrip("/")
     provnav = "".join(f'<a href="{site}/{slug(p)}/">{p}</a>' for p in datos["provincias"])
-    payload = json.dumps(datos, ensure_ascii=False, separators=(",", ":"))
-    schema = json.dumps(construir_schema(datos, site), ensure_ascii=False)
-    html = (TEMPLATE.replace("__DATA__", payload)
-            .replace("__APPS_URL__", APPS_SCRIPT_URL)
-            .replace("__MODO_PRENSA__", "true" if MODO_PRENSA else "false")
-            .replace("__SITE_URL__", site)
-            .replace("__SCHEMA__", schema)
-            .replace("__PROV_NAV__", provnav))
-    OUT_HTML.write_text(html, encoding="utf-8")
+    # PORTADA: el nuevo diseño (el que se validó en /beta/) es ahora la home,
+    # indexable. El TEMPLATE antiguo queda como referencia por si portamos piezas
+    # (calculadora con badge de certificado, barras refugios/infiernos, FAQ).
+    OUT_HTML.write_text(construir_pagina_beta(datos, site, es_portada=True),
+                        encoding="utf-8")
     # Ficheros SEO: desactivar Jekyll y robots.
     (DOCS_DIR / ".nojekyll").write_text("", encoding="utf-8")
     (DOCS_DIR / "robots.txt").write_text(
@@ -2714,11 +2717,18 @@ def main() -> int:
     (DOCS_DIR / "ola-de-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "ola-de-calor" / "index.html").write_text(
         construir_pagina_ola(site, fecha_mod_iso, fecha_mod_txt), encoding="utf-8")
-    # Portada BETA (nuevo diseño en pruebas): docs/beta/, con noindex y SIN
-    # enlazar desde el sitio ni el sitemap. Para validar en real antes de promover.
+    # /beta/ YA es la portada: dejamos una redirección a la home (noindex; fuera
+    # del sitemap por el filtro startswith("beta")). Así no hay duplicado y quien
+    # tuviera guardado /beta/ acaba en la web nueva.
     (DOCS_DIR / "beta").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "beta" / "index.html").write_text(
-        construir_pagina_beta(datos, site), encoding="utf-8")
+        '<!doctype html><html lang="es"><head><meta charset="utf-8">'
+        '<meta name="robots" content="noindex,nofollow">'
+        f'<link rel="canonical" href="{site}/">'
+        f'<meta http-equiv="refresh" content="0; url={site}/">'
+        '<title>Redirigiendo a nochetropical.es</title></head><body>'
+        f'<p>El nuevo diseño ya es la portada. <a href="{site}/">Ir a nochetropical.es</a></p>'
+        '</body></html>', encoding="utf-8")
     (DOCS_DIR / "metodologia").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "metodologia" / "index.html").write_text(
         construir_pagina_metodologia(estaciones, total, site, fecha_mod_iso, fecha_mod_txt),

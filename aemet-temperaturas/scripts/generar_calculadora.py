@@ -2641,7 +2641,9 @@ PAGINA_BETA = r"""<!doctype html>
 const DATA=__DATA__;
 const SITE="__SITE__";
 const APPS_SCRIPT_URL="__APPS_URL__";
-const MODO_PRENSA=false;
+// true = modo consumidor/prensa (sin compra/venta/agente ni puente inmobiliario);
+// false = modo inmobiliario (propietario/comprador). Prudentes hasta tener repercusión.
+const MODO_PRENSA=true;
 function banda(nt){if(nt<1)return["Refugio","var(--c-ref)"];if(nt<10)return["Se duerme bien","var(--c-bien)"];if(nt<30)return["Templado","var(--c-temp)"];if(nt<60)return["Se suda","var(--c-suda)"];return["Horno","var(--c-horno)"];}
 function num(nt){return nt===0?"0":(nt<10?nt.toFixed(1).replace(".",","):Math.round(nt)+"");}
 var prov=document.getElementById("prov"),est=document.getElementById("est");

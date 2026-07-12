@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-11",
- "total": 829,
- "tropicales": 231,
- "ecuatoriales": 4,
+ "fecha": "2026-07-12",
+ "total": 827,
+ "tropicales": 326,
+ "ecuatoriales": 22,
  "peor": {
-  "id": "B569X",
-  "nombre": "Capdepera-Faro",
-  "min": 25.4,
-  "prov": "Illes Balears"
+  "id": "8036Y",
+  "nombre": "Benidorm (Parc Les Foietes)",
+  "min": 27.7,
+  "prov": "Alicante"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 5.9,
-  "prov": "Ávila"
+  "id": "C406G",
+  "nombre": "Cañadas Parador",
+  "min": 6.7,
+  "prov": "Santa Cruz de Tenerife"
  },
  "top_calor": [
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 25.4,
+   "id": "8036Y",
+   "nombre": "Benidorm (Parc Les Foietes)",
+   "min": 27.7,
+   "prov": "Alicante"
+  },
+  {
+   "id": "B986",
+   "nombre": "Formentera",
+   "min": 26.5,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 25.1,
-   "prov": "Almería"
-  },
-  {
-   "id": "7031X",
-   "nombre": "Murcia/San Javier",
-   "min": 25.1,
-   "prov": "Murcia"
-  },
-  {
-   "id": "7002Y",
-   "nombre": "Águilas",
-   "min": 24.9,
-   "prov": "Murcia"
-  },
-  {
-   "id": "7178I",
-   "nombre": "Murcia",
-   "min": 24.9,
-   "prov": "Murcia"
   },
   {
    "id": "7019X",
    "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 24.8,
+   "min": 26.1,
    "prov": "Murcia"
   },
   {
-   "id": "0002I",
-   "nombre": "Vandellós",
-   "min": 24.7,
-   "prov": "Tarragona"
+   "id": "B954",
+   "nombre": "Ibiza/Es Codolá",
+   "min": 26.0,
+   "prov": "Illes Balears"
   },
   {
-   "id": "7244X",
-   "nombre": "Orihuela Desamparados",
-   "min": 24.7,
-   "prov": "Alicante"
+   "id": "9122I",
+   "nombre": "Labastida",
+   "min": 25.8,
+   "prov": "Araba/Álava"
   },
   {
-   "id": "0076",
-   "nombre": "Barcelona Aeropuerto",
-   "min": 24.6,
-   "prov": "Barcelona"
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 25.8,
+   "prov": "Illes Balears"
   },
   {
-   "id": "6325O",
-   "nombre": "Almería/Aeropuerto",
-   "min": 24.6,
-   "prov": "Almería"
+   "id": "B434X",
+   "nombre": "Portocolom",
+   "min": 25.8,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "7012D",
+   "nombre": "Cartagena - Tentegorra",
+   "min": 25.7,
+   "prov": "Murcia"
+  },
+  {
+   "id": "B410B",
+   "nombre": "Santanyí",
+   "min": 25.7,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "9121X",
+   "nombre": "Haro",
+   "min": 25.5,
+   "prov": "La Rioja"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 5.9,
-   "prov": "Ávila"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 8.4,
-   "prov": "Soria"
-  },
-  {
    "id": "C406G",
    "nombre": "Cañadas Parador",
-   "min": 8.8,
+   "min": 6.7,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 9.0,
-   "prov": "Segovia"
+   "id": "C314Z",
+   "nombre": "Vallehermoso-Alto Igualero",
+   "min": 9.5,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 9.0,
-   "prov": "Salamanca"
+   "id": "C611E",
+   "nombre": "San Mateo (Corral de los Juncos)",
+   "min": 9.6,
+   "prov": "Las Palmas"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 9.0,
-   "prov": "Madrid"
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 10.0,
+   "prov": "Granada"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 10.2,
+   "prov": "Zamora"
+  },
+  {
+   "id": "C430E",
+   "nombre": "Izaña",
+   "min": 10.6,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "4520X",
+   "nombre": "Fregenal de la Sierra",
+   "min": 10.9,
+   "prov": "Badajoz"
   },
   {
    "id": "8210Y",
    "nombre": "Salvacañete",
-   "min": 9.0,
+   "min": 10.9,
    "prov": "Cuenca"
   },
   {
-   "id": "3013",
-   "nombre": "Molina de Aragón",
-   "min": 9.3,
-   "prov": "Guadalajara"
+   "id": "C925F",
+   "nombre": "San Andrés-Depósito Cabildo",
+   "min": 10.9,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "2135A",
-   "nombre": "Fresno de Cantiespino",
-   "min": 9.4,
-   "prov": "Segovia"
-  },
-  {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": 9.4,
-   "prov": "Teruel"
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 11.2,
+   "prov": "Salamanca"
   }
  ]
 }

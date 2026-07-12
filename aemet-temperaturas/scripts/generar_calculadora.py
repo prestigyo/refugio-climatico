@@ -2509,6 +2509,19 @@ PAGINA_BETA = r"""<!doctype html>
  .result .chip{display:inline-block;font-weight:700;font-size:12.5px;padding:4px 11px;border-radius:999px;color:#160f08;margin-right:10px}
  .certbadge{display:block;margin-top:12px;background:rgba(99,182,154,.12);border:1px solid var(--c-bien);color:#8fd7bd;font-size:14px;font-weight:600;padding:10px 14px;border-radius:10px;text-decoration:none;line-height:1.4}
  .certbadge:hover{background:rgba(99,182,154,.2)}
+ .capture{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+ .capture .lead-h{font-family:var(--font-d);font-weight:700;font-size:16.5px;color:var(--ink);margin-bottom:6px;line-height:1.3}
+ .capture .lead-sub{font-size:13.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+ .leadform{display:grid;gap:9px}
+ .leadform input,.leadform select{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:10px;color:var(--ink);font-size:14.5px;padding:11px 13px;font-family:var(--font-b)}
+ .leadform input::placeholder{color:var(--muted2)}
+ .leadform input:focus,.leadform select:focus{outline:2px solid var(--brand);outline-offset:1px}
+ .leadform .lrgpd{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--muted);line-height:1.45}
+ .leadform .lrgpd input{width:auto;margin-top:2px;accent-color:var(--brand)}
+ .leadform button[type=submit]{background:var(--brand);color:var(--brand-ink);border:0;border-radius:10px;font-weight:700;font-size:15px;padding:12px;cursor:pointer;margin-top:2px}
+ .leadform button[type=submit]:hover{filter:brightness(1.08)}
+ .capture .bridge{display:inline-block;margin-top:13px;color:var(--brand);font-size:13.5px;font-weight:600;text-decoration:none}
+ .capture .bridge:hover{text-decoration:underline}
  .foot-note{font-size:12.5px;color:var(--muted2);margin-top:10px}
  footer{margin-top:54px;border-top:1px solid var(--line);background:var(--surface)}
  .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding:44px 0 28px}
@@ -2619,7 +2632,7 @@ PAGINA_BETA = r"""<!doctype html>
       </div>
       <div class="fcol"><h4>Explora</h4><a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a><a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a><a href="__SITE__/parte/">El parte de la noche</a><a href="__SITE__/certificados/">Certificados</a></div>
       <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a><a href="__SITE__/prensa/">Sala de prensa</a><a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a><a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">Licencia CC BY 4.0</a></div>
-      <div class="fcol"><h4>Proyecto</h4><a href="__HOME__">Sobre el proyecto</a><a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a><a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>
+      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/metodologia/">Sobre el proyecto</a><a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a><a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>
     </div>
     <div class="in fbar">© 2026 nochetropical.es · Datos de AEMET bajo CC BY 4.0 · Ramón J. Lowesting</div>
   </footer>
@@ -2627,6 +2640,8 @@ PAGINA_BETA = r"""<!doctype html>
 <script>
 const DATA=__DATA__;
 const SITE="__SITE__";
+const APPS_SCRIPT_URL="__APPS_URL__";
+const MODO_PRENSA=false;
 function banda(nt){if(nt<1)return["Refugio","var(--c-ref)"];if(nt<10)return["Se duerme bien","var(--c-bien)"];if(nt<30)return["Templado","var(--c-temp)"];if(nt<60)return["Se suda","var(--c-suda)"];return["Horno","var(--c-horno)"];}
 function num(nt){return nt===0?"0":(nt<10?nt.toFixed(1).replace(".",","):Math.round(nt)+"");}
 var prov=document.getElementById("prov"),est=document.getElementById("est");
@@ -2647,7 +2662,45 @@ function mostrar(){
   var r=document.getElementById("result");
   r.hidden=false;
   var cert=e.c?"<a class='certbadge' href='"+SITE+"/certificados/"+e.c+"/'>Este pueblo es un refugio climático certificado. Ver su certificado →</a>":"";
-  r.innerHTML="<span class='chip' style='background:"+b[1]+"'>"+b[0]+"</span><b>"+e.l+"</b> ("+prov.value+"), "+e.a+" m — <b>"+num(e.nt)+"</b> noches tropicales al año."+cert;
+  var etq=b[0];
+  var modo=MODO_PRENSA?"prensa":(e.nt<10?"propietario":"comprador");
+  var lh,ls,opts,bridge,zph;
+  if(modo==="prensa"){
+    lh="¿Quieres el informe de tu zona y aviso si entra en ola de calor?";ls="";
+    opts="<option value='info'>Quiero el informe y alertas de calor</option><option value='periodista'>Soy periodista o medio</option>";
+    bridge="";zph="Tu provincia (opcional)";
+  }else if(modo==="propietario"){
+    lh="Tienes una casa donde se duerme fresco. Hoy eso es un tesoro.";
+    ls="Cada vez más gente huye del calor. Si te planteas venderla, te ponemos en contacto con compradores que buscan exactamente esto.";
+    opts="<option value='tasacion'>Quiero una tasación gratuita</option><option value='vender'>Me planteo vender</option><option value='info'>Solo información de mi zona</option><option value='agente'>Soy agente inmobiliario</option>";
+    bridge="Vendemos sin pasar por Idealista — cómo trabajamos →";zph="¿Dónde está tu casa? (opcional)";
+  }else{
+    lh=e.nt>=30?"¿Y si pudieras dormir fresco? Te ayudamos a encontrar tu refugio.":"¿Quieres el informe de tu zona y aviso si entra en ola de calor?";ls="";
+    opts="<option value='info'>Quiero el informe y alertas de calor</option><option value='comprar'>Me interesa comprar en un refugio</option><option value='alquilar'>Me interesa alquilar o veranear</option><option value='agente'>Soy agente inmobiliario</option>";
+    bridge="O conoce La Virgen de la Vega, un refugio a 75 min de Valencia →";zph="¿En qué zona te gustaría? (opcional)";
+  }
+  var cap="<div class='capture'><div class='lead-h'>"+lh+"</div>"+(ls?"<p class='lead-sub'>"+ls+"</p>":"")
+    +"<form id='leadf' class='leadform'>"
+    +"<input type='email' id='lemail' placeholder='Tu email' required>"
+    +"<select id='lwhat'>"+opts+"</select>"
+    +"<input type='text' id='lzona' placeholder='"+zph+"'>"
+    +"<input type='text' id='lpet' placeholder='¿Qué dato te gustaría ver? (opcional)'>"
+    +"<label class='lrgpd'><input type='checkbox' id='lrgpd' required> Acepto que me contactéis sobre esto.</label>"
+    +"<button type='submit'>Enviar</button></form>"
+    +(bridge?"<a class='bridge' href='https://lavirgendelavega.es' target='_blank' rel='noopener'>"+bridge+"</a>":"")
+    +"</div>";
+  r.innerHTML="<span class='chip' style='background:"+b[1]+"'>"+b[0]+"</span><b>"+e.l+"</b> ("+prov.value+"), "+e.a+" m — <b>"+num(e.nt)+"</b> noches tropicales al año."+cert+cap;
+  var lf=document.getElementById("leadf");
+  if(lf) lf.addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var lead={timestamp:new Date().toISOString(),email:document.getElementById("lemail").value.trim(),
+      modo:modo,busca:document.getElementById("lwhat").value,zona_interes:document.getElementById("lzona").value.trim(),
+      peticion:document.getElementById("lpet").value.trim(),estacion:e.l,provincia:prov.value,noches_trop:e.nt,
+      veredicto:etq,rgpd:document.getElementById("lrgpd").checked?"si":"",source:"portada",user_agent:navigator.userAgent};
+    var gracias=function(){var h=document.querySelector("#result .lead-h");if(h)h.textContent="¡Gracias! Te escribimos pronto.";if(lf)lf.remove();};
+    if(APPS_SCRIPT_URL){fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(lead)}).then(gracias).catch(gracias);}
+    else{gracias();}
+  });
   // En móvil la escala queda arriba, fuera de pantalla: la traemos a la vista
   // para que se aprecie el pin de tu pueblo al seleccionar.
   if(window.matchMedia("(max-width:660px)").matches){
@@ -2679,6 +2732,7 @@ def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> s
     return (plantilla
             .replace("__DATA__", data_json)
             .replace("__SCHEMA__", schema)
+            .replace("__APPS_URL__", APPS_SCRIPT_URL)
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
 

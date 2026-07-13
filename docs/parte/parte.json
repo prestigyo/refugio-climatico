@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-12",
- "total": 827,
- "tropicales": 326,
- "ecuatoriales": 22,
+ "fecha": "2026-07-13",
+ "total": 825,
+ "tropicales": 251,
+ "ecuatoriales": 21,
  "peor": {
-  "id": "8036Y",
-  "nombre": "Benidorm (Parc Les Foietes)",
-  "min": 27.7,
+  "id": "8025",
+  "nombre": "Alicante",
+  "min": 26.5,
   "prov": "Alicante"
  },
  "mejor": {
-  "id": "C406G",
-  "nombre": "Cañadas Parador",
-  "min": 6.7,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": 6.8,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "8036Y",
-   "nombre": "Benidorm (Parc Les Foietes)",
-   "min": 27.7,
+   "id": "8025",
+   "nombre": "Alicante",
+   "min": 26.5,
    "prov": "Alicante"
   },
   {
    "id": "B986",
    "nombre": "Formentera",
-   "min": 26.5,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "7019X",
-   "nombre": "Cartagena/Salinas Cabo Palos",
    "min": 26.1,
-   "prov": "Murcia"
-  },
-  {
-   "id": "B954",
-   "nombre": "Ibiza/Es Codolá",
-   "min": 26.0,
    "prov": "Illes Balears"
   },
   {
-   "id": "9122I",
-   "nombre": "Labastida",
-   "min": 25.8,
-   "prov": "Araba/Álava"
+   "id": "0002I",
+   "nombre": "Vandellós",
+   "min": 25.9,
+   "prov": "Tarragona"
   },
   {
    "id": "B228",
    "nombre": "Palma-Portopí",
+   "min": 25.9,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
    "min": 25.8,
    "prov": "Illes Balears"
   },
   {
-   "id": "B434X",
-   "nombre": "Portocolom",
-   "min": 25.8,
-   "prov": "Illes Balears"
+   "id": "8416",
+   "nombre": "Valencia Dt",
+   "min": 25.6,
+   "prov": "Valencia"
   },
   {
-   "id": "7012D",
-   "nombre": "Cartagena - Tentegorra",
-   "min": 25.7,
+   "id": "7023X",
+   "nombre": "Fuente Alamo",
+   "min": 25.4,
    "prov": "Murcia"
   },
   {
-   "id": "B410B",
-   "nombre": "Santanyí",
-   "min": 25.7,
+   "id": "7031X",
+   "nombre": "Murcia/San Javier",
+   "min": 25.4,
+   "prov": "Murcia"
+  },
+  {
+   "id": "B087X",
+   "nombre": "Banyalbufar",
+   "min": 25.4,
    "prov": "Illes Balears"
   },
   {
-   "id": "9121X",
-   "nombre": "Haro",
-   "min": 25.5,
-   "prov": "La Rioja"
+   "id": "7007Y",
+   "nombre": "Mazarrón/las Torres",
+   "min": 25.3,
+   "prov": "Murcia"
   }
  ],
  "top_fresco": [
   {
-   "id": "C406G",
-   "nombre": "Cañadas Parador",
-   "min": 6.7,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C314Z",
-   "nombre": "Vallehermoso-Alto Igualero",
-   "min": 9.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C611E",
-   "nombre": "San Mateo (Corral de los Juncos)",
-   "min": 9.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 10.0,
-   "prov": "Granada"
-  },
-  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 10.2,
+   "min": 6.8,
    "prov": "Zamora"
   },
   {
-   "id": "C430E",
-   "nombre": "Izaña",
-   "min": 10.6,
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 7.6,
+   "prov": "Ourense"
+  },
+  {
+   "id": "C406G",
+   "nombre": "Cañadas Parador",
+   "min": 7.7,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "4520X",
-   "nombre": "Fregenal de la Sierra",
-   "min": 10.9,
-   "prov": "Badajoz"
-  },
-  {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 10.9,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "C925F",
-   "nombre": "San Andrés-Depósito Cabildo",
-   "min": 10.9,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 7.9,
+   "prov": "Asturias"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 11.2,
+   "min": 7.9,
    "prov": "Salamanca"
+  },
+  {
+   "id": "2737E",
+   "nombre": "Lagunas de Somoza",
+   "min": 8.3,
+   "prov": "León"
+  },
+  {
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 8.8,
+   "prov": "Zamora"
+  },
+  {
+   "id": "C925F",
+   "nombre": "San Andrés-Depósito Cabildo",
+   "min": 8.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 9.2,
+   "prov": "Ávila"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 9.3,
+   "prov": "Segovia"
   }
  ]
 }

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Cuánto margen les queda a los refugios climáticos? El caso de Cedrillas | Refugio Climático</title>
+<meta name="description" content="En diez veranos y 828 noches medidas, la estación de Cedrillas (Teruel, 1.380 m) no ha registrado ni una sola noche tropical. Calculamos cuántas décadas de fresco nocturno le quedan a un refugio climático según los escenarios del IPCC.">
+<link rel="canonical" href="https://nochetropical.es/margen-refugios-climaticos/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="¿Cuánto margen les queda a los refugios climáticos? El caso de Cedrillas">
+<meta property="og:description" content="828 noches de verano medidas, cero noches tropicales. Los datos de Cedrillas y la matemática del colchón térmico: ni el escenario más pesimista baja del siglo.">
+<meta property="og:url" content="https://nochetropical.es/margen-refugios-climaticos/">
+<meta property="og:image" content="https://nochetropical.es/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="¿Cuánto margen les queda a los refugios climáticos?">
+<meta name="twitter:description" content="El caso de Cedrillas: 828 noches de verano medidas, cero noches tropicales. La matemática del colchón térmico.">
+<meta name="twitter:image" content="https://nochetropical.es/og.png">
+<link rel="icon" type="image/svg+xml" href="https://nochetropical.es/favicon.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Refugio Climático","item":"https://nochetropical.es/"},{"@type":"ListItem","position":2,"name":"El margen de los refugios","item":"https://nochetropical.es/margen-refugios-climaticos/"}]},{"@type":"Article","headline":"¿Cuánto margen les queda a los refugios climáticos antes de necesitar aire acondicionado?","description":"En diez veranos y 828 noches medidas, la estación de Cedrillas (Teruel, 1.380 m) no ha registrado ni una sola noche tropical. Calculamos cuántas décadas de fresco nocturno le quedan a un refugio climático según los escenarios del IPCC.","image":"https://nochetropical.es/og.png","author":{"@type":"Person","name":"Ramón J. Lowesting"},"publisher":{"@type":"Organization","name":"Refugio Climático","logo":{"@type":"ImageObject","url":"https://nochetropical.es/favicon.svg"}},"datePublished":"2026-07-14","dateModified":"2026-07-14","mainEntityOfPage":"https://nochetropical.es/margen-refugios-climaticos/"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Qué es el colchón térmico de un refugio climático?","acceptedAnswer":{"@type":"Answer","text":"Es la distancia entre la temperatura mínima habitual de las noches de verano de un lugar y el umbral de noche tropical (20 °C). En Cedrillas, con una mínima media de verano de 11,6 °C, el colchón supera los 8 °C."}},{"@type":"Question","name":"¿Ha tenido Cedrillas alguna noche tropical?","acceptedAnswer":{"@type":"Answer","text":"No. En las 828 noches de verano medidas por AEMET entre 2017 y 2026, ninguna alcanzó los 20 °C. El récord absoluto de la serie es 19,5 °C, registrado dos noches de julio de 2023."}},{"@type":"Question","name":"¿Cuántos años le quedan a Cedrillas antes de su primera noche tropical recurrente?","acceptedAnswer":{"@type":"Answer","text":"Con los escenarios de calentamiento del IPCC para la península (0,3–0,5 °C por década), entre 170 y 280 años. Incluso proyectando la tendencia local observada en la propia estación, más acelerada, el margen ronda el siglo."}},{"@type":"Question","name":"¿Qué pueblos representa la estación de Cedrillas?","acceptedAnswer":{"@type":"Answer","text":"El altiplano turolense que rodea la estación (Cedrillas, El Pobo, Monteagudo del Castillo, Corbalán, Ababuj, Jorcas, Camarillas o Aguilar del Alfambra) y la puerta de la Sierra de Gúdar: El Castellar, Gúdar, Alcalá de la Selva o Valdelinares, todos por encima de los 1.300 metros."}}]}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--fm:"JetBrains Mono",monospace}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.75;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:720px;margin:0 auto;padding:0 22px}
+ a{color:var(--teal);text-decoration:none}
+ a:hover{text-decoration:underline}
+ header.h{padding:48px 0 14px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:20px 0 12px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(28px,5.6vw,44px);line-height:1.08;letter-spacing:-.01em}
+ .lead{margin:22px 0 0}
+ .lead p{font-size:clamp(17px,2.7vw,19px);color:#e7dcc8;margin:0 0 16px}
+ .lead p b{color:var(--paper)}
+ article{padding:8px 0 10px}
+ article h2{font-family:var(--fd);font-weight:700;font-size:clamp(22px,4.2vw,30px);line-height:1.15;letter-spacing:-.01em;margin:44px 0 14px}
+ article h3{font-family:var(--fd);font-weight:600;font-size:clamp(18px,3vw,22px);margin:28px 0 10px;color:var(--teja2)}
+ article p{font-size:clamp(16px,2.4vw,18px);color:#e3d8c4;margin:0 0 18px}
+ article p b,article p strong{color:var(--paper);font-weight:700}
+ article em{font-style:italic;color:var(--teal)}
+ ul.bullets{list-style:none;margin:4px 0 18px;padding:0}
+ ul.bullets li{position:relative;padding-left:24px;margin:0 0 14px;font-size:clamp(16px,2.4vw,18px);color:#e3d8c4}
+ ul.bullets li::before{content:"";position:absolute;left:2px;top:.62em;width:9px;height:9px;border-radius:50%;background:var(--teja)}
+ ul.bullets li b{color:var(--paper)}
+ .reflexion{margin:32px 0;padding:22px 26px;border-left:3px solid var(--teja);background:linear-gradient(180deg,rgba(217,116,78,.09),transparent);border-radius:0 14px 14px 0}
+ .reflexion .rk{font:600 11px/1 var(--fb);letter-spacing:.15em;text-transform:uppercase;color:var(--teja);margin-bottom:12px}
+ .reflexion p{font-family:var(--fd);font-size:clamp(17px,2.7vw,20px);font-style:italic;line-height:1.6;color:#efe6d6;margin:0}
+ .reflexion p b{font-style:normal;color:var(--teja2)}
+ .dato{margin:26px 0;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--bg2),var(--panel));padding:22px 24px}
+ .dato .dk{font:600 11px/1 var(--fb);letter-spacing:.15em;text-transform:uppercase;color:var(--teja);margin-bottom:14px}
+ .dato table{width:100%;border-collapse:collapse;font-size:15px}
+ .dato td{padding:8px 4px;border-bottom:1px solid var(--line);color:#e3d8c4;vertical-align:top}
+ .dato tr:last-child td{border-bottom:none}
+ .dato td.v{text-align:right;font-family:var(--fm);color:var(--paper);white-space:nowrap}
+ .formula{margin:24px 0;padding:20px 22px;border:1px solid var(--line);border-radius:14px;background:var(--bg2);text-align:center;font-family:var(--fm);font-size:clamp(14px,2.4vw,17px);color:var(--teja2);overflow-x:auto}
+ .formula .res{display:block;margin-top:10px;font-size:clamp(18px,3.4vw,24px);color:var(--paper)}
+ .compartir{margin:38px 0 8px;padding:16px 18px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}
+ .compartir .ct{display:block;font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:11px}
+ .share{display:flex;gap:9px;flex-wrap:wrap}
+ .share a,.share button{flex:1;min-width:96px;text-align:center;text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:11px 10px;background:transparent;color:var(--paper);font:600 13.5px/1.2 var(--fb);cursor:pointer}
+ .share a:hover,.share button:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none}
+ .faq{margin:10px 0 6px}
+ .faq details{border:1px solid var(--line);border-radius:12px;margin:0 0 10px;background:var(--bg2)}
+ .faq summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:15.5px;color:var(--paper);list-style:none}
+ .faq summary::-webkit-details-marker{display:none}
+ .faq summary::before{content:"+";color:var(--teja);font-weight:900;margin-right:10px}
+ .faq details[open] summary::before{content:"–"}
+ .faq .fa{padding:0 18px 14px;font-size:15px;color:#d8ccb6}
+ .cierre{margin:46px 0 10px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:30px 26px;text-align:center}
+ .cierre h2{margin:0 0 12px}
+ .cierre p{font-size:16.5px;color:var(--muted);margin:0 auto 22px;max-width:48ch}
+ .botones{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+ .btn{display:inline-block;padding:14px 22px;border-radius:12px;font-weight:700;font-size:15.5px;line-height:1.2}
+ .btn.pri{background:var(--teja);color:#1a1209}
+ .btn.pri:hover{background:var(--teja2);text-decoration:none}
+ .btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}
+ .btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
+ footer{border-top:1px solid var(--line);padding:32px 0 64px;color:#82745d;font-size:12.5px;margin-top:36px}
+ footer a{color:#9a8a6f}
+ footer p{margin:0 0 8px;max-width:680px}
+ @media(max-width:560px){.wrap{padding:0 18px}}
+</style>
+</head>
+<body>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="https://nochetropical.es/">Refugio Climático</a> · El margen de los refugios</nav>
+  <div class="kick">Análisis · Datos de AEMET · Sierra de Gúdar</div>
+  <h1>¿Cuánto margen les queda a los refugios climáticos antes de necesitar aire acondicionado?</h1>
+  <div class="lead">
+    <p>El cambio climático ya no es una hipótesis para 2050: es la madrugada de hoy. Las noches tropicales —las que no bajan de 20&nbsp;°C— se han multiplicado en España en las últimas décadas, y más de la mitad del país duerme peor cada verano. Ante eso, la pregunta honesta que nos hacen los lectores es esta: <b>los pueblos que hoy duermen frescos, ¿cuánto tiempo lo seguirán haciendo?</b></p>
+    <p>Para responder no hace falta opinar: basta una estación bien situada y diez veranos de datos. La nuestra es la de <b>Cedrillas (Teruel), a 1.380 metros</b>, la estación que mide el clima nocturno de todo un altiplano de pueblos.</p>
+  </div>
+</div></header>
+
+<article><div class="wrap">
+
+  <h2>828 noches medidas. Cero noches tropicales.</h2>
+  <p>Entre 2017 y 2026, la estación de AEMET en Cedrillas ha registrado <b>828 noches de verano</b> (junio–agosto). El resultado es rotundo: <b>ni una sola alcanzó los 20&nbsp;°C</b>. Ni una. La noche más cálida jamás medida en la serie se quedó en <b>19,5&nbsp;°C</b> —ocurrió dos veces, ambas en julio de 2023— y es la única vez que el termómetro se acercó siquiera al umbral.</p>
+  <p>La mínima media de las noches de verano es de <b>11,6&nbsp;°C</b>. Y la prueba de estrés ya está hecha: en el verano de 2022, <b>el más cálido de la historia de España</b> desde que hay registros, las noches de Cedrillas promediaron 12,5&nbsp;°C y la más suave de todo el verano se quedó en 17,7&nbsp;°C. El peor verano de la historia del país fue, aquí arriba, un verano de manta fina.</p>
+
+  <div class="dato">
+    <div class="dk">Estación de Cedrillas (8458X) · veranos 2017–2026 · AEMET</div>
+    <table>
+      <tr><td>Altitud</td><td class="v">1.380 m</td></tr>
+      <tr><td>Noches de verano medidas</td><td class="v">828</td></tr>
+      <tr><td>Noches tropicales (≥ 20 °C)</td><td class="v">0</td></tr>
+      <tr><td>Mínima media de verano</td><td class="v">11,6 °C</td></tr>
+      <tr><td>Récord de mínima más alta de la serie</td><td class="v">19,5 °C (jul. 2023)</td></tr>
+      <tr><td>Verano 2022 (el más cálido de España): mínima media</td><td class="v">12,5 °C</td></tr>
+      <tr><td>Puesto en el ranking nacional de refugios</td><td class="v">71 de 848</td></tr>
+    </table>
+  </div>
+
+  <h2>Los pueblos bajo la influencia de la estación</h2>
+  <p>Una estación no mide solo su pueblo: mide el aire de su comarca. La de Cedrillas representa el clima nocturno del <b>altiplano turolense</b> que la rodea —Cedrillas, El&nbsp;Pobo, Monteagudo del Castillo, Corbalán, Ababuj, Jorcas, Camarillas, Aguilar del Alfambra— y de la <b>puerta de la Sierra de Gúdar</b>: El&nbsp;Castellar, Gúdar, Alcalá de la Selva o Valdelinares, todos por encima de los 1.300 metros y compartiendo la misma física: altitud, aire seco y cielo limpio que deja escapar el calor del día en cuanto se pone el sol.</p>
+  <p>La comarca tiene además un segundo testigo independiente: la estación de <b>Mosqueruela (1.515&nbsp;m)</b>, que en el mismo periodo registra apenas 0,8 noches tropicales al año. Dos estaciones, dos series, la misma conclusión.</p>
+  <p>Hay un detalle en los datos de Cedrillas que merece una línea: su mínima de verano es <b>1,6&nbsp;°C más fría de lo que su altitud predice</b>. La explicación está en el terreno: el altiplano acumula de noche el aire frío que resbala de las lomas, el <em>lago de aire frío</em> que ya contamos en <a href="https://nochetropical.es/microclimas/">Microclimas</a>. No es solo altura: es que el sitio está bien hecho.</p>
+
+  <h2>La matemática del colchón térmico</h2>
+  <p>El cuerpo humano empieza a tener problemas para entrar en sueño profundo cuando el dormitorio no baja de los 20&nbsp;°C. Llamamos <b>colchón térmico</b> a la distancia entre las noches típicas de un lugar y ese umbral. En Cedrillas:</p>
+  <div class="formula">
+    colchón = 20 °C − 11,6 °C = <b>8,4 °C</b>
+  </div>
+  <p>Los escenarios del IPCC para la península ibérica estiman un calentamiento de entre <b>0,3 y 0,5&nbsp;°C por década</b> si las emisiones siguen el ritmo actual. Dividamos:</p>
+  <div class="formula">
+    margen = 8,4 °C ÷ (0,3 – 0,5 °C/década)
+    <span class="res">≈ entre 170 y 280 años</span>
+  </div>
+  <p>Seamos aún más duros. La propia serie de Cedrillas, que es corta (nueve veranos) y por tanto ruidosa, muestra una tendencia local más acelerada que la media del IPCC. Si proyectáramos esa tendencia extrema tal cual —algo estadísticamente muy discutible con tan pocos años—, el margen seguiría rondando <b>el siglo</b>. Es decir:</p>
+
+  <div class="reflexion">
+    <div class="rk">El veredicto de los datos</div>
+    <p>Ni el escenario más pesimista que podemos construir con datos reales sitúa la primera noche tropical recurrente de Cedrillas <b>antes de finales de este siglo</b>. Los escenarios centrales la empujan más allá del año 2200.</p>
+  </div>
+
+  <h2>Por qué la altitud es un escudo (y la costa no tiene ninguno)</h2>
+  <p>Este margen no es suerte: es termodinámica. Por cada 100 metros de ascenso, la temperatura del aire cae de media unos 0,65&nbsp;°C. Para que Cedrillas registrara una noche tropical de 20&nbsp;°C, una ciudad al nivel del mar en su misma vertical térmica tendría que sostener una madrugada de <b>casi 29&nbsp;°C de mínima</b>. Y hay un segundo mecanismo que trabaja a favor del altiplano: el aire seco de montaña deja escapar la radiación infrarroja hacia el espacio en cuanto anochece. El calentamiento global puede hacer las tardes de la sierra más cálidas, pero la noche seguirá desplomándose.</p>
+  <p>La costa juega la partida contraria: un Mediterráneo cada vez más cálido actúa de radiador nocturno, y la <a href="https://nochetropical.es/valencia/">isla de calor urbana</a> remata la faena. Su colchón térmico no es que sea pequeño: es que ya es negativo — València supera el umbral de noche tropical, de media, más de 70 noches cada año según nuestros datos. Lo que cuesta eso en euros lo calculamos en la pieza hermana de esta: <a href="https://nochetropical.es/hipoteca-termica/">La hipoteca térmica</a>.</p>
+
+  <h2>Preguntas frecuentes</h2>
+  <div class="faq">
+    <details><summary>¿Qué es exactamente una noche tropical?</summary><div class="fa">Una noche en la que la temperatura mínima no baja de 20 °C. Es el umbral a partir del cual el descanso se degrada de forma medible. Cuando la mínima no baja de 25 °C se habla de noche ecuatorial o tórrida.</div></details>
+    <details><summary>¿Ha tenido Cedrillas alguna noche tropical?</summary><div class="fa">No. En 828 noches de verano medidas entre 2017 y 2026, ninguna alcanzó los 20 °C. El récord de la serie es 19,5 °C, dos noches de julio de 2023.</div></details>
+    <details><summary>¿Qué pueblos representa la estación?</summary><div class="fa">El altiplano de Cedrillas–El Pobo (Cedrillas, El Pobo, Monteagudo del Castillo, Corbalán, Ababuj, Jorcas, Camarillas, Aguilar del Alfambra) y la puerta de la Sierra de Gúdar (El Castellar, Gúdar, Alcalá de la Selva, Valdelinares), todos por encima de 1.300 m.</div></details>
+    <details><summary>¿De dónde salen los datos y cada cuánto se actualizan?</summary><div class="fa">De AEMET OpenData: descargamos y analizamos a diario las 848 estaciones de la red. La metodología completa está en <a href="https://nochetropical.es/metodologia/">Sobre el proyecto</a>.</div></details>
+  </div>
+
+  <div class="compartir">
+    <span class="ct">Comparte esta pieza</span>
+    <div class="share">
+      <a href="https://wa.me/?text=En%20Cedrillas%20(Teruel)%20no%20se%20ha%20medido%20ni%20una%20sola%20noche%20tropical%20en%20828%20noches%20de%20verano.%20%C2%BFCu%C3%A1nto%20margen%20les%20queda%20a%20los%20refugios%20clim%C3%A1ticos%3F%20Los%20datos%3A%20https%3A%2F%2Fnochetropical.es%2Fmargen-refugios-climaticos%2F" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://twitter.com/intent/tweet?text=828%20noches%20de%20verano%20medidas%20en%20Cedrillas%20(Teruel%2C%201.380%20m)%3A%20cero%20noches%20tropicales.%20%C2%BFCu%C3%A1nto%20margen%20les%20queda%20a%20los%20refugios%20clim%C3%A1ticos%3F&url=https%3A%2F%2Fnochetropical.es%2Fmargen-refugios-climaticos%2F" target="_blank" rel="noopener">X / Twitter</a>
+      <button id="copy" type="button">Copiar enlace</button>
+    </div>
+  </div>
+
+  <div class="cierre">
+    <h2>¿Y el margen de tu pueblo?</h2>
+    <p>Diez veranos de datos de AEMET, estación a estación. Busca la tuya y compárala con Cedrillas.</p>
+    <div class="botones">
+      <a class="btn pri" href="https://nochetropical.es/teruel/">Ver Teruel en la calculadora →</a>
+      <a class="btn sec" href="https://nochetropical.es/hipoteca-termica/">Leer: La hipoteca térmica</a>
+    </div>
+  </div>
+
+</div></article>
+
+<footer><div class="wrap">
+  <p>Pieza de análisis del proyecto <a href="https://nochetropical.es/">Refugio Climático</a>. Texto: Ramón J. Lowesting.</p>
+  <p>Los datos meteorológicos que sustentan el proyecto proceden de <b>AEMET</b> (OpenData) y el análisis se publica bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Escenarios de calentamiento: IPCC AR6 para la península ibérica. Publicado en julio de 2026.</p>
+</div></footer>
+<script>
+document.getElementById("copy").addEventListener("click",function(){
+  navigator.clipboard&&navigator.clipboard.writeText("https://nochetropical.es/margen-refugios-climaticos/");
+  this.textContent="¡Copiado!";var b=this;setTimeout(function(){b.textContent="Copiar enlace"},1800);
+});
+</script>
+</body>
+</html>

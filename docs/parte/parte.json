@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-13",
- "total": 826,
- "tropicales": 251,
- "ecuatoriales": 21,
+ "fecha": "2026-07-14",
+ "total": 838,
+ "tropicales": 264,
+ "ecuatoriales": 22,
  "peor": {
-  "id": "8025",
-  "nombre": "Alicante",
-  "min": 26.5,
-  "prov": "Alicante"
+  "id": "B780X",
+  "nombre": "Port Pollença-Aerodrom",
+  "min": 26.6,
+  "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 6.8,
-  "prov": "Zamora"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 5.1,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "8025",
-   "nombre": "Alicante",
-   "min": 26.5,
-   "prov": "Alicante"
-  },
-  {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 26.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "0002I",
-   "nombre": "Vandellós",
-   "min": 25.9,
-   "prov": "Tarragona"
-  },
-  {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 25.9,
+   "id": "B780X",
+   "nombre": "Port Pollença-Aerodrom",
+   "min": 26.6,
    "prov": "Illes Balears"
   },
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 25.8,
+   "min": 26.3,
    "prov": "Illes Balears"
   },
   {
-   "id": "8416",
-   "nombre": "Valencia Dt",
-   "min": 25.6,
-   "prov": "Valencia"
-  },
-  {
-   "id": "7023X",
-   "nombre": "Fuente Alamo",
-   "min": 25.4,
-   "prov": "Murcia"
-  },
-  {
-   "id": "7031X",
-   "nombre": "Murcia/San Javier",
-   "min": 25.4,
-   "prov": "Murcia"
+   "id": "B860X",
+   "nombre": "Ciutadella-Son Quim",
+   "min": 26.3,
+   "prov": "Illes Balears"
   },
   {
    "id": "B087X",
    "nombre": "Banyalbufar",
-   "min": 25.4,
+   "min": 26.2,
    "prov": "Illes Balears"
   },
   {
-   "id": "7007Y",
-   "nombre": "Mazarrón/las Torres",
-   "min": 25.3,
-   "prov": "Murcia"
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 26.2,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B605X",
+   "nombre": "Muro-S?albufera",
+   "min": 26.2,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "0002I",
+   "nombre": "Vandellós",
+   "min": 26.0,
+   "prov": "Tarragona"
+  },
+  {
+   "id": "B603X",
+   "nombre": "Colònia Sant Pere-Can Mengol",
+   "min": 26.0,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "0016A",
+   "nombre": "Reus Aeropuerto",
+   "min": 25.9,
+   "prov": "Tarragona"
+  },
+  {
+   "id": "8500A",
+   "nombre": "Castellón-Almassora",
+   "min": 25.8,
+   "prov": "Castellón"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 6.8,
-   "prov": "Zamora"
-  },
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 7.6,
-   "prov": "Ourense"
-  },
-  {
-   "id": "C406G",
-   "nombre": "Cañadas Parador",
-   "min": 7.7,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 7.9,
-   "prov": "Asturias"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 7.9,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "2737E",
-   "nombre": "Lagunas de Somoza",
-   "min": 8.3,
-   "prov": "León"
-  },
-  {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": 8.8,
-   "prov": "Zamora"
-  },
-  {
-   "id": "C925F",
-   "nombre": "San Andrés-Depósito Cabildo",
-   "min": 8.9,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 9.2,
+   "min": 5.1,
    "prov": "Ávila"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 9.3,
+   "min": 8.2,
    "prov": "Segovia"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 8.3,
+   "prov": "Zamora"
+  },
+  {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 8.8,
+   "prov": "Madrid"
+  },
+  {
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 8.9,
+   "prov": "Soria"
+  },
+  {
+   "id": "C406G",
+   "nombre": "Cañadas Parador",
+   "min": 9.0,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 9.2,
+   "prov": "Soria"
+  },
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 9.3,
+   "prov": "Ourense"
+  },
+  {
+   "id": "2302N",
+   "nombre": "Monterrubio de la Demanda",
+   "min": 9.3,
+   "prov": "Burgos"
+  },
+  {
+   "id": "2828Y",
+   "nombre": "Barco de Avila",
+   "min": 9.3,
+   "prov": "Ávila"
   }
  ]
 }

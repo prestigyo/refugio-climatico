@@ -2622,6 +2622,8 @@ PAGINA_BETA = r"""<!doctype html>
       <a class="card2" href="__SITE__/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
       <a class="card2" href="__SITE__/refugio-climatico-natural/"><h3>Refugio climático natural</h3><p>Combatir el calor sin aire acondicionado, como se hacía antes.</p></a>
       <a class="card2" href="__SITE__/refugios-y-espana-vaciada/"><h3>Refugios y España vaciada</h3><p>El frío que despobló estos pueblos es hoy su mayor activo.</p></a>
+      <a class="card2" href="__SITE__/hipoteca-termica/"><h3>La hipoteca térmica</h3><p>Lo que cuesta cada verano, en euros y en sueño, vivir donde la noche no refresca.</p></a>
+      <a class="card2" href="__SITE__/margen-refugios-climaticos/"><h3>El margen de los refugios</h3><p>¿Cuántas décadas de fresco le quedan a un refugio? El caso de Cedrillas.</p></a>
     </div>
   </div></section>
   <footer>

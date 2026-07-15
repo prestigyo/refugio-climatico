@@ -1476,6 +1476,123 @@ _CSS_CHROME = (
     '.compartir .cb:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none;background:rgba(217,116,78,.10)}'
 )
 
+# ---------------------------------------------------------------------------
+# Chrome nuevo (paleta negra): menú y pie COMPARTIDOS por todas las páginas que
+# ya lo llevan. Fuente única: al añadir una página nueva al site se toca aquí y
+# aparece en el menú de todas. Antes estaba duplicado literal en cada plantilla.
+# ---------------------------------------------------------------------------
+
+# (clave, href, texto). La clave es la que se pasa a nav_html() para marcar
+# la página actual.
+_MENU = [
+    ("inicio", "__HOME__", "Inicio"),
+    ("mapa", "__SITE__/mapa-estaciones/", "Mapa"),
+    ("cerca", "__SITE__/refugios-cerca/", "Refugios cerca"),
+    ("ola", "__SITE__/ola-de-calor/", "Ola de calor"),
+    ("ranking", "__SITE__/ranking-noches-tropicales/", "Ranking"),
+    ("parte", "__SITE__/parte/", "El parte"),
+    ("certificados", "__SITE__/certificados/", "Certificados"),
+    ("articulos", "__HOME__#articulos", "Artículos"),
+    ("metodologia", "__SITE__/metodologia/", "Metodología"),
+]
+
+_LOGO = ('<svg width="{px}" height="{px}" viewBox="0 0 100 100" aria-hidden="true">'
+         '<circle cx="45" cy="52" r="30" fill="var(--brand)"/>'
+         '<circle cx="60" cy="44" r="29" fill="var({hueco})"/></svg>nochetropical.es')
+
+
+def nav_html(actual: str = "") -> str:
+    """Menú superior. `actual` es una clave de _MENU; marca el enlace activo."""
+    def destino(k: str, href: str) -> str:
+        # "Artículos" es una sección DE la portada: desde ella basta el ancla;
+        # desde cualquier otra página hay que viajar a la portada.
+        if k == "articulos" and actual == "inicio":
+            return "#articulos"
+        return href
+
+    enlaces = "".join(
+        '<a href="%s"%s>%s</a>' % (destino(k, href),
+                                   ' aria-current="page"' if k == actual else "", txt)
+        for k, href, txt in _MENU)
+    logo = _LOGO.format(px=26, hueco="--bg")
+    return ('<nav class="nav"><div class="in">\n'
+            '    <a class="brand" href="__HOME__">' + logo + '</a>\n'
+            '    <div class="menu">\n'
+            '      ' + enlaces + '\n'
+            '    </div>\n'
+            '  </div></nav>')
+
+
+FOOTER_HTML = (
+    '<footer>\n'
+    '    <div class="in fgrid">\n'
+    '      <div class="fcol">\n'
+    '        <a class="brand" href="__HOME__" style="margin-bottom:12px">'
+    + _LOGO.format(px=24, hueco="--surface") + '</a>\n'
+    '        <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: '
+    '¿dónde se duerme fresco en España?</p>\n'
+    '      </div>\n'
+    '      <div class="fcol"><h4>Explora</h4><a href="__SITE__/refugios-cerca/">Refugios cerca de ti</a>'
+    '<a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a>'
+    '<a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a>'
+    '<a href="__SITE__/parte/">El parte de la noche</a>'
+    '<a href="__SITE__/certificados/">Certificados</a></div>\n'
+    '      <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a>'
+    '<a href="__SITE__/prensa/">Sala de prensa</a>'
+    '<a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a>'
+    '<a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">Licencia CC BY 4.0</a></div>\n'
+    '      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/metodologia/">Sobre el proyecto</a>'
+    '<a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a>'
+    '<a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a>'
+    '<a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>\n'
+    '    </div>\n'
+    '    <div class="in fbar">© 2026 nochetropical.es · Datos de AEMET bajo CC BY 4.0 · '
+    'Ramón J. Lowesting</div>\n'
+    '  </footer>'
+)
+
+# Paleta negra + contenedores + menú + pie. Lo que necesita una página para
+# llevar el chrome nuevo; las reglas propias de cada página van aparte.
+CSS_CHROME2 = (
+    ':root{--bg:#080705;--surface:#16120c;--panel:#211a12;--ink:#f2eae0;--muted:#c3b6a2;'
+    '--muted2:#9a8d79;--line:#3a3122;--brand:#ee9769;--brand-ink:#160f08;'
+    '--shadow:0 1px 2px rgba(0,0,0,.5),0 12px 34px rgba(0,0,0,.45);--c-ref:#3f9aa8;'
+    '--font-d:Georgia,"Times New Roman",serif;'
+    '--font-b:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;'
+    '--font-m:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}'
+    '*{box-sizing:border-box}'
+    'body{margin:0}'
+    '.pg{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height:1.55}'
+    '.in{max-width:1100px;margin:0 auto;padding:0 24px}'
+    '.nav{position:sticky;top:0;z-index:20;background:rgba(8,7,5,.85);'
+    'backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid var(--line)}'
+    '.nav .in{display:flex;align-items:center;gap:20px;height:60px}'
+    '.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-weight:700;'
+    'font-size:18px;color:var(--ink);text-decoration:none;white-space:nowrap}'
+    '.menu{margin-left:auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}'
+    '.menu::-webkit-scrollbar{display:none}'
+    '.menu a{font-size:14.5px;color:var(--muted);text-decoration:none;padding:8px 12px;'
+    'border-radius:8px;white-space:nowrap}'
+    '.menu a:hover{color:var(--ink);background:rgba(238,151,105,.14)}'
+    '.menu a[aria-current]{color:var(--brand);font-weight:600}'
+    '.hero{padding:50px 0 6px}'
+    '.kick{font:600 12px/1 var(--font-b);letter-spacing:.16em;text-transform:uppercase;'
+    'color:var(--brand);margin:0 0 14px}'
+    'h1{font-family:var(--font-d);font-weight:700;font-size:clamp(30px,5vw,46px);line-height:1.06;'
+    'margin:0;letter-spacing:-.01em;text-wrap:balance}'
+    '.lede{font-size:clamp(16.5px,2.2vw,19px);color:var(--muted);max-width:58ch;margin:18px 0 0}'
+    'footer{margin-top:54px;border-top:1px solid var(--line);background:var(--surface)}'
+    '.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding:44px 0 28px}'
+    '.fcol h4{font:600 11px/1 var(--font-b);letter-spacing:.14em;text-transform:uppercase;'
+    'color:var(--muted);margin:0 0 14px}'
+    '.fcol a{display:block;color:var(--ink);text-decoration:none;font-size:15px;margin:0 0 9px;opacity:.9}'
+    '.fcol a:hover{opacity:1;color:var(--brand)}'
+    '.fabout{font-size:14.5px;color:var(--muted);max-width:34ch}'
+    '.fbar{border-top:1px solid var(--line);padding:18px 0;font-size:13px;color:var(--muted)}'
+    '@media(max-width:660px){.fgrid{grid-template-columns:1fr 1fr}}'
+    '@media(max-width:430px){.fgrid{grid-template-columns:1fr}}'
+)
+
 PAGINA_PRENSA = r"""<!doctype html>
 <html lang="es">
 <head>
@@ -2354,9 +2471,9 @@ PAGINA_OLA = r"""<!doctype html>
     <p class="sub">Los dos mapas se leen casi al revés de lo que parece. Esto es lo que hay que buscar en cada uno.</p>
     <div class="claves">
       <div class="clave">
-        <h3><span class="chip" style="background:#3f6fc4"></span> Mapa de mínimas · la noche</h3>
-        <p>Busca las zonas que <b>se mantienen en los azules</b> noche tras noche, mientras el resto del país vira a verde y amarillo.</p>
-        <p>Cuidado con el verde: en la escala de AEMET <b>el verde ya empieza en los 18 °C</b>. Verde no es fresco; es estar a dos grados de la <b>noche tropical</b>. El refugio está en el azul.</p>
+        <h3><span class="chip" style="background:#21c5c0"></span> Mapa de mínimas · la noche</h3>
+        <p>Busca las zonas que <b>se mantienen en los cianes y azules</b> noche tras noche, mientras el resto del país vira a verde y amarillo.</p>
+        <p>El verde engaña. En la escala de AEMET es la banda de <b>18 a 20 °C</b>, y a 18 grados se duerme de maravilla — el problema es que está <b>pegado a la raya de los 20</b>. Hemos cruzado diez veranos: las estaciones cuya noche típica cae en el verde acumulan <b>36 noches tropicales al año</b>, cuatro de cada diez del verano. En el turquesa (14–16 °C) bajan a 2. Solo <b>por debajo de los 14</b> la cuenta llega a cero.</p>
       </div>
       <div class="clave">
         <h3><span class="chip" style="background:#c8402c"></span> Mapa de máximas · el día</h3>
@@ -2583,12 +2700,7 @@ PAGINA_BETA = r"""<!doctype html>
 <body>
 <div class="betabar">Versión <b>beta</b> del nuevo diseño · en pruebas · <a href="__HOME__">volver a la web actual</a></div>
 <div class="pg">
-  <nav class="nav"><div class="in">
-    <a class="brand" href="__HOME__"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg>nochetropical.es</a>
-    <div class="menu">
-      <a href="__HOME__" aria-current="page">Inicio</a><a href="__SITE__/mapa-estaciones/">Mapa</a><a href="__SITE__/refugios-cerca/">Refugios cerca</a><a href="__SITE__/ola-de-calor/">Ola de calor</a><a href="__SITE__/ranking-noches-tropicales/">Ranking</a><a href="__SITE__/parte/">El parte</a><a href="__SITE__/certificados/">Certificados</a><a href="#articulos">Artículos</a><a href="__SITE__/metodologia/">Metodología</a>
-    </div>
-  </div></nav>
+  __NAV__
   <header class="hero"><div class="in">
     <p class="kick">¿Dónde se duerme fresco en España?</p>
     <h1>El termómetro de las noches tropicales</h1>
@@ -2656,18 +2768,7 @@ PAGINA_BETA = r"""<!doctype html>
       <a class="card2" href="__SITE__/margen-refugios-climaticos/"><h3>El margen de los refugios</h3><p>¿Cuántas décadas de fresco le quedan a un refugio? El caso de Cedrillas.</p></a>
     </div>
   </div></section>
-  <footer>
-    <div class="in fgrid">
-      <div class="fcol">
-        <a class="brand" href="__HOME__" style="margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--surface)"/></svg>nochetropical.es</a>
-        <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p>
-      </div>
-      <div class="fcol"><h4>Explora</h4><a href="__SITE__/refugios-cerca/">Refugios cerca de ti</a><a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a><a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a><a href="__SITE__/parte/">El parte de la noche</a><a href="__SITE__/certificados/">Certificados</a></div>
-      <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a><a href="__SITE__/prensa/">Sala de prensa</a><a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a><a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">Licencia CC BY 4.0</a></div>
-      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/metodologia/">Sobre el proyecto</a><a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a><a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>
-    </div>
-    <div class="in fbar">© 2026 nochetropical.es · Datos de AEMET bajo CC BY 4.0 · Ramón J. Lowesting</div>
-  </footer>
+  __FOOTER__
 </div>
 <script>
 const DATA=__DATA__;
@@ -2764,6 +2865,8 @@ def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> s
                               '<meta name="robots" content="index,follow,max-image-preview:large">')
                      .replace('<div class="betabar">Versión <b>beta</b> del nuevo diseño · en pruebas · <a href="__HOME__">volver a la web actual</a></div>\n', ''))
     return (plantilla
+            .replace("__NAV__", nav_html("inicio"))
+            .replace("__FOOTER__", FOOTER_HTML)
             .replace("__DATA__", data_json)
             .replace("__SCHEMA__", schema)
             .replace("__APPS_URL__", APPS_SCRIPT_URL)
@@ -2844,6 +2947,15 @@ PAGINA_CERCA = r"""<!doctype html>
  .racc a.pri:hover{color:var(--brand-ink);filter:brightness(1.08)}
  .notas{font-size:13px;color:var(--muted2);border-top:1px dashed var(--line);padding-top:16px;margin-top:34px;line-height:1.65}
  .notas b{color:var(--muted)}
+ .compartir{margin:38px 0 0;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+ .compartir h2{font-family:var(--font-d);font-weight:700;font-size:clamp(18px,2.6vw,22px);color:var(--ink);margin:0 0 8px;line-height:1.25;text-wrap:balance}
+ .compartir p{font-size:14.5px;color:var(--muted);margin:0 0 16px;max-width:58ch}
+ .compartir p b{color:var(--ink)}
+ .cbtns{display:flex;gap:9px;flex-wrap:wrap}
+ .cb{font:600 14px/1 var(--font-b);padding:11px 16px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;text-decoration:none;display:inline-block}
+ .cb:hover{border-color:var(--brand);color:var(--brand)}
+ .cb.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+ .cb.pri:hover{color:var(--brand-ink);filter:brightness(1.08)}
  footer{margin-top:54px;border-top:1px solid var(--line);background:var(--surface)}
  .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding:44px 0 28px}
  .fcol h4{font:600 11px/1 var(--font-b);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
@@ -2857,12 +2969,7 @@ PAGINA_CERCA = r"""<!doctype html>
 </head>
 <body>
 <div class="pg">
-  <nav class="nav"><div class="in">
-    <a class="brand" href="__HOME__"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg>nochetropical.es</a>
-    <div class="menu">
-      <a href="__HOME__">Inicio</a><a href="__SITE__/mapa-estaciones/">Mapa</a><a href="__SITE__/refugios-cerca/" aria-current="page">Refugios cerca</a><a href="__SITE__/ola-de-calor/">Ola de calor</a><a href="__SITE__/ranking-noches-tropicales/">Ranking</a><a href="__SITE__/parte/">El parte</a><a href="__SITE__/certificados/">Certificados</a><a href="__SITE__/metodologia/">Metodología</a>
-    </div>
-  </div></nav>
+  __NAV__
 
   <header class="hero"><div class="in">
     <p class="kick">Herramienta · Datos de AEMET</p>
@@ -2882,24 +2989,25 @@ PAGINA_CERCA = r"""<!doctype html>
     </div>
     <p class="msg" id="msg"></p>
     <ol class="refs" id="refs"></ol>
+
+    <div class="compartir" data-url="__SITE__/refugios-cerca/" data-text="__SHARE_TXT__">
+      <h2>Ayuda a un amigo a encontrar el refugio climático natural más cercano a su casa</h2>
+      <p>Compártela con quien peor lo pase en verano — o úsala tú para elegir tu <b>próximo punto de vacaciones</b>: los sitios de España donde todavía se duerme sin aire acondicionado.</p>
+      <div class="cbtns">
+        <a class="cb pri" href="__SHARE_WA__" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+        <a class="cb" href="__SHARE_X__" target="_blank" rel="noopener">Compartir en X</a>
+        <button class="cb" id="cb-copiar" type="button">Copiar enlace</button>
+        <button class="cb" id="cb-share" type="button" hidden>Compartir…</button>
+      </div>
+    </div>
+
     <p class="notas">
       <b>Cómo se calcula:</b> un <b>refugio climático natural</b> es una estación de AEMET con <b>menos de una noche tropical al año</b> de media (veranos 2017–2026); una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. La <b>distancia es en línea recta</b>; el botón «Ver ruta» abre el mapa con la ruta real por carretera, con kilómetros y tiempo.<br>
       <b>El límite honesto:</b> el dato es de la <b>estación meteorológica</b>, no del municipio exacto — y en montaña la noche cambia mucho con la altitud. Los pueblos del entorno de un refugio suelen compartir su clima; eso lo mediremos pronto.
     </p>
   </div></section>
 
-  <footer>
-    <div class="in fgrid">
-      <div class="fcol">
-        <a class="brand" href="__HOME__" style="margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--surface)"/></svg>nochetropical.es</a>
-        <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p>
-      </div>
-      <div class="fcol"><h4>Explora</h4><a href="__SITE__/refugios-cerca/">Refugios cerca de ti</a><a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a><a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a><a href="__SITE__/parte/">El parte de la noche</a><a href="__SITE__/certificados/">Certificados</a></div>
-      <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a><a href="__SITE__/prensa/">Sala de prensa</a><a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a><a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">Licencia CC BY 4.0</a></div>
-      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/metodologia/">Sobre el proyecto</a><a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a><a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>
-    </div>
-    <div class="in fbar">© 2026 nochetropical.es · Datos de AEMET bajo CC BY 4.0 · Ramón J. Lowesting</div>
-  </footer>
+  __FOOTER__
 </div>
 <script>
 const REF=__REF__;
@@ -2950,6 +3058,24 @@ est.addEventListener("change",function(){
  var l=EST[prov.value]; if(!l||est.value==="")return;
  var e=l[+est.value]; pinta(e.la,e.lo,e.n);
 });
+
+// Compartir: copiar al portapapeles y hoja nativa del móvil (si la hay).
+(function(){
+ var box=document.querySelector(".compartir"); if(!box) return;
+ var url=box.getAttribute("data-url"), text=box.getAttribute("data-text");
+ var cp=document.getElementById("cb-copiar");
+ if(cp&&navigator.clipboard) cp.addEventListener("click",function(){
+   navigator.clipboard.writeText(url).then(function(){
+     cp.textContent="Enlace copiado"; setTimeout(function(){cp.textContent="Copiar enlace";},1600);
+   });
+ });
+ var sh=document.getElementById("cb-share");
+ if(sh&&navigator.share){ sh.hidden=false;
+   sh.addEventListener("click",function(){
+     navigator.share({title:document.title,text:text,url:url}).catch(function(){});
+   });
+ }
+})();
 </script>
 </body>
 </html>
@@ -2977,7 +3103,20 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str) -> str:
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
          "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
         ensure_ascii=False)
+    # Texto para compartir: dato favorable primero y sin emojis.
+    from urllib.parse import quote
+    import html as _html
+    url_cerca = site + "/refugios-cerca/"
+    share_txt = ("En España quedan 218 pueblos donde no se registra ni una noche tropical al año: "
+                 "se duerme tapado en agosto y sin aire acondicionado. "
+                 "Mira cuál te pilla más cerca, con los datos de AEMET de diez veranos:")
     return (PAGINA_CERCA
+            .replace("__NAV__", nav_html("cerca"))
+            .replace("__FOOTER__", FOOTER_HTML)
+            .replace("__SHARE_WA__", "https://wa.me/?text=" + quote(share_txt + " " + url_cerca))
+            .replace("__SHARE_X__", "https://twitter.com/intent/tweet?text=" + quote(share_txt)
+                     + "&amp;url=" + quote(url_cerca))
+            .replace("__SHARE_TXT__", _html.escape(share_txt, quote=True))
             .replace("__SCHEMA__", schema)
             .replace("__REF__", json.dumps(refs, ensure_ascii=False, separators=(",", ":")))
             .replace("__EST__", json.dumps(est, ensure_ascii=False, separators=(",", ":")))

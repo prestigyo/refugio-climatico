@@ -145,64 +145,61 @@ TEMPLATE = r"""<!doctype html>
 <meta name="twitter:description" content="Pulsa cualquier punto y descubre dónde se duerme fresco en España.">
 <meta name="twitter:image" content="__SITE__/og.png">
 <link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script type="application/ld+json">__SCHEMA__</script>
 <style>
- :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--fm:"JetBrains Mono",monospace}
- *{box-sizing:border-box}
+__CSS_CHROME__
  html{-webkit-text-size-adjust:100%}
- body{margin:0;background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.6;-webkit-font-smoothing:antialiased}
- a{color:var(--teja2)}
+ body{-webkit-font-smoothing:antialiased}
+ .pg{line-height:1.6}
+ a{color:var(--brand)}
  .wrap{max-width:880px;margin:0 auto;padding:0 1.1rem}
- .crumb{font-family:var(--fm);font-size:.72rem;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;padding:1.1rem 0 .2rem}
+ .crumb{font-family:var(--font-m);font-size:.72rem;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;padding:1.1rem 0 .2rem}
  .crumb a{color:var(--muted);text-decoration:none}
- .crumb a:hover{color:var(--teja2)}
- h1{font-family:var(--fd);font-weight:900;font-size:clamp(1.7rem,5.2vw,2.8rem);line-height:1.08;letter-spacing:-.01em;margin:.5rem 0 .4rem}
- .lead{font-size:1.05rem;color:#e7dcc8;max-width:42rem;margin:0 0 1.1rem}
+ .crumb a:hover{color:var(--brand)}
+ h1{margin:.5rem 0 .4rem;font-size:clamp(1.7rem,5.2vw,2.8rem);line-height:1.08}
+ .lead{font-size:1.05rem;color:var(--muted);max-width:42rem;margin:0 0 1.1rem}
+ .lead b{color:var(--ink)}
+ .lead a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
  .tools{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin:.6rem 0 1rem}
  .buscador{flex:1 1 220px;min-width:0}
- .buscador input{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--paper);font-family:var(--fb);font-size:.95rem;padding:.55rem .8rem}
- .buscador input:focus{outline:none;border-color:var(--teja)}
- .cont{font-family:var(--fm);font-size:.78rem;color:var(--muted);white-space:nowrap}
+ .buscador input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:var(--font-b);font-size:.95rem;padding:.55rem .8rem}
+ .buscador input:focus{outline:none;border-color:var(--brand)}
+ .cont{font-family:var(--font-m);font-size:.78rem;color:var(--muted);white-space:nowrap}
  .mapwrap{position:relative;background:linear-gradient(180deg,#12100c,#0e0b07);border:1px solid var(--line);border-radius:16px;padding:.4rem;overflow:hidden}
  svg#mapa{width:100%;height:auto;display:block;touch-action:manipulation}
  .provincias path{fill:#221a10;stroke:#5b4730;stroke-width:.6;stroke-linejoin:round}
  .inset{fill:none;stroke:#4a3a26;stroke-width:.7;stroke-dasharray:3 3}
  circle.st{stroke:#120d07;stroke-width:.35;cursor:pointer;transition:r .08s ease}
- circle.st:hover{r:5.6;stroke:var(--paper);stroke-width:.9}
- .pop{position:absolute;z-index:30;display:none;width:228px;background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid #54402a;border-radius:13px;padding:.7rem .85rem .85rem;box-shadow:0 14px 36px rgba(0,0,0,.55)}
+ circle.st:hover{r:5.6;stroke:var(--ink);stroke-width:.9}
+ .pop{position:absolute;z-index:30;display:none;width:228px;background:linear-gradient(180deg,var(--panel),var(--surface));border:1px solid #54402a;border-radius:13px;padding:.7rem .85rem .85rem;box-shadow:0 14px 36px rgba(0,0,0,.55)}
  .pop .x{position:absolute;top:2px;right:6px;background:none;border:none;color:var(--muted);font-size:1.25rem;line-height:1;cursor:pointer;padding:.2rem}
- .pop .x:hover{color:var(--paper)}
- .pl{font-family:var(--fd);font-weight:600;font-size:1.08rem;line-height:1.15;padding-right:1rem;margin-bottom:.1rem}
- .pm{font-family:var(--fm);font-size:.74rem;color:var(--muted);margin-bottom:.5rem}
+ .pop .x:hover{color:var(--ink)}
+ .pl{font-family:var(--font-d);font-weight:600;font-size:1.08rem;line-height:1.15;padding-right:1rem;margin-bottom:.1rem}
+ .pm{font-family:var(--font-m);font-size:.74rem;color:var(--muted);margin-bottom:.5rem}
  .pb{display:flex;align-items:baseline;gap:.4rem;margin-bottom:.15rem}
- .pn{font-family:var(--fm);font-weight:700;font-size:1.55rem}
+ .pn{font-family:var(--font-m);font-weight:700;font-size:1.55rem}
  .pbu{font-size:.8rem;color:#e7dcc8}
  .pr{font-size:.76rem;color:var(--muted);margin-bottom:.55rem}
- .pa{display:inline-block;font-family:var(--fm);font-size:.8rem;font-weight:700;color:var(--teja2);text-decoration:none;border-bottom:1px solid rgba(232,154,115,.4)}
- .pa:hover{border-color:var(--teja2)}
- .leyenda{display:flex;align-items:center;gap:.6rem;margin:.9rem 0 .2rem;font-family:var(--fm);font-size:.72rem;color:var(--muted)}
+ .pa{display:inline-block;font-family:var(--font-m);font-size:.8rem;font-weight:700;color:var(--brand);text-decoration:none;border-bottom:1px solid rgba(232,154,115,.4)}
+ .pa:hover{border-color:var(--brand)}
+ .leyenda{display:flex;align-items:center;gap:.6rem;margin:.9rem 0 .2rem;font-family:var(--font-m);font-size:.72rem;color:var(--muted)}
  .barra{flex:1;height:11px;border-radius:6px;background:linear-gradient(90deg,rgb(134,176,196),rgb(217,160,94),rgb(207,75,52),rgb(150,30,20))}
  .ayuda{font-size:.9rem;color:var(--muted);margin:.7rem 0 0}
  .ayuda b{color:#e7dcc8;font-weight:600}
- .sigue{margin:2rem 0 0;padding:1.1rem 1.2rem;background:var(--bg2);border:1px solid var(--line);border-radius:12px}
- .sigue h2{font-family:var(--fd);font-weight:600;font-size:1.05rem;color:var(--paper);margin:0 0 .5rem}
- .sigue p{font-size:.92rem;line-height:1.65;color:var(--muted);margin:0 0 .5rem}
- .sigue p:last-child{margin:0}
- .sigue b{color:#e7dcc8;font-weight:600}
- footer{border-top:1px solid var(--line);margin-top:2.2rem;padding:1.3rem 0 2.4rem;color:var(--muted);font-size:.82rem}
- footer a{color:var(--muted)}
- .volver{font-family:var(--fm);font-size:.8rem}
+ .notas{font-size:13px;color:var(--muted2);border-top:1px dashed var(--line);padding-top:16px;margin-top:34px;line-height:1.65}
+ .notas b{color:var(--muted)}
+ .notas a{color:var(--muted)}
  @media(max-width:560px){.lead{font-size:1rem}.cont{width:100%}}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="pg">
+  __NAV__
+
+  <div class="wrap">
   <div class="crumb"><a href="__SITE__/">Refugio Climático</a> · El mapa interactivo</div>
   <h1>El mapa de los refugios climáticos de España</h1>
-  <p class="lead">Las <b>848 estaciones de AEMET</b>, una a una, sobre el mapa. El color dice cuántas <b>noches tropicales</b> (mínima ≥ 20 °C) sufre cada una al año. Pasa el ratón —o toca en el móvil— sobre cualquier punto para ver sus datos y abrir su provincia.</p>
+  <p class="lead">Las <b>848 estaciones de AEMET</b>, una a una, sobre el mapa. El color dice cuántas <b>noches tropicales</b> (mínima ≥ 20 °C) sufre cada una al año. Pasa el ratón —o toca en el móvil— sobre cualquier punto para ver sus datos y abrir su provincia. Es la <b>media de diez veranos</b>: para ver qué pasa en el peor momento, está el <a href="__SITE__/ola-de-calor/">mapa de la ola de calor en España</a>; y si buscas lo práctico, <a href="__SITE__/refugios-cerca/">qué refugios tienes cerca de ti</a>.</p>
 
   <div class="tools">
     <div class="buscador"><input id="buscar" type="search" placeholder="Buscar estación o provincia…" autocomplete="off" aria-label="Buscar estación o provincia"></div>
@@ -230,18 +227,12 @@ __CIRCULOS__
   </div>
 
   <div class="leyenda"><span>se duerme fresco</span><span class="barra"></span><span>no refresca</span></div>
-  <p class="ayuda"><b>Verde</b> = duerme tapadito todo el verano · <b>Rojo</b> = se suda. Pulsa cualquier punto para ver los detalles. El recuadro de abajo a la izquierda son las <b>Canarias</b>.</p>
+  <p class="ayuda"><b>Azul</b> = duerme tapadito todo el verano · <b>Rojo</b> = se suda. Pulsa cualquier punto para ver los detalles. El recuadro de abajo a la izquierda son las <b>Canarias</b>.</p>
 
-  <div class="sigue">
-    <h2>Y cuando llega la ola de calor, ¿aguantan?</h2>
-    <p>Este mapa es la <b>media de diez veranos</b>: sirve para saber dónde se duerme fresco un año normal. Para ver qué pasa en el peor momento está el <a href="__SITE__/ola-de-calor/">mapa de la ola de calor en España</a>, animado con los mapas de temperaturas de AEMET: las máximas de cada día y las mínimas de cada noche, un fotograma por jornada. Los refugios de verdad son los que ahí <b>ni se vuelven rojos de día ni pierden el azul de noche</b>.</p>
-    <p>Y si lo que quieres es lo práctico: mira <a href="__SITE__/refugios-cerca/">qué refugios climáticos tienes cerca de ti</a>, ordenados por distancia.</p>
+  <p class="notas">Fuente: <b>AEMET</b> (OpenData). Noches tropicales medidas en verano (jun–ago), veranos 2017–2026. Datos abiertos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC BY 4.0</a>. Actualizado en <time datetime="__FECHA_ISO__">__FECHA_TXT__</time>.</p>
   </div>
 
-  <footer>
-    <p class="volver"><a href="__SITE__/">← Volver a la portada</a></p>
-    <p>Fuente: <b>AEMET</b> (OpenData). Noches tropicales medidas en verano (jun–ago), veranos 2017–2026. Datos abiertos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC BY 4.0</a>. Actualizado en <time datetime="__FECHA_ISO__">__FECHA_TXT__</time>.</p>
-  </footer>
+  __FOOTER__
 </div>
 
 <script>
@@ -306,12 +297,18 @@ def main() -> int:
     fecha_txt = g.fecha_es(fecha)
 
     html_out = (TEMPLATE
+                # chrome compartido con la portada (menú, pie y paleta negra):
+                # vive en generar_calculadora para no duplicarlo por página
+                .replace("__CSS_CHROME__", g.CSS_CHROME2)
+                .replace("__NAV__", g.nav_html("mapa"))
+                .replace("__FOOTER__", g.FOOTER_HTML)
                 .replace("__SCHEMA__", construir_schema(fecha_iso))
                 .replace("__PROVINCIAS__", construir_provincias())
                 .replace("__CIRCULOS__", construir_circulos(estaciones))
                 .replace("__TOTAL__", str(total))
                 .replace("__FECHA_ISO__", fecha_iso)
                 .replace("__FECHA_TXT__", fecha_txt)
+                .replace("__HOME__", SITE + "/")
                 .replace("__SITE__", SITE))
 
     OUT.parent.mkdir(parents=True, exist_ok=True)

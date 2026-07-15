@@ -1340,6 +1340,40 @@ def barra_compartir(url: str, texto: str) -> str:
         '</div></div>')
 
 
+# Slug de la herramienta de cercanía. Lleva "naturales" a propósito: "refugio
+# climático" a secas es el término oficial de los locales con aire que abren los
+# ayuntamientos en las olas, que es justo lo contrario de lo que contamos.
+SLUG_CERCA = "refugios-climaticos-naturales-cerca-de-mi"
+
+# Carpetas que solo contienen una redirección: fuera del sitemap (no son páginas).
+REDIRECCIONES: list[str] = []
+
+
+def escribir_redireccion(site: str, carpeta: str, destino: str, mensaje: str,
+                         noindex: bool = False) -> None:
+    """Deja en `carpeta` un stub que manda a `destino`.
+
+    GitHub Pages no sabe hacer un 301, así que lo más parecido es un
+    meta-refresh instantáneo + canonical. Google lo acaba tratando como
+    redirección, aunque más despacio y con menos fuerza que un 301 real.
+
+    `noindex` solo para páginas que NO queremos consolidar (un duplicado que
+    sobra). En una MUDANZA de URL hay que dejarlo en False: el canonical es lo
+    único que traspasa la señal, y un noindex la borraría.
+    """
+    REDIRECCIONES.append(carpeta)
+    (DOCS_DIR / carpeta).mkdir(parents=True, exist_ok=True)
+    robots = '<meta name="robots" content="noindex,nofollow">' if noindex else ""
+    (DOCS_DIR / carpeta / "index.html").write_text(
+        '<!doctype html><html lang="es"><head><meta charset="utf-8">'
+        + robots
+        + f'<link rel="canonical" href="{destino}">'
+        f'<meta http-equiv="refresh" content="0; url={destino}">'
+        '<title>Redirigiendo a nochetropical.es</title></head><body>'
+        f'<p>{mensaje} <a href="{destino}">Continuar</a></p>'
+        '</body></html>', encoding="utf-8")
+
+
 def csv_provincia(lista: list[dict]) -> str:
     """CSV limpio de una provincia (una fila por estación) para descarga en la
     web y para prensa. Formato máquina: decimales con punto. Usa csv.writer por
@@ -1500,7 +1534,7 @@ _CSS_CHROME = (
 _MENU = [
     ("inicio", "__HOME__", "Inicio"),
     ("mapa", "__SITE__/mapa-estaciones/", "Mapa"),
-    ("cerca", "__SITE__/refugios-cerca/", "Refugios cerca"),
+    ("cerca", "__SITE__/refugios-climaticos-naturales-cerca-de-mi/", "Refugios cerca"),
     ("ola", "__SITE__/ola-de-calor/", "Ola de calor"),
     ("ranking", "__SITE__/ranking-noches-tropicales/", "Ranking"),
     ("parte", "__SITE__/parte/", "El parte"),
@@ -1545,7 +1579,7 @@ FOOTER_HTML = (
     '        <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: '
     '¿dónde se duerme fresco en España?</p>\n'
     '      </div>\n'
-    '      <div class="fcol"><h4>Explora</h4><a href="__SITE__/refugios-cerca/">Refugios cerca de ti</a>'
+    '      <div class="fcol"><h4>Explora</h4><a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">Refugios cerca de ti</a>'
     '<a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a>'
     '<a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a>'
     '<a href="__SITE__/parte/">El parte de la noche</a>'
@@ -2403,17 +2437,25 @@ PAGINA_OLA = r"""<!doctype html>
 <meta name="twitter:image" content="__SITE__/og.png">
 <link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
 <script type="application/ld+json">__SCHEMA__</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
- __CSS__
+__CSS__
+ .pg{line-height:1.7}
+ a{color:var(--brand)}
  .wrap{max-width:720px;margin:0 auto;padding:0 22px}
- p{font-size:clamp(15.5px,2.3vw,17px);color:#e3d8c4;margin:0 0 14px}p b{color:var(--paper)}
- .toggle-refugios{display:inline-flex;align-items:center;gap:8px;background:rgba(217,116,78,.14);border:1px solid var(--teja);color:var(--teja2);padding:11px 20px;border-radius:999px;font-family:var(--fb);font-weight:600;font-size:14.5px;cursor:pointer;transition:.2s;margin:8px 0 20px}
- .toggle-refugios:hover,.toggle-refugios.on{background:var(--teja);color:#1a1209}
+ p{font-size:clamp(15.5px,2.3vw,17px);color:var(--muted);margin:0 0 14px}p b{color:var(--ink)}
+ .crumb{font-size:13px;color:var(--muted2)}.crumb a{color:var(--muted2)}
+ .hero .wrap{padding:0 22px}
+ .lede{max-width:none}
+ .btn{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px;text-decoration:none}
+ .btn.pri{background:var(--brand);color:var(--brand-ink)}
+ .btn.pri:hover{filter:brightness(1.08)}
+ .btn.sec{background:transparent;border:1px solid var(--line);color:var(--ink)}
+ .btn.sec:hover{border-color:var(--brand);color:var(--brand)}
+ .botones{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+ .toggle-refugios{display:inline-flex;align-items:center;gap:8px;background:rgba(238,151,105,.14);border:1px solid var(--brand);color:var(--brand);padding:11px 20px;border-radius:999px;font-family:var(--font-b);font-weight:600;font-size:14.5px;cursor:pointer;transition:.2s;margin:8px 0 20px}
+ .toggle-refugios:hover,.toggle-refugios.on{background:var(--brand);color:var(--brand-ink)}
  .mapa{margin:0 0 26px}
- .mapa h2{font-family:var(--fd);font-weight:600;font-size:clamp(16px,2.6vw,19px);color:var(--teja2);margin:0 0 8px;text-align:center}
+ .mapa h2{font-family:var(--font-d);font-weight:700;font-size:clamp(16px,2.6vw,19px);color:var(--brand);margin:0 0 8px;text-align:center}
  .gifwrap{position:relative;max-width:630px;margin:0 auto;border-radius:8px;overflow:hidden}
  .gifwrap img{width:100%;height:auto;display:block}
  .capa{position:absolute;inset:0;width:100%;height:100%;transition:opacity .25s ease;pointer-events:none}
@@ -2421,36 +2463,41 @@ PAGINA_OLA = r"""<!doctype html>
  .marca{pointer-events:auto;cursor:pointer}
  .capa.oculta .marca{pointer-events:none}
  .flecha{fill:#111;stroke:#fff;stroke-width:1.2;stroke-linejoin:round}
- .marca:hover .flecha,.marca.activa .flecha{fill:var(--teja)}
+ .marca:hover .flecha,.marca.activa .flecha{fill:var(--brand)}
  .tt{opacity:0;transition:opacity .12s ease}
  .marca:hover .tt,.marca.activa .tt{opacity:1}
  .tt rect{fill:rgba(20,14,8,.94);stroke:#5a4d3a;stroke-width:.7}
- .tt text{fill:#efe6d6;font-family:var(--fm);font-size:11px;font-weight:700}
+ .tt text{fill:#f2eae0;font-family:var(--font-m);font-size:11px;font-weight:700}
  .note{font-size:13px;color:var(--muted);text-align:center;margin:0 0 18px}
- .aviso{font-size:13.5px;color:var(--muted);line-height:1.65;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:8px auto 24px;max-width:600px}
- .aviso b{color:#e7dcc8}
+ .aviso{font-size:13.5px;color:var(--muted);line-height:1.65;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:8px auto 24px;max-width:600px}
+ .aviso b{color:var(--ink)}
  .guia{margin:34px auto 28px;max-width:660px}
- .guia h2{font-family:var(--fd);font-weight:600;font-size:clamp(18px,3vw,22px);color:var(--paper);margin:0 0 6px;text-align:center}
+ .guia h2{font-family:var(--font-d);font-weight:600;font-size:clamp(18px,3vw,22px);color:var(--ink);margin:0 0 6px;text-align:center}
  .guia .sub{font-size:14.5px;color:var(--muted);text-align:center;margin:0 0 18px}
  .claves{display:grid;grid-template-columns:1fr 1fr;gap:14px}
  @media(max-width:620px){.claves{grid-template-columns:1fr}}
- .clave{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px}
- .clave h3{font-family:var(--fb);font-weight:600;font-size:15px;color:var(--teja2);margin:0 0 10px;display:flex;align-items:center;gap:8px;line-height:1.35}
+ .clave{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+ .clave h3{font-family:var(--font-b);font-weight:600;font-size:15px;color:var(--brand);margin:0 0 10px;display:flex;align-items:center;gap:8px;line-height:1.35}
  .chip{width:14px;height:14px;border-radius:4px;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
- .clave p{font-size:14px;line-height:1.6;color:#d8ccb8;margin:0 0 9px}
+ .clave p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 9px}
  .clave p:last-child{margin:0}
  .guia .pie{font-size:14px;color:var(--muted);text-align:center;margin:16px 0 0}
- .cierre{margin:40px 0 10px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:28px 24px;text-align:center}
- .cierre b{font-family:var(--fd);font-size:19px}
- footer p{margin:0 0 8px}
+ .cierre{margin:40px 0 10px;background:linear-gradient(180deg,var(--surface),var(--panel));border:1px solid var(--line);border-radius:18px;padding:28px 24px;text-align:center}
+ .cierre b{font-family:var(--font-d);font-size:19px;color:var(--ink)}
+ .notas{font-size:13px;color:var(--muted2);border-top:1px dashed var(--line);padding-top:16px;margin:34px 0 0;line-height:1.65}
+ .notas b{color:var(--muted)}
+ .notas a{color:var(--muted)}
 </style>
 </head>
 <body>
-<header class="h"><div class="wrap">
+<div class="pg">
+__NAV__
+
+<header class="hero"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Mapa de la ola de calor</nav>
-  <div class="kick">Mapa animado · Datos AEMET</div>
+  <p class="kick">Mapa animado · Datos AEMET</p>
   <h1>Mapa de la ola de calor en España, <em>día y noche</em></h1>
-  <p class="intro">Los <b>mapas de temperaturas de AEMET</b>, animados: las <b>máximas de día</b> y las <b>mínimas de noche</b>, un fotograma por jornada. De día arde el 98 % del país. De noche, España se parte en dos: <b>una quinta parte del territorio no cruza los 20 °C ni una sola noche</b>. Ahí es donde se duerme. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
+  <p class="lede">Los <b>mapas de temperaturas de AEMET</b>, animados: las <b>máximas de día</b> y las <b>mínimas de noche</b>, un fotograma por jornada. De día arde el 98 % del país. De noche, España se parte en dos: <b>una quinta parte del territorio no cruza los 20 °C ni una sola noche</b>. Ahí es donde se duerme. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
 </div></header>
 
 <section><div class="wrap">
@@ -2495,7 +2542,7 @@ PAGINA_OLA = r"""<!doctype html>
         <p>Es más: los mejores refugios <b>se ponen rojos</b><span class="mu" style="background:#FF0000" aria-hidden="true"></span>. Teruel supera los 32 °C cincuenta y tres días al año y casi no tiene noches tropicales. El refugio español no es donde no aprieta el sol — <b>es donde la noche se lleva el calor</b>. Este mapa está aquí para que veas de qué se escapan.</p>
       </div>
     </div>
-    <p class="pie">¿Has localizado una zona? Compruébala con el dato exacto en <a href="__SITE__/mapa-estaciones/">el mapa de refugios climáticos</a>, estación a estación, o mira <a href="__SITE__/refugios-cerca/">qué refugios tienes cerca de ti</a>.</p>
+    <p class="pie">¿Has localizado una zona? Compruébala con el dato exacto en <a href="__SITE__/mapa-estaciones/">el mapa de refugios climáticos</a>, estación a estación, o mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">qué refugios tienes cerca de ti</a>.</p>
   </div>
 
   <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona. Cada punto es la <b>estación meteorológica</b> y la población donde está; eso <b>no significa que los pueblos de alrededor no pertenezcan a ese mismo refugio climático</b> —el fresco no entiende de límites municipales—. <b>Cedrillas</b>, por ejemplo, abarca también Gúdar, Cabra de Mora, Alcalá de la Selva, Valdelinares, Allepuz o El Castellar. Señalan zonas donde, durante la ola, los colores se mantienen <b>lejos del lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span> y del amarillo<span class="mu" style="background:#FFFF00" aria-hidden="true"></span></b>: la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar el calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
@@ -2508,11 +2555,12 @@ PAGINA_OLA = r"""<!doctype html>
       <a class="btn sec" href="__SHARE_X__" target="_blank" rel="noopener">Compartir en X</a>
     </div>
   </div>
+
+  <p class="notas">Mapas: <b>AEMET</b> (© Agencia Estatal de Meteorología), animados por el proyecto <a href="__HOME__">Refugio Climático</a>. Un fotograma por día. Datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.</p>
 </div></section>
 
-<footer><div class="wrap">
-  <p>Mapas: <b>AEMET</b> (© Agencia Estatal de Meteorología), animados por el proyecto <a href="__HOME__">Refugio Climático</a>. Un fotograma por día. Datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.</p>
-</div></footer>
+__FOOTER__
+</div>
 
 <script>
 const SITE="__SITE__";
@@ -2566,7 +2614,10 @@ def construir_pagina_ola(site: str, fecha_iso: str, fecha_txt: str) -> str:
     return (PAGINA_OLA
             .replace("__SCHEMA__", schema)
             .replace("__SHARE_X__", share_x)
-            .replace("__CSS__", _CSS_CHROME)
+            # chrome nuevo: paleta negra + menú + pie, compartidos con la portada
+            .replace("__CSS__", CSS_CHROME2)
+            .replace("__NAV__", nav_html("ola"))
+            .replace("__FOOTER__", FOOTER_HTML)
             .replace("__MARCADORES__", construir_marcadores_ola(site))
             .replace("__FECHA__", fecha_txt)
             .replace("__HOME__", site + "/")
@@ -2768,7 +2819,7 @@ __CSS_MU__
     </div>
     <h2 class="sec-h">Explora los datos</h2>
     <div class="mods">
-      <a class="card2" href="__SITE__/refugios-cerca/"><h3>Refugios cerca de ti</h3><p>Los refugios climáticos más cercanos, con la distancia y la ruta.</p></a>
+      <a class="card2" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/"><h3>Refugios cerca de ti</h3><p>Los refugios climáticos más cercanos, con la distancia y la ruta.</p></a>
       <a class="card2" href="__SITE__/mapa-estaciones/"><h3>Mapa interactivo</h3><p>Las 848 estaciones de AEMET sobre el mapa de España.</p></a>
       <a class="card2" href="__SITE__/ranking-noches-tropicales/"><h3>Ranking nacional</h3><p>Dónde se duerme mejor y peor de toda España.</p></a>
       <a class="card2" href="__SITE__/parte/"><h3>El parte de la noche</h3><p>Quién durmió fresco anoche. Cada mañana.</p></a>
@@ -2891,7 +2942,7 @@ def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> s
 
 
 # ===========================================================================
-# Página /refugios-cerca/: geolocaliza (o eliges estación) y te da los 5
+# Página /refugios-climaticos-naturales-cerca-de-mi/: geolocaliza (o eliges estación) y te da los 5
 # refugios climáticos naturales más cercanos, con distancia y ruta.
 # FASE A: sin dataset de municipios. FASE B (pendiente): buscar por municipio
 # (INE) y listar los pueblos bajo la influencia de cada refugio (±150 m alt).
@@ -2903,13 +2954,13 @@ PAGINA_CERCA = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Refugios climáticos cerca de ti: dónde se duerme fresco más cerca | nochetropical.es</title>
 <meta name="description" content="¿Cuál es el refugio climático natural más cercano a ti? Los pueblos de España sin noches tropicales, con la distancia y la ruta para llegar. Diez veranos de datos de AEMET.">
-<link rel="canonical" href="__SITE__/refugios-cerca/">
+<link rel="canonical" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Refugios climáticos cerca de ti">
 <meta property="og:description" content="Los pueblos donde se duerme fresco más cerca de ti, con distancia y ruta. Datos de AEMET.">
-<meta property="og:url" content="__SITE__/refugios-cerca/">
+<meta property="og:url" content="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">
 <meta property="og:image" content="__SITE__/og.png">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
@@ -3006,7 +3057,7 @@ PAGINA_CERCA = r"""<!doctype html>
     <p class="msg" id="msg"></p>
     <ol class="refs" id="refs"></ol>
 
-    <div class="compartir" data-url="__SITE__/refugios-cerca/" data-text="__SHARE_TXT__">
+    <div class="compartir" data-url="__SITE__/refugios-climaticos-naturales-cerca-de-mi/" data-text="__SHARE_TXT__">
       <h2>Ayuda a un amigo a encontrar el refugio climático natural más cercano a su casa</h2>
       <p>Compártela con quien peor lo pase en verano — o úsala tú para elegir tu <b>próximo punto de vacaciones</b>: los sitios de España donde todavía se duerme sin aire acondicionado.</p>
       <div class="cbtns">
@@ -3107,7 +3158,7 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str) -> str:
     est = {prov: [{"n": e["loc"], "a": e["alt"], "la": e["lat"], "lo": e["lon"]}
                   for e in sorted(lista, key=lambda x: clave_orden(x["loc"]))]
            for prov, lista in datos["provincias"].items()}
-    url = site + "/refugios-cerca/"
+    url = site + "/refugios-climaticos-naturales-cerca-de-mi/"
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
@@ -3122,7 +3173,7 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str) -> str:
     # Texto para compartir: dato favorable primero y sin emojis.
     from urllib.parse import quote
     import html as _html
-    url_cerca = site + "/refugios-cerca/"
+    url_cerca = site + "/refugios-climaticos-naturales-cerca-de-mi/"
     share_txt = ("En España quedan 218 pueblos donde no se registra ni una noche tropical al año: "
                  "se duerme tapado en agosto y sin aire acondicionado. "
                  "Mira cuál te pilla más cerca, con los datos de AEMET de diez veranos:")
@@ -3180,21 +3231,20 @@ def main() -> int:
     (DOCS_DIR / "ola-de-calor" / "index.html").write_text(
         construir_pagina_ola(site, fecha_mod_iso, fecha_mod_txt), encoding="utf-8")
     # Herramienta: los refugios climáticos más cercanos (geolocalización).
-    (DOCS_DIR / "refugios-cerca").mkdir(parents=True, exist_ok=True)
-    (DOCS_DIR / "refugios-cerca" / "index.html").write_text(
+    (DOCS_DIR / "refugios-climaticos-naturales-cerca-de-mi").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "refugios-climaticos-naturales-cerca-de-mi" / "index.html").write_text(
         construir_pagina_cerca(estaciones, datos, site), encoding="utf-8")
     # /beta/ YA es la portada: dejamos una redirección a la home (noindex; fuera
-    # del sitemap por el filtro startswith("beta")). Así no hay duplicado y quien
+    # del sitemap por el filtro de REDIRECCIONES). Así no hay duplicado y quien
     # tuviera guardado /beta/ acaba en la web nueva.
-    (DOCS_DIR / "beta").mkdir(parents=True, exist_ok=True)
-    (DOCS_DIR / "beta" / "index.html").write_text(
-        '<!doctype html><html lang="es"><head><meta charset="utf-8">'
-        '<meta name="robots" content="noindex,nofollow">'
-        f'<link rel="canonical" href="{site}/">'
-        f'<meta http-equiv="refresh" content="0; url={site}/">'
-        '<title>Redirigiendo a nochetropical.es</title></head><body>'
-        f'<p>El nuevo diseño ya es la portada. <a href="{site}/">Ir a nochetropical.es</a></p>'
-        '</body></html>', encoding="utf-8")
+    escribir_redireccion(site, "beta", site + "/",
+                         "El nuevo diseño ya es la portada.", noindex=True)
+    # La herramienta vivía en /refugios-cerca/ (slug flojo). Al mudarla NO se
+    # pone noindex: GitHub Pages no hace 301 de verdad, así que el meta-refresh
+    # + canonical es todo lo que tiene Google para pasar la señal a la URL nueva
+    # — y un noindex la mataría en vez de traspasarla.
+    escribir_redireccion(site, "refugios-cerca", site + "/" + SLUG_CERCA + "/",
+                         "Esta herramienta se ha mudado.")
     (DOCS_DIR / "metodologia").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "metodologia" / "index.html").write_text(
         construir_pagina_metodologia(estaciones, total, site, fecha_mod_iso, fecha_mod_txt),
@@ -3223,7 +3273,8 @@ def main() -> int:
         f"{site}/{rel}/"
         for patron in ("*/index.html", "*/*/index.html")
         for f in DOCS_DIR.glob(patron)
-        if not (rel := f.parent.relative_to(DOCS_DIR).as_posix()).startswith("beta"))
+        # las carpetas que solo redirigen no son páginas: fuera del sitemap
+        if (rel := f.parent.relative_to(DOCS_DIR).as_posix()) not in REDIRECCIONES)
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'
         f'<priority>{"1.0" if u == site + "/" else "0.7"}</priority></url>' for u in urls)

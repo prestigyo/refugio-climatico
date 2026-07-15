@@ -199,7 +199,7 @@ __CSS_CHROME__
   <div class="wrap">
   <div class="crumb"><a href="__SITE__/">Refugio Climático</a> · El mapa interactivo</div>
   <h1>El mapa de los refugios climáticos de España</h1>
-  <p class="lead">Las <b>848 estaciones de AEMET</b>, una a una, sobre el mapa. El color dice cuántas <b>noches tropicales</b> (mínima ≥ 20 °C) sufre cada una al año. Pasa el ratón —o toca en el móvil— sobre cualquier punto para ver sus datos y abrir su provincia. Es la <b>media de diez veranos</b>: para ver qué pasa en el peor momento, está el <a href="__SITE__/ola-de-calor/">mapa de la ola de calor en España</a>; y si buscas lo práctico, <a href="__SITE__/refugios-cerca/">qué refugios tienes cerca de ti</a>.</p>
+  <p class="lead">Las <b>848 estaciones de AEMET</b>, una a una, sobre el mapa. El color dice cuántas <b>noches tropicales</b> (mínima ≥ 20 °C) sufre cada una al año. Pasa el ratón —o toca en el móvil— sobre cualquier punto para ver sus datos y abrir su provincia. Es la <b>media de diez veranos</b>: para ver qué pasa en el peor momento, está el <a href="__SITE__/ola-de-calor/">mapa de la ola de calor en España</a>; y si buscas lo práctico, <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">qué refugios tienes cerca de ti</a>.</p>
 
   <div class="tools">
     <div class="buscador"><input id="buscar" type="search" placeholder="Buscar estación o provincia…" autocomplete="off" aria-label="Buscar estación o provincia"></div>

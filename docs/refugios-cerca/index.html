@@ -65,6 +65,15 @@
  .racc a.pri:hover{color:var(--brand-ink);filter:brightness(1.08)}
  .notas{font-size:13px;color:var(--muted2);border-top:1px dashed var(--line);padding-top:16px;margin-top:34px;line-height:1.65}
  .notas b{color:var(--muted)}
+ .compartir{margin:38px 0 0;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+ .compartir h2{font-family:var(--font-d);font-weight:700;font-size:clamp(18px,2.6vw,22px);color:var(--ink);margin:0 0 8px;line-height:1.25;text-wrap:balance}
+ .compartir p{font-size:14.5px;color:var(--muted);margin:0 0 16px;max-width:58ch}
+ .compartir p b{color:var(--ink)}
+ .cbtns{display:flex;gap:9px;flex-wrap:wrap}
+ .cb{font:600 14px/1 var(--font-b);padding:11px 16px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;text-decoration:none;display:inline-block}
+ .cb:hover{border-color:var(--brand);color:var(--brand)}
+ .cb.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+ .cb.pri:hover{color:var(--brand-ink);filter:brightness(1.08)}
  footer{margin-top:54px;border-top:1px solid var(--line);background:var(--surface)}
  .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding:44px 0 28px}
  .fcol h4{font:600 11px/1 var(--font-b);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
@@ -81,7 +90,7 @@
   <nav class="nav"><div class="in">
     <a class="brand" href="https://nochetropical.es/"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg>nochetropical.es</a>
     <div class="menu">
-      <a href="https://nochetropical.es/">Inicio</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa</a><a href="https://nochetropical.es/refugios-cerca/" aria-current="page">Refugios cerca</a><a href="https://nochetropical.es/ola-de-calor/">Ola de calor</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking</a><a href="https://nochetropical.es/parte/">El parte</a><a href="https://nochetropical.es/certificados/">Certificados</a><a href="https://nochetropical.es/metodologia/">Metodología</a>
+      <a href="https://nochetropical.es/">Inicio</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa</a><a href="https://nochetropical.es/refugios-cerca/" aria-current="page">Refugios cerca</a><a href="https://nochetropical.es/ola-de-calor/">Ola de calor</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking</a><a href="https://nochetropical.es/parte/">El parte</a><a href="https://nochetropical.es/certificados/">Certificados</a><a href="https://nochetropical.es/#articulos">Artículos</a><a href="https://nochetropical.es/metodologia/">Metodología</a>
     </div>
   </div></nav>
 
@@ -103,6 +112,18 @@
     </div>
     <p class="msg" id="msg"></p>
     <ol class="refs" id="refs"></ol>
+
+    <div class="compartir" data-url="https://nochetropical.es/refugios-cerca/" data-text="En España quedan 218 pueblos donde no se registra ni una noche tropical al año: se duerme tapado en agosto y sin aire acondicionado. Mira cuál te pilla más cerca, con los datos de AEMET de diez veranos:">
+      <h2>Ayuda a un amigo a encontrar el refugio climático natural más cercano a su casa</h2>
+      <p>Compártela con quien peor lo pase en verano — o úsala tú para elegir tu <b>próximo punto de vacaciones</b>: los sitios de España donde todavía se duerme sin aire acondicionado.</p>
+      <div class="cbtns">
+        <a class="cb pri" href="https://wa.me/?text=En%20Espa%C3%B1a%20quedan%20218%20pueblos%20donde%20no%20se%20registra%20ni%20una%20noche%20tropical%20al%20a%C3%B1o%3A%20se%20duerme%20tapado%20en%20agosto%20y%20sin%20aire%20acondicionado.%20Mira%20cu%C3%A1l%20te%20pilla%20m%C3%A1s%20cerca%2C%20con%20los%20datos%20de%20AEMET%20de%20diez%20veranos%3A%20https%3A//nochetropical.es/refugios-cerca/" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+        <a class="cb" href="https://twitter.com/intent/tweet?text=En%20Espa%C3%B1a%20quedan%20218%20pueblos%20donde%20no%20se%20registra%20ni%20una%20noche%20tropical%20al%20a%C3%B1o%3A%20se%20duerme%20tapado%20en%20agosto%20y%20sin%20aire%20acondicionado.%20Mira%20cu%C3%A1l%20te%20pilla%20m%C3%A1s%20cerca%2C%20con%20los%20datos%20de%20AEMET%20de%20diez%20veranos%3A&amp;url=https%3A//nochetropical.es/refugios-cerca/" target="_blank" rel="noopener">Compartir en X</a>
+        <button class="cb" id="cb-copiar" type="button">Copiar enlace</button>
+        <button class="cb" id="cb-share" type="button" hidden>Compartir…</button>
+      </div>
+    </div>
+
     <p class="notas">
       <b>Cómo se calcula:</b> un <b>refugio climático natural</b> es una estación de AEMET con <b>menos de una noche tropical al año</b> de media (veranos 2017–2026); una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. La <b>distancia es en línea recta</b>; el botón «Ver ruta» abre el mapa con la ruta real por carretera, con kilómetros y tiempo.<br>
       <b>El límite honesto:</b> el dato es de la <b>estación meteorológica</b>, no del municipio exacto — y en montaña la noche cambia mucho con la altitud. Los pueblos del entorno de un refugio suelen compartir su clima; eso lo mediremos pronto.
@@ -171,6 +192,24 @@ est.addEventListener("change",function(){
  var l=EST[prov.value]; if(!l||est.value==="")return;
  var e=l[+est.value]; pinta(e.la,e.lo,e.n);
 });
+
+// Compartir: copiar al portapapeles y hoja nativa del móvil (si la hay).
+(function(){
+ var box=document.querySelector(".compartir"); if(!box) return;
+ var url=box.getAttribute("data-url"), text=box.getAttribute("data-text");
+ var cp=document.getElementById("cb-copiar");
+ if(cp&&navigator.clipboard) cp.addEventListener("click",function(){
+   navigator.clipboard.writeText(url).then(function(){
+     cp.textContent="Enlace copiado"; setTimeout(function(){cp.textContent="Copiar enlace";},1600);
+   });
+ });
+ var sh=document.getElementById("cb-share");
+ if(sh&&navigator.share){ sh.hidden=false;
+   sh.addEventListener("click",function(){
+     navigator.share({title:document.title,text:text,url:url}).catch(function(){});
+   });
+ }
+})();
 </script>
 </body>
 </html>

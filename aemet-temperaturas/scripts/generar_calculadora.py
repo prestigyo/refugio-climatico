@@ -2557,7 +2557,7 @@ PAGINA_BETA = r"""<!doctype html>
   <nav class="nav"><div class="in">
     <a class="brand" href="__HOME__"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg>nochetropical.es</a>
     <div class="menu">
-      <a href="__HOME__" aria-current="page">Inicio</a><a href="__SITE__/mapa-estaciones/">Mapa</a><a href="__SITE__/ola-de-calor/">Ola de calor</a><a href="__SITE__/ranking-noches-tropicales/">Ranking</a><a href="__SITE__/parte/">El parte</a><a href="__SITE__/certificados/">Certificados</a><a href="#articulos">Artículos</a><a href="__SITE__/metodologia/">Metodología</a>
+      <a href="__HOME__" aria-current="page">Inicio</a><a href="__SITE__/mapa-estaciones/">Mapa</a><a href="__SITE__/refugios-cerca/">Refugios cerca</a><a href="__SITE__/ola-de-calor/">Ola de calor</a><a href="__SITE__/ranking-noches-tropicales/">Ranking</a><a href="__SITE__/parte/">El parte</a><a href="__SITE__/certificados/">Certificados</a><a href="#articulos">Artículos</a><a href="__SITE__/metodologia/">Metodología</a>
     </div>
   </div></nav>
   <header class="hero"><div class="in">
@@ -2612,6 +2612,7 @@ PAGINA_BETA = r"""<!doctype html>
     </div>
     <h2 class="sec-h">Explora los datos</h2>
     <div class="mods">
+      <a class="card2" href="__SITE__/refugios-cerca/"><h3>Refugios cerca de ti</h3><p>Los refugios climáticos más cercanos, con la distancia y la ruta.</p></a>
       <a class="card2" href="__SITE__/mapa-estaciones/"><h3>Mapa interactivo</h3><p>Las 848 estaciones de AEMET sobre el mapa de España.</p></a>
       <a class="card2" href="__SITE__/ranking-noches-tropicales/"><h3>Ranking nacional</h3><p>Dónde se duerme mejor y peor de toda España.</p></a>
       <a class="card2" href="__SITE__/parte/"><h3>El parte de la noche</h3><p>Quién durmió fresco anoche. Cada mañana.</p></a>
@@ -2632,7 +2633,7 @@ PAGINA_BETA = r"""<!doctype html>
         <a class="brand" href="__HOME__" style="margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--surface)"/></svg>nochetropical.es</a>
         <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p>
       </div>
-      <div class="fcol"><h4>Explora</h4><a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a><a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a><a href="__SITE__/parte/">El parte de la noche</a><a href="__SITE__/certificados/">Certificados</a></div>
+      <div class="fcol"><h4>Explora</h4><a href="__SITE__/refugios-cerca/">Refugios cerca de ti</a><a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a><a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a><a href="__SITE__/parte/">El parte de la noche</a><a href="__SITE__/certificados/">Certificados</a></div>
       <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a><a href="__SITE__/prensa/">Sala de prensa</a><a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a><a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">Licencia CC BY 4.0</a></div>
       <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/metodologia/">Sobre el proyecto</a><a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a><a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>
     </div>
@@ -2741,6 +2742,220 @@ def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> s
             .replace("__SITE__", site))
 
 
+# ===========================================================================
+# Página /refugios-cerca/: geolocaliza (o eliges estación) y te da los 5
+# refugios climáticos naturales más cercanos, con distancia y ruta.
+# FASE A: sin dataset de municipios. FASE B (pendiente): buscar por municipio
+# (INE) y listar los pueblos bajo la influencia de cada refugio (±150 m alt).
+# ===========================================================================
+PAGINA_CERCA = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refugios climáticos cerca de ti: dónde se duerme fresco más cerca | nochetropical.es</title>
+<meta name="description" content="¿Cuál es el refugio climático natural más cercano a ti? Los pueblos de España sin noches tropicales, con la distancia y la ruta para llegar. Diez veranos de datos de AEMET.">
+<link rel="canonical" href="__SITE__/refugios-cerca/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Refugios climáticos cerca de ti">
+<meta property="og:description" content="Los pueblos donde se duerme fresco más cerca de ti, con distancia y ruta. Datos de AEMET.">
+<meta property="og:url" content="__SITE__/refugios-cerca/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<style>
+ :root{--bg:#080705;--surface:#16120c;--panel:#211a12;--ink:#f2eae0;--muted:#c3b6a2;--muted2:#9a8d79;--line:#3a3122;--brand:#ee9769;--brand-ink:#160f08;--shadow:0 1px 2px rgba(0,0,0,.5),0 12px 34px rgba(0,0,0,.45);--c-ref:#3f9aa8;--font-d:Georgia,"Times New Roman",serif;--font-b:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--font-m:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}
+ *{box-sizing:border-box}
+ body{margin:0}
+ .pg{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height:1.55}
+ .in{max-width:1100px;margin:0 auto;padding:0 24px}
+ .nav{position:sticky;top:0;z-index:20;background:rgba(8,7,5,.85);backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid var(--line)}
+ .nav .in{display:flex;align-items:center;gap:20px;height:60px}
+ .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;white-space:nowrap}
+ .menu{margin-left:auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+ .menu::-webkit-scrollbar{display:none}
+ .menu a{font-size:14.5px;color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;white-space:nowrap}
+ .menu a:hover{color:var(--ink);background:rgba(238,151,105,.14)}
+ .menu a[aria-current]{color:var(--brand);font-weight:600}
+ .hero{padding:50px 0 6px}
+ .kick{font:600 12px/1 var(--font-b);letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin:0 0 14px}
+ h1{font-family:var(--font-d);font-weight:700;font-size:clamp(30px,5vw,46px);line-height:1.06;margin:0;letter-spacing:-.01em;text-wrap:balance}
+ .lede{font-size:clamp(16.5px,2.2vw,19px);color:var(--muted);max-width:58ch;margin:18px 0 0}
+ .tool{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:24px;margin:32px 0}
+ .geobtn{width:100%;background:var(--brand);color:var(--brand-ink);border:0;border-radius:12px;font-weight:700;font-size:16px;padding:15px;cursor:pointer}
+ .geobtn:hover{filter:brightness(1.08)}
+ .geobtn:disabled{opacity:.6;cursor:default}
+ .hint{font-size:12.5px;color:var(--muted2);margin:12px 0 0}
+ .orsep{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--muted2);font-size:13px;white-space:nowrap}
+ .orsep::before,.orsep::after{content:"";flex:1;height:1px;background:var(--line)}
+ .picks{display:flex;gap:10px;flex-wrap:wrap}
+ .field{position:relative;flex:1;min-width:190px}
+ .field select{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--ink);font-size:15px;padding:13px 40px 13px 14px;font-family:var(--font-b);appearance:none;-webkit-appearance:none;cursor:pointer}
+ .field select:hover{border-color:#7d6a49}
+ .field select:focus{outline:2px solid var(--brand);outline-offset:1px}
+ .field::after{content:"";position:absolute;right:16px;top:50%;width:9px;height:9px;border-right:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+ .msg{font-size:15px;color:var(--ink);margin:26px 0 0;font-weight:600}
+ .refs{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:12px}
+ .ref{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+ .ref.first{border-color:var(--c-ref)}
+ .rtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+ .rn{font-family:var(--font-d);font-weight:700;font-size:18px}
+ .rkm{font-family:var(--font-m);font-weight:700;font-size:16px;color:var(--brand);white-space:nowrap}
+ .rp{font-size:13.5px;color:var(--muted);margin:4px 0 0}
+ .rp .nt{color:var(--c-ref);font-weight:600}
+ .racc{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+ .racc a{font:600 13.5px/1 var(--font-b);padding:9px 14px;border-radius:9px;border:1px solid var(--line);color:var(--ink);text-decoration:none}
+ .racc a:hover{border-color:var(--brand);color:var(--brand)}
+ .racc a.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+ .racc a.pri:hover{color:var(--brand-ink);filter:brightness(1.08)}
+ .notas{font-size:13px;color:var(--muted2);border-top:1px dashed var(--line);padding-top:16px;margin-top:34px;line-height:1.65}
+ .notas b{color:var(--muted)}
+ footer{margin-top:54px;border-top:1px solid var(--line);background:var(--surface)}
+ .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding:44px 0 28px}
+ .fcol h4{font:600 11px/1 var(--font-b);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+ .fcol a{display:block;color:var(--ink);text-decoration:none;font-size:15px;margin:0 0 9px;opacity:.9}
+ .fcol a:hover{opacity:1;color:var(--brand)}
+ .fabout{font-size:14.5px;color:var(--muted);max-width:34ch}
+ .fbar{border-top:1px solid var(--line);padding:18px 0;font-size:13px;color:var(--muted)}
+ @media(max-width:660px){.fgrid{grid-template-columns:1fr 1fr}}
+ @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="pg">
+  <nav class="nav"><div class="in">
+    <a class="brand" href="__HOME__"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg>nochetropical.es</a>
+    <div class="menu">
+      <a href="__HOME__">Inicio</a><a href="__SITE__/mapa-estaciones/">Mapa</a><a href="__SITE__/refugios-cerca/" aria-current="page">Refugios cerca</a><a href="__SITE__/ola-de-calor/">Ola de calor</a><a href="__SITE__/ranking-noches-tropicales/">Ranking</a><a href="__SITE__/parte/">El parte</a><a href="__SITE__/certificados/">Certificados</a><a href="__SITE__/metodologia/">Metodología</a>
+    </div>
+  </div></nav>
+
+  <header class="hero"><div class="in">
+    <p class="kick">Herramienta · Datos de AEMET</p>
+    <h1>¿Dónde está tu refugio climático más cercano?</h1>
+    <p class="lede">En España hay <b>218 estaciones de AEMET</b> que no registran ni una noche tropical al año: sitios donde se sigue durmiendo tapado en agosto. Te decimos cuáles tienes más cerca, a qué distancia y cómo llegar.</p>
+  </div></header>
+
+  <section><div class="in">
+    <div class="tool">
+      <button class="geobtn" id="geo" type="button">Usar mi ubicación</button>
+      <p class="hint" id="geohint">El cálculo se hace en tu navegador: no guardamos ni enviamos tu ubicación.</p>
+      <div class="orsep">o elige tu pueblo (o el más cercano)</div>
+      <div class="picks">
+        <div class="field"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
+        <div class="field"><select id="est" aria-label="Estación"><option value="">…y tu estación</option></select></div>
+      </div>
+    </div>
+    <p class="msg" id="msg"></p>
+    <ol class="refs" id="refs"></ol>
+    <p class="notas">
+      <b>Cómo se calcula:</b> un <b>refugio climático natural</b> es una estación de AEMET con <b>menos de una noche tropical al año</b> de media (veranos 2017–2026); una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. La <b>distancia es en línea recta</b>; el botón «Ver ruta» abre el mapa con la ruta real por carretera, con kilómetros y tiempo.<br>
+      <b>El límite honesto:</b> el dato es de la <b>estación meteorológica</b>, no del municipio exacto — y en montaña la noche cambia mucho con la altitud. Los pueblos del entorno de un refugio suelen compartir su clima; eso lo mediremos pronto.
+    </p>
+  </div></section>
+
+  <footer>
+    <div class="in fgrid">
+      <div class="fcol">
+        <a class="brand" href="__HOME__" style="margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--surface)"/></svg>nochetropical.es</a>
+        <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p>
+      </div>
+      <div class="fcol"><h4>Explora</h4><a href="__SITE__/refugios-cerca/">Refugios cerca de ti</a><a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a><a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a><a href="__SITE__/parte/">El parte de la noche</a><a href="__SITE__/certificados/">Certificados</a></div>
+      <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a><a href="__SITE__/prensa/">Sala de prensa</a><a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a><a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">Licencia CC BY 4.0</a></div>
+      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/metodologia/">Sobre el proyecto</a><a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a><a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>
+    </div>
+    <div class="in fbar">© 2026 nochetropical.es · Datos de AEMET bajo CC BY 4.0 · Ramón J. Lowesting</div>
+  </footer>
+</div>
+<script>
+const REF=__REF__;
+const EST=__EST__;
+const SITE="__SITE__";
+function hav(la1,lo1,la2,lo2){var R=6371,r=Math.PI/180,dLa=(la2-la1)*r,dLo=(lo2-lo1)*r;
+ var x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
+ return 2*R*Math.asin(Math.sqrt(x));}
+function km(d){return d<10?d.toFixed(1).replace(".",","):Math.round(d)+"";}
+function ntTxt(nt){return nt===0?"cero noches tropicales al año":(nt<1?"menos de 1 noche tropical al año":nt.toFixed(1).replace(".",",")+" al año");}
+function pinta(la,lo,origen){
+ var lista=REF.map(function(x){return {x:x,d:hav(la,lo,x.la,x.lo)};}).sort(function(a,b){return a.d-b.d;}).slice(0,5);
+ var ol=document.getElementById("refs"); ol.innerHTML="";
+ lista.forEach(function(o,i){
+   var x=o.x;
+   var ruta="https://www.google.com/maps/dir/?api=1&origin="+la+","+lo+"&destination="+x.la+","+x.lo;
+   var li=document.createElement("li");
+   li.className="ref"+(i===0?" first":"");
+   li.innerHTML="<div class='rtop'><span class='rn'>"+x.n+"</span><span class='rkm'>"+km(o.d)+" km</span></div>"
+     +"<div class='rp'>"+x.p+" · "+x.a+" m · <span class='nt'>"+ntTxt(x.nt)+"</span></div>"
+     +"<div class='racc'><a class='pri' href='"+ruta+"' target='_blank' rel='noopener'>Ver ruta</a>"
+     +"<a href='"+SITE+"/certificados/"+x.c+"/'>Ver su certificado</a>"
+     +"<a href='"+SITE+"/"+x.s+"/'>Ver "+x.p+"</a></div>";
+   ol.appendChild(li);
+ });
+ document.getElementById("msg").textContent="Tus 5 refugios climáticos naturales más cercanos"+(origen?" a "+origen:"")+":";
+ document.getElementById("msg").scrollIntoView({behavior:"smooth",block:"start"});
+}
+var gb=document.getElementById("geo"), gh=document.getElementById("geohint");
+gb.addEventListener("click",function(){
+ if(!navigator.geolocation){gh.textContent="Tu navegador no permite la geolocalización. Elige tu provincia y estación aquí abajo.";return;}
+ gb.disabled=true; gb.textContent="Buscando tu ubicación…";
+ navigator.geolocation.getCurrentPosition(function(p){
+   gb.disabled=false; gb.textContent="Usar mi ubicación";
+   pinta(p.coords.latitude,p.coords.longitude,"tu ubicación");
+ },function(){
+   gb.disabled=false; gb.textContent="Usar mi ubicación";
+   gh.textContent="No se pudo obtener tu ubicación (¿permiso denegado?). Elige tu provincia y estación aquí abajo.";
+ },{timeout:9000});
+});
+var prov=document.getElementById("prov"), est=document.getElementById("est");
+Object.keys(EST).forEach(function(p){var o=document.createElement("option");o.value=p;o.textContent=p;prov.appendChild(o);});
+prov.addEventListener("change",function(){
+ est.innerHTML='<option value="">…y tu estación</option>';
+ (EST[prov.value]||[]).forEach(function(e,i){var o=document.createElement("option");o.value=i;o.textContent=e.n+" ("+e.a+" m)";est.appendChild(o);});
+});
+est.addEventListener("change",function(){
+ var l=EST[prov.value]; if(!l||est.value==="")return;
+ var e=l[+est.value]; pinta(e.la,e.lo,e.n);
+});
+</script>
+</body>
+</html>
+"""
+
+
+def construir_pagina_cerca(estaciones: list, datos: dict, site: str) -> str:
+    """Los 218 refugios (nt<1) con coordenadas + todas las estaciones para poder
+    elegir origen sin geolocalización. El cálculo (Haversine) va en el navegador."""
+    refs = [{"n": e["loc"], "p": e["prov"], "a": e["alt"], "nt": e["nt"],
+             "la": e["lat"], "lo": e["lon"], "c": slug(e["loc"]), "s": slug(e["prov"])}
+            for e in sorted(estaciones, key=lambda x: (x["nt"], -x["alt"])) if e["nt"] < 1]
+    est = {prov: [{"n": e["loc"], "a": e["alt"], "la": e["lat"], "lo": e["lon"]}
+                  for e in sorted(lista, key=lambda x: clave_orden(x["loc"]))]
+           for prov, lista in datos["provincias"].items()}
+    url = site + "/refugios-cerca/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Refugios cerca de ti", "item": url}]},
+        {"@type": "WebApplication", "name": "Refugios climáticos cerca de ti",
+         "url": url, "applicationCategory": "ReferenceApplication",
+         "operatingSystem": "Web",
+         "description": "Encuentra los refugios climáticos naturales más cercanos a tu ubicación, con la distancia y la ruta. Con diez veranos de datos de AEMET.",
+         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+         "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
+        ensure_ascii=False)
+    return (PAGINA_CERCA
+            .replace("__SCHEMA__", schema)
+            .replace("__REF__", json.dumps(refs, ensure_ascii=False, separators=(",", ":")))
+            .replace("__EST__", json.dumps(est, ensure_ascii=False, separators=(",", ":")))
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
 def main() -> int:
     estaciones, total = cargar_estaciones()
     datos = construir_datos(estaciones, total)
@@ -2780,6 +2995,10 @@ def main() -> int:
     (DOCS_DIR / "ola-de-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "ola-de-calor" / "index.html").write_text(
         construir_pagina_ola(site, fecha_mod_iso, fecha_mod_txt), encoding="utf-8")
+    # Herramienta: los refugios climáticos más cercanos (geolocalización).
+    (DOCS_DIR / "refugios-cerca").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "refugios-cerca" / "index.html").write_text(
+        construir_pagina_cerca(estaciones, datos, site), encoding="utf-8")
     # /beta/ YA es la portada: dejamos una redirección a la home (noindex; fuera
     # del sitemap por el filtro startswith("beta")). Así no hay duplicado y quien
     # tuviera guardado /beta/ acaba en la web nueva.

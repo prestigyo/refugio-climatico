@@ -2257,14 +2257,14 @@ PAGINA_OLA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>La ola de calor sobre España, día y noche (mapa animado de AEMET) | Refugio Climático</title>
-<meta name="description" content="Los mapas diarios de AEMET, animados: máximas de día y mínimas de noche. Activa la capa de refugios climáticos y descubre dónde se sigue durmiendo fresco durante la ola de calor.">
+<title>Mapa de la ola de calor en España, día y noche (AEMET) | Refugio Climático</title>
+<meta name="description" content="El mapa de la ola de calor en España, animado con datos de AEMET: temperaturas máximas de día y mínimas de noche, un fotograma por jornada. Activa la capa de refugios y mira dónde se duerme fresco.">
 <link rel="canonical" href="__SITE__/ola-de-calor/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
 <meta property="og:type" content="article">
-<meta property="og:title" content="La ola de calor sobre España, día y noche">
-<meta property="og:description" content="Los mapas animados de AEMET con la capa de refugios climáticos nocturnos.">
+<meta property="og:title" content="Mapa de la ola de calor en España, día y noche">
+<meta property="og:description" content="El mapa animado de temperaturas de AEMET —máximas de día, mínimas de noche— con la capa de refugios climáticos naturales.">
 <meta property="og:url" content="__SITE__/ola-de-calor/">
 <meta property="og:image" content="__SITE__/og.png">
 <meta property="og:locale" content="es_ES">
@@ -2298,6 +2298,17 @@ PAGINA_OLA = r"""<!doctype html>
  .note{font-size:13px;color:var(--muted);text-align:center;margin:0 0 18px}
  .aviso{font-size:13.5px;color:var(--muted);line-height:1.65;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:8px auto 24px;max-width:600px}
  .aviso b{color:#e7dcc8}
+ .guia{margin:34px auto 28px;max-width:660px}
+ .guia h2{font-family:var(--fd);font-weight:600;font-size:clamp(18px,3vw,22px);color:var(--paper);margin:0 0 6px;text-align:center}
+ .guia .sub{font-size:14.5px;color:var(--muted);text-align:center;margin:0 0 18px}
+ .claves{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+ @media(max-width:620px){.claves{grid-template-columns:1fr}}
+ .clave{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px}
+ .clave h3{font-family:var(--fb);font-weight:600;font-size:15px;color:var(--teja2);margin:0 0 10px;display:flex;align-items:center;gap:8px;line-height:1.35}
+ .chip{width:14px;height:14px;border-radius:4px;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+ .clave p{font-size:14px;line-height:1.6;color:#d8ccb8;margin:0 0 9px}
+ .clave p:last-child{margin:0}
+ .guia .pie{font-size:14px;color:var(--muted);text-align:center;margin:16px 0 0}
  .cierre{margin:40px 0 10px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:28px 24px;text-align:center}
  .cierre b{font-family:var(--fd);font-size:19px}
  footer p{margin:0 0 8px}
@@ -2305,10 +2316,10 @@ PAGINA_OLA = r"""<!doctype html>
 </head>
 <body>
 <header class="h"><div class="wrap">
-  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · La ola, día y noche</nav>
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Mapa de la ola de calor</nav>
   <div class="kick">Mapa animado · Datos AEMET</div>
-  <h1>La ola de calor sobre España, <em>día y noche</em></h1>
-  <p class="intro">Los mapas diarios de AEMET, animados: las <b>máximas de día</b> y las <b>mínimas de noche</b>, un fotograma por jornada. De día casi toda España arde; de noche, unas pocas zonas siguen refrescando. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
+  <h1>Mapa de la ola de calor en España, <em>día y noche</em></h1>
+  <p class="intro">Los <b>mapas de temperaturas de AEMET</b>, animados: las <b>máximas de día</b> y las <b>mínimas de noche</b>, un fotograma por jornada. De día casi toda España arde; de noche, unas pocas zonas siguen refrescando. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
 </div></header>
 
 <section><div class="wrap">
@@ -2336,6 +2347,24 @@ PAGINA_OLA = r"""<!doctype html>
       <img src="__SITE__/ola-canarias-minimas.gif" alt="Mapa animado de las temperaturas mínimas nocturnas de Canarias (AEMET)" loading="lazy" style="width:100%;height:auto;display:block">
     </div>
     <p style="font-size:14px;color:var(--muted);margin-top:12px">En las islas el <b>efecto foehn</b> recalienta hasta la montaña: el interior de Gran Canaria es de los peores sitios de España para dormir de noche. Por eso va en su propio mapa.</p>
+  </div>
+
+  <div class="guia">
+    <h2>Cómo leer el mapa para encontrar un refugio climático</h2>
+    <p class="sub">Los dos mapas se leen casi al revés de lo que parece. Esto es lo que hay que buscar en cada uno.</p>
+    <div class="claves">
+      <div class="clave">
+        <h3><span class="chip" style="background:#3f6fc4"></span> Mapa de mínimas · la noche</h3>
+        <p>Busca las zonas que <b>se mantienen en los azules</b> noche tras noche, mientras el resto del país vira a verde y amarillo.</p>
+        <p>Cuidado con el verde: en la escala de AEMET <b>el verde ya empieza en los 18 °C</b>. Verde no es fresco; es estar a dos grados de la <b>noche tropical</b>. El refugio está en el azul.</p>
+      </div>
+      <div class="clave">
+        <h3><span class="chip" style="background:#c8402c"></span> Mapa de máximas · el día</h3>
+        <p>Aquí casi toda España se pone roja, así que lo interesante es lo contrario: los <b>puntos que no llegan a volverse rojos</b> ni en el pico de la ola de calor.</p>
+        <p>Suelen repetirse los mismos: <b>altitud, montaña y costa norte</b>. Un punto que resiste de día y además amanece azul de noche es un <b>refugio climático natural</b>.</p>
+      </div>
+    </div>
+    <p class="pie">¿Has localizado una zona? Compruébala con el dato exacto en <a href="__SITE__/mapa-estaciones/">el mapa de refugios climáticos</a>, estación a estación, o mira <a href="__SITE__/refugios-cerca/">qué refugios tienes cerca de ti</a>.</p>
   </div>
 
   <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona. Cada punto es la <b>estación meteorológica</b> y la población donde está; eso <b>no significa que los pueblos de alrededor no pertenezcan a ese mismo refugio climático</b> —el fresco no entiende de límites municipales—. <b>Cedrillas</b>, por ejemplo, abarca también Gúdar, Cabra de Mora, Alcalá de la Selva, Valdelinares, Allepuz o El Castellar. Señalan zonas donde, durante la ola, los colores se mantienen <b>lejos de los rojos más intensos</b>: la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar el calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
@@ -2393,10 +2422,10 @@ def construir_pagina_ola(site: str, fecha_iso: str, fecha_txt: str) -> str:
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
-            {"@type": "ListItem", "position": 2, "name": "La ola de calor, día y noche", "item": url}]},
+            {"@type": "ListItem", "position": 2, "name": "Mapa de la ola de calor", "item": url}]},
         {"@type": "Article",
-         "headline": "La ola de calor sobre España, día y noche",
-         "description": "Los mapas animados de AEMET (máximas de día y mínimas de noche) con la capa de refugios climáticos nocturnos.",
+         "headline": "Mapa de la ola de calor en España, día y noche",
+         "description": "El mapa animado de temperaturas de AEMET (máximas de día y mínimas de noche) con la capa de refugios climáticos naturales y las claves para leerlo.",
          "image": site + "/og.png",
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",

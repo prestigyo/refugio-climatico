@@ -1447,6 +1447,18 @@ ASSETS_PRENSA = [
     ("og-cuadrada.png", "Imagen cuadrada", "1080×1080, para redes"),
 ]
 
+# Muestra de color en línea: siempre que un texto nombra un color, se enseña.
+# Los valores han de ser los EXACTOS de la paleta de AEMET (verificados píxel a
+# píxel sobre la barra del propio GIF) para que se puedan cotejar con el mapa.
+_CSS_MU = ('.mu{display:inline-block;width:.78em;height:.78em;border-radius:3px;'
+           'margin:0 .16em 0 .1em;position:relative;top:.04em;'
+           'box-shadow:0 0 0 1px rgba(255,255,255,.3)}')
+
+# Colores de la escala de AEMET, para no volver a teclearlos de memoria.
+AEMET = {"verde": "#66FF66", "lima": "#CCFF00", "amarillo": "#FFFF00",
+         "naranja": "#FF7F00", "rojo": "#FF0000", "granate": "#B83450",
+         "turquesa": "#15C5C0", "cian": "#00EDED", "azul": "#1E8EFF"}
+
 _CSS_CHROME = (
     ':root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;'
     '--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;'
@@ -1474,6 +1486,7 @@ _CSS_CHROME = (
     '.compartir .cbtns{display:flex;flex-wrap:wrap;gap:9px}'
     '.compartir .cb{font:600 13.5px/1 var(--fb);padding:9px 15px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--paper);cursor:pointer;text-decoration:none;display:inline-block}'
     '.compartir .cb:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none;background:rgba(217,116,78,.10)}'
+    + _CSS_MU
 )
 
 # ---------------------------------------------------------------------------
@@ -1591,6 +1604,7 @@ CSS_CHROME2 = (
     '.fbar{border-top:1px solid var(--line);padding:18px 0;font-size:13px;color:var(--muted)}'
     '@media(max-width:660px){.fgrid{grid-template-columns:1fr 1fr}}'
     '@media(max-width:430px){.fgrid{grid-template-columns:1fr}}'
+    + _CSS_MU
 )
 
 PAGINA_PRENSA = r"""<!doctype html>
@@ -2436,7 +2450,7 @@ PAGINA_OLA = r"""<!doctype html>
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Mapa de la ola de calor</nav>
   <div class="kick">Mapa animado · Datos AEMET</div>
   <h1>Mapa de la ola de calor en España, <em>día y noche</em></h1>
-  <p class="intro">Los <b>mapas de temperaturas de AEMET</b>, animados: las <b>máximas de día</b> y las <b>mínimas de noche</b>, un fotograma por jornada. De día casi toda España arde; de noche, unas pocas zonas siguen refrescando. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
+  <p class="intro">Los <b>mapas de temperaturas de AEMET</b>, animados: las <b>máximas de día</b> y las <b>mínimas de noche</b>, un fotograma por jornada. De día arde el 98 % del país. De noche, España se parte en dos: <b>una quinta parte del territorio no cruza los 20 °C ni una sola noche</b>. Ahí es donde se duerme. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
 </div></header>
 
 <section><div class="wrap">
@@ -2468,23 +2482,23 @@ PAGINA_OLA = r"""<!doctype html>
 
   <div class="guia">
     <h2>Cómo leer el mapa para encontrar un refugio climático</h2>
-    <p class="sub">Los dos mapas se leen casi al revés de lo que parece. Esto es lo que hay que buscar en cada uno.</p>
+    <p class="sub">Solo hay que mirar un mapa, y solo hay que buscar un color. Aquí está el truco.</p>
     <div class="claves">
       <div class="clave">
-        <h3><span class="chip" style="background:#21c5c0"></span> Mapa de mínimas · la noche</h3>
-        <p>Busca las zonas que <b>se mantienen en los cianes y azules</b> noche tras noche, mientras el resto del país vira a verde y amarillo.</p>
-        <p>El verde engaña. En la escala de AEMET es la banda de <b>18 a 20 °C</b>, y a 18 grados se duerme de maravilla — el problema es que está <b>pegado a la raya de los 20</b>. Hemos cruzado diez veranos: las estaciones cuya noche típica cae en el verde acumulan <b>36 noches tropicales al año</b>, cuatro de cada diez del verano. En el turquesa (14–16 °C) bajan a 2. Solo <b>por debajo de los 14</b> la cuenta llega a cero.</p>
+        <h3><span class="chip" style="background:#15c5c0"></span> Mapa de mínimas · la noche</h3>
+        <p><b>Busca las zonas que nunca llegan a ponerse lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span> ni amarillas<span class="mu" style="background:#FFFF00" aria-hidden="true"></span>.</b> Eso es un refugio. Y no es una interpretación nuestra: en la escala de AEMET <b>el verde<span class="mu" style="background:#66FF66" aria-hidden="true"></span> acaba exactamente en 20 °C y el lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span> empieza exactamente en 20</b>. Ese salto de color <i>es</i> la raya de la noche tropical.</p>
+        <p>Por debajo de 20 se duerme, aunque sean 19,5 a las tres de la madrugada. A partir de 20 no baja en toda la noche y no hay descanso. Que una zona toque el verde<span class="mu" style="background:#66FF66" aria-hidden="true"></span> en su peor noche no la descalifica — <b>lo que la descalifica es cruzar al lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span></b>. Superponiendo todas las noches, <b>una quinta parte de España no la cruza nunca</b>.</p>
       </div>
       <div class="clave">
-        <h3><span class="chip" style="background:#c8402c"></span> Mapa de máximas · el día</h3>
-        <p>Aquí casi toda España se pone roja, así que lo interesante es lo contrario: los <b>puntos que no llegan a volverse rojos</b> ni en el pico de la ola de calor.</p>
-        <p>Suelen repetirse los mismos: <b>altitud, montaña y costa norte</b>. Un punto que resiste de día y además amanece azul de noche es un <b>refugio climático natural</b>.</p>
+        <h3><span class="chip" style="background:#FF0000"></span> Mapa de máximas · el día</h3>
+        <p>Este <b>no sirve para buscar refugios</b>, y conviene decirlo. Hemos superpuesto los rojos<span class="mu" style="background:#FF0000" aria-hidden="true"></span> de todos los fotogramas: <b>el 98 % de España se pone roja</b> y casi la mitad pasa de 40 °C<span class="mu" style="background:#B83450" aria-hidden="true"></span>. No distingue nada, porque de día aquí hace calor en todas partes.</p>
+        <p>Es más: los mejores refugios <b>se ponen rojos</b><span class="mu" style="background:#FF0000" aria-hidden="true"></span>. Teruel supera los 32 °C cincuenta y tres días al año y casi no tiene noches tropicales. El refugio español no es donde no aprieta el sol — <b>es donde la noche se lleva el calor</b>. Este mapa está aquí para que veas de qué se escapan.</p>
       </div>
     </div>
     <p class="pie">¿Has localizado una zona? Compruébala con el dato exacto en <a href="__SITE__/mapa-estaciones/">el mapa de refugios climáticos</a>, estación a estación, o mira <a href="__SITE__/refugios-cerca/">qué refugios tienes cerca de ti</a>.</p>
   </div>
 
-  <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona. Cada punto es la <b>estación meteorológica</b> y la población donde está; eso <b>no significa que los pueblos de alrededor no pertenezcan a ese mismo refugio climático</b> —el fresco no entiende de límites municipales—. <b>Cedrillas</b>, por ejemplo, abarca también Gúdar, Cabra de Mora, Alcalá de la Selva, Valdelinares, Allepuz o El Castellar. Señalan zonas donde, durante la ola, los colores se mantienen <b>lejos de los rojos más intensos</b>: la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar el calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
+  <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona. Cada punto es la <b>estación meteorológica</b> y la población donde está; eso <b>no significa que los pueblos de alrededor no pertenezcan a ese mismo refugio climático</b> —el fresco no entiende de límites municipales—. <b>Cedrillas</b>, por ejemplo, abarca también Gúdar, Cabra de Mora, Alcalá de la Selva, Valdelinares, Allepuz o El Castellar. Señalan zonas donde, durante la ola, los colores se mantienen <b>lejos del lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span> y del amarillo<span class="mu" style="background:#FFFF00" aria-hidden="true"></span></b>: la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar el calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
 
   <div class="cierre">
     <b>¿Y tu pueblo, aguanta fresco de noche?</b><br>
@@ -2695,6 +2709,7 @@ PAGINA_BETA = r"""<!doctype html>
  .leer b{color:var(--ink)}
  @media(max-width:660px){.scale-h-wrap{display:none}.scale-v-wrap{display:block}.fgrid{grid-template-columns:1fr 1fr}}
  @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
+__CSS_MU__
 </style>
 </head>
 <body>
@@ -2748,8 +2763,8 @@ PAGINA_BETA = r"""<!doctype html>
     </div>
     <div class="leer">
       <h3>Cómo leer el mapa para encontrar un refugio</h3>
-      <p>La clave está en el <b>color</b>. En el mapa de mínimas nocturnas, busca las zonas que se quedan <b>azules</b> mientras todo alrededor se pone verde, amarillo o rojo. El <b>verde empieza en los 18&nbsp;°C</b>; el azul es más fresco todavía.</p>
-      <p>Un <b>refugio climático natural</b> es justo eso: un punto que <b>aguanta azul</b> —por debajo de 18&nbsp;°C de madrugada— noche tras noche, incluso en plena ola de calor, sin llegar al verde y mucho menos al amarillo. Si tu zona sigue azul cuando la costa arde en rojo, ahí se duerme fresco de verdad.</p>
+      <p>La clave está en el <b>color</b>, y se resume en una frase: busca las zonas que <b>nunca llegan a ponerse lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span> ni amarillas<span class="mu" style="background:#FFFF00" aria-hidden="true"></span></b>. No es una interpretación nuestra: en la escala de AEMET el verde<span class="mu" style="background:#66FF66" aria-hidden="true"></span> acaba <b>exactamente</b> en 20&nbsp;°C y el lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span> empieza <b>exactamente</b> en 20. Ese salto de color <i>es</i> la raya de la noche tropical.</p>
+      <p>Un <b>refugio climático natural</b> es justo eso: una zona que <b>no cruza los 20&nbsp;°C</b> ninguna noche, ni en plena ola de calor. Por debajo de 20 se duerme, aunque sean 19,5 a las tres de la madrugada; a partir de 20 ya no baja en toda la noche. Que toque el verde<span class="mu" style="background:#66FF66" aria-hidden="true"></span> en su peor noche no la descalifica — lo que la descalifica es <b>pasar al lima</b><span class="mu" style="background:#CCFF00" aria-hidden="true"></span>. Superponiendo todas las noches del verano, <b>una quinta parte de España no lo hace nunca</b>.</p>
     </div>
     <h2 class="sec-h">Explora los datos</h2>
     <div class="mods">
@@ -2867,6 +2882,7 @@ def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> s
     return (plantilla
             .replace("__NAV__", nav_html("inicio"))
             .replace("__FOOTER__", FOOTER_HTML)
+            .replace("__CSS_MU__", " " + _CSS_MU)
             .replace("__DATA__", data_json)
             .replace("__SCHEMA__", schema)
             .replace("__APPS_URL__", APPS_SCRIPT_URL)

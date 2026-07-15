@@ -227,7 +227,7 @@ __CIRCULOS__
   </div>
 
   <div class="leyenda"><span>se duerme fresco</span><span class="barra"></span><span>no refresca</span></div>
-  <p class="ayuda"><b>Azul</b> = duerme tapadito todo el verano · <b>Rojo</b> = se suda. Pulsa cualquier punto para ver los detalles. El recuadro de abajo a la izquierda son las <b>Canarias</b>.</p>
+  <p class="ayuda"><b>Azul<span class="mu" style="background:rgb(134,176,196)" aria-hidden="true"></span></b> = duerme tapadito todo el verano · <b>Rojo<span class="mu" style="background:rgb(150,30,20)" aria-hidden="true"></span></b> = se suda. Ojo: esta escala es nuestra, no la de AEMET — aquí el color no son grados, son <b>noches tropicales al año</b>. Pulsa cualquier punto para ver los detalles. El recuadro de abajo a la izquierda son las <b>Canarias</b>.</p>
 
   <p class="notas">Fuente: <b>AEMET</b> (OpenData). Noches tropicales medidas en verano (jun–ago), veranos 2017–2026. Datos abiertos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC BY 4.0</a>. Actualizado en <time datetime="__FECHA_ISO__">__FECHA_TXT__</time>.</p>
   </div>

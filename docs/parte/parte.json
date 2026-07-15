@@ -1,26 +1,38 @@
 {
- "fecha": "2026-07-14",
- "total": 838,
- "tropicales": 264,
- "ecuatoriales": 22,
+ "fecha": "2026-07-15",
+ "total": 833,
+ "tropicales": 371,
+ "ecuatoriales": 46,
  "peor": {
-  "id": "B780X",
-  "nombre": "Port Pollença-Aerodrom",
-  "min": 26.6,
-  "prov": "Illes Balears"
+  "id": "8036Y",
+  "nombre": "Benidorm (Parc Les Foietes)",
+  "min": 26.5,
+  "prov": "Alicante"
  },
  "mejor": {
   "id": "3319D",
   "nombre": "Puerto el Pico",
-  "min": 5.1,
+  "min": 7.2,
   "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "B780X",
-   "nombre": "Port Pollença-Aerodrom",
-   "min": 26.6,
-   "prov": "Illes Balears"
+   "id": "8036Y",
+   "nombre": "Benidorm (Parc Les Foietes)",
+   "min": 26.5,
+   "prov": "Alicante"
+  },
+  {
+   "id": "0201X",
+   "nombre": "Barcelona Drassanes",
+   "min": 26.4,
+   "prov": "Barcelona"
+  },
+  {
+   "id": "8025",
+   "nombre": "Alicante",
+   "min": 26.3,
+   "prov": "Alicante"
   },
   {
    "id": "B569X",
@@ -29,114 +41,102 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "B860X",
-   "nombre": "Ciutadella-Son Quim",
-   "min": 26.3,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 26.2,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 26.2,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B605X",
-   "nombre": "Muro-S?albufera",
-   "min": 26.2,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "0002I",
    "nombre": "Vandellós",
-   "min": 26.0,
+   "min": 26.2,
    "prov": "Tarragona"
   },
   {
-   "id": "B603X",
-   "nombre": "Colònia Sant Pere-Can Mengol",
-   "min": 26.0,
-   "prov": "Illes Balears"
+   "id": "9561X",
+   "nombre": "Castellote Depósito",
+   "min": 26.1,
+   "prov": "Teruel"
   },
   {
-   "id": "0016A",
-   "nombre": "Reus Aeropuerto",
+   "id": "7178I",
+   "nombre": "Murcia",
+   "min": 26.0,
+   "prov": "Murcia"
+  },
+  {
+   "id": "8416",
+   "nombre": "Valencia Dt",
+   "min": 26.0,
+   "prov": "Valencia"
+  },
+  {
+   "id": "7002Y",
+   "nombre": "Águilas",
    "min": 25.9,
-   "prov": "Tarragona"
+   "prov": "Murcia"
   },
   {
-   "id": "8500A",
-   "nombre": "Castellón-Almassora",
-   "min": 25.8,
-   "prov": "Castellón"
+   "id": "7026X",
+   "nombre": "Torre Pacheco (C.C.a. Aut.)",
+   "min": 25.9,
+   "prov": "Murcia"
   }
  ],
  "top_fresco": [
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 5.1,
+   "min": 7.2,
    "prov": "Ávila"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 8.2,
-   "prov": "Segovia"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 8.3,
-   "prov": "Zamora"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 8.8,
-   "prov": "Madrid"
-  },
-  {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 8.9,
-   "prov": "Soria"
-  },
-  {
-   "id": "C406G",
-   "nombre": "Cañadas Parador",
-   "min": 9.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 9.2,
-   "prov": "Soria"
   },
   {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 9.3,
+   "min": 8.3,
    "prov": "Ourense"
   },
   {
-   "id": "2302N",
-   "nombre": "Monterrubio de la Demanda",
-   "min": 9.3,
-   "prov": "Burgos"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 8.7,
+   "prov": "Zamora"
   },
   {
    "id": "2828Y",
    "nombre": "Barco de Avila",
-   "min": 9.3,
+   "min": 9.9,
    "prov": "Ávila"
+  },
+  {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 10.0,
+   "prov": "Madrid"
+  },
+  {
+   "id": "2737E",
+   "nombre": "Lagunas de Somoza",
+   "min": 10.1,
+   "prov": "León"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 10.4,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 10.6,
+   "prov": "Asturias"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 10.6,
+   "prov": "Soria"
+  },
+  {
+   "id": "1489A",
+   "nombre": "A Lama",
+   "min": 10.7,
+   "prov": "Pontevedra"
   }
  ]
 }

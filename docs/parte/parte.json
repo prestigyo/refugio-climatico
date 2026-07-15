@@ -1,13 +1,13 @@
 {
  "fecha": "2026-07-15",
- "total": 833,
- "tropicales": 371,
- "ecuatoriales": 46,
+ "total": 835,
+ "tropicales": 372,
+ "ecuatoriales": 47,
  "peor": {
-  "id": "8036Y",
-  "nombre": "Benidorm (Parc Les Foietes)",
-  "min": 26.5,
-  "prov": "Alicante"
+  "id": "0201D",
+  "nombre": "Barcelona Port Olímpic",
+  "min": 26.7,
+  "prov": "Barcelona"
  },
  "mejor": {
   "id": "3319D",
@@ -16,6 +16,12 @@
   "prov": "Ávila"
  },
  "top_calor": [
+  {
+   "id": "0201D",
+   "nombre": "Barcelona Port Olímpic",
+   "min": 26.7,
+   "prov": "Barcelona"
+  },
   {
    "id": "8036Y",
    "nombre": "Benidorm (Parc Les Foietes)",
@@ -67,12 +73,6 @@
   {
    "id": "7002Y",
    "nombre": "Águilas",
-   "min": 25.9,
-   "prov": "Murcia"
-  },
-  {
-   "id": "7026X",
-   "nombre": "Torre Pacheco (C.C.a. Aut.)",
    "min": 25.9,
    "prov": "Murcia"
   }

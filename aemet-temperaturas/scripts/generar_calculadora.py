@@ -1488,6 +1488,15 @@ _CSS_MU = ('.mu{display:inline-block;width:.78em;height:.78em;border-radius:3px;
            'margin:0 .16em 0 .1em;position:relative;top:.04em;'
            'box-shadow:0 0 0 1px rgba(255,255,255,.3)}')
 
+# En móvil el nombre del dominio se comía 190 de los 375 px de la barra (el 51 %)
+# y no cabía entero ni UNO de los nueve elementos del menú. Se queda solo la luna;
+# el nombre sigue en el <title>, en el pie y en el aria-label del enlace.
+_CSS_NAV_MOVIL = ('@media(max-width:560px){.nav .brand span{display:none}'
+                  '.nav .in{gap:14px}.menu a{padding:8px 10px}}')
+
+# Reglas que quiere cualquier página con el chrome nuevo.
+_CSS_COMUN = _CSS_MU + _CSS_NAV_MOVIL
+
 # Colores de la escala de AEMET, para no volver a teclearlos de memoria.
 AEMET = {"verde": "#66FF66", "lima": "#CCFF00", "amarillo": "#FFFF00",
          "naranja": "#FF7F00", "rojo": "#FF0000", "granate": "#B83450",
@@ -1545,7 +1554,8 @@ _MENU = [
 
 _LOGO = ('<svg width="{px}" height="{px}" viewBox="0 0 100 100" aria-hidden="true">'
          '<circle cx="45" cy="52" r="30" fill="var(--brand)"/>'
-         '<circle cx="60" cy="44" r="29" fill="var({hueco})"/></svg>nochetropical.es')
+         '<circle cx="60" cy="44" r="29" fill="var({hueco})"/></svg>'
+         '<span>nochetropical.es</span>')
 
 
 def nav_html(actual: str = "") -> str:
@@ -1563,7 +1573,7 @@ def nav_html(actual: str = "") -> str:
         for k, href, txt in _MENU)
     logo = _LOGO.format(px=26, hueco="--bg")
     return ('<nav class="nav"><div class="in">\n'
-            '    <a class="brand" href="__HOME__">' + logo + '</a>\n'
+            '    <a class="brand" href="__HOME__" aria-label="nochetropical.es">' + logo + '</a>\n'
             '    <div class="menu">\n'
             '      ' + enlaces + '\n'
             '    </div>\n'
@@ -1638,7 +1648,7 @@ CSS_CHROME2 = (
     '.fbar{border-top:1px solid var(--line);padding:18px 0;font-size:13px;color:var(--muted)}'
     '@media(max-width:660px){.fgrid{grid-template-columns:1fr 1fr}}'
     '@media(max-width:430px){.fgrid{grid-template-columns:1fr}}'
-    + _CSS_MU
+    + _CSS_COMUN
 )
 
 PAGINA_PRENSA = r"""<!doctype html>
@@ -2760,7 +2770,7 @@ PAGINA_BETA = r"""<!doctype html>
  .leer b{color:var(--ink)}
  @media(max-width:660px){.scale-h-wrap{display:none}.scale-v-wrap{display:block}.fgrid{grid-template-columns:1fr 1fr}}
  @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
-__CSS_MU__
+__CSS_COMUN__
 </style>
 </head>
 <body>
@@ -2933,7 +2943,7 @@ def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> s
     return (plantilla
             .replace("__NAV__", nav_html("inicio"))
             .replace("__FOOTER__", FOOTER_HTML)
-            .replace("__CSS_MU__", " " + _CSS_MU)
+            .replace("__CSS_COMUN__", " " + _CSS_COMUN)
             .replace("__DATA__", data_json)
             .replace("__SCHEMA__", schema)
             .replace("__APPS_URL__", APPS_SCRIPT_URL)
@@ -3032,6 +3042,7 @@ PAGINA_CERCA = r"""<!doctype html>
  .fbar{border-top:1px solid var(--line);padding:18px 0;font-size:13px;color:var(--muted)}
  @media(max-width:660px){.fgrid{grid-template-columns:1fr 1fr}}
  @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
+__CSS_COMUN__
 </style>
 </head>
 <body>
@@ -3180,6 +3191,7 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str) -> str:
     return (PAGINA_CERCA
             .replace("__NAV__", nav_html("cerca"))
             .replace("__FOOTER__", FOOTER_HTML)
+            .replace("__CSS_COMUN__", " " + _CSS_COMUN)
             .replace("__SHARE_WA__", "https://wa.me/?text=" + quote(share_txt + " " + url_cerca))
             .replace("__SHARE_X__", "https://twitter.com/intent/tweet?text=" + quote(share_txt)
                      + "&amp;url=" + quote(url_cerca))

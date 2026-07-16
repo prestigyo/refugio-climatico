@@ -1,8 +1,8 @@
 {
  "fecha": "2026-07-16",
- "total": 835,
- "tropicales": 424,
- "ecuatoriales": 66,
+ "total": 840,
+ "tropicales": 429,
+ "ecuatoriales": 68,
  "peor": {
   "id": "8059C",
   "nombre": "Alcoy",
@@ -47,12 +47,6 @@
    "prov": "Tarragona"
   },
   {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 26.9,
-   "prov": "Las Palmas"
-  },
-  {
    "id": "0201X",
    "nombre": "Barcelona Drassanes",
    "min": 26.7,
@@ -69,6 +63,12 @@
    "nombre": "Totana",
    "min": 26.6,
    "prov": "Murcia"
+  },
+  {
+   "id": "0201D",
+   "nombre": "Barcelona Port Olímpic",
+   "min": 26.5,
+   "prov": "Barcelona"
   },
   {
    "id": "B569X",

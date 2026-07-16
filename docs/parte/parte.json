@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-15",
+ "fecha": "2026-07-16",
  "total": 835,
- "tropicales": 372,
- "ecuatoriales": 47,
+ "tropicales": 424,
+ "ecuatoriales": 66,
  "peor": {
-  "id": "0201D",
-  "nombre": "Barcelona Port Olímpic",
-  "min": 26.7,
-  "prov": "Barcelona"
+  "id": "8059C",
+  "nombre": "Alcoy",
+  "min": 27.7,
+  "prov": "Alicante"
  },
  "mejor": {
   "id": "3319D",
   "nombre": "Puerto el Pico",
-  "min": 7.2,
+  "min": 7.3,
   "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 26.7,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "8036Y",
-   "nombre": "Benidorm (Parc Les Foietes)",
-   "min": 26.5,
+   "id": "8059C",
+   "nombre": "Alcoy",
+   "min": 27.7,
    "prov": "Alicante"
   },
   {
-   "id": "0201X",
-   "nombre": "Barcelona Drassanes",
-   "min": 26.4,
-   "prov": "Barcelona"
+   "id": "C668V",
+   "nombre": "Agaete - Suerte Alta",
+   "min": 27.4,
+   "prov": "Las Palmas"
   },
   {
-   "id": "8025",
-   "nombre": "Alicante",
-   "min": 26.3,
-   "prov": "Alicante"
-  },
-  {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 26.3,
+   "id": "B051A",
+   "nombre": "Sóller",
+   "min": 27.1,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "0002I",
-   "nombre": "Vandellós",
-   "min": 26.2,
-   "prov": "Tarragona"
-  },
-  {
-   "id": "9561X",
-   "nombre": "Castellote Depósito",
-   "min": 26.1,
-   "prov": "Teruel"
   },
   {
    "id": "7178I",
    "nombre": "Murcia",
-   "min": 26.0,
+   "min": 26.9,
    "prov": "Murcia"
   },
   {
-   "id": "8416",
-   "nombre": "Valencia Dt",
-   "min": 26.0,
-   "prov": "Valencia"
+   "id": "9961X",
+   "nombre": "Cabacés",
+   "min": 26.9,
+   "prov": "Tarragona"
   },
   {
-   "id": "7002Y",
-   "nombre": "Águilas",
-   "min": 25.9,
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 26.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "0201X",
+   "nombre": "Barcelona Drassanes",
+   "min": 26.7,
+   "prov": "Barcelona"
+  },
+  {
+   "id": "7211B",
+   "nombre": "Puerto Lumbreras",
+   "min": 26.6,
    "prov": "Murcia"
+  },
+  {
+   "id": "7218Y",
+   "nombre": "Totana",
+   "min": 26.6,
+   "prov": "Murcia"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 26.5,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 7.2,
+   "min": 7.3,
    "prov": "Ávila"
-  },
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 8.3,
-   "prov": "Ourense"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 8.7,
+   "min": 8.2,
    "prov": "Zamora"
   },
   {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 9.9,
-   "prov": "Ávila"
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 8.2,
+   "prov": "Lleida"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 10.0,
-   "prov": "Madrid"
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 8.8,
+   "prov": "Ourense"
   },
   {
-   "id": "2737E",
-   "nombre": "Lagunas de Somoza",
-   "min": 10.1,
-   "prov": "León"
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 8.8,
+   "prov": "Ourense"
   },
   {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 10.4,
-   "prov": "Salamanca"
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 9.2,
+   "prov": "Segovia"
   },
   {
    "id": "1542",
    "nombre": "Puerto de Leitariegos",
-   "min": 10.6,
+   "min": 9.4,
    "prov": "Asturias"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 9.5,
+   "prov": "Salamanca"
   },
   {
    "id": "2084Y",
    "nombre": "Ucero",
-   "min": 10.6,
+   "min": 10.3,
    "prov": "Soria"
   },
   {
-   "id": "1489A",
-   "nombre": "A Lama",
-   "min": 10.7,
-   "prov": "Pontevedra"
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 10.4,
+   "prov": "Madrid"
   }
  ]
 }

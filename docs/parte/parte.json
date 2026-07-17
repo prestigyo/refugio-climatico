@@ -1,6 +1,6 @@
 {
  "fecha": "2026-07-17",
- "total": 839,
+ "total": 838,
  "tropicales": 299,
  "ecuatoriales": 68,
  "peor": {
@@ -35,6 +35,12 @@
    "prov": "Illes Balears"
   },
   {
+   "id": "6156X",
+   "nombre": "Málaga Centro Meteorológico",
+   "min": 27.2,
+   "prov": "Málaga"
+  },
+  {
    "id": "7211B",
    "nombre": "Puerto Lumbreras",
    "min": 27.2,
@@ -51,12 +57,6 @@
    "nombre": "Capdepera-Faro",
    "min": 27.1,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "6156X",
-   "nombre": "Málaga Centro Meteorológico",
-   "min": 27.0,
-   "prov": "Málaga"
   },
   {
    "id": "B228",

@@ -1085,6 +1085,61 @@ def mininav_footer_html(site: str) -> str:
     return " · ".join(f'<a href="{site}{href}">{txt}</a>' for txt, href in MENU_ESCUETO)
 
 
+# Pie COMPLETO del chrome escueto: tres columnas de interlinks con texto ancla
+# descriptivo (SEO interno + navegabilidad) y barra de licencia. Lo montan las
+# páginas nuevas (confortómetro, dormir con manta); es el patrón para sustituir
+# poco a poco los pies mínimos del resto.
+CSS_FOOTER_ESCUETO = (
+    '.f2{border-top:1px solid var(--line);background:var(--bg2);margin-top:30px;'
+    'padding:34px 0 46px}'
+    '.f2grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}'
+    '.f2col h4{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;'
+    'color:var(--teja);margin:0 0 12px}'
+    '.f2col a{display:block;color:var(--muted);font-size:13.5px;margin:0 0 8px;'
+    'text-decoration:none}'
+    '.f2col a:hover{color:var(--paper);text-decoration:underline}'
+    '.f2bar{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;'
+    'font-size:12.5px;color:#82745d}'
+    '.f2bar a{color:#9a8a6f}'
+    '@media(max-width:640px){.f2grid{grid-template-columns:1fr}}'
+)
+
+
+def footer_escueto_html(site: str, extra: str = "") -> str:
+    c1 = [("Refugios climáticos cerca de mí", "/refugios-climaticos-naturales-cerca-de-mi/"),
+          ("El Confortómetro: vota tu zona", "/confortometro/"),
+          ("Mapa interactivo de estaciones", "/mapa-estaciones/"),
+          ("¿Cuándo acaba la ola de calor?", "/ola-de-calor/"),
+          ("Ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
+          ("El parte de la noche", "/parte/"),
+          ("Certificados de refugio climático", "/certificados/")]
+    c2 = [("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
+          ("Cómo crear un refugio climático natural", "/refugio-climatico-natural/"),
+          ("Microclimas: los refugios de la naturaleza", "/microclimas/"),
+          ("Refugios y España vaciada", "/refugios-y-espana-vaciada/"),
+          ("La hipoteca térmica", "/hipoteca-termica/"),
+          ("¿Tu pueblo no aparece? Ayúdanos", "/tu-pueblo/")]
+    c3 = [("La calculadora de tu pueblo", "/"),
+          ("Metodología y glosario", "/metodologia/"),
+          ("Sala de prensa", "/prensa/")]
+
+    def col(titulo: str, items: list) -> str:
+        enlaces = "".join(f'<a href="{site}{h}">{t}</a>' for t, h in items)
+        return f'<div class="f2col"><h4>{titulo}</h4>{enlaces}</div>'
+
+    return ('<footer class="f2"><div class="wrap"><div class="f2grid">'
+            + col("Explora los datos", c1)
+            + col("Guías y artículos", c2)
+            + col("Proyecto", c3)
+            + '</div><div class="f2bar">Fuente: '
+            '<a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a>'
+            ' · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" '
+            'rel="license">CC&nbsp;BY&nbsp;4.0</a> · © 2026 '
+            f'<a href="{site}/">nochetropical.es</a> · Ramón J. Lowesting'
+            + (f' · {extra}' if extra else '') + '</div>'
+            '</div></footer>')
+
+
 def aplicar_menu_escueto(html: str, site: str) -> str:
     """Inyecta el menú escueto en una página cuya plantilla aún no trae ningún
     menú. Idempotente (si ya hay un nav, no toca nada) y solo apto para páginas
@@ -1173,9 +1228,16 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
  .btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}
  .btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
  .prose p.ctain{margin:-4px 0 18px;font-size:15px}.prose p.ctain a{font-weight:600}
- .fnav{margin-bottom:10px;font-size:13px}
  __NAVCSS__
+ __FOOTERCSS__
  @media(max-width:520px){th.hide,td.hide{display:none}}
+ @media(min-width:1000px){
+  .wrap{max-width:min(94vw,1200px)}
+  .dcols{display:grid;grid-template-columns:1fr 1.05fr;gap:0 48px;align-items:start}
+  .dcols .prose{margin-top:0;max-width:none}
+  .dcols .prose h2:first-child{margin-top:0}
+  .faq{max-width:none;display:grid;grid-template-columns:1fr 1fr;gap:0 48px}
+ }
 </style>
 </head>
 <body>
@@ -1187,9 +1249,10 @@ __NAV__
   <p class="intro">__INTRO__</p>
 </div></header>
 
-<section><div class="wrap">
-  <div class="prose">__PROSA__</div>
+<section><div class="wrap"><div class="dcols">
+  <div><div class="prose">__PROSA__</div></div>
 
+  <div>
   <table>
     <caption>__CAPTION__</caption>
     <thead><tr><th>Localidad</th><th class="hide">Altitud</th><th class="r">Noches tropicales/año</th><th>Cómo se duerme</th></tr></thead>
@@ -1210,7 +1273,8 @@ __NAV__
     <b>¿Quieres comparar con cualquier pueblo de España?</b><br>
     <a class="btn" href="__HOME__">Abre el mapa y la calculadora →</a>
   </div>
-</div></section>
+  </div>
+</div></div></section>
 
 <section><div class="wrap">
   <div class="kick">Preguntas frecuentes</div>
@@ -1230,11 +1294,7 @@ __NAV__
   <nav class="provnav" aria-label="Todas las provincias">__PROVNAV__</nav>
 </div></section>
 
-<footer><div class="wrap">
-  <nav class="fnav" aria-label="secciones">__FNAV__</nav>
-  Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting.<br>
-  Última actualización de los datos: __FECHA_FOOTER__.
-</div></footer>
+__FOOTER__
 <script>
 (function(){
  var box=document.querySelector(".compartir"); if(!box) return;
@@ -1569,8 +1629,10 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
 
     return (PAGINA_PROVINCIA
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
             .replace("__NAV__", nav_escueto_html(site))
-            .replace("__FNAV__", mininav_footer_html(site))
+            .replace("__FOOTER__", footer_escueto_html(
+                site, f"Última actualización de los datos: {fecha_mod_txt}"))
             .replace("__OGTITLE__", title)
             .replace("__TITLE__", title)
             .replace("__DESC__", desc)
@@ -1587,7 +1649,6 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             .replace("__PROSA__", prosa)
             .replace("__FAQ__", faq_html(faq))
             .replace("__VECINAS__", vecinas_html(prov, site))
-            .replace("__FECHA_FOOTER__", fecha_mod_txt)
             .replace("__PROVNAV__", provnav)
             .replace("__SCHEMA__", schema))
 
@@ -2965,6 +3026,7 @@ __CSS_COMUN__
     <h2 class="sec-h">Explora los datos</h2>
     <div class="mods">
       <a class="card2" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/"><h3>Refugios cerca de ti</h3><p>Los refugios climáticos más cercanos, con la distancia y la ruta.</p></a>
+      <a class="card2" href="__SITE__/confortometro/"><h3>El Confortómetro</h3><p>El estudio participativo: vota cómo se siente el clima en tu zona.</p></a>
       <a class="card2" href="__SITE__/mapa-estaciones/"><h3>Mapa interactivo</h3><p>Las 848 estaciones de AEMET sobre el mapa de España.</p></a>
       <a class="card2" href="__SITE__/ranking-noches-tropicales/"><h3>Ranking nacional</h3><p>Dónde se duerme mejor y peor de toda España.</p></a>
       <a class="card2" href="__SITE__/parte/"><h3>El parte de la noche</h3><p>Quién durmió fresco anoche. Cada mañana.</p></a>
@@ -2972,6 +3034,7 @@ __CSS_COMUN__
     </div>
     <h2 class="sec-h" id="articulos">Artículos</h2>
     <div class="mods">
+      <a class="card2" href="__SITE__/dormir-con-manta-en-verano/"><h3>Dormir con manta en verano</h3><p>Un destino fresco medido por provincia: el mapa del turismo climático.</p></a>
       <a class="card2" href="__SITE__/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
       <a class="card2" href="__SITE__/refugio-climatico-natural/"><h3>Refugio climático natural</h3><p>Combatir el calor sin aire acondicionado, como se hacía antes.</p></a>
       <a class="card2" href="__SITE__/refugios-y-espana-vaciada/"><h3>Refugios y España vaciada</h3><p>El frío que despobló estos pueblos es hoy su mayor activo.</p></a>
@@ -3454,6 +3517,7 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
  .chip.sel{border-color:var(--teja);color:var(--teja2);background:rgba(217,116,78,.12);font-weight:600}
  .subq{font-size:13px;color:var(--muted);margin:12px 0 8px}
  #clima{display:none}
+ #sol{display:none}
  .enviar{width:100%;margin-top:6px;background:var(--teja);color:#1a1209;font-weight:700;padding:14px;border-radius:12px;border:0;font-size:16px;cursor:pointer}
  .enviar:hover{background:var(--teja2)}
  .enviar[disabled]{opacity:.4;cursor:not-allowed}
@@ -3480,11 +3544,20 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
  .faqitem{padding:14px 0;border-bottom:1px solid var(--line)}
  .faqitem h3{font-family:var(--fd);font-weight:600;font-size:16px;margin-bottom:5px}
  .faqitem p{color:var(--muted);font-size:14px}
- footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#82745d;font-size:12.5px;margin-top:20px}
- footer a{color:#9a8a6f}
- .fnav{margin-bottom:10px;font-size:13px}
  __NAVCSS__
+ __FOOTERCSS__
  @media(min-width:560px){.niveles{grid-template-columns:1fr 1fr}}
+ @media(min-width:980px){
+  .wrap{max-width:min(94vw,1150px)}
+  #widget{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+  #widget .paso{margin:0}
+  #p1,#widget .enviar,#widget .hint,#gracias{grid-column:1/-1}
+  .prose{max-width:none;column-count:2;column-gap:52px}
+  .prose h2{break-after:avoid;margin-top:0}
+  .prose h2:not(:first-child){margin-top:26px}
+  .prose p{break-inside:avoid}
+  .faq{max-width:none;display:grid;grid-template-columns:1fr 1fr;gap:0 52px}
+ }
 </style>
 </head>
 <body>
@@ -3519,7 +3592,14 @@ __NAV__
     <p class="subq">¿El aire se siente húmedo, pegajoso?</p>
     <div class="chips" id="boch">
       <button class="chip" type="button" data-v="1">💦 Sí, bochorno</button>
-      <button class="chip" type="button" data-v="0">🌵 No, calor seco</button>
+      <button class="chip" type="button" data-v="0">🌵 No, aire seco</button>
+    </div>
+    <p class="subq">¿Y el viento? Lo cambia todo.</p>
+    <div class="chips" id="viento">
+      <button class="chip" type="button" data-v="calma">🍃 Calma total</button>
+      <button class="chip" type="button" data-v="brisa">🌬️ Brisa agradable</button>
+      <button class="chip" type="button" data-v="viento">💨 Viento molesto</button>
+      <button class="chip" type="button" data-v="fuerte">🌪️ Viento fuerte</button>
     </div>
     <p class="subq">¿Dónde estás?</p>
     <div class="chips" id="lugar">
@@ -3536,6 +3616,21 @@ __NAV__
         <button class="chip" type="button" data-v="aire">Aire acondicionado</button>
         <button class="chip" type="button" data-v="calefaccion">Calefacción</button>
       </div>
+    </div>
+    <div id="sol">
+      <p class="subq">¿Sol o sombra?</p>
+      <div class="chips" id="solchips">
+        <button class="chip" type="button" data-v="sol">☀️ A pleno sol</button>
+        <button class="chip" type="button" data-v="sombra">⛱️ A la sombra</button>
+        <button class="chip" type="button" data-v="nublado">☁️ Nublado</button>
+      </div>
+    </div>
+    <p class="subq">¿Cómo es tu zona?</p>
+    <div class="chips" id="entorno">
+      <button class="chip" type="button" data-v="playa">🏖️ Playa / costa</button>
+      <button class="chip" type="button" data-v="ciudad">🏙️ Ciudad</button>
+      <button class="chip" type="button" data-v="pueblo">🏡 Pueblo / campo</button>
+      <button class="chip" type="button" data-v="montana">⛰️ Montaña</button>
     </div>
   </div>
 
@@ -3566,11 +3661,14 @@ __NAV__
   <p>Porque la temperatura es un valor <b>relativo</b>: orienta, pero no establece las condiciones exactas. Un termómetro no suda, no nota la humedad que impide que el sudor evapore, ni el asfalto que devuelve por la noche el calor del día, ni la brisa que lo cambia todo. El Confortómetro nace para medir lo que ese número no cuenta: <b>el estado de confort de las personas, en su momento y en su lugar</b>. Una herramienta participativa para levantar, voto a voto, el mapa del grado de confort real en las poblaciones españolas — y compararlo con el de los termómetros.</p>
 
   <h2>Un estudio para todo el año: hacia el turismo climático</h2>
-  <p>Este estudio no es solo de noches de verano. Se vota <b>de día y de noche, en agosto y en enero</b>: la escala va del frío helador al calor insoportable. Con el tiempo, esos votos dibujan algo que hoy no existe: el calendario del confort de cada zona de España — dónde se está bien en cada época del año. Esa es la base del <b>turismo climático</b>: elegir destino no por lo que hay que ver, sino por cómo se va a sentir el cuerpo al estar allí. Los pueblos donde se duerme con manta en agosto ya lo saben; este estudio quiere ponerle números y mapa.</p>
+  <p>Este estudio no es solo de noches de verano. Se vota <b>de día y de noche, en agosto y en enero</b>: la escala va del frío helador al calor insoportable. Con el tiempo, esos votos dibujan algo que hoy no existe: el calendario del confort de cada zona de España — dónde se está bien en cada época del año. Esa es la base del <b>turismo climático</b>: elegir destino no por lo que hay que ver, sino por cómo se va a sentir el cuerpo al estar allí. <a href="__SITE__/dormir-con-manta-en-verano/">Los pueblos donde se duerme con manta en agosto</a> ya lo saben; este estudio quiere ponerle números y mapa.</p>
 
   <h2>Cómo funciona (y cómo detectamos trolas)</h2>
-  <p>Cada voto se contrasta con lo que marcó la estación de AEMET de su zona: si alguien vota «insoportable» una noche de mínima 14&nbsp;°C en la calle, su voto <b>no se borra, pero pesa menos</b>. Votar «fresquito» con el aire acondicionado puesto, en cambio, es perfectamente coherente — por eso preguntamos el contexto. Una zona no muestra resultado hasta reunir al menos <b>5 votos en 24 horas</b>, el agregado es una mediana ponderada (un voto disparatado no mueve el resultado) y cada dispositivo puede votar una vez por hora.</p>
-  <p>¿Por qué medir la sensación si ya hay termómetros? Porque el termómetro no suda: 22&nbsp;°C secos en el interior se duermen bien y 22&nbsp;°C con el 85&nbsp;% de humedad en la costa son una noche en vela. La diferencia entre <b>lo que se mide y lo que se siente</b> es exactamente lo que este proyecto quiere contar.</p>
+  <p>Cada voto se contrasta con lo que marcó la <a href="__SITE__/mapa-estaciones/">estación de AEMET de su zona</a>: si alguien vota «insoportable» una noche de mínima 14&nbsp;°C en la calle, su voto <b>no se borra, pero pesa menos</b>. Votar «fresco» con el aire acondicionado puesto, en cambio, es perfectamente coherente — por eso preguntamos el contexto: dónde estás, qué viento hace, si te da el sol. Una zona no muestra resultado hasta reunir al menos <b>5 votos en 24 horas</b>, el agregado es una mediana ponderada (un voto disparatado no mueve el resultado) y cada dispositivo puede votar una vez por hora.</p>
+  <p>¿Por qué medir la sensación si ya hay termómetros? Porque el termómetro no suda: 22&nbsp;°C secos en el interior se duermen bien y 22&nbsp;°C con el 85&nbsp;% de humedad en la costa son <a href="__SITE__/ranking-noches-tropicales/">una noche en vela</a>. Y porque el mismo termómetro con brisa o en calma total cuenta dos noches distintas. La diferencia entre <b>lo que se mide y lo que se siente</b> es exactamente lo que este proyecto quiere contar.</p>
+
+  <h2>Sigue explorando</h2>
+  <p>Si el estudio te ha picado la curiosidad: mira <a href="__SITE__/ranking-noches-tropicales/">dónde se duerme mejor y peor de toda España</a>, sigue <a href="__SITE__/ola-de-calor/">la ola de calor de hoy en el mapa de AEMET</a>, apunta <a href="__SITE__/dormir-con-manta-en-verano/">los pueblos donde se duerme con manta en pleno agosto</a>, localiza <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">tu refugio climático natural más cercano</a> o entiende <a href="__SITE__/microclimas/">por qué un valle puede ser más fresco que la cima de al lado</a>. Y cada mañana, <a href="__SITE__/parte/">el parte de la noche</a> cuenta quién durmió fresco.</p>
 </div></div></section>
 
 <section><div class="wrap">
@@ -3584,15 +3682,12 @@ __NAV__
   </div>
 </div></section>
 
-<footer><div class="wrap">
-  <nav class="fnav" aria-label="secciones">__FNAV__</nav>
-  Fuente de contraste: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>.
-</div></footer>
+__FOOTER__
 
 <script>
 var EST=__EST__;
 var URL_API="__CONFORT_URL__";
-var sel={zona:null,celda:null,nivel:null,boch:null,lugar:null,clima:null};
+var sel={zona:null,celda:null,nivel:null,boch:null,viento:null,lugar:null,clima:null,sol:null,entorno:null};
 var t0=Date.now();
 
 function uid(){
@@ -3665,9 +3760,14 @@ function chips(id,campo,cb){
  });
 }
 chips("boch","boch");
+chips("viento","viento");
+chips("entorno","entorno");
+chips("solchips","sol");
 chips("lugar","lugar",function(){
  document.getElementById("clima").style.display=(sel.lugar==="casa")?"block":"none";
+ document.getElementById("sol").style.display=(sel.lugar==="terraza"||sel.lugar==="calle")?"block":"none";
  if(sel.lugar!=="casa")sel.clima=null;
+ if(sel.lugar==="casa")sel.sol=null;
 });
 chips("climachips","clima");
 
@@ -3679,7 +3779,7 @@ document.getElementById("enviar").addEventListener("click",function(){
  if(document.getElementById("hp").value){return;}
  if(Date.now()-t0<3000){st.textContent="Un segundo… (comprobación anti-robots)";return;}
  if(!puedeVotar()){st.textContent="Ya has votado hace poco: se admite un voto por hora, para que cada noche cuente una vez.";return;}
- var p={z:sel.zona[0],g:sel.celda,s:sel.nivel,b:sel.boch,l:sel.lugar,c:sel.clima,u:uid(),v:1};
+ var p={z:sel.zona[0],g:sel.celda,s:sel.nivel,b:sel.boch,w:sel.viento,l:sel.lugar,c:sel.clima,o:sel.sol,e:sel.entorno,u:uid(),v:1};
  var fin=function(guardado){
   marcaVoto();
   document.getElementById("p1").style.display="none";
@@ -3763,8 +3863,9 @@ def construir_pagina_confortometro(estaciones: list, site: str,
     ]}, ensure_ascii=False)
     return (PAGINA_CONFORTOMETRO
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
             .replace("__NAV__", nav_escueto_html(site))
-            .replace("__FNAV__", mininav_footer_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
             .replace("__SCHEMA__", schema)
             .replace("__NIVELES__", niveles)
             .replace("__EST__", est_js)
@@ -3839,12 +3940,17 @@ PAGINA_MANTA = r"""<!DOCTYPE html>
  .btn{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px}
  .btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}
  .btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
- footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#82745d;font-size:12.5px;margin-top:20px}
- footer a{color:#9a8a6f}
- .fnav{margin-bottom:10px;font-size:13px}
  .twrap{overflow-x:auto}
  __NAVCSS__
+ __FOOTERCSS__
  @media(max-width:520px){th.hide,td.hide{display:none}table{font-size:13.5px}th,td{padding:9px 8px}}
+ @media(min-width:980px){
+  .wrap{max-width:min(94vw,1150px)}
+  .dcols{display:grid;grid-template-columns:1.05fr .95fr;gap:0 52px;align-items:start}
+  .prose{max-width:none}
+  .prose h2:first-child{margin-top:0}
+  .faq{max-width:none;display:grid;grid-template-columns:1fr 1fr;gap:0 52px}
+ }
 </style>
 </head>
 <body>
@@ -3856,13 +3962,25 @@ __NAV__
   <p class="intro">Buscar «pueblos donde dormir con manta en verano» es un clásico por una razón: <b>el mejor aire acondicionado es un clima que no lo necesita</b>. Esta lista no es de oídas — son estaciones de AEMET donde la noche baja de 20&nbsp;°C prácticamente <b>todo el verano</b>, medida a medida, una por provincia. Tu próximo destino fresco para agosto está aquí.</p>
 </div></header>
 
-<section><div class="wrap">
+<section><div class="wrap"><div class="dcols">
+  <div>
   <div class="twrap"><table>
     <caption>Un destino fresco por provincia, ordenados por altitud. Todos con menos de 1 noche tropical al año de media.</caption>
     <thead><tr><th>Pueblo / zona</th><th>Provincia</th><th class="hide r">Altitud</th><th class="r">Noches trop./año</th></tr></thead>
     <tbody>__TABLA__</tbody>
   </table></div>
   <p class="note">Una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. Media de los veranos 2017–2026. Fuente: AEMET OpenData. El dato es de la estación; el pueblo enlaza a su provincia con todas las estaciones.</p>
+  </div>
+
+  <div>
+  <div class="prose">
+    <h2>Por qué en estos pueblos se duerme con manta</h2>
+    <p>Casi todos comparten receta: <b>altitud</b> (600–1.700 m), <b>interior</b> (lejos del mar, que de noche devuelve el calor acumulado) y <b>aire seco</b> de clima continental, que deja escapar el calor del día en cuanto se pone el sol. Es el mecanismo que explican <a href="__SITE__/microclimas/">los microclimas</a>: mientras la costa mediterránea encadena hasta 86 noches tropicales seguidas — compruébalo en <a href="__SITE__/ranking-noches-tropicales/">el ranking nacional</a> —, en estas sierras la manta es obligatoria hasta en pleno agosto.</p>
+    <h2>Turismo climático: elegir destino por cómo se siente</h2>
+    <p>Cada verano más gente organiza las vacaciones huyendo del calor: es el <b>turismo climático</b>. No va de monumentos, va de <b>cómo se va a sentir el cuerpo</b>: dormir sin ventilador, cenar con chaqueta fina, pasear a mediodía sin sufrir mientras <a href="__SITE__/ola-de-calor/">la ola de calor</a> asa el resto del mapa. Estos datos son su mapa — y <a href="__SITE__/confortometro/">el Confortómetro</a>, nuestro estudio participativo, le está poniendo la capa que faltaba: cómo se siente cada zona, votado por quienes están allí.</p>
+    <p>Y si buscas <b>hoteles rurales frescos</b> — o ese «hotel sin aire acondicionado pero fresco» que promete la búsqueda —, la regla es simple: no tenemos datos de hoteles, pero sí del clima que los rodea; busca alojamiento en estos términos municipales y el aire acondicionado sobrará.</p>
+    <p><a href="__SITE__/refugios-y-espana-vaciada/">Muchos de estos pueblos están en la España vaciada: el frío que los despobló es hoy su activo →</a></p>
+  </div>
 
   <div class="cta">
     <b>¿Cuál te pilla más cerca?</b>
@@ -3871,25 +3989,15 @@ __NAV__
       <a class="btn sec" href="__SITE__/confortometro/">🌡️ Vota en el Confortómetro →</a>
     </div>
   </div>
-
-  <div class="prose">
-    <h2>Por qué en estos pueblos se duerme con manta</h2>
-    <p>Casi todos comparten receta: <b>altitud</b> (600–1.700 m), <b>interior</b> (lejos del mar, que de noche devuelve el calor acumulado) y <b>aire seco</b> de clima continental, que deja escapar el calor del día en cuanto se pone el sol. Mientras la costa mediterránea encadena hasta 86 noches tropicales seguidas, en estas sierras la manta es obligatoria hasta en pleno agosto.</p>
-    <h2>Turismo climático: elegir destino por cómo se siente</h2>
-    <p>Cada verano más gente organiza las vacaciones huyendo del calor: es el <b>turismo climático</b>. No va de monumentos, va de <b>cómo se va a sentir el cuerpo</b>: dormir sin ventilador, cenar con chaqueta fina, pasear a mediodía sin sufrir. Estos datos son su mapa. Y si buscas <b>hoteles rurales frescos</b> — o ese «hotel sin aire acondicionado pero fresco» que promete la búsqueda —, la regla es simple: no tenemos datos de hoteles, pero sí del clima que los rodea; busca alojamiento en estos términos municipales y el aire acondicionado sobrará.</p>
-    <p><a href="__SITE__/refugios-y-espana-vaciada/">Muchos de estos pueblos están en la España vaciada: el frío que los despobló es hoy su activo →</a></p>
   </div>
-</div></section>
+</div></div></section>
 
 <section><div class="wrap">
   <div class="kick">Preguntas frecuentes</div>
   <div class="faq">__FAQ__</div>
 </div></section>
 
-<footer><div class="wrap">
-  <nav class="fnav" aria-label="secciones">__FNAV__</nav>
-  Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · veranos 2017–2026 · proyecto <a href="__HOME__">Refugio Climático</a> de Ramón J. Lowesting · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>.
-</div></footer>
+__FOOTER__
 </body>
 </html>
 """
@@ -3955,8 +4063,9 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
     ]}, ensure_ascii=False)
     return (PAGINA_MANTA
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
             .replace("__NAV__", nav_escueto_html(site))
-            .replace("__FNAV__", mininav_footer_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
             .replace("__SCHEMA__", schema)
             .replace("__DESC__", desc)
             .replace("__TABLA__", "".join(filas))

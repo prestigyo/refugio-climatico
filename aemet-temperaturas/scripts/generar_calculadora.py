@@ -3422,7 +3422,7 @@ APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbzpBift9lGy5
 # que viaja y lo que usa el detector de coherencia.
 NIVELES_CONFORT = [
     (1, "🧊", "Helador: se pasa frío de verdad"),
-    (2, "🥶", "Frío: sin abrigo no se está"),
+    (2, "🥶", "Frío: imprescindible abrigo"),
     (3, "🧣", "Fresco: de manta o chaqueta"),
     (4, "😌", "Muy a gusto"),
     (5, "🙂", "Cómodo: ni frío ni calor"),
@@ -3517,7 +3517,6 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
  .chip.sel{border-color:var(--teja);color:var(--teja2);background:rgba(217,116,78,.12);font-weight:600}
  .subq{font-size:13px;color:var(--muted);margin:12px 0 8px}
  #clima{display:none}
- #sol{display:none}
  .enviar{width:100%;margin-top:6px;background:var(--teja);color:#1a1209;font-weight:700;padding:14px;border-radius:12px;border:0;font-size:16px;cursor:pointer}
  .enviar:hover{background:var(--teja2)}
  .enviar[disabled]{opacity:.4;cursor:not-allowed}
@@ -3572,12 +3571,14 @@ __NAV__
 <section><div class="wrap" id="widget">
   <div class="paso" id="p1">
     <div class="pt">1 · Tu zona</div>
-    <button class="geo" id="geo" type="button">📍 Usar mi zona</button>
-    <p class="priv">Tu ubicación exacta nunca sale del móvil: aquí mismo se redondea a una celda de ~1 km y se busca la estación de AEMET de referencia. Solo viajan esas dos cosas; el punto exacto, jamás.</p>
-    <p class="hint" id="geohint">¿Sin GPS o no quieres darlo? Elige a mano:</p>
-    <div class="selects">
-      <select id="prov"><option value="">Tu provincia…</option></select>
-      <select id="est"><option value="">…y tu zona</option></select>
+    <div id="geoform">
+      <button class="geo" id="geo" type="button">📍 Usar mi zona</button>
+      <p class="priv">Tu ubicación exacta nunca sale del móvil: aquí mismo se redondea a una celda de ~1 km y se busca la estación de AEMET de referencia. Solo viajan esas dos cosas; el punto exacto, jamás.</p>
+      <p class="hint" id="geohint">¿Sin GPS o no quieres darlo? Elige a mano:</p>
+      <div class="selects">
+        <select id="prov"><option value="">Tu provincia…</option></select>
+        <select id="est"><option value="">…y tu zona</option></select>
+      </div>
     </div>
     <p class="zona" id="zona"></p>
   </div>
@@ -3597,32 +3598,36 @@ __NAV__
     <p class="subq">¿Y el viento? Lo cambia todo.</p>
     <div class="chips" id="viento">
       <button class="chip" type="button" data-v="calma">🍃 Calma total</button>
-      <button class="chip" type="button" data-v="brisa">🌬️ Brisa agradable</button>
-      <button class="chip" type="button" data-v="viento">💨 Viento molesto</button>
+      <button class="chip" type="button" data-v="ligera">🌬️ Ligera brisa</button>
+      <button class="chip" type="button" data-v="brisa">😌 Brisa agradable</button>
+      <button class="chip" type="button" data-v="viento">💨 Viento</button>
+      <button class="chip" type="button" data-v="molesto">😣 Viento molesto</button>
       <button class="chip" type="button" data-v="fuerte">🌪️ Viento fuerte</button>
+    </div>
+    <p class="subq">¿Qué tiempo hace ahí fuera?</p>
+    <div class="chips" id="cielochips">
+      <button class="chip" type="button" data-v="sol">☀️ Sol radiante</button>
+      <button class="chip" type="button" data-v="nublado">☁️ Nublado</button>
+      <button class="chip" type="button" data-v="xirimiri">🌫️ Xirimiri</button>
+      <button class="chip" type="button" data-v="lluvia">🌧️ Llueve</button>
     </div>
     <p class="subq">¿Dónde estás?</p>
     <div class="chips" id="lugar">
       <button class="chip" type="button" data-v="casa">🏠 Dentro de casa</button>
+      <button class="chip" type="button" data-v="oficina">🏢 Oficina o despacho</button>
+      <button class="chip" type="button" data-v="fabrica">🏭 Fábrica o nave</button>
+      <button class="chip" type="button" data-v="colegio">🏫 Colegio o aula</button>
       <button class="chip" type="button" data-v="terraza">🌆 Terraza o balcón</button>
       <button class="chip" type="button" data-v="calle">🚶 En la calle</button>
     </div>
     <div id="clima">
-      <p class="subq">Y en casa, ¿con qué?</p>
+      <p class="subq">Y ahí dentro, ¿con qué?</p>
       <div class="chips" id="climachips">
         <button class="chip" type="button" data-v="nada">Nada</button>
         <button class="chip" type="button" data-v="ventana">Ventana abierta</button>
         <button class="chip" type="button" data-v="ventilador">Ventilador</button>
         <button class="chip" type="button" data-v="aire">Aire acondicionado</button>
         <button class="chip" type="button" data-v="calefaccion">Calefacción</button>
-      </div>
-    </div>
-    <div id="sol">
-      <p class="subq">¿Sol o sombra?</p>
-      <div class="chips" id="solchips">
-        <button class="chip" type="button" data-v="sol">☀️ A pleno sol</button>
-        <button class="chip" type="button" data-v="sombra">⛱️ A la sombra</button>
-        <button class="chip" type="button" data-v="nublado">☁️ Nublado</button>
       </div>
     </div>
     <p class="subq">¿Cómo es tu zona?</p>
@@ -3661,7 +3666,7 @@ __NAV__
   <p>Porque la temperatura es un valor <b>relativo</b>: orienta, pero no establece las condiciones exactas. Un termómetro no suda, no nota la humedad que impide que el sudor evapore, ni el asfalto que devuelve por la noche el calor del día, ni la brisa que lo cambia todo. El Confortómetro nace para medir lo que ese número no cuenta: <b>el estado de confort de las personas, en su momento y en su lugar</b>. Una herramienta participativa para levantar, voto a voto, el mapa del grado de confort real en las poblaciones españolas — y compararlo con el de los termómetros.</p>
 
   <h2>Un estudio para todo el año: hacia el turismo climático</h2>
-  <p>Este estudio no es solo de noches de verano. Se vota <b>de día y de noche, en agosto y en enero</b>: la escala va del frío helador al calor insoportable. Con el tiempo, esos votos dibujan algo que hoy no existe: el calendario del confort de cada zona de España — dónde se está bien en cada época del año. Esa es la base del <b>turismo climático</b>: elegir destino no por lo que hay que ver, sino por cómo se va a sentir el cuerpo al estar allí. <a href="__SITE__/dormir-con-manta-en-verano/">Los pueblos donde se duerme con manta en agosto</a> ya lo saben; este estudio quiere ponerle números y mapa.</p>
+  <p>Este estudio no es solo de noches de verano. Se vota <b>de día y de noche, en agosto y en enero</b>: la escala va del frío helador al calor insoportable. Con el tiempo, esos votos dibujan algo que hoy no existe: el calendario del confort de cada zona de España — dónde se está bien en cada época del año. Esa es la base del <b>turismo climático</b>: elegir destino no por lo que hay que ver, sino por cómo se va a sentir el cuerpo al estar allí. <a href="__SITE__/dormir-con-manta-en-verano/">Los pueblos donde se duerme con manta en agosto</a> ya lo saben; este estudio quiere ponerle números y mapa. Y si lo que quieres es escapar del calor este fin de semana, <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">busca el refugio climático natural más cerca de ti →</a></p>
 
   <h2>Cómo funciona (y cómo detectamos trolas)</h2>
   <p>Cada voto se contrasta con lo que marcó la <a href="__SITE__/mapa-estaciones/">estación de AEMET de su zona</a>: si alguien vota «insoportable» una noche de mínima 14&nbsp;°C en la calle, su voto <b>no se borra, pero pesa menos</b>. Votar «fresco» con el aire acondicionado puesto, en cambio, es perfectamente coherente — por eso preguntamos el contexto: dónde estás, qué viento hace, si te da el sol. Una zona no muestra resultado hasta reunir al menos <b>5 votos en 24 horas</b>, el agregado es una mediana ponderada (un voto disparatado no mueve el resultado) y cada dispositivo puede votar una vez por hora.</p>
@@ -3687,7 +3692,7 @@ __FOOTER__
 <script>
 var EST=__EST__;
 var URL_API="__CONFORT_URL__";
-var sel={zona:null,celda:null,nivel:null,boch:null,viento:null,lugar:null,clima:null,sol:null,entorno:null};
+var sel={zona:null,celda:null,nivel:null,boch:null,viento:null,lugar:null,clima:null,cielo:null,entorno:null};
 var t0=Date.now();
 
 function uid(){
@@ -3705,9 +3710,19 @@ function marcaVoto(){try{localStorage.setItem("cf_last",""+Date.now());}catch(e)
 function fijaZona(e,celda){
  sel.zona=e;
  sel.celda=celda||null; // celda ~1 km del punto del check; sin GPS no hay celda
+ // Zona fijada: el formulario de posición desaparece (molesta una vez
+ // localizado) y queda la zona con un enlace para cambiarla.
+ document.getElementById("geoform").style.display="none";
  var z=document.getElementById("zona");
  z.style.display="block";
- z.innerHTML="Tu zona: <b>"+e[3]+"</b> ("+e[4]+")"+(e[5]!==null?" · anoche la mínima oficial fue <b>"+String(e[5]).replace(".",",")+" °C</b>":"");
+ z.innerHTML="📍 Tu zona: <b>"+e[3]+"</b> ("+e[4]+")"
+  +(e[5]!==null?" · anoche la mínima oficial fue <b>"+String(e[5]).replace(".",",")+" °C</b>":"")
+  +' · <a href="#" id="zcambiar">cambiar</a>';
+ document.getElementById("zcambiar").addEventListener("click",function(ev){
+  ev.preventDefault();
+  document.getElementById("geoform").style.display="block";
+  z.style.display="none";
+ });
  valida();
 }
 function cerca(la,lo){
@@ -3762,12 +3777,12 @@ function chips(id,campo,cb){
 chips("boch","boch");
 chips("viento","viento");
 chips("entorno","entorno");
-chips("solchips","sol");
+chips("cielochips","cielo");
+var INTERIOR={casa:1,oficina:1,fabrica:1,colegio:1};
 chips("lugar","lugar",function(){
- document.getElementById("clima").style.display=(sel.lugar==="casa")?"block":"none";
- document.getElementById("sol").style.display=(sel.lugar==="terraza"||sel.lugar==="calle")?"block":"none";
- if(sel.lugar!=="casa")sel.clima=null;
- if(sel.lugar==="casa")sel.sol=null;
+ var dentro=!!INTERIOR[sel.lugar];
+ document.getElementById("clima").style.display=dentro?"block":"none";
+ if(!dentro)sel.clima=null;
 });
 chips("climachips","clima");
 
@@ -3779,7 +3794,7 @@ document.getElementById("enviar").addEventListener("click",function(){
  if(document.getElementById("hp").value){return;}
  if(Date.now()-t0<3000){st.textContent="Un segundo… (comprobación anti-robots)";return;}
  if(!puedeVotar()){st.textContent="Ya has votado hace poco: se admite un voto por hora, para que cada noche cuente una vez.";return;}
- var p={z:sel.zona[0],g:sel.celda,s:sel.nivel,b:sel.boch,w:sel.viento,l:sel.lugar,c:sel.clima,o:sel.sol,e:sel.entorno,u:uid(),v:1};
+ var p={z:sel.zona[0],g:sel.celda,s:sel.nivel,b:sel.boch,w:sel.viento,l:sel.lugar,c:sel.clima,o:sel.cielo,e:sel.entorno,u:uid(),v:1};
  var fin=function(guardado){
   marcaVoto();
   document.getElementById("p1").style.display="none";

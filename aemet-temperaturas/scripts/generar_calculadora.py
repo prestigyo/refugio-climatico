@@ -3495,6 +3495,19 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
  .intro{color:var(--muted);font-size:clamp(15px,2.4vw,17.5px);margin:18px 0 0;max-width:640px}
  .intro b{color:var(--paper)}
  section{padding:26px 0}
+ .como{margin:0 0 4px;border-left:3px solid var(--teja);background:var(--bg2);border-radius:0 12px 12px 0;padding:14px 16px;font-size:14px;color:var(--muted);line-height:1.55}
+ .como b{color:var(--paper)}
+ .dirbox{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px}
+ .dirn{font-size:14px;color:var(--muted)}.dirn b{color:var(--teja2);font-family:var(--fm)}
+ .brow{display:flex;align-items:center;gap:10px;margin:6px 0}
+ .blab{flex:0 0 168px;font-size:13px;color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .btrack{flex:1;height:10px;background:var(--bg);border-radius:99px;overflow:hidden}
+ .bfill{display:block;height:100%;background:var(--teja);border-radius:99px}
+ .bnum{flex:0 0 30px;font-family:var(--fm);font-size:12.5px;color:var(--paper)}
+ .dzl{list-style:none;margin:6px 0 0;padding:0;font-size:14px;color:var(--muted)}
+ .dzl li{padding:6px 0;border-bottom:1px solid var(--line)}.dzl li:last-child{border-bottom:none}
+ .dzl b{color:var(--paper)}
+ @media(max-width:520px){.blab{flex-basis:120px}}
  .paso{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0}
  .paso .pt{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:12px}
  .geo{display:inline-block;background:var(--teja);color:#1a1209;font-weight:700;padding:12px 20px;border-radius:11px;border:0;font-size:15px;cursor:pointer}
@@ -3550,7 +3563,7 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
   .wrap{max-width:min(94vw,1150px)}
   #widget{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
   #widget .paso{margin:0}
-  #p1,#widget .enviar,#widget .hint,#gracias{grid-column:1/-1}
+  .como,#p1,#widget .enviar,#widget .hint,#gracias{grid-column:1/-1}
   .prose{max-width:none;column-count:2;column-gap:52px}
   .prose h2{break-after:avoid;margin-top:0}
   .prose h2:not(:first-child){margin-top:26px}
@@ -3569,6 +3582,9 @@ __NAV__
 </div></header>
 
 <section><div class="wrap" id="widget">
+  <div class="como">
+    <b>Funciona como los avisos de tráfico de Google Maps.</b> Allí un conductor marca «coche parado en la vía» y a quienes pasan después se les pregunta: «¿sigue ahí?». Aquí, igual: tú informas de cómo se siente el clima en tu zona, los votos de los demás lo confirman o lo matizan, y el dato oficial de AEMET hace de árbitro. Cuanta más gente informa, más fiable y más vivo es el mapa.
+  </div>
   <div class="paso" id="p1">
     <div class="pt">1 · Tu zona</div>
     <div id="geoform">
@@ -3660,6 +3676,11 @@ __NAV__
   </div>
 </div></section>
 
+<section><div class="wrap" id="directo">
+  <div class="kick">El resultado, en directo</div>
+  <div class="dirbox" id="dirbox"><p class="hint">Cargando los votos de las últimas 24 horas…</p></div>
+</div></section>
+
 <section><div class="wrap"><div class="prose">
   <h2>¿Por qué un confortómetro?</h2>
   <p>Cuando quieres saber cómo se está en otro sitio, hoy solo tienes dos fuentes: <b>lo que te cuente alguien que está allí</b> o <b>el termómetro más cercano</b> que le encuentre el móvil a esa localidad. Y muchas veces no cuadran: tu amigo jura que no ha pegado ojo y el aparato marca una cifra de lo más razonable. ¿Coincide lo que sienten las personas con lo que dice el termómetro de su pueblo? Nosotros tenemos serias dudas.</p>
@@ -3682,7 +3703,7 @@ __NAV__
     <div class="faqitem"><h3>¿Guardáis mi ubicación?</h3><p>No. Antes de enviar nada, tu navegador redondea las coordenadas a una celda de ~1&nbsp;km (suficiente para dibujar el mapa fino del calor urbano, insuficiente para saber dónde vives) y calcula la estación de AEMET de referencia. Solo viajan la celda y la zona. Sin cuentas, sin cookies de rastreo, sin IP.</p></div>
     <div class="faqitem"><h3>¿Qué es cada nivel de la escala?</h3><p>Una escala simétrica de 9 puntos, del frío helador al calor insoportable, basada en la escala clásica de confort térmico y escrita en el lenguaje en que se cuenta de verdad. El bochorno se pregunta aparte porque la humedad es otra cosa: no es más calor, es sudor que no evapora.</p></div>
     <div class="faqitem"><h3>¿Qué es el turismo climático?</h3><p>Elegir destino por cómo se va a sentir el cuerpo: pueblos donde se duerme con manta en agosto, costas templadas en enero. Este estudio quiere construir el primer calendario del confort real de las poblaciones españolas, votado por quienes están allí y contrastado con AEMET.</p></div>
-    <div class="faqitem"><h3>¿Y si la gente miente?</h3><p>Los votos se contrastan con el dato oficial de AEMET de la zona y con su contexto (interior, exterior, aire acondicionado…). Los incoherentes pesan menos, los dispositivos sistemáticamente incoherentes pierden peso, y ninguna zona publica resultado con menos de 5 votos.</p></div>
+    <div class="faqitem"><h3>¿Y si la gente miente?</h3><p>Es el mismo principio que los avisos de tráfico de Google Maps: informes de personas que se verifican entre sí. Cada voto se contrasta además con el dato oficial de AEMET de la zona y con su contexto (interior, exterior, viento, aire acondicionado…). Los incoherentes pesan menos, los dispositivos sistemáticamente incoherentes pierden peso, y ninguna zona publica resultado con menos de 5 votos.</p></div>
     <div class="faqitem"><h3>¿Para qué servirán los datos?</h3><p>Para el mapa del desacuerdo: dónde la gente sufre más de lo que marca el termómetro (costa húmeda, islas de calor urbanas). Se publicarán agregados y anónimos, como todo en este proyecto.</p></div>
   </div>
 </div></section>
@@ -3827,7 +3848,11 @@ document.getElementById("enviar").addEventListener("click",function(){
     if(d&&d.n>=5)
      r.innerHTML+="<br>Ahora mismo en tu zona: <b>"+d.mediana_txt+"</b> (mediana de <span class=\"num\">"+d.n+"</span> votos en 24 h"+(d.pct_bochorno!==null?", "+d.pct_bochorno+" % con bochorno":"")+").";
     else if(d)
-     r.innerHTML+="<br>Tu zona aún no llega a 5 votos en 24 h: el resultado se publicará al llegar.";
+     r.innerHTML+="<br>Tu zona aún no llega a 5 votos en 24 h: en cuanto llegue, su resultado se publica abajo, en «El resultado, en directo».";
+   }).catch(function(){});
+   fetch(URL_API+"?global=1").then(function(x){return x.json();}).then(function(d){
+    if(d&&d.ok)r.innerHTML+="<br>Tu voto es uno de los <span class=\"num\">"+d.n+"</span> de las últimas 24 horas en toda España.";
+    pintaDirecto(d);
    }).catch(function(){});
   }
  };
@@ -3839,6 +3864,42 @@ document.getElementById("enviar").addEventListener("click",function(){
   .then(function(){fin.call(this_btn,true);})
   .catch(function(){this_btn.disabled=false;st.textContent="No se pudo enviar (¿sin conexión?). Prueba otra vez.";});
 });
+
+// "El resultado, en directo": el agregado nacional de las últimas 24 h — la
+// recompensa visible desde el primer voto, sin esperar a que una zona junte 5.
+var ETQ=["","Helador","Frío","Fresco","Muy a gusto","Cómodo","Templado","Caluroso","Mucho calor","Insoportable"];
+var EMO=["","🧊","🥶","🧣","😌","🙂","😐","🥵","😫","🔥"];
+function pintaDirecto(d){
+ var b=document.getElementById("dirbox");
+ if(!d||!d.ok||!d.n){
+  b.innerHTML='<p class="hint">El estudio acaba de arrancar: aquí se verá, en directo, cómo se siente España según los votos de las últimas 24 horas. Los primeros votos — como el tuyo — son los que lo encienden.</p>';
+  return;
+ }
+ var NOMB={};EST.forEach(function(e){NOMB[e[0]]=[e[3],e[4]];});
+ var max=Math.max.apply(null,d.niveles)||1;
+ var html='<p class="dirn">🔴 <b>'+d.n+'</b> votos en las últimas 24 horas en España</p><div class="bars">';
+ for(var i=0;i<9;i++){
+  html+='<div class="brow"><span class="blab">'+EMO[i+1]+' '+ETQ[i+1]+'</span>'
+   +'<span class="btrack"><span class="bfill" style="width:'+Math.round(100*d.niveles[i]/max)+'%"></span></span>'
+   +'<span class="bnum">'+d.niveles[i]+'</span></div>';
+ }
+ html+='</div>';
+ if(d.zonas&&d.zonas.length){
+  html+='<p class="dirn" style="margin-top:14px">Zonas con resultado (5 votos o más), de más calurosa a más fresca sentida:</p><ul class="dzl">';
+  d.zonas.forEach(function(x){
+   var nm=NOMB[x.z]||[x.z,""];
+   html+='<li>'+EMO[Math.round(x.m)]+' <b>'+nm[0]+'</b>'+(nm[1]?' ('+nm[1]+')':'')+': '+ETQ[Math.round(x.m)]+' · '+x.n+' votos</li>';
+  });
+  html+='</ul>';
+ }
+ b.innerHTML=html;
+}
+(function(){
+ var b=document.getElementById("dirbox");
+ if(!URL_API){b.innerHTML='<p class="hint">Los resultados en directo aparecerán aquí en cuanto el buzón de votos esté desplegado.</p>';return;}
+ fetch(URL_API+"?global=1").then(function(x){return x.json();}).then(pintaDirecto)
+  .catch(function(){b.innerHTML='<p class="hint">No se pudieron cargar los resultados en directo. Prueba a recargar en un rato.</p>';});
+})();
 </script>
 </body>
 </html>

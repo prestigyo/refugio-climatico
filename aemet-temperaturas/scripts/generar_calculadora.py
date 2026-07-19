@@ -1121,7 +1121,8 @@ def footer_escueto_html(site: str, extra: str = "") -> str:
           ("¿Tu pueblo no aparece? Ayúdanos", "/tu-pueblo/")]
     c3 = [("La calculadora de tu pueblo", "/"),
           ("Metodología y glosario", "/metodologia/"),
-          ("Sala de prensa", "/prensa/")]
+          ("Sala de prensa", "/prensa/"),
+          ("Licencia y aviso legal", "/aviso-legal/")]
 
     def col(titulo: str, items: list) -> str:
         enlaces = "".join(f'<a href="{site}{h}">{t}</a>' for t, h in items)
@@ -1138,6 +1139,115 @@ def footer_escueto_html(site: str, extra: str = "") -> str:
             f'<a href="{site}/">nochetropical.es</a> · Ramón J. Lowesting'
             + (f' · {extra}' if extra else '') + '</div>'
             '</div></footer>')
+
+
+CONSOLA_INFORMES = r"""<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consola de informes · nochetropical.es</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=Lora:wght@400&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif;--fm:ui-monospace,monospace}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.6}
+ .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+ a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+ header{padding:40px 0 8px}
+ .kick{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--teja);font-weight:600;margin-bottom:12px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(26px,5vw,38px)}
+ h2{font-family:var(--fd);font-weight:600;font-size:20px;margin:28px 0 10px}
+ p{color:var(--muted);font-size:15px;margin:12px 0}
+ input{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--paper);padding:12px 14px;border-radius:10px;font-size:15px;font-family:var(--fb)}
+ .cmd{margin-top:14px;background:#0c0906;border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-family:var(--fm);font-size:13.5px;color:var(--verde);word-break:break-all;display:none}
+ .cmd b{color:var(--teja2)}
+ .copiar{margin-top:10px;background:var(--teja);color:#1a1209;border:0;font-weight:700;padding:10px 16px;border-radius:9px;cursor:pointer;font-family:var(--fb);display:none}
+ .verurl{display:none;margin-top:10px;font-size:14px}
+ ul{list-style:none;margin:12px 0;padding:0}
+ li{padding:12px 0;border-bottom:1px solid var(--line)}
+ li a{font-family:var(--fd);font-weight:600;font-size:17px;color:var(--teja2)}
+ li span{color:var(--muted);font-size:13px}
+ .vacio{color:var(--muted);font-style:italic}
+ footer{border-top:1px solid var(--line);margin-top:30px;padding:22px 0 60px;color:#82745d;font-size:12.5px}
+</style></head><body>
+<header><div class="wrap"><div class="kick">Panel interno · nochetropical.es</div>
+<h1>Consola de informes de zona</h1>
+<p>Página privada (noindex). Genera y comparte informes por estación de AEMET.</p></div></header>
+
+<section><div class="wrap">
+ <h2>1 · Generar un informe</h2>
+ <p>Busca una estación (por pueblo, provincia o indicativo) y copia el comando. Ejecútalo en el repo; el informe y su Excel quedan en <span style="font-family:var(--fm)">/informes/&lt;pueblo&gt;/</span>.</p>
+ <input id="q" type="text" placeholder="Escribe un pueblo… (p. ej. Gandia, Cuenca, 8058X)" autocomplete="off" list="estlist">
+ <datalist id="estlist"></datalist>
+ <div class="cmd" id="cmd"></div>
+ <button class="copiar" id="copiar" type="button">Copiar comando</button>
+ <div class="verurl" id="verurl"></div>
+</div></section>
+
+<section><div class="wrap">
+ <h2>2 · Informes ya generados</h2>
+ <ul id="lista">__LISTA__</ul>
+</div></section>
+
+<footer><div class="wrap">Consola interna de <a href="__SITE__/">nochetropical.es</a>. No enlaces esta URL desde páginas públicas.</div></footer>
+<script>
+var EST=__EST__; // [id, loc, prov, slug]
+var dl=document.getElementById("estlist");
+EST.forEach(function(e){var o=document.createElement("option");o.value=e[1]+" ("+e[2]+") · "+e[0];dl.appendChild(o);});
+var q=document.getElementById("q"),cmd=document.getElementById("cmd"),cop=document.getElementById("copiar"),vu=document.getElementById("verurl");
+function buscar(txt){
+ txt=txt.toLowerCase().trim();
+ var m=txt.match(/·\s*([0-9a-z]{3,7})\s*$/i);
+ if(m){for(var i=0;i<EST.length;i++)if(EST[i][0].toLowerCase()===m[1].toLowerCase())return EST[i];}
+ for(var j=0;j<EST.length;j++)if(EST[j][0].toLowerCase()===txt)return EST[j];
+ for(var k=0;k<EST.length;k++)if((EST[k][1]+" "+EST[k][2]).toLowerCase().indexOf(txt)>=0)return EST[k];
+ return null;
+}
+q.addEventListener("input",function(){
+ var e=buscar(q.value);
+ if(!e||!q.value){cmd.style.display=cop.style.display=vu.style.display="none";return;}
+ cmd.innerHTML="cd aemet-temperaturas<br>python scripts/generar_informe_lead.py --estacion <b>"+e[0]+"</b>";
+ cmd.style.display="block";cop.style.display="inline-block";
+ vu.style.display="block";
+ vu.innerHTML='Una vez generado: <a href="__SITE__/informes/'+e[3]+'/">__SITE__/informes/'+e[3]+'/</a>';
+ cop.setAttribute("data-cmd","cd aemet-temperaturas\npython scripts/generar_informe_lead.py --estacion "+e[0]);
+});
+cop.addEventListener("click",function(){
+ var t=cop.getAttribute("data-cmd");
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){cop.textContent="Copiado ✓";setTimeout(function(){cop.textContent="Copiar comando";},1500);});
+});
+</script>
+</body></html>
+"""
+
+
+def construir_consola_informes(estaciones: list, site: str) -> str:
+    """Consola interna (noindex) del generador de informes: buscador de las 848
+    estaciones que da el comando, y lista de informes ya publicados en
+    docs/informes/. Se reconstruye en cada build escaneando la carpeta."""
+    est_js = json.dumps(
+        [[e["id"], e["loc"], e["prov"], slug(e["loc"])] for e in estaciones],
+        ensure_ascii=False, separators=(",", ":"))
+    base = DOCS_DIR / "informes"
+    entradas = []
+    if base.exists():
+        for idx in sorted(base.glob("*/index.html")):
+            m = re.search(r"<title>Informe de noches tropicales · (.+?) \((.+?)\)</title>",
+                          idx.read_text(encoding="utf-8"))
+            sl = idx.parent.name
+            entradas.append((m.group(1) if m else sl, m.group(2) if m else "", sl))
+    entradas.sort(key=lambda x: clave_orden(x[0]))
+    if entradas:
+        lista = "".join(
+            f'<li><a href="{site}/informes/{sl}/">{loc}</a> '
+            f'<span>· {prov} · <a href="{site}/informes/{sl}/datos.xlsx">Excel</a></span></li>'
+            for loc, prov, sl in entradas)
+    else:
+        lista = '<li class="vacio">Aún no hay informes generados.</li>'
+    return (CONSOLA_INFORMES
+            .replace("__EST__", est_js)
+            .replace("__LISTA__", lista)
+            .replace("__SITE__", site))
 
 
 def aplicar_menu_escueto(html: str, site: str) -> str:
@@ -1793,7 +1903,7 @@ FOOTER_HTML = (
     '      <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a>'
     '<a href="__SITE__/prensa/">Sala de prensa</a>'
     '<a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a>'
-    '<a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">Licencia CC BY 4.0</a></div>\n'
+    '<a href="__SITE__/aviso-legal/">Licencia y aviso legal</a></div>\n'
     '      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/metodologia/">Sobre el proyecto</a>'
     '<a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a>'
     '<a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a>'
@@ -1964,6 +2074,14 @@ PAGINA_PRENSA = r"""<!doctype html>
 <footer><div class="wrap">
   Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · proyecto Refugio Climático de Ramón J. Lowesting · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.
 </div></footer>
+<script>
+/* Atajo interno (no visible): teclea la palabra secreta en cualquier punto de
+   esta página y saltas a la consola de informes. Seguridad por oscuridad: la
+   consola es noindex y no está enlazada en ningún sitio público, pero su URL
+   es adivinable, así que no guardes ahí nada sensible. Cambia la palabra en
+   PALABRA_CONSOLA (generar_calculadora.py). */
+(function(){var s="",k=atob("__CLAVE_CONSOLA__");document.addEventListener("keydown",function(e){if(e.key&&e.key.length===1){s=(s+e.key.toLowerCase()).slice(-k.length);if(s===k)location.href="__SITE__/informes/";}});})();
+</script>
 </body>
 </html>
 """
@@ -2120,6 +2238,8 @@ def construir_pagina_prensa(datos: dict, estaciones: list, site: str,
         f'<li><a href="{md["url"]}" target="_blank" rel="noopener">{md["titular"]}</a>'
         f'<span class="meta">{md["medio"]} · {md["grupo"]} · {md["fecha"]}</span></li>'
         for md in MEDIOS)
+    import base64
+    clave = base64.b64encode(PALABRA_CONSOLA.encode()).decode()
     return (PAGINA_PRENSA
             .replace("__SCHEMA__", schema)
             .replace("__MEDIOS__", medios_html)
@@ -2128,6 +2248,7 @@ def construir_pagina_prensa(datos: dict, estaciones: list, site: str,
             .replace("__DESCARGAS__", desc_html)
             .replace("__TOTAL__", str(total))
             .replace("__FECHA__", fecha_txt)
+            .replace("__CLAVE_CONSOLA__", clave)
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
 
@@ -3415,6 +3536,12 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str) -> str:
 APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbzpBift9lGy5j"
                            "gilf3nxvcGDhD4zOP7LR17GgKgUOLzG4yI43gZrM4D1CvhcNp7T135qQ/exec")
 
+# Palabra secreta del atajo de teclado de la sala de prensa: tecléala en
+# /prensa/ y saltas a la consola interna de informes (/informes/). Va ofuscada
+# en base64 en el HTML (no en claro), pero es seguridad por oscuridad: cámbiala
+# cuando quieras y no guardes nada sensible en la consola.
+PALABRA_CONSOLA = "refugio"
+
 # Niveles de sensación: escala SIMÉTRICA de 9 puntos (ampliación de la ASHRAE
 # de 7), en lenguaje de calle. Cubre también el frío: el confortómetro es un
 # estudio de TODO el año (verano e invierno, día y noche), no solo de noches
@@ -3535,6 +3662,9 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
  .enviar[disabled]{opacity:.4;cursor:not-allowed}
  .gracias{display:none;text-align:center;padding:26px 18px}
  .gracias .big{font-family:var(--fd);font-weight:600;font-size:22px;margin-bottom:8px}
+ .racha{font-size:14px;color:var(--teja2);font-weight:600;margin-top:2px}
+ .manana{font-size:13px;color:var(--muted);margin:14px auto 0;max-width:480px}
+ .manana b{color:var(--paper)}
  .resultado{margin-top:14px;font-size:14.5px;color:var(--muted)}
  .resultado b{color:var(--paper)}
  .resultado .num{font-family:var(--fm);color:var(--teja2)}
@@ -3661,8 +3791,10 @@ __NAV__
 
   <div class="paso gracias" id="gracias">
     <div class="big">🌙 Gracias: tu voto ya forma parte del estudio.</div>
+    <p class="racha" id="racha"></p>
     <div class="resultado" id="resultado"></div>
     <div class="zinfo" id="zinfo"></div>
+    <p class="manana">📅 <b>Vuelve mañana.</b> Cada mañana publicamos <a href="__SITE__/parte/">el parte de la noche</a> — quién durmió fresco y quién no pegó ojo — y tu zona quedará recordada aquí para votar con un solo toque. Cuantos más días votes, más fino será el mapa del confort.</p>
     <p class="demo" id="demo">Modo demostración: el buzón de votos aún no está desplegado, así que este voto no se ha guardado.</p>
     <div class="compartir">
       <span class="ct">Un estudio así se construye compartiéndolo</span>
@@ -3731,6 +3863,7 @@ function marcaVoto(){try{localStorage.setItem("cf_last",""+Date.now());}catch(e)
 function fijaZona(e,celda){
  sel.zona=e;
  sel.celda=celda||null; // celda ~1 km del punto del check; sin GPS no hay celda
+ try{localStorage.setItem("cf_zona",e[0]);}catch(er){} // recordada para la próxima visita
  // Zona fijada: el formulario de posición desaparece (molesta una vez
  // localizado) y queda la zona con un enlace para cambiarla.
  document.getElementById("geoform").style.display="none";
@@ -3782,6 +3915,27 @@ prov.addEventListener("change",function(){
 est.addEventListener("change",function(){
  if(est.value!=="")fijaZona(PR[prov.value][+est.value]);
 });
+// Visita recurrente: si ya nos dio su zona otro día, el paso 1 viene hecho
+// (queda el enlace "cambiar" por si se ha movido).
+try{
+ var zg=localStorage.getItem("cf_zona");
+ if(zg){for(var zi=0;zi<EST.length;zi++)if(EST[zi][0]===zg){fijaZona(EST[zi]);break;}}
+}catch(e){}
+
+// Racha de días seguidos participando (solo con votos guardados de verdad).
+function racha(){
+ try{
+  var d0=new Date().toISOString().slice(0,10);
+  var prev=localStorage.getItem("cf_dia")||"";
+  var n=+localStorage.getItem("cf_racha")||0;
+  if(prev!==d0){
+   var ayer=new Date(Date.now()-864e5).toISOString().slice(0,10);
+   n=(prev===ayer)?n+1:1;
+   localStorage.setItem("cf_dia",d0);localStorage.setItem("cf_racha",""+n);
+  }
+  return n||1;
+ }catch(e){return 0;}
+}
 
 document.getElementById("niveles").addEventListener("click",function(ev){
  var b=ev.target.closest(".nvl");if(!b)return;
@@ -3824,6 +3978,7 @@ document.getElementById("enviar").addEventListener("click",function(){
   this_btn.style.display="none";st.style.display="none";
   var g=document.getElementById("gracias");g.style.display="block";
   if(!guardado)document.getElementById("demo").style.display="block";
+  if(guardado){var nr=racha();if(nr>=2)document.getElementById("racha").textContent="🔥 Llevas "+nr+" días seguidos aportando al estudio.";}
   var z=sel.zona,r=document.getElementById("resultado"),partes=[];
   if(z[5]!==null&&z[5]!==undefined)partes.push("mínima <span class=\"num\">"+String(z[5]).replace(".",",")+" °C</span>");
   if(z[6]!==null&&z[6]!==undefined)partes.push("máxima <span class=\"num\">"+String(z[6]).replace(".",",")+" °C</span>");
@@ -4150,6 +4305,121 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
             .replace("__HOME__", site + "/"))
 
 
+PAGINA_AVISO_LEGAL = r"""<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Licencia, derechos de autor y aviso legal | nochetropical.es</title>
+<meta name="description" content="Qué puedes reutilizar de nochetropical.es y cómo citarlo: los datos de noches tropicales están bajo licencia CC BY 4.0; la marca, el diseño y los textos están reservados. Fuente de los datos: AEMET.">
+<link rel="canonical" href="__SITE__/aviso-legal/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Licencia, derechos de autor y aviso legal · nochetropical.es">
+<meta property="og:description" content="Los datos, bajo CC BY 4.0 (reutilizables citando la fuente); la marca, el diseño y los textos, reservados.">
+<meta property="og:url" content="__SITE__/aviso-legal/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=Lora:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif;--fm:ui-monospace,monospace}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.65;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+ a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+ header.h{padding:44px 0 12px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:16px 0 8px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(28px,5.5vw,42px);line-height:1.05}
+ .intro{color:var(--muted);font-size:clamp(15px,2.4vw,17px);margin:16px 0 0}
+ section{padding:22px 0}
+ h2{font-family:var(--fd);font-weight:600;font-size:clamp(19px,3.4vw,24px);margin:18px 0 10px}
+ p{color:var(--muted);font-size:15.5px;margin:0 0 14px}p b{color:var(--paper)}
+ ul{margin:0 0 14px 20px;color:var(--muted);font-size:15.5px}li{margin:6px 0}
+ .lic{display:flex;flex-wrap:wrap;gap:12px;align-items:center;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:6px 0 14px}
+ .lic .b{font-family:var(--fm);font-weight:700;color:var(--verde);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;white-space:nowrap}
+ .cita{font-family:var(--fm);font-size:13px;background:#0c0906;border:1px solid var(--line);border-radius:10px;padding:14px 16px;color:#e3d8c4;line-height:1.5;margin:6px 0 14px}
+ .ok{color:var(--verde)}.no{color:var(--teja2)}
+ __NAVCSS__
+ __FOOTERCSS__
+</style></head><body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Aviso legal y licencia</nav>
+  <div class="kick">Licencia · Derechos de autor</div>
+  <h1>Licencia, derechos de autor y aviso legal</h1>
+  <p class="intro">Este proyecto nace para compartirse. Aquí explicamos, sin letra pequeña, <b>qué puedes reutilizar y cómo citarlo</b>, y qué está reservado. En resumen: los <b>datos</b> son libres citando la fuente; el <b>nombre, el diseño y los textos</b>, no.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Titularidad</h2>
+  <p><b>nochetropical.es</b> (también accesible desde el github.io original) es un proyecto de datos de <b>Ramón&nbsp;J.&nbsp;Lowesting</b>. Los datos meteorológicos de base proceden de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a>, la Agencia Estatal de Meteorología, y se tratan aquí de forma reproducible a partir de fuentes públicas.</p>
+
+  <h2>Los datos: libres con atribución (CC BY 4.0)</h2>
+  <div class="lic">
+    <span class="b">CC BY 4.0</span>
+    <span style="color:var(--muted);font-size:14.5px">Los datos de noches tropicales por estación —conteos, medias, rankings y los CSV/Excel descargables— se publican bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license" target="_blank">Creative Commons Reconocimiento 4.0</a>.</span>
+  </div>
+  <p>Eso significa que <span class="ok">puedes copiarlos, redistribuirlos, adaptarlos y usarlos —incluso con fines comerciales—</span> siempre que <b>cites la fuente</b> y enlaces a la licencia. Nos encanta que se reutilicen: es justo para lo que están.</p>
+  <p><b>Cómo citar:</b></p>
+  <div class="cita">Fuente: AEMET · nochetropical.es (Refugio Climático), datos bajo CC BY 4.0.<br>https://nochetropical.es</div>
+
+  <h2>Lo que está reservado</h2>
+  <p>La licencia CC BY 4.0 cubre <b>los datos</b>, no todo lo demás. Se reservan todos los derechos sobre:</p>
+  <ul>
+    <li>El <b>nombre y la marca</b> «nochetropical.es» / «Refugio Climático» y el logotipo.</li>
+    <li>El <b>diseño</b>, la interfaz, la identidad visual y el <b>código</b> del sitio.</li>
+    <li>Los <b>textos editoriales</b> (reportajes, artículos, análisis redactados) y las imágenes originales.</li>
+  </ul>
+  <p>En corto: <span class="ok">reutiliza los números citándonos</span>; <span class="no">no clones el sitio, no copies los textos ni te hagas pasar por nochetropical.es</span>.</p>
+
+  <h2>Usos que no autorizamos</h2>
+  <ul>
+    <li>Reproducir el sitio o sus textos <b>de forma sustancial y sin atribución</b>, o presentándolos como propios.</li>
+    <li>Usar el <b>nombre o la marca</b> de forma que sugiera afiliación, respaldo u origen que no existe.</li>
+    <li>Republicar los datos <b>ocultando o falseando</b> que proceden de AEMET y de este proyecto.</li>
+  </ul>
+
+  <h2>¿Reutilizas nuestro trabajo? ¿O ves un uso indebido?</h2>
+  <p>Si quieres reutilizar algo más allá de lo que permite CC BY (por ejemplo, textos o diseño), o si detectas una copia que incumple lo anterior, escríbenos: <a href="mailto:lowesting@gmail.com">lowesting@gmail.com</a>. Para citas normales de los datos no hace falta pedir permiso —basta con atribuir.</p>
+
+  <h2>Datos personales</h2>
+  <p>No usamos cookies de rastreo ni perfiles publicitarios. El <a href="__SITE__/confortometro/">Confortómetro</a> guarda votos <b>anónimos</b> por zona (la ubicación exacta nunca sale de tu dispositivo). Si nos dejas tu correo para recibir un informe o alertas, lo usamos solo para eso; puedes pedir su baja en la dirección de arriba.</p>
+
+  <h2>Descargo</h2>
+  <p>La información se ofrece «tal cual», con fines divulgativos. El dato es de la <b>estación</b> de AEMET, no del municipio entero, y no sustituye a la información oficial de AEMET ni a un aviso meteorológico. Hacemos lo posible por que sea correcta, pero no garantizamos que esté libre de errores.</p>
+</div></section>
+__FOOTER__
+</body></html>
+"""
+
+
+def construir_pagina_aviso_legal(site: str) -> str:
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Aviso legal y licencia",
+             "item": site + "/aviso-legal/"}]},
+        {"@type": "WebPage", "name": "Licencia, derechos de autor y aviso legal",
+         "url": site + "/aviso-legal/",
+         "description": ("Condiciones de reutilización de nochetropical.es: datos bajo "
+                         "CC BY 4.0 con atribución; marca, diseño y textos reservados."),
+         "license": "https://creativecommons.org/licenses/by/4.0/",
+         "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
+        ensure_ascii=False)
+    return (PAGINA_AVISO_LEGAL
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
 def main() -> int:
     estaciones, total = cargar_estaciones()
     datos = construir_datos(estaciones, total)
@@ -4209,6 +4479,15 @@ def main() -> int:
     (DOCS_DIR / "dormir-con-manta-en-verano").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "dormir-con-manta-en-verano" / "index.html").write_text(
         construir_pagina_manta(estaciones, site), encoding="utf-8")
+    (DOCS_DIR / "aviso-legal").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "aviso-legal" / "index.html").write_text(
+        construir_pagina_aviso_legal(site), encoding="utf-8")
+    # Consola interna del generador de informes (noindex, fuera del sitemap):
+    # buscador de estaciones + lista de informes ya publicados. Se reconstruye
+    # cada build escaneando docs/informes/.
+    (DOCS_DIR / "informes").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "informes" / "index.html").write_text(
+        construir_consola_informes(estaciones, site), encoding="utf-8")
     (DOCS_DIR / "datos").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "datos" / "tmin-zonas.json").write_text(
         json.dumps({"actualizado": max((f for f, _, _ in tmin_rec.values()), default=""),
@@ -4274,8 +4553,11 @@ def main() -> int:
         f"{site}/{rel}/"
         for patron in ("*/index.html", "*/*/index.html")
         for f in DOCS_DIR.glob(patron)
-        # las carpetas que solo redirigen no son páginas: fuera del sitemap
-        if (rel := f.parent.relative_to(DOCS_DIR).as_posix()) not in REDIRECCIONES)
+        # las carpetas que solo redirigen no son páginas: fuera del sitemap.
+        # Los informes de zona (/informes/) son noindex y compartibles por
+        # enlace, NO para indexar: también fuera del sitemap.
+        if (rel := f.parent.relative_to(DOCS_DIR).as_posix()) not in REDIRECCIONES
+        and not rel.startswith("informes"))
     filas = "\n".join(
         f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'
         f'<priority>{"1.0" if u == site + "/" else "0.7"}</priority></url>' for u in urls)

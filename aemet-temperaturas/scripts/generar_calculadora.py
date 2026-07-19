@@ -2123,6 +2123,10 @@ PAGINA_RANKING = r"""<!doctype html>
  td.pos{font-family:var(--fm);color:var(--teja2);width:34px}
  td.loc{font-weight:600}
  tbody tr:hover{background:rgba(217,116,78,.05)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.15em;text-transform:uppercase;color:var(--teja);margin:0 0 10px}
+ .provnav{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:6px;font-size:14px}
+ .provnav a{color:var(--teal);text-decoration:none}
+ .provnav a:hover{color:var(--teja2);text-decoration:underline}
  @media(max-width:520px){th.hide,td.hide{display:none}}
 </style>
 </head>
@@ -2162,6 +2166,12 @@ PAGINA_RANKING = r"""<!doctype html>
       <a class="btn sec" href="__SITE__/mapa-estaciones/">Ver el mapa interactivo</a>
     </div>
   </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kick">Todas las provincias</div>
+  <p class="note">¿No ves tu pueblo en las tablas de arriba? Entra en tu provincia y mira el detalle de todas sus estaciones, de la más fresca a la más calurosa.</p>
+  <nav class="provnav" aria-label="Todas las provincias">__PROVNAV__</nav>
 </div></section>
 
 <footer><div class="wrap">
@@ -2254,7 +2264,7 @@ def construir_pagina_prensa(datos: dict, estaciones: list, site: str,
 
 
 def construir_pagina_ranking(estaciones: list, site: str,
-                             fecha_iso: str, fecha_txt: str) -> str:
+                             fecha_iso: str, fecha_txt: str, provnav: str = "") -> str:
     peor = sorted(estaciones, key=lambda x: -x["nt"])[:30]
     refus = [e for e in estaciones if e["nt"] < 1]
     cero = len(refus)
@@ -2297,6 +2307,7 @@ def construir_pagina_ranking(estaciones: list, site: str,
             .replace("__CERO__", str(cero))
             .replace("__TOTAL__", str(len(estaciones)))
             .replace("__FECHA__", fecha_txt)
+            .replace("__PROVNAV__", provnav)
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
 
@@ -4458,7 +4469,7 @@ def main() -> int:
     (DOCS_DIR / "ranking-noches-tropicales").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "ranking-noches-tropicales" / "index.html").write_text(
         aplicar_menu_escueto(
-            construir_pagina_ranking(estaciones, site, fecha_mod_iso, fecha_mod_txt),
+            construir_pagina_ranking(estaciones, site, fecha_mod_iso, fecha_mod_txt, provnav),
             site),
         encoding="utf-8")
     (DOCS_DIR / "ola-de-calor").mkdir(parents=True, exist_ok=True)

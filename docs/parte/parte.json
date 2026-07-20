@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-19",
+ "fecha": "2026-07-20",
  "total": 835,
- "tropicales": 322,
- "ecuatoriales": 49,
+ "tropicales": 367,
+ "ecuatoriales": 80,
  "peor": {
-  "id": "8058X",
-  "nombre": "Oliva",
-  "min": 27.5,
-  "prov": "Valencia"
+  "id": "B051A",
+  "nombre": "Sóller",
+  "min": 28.0,
+  "prov": "Illes Balears"
  },
  "mejor": {
   "id": "3319D",
   "nombre": "Puerto el Pico",
-  "min": 4.9,
+  "min": 5.4,
   "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "8058X",
-   "nombre": "Oliva",
+   "id": "B051A",
+   "nombre": "Sóller",
+   "min": 28.0,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
+   "min": 27.8,
+   "prov": "Murcia"
+  },
+  {
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 27.7,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B986",
+   "nombre": "Formentera",
    "min": 27.5,
-   "prov": "Valencia"
-  },
-  {
-   "id": "0429X",
-   "nombre": "Figueres Els Aspres",
-   "min": 27.2,
-   "prov": "Girona"
-  },
-  {
-   "id": "6000A",
-   "nombre": "Melilla",
-   "min": 27.2,
-   "prov": "Melilla"
-  },
-  {
-   "id": "8500A",
-   "nombre": "Castellón-Almassora",
-   "min": 27.2,
-   "prov": "Castellón"
-  },
-  {
-   "id": "8058Y",
-   "nombre": "Miramar",
-   "min": 27.1,
-   "prov": "Valencia"
-  },
-  {
-   "id": "8057C",
-   "nombre": "Pego",
-   "min": 26.8,
-   "prov": "Alicante"
-  },
-  {
-   "id": "8416",
-   "nombre": "Valencia Dt",
-   "min": 26.7,
-   "prov": "Valencia"
-  },
-  {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 26.5,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "8414A",
-   "nombre": "Valencia/Aeropuerto",
-   "min": 26.5,
-   "prov": "Valencia"
+   "prov": "Illes Balears"
   },
   {
    "id": "6281X",
    "nombre": "Válor",
-   "min": 26.4,
+   "min": 27.3,
    "prov": "Granada"
+  },
+  {
+   "id": "B087X",
+   "nombre": "Banyalbufar",
+   "min": 27.2,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B373X",
+   "nombre": "Campos-Salines Levant",
+   "min": 27.1,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "0201D",
+   "nombre": "Barcelona Port Olímpic",
+   "min": 26.9,
+   "prov": "Barcelona"
+  },
+  {
+   "id": "B275E",
+   "nombre": "Son Bonet Aeropuerto",
+   "min": 26.9,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 26.9,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 4.9,
+   "min": 5.4,
    "prov": "Ávila"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 6.0,
+   "prov": "Salamanca"
   },
   {
    "id": "2828Y",
    "nombre": "Barco de Avila",
-   "min": 7.5,
+   "min": 7.1,
    "prov": "Ávila"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 7.9,
+   "min": 7.2,
    "prov": "Segovia"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 8.5,
-   "prov": "Salamanca"
   },
   {
    "id": "3104Y",
    "nombre": "El Paular- Rascafría (Automática)",
-   "min": 8.7,
+   "min": 8.4,
    "prov": "Madrid"
   },
   {
-   "id": "3013",
-   "nombre": "Molina de Aragón",
-   "min": 9.8,
-   "prov": "Guadalajara"
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 9.0,
+   "prov": "Soria"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 10.0,
-   "prov": "León"
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 9.1,
+   "prov": "Soria"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 10.0,
+   "min": 9.8,
    "prov": "Zamora"
   },
   {
    "id": "3130C",
    "nombre": "Sigüenza",
-   "min": 10.0,
+   "min": 9.8,
    "prov": "Guadalajara"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 10.2,
-   "prov": "Cantabria"
+   "id": "2092",
+   "nombre": "Burgo de Osma-Pozuelos",
+   "min": 10.0,
+   "prov": "Soria"
   }
  ]
 }

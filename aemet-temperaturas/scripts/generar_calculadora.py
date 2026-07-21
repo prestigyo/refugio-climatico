@@ -4689,6 +4689,25 @@ def main() -> int:
             if nuevo != h:
                 f.write_text(nuevo, encoding="utf-8")
                 cert_noindex += 1
+    # El parte de la noche: la portada /parte/ se indexa, pero los archivos
+    # diarios /parte/AAAA-MM-DD/ son efímeros (uno por noche, cientos al año) y
+    # solo existen para el permalink del tuit → noindex. Mismo post-proceso in
+    # situ que los certificados; el sitemap los excluye al quedar noindex.
+    parte_noindex = 0
+    parte_dir = DOCS_DIR / "parte"
+    if parte_dir.exists():
+        for f in parte_dir.glob("*/index.html"):
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", f.parent.name):
+                continue
+            h = f.read_text(encoding="utf-8")
+            if 'content="noindex' in h:
+                continue
+            nuevo = h.replace(
+                '<meta name="robots" content="index,follow,max-image-preview:large">',
+                '<meta name="robots" content="noindex,follow">')
+            if nuevo != h:
+                f.write_text(nuevo, encoding="utf-8")
+                parte_noindex += 1
     # Sitemap AUTOMÁTICO: descubre todas las páginas publicadas escaneando docs/.
     # Excluye redirecciones y CUALQUIER página noindex (informes, consola,
     # certificados finos, beta…) leyendo su meta robots — así nunca anuncia a
@@ -4717,7 +4736,8 @@ def main() -> int:
     print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"
           + (f" · {migradas} páginas estáticas migradas de dominio" if migradas else "")
           + (f" · menú escueto inyectado en {con_menu} páginas estáticas" if con_menu else "")
-          + (f" · {cert_noindex} certificados a noindex" if cert_noindex else ""))
+          + (f" · {cert_noindex} certificados a noindex" if cert_noindex else "")
+          + (f" · {parte_noindex} partes diarios a noindex" if parte_noindex else ""))
     c = datos["meta"]["contraste"]
     print(f"OK -> {OUT_HTML}")
     print(f"   {total} estaciones en {len(datos['provincias'])} provincias")

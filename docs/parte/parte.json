@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-20",
- "total": 835,
- "tropicales": 367,
- "ecuatoriales": 82,
+ "fecha": "2026-07-21",
+ "total": 842,
+ "tropicales": 379,
+ "ecuatoriales": 69,
  "peor": {
   "id": "B051A",
   "nombre": "Sóller",
-  "min": 28.0,
+  "min": 27.9,
   "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 5.4,
-  "prov": "Ávila"
+  "id": "2192C",
+  "nombre": "Cuellar",
+  "min": 5.8,
+  "prov": "Segovia"
  },
  "top_calor": [
   {
    "id": "B051A",
    "nombre": "Sóller",
-   "min": 28.0,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "7019X",
-   "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 27.8,
-   "prov": "Murcia"
-  },
-  {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 27.7,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 27.5,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "6281X",
-   "nombre": "Válor",
-   "min": 27.3,
-   "prov": "Granada"
-  },
-  {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 27.2,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B373X",
-   "nombre": "Campos-Salines Levant",
-   "min": 27.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 26.9,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "B275E",
-   "nombre": "Son Bonet Aeropuerto",
-   "min": 26.9,
+   "min": 27.9,
    "prov": "Illes Balears"
   },
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 26.9,
+   "min": 27.6,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "8500A",
+   "nombre": "Castellón-Almassora",
+   "min": 27.4,
+   "prov": "Castellón"
+  },
+  {
+   "id": "B603X",
+   "nombre": "Colònia Sant Pere-Can Mengol",
+   "min": 27.4,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B087X",
+   "nombre": "Banyalbufar",
+   "min": 27.3,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "6127X",
+   "nombre": "Álora las Pelonas",
+   "min": 27.0,
+   "prov": "Málaga"
+  },
+  {
+   "id": "7023X",
+   "nombre": "Fuente Alamo",
+   "min": 27.0,
+   "prov": "Murcia"
+  },
+  {
+   "id": "7178I",
+   "nombre": "Murcia",
+   "min": 27.0,
+   "prov": "Murcia"
+  },
+  {
+   "id": "B780X",
+   "nombre": "Port Pollença-Aerodrom",
+   "min": 27.0,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 26.8,
+   "prov": "Almería"
   }
  ],
  "top_fresco": [
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 5.8,
+   "prov": "Segovia"
+  },
+  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 5.4,
+   "min": 5.9,
+   "prov": "Ávila"
+  },
+  {
+   "id": "2828Y",
+   "nombre": "Barco de Avila",
+   "min": 7.2,
    "prov": "Ávila"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 6.0,
+   "min": 8.1,
    "prov": "Salamanca"
-  },
-  {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 7.1,
-   "prov": "Ávila"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 7.2,
-   "prov": "Segovia"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 8.4,
-   "prov": "Madrid"
   },
   {
    "id": "2084Y",
    "nombre": "Ucero",
-   "min": 9.0,
+   "min": 8.3,
    "prov": "Soria"
+  },
+  {
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 8.4,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 9.0,
+   "prov": "Madrid"
   },
   {
    "id": "2048A",
    "nombre": "Moron de Almazan",
-   "min": 9.1,
+   "min": 9.3,
    "prov": "Soria"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 9.8,
-   "prov": "Zamora"
+   "id": "2847X",
+   "nombre": "Pedrosillo de los Aires-Castillejo",
+   "min": 9.4,
+   "prov": "Salamanca"
   },
   {
-   "id": "3130C",
-   "nombre": "Sigüenza",
-   "min": 9.8,
-   "prov": "Guadalajara"
-  },
-  {
-   "id": "2092",
-   "nombre": "Burgo de Osma-Pozuelos",
-   "min": 10.0,
-   "prov": "Soria"
+   "id": "2867",
+   "nombre": "Salamanca/Matacan",
+   "min": 9.5,
+   "prov": "Salamanca"
   }
  ]
 }

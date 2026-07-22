@@ -1256,10 +1256,55 @@ def aplicar_menu_escueto(html: str, site: str) -> str:
     menú. Idempotente (si ya hay un nav, no toca nada) y solo apto para páginas
     con la paleta de la casa (usa sus variables CSS). Es el camino de migración
     hacia el chrome unificado sin reescribir cada plantilla."""
-    if 'class="nav-e"' in html or 'class="nav"' in html or "--teja:" not in html:
+    nav = nav_escueto_html(site)
+    # Si ya se inyectó el menú en un build anterior, se REFRESCA (por si cambió
+    # MENU_ESCUETO): así una estática no se queda con un menú viejo ("Portada"
+    # en vez de "Refugios cerca de mí", p. ej.).
+    if 'class="nav-e"' in html:
+        return _NAV_E_RE.sub(lambda _m: nav, html, count=1)
+    if 'class="nav"' in html or "--teja:" not in html:
         return html
     html = html.replace("</style>", "\n " + CSS_NAV_ESCUETO + "\n</style>", 1)
-    return html.replace("<body>", "<body>\n" + nav_escueto_html(site), 1)
+    return html.replace("<body>", "<body>\n" + nav, 1)
+
+
+_NAV_E_RE = re.compile(r'<nav class="nav-e".*?</nav>', re.DOTALL)
+
+
+# Páginas antiguas cuyo pie es este "Pieza de divulgación…". Se detecta para
+# sustituirlo por el pie unificado sin depender de un match byte a byte.
+_FOOTER_VIEJO_RE = re.compile(
+    r'<footer><div class="wrap">\s*<p>Pieza de divulgaci.*?</footer>', re.DOTALL)
+
+# Interlinks del bloque "Sigue explorando" (texto ancla, href). Se filtra el
+# auto-enlace según la carpeta que se procese.
+_SIGUE_LINKS = [
+    ("la calculadora de tu pueblo", "/"),
+    ("los refugios climáticos naturales más cercanos a ti", "/refugios-climaticos-naturales-cerca-de-mi/"),
+    ("los pueblos donde se duerme con manta en agosto", "/dormir-con-manta-en-verano/"),
+    ("el ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
+    ("por qué existen los microclimas", "/microclimas/"),
+    ("cómo crear un refugio climático natural", "/refugio-climatico-natural/"),
+    ("el Confortómetro", "/confortometro/"),
+]
+
+
+def enriquecer_estatica(html: str, site: str, carpeta: str) -> str:
+    """En páginas antiguas con el pie 'Pieza de divulgación…': lo sustituye por
+    el pie unificado (3 columnas con interlinks) precedido de un bloque 'Sigue
+    explorando' con textos anclados. Idempotente: si no está ese pie, no toca
+    nada (ya migró en un build anterior)."""
+    if not _FOOTER_VIEJO_RE.search(html):
+        return html
+    links = [(t, h) for t, h in _SIGUE_LINKS if h.strip("/") != carpeta]
+    lista = (", ".join(f'<a href="{site}{h}">{t}</a>' for t, h in links[:-1])
+             + f' o <a href="{site}{links[-1][1]}">{links[-1][0]}</a>')
+    sigue = f'<section class="wrap siguemas"><p>Sigue explorando: {lista}.</p></section>'
+    html = _FOOTER_VIEJO_RE.sub(lambda _m: sigue + footer_escueto_html(site), html, count=1)
+    css = (CSS_FOOTER_ESCUETO
+           + '.siguemas{padding:20px 0}.siguemas p{color:var(--muted);font-size:15px;'
+             'max-width:72ch;line-height:1.75;margin:0 auto}.siguemas a{color:var(--teal);font-weight:600}')
+    return html.replace("</style>", css + "</style>", 1)
 
 
 PAGINA_PROVINCIA = r"""<!DOCTYPE html>
@@ -4785,7 +4830,7 @@ def main() -> int:
     # idempotente). parte/ y certificados/ NO: los regeneran sus propios
     # scripts y el retoque se perdería — su menú se añade en esos generadores.
     OTROS_GENERADORES = {"parte", "certificados"}
-    migradas = con_menu = 0
+    migradas = con_menu = con_footer = 0
     for f in DOCS_DIR.glob("*/index.html"):
         carpeta = f.parent.name
         html_est = f.read_text(encoding="utf-8")
@@ -4797,6 +4842,9 @@ def main() -> int:
             con_nav = aplicar_menu_escueto(nuevo, site)
             if con_nav != nuevo:
                 nuevo, con_menu = con_nav, con_menu + 1
+            con_pie = enriquecer_estatica(nuevo, site, carpeta)
+            if con_pie != nuevo:
+                nuevo, con_footer = con_pie, con_footer + 1
         if nuevo != html_est:
             f.write_text(nuevo, encoding="utf-8")
     # Certificados: las ~218 páginas individuales (una por estación) son finas y
@@ -4866,6 +4914,7 @@ def main() -> int:
     print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"
           + (f" · {migradas} páginas estáticas migradas de dominio" if migradas else "")
           + (f" · menú escueto inyectado en {con_menu} páginas estáticas" if con_menu else "")
+          + (f" · pie unificado en {con_footer} páginas estáticas" if con_footer else "")
           + (f" · {cert_noindex} certificados a noindex" if cert_noindex else "")
           + (f" · {parte_noindex} partes diarios a noindex" if parte_noindex else ""))
     c = datos["meta"]["contraste"]

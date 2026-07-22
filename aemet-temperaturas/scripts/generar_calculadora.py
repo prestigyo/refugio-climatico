@@ -3698,8 +3698,8 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str) -> str:
 # URL /exec en APPS_SCRIPT_CONFORT_URL. Con la URL vacía la página funciona
 # en modo demostración (no guarda votos y lo dice).
 # ===========================================================================
-APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbzpBift9lGy5j"
-                           "gilf3nxvcGDhD4zOP7LR17GgKgUOLzG4yI43gZrM4D1CvhcNp7T135qQ/exec")
+APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbwjIxpPVGrwcUJb"
+                           "29i6L75tTQyN5h6IB243GblSXwIHAonMiQB9cEtJk2zaRI3P4W4PWg/exec")
 
 # Palabra secreta del atajo de teclado de la sala de prensa: tecléala en
 # /prensa/ y saltas a la consola interna de informes (/informes/). Va ofuscada

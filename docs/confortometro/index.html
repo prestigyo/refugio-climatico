@@ -59,11 +59,15 @@
  .zona b{color:var(--teja2)}
  .selects{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
  select{background:var(--bg);border:1px solid var(--line);color:var(--paper);padding:10px 12px;border-radius:9px;font-size:14px;max-width:100%}
- .niveles{display:grid;grid-template-columns:1fr;gap:8px}
- .nvl{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:11px 14px;cursor:pointer;font-size:14.5px;color:var(--paper);text-align:left;width:100%}
+ .niveles{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+ .nvl{display:flex;align-items:center;gap:9px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 11px;cursor:pointer;color:var(--paper);text-align:left;width:100%}
  .nvl:hover{border-color:var(--teja)}
- .nvl.sel{border-color:var(--teja);background:rgba(217,116,78,.14);font-weight:700}
- .nvl .em{font-size:20px}
+ .nvl.sel{border-color:var(--teja);background:rgba(217,116,78,.16)}
+ .nvl .em{font-size:19px;flex:0 0 auto}
+ .nvl .nl{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+ .nvl .nl b{font-size:13.5px;font-weight:700}
+ .nvl .nl .d{font-size:11px;color:var(--muted);margin-top:1px}
+ .nvl.sel .nl .d{color:var(--teja2)}
  .chips{display:flex;flex-wrap:wrap;gap:8px}
  .chip{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13.5px;color:var(--muted);cursor:pointer}
  .chip:hover{border-color:var(--teja)}
@@ -100,8 +104,11 @@
  .faqitem h3{font-family:var(--fd);font-weight:600;font-size:16px;margin-bottom:5px}
  .faqitem p{color:var(--muted);font-size:14px}
  /* --- Asistente paso a paso: una pregunta por pantalla --- */
- .wstage{position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:24px 20px 18px;max-width:640px;margin:0 auto;min-height:min(68vh,540px)}
- .wbar{height:5px;background:var(--bg);border-radius:99px;overflow:hidden;margin-bottom:22px;flex:0 0 auto}
+ .wstage{position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:18px 18px 14px;max-width:640px;margin:0 auto;min-height:min(62vh,520px)}
+ .wbar{height:5px;background:var(--bg);border-radius:99px;overflow:hidden;margin-bottom:16px;flex:0 0 auto}
+ /* El paso del nivel tiene 9 opciones: cabecera compacta para que quepan todas. */
+ #s-nivel .wq{font-size:clamp(20px,4.6vw,28px);margin-bottom:4px}
+ #s-nivel .wsub{font-size:12.5px;margin-bottom:10px}
  .wbar span{display:block;height:100%;width:0;background:var(--teja);border-radius:99px;transition:width .35s ease}
  .wstep{display:none}
  .wstep.on{display:flex;flex-direction:column;flex:1 1 auto;animation:wfade .28s ease}
@@ -171,8 +178,8 @@
 
     <div class="wstep" data-step="nivel" id="s-nivel">
       <h2 class="wq">¿Cómo se siente ahí ahora mismo?</h2>
-      <p class="wsub">Del frío helador al calor insoportable. Elige lo que sienta tu cuerpo, no lo que marque el termómetro.</p>
-      <div class="niveles" id="niveles"><button class="nvl" type="button" data-v="1"><span class="em">🧊</span><span>Helador: se pasa frío de verdad</span></button><button class="nvl" type="button" data-v="2"><span class="em">🥶</span><span>Frío: imprescindible abrigo</span></button><button class="nvl" type="button" data-v="3"><span class="em">🧣</span><span>Fresco: de manta o chaqueta</span></button><button class="nvl" type="button" data-v="4"><span class="em">😌</span><span>Muy a gusto</span></button><button class="nvl" type="button" data-v="5"><span class="em">🙂</span><span>Cómodo: ni frío ni calor</span></button><button class="nvl" type="button" data-v="6"><span class="em">😐</span><span>Templado: el calor se nota</span></button><button class="nvl" type="button" data-v="7"><span class="em">🥵</span><span>Caluroso: incomoda</span></button><button class="nvl" type="button" data-v="8"><span class="em">😫</span><span>Mucho calor: se suda hasta quieto</span></button><button class="nvl" type="button" data-v="9"><span class="em">🔥</span><span>Insoportable</span></button></div>
+      <p class="wsub">Elige lo que siente tu cuerpo, no lo que marca el termómetro.</p>
+      <div class="niveles" id="niveles"><button class="nvl" type="button" data-v="1"><span class="em">🧊</span><span class="nl"><b>Helador</b><span class="d">se pasa frío de verdad</span></span></button><button class="nvl" type="button" data-v="2"><span class="em">🥶</span><span class="nl"><b>Frío</b><span class="d">imprescindible abrigo</span></span></button><button class="nvl" type="button" data-v="3"><span class="em">🧣</span><span class="nl"><b>Fresco</b><span class="d">de manta o chaqueta</span></span></button><button class="nvl" type="button" data-v="4"><span class="em">😌</span><span class="nl"><b>Muy a gusto</b></span></button><button class="nvl" type="button" data-v="5"><span class="em">🙂</span><span class="nl"><b>Cómodo</b><span class="d">ni frío ni calor</span></span></button><button class="nvl" type="button" data-v="6"><span class="em">😐</span><span class="nl"><b>Templado</b><span class="d">el calor se nota</span></span></button><button class="nvl" type="button" data-v="7"><span class="em">🥵</span><span class="nl"><b>Caluroso</b><span class="d">incomoda</span></span></button><button class="nvl" type="button" data-v="8"><span class="em">😫</span><span class="nl"><b>Mucho calor</b><span class="d">se suda hasta quieto</span></span></button><button class="nvl" type="button" data-v="9"><span class="em">🔥</span><span class="nl"><b>Insoportable</b></span></button></div>
     </div>
 
     <div class="wstep opt" data-step="boch" id="s-boch">
@@ -462,7 +469,7 @@ function irPaso(s){
  var vis=pasosVis(),i=vis.indexOf(s);
  document.getElementById("wfill").style.width=Math.round(100*i/(vis.length-1))+"%";
  var nav=document.getElementById("wnav"),opt=document.getElementById("s-"+s).classList.contains("opt");
- nav.style.display=(s==="zona"||s==="enviar")?"none":"flex";
+ nav.style.display=(s==="zona")?"none":"flex"; // en "enviar" queda solo el Atrás
  document.getElementById("wback").style.visibility=(s==="nivel"||i<=0)?"hidden":"visible";
  document.getElementById("wskip").style.display=opt?"inline-block":"none";
  document.getElementById("wya").style.display=opt?"inline-block":"none";

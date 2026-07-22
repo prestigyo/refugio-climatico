@@ -3851,14 +3851,39 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
  .faqitem{padding:14px 0;border-bottom:1px solid var(--line)}
  .faqitem h3{font-family:var(--fd);font-weight:600;font-size:16px;margin-bottom:5px}
  .faqitem p{color:var(--muted);font-size:14px}
+ /* --- Asistente paso a paso: una pregunta por pantalla --- */
+ .wstage{position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:24px 20px 18px;max-width:640px;margin:0 auto;min-height:min(68vh,540px)}
+ .wbar{height:5px;background:var(--bg);border-radius:99px;overflow:hidden;margin-bottom:22px;flex:0 0 auto}
+ .wbar span{display:block;height:100%;width:0;background:var(--teja);border-radius:99px;transition:width .35s ease}
+ .wstep{display:none}
+ .wstep.on{display:flex;flex-direction:column;flex:1 1 auto;animation:wfade .28s ease}
+ @keyframes wfade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+ .wq{font-family:var(--fd);font-weight:700;font-size:clamp(22px,4.8vw,31px);line-height:1.12;letter-spacing:-.01em;margin:0 0 8px}
+ .wsub{color:var(--muted);font-size:14.5px;line-height:1.55;margin:0 0 18px;max-width:46ch}
+ .wstep .como{margin:0 0 18px}
+ .wstep .chips.big{gap:10px;margin-top:2px}
+ .wstep .chips.big .chip{font-size:15px;padding:12px 18px}
+ .wcont{align-self:flex-start;margin-top:22px;background:var(--teja);color:#1a1209;font-weight:700;padding:13px 24px;border-radius:11px;border:0;font-size:15px;cursor:pointer}
+ .wcont[disabled]{opacity:.4;cursor:not-allowed}
+ .wcont:hover:not([disabled]){background:var(--teja2)}
+ .wnav{display:flex;align-items:center;gap:12px;margin-top:18px;padding-top:15px;border-top:1px solid var(--line);flex:0 0 auto}
+ .wback{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;padding:6px 2px}
+ .wback:hover{color:var(--paper)}
+ .wskip{margin-left:auto;background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+ .wskip:hover{color:var(--paper)}
+ .wya{background:none;border:1px solid var(--line);color:var(--teja2);font:600 13px/1 var(--fb);cursor:pointer;padding:9px 13px;border-radius:9px}
+ .wya:hover{border-color:var(--teja)}
+ .gnav{margin:20px auto 0;max-width:520px;text-align:left}
+ .gnav .ct{display:block;font:600 11px/1 var(--fb);letter-spacing:.12em;text-transform:uppercase;color:var(--teja);margin-bottom:11px;text-align:center}
+ .gnav-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .gnav-grid a{display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13.5px;color:var(--paper);font-weight:600}
+ .gnav-grid a:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none}
+ @media(max-width:520px){.gnav-grid{grid-template-columns:1fr}}
  __NAVCSS__
  __FOOTERCSS__
  @media(min-width:560px){.niveles{grid-template-columns:1fr 1fr}}
  @media(min-width:980px){
   .wrap{max-width:min(94vw,1150px)}
-  #widget{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
-  #widget .paso{margin:0}
-  .como,#p1,#widget .enviar,#widget .hint,#gracias{grid-column:1/-1}
   .prose{max-width:none;column-count:2;column-gap:52px}
   .prose h2{break-after:avoid;margin-top:0}
   .prose h2:not(:first-child){margin-top:26px}
@@ -3877,66 +3902,80 @@ __NAV__
 </div></header>
 
 <section><div class="wrap" id="widget">
-  <div class="como">
-    <b>Funciona como los avisos de tráfico de Google Maps.</b> Allí un conductor marca «coche parado en la vía» y a quienes pasan después se les pregunta: «¿sigue ahí?». Aquí, igual: tú informas de cómo se siente el clima en tu zona, los votos de los demás lo confirman o lo matizan, y el dato oficial de AEMET hace de árbitro. Cuanta más gente informa, más fiable y más vivo es el mapa.
-  </div>
-  <div class="paso" id="p1">
-    <div class="pt">1 · Tu zona</div>
-    <div id="geoform">
-      <button class="geo" id="geo" type="button">📍 Usar mi zona</button>
-      <p class="priv">Tu ubicación exacta nunca sale del móvil: aquí mismo se redondea a una celda de ~1 km y se busca la estación de AEMET de referencia. Solo viajan esas dos cosas; el punto exacto, jamás.</p>
-      <p class="hint" id="geohint">¿Sin GPS o no quieres darlo? Elige a mano:</p>
-      <div class="selects">
-        <select id="prov"><option value="">Tu provincia…</option></select>
-        <select id="est"><option value="">…y tu zona</option></select>
+  <div class="wstage" id="wstage">
+    <div class="wbar" aria-hidden="true"><span id="wfill"></span></div>
+
+    <div class="wstep" data-step="zona" id="s-zona">
+      <p class="como"><b>Funciona como los avisos de Google Maps.</b> Tú informas de cómo se siente el clima en tu zona ahora mismo; los votos de los demás lo confirman o lo matizan, y el dato oficial de AEMET hace de árbitro. Cuanta más gente vota, más vivo es el mapa.</p>
+      <h2 class="wq">¿Desde qué zona votas?</h2>
+      <div id="geoform">
+        <button class="geo" id="geo" type="button">📍 Usar mi zona</button>
+        <p class="priv">Tu ubicación exacta nunca sale del móvil: aquí mismo se redondea a una celda de ~1 km y se busca la estación de AEMET de referencia. Solo viajan esas dos cosas; el punto exacto, jamás.</p>
+        <p class="hint" id="geohint">¿Sin GPS o no quieres darlo? Elige a mano:</p>
+        <div class="selects">
+          <select id="prov"><option value="">Tu provincia…</option></select>
+          <select id="est"><option value="">…y tu zona</option></select>
+        </div>
+      </div>
+      <p class="zona" id="zona"></p>
+      <button class="wcont" id="wcont" type="button" disabled>Continuar →</button>
+    </div>
+
+    <div class="wstep" data-step="nivel" id="s-nivel">
+      <h2 class="wq">¿Cómo se siente ahí ahora mismo?</h2>
+      <p class="wsub">Del frío helador al calor insoportable. Elige lo que sienta tu cuerpo, no lo que marque el termómetro.</p>
+      <div class="niveles" id="niveles">__NIVELES__</div>
+    </div>
+
+    <div class="wstep opt" data-step="boch" id="s-boch">
+      <h2 class="wq">¿El aire se siente húmedo, pegajoso?</h2>
+      <p class="wsub">La humedad no es más calor: es sudor que no evapora. Cuenta distinto.</p>
+      <div class="chips big" id="boch">
+        <button class="chip" type="button" data-v="1">💦 Sí, bochorno</button>
+        <button class="chip" type="button" data-v="0">🌵 No, aire seco</button>
       </div>
     </div>
-    <p class="zona" id="zona"></p>
-  </div>
 
-  <div class="paso" id="p2">
-    <div class="pt">2 · ¿Cómo se siente ahora mismo?</div>
-    <div class="niveles" id="niveles">__NIVELES__</div>
-  </div>
+    <div class="wstep opt" data-step="viento" id="s-viento">
+      <h2 class="wq">¿Y el viento? Lo cambia todo.</h2>
+      <div class="chips big" id="viento">
+        <button class="chip" type="button" data-v="calma">🍃 Calma total</button>
+        <button class="chip" type="button" data-v="ligera">🌬️ Ligera brisa</button>
+        <button class="chip" type="button" data-v="brisa">😌 Brisa agradable</button>
+        <button class="chip" type="button" data-v="viento">💨 Viento</button>
+        <button class="chip" type="button" data-v="molesto">😣 Viento molesto</button>
+        <button class="chip" type="button" data-v="fuerte">🌪️ Viento fuerte</button>
+      </div>
+    </div>
 
-  <div class="paso" id="p3">
-    <div class="pt">3 · Un poco de contexto <span style="text-transform:none;letter-spacing:0;color:var(--muted)">(opcional, mejora el dato)</span></div>
-    <p class="subq">¿El aire se siente húmedo, pegajoso?</p>
-    <div class="chips" id="boch">
-      <button class="chip" type="button" data-v="1">💦 Sí, bochorno</button>
-      <button class="chip" type="button" data-v="0">🌵 No, aire seco</button>
+    <div class="wstep opt" data-step="cielo" id="s-cielo">
+      <h2 class="wq">¿Qué tiempo hace ahí fuera?</h2>
+      <div class="chips big" id="cielochips">
+        <button class="chip" type="button" data-v="sol">☀️ Sol radiante</button>
+        <button class="chip" type="button" data-v="nubes">⛅ Nubes y claros</button>
+        <button class="chip" type="button" data-v="nublado">☁️ Cielo cubierto</button>
+        <button class="chip" type="button" data-v="bruma">🌫️ Bruma o calima</button>
+        <button class="chip" type="button" data-v="niebla">🌁 Niebla</button>
+        <button class="chip" type="button" data-v="xirimiri">🌦️ Sirimiri</button>
+        <button class="chip" type="button" data-v="lluvia">🌧️ Llueve</button>
+      </div>
     </div>
-    <p class="subq">¿Y el viento? Lo cambia todo.</p>
-    <div class="chips" id="viento">
-      <button class="chip" type="button" data-v="calma">🍃 Calma total</button>
-      <button class="chip" type="button" data-v="ligera">🌬️ Ligera brisa</button>
-      <button class="chip" type="button" data-v="brisa">😌 Brisa agradable</button>
-      <button class="chip" type="button" data-v="viento">💨 Viento</button>
-      <button class="chip" type="button" data-v="molesto">😣 Viento molesto</button>
-      <button class="chip" type="button" data-v="fuerte">🌪️ Viento fuerte</button>
+
+    <div class="wstep opt" data-step="lugar" id="s-lugar">
+      <h2 class="wq">¿Dónde estás ahora?</h2>
+      <div class="chips big" id="lugar">
+        <button class="chip" type="button" data-v="casa">🏠 Dentro de casa</button>
+        <button class="chip" type="button" data-v="oficina">🏢 Oficina o despacho</button>
+        <button class="chip" type="button" data-v="fabrica">🏭 Fábrica o nave</button>
+        <button class="chip" type="button" data-v="colegio">🏫 Colegio o aula</button>
+        <button class="chip" type="button" data-v="terraza">🌆 Terraza o balcón</button>
+        <button class="chip" type="button" data-v="calle">🚶 En la calle</button>
+      </div>
     </div>
-    <p class="subq">¿Qué tiempo hace ahí fuera?</p>
-    <div class="chips" id="cielochips">
-      <button class="chip" type="button" data-v="sol">☀️ Sol radiante</button>
-      <button class="chip" type="button" data-v="nubes">⛅ Nubes y claros</button>
-      <button class="chip" type="button" data-v="nublado">☁️ Cielo cubierto</button>
-      <button class="chip" type="button" data-v="bruma">🌫️ Bruma o calima</button>
-      <button class="chip" type="button" data-v="niebla">🌁 Niebla</button>
-      <button class="chip" type="button" data-v="xirimiri">🌦️ Sirimiri</button>
-      <button class="chip" type="button" data-v="lluvia">🌧️ Llueve</button>
-    </div>
-    <p class="subq">¿Dónde estás?</p>
-    <div class="chips" id="lugar">
-      <button class="chip" type="button" data-v="casa">🏠 Dentro de casa</button>
-      <button class="chip" type="button" data-v="oficina">🏢 Oficina o despacho</button>
-      <button class="chip" type="button" data-v="fabrica">🏭 Fábrica o nave</button>
-      <button class="chip" type="button" data-v="colegio">🏫 Colegio o aula</button>
-      <button class="chip" type="button" data-v="terraza">🌆 Terraza o balcón</button>
-      <button class="chip" type="button" data-v="calle">🚶 En la calle</button>
-    </div>
-    <div id="clima">
-      <p class="subq">Y ahí dentro, ¿con qué?</p>
-      <div class="chips" id="climachips">
+
+    <div class="wstep opt" data-step="clima" id="s-clima">
+      <h2 class="wq">Y ahí dentro, ¿con qué te apañas?</h2>
+      <div class="chips big" id="climachips">
         <button class="chip" type="button" data-v="nada">Nada</button>
         <button class="chip" type="button" data-v="ventana">Ventana abierta</button>
         <button class="chip" type="button" data-v="ventilador">Ventilador</button>
@@ -3944,18 +3983,31 @@ __NAV__
         <button class="chip" type="button" data-v="calefaccion">Calefacción</button>
       </div>
     </div>
-    <p class="subq">¿Cómo es tu zona?</p>
-    <div class="chips" id="entorno">
-      <button class="chip" type="button" data-v="playa">🏖️ Playa / costa</button>
-      <button class="chip" type="button" data-v="ciudad">🏙️ Ciudad</button>
-      <button class="chip" type="button" data-v="pueblo">🏡 Pueblo / campo</button>
-      <button class="chip" type="button" data-v="montana">⛰️ Montaña</button>
+
+    <div class="wstep opt" data-step="entorno" id="s-entorno">
+      <h2 class="wq">¿Cómo es tu zona?</h2>
+      <div class="chips big" id="entorno">
+        <button class="chip" type="button" data-v="playa">🏖️ Playa / costa</button>
+        <button class="chip" type="button" data-v="ciudad">🏙️ Ciudad</button>
+        <button class="chip" type="button" data-v="pueblo">🏡 Pueblo / campo</button>
+        <button class="chip" type="button" data-v="montana">⛰️ Montaña</button>
+      </div>
+    </div>
+
+    <div class="wstep" data-step="enviar" id="s-enviar">
+      <h2 class="wq">Ya está. ¿Enviamos tu voto?</h2>
+      <p class="wsub" id="resumen"></p>
+      <input class="hp" type="text" name="web" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="enviar" id="enviar" type="button" disabled>Enviar mi voto</button>
+      <p class="hint" id="estado"></p>
+    </div>
+
+    <div class="wnav" id="wnav">
+      <button class="wback" id="wback" type="button">‹ Atrás</button>
+      <button class="wskip" id="wskip" type="button">Omitir ›</button>
+      <button class="wya" id="wya" type="button">Enviar ya ›</button>
     </div>
   </div>
-
-  <input class="hp" type="text" name="web" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-  <button class="enviar" id="enviar" type="button" disabled>Enviar mi voto</button>
-  <p class="hint" id="estado"></p>
 
   <div class="paso gracias" id="gracias">
     <div class="big">🌙 Gracias: tu voto ya forma parte del estudio.</div>
@@ -3964,6 +4016,17 @@ __NAV__
     <div class="zinfo" id="zinfo"></div>
     <p class="manana">📅 <b>Vuelve mañana.</b> Cada mañana publicamos <a href="__SITE__/parte/">el parte de la noche</a> — quién durmió fresco y quién no pegó ojo — y tu zona quedará recordada aquí para votar con un solo toque. Cuantos más días votes, más fino será el mapa del confort.</p>
     <p class="demo" id="demo">Modo demostración: el buzón de votos aún no está desplegado, así que este voto no se ha guardado.</p>
+    <div class="gnav">
+      <span class="ct">No te vayas todavía · sigue explorando</span>
+      <div class="gnav-grid">
+        <a href="__SITE__/ranking-noches-tropicales/">🏆 El ranking: dónde se duerme mejor y peor</a>
+        <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">📍 Refugios climáticos cerca de mí</a>
+        <a href="__SITE__/dormir-con-manta-en-verano/">🛌 Pueblos para dormir con manta en agosto</a>
+        <a href="__SITE__/ola-de-calor/">🔥 ¿Cuándo acaba la ola de calor?</a>
+        <a href="__SITE__/parte/">🌙 El parte de la noche de hoy</a>
+        <a href="__SITE__/">🏡 La calculadora de tu pueblo</a>
+      </div>
+    </div>
     <div class="compartir">
       <span class="ct">Un estudio así se construye compartiéndolo</span>
       <div class="cbtns">
@@ -4108,7 +4171,7 @@ function racha(){
 document.getElementById("niveles").addEventListener("click",function(ev){
  var b=ev.target.closest(".nvl");if(!b)return;
  document.querySelectorAll(".nvl").forEach(function(x){x.classList.remove("sel");});
- b.classList.add("sel");sel.nivel=+b.getAttribute("data-v");valida();
+ b.classList.add("sel");sel.nivel=+b.getAttribute("data-v");valida();avanzar();
 });
 function chips(id,campo,cb){
  document.getElementById(id).addEventListener("click",function(ev){
@@ -4117,21 +4180,54 @@ function chips(id,campo,cb){
   b.classList.add("sel");sel[campo]=b.getAttribute("data-v");if(cb)cb();
  });
 }
-chips("boch","boch");
-chips("viento","viento");
-chips("entorno","entorno");
-chips("cielochips","cielo");
+chips("boch","boch",avanzar);
+chips("viento","viento",avanzar);
+chips("entorno","entorno",avanzar);
+chips("cielochips","cielo",avanzar);
 var INTERIOR={casa:1,oficina:1,fabrica:1,colegio:1};
 chips("lugar","lugar",function(){
- var dentro=!!INTERIOR[sel.lugar];
- document.getElementById("clima").style.display=dentro?"block":"none";
- if(!dentro)sel.clima=null;
+ if(!INTERIOR[sel.lugar])sel.clima=null; // fuera no se pregunta la climatización
+ avanzar();                              // el paso "clima" se salta solo si no es interior
 });
-chips("climachips","clima");
+chips("climachips","clima",avanzar);
 
 function valida(){
+ document.getElementById("wcont").disabled=!sel.zona;
  document.getElementById("enviar").disabled=!(sel.zona&&sel.nivel);
 }
+
+// --- Máquina del asistente: una pregunta por pantalla ---------------------
+var ORDEN=["zona","nivel","boch","viento","cielo","lugar","clima","entorno","enviar"];
+var pasoAct="zona";
+function visiblePaso(s){return s==="clima"?!!INTERIOR[sel.lugar]:true;}
+function pasosVis(){return ORDEN.filter(visiblePaso);}
+function resumen(){
+ var ETQ=["","Helador","Frío","Fresco","Muy a gusto","Cómodo","Templado","Caluroso","Mucho calor","Insoportable"];
+ var t="Votas «<b>"+(ETQ[sel.nivel]||"—")+"</b>»"+(sel.zona?" desde <b>"+sel.zona[3]+"</b>":"")+".";
+ var extra=[sel.boch!==null,sel.viento,sel.cielo,sel.lugar,sel.clima,sel.entorno].filter(Boolean).length;
+ t+=extra?" Con "+extra+" dato"+(extra>1?"s":"")+" de contexto para afinar el mapa.":" Sin contexto adicional: rápido y anónimo.";
+ document.getElementById("resumen").innerHTML=t;
+}
+function irPaso(s){
+ pasoAct=s;
+ ORDEN.forEach(function(x){var el=document.getElementById("s-"+x);if(el)el.classList.toggle("on",x===s);});
+ var vis=pasosVis(),i=vis.indexOf(s);
+ document.getElementById("wfill").style.width=Math.round(100*i/(vis.length-1))+"%";
+ var nav=document.getElementById("wnav"),opt=document.getElementById("s-"+s).classList.contains("opt");
+ nav.style.display=(s==="zona"||s==="enviar")?"none":"flex";
+ document.getElementById("wback").style.visibility=(s==="nivel"||i<=0)?"hidden":"visible";
+ document.getElementById("wskip").style.display=opt?"inline-block":"none";
+ document.getElementById("wya").style.display=opt?"inline-block":"none";
+ if(s==="enviar")resumen();
+ try{document.getElementById("wstage").scrollIntoView({block:"nearest"});}catch(e){}
+}
+function avanzar(){setTimeout(function(){var vis=pasosVis(),i=vis.indexOf(pasoAct);irPaso(vis[Math.min(i+1,vis.length-1)]);},180);}
+document.getElementById("wback").addEventListener("click",function(){var vis=pasosVis(),i=vis.indexOf(pasoAct);irPaso(vis[Math.max(i-1,0)]);});
+document.getElementById("wskip").addEventListener("click",function(){var vis=pasosVis(),i=vis.indexOf(pasoAct);irPaso(vis[Math.min(i+1,vis.length-1)]);});
+document.getElementById("wya").addEventListener("click",function(){irPaso("enviar");});
+document.getElementById("wcont").addEventListener("click",function(){if(sel.zona)irPaso("nivel");});
+// Arranque: si ya conocemos la zona de otra visita, empezamos por la pregunta.
+irPaso(sel.zona?"nivel":"zona");
 document.getElementById("enviar").addEventListener("click",function(){
  var st=document.getElementById("estado");
  if(document.getElementById("hp").value){return;}
@@ -4140,11 +4236,9 @@ document.getElementById("enviar").addEventListener("click",function(){
  var p={z:sel.zona[0],g:sel.celda,s:sel.nivel,b:sel.boch,w:sel.viento,l:sel.lugar,c:sel.clima,o:sel.cielo,e:sel.entorno,u:uid(),v:1};
  var fin=function(guardado){
   marcaVoto();
-  document.getElementById("p1").style.display="none";
-  document.getElementById("p2").style.display="none";
-  document.getElementById("p3").style.display="none";
-  this_btn.style.display="none";st.style.display="none";
+  document.getElementById("wstage").style.display="none";
   var g=document.getElementById("gracias");g.style.display="block";
+  try{g.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){}
   if(!guardado)document.getElementById("demo").style.display="block";
   if(guardado){var nr=racha();if(nr>=2)document.getElementById("racha").textContent="🔥 Llevas "+nr+" días seguidos aportando al estudio.";}
   var z=sel.zona,r=document.getElementById("resultado"),partes=[];

@@ -1120,6 +1120,7 @@ def footer_escueto_html(site: str, extra: str = "") -> str:
           ("La hipoteca térmica", "/hipoteca-termica/"),
           ("¿Tu pueblo no aparece? Ayúdanos", "/tu-pueblo/")]
     c3 = [("La calculadora de tu pueblo", "/"),
+          ("Sobre el proyecto", "/sobre-el-proyecto/"),
           ("Metodología y glosario", "/metodologia/"),
           ("Sala de prensa", "/prensa/"),
           ("Licencia y aviso legal", "/aviso-legal/")]
@@ -2011,7 +2012,8 @@ FOOTER_HTML = (
     '<a href="__SITE__/prensa/">Sala de prensa</a>'
     '<a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a>'
     '<a href="__SITE__/aviso-legal/">Licencia y aviso legal</a></div>\n'
-    '      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/metodologia/">Sobre el proyecto</a>'
+    '      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/sobre-el-proyecto/">Sobre el proyecto</a>'
+    '<a href="__SITE__/metodologia/">Metodología</a>'
     '<a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a>'
     '<a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a>'
     '<a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>\n'
@@ -4505,7 +4507,7 @@ __NAV__
   <p>Si quieres reutilizar algo más allá de lo que permite CC BY (por ejemplo, textos o diseño), o si detectas una copia que incumple lo anterior, escríbenos: <a href="mailto:lowesting@gmail.com">lowesting@gmail.com</a>. Para citas normales de los datos no hace falta pedir permiso —basta con atribuir.</p>
 
   <h2>Datos personales</h2>
-  <p>No usamos cookies de rastreo ni perfiles publicitarios. El <a href="__SITE__/confortometro/">Confortómetro</a> guarda votos <b>anónimos</b> por zona (la ubicación exacta nunca sale de tu dispositivo). Si nos dejas tu correo para recibir un informe o alertas, lo usamos solo para eso; puedes pedir su baja en la dirección de arriba.</p>
+  <p><b>No usamos cookies</b> —ni de rastreo ni de ningún tipo—, así que no verás ningún aviso de consentimiento: no hay nada que consentir. Tampoco hay perfiles publicitarios. El <a href="__SITE__/confortometro/">Confortómetro</a> guarda tu voto de forma <b>anónima</b> por zona y usa el almacenamiento local de tu navegador (no una cookie) solo para recordar tu zona y no dejarte votar dos veces seguidas; la ubicación exacta nunca sale de tu dispositivo. Si nos dejas tu correo para recibir un informe o alertas, lo usamos solo para eso; puedes pedir su baja en la dirección de arriba.</p>
 
   <h2>Descargo</h2>
   <p>La información se ofrece «tal cual», con fines divulgativos. El dato es de la <b>estación</b> de AEMET, no del municipio entero, y no sustituye a la información oficial de AEMET ni a un aviso meteorológico. Hacemos lo posible por que sea correcta, pero no garantizamos que esté libre de errores.</p>
@@ -4513,6 +4515,124 @@ __NAV__
 __FOOTER__
 </body></html>
 """
+
+
+PAGINA_SOBRE = r"""<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sobre el proyecto: quién hay detrás de nochetropical.es y por qué</title>
+<meta name="description" content="Quién está detrás de nochetropical.es: no una empresa ni una redacción, sino una persona, sus ratos libres y una pregunta —¿por qué no se conocen los pueblos donde de verdad se duerme fresco?—. Datos abiertos de AEMET, método reproducible, sin publicidad.">
+<link rel="canonical" href="__SITE__/sobre-el-proyecto/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sobre el proyecto: quién hay detrás de nochetropical.es y por qué">
+<meta property="og:description" content="Una persona, sus ratos libres y una pregunta que lleva años rondando. Datos abiertos de AEMET, método reproducible, sin publicidad ni rastreo.">
+<meta property="og:url" content="__SITE__/sobre-el-proyecto/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=Lora:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif;--fm:ui-monospace,monospace}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.7;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:720px;margin:0 auto;padding:0 24px}
+ a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+ header.h{padding:46px 0 12px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:16px 0 8px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(29px,5.6vw,44px);line-height:1.05;letter-spacing:-.01em}
+ h1 em{font-style:italic;color:var(--teja2)}
+ .intro{color:var(--muted);font-size:clamp(15.5px,2.5vw,18px);margin:16px 0 0;max-width:60ch}
+ .intro b{color:var(--paper)}
+ section{padding:20px 0}
+ h2{font-family:var(--fd);font-weight:600;font-size:clamp(20px,3.6vw,25px);margin:20px 0 10px}
+ p{color:#d9ccb6;font-size:16px;margin:0 0 15px;max-width:66ch}p b{color:var(--paper)}
+ .firma{border-left:3px solid var(--teja);background:var(--bg2);border-radius:0 12px 12px 0;padding:16px 18px;margin:8px 0 6px;font-size:15px;color:var(--muted)}
+ .firma b{color:var(--paper)}
+ .valores{list-style:none;margin:8px 0 6px;padding:0;display:grid;gap:10px}
+ .valores li{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:15px;color:var(--muted)}
+ .valores b{color:var(--paper)}
+ .cta{margin:22px 0 6px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px;text-align:center}
+ .cta b{font-family:var(--fd);font-weight:600;font-size:19px;color:var(--paper)}
+ .botones{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+ .btn{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px}
+ .btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}
+ .btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
+ __NAVCSS__
+ __FOOTERCSS__
+</style></head><body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Sobre el proyecto</nav>
+  <div class="kick">Quiénes somos · Por qué se hace</div>
+  <h1>Quién hay detrás de <em>nochetropical.es</em></h1>
+  <p class="intro">Aquí no hay una empresa ni una redacción: hay <b>una persona, sus ratos libres y una pregunta</b> que le lleva años rondando. Esta es la historia, sin adornos.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>La chispa: una casa donde de verdad se duerme</h2>
+  <p>Tengo la suerte de tener una casita en uno de esos pueblos donde en pleno agosto hay que dormir con manta. Desde el primer verano pensé lo mismo: «el día que esto se sepa, aquí no cabrá un alfiler». Han pasado los años… y no ha pasado. La gente sigue amontonándose en costas donde no se pega ojo, pagando aire acondicionado para combatir noches que <b>a una hora de distancia, tierra adentro, sencillamente no existen</b>.</p>
+  <p>Quise entender por qué. Por qué medimos el calor del día hasta la obsesión y casi nadie mira <b>el que de verdad nos quita el sueño</b>. Esa pregunta es el origen de nochetropical.es. Antes lo gestionaba a mano, con paciencia; hoy lo hace un puñado de scripts, pero la pregunta es la misma.</p>
+
+  <h2>Quién lo hace</h2>
+  <div class="firma">
+    Me llamo Ramón y firmo como <b>Ramón&nbsp;J.&nbsp;Lowesting</b> — un guiño a <i>El príncipe de las mareas</i>, una película que me relaja y cuyo personaje me prestó el apellido.
+  </div>
+  <p>Me considero un <b>emprendedor incansable</b> y un curioso profesional. Me fijo en las incongruencias que asumimos por comodidad —desde farolas plantadas más altas que los árboles, que acaban iluminando las copas mientras la acera se queda a oscuras bajo la sombra, hasta rotondas que sustituyen a un cruce con semáforo y, lejos de agilizarlo, rompen la fluidez del tráfico— y me pregunto si no se podrían hacer mejor. Las <b>noches tropicales</b> son una de esas incongruencias: hay un mapa del calor diurno en cada telediario, y el calor nocturno —el que decide si descansas o no— apenas se cuenta. Este proyecto es mi granito de arena para cambiarlo.</p>
+
+  <h2>Cómo se hace: con datos, a la vista de todos</h2>
+  <p>Aquí no se opina, se mide. Todo lo que ves sale de los <b>datos abiertos de AEMET</b> (veranos de 2017 a 2026), se calcula con scripts que cualquiera puede revisar y <b>se puede reproducir paso a paso</b>. Sin estimaciones ni retoques: si un dato aparece, es porque una estación lo registró. Por eso lo publicamos bajo <a href="__SITE__/aviso-legal/">licencia libre (CC&nbsp;BY)</a> — cógelo, contrástalo, úsalo. Un dato que no se puede comprobar no vale nada; estos se pueden comprobar todos. El detalle del método está en la <a href="__SITE__/metodologia/">metodología</a>.</p>
+
+  <h2>Cómo se sostiene</h2>
+  <ul class="valores">
+    <li><b>Con ratos libres.</b> Esto se mantiene a base de tardes y fines de semana. Si llego a saber el trabajo que iba a dar, quizá no me habría atrevido a empezarlo — y me alegro de no haberlo sabido.</li>
+    <li><b>Sin publicidad, sin cookies, sin rastreo.</b> No hay banners, no se comercia con tus datos y —algo cada vez más raro— <b>no usamos ni una sola cookie</b>: no tendrás que aceptar ningún aviso molesto para entrar, porque no hay nada que aceptar. La web es lo que ves.</li>
+    <li><b>El dinero, como consecuencia.</b> Algún día me gustaría que se sostuviera solo, no lo escondo. Pero tengo una creencia firme: el dinero debe ser el resultado, la consecuencia de hacer las cosas bien, no el objetivo. Primero el valor; lo demás, ya vendrá.</li>
+  </ul>
+
+  <h2>Si eres periodista</h2>
+  <p>La <a href="__SITE__/prensa/">sala de prensa</a> tiene datos para titular, gráficos descargables, metodología y contacto. Y si algo de lo que cuento aquí te parece mejorable o discutible, escríbeme: <a href="mailto:lowesting@gmail.com">lowesting@gmail.com</a>. Se agradece de verdad — este proyecto se ha hecho siempre mejor cuando alguien me ha llevado la contraria con datos.</p>
+
+  <div class="cta">
+    <b>¿Y tu pueblo? ¿Se duerme bien?</b>
+    <div class="botones">
+      <a class="btn pri" href="__HOME__">Búscalo en la calculadora →</a>
+      <a class="btn sec" href="__SITE__/confortometro/">Vota en el Confortómetro →</a>
+    </div>
+  </div>
+</div></section>
+__FOOTER__
+</body></html>
+"""
+
+
+def construir_pagina_sobre(site: str) -> str:
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Sobre el proyecto",
+             "item": site + "/sobre-el-proyecto/"}]},
+        {"@type": "AboutPage", "name": "Sobre el proyecto · nochetropical.es",
+         "url": site + "/sobre-el-proyecto/",
+         "description": ("Quién está detrás de nochetropical.es y por qué: un proyecto personal "
+                         "de datos abiertos sobre noches tropicales, con método reproducible y "
+                         "sin publicidad."),
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
+        ensure_ascii=False)
+    return (PAGINA_SOBRE
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
 
 
 def construir_pagina_aviso_legal(site: str) -> str:
@@ -4605,6 +4725,9 @@ def main() -> int:
     (DOCS_DIR / "aviso-legal").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "aviso-legal" / "index.html").write_text(
         construir_pagina_aviso_legal(site), encoding="utf-8")
+    (DOCS_DIR / "sobre-el-proyecto").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "sobre-el-proyecto" / "index.html").write_text(
+        construir_pagina_sobre(site), encoding="utf-8")
     # Consola interna del generador de informes (noindex, fuera del sitemap):
     # buscador de estaciones + lista de informes ya publicados. Se reconstruye
     # cada build escaneando docs/informes/.
@@ -4630,6 +4753,13 @@ def main() -> int:
     # — y un noindex la mataría en vez de traspasarla.
     escribir_redireccion(site, "refugios-cerca", site + "/" + SLUG_CERCA + "/",
                          "Esta herramienta se ha mudado.")
+    # /refugio-climatico-natural/microclimas/ era un DUPLICADO de /microclimas/
+    # (mismo título, H1 y contenido) heredado de la migración, con canonical al
+    # dominio viejo. Se redirige a la versión buena para consolidar la señal y
+    # quitar el contenido duplicado del índice.
+    escribir_redireccion(site, "refugio-climatico-natural/microclimas",
+                         site + "/microclimas/",
+                         "Este artículo se ha unificado en /microclimas/.")
     (DOCS_DIR / "metodologia").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "metodologia" / "index.html").write_text(
         aplicar_menu_escueto(

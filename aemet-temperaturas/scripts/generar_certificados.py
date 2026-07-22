@@ -177,7 +177,7 @@ _CSS_CERT = (
     '.cert svg text{-webkit-font-smoothing:antialiased}'
     '@media print{@page{size:A4 landscape;margin:8mm}'
     'body{background:#fff}'
-    'header.h,.acciones,.verifica,footer,.crumb,.kick,h1,.intro{display:none!important}'
+    'header.h,.acciones,.verifica,footer,.nav-e,.crumb,.kick,h1,.intro{display:none!important}'
     '.cert{margin:0;border:none;border-radius:0}}'
     '.acciones{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 26px}'
     '.acciones a,.acciones button{border:1px solid var(--teja);color:var(--teja2);background:transparent;'
@@ -188,6 +188,8 @@ _CSS_CERT = (
     'border-radius:14px;padding:18px 20px;margin:0 0 26px;font-size:14px;color:var(--muted)}'
     '.verifica b{color:#e7dcc8}.verifica .t{font:600 11px/1 var(--fb);letter-spacing:.14em;'
     'text-transform:uppercase;color:var(--teja);margin-bottom:8px}'
+    '.sigue{font-size:14.5px;color:var(--muted);margin:0 0 30px;max-width:70ch;line-height:1.7}'
+    '.sigue a{font-weight:600}'
     'footer{border-top:1px solid var(--line);padding:26px 0 60px;color:#82745d;font-size:12.5px}'
     'footer a{color:#9a8a6f}'
 )
@@ -200,7 +202,7 @@ PAGINA_CERT = r"""<!doctype html>
 <title>__LOC__, Refugio Climático de España 2026 (certificado) | Noche Tropical</title>
 <meta name="description" content="Certificado digital: la estación de AEMET de __LOC__ (__PROV__) está entre las 25 de España con menos noches tropicales — __NT__ al año de media (2017–2026). Verificable y descargable.">
 <link rel="canonical" href="__URL__">
-<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="robots" content="__ROBOTS__">
 <meta property="og:type" content="article">
 <meta property="og:title" content="__LOC__, Refugio Climático de España 2026">
 <meta property="og:description" content="__NT__ noches tropicales al año de media (AEMET, 2017–2026). Entre los 25 mejores refugios climáticos de España.">
@@ -214,9 +216,10 @@ PAGINA_CERT = r"""<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-<style>__CSS__</style>
+<style>__CSS__ __NAVCSS__ __FOOTERCSS__</style>
 </head>
 <body>
+__NAV__
 <header class="h"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="__SITE__/">Refugio Climático</a> · <a href="__SITE__/certificados/">Certificados</a> · __LOC__</nav>
   <div class="kick">Certificado digital · __NIVEL__ · 2026</div>
@@ -238,11 +241,11 @@ PAGINA_CERT = r"""<!doctype html>
     <div class="t">Por qué se otorga este certificado</div>
     Se certifica como <b>Refugio Climático de España</b> a las estaciones de AEMET con <b>menos de una noche tropical al año</b> de media en los últimos diez veranos (2017–2026) — una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Lo consiguen <b>218 de las 848</b> estaciones analizadas; el <b>Top 25</b> reúne, de entre ellas, las de mayor altitud. El dato de __LOC__ procede de los valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> y puede contrastarse en el <a href="__SITE__/ranking-noches-tropicales/">ranking nacional</a> y en la página de <a href="__SITE__/__PROVSLUG__/">__PROV__</a>. Certificado de uso libre citando la fuente (CC&nbsp;BY&nbsp;4.0).
   </div>
+
+  <p class="sigue">Sigue explorando: mira <a href="__SITE__/__PROVSLUG__/">cómo se duerme en el resto de __PROV__</a>, <a href="__SITE__/ranking-noches-tropicales/">el ranking nacional de noches tropicales</a>, <a href="__SITE__/dormir-con-manta-en-verano/">los pueblos de España donde se duerme con manta en agosto</a> o <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">el refugio climático más cercano a ti</a>. Y vota cómo se siente tu zona en <a href="__SITE__/confortometro/">el Confortómetro</a>.</p>
 </div></section>
 
-<footer><div class="wrap">
-  Proyecto <a href="__SITE__/">Refugio Climático · nochetropical.es</a> · Datos: AEMET OpenData · <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>
-</div></footer>
+__FOOTER__
 
 <script>
 const URL_CERT="__URL__";
@@ -286,9 +289,18 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
          "datePublished": "2026-07-06", "dateModified": "2026-07-06",
          "mainEntityOfPage": url}]}, ensure_ascii=False)
+    # Solo el Top 25 se indexa; el resto de certificados individuales son finos
+    # (una página casi calcada por estación) y van a noindex para no lastrar la
+    # calidad media del sitio ante Google.
+    robots = "index,follow,max-image-preview:large" if top25 else "noindex,follow"
     return (PAGINA_CERT
             .replace("__SCHEMA__", schema)
             .replace("__CSS__", _CSS_CERT)
+            .replace("__NAVCSS__", g.CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", g.CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", g.nav_escueto_html(site))
+            .replace("__FOOTER__", g.footer_escueto_html(site))
+            .replace("__ROBOTS__", robots)
             .replace("__URL__", url)
             .replace("__SLUG__", sl)
             .replace("__NIVEL__", nivel)
@@ -329,7 +341,8 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
         'h2{font-family:var(--fd);font-weight:700;font-size:clamp(20px,3.6vw,26px);margin:34px 0 6px}'
         '.grupo{font-size:13.5px;color:var(--muted);padding:9px 0;border-bottom:1px solid var(--line);line-height:1.8}'
         '.grupo b{color:#e7dcc8;margin-right:6px}'
-        '@media(max-width:560px){ul.lista{grid-template-columns:1fr}}')
+        '@media(max-width:560px){ul.lista{grid-template-columns:1fr}}'
+        + g.CSS_NAV_ESCUETO + g.CSS_FOOTER_ESCUETO)
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
@@ -360,6 +373,7 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
 <style>{css}</style>
 </head>
 <body>
+{g.nav_escueto_html(site)}
 <header class="h"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="{site}/">Refugio Climático</a> · Certificados</nav>
   <div class="kick">Certificados digitales · Top 25 · 2026</div>
@@ -374,9 +388,7 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
   <div class="verifica"><div class="t">Cómo se otorga</div>
   Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Se certifica a las estaciones con <b>menos de una noche tropical al año</b> de media (2017–2026): lo logran <b>218 de las 848</b> analizadas. Este Top 25 reúne, de entre ellas, las de mayor altitud. Solo podemos certificar donde hay estación de AEMET con datos suficientes: que un pueblo no aparezca no significa que no sea un refugio — significa que aún no podemos medirlo. Datos: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · <a href="{site}/ranking-noches-tropicales/">ranking completo</a>.</div>
 </div></section>
-<footer><div class="wrap">
-  Proyecto <a href="{site}/">Refugio Climático · nochetropical.es</a> · Datos: AEMET OpenData · <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>
-</div></footer>
+{g.footer_escueto_html(site)}
 </body>
 </html>
 """

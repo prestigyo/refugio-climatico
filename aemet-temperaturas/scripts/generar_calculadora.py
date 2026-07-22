@@ -3811,11 +3811,15 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
  .zona b{color:var(--teja2)}
  .selects{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
  select{background:var(--bg);border:1px solid var(--line);color:var(--paper);padding:10px 12px;border-radius:9px;font-size:14px;max-width:100%}
- .niveles{display:grid;grid-template-columns:1fr;gap:8px}
- .nvl{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:11px 14px;cursor:pointer;font-size:14.5px;color:var(--paper);text-align:left;width:100%}
+ .niveles{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+ .nvl{display:flex;align-items:center;gap:9px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 11px;cursor:pointer;color:var(--paper);text-align:left;width:100%}
  .nvl:hover{border-color:var(--teja)}
- .nvl.sel{border-color:var(--teja);background:rgba(217,116,78,.14);font-weight:700}
- .nvl .em{font-size:20px}
+ .nvl.sel{border-color:var(--teja);background:rgba(217,116,78,.16)}
+ .nvl .em{font-size:19px;flex:0 0 auto}
+ .nvl .nl{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+ .nvl .nl b{font-size:13.5px;font-weight:700}
+ .nvl .nl .d{font-size:11px;color:var(--muted);margin-top:1px}
+ .nvl.sel .nl .d{color:var(--teja2)}
  .chips{display:flex;flex-wrap:wrap;gap:8px}
  .chip{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13.5px;color:var(--muted);cursor:pointer}
  .chip:hover{border-color:var(--teja)}
@@ -3852,8 +3856,11 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
  .faqitem h3{font-family:var(--fd);font-weight:600;font-size:16px;margin-bottom:5px}
  .faqitem p{color:var(--muted);font-size:14px}
  /* --- Asistente paso a paso: una pregunta por pantalla --- */
- .wstage{position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:24px 20px 18px;max-width:640px;margin:0 auto;min-height:min(68vh,540px)}
- .wbar{height:5px;background:var(--bg);border-radius:99px;overflow:hidden;margin-bottom:22px;flex:0 0 auto}
+ .wstage{position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:18px 18px 14px;max-width:640px;margin:0 auto;min-height:min(62vh,520px)}
+ .wbar{height:5px;background:var(--bg);border-radius:99px;overflow:hidden;margin-bottom:16px;flex:0 0 auto}
+ /* El paso del nivel tiene 9 opciones: cabecera compacta para que quepan todas. */
+ #s-nivel .wq{font-size:clamp(20px,4.6vw,28px);margin-bottom:4px}
+ #s-nivel .wsub{font-size:12.5px;margin-bottom:10px}
  .wbar span{display:block;height:100%;width:0;background:var(--teja);border-radius:99px;transition:width .35s ease}
  .wstep{display:none}
  .wstep.on{display:flex;flex-direction:column;flex:1 1 auto;animation:wfade .28s ease}
@@ -3923,7 +3930,7 @@ __NAV__
 
     <div class="wstep" data-step="nivel" id="s-nivel">
       <h2 class="wq">¿Cómo se siente ahí ahora mismo?</h2>
-      <p class="wsub">Del frío helador al calor insoportable. Elige lo que sienta tu cuerpo, no lo que marque el termómetro.</p>
+      <p class="wsub">Elige lo que siente tu cuerpo, no lo que marca el termómetro.</p>
       <div class="niveles" id="niveles">__NIVELES__</div>
     </div>
 
@@ -4214,7 +4221,7 @@ function irPaso(s){
  var vis=pasosVis(),i=vis.indexOf(s);
  document.getElementById("wfill").style.width=Math.round(100*i/(vis.length-1))+"%";
  var nav=document.getElementById("wnav"),opt=document.getElementById("s-"+s).classList.contains("opt");
- nav.style.display=(s==="zona"||s==="enviar")?"none":"flex";
+ nav.style.display=(s==="zona")?"none":"flex"; // en "enviar" queda solo el Atrás
  document.getElementById("wback").style.visibility=(s==="nivel"||i<=0)?"hidden":"visible";
  document.getElementById("wskip").style.display=opt?"inline-block":"none";
  document.getElementById("wya").style.display=opt?"inline-block":"none";
@@ -4333,9 +4340,16 @@ def construir_pagina_confortometro(estaciones: list, site: str,
                 e["alt"], e["nt"], slug(e["prov"])]
     est_js = json.dumps([_fila(e) for e in estaciones],
                         ensure_ascii=False, separators=(",", ":"))
+    def _niv_label(txt):
+        # "Nombre: descripción" -> nombre destacado + descripción pequeña, para
+        # una rejilla compacta de 2 columnas que quepa entera en el móvil.
+        if ": " in txt:
+            w, d = txt.split(": ", 1)
+            return f'<b>{w}</b><span class="d">{d}</span>'
+        return f'<b>{txt}</b>'
     niveles = "".join(
         f'<button class="nvl" type="button" data-v="{v}">'
-        f'<span class="em">{em}</span><span>{txt}</span></button>'
+        f'<span class="em">{em}</span><span class="nl">{_niv_label(txt)}</span></button>'
         for v, em, txt in NIVELES_CONFORT)
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [

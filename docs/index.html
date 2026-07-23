@@ -125,6 +125,8 @@
  .mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:14px 0}
  .card2{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;color:var(--ink)}
  .card2:hover{border-color:var(--brand)}
+ .card2.destacada{border-color:var(--brand);background:linear-gradient(180deg,rgba(217,116,78,.12),var(--surface))}
+ .card2.destacada h3{color:var(--brand)}
  .card2 h3{font-family:var(--font-d);font-weight:700;font-size:18px;margin:0 0 6px}
  .card2 p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.5}
  .leer{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:0 14px 14px 0;padding:18px 20px;margin:16px 0 0}
@@ -188,7 +190,7 @@
     <p class="sec-s">De día casi toda España arde; de noche, no. El mapa que dio origen al proyecto, con datos de AEMET día a día.</p>
     <div class="gifmod">
       <a href="https://nochetropical.es/ola-de-calor/" aria-label="Ver el mapa animado completo de la ola de calor en España"><img src="https://nochetropical.es/ola-minimas.gif" alt="Mapa de temperaturas de España de noche durante la ola de calor (AEMET): las mínimas nocturnas, dónde se queda por encima de 20 °C y dónde se duerme fresco" loading="lazy"></a>
-      <div class="gm-b"><a href="https://nochetropical.es/ola-de-calor/">Ver el mapa animado completo, con Canarias y las flechas a los refugios →</a></div>
+      <div class="gm-b"><a href="https://nochetropical.es/ola-de-calor/">Ver el mapa de la ola de calor, animado y completo, con Canarias y las flechas a los refugios →</a></div>
     </div>
     <div class="leer">
       <h3>Cómo leer el mapa para encontrar un refugio</h3>
@@ -197,6 +199,7 @@
     </div>
     <h2 class="sec-h">Explora los datos</h2>
     <div class="mods">
+      <a class="card2 destacada" href="https://nochetropical.es/ola-de-calor/"><h3>🔥 Mapa de la ola de calor</h3><p>El mapa de calor de España, día a día: las máximas de hoy y las mínimas de esta noche, con datos de AEMET.</p></a>
       <a class="card2" href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/"><h3>Refugios cerca de ti</h3><p>Los refugios climáticos más cercanos, con la distancia y la ruta.</p></a>
       <a class="card2" href="https://nochetropical.es/confortometro/"><h3>El Confortómetro</h3><p>El estudio participativo: vota cómo se siente el clima en tu zona.</p></a>
       <a class="card2" href="https://nochetropical.es/mapa-estaciones/"><h3>Mapa interactivo</h3><p>Las 848 estaciones de AEMET sobre el mapa de España.</p></a>
@@ -204,8 +207,9 @@
       <a class="card2" href="https://nochetropical.es/parte/"><h3>El parte de la noche</h3><p>Quién durmió fresco anoche. Cada mañana.</p></a>
       <a class="card2" href="https://nochetropical.es/certificados/"><h3>Certificados</h3><p>Los pueblos acreditados como refugio climático.</p></a>
     </div>
-    <h2 class="sec-h" id="articulos">Artículos</h2>
+    <h2 class="sec-h" id="articulos">Artículos y estudios</h2>
     <div class="mods">
+      <a class="card2 destacada" href="https://nochetropical.es/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
       <a class="card2" href="https://nochetropical.es/dormir-con-manta-en-verano/"><h3>Dormir con manta en verano</h3><p>Un destino fresco medido por provincia: el mapa del turismo climático.</p></a>
       <a class="card2" href="https://nochetropical.es/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
       <a class="card2" href="https://nochetropical.es/refugio-climatico-natural/"><h3>Refugio climático natural</h3><p>Combatir el calor sin aire acondicionado, como se hacía antes.</p></a>

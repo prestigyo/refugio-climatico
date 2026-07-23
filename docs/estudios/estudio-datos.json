@@ -12,6 +12,8 @@
   },
   "dia": {
     "medio_verano_fresco": 1.5,
-    "umbral": 24
+    "umbral": 24,
+    "nunca_rojo": 1.6,
+    "enrojece": 98.4
   }
 }

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La España que nunca se colorea: el mapa de los refugios climáticos</title>
+<meta name="description" content="Superponemos 57 mapas de AEMET: solo el 5 % de España baja de 18° cada noche y apenas un puñado de cumbres resiste el calor de día. El mapa honesto de los refugios climáticos reales, de noche y de día.">
+<link rel="canonical" href="https://nochetropical.es/la-espana-que-nunca-se-colorea/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="La España que nunca se colorea: el mapa de los refugios climáticos">
+<meta property="og:description" content="Superponemos 57 mapas de AEMET: solo el 5 % de España baja de 18° cada noche y apenas un puñado de cumbres resiste el calor de día. El mapa honesto de los refugios climáticos reales, de noche y de día.">
+<meta property="og:url" content="https://nochetropical.es/la-espana-que-nunca-se-colorea/">
+<meta property="og:image" content="https://nochetropical.es/estudios/refugios-nocturnos.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nochetropical.es/estudios/refugios-nocturnos.png">
+<link rel="icon" type="image/svg+xml" href="https://nochetropical.es/favicon.svg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": "https://nochetropical.es/"}, {"@type": "ListItem", "position": 2, "name": "La España que nunca se colorea", "item": "https://nochetropical.es/la-espana-que-nunca-se-colorea/"}]}, {"@type": "Article", "headline": "La España que nunca se colorea: el mapa de los refugios climáticos", "description": "Superponemos 57 mapas de AEMET: solo el 5 % de España baja de 18° cada noche y apenas un puñado de cumbres resiste el calor de día. El mapa honesto de los refugios climáticos reales, de noche y de día.", "image": "https://nochetropical.es/estudios/refugios-nocturnos.png", "author": {"@type": "Person", "name": "Ramón J. Lowesting"}, "publisher": {"@type": "Organization", "name": "nochetropical.es"}, "isBasedOn": "https://opendata.aemet.es"}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.7;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:min(92vw,760px);margin:0 auto;padding:0 22px}
+ a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+ header.h{padding:46px 0 10px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:18px 0 8px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(30px,6vw,48px);line-height:1.04;letter-spacing:-.01em}
+ h1 em{font-style:italic;color:var(--teja2)}
+ .intro{color:var(--muted);font-size:clamp(15px,2.4vw,17.5px);margin:18px 0 0}
+ .intro b{color:var(--paper)}
+ section{padding:22px 0}
+ h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,3.6vw,27px);margin:0 0 12px;line-height:1.15}
+ p{font-size:clamp(15px,2.2vw,16.5px);color:var(--muted);margin:0 0 14px}p b{color:var(--paper)}
+ figure{margin:8px 0 6px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:12px;overflow:hidden}
+ figure img{width:100%;height:auto;display:block;border-radius:9px}
+ figcaption{font-size:13.5px;color:var(--muted);margin-top:10px;padding:0 4px}
+ .dato{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 18px}
+ .dcard{flex:1;min-width:150px;background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:14px 16px}
+ .dcard .n{font-family:var(--fd);font-weight:900;font-size:30px;color:var(--teja2);line-height:1}
+ .dcard .l{font-size:13px;color:var(--muted);margin-top:6px}
+ .metodo{background:var(--bg2);border-left:3px solid var(--teja);border-radius:0 12px 12px 0;padding:16px 18px;font-size:14px;color:var(--muted)}
+ .metodo b{color:var(--paper)}
+ .sigue{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+ .nav-e{position:sticky;top:0;z-index:30;background:rgba(22,16,9,.88);backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid var(--line)}.nav-e .in{max-width:min(92vw,920px);margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:16px;height:54px}.nav-e .brand{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:600;font-size:16.5px;color:var(--paper);white-space:nowrap}.nav-e .brand:hover{text-decoration:none;color:var(--teja2)}.nav-e .links{margin-left:auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.nav-e .links::-webkit-scrollbar{display:none}.nav-e .links a{font-size:13.5px;color:var(--muted);padding:8px 11px;border-radius:8px;white-space:nowrap}.nav-e .links a:hover{color:var(--paper);background:rgba(217,116,78,.14);text-decoration:none}@media(max-width:560px){.nav-e .brand span{display:none}.nav-e .in{gap:8px;padding:0 14px}.nav-e .links a{padding:8px 8px}}
+ .f2{border-top:1px solid var(--line);background:var(--bg2);margin-top:30px;padding:34px 0 46px}.f2grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}.f2col h4{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin:0 0 12px}.f2col a{display:block;color:var(--muted);font-size:13.5px;margin:0 0 8px;text-decoration:none}.f2col a:hover{color:var(--paper);text-decoration:underline}.f2bar{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-size:12.5px;color:#82745d}.f2bar a{color:#9a8a6f}@media(max-width:640px){.f2grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav-e" aria-label="principal"><div class="in"><a class="brand" href="https://nochetropical.es/" aria-label="nochetropical.es"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--paper)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/><circle cx="73" cy="34" r="6.5" fill="var(--teja)"/></svg><span>nochetropical.es</span></a><div class="links"><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios cerca de mí</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa interactivo</a><a href="https://nochetropical.es/ola-de-calor/">Ola de calor</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking</a></div></div></nav>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="https://nochetropical.es/">Refugio Climático</a> · La España que nunca se colorea</nav>
+  <div class="kick">Estudio · Refugios climáticos · Datos AEMET</div>
+  <h1>La España que <em>nunca se colorea</em></h1>
+  <p class="intro">Hemos superpuesto <b>57 mapas diarios de AEMET</b> de este verano, píxel a píxel, para responder a una pregunta simple: <b>¿qué parte de España nunca cruza la línea del calor?</b> El resultado dibuja, en negativo, los <b>refugios climáticos reales</b> de la península — y desmonta un espejismo.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>De noche: el mapa del sueño</h2>
+  <p>Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Pero el termómetro engaña: una mínima <i>puntual</i> de 19,5&nbsp;°C al amanecer, tras una noche infernal, es un <b>falso alivio</b>. Por eso distinguimos tres Españas: la que <b>baja de 18&nbsp;°C cada noche</b> (frescor real, sueño garantizado), la que nunca es tropical pero <b>roza los 18-20</b> (el espejismo), y la que <b>alguna noche cruza los 20</b>.</p>
+  <div class="dato">
+    <div class="dcard"><div class="n">5 %</div><div class="l">baja de 18° cada noche · refugio profundo</div></div>
+    <div class="dcard"><div class="n">12 %</div><div class="l">nunca tropical, pero roza los 20° · falso alivio</div></div>
+    <div class="dcard"><div class="n">83 %</div><div class="l">alguna noche tropical</div></div>
+  </div>
+  <figure>
+    <img src="https://nochetropical.es/estudios/refugios-nocturnos.png" alt="Mapa de España con los refugios climáticos nocturnos: las zonas donde la temperatura mínima nunca cruza los 20 grados, superponiendo los mapas de mínimas de AEMET de todo el verano" loading="lazy">
+    <figcaption>En teal, los refugios profundos (montaña interior). En ámbar, el falso alivio que rodea las cumbres. En rojo, la España tropical. Fuente: mapas de mínimas de AEMET, mayo de 2026 – julio de 2026.</figcaption>
+  </figure>
+  <p>Los refugios profundos son <b>montaña interior seca</b>: la Cordillera Cantábrica, el Sistema Central, el Ibérico, el Pirineo. Y fíjate en el <b>halo ámbar</b> que los rodea: al bajar de la sierra hacia el valle, primero se cruza esa franja dudosa. Por eso, para valorar un pueblo, <a href="https://nochetropical.es/">no vale la media — hay que mirar su peor noche</a>.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>De día: solo resisten las cumbres</h2>
+  <p>¿Y de día? Aquí no hay refugio para casi nadie: en verano <b>España arde de sol a sol</b> — el 98&nbsp;% del territorio llega al rojo (32&nbsp;°C) algún día. Solo un puñado de <b>cumbres</b> aguanta fresco también a mediodía. Este mapa cuenta, punto por punto, cuántos días la máxima se quedó por debajo de 24&nbsp;°C.</p>
+  <figure>
+    <img src="https://nochetropical.es/estudios/frescor-dia.png" alt="Mapa de España del frescor de día: las cumbres donde la temperatura máxima se mantiene baja incluso a mediodía en verano, según las máximas de AEMET" loading="lazy">
+    <figcaption>Cuanto más claro, más a menudo hace fresco a mediodía. Brillan Sierra Nevada, el Pirineo, la Cantábrica y, muy cerca, la sierra de Gúdar. Casi todo lo demás está oscuro. Fuente: mapas de máximas de AEMET, mayo de 2026 – julio de 2026.</figcaption>
+  </figure>
+  <p>Sierra Nevada resplandece: tan alta que refresca de día hasta en Andalucía. Y hay sierras que se quedan <b>a un pelo</b> — la <b>sierra de Gúdar</b>, en Teruel, no alcanza ese nivel de brillo pero anda cerquísima. Es exactamente por eso que <a href="https://nochetropical.es/">Alcalá de la Selva</a> y La Virgen de la Vega son refugios climáticos naturales de manual: si el día ya perdona algo y <b>la noche siempre refresca</b>, tienes el combo completo.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>El refugio total está donde coinciden los dos mapas</h2>
+  <p>De noche hay refugio para bastantes; de día, casi solo para las cumbres. <b>Donde se solapan</b> — Pirineo, Cantábrica, las sierras altas de Teruel y Gúdar, el techo del Sistema Central — está el <b>refugio total</b>: fresco al mediodía y fresco de madrugada. Son los pueblos donde en agosto se cena con chaqueta y se duerme con manta.</p>
+  <p class="metodo"><b>Cómo está hecho.</b> Superponemos los mapas diarios de AEMET (57 jornadas de este verano) y, con su propia escala de color, clasificamos cada píxel por su banda de temperatura. Es una <b>ventana</b>: el titular «nunca» se refiere al periodo observado (mayo de 2026 – julio de 2026); a medida que avanza el verano la mancha crece y el refugio se ajusta. Iremos publicando los estudios de veranos anteriores y posteriores. Todo es regenerable con <code>scripts/estudio_colores.py</code> sobre datos de AEMET.</p>
+  <div class="sigue">
+    <p><b>Sigue explorando:</b> busca <a href="https://nochetropical.es/">tu pueblo en la calculadora</a>, localiza <a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">el refugio climático natural más cercano</a>, mira <a href="https://nochetropical.es/ranking-noches-tropicales/">el ranking nacional</a>, sigue <a href="https://nochetropical.es/ola-de-calor/">el mapa de la ola de calor de hoy</a> o entiende <a href="https://nochetropical.es/microclimas/">por qué un valle es más fresco que la cima de al lado</a>.</p>
+  </div>
+</div></section>
+
+<footer class="f2"><div class="wrap"><div class="f2grid"><div class="f2col"><h4>Explora los datos</h4><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios climáticos cerca de mí</a><a href="https://nochetropical.es/confortometro/">El Confortómetro: vota tu zona</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa interactivo de estaciones</a><a href="https://nochetropical.es/ola-de-calor/">¿Cuándo acaba la ola de calor?</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking nacional de noches tropicales</a><a href="https://nochetropical.es/parte/">El parte de la noche</a><a href="https://nochetropical.es/certificados/">Certificados de refugio climático</a></div><div class="f2col"><h4>Guías y artículos</h4><a href="https://nochetropical.es/dormir-con-manta-en-verano/">Pueblos para dormir con manta en verano</a><a href="https://nochetropical.es/refugio-climatico-natural/">Cómo crear un refugio climático natural</a><a href="https://nochetropical.es/microclimas/">Microclimas: los refugios de la naturaleza</a><a href="https://nochetropical.es/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://nochetropical.es/hipoteca-termica/">La hipoteca térmica</a><a href="https://nochetropical.es/tu-pueblo/">¿Tu pueblo no aparece? Ayúdanos</a></div><div class="f2col"><h4>Proyecto</h4><a href="https://nochetropical.es/">La calculadora de tu pueblo</a><a href="https://nochetropical.es/sobre-el-proyecto/">Sobre el proyecto</a><a href="https://nochetropical.es/metodologia/">Metodología y glosario</a><a href="https://nochetropical.es/prensa/">Sala de prensa</a><a href="https://nochetropical.es/aviso-legal/">Licencia y aviso legal</a></div></div><div class="f2bar">Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a> · © 2026 <a href="https://nochetropical.es/">nochetropical.es</a> · Ramón J. Lowesting</div></div></footer>
+</body>
+</html>

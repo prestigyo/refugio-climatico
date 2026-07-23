@@ -1,7 +1,7 @@
 {
  "fecha": "2026-07-23",
- "total": 846,
- "tropicales": 391,
+ "total": 844,
+ "tropicales": 390,
  "ecuatoriales": 68,
  "peor": {
   "id": "7007Y",
@@ -65,16 +65,16 @@
    "prov": "Alicante"
   },
   {
-   "id": "6332Y",
-   "nombre": "Carboneras - Faro Mesa Roldán",
-   "min": 26.5,
-   "prov": "Almería"
-  },
-  {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
    "min": 26.5,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "5038Y",
+   "nombre": "Cazorla (Automatica)",
+   "min": 26.4,
+   "prov": "Jaén"
   }
  ],
  "top_fresco": [

@@ -86,11 +86,12 @@ def _fecha_larga(d):
     return f"{d.day} de {MESES[d.month]} de {d.year}"
 
 
-def _lienzo(mapa_arr, cfg, pie_lineas, leyenda):
+def _lienzo(mapa_arr, cfg, pie_lineas, leyenda=None, escala=None):
     mp = Image.fromarray(mapa_arr)
     esc = 1.5; mw, mh = int(mp.width * esc), int(mp.height * esc)
     mp = mp.resize((mw, mh), Image.NEAREST)
-    HEAD = 176; FOOT = 150 + 26 * len(leyenda); MARG = 44
+    HEAD = 176; MARG = 44
+    FOOT = 150 + (66 if escala else 26 * len(leyenda or []))
     CW, CH = mw + 2 * MARG, HEAD + mh + FOOT
     cv = Image.new("RGB", (CW, CH), BG); d = ImageDraw.Draw(cv)
     cv.paste(mp, (MARG, HEAD))
@@ -101,11 +102,20 @@ def _lienzo(mapa_arr, cfg, pie_lineas, leyenda):
     y0 = HEAD + mh + 16
     d.text((MARG, y0), pie_lineas[0], font=_fuente(FB, 24), fill=cfg["acento"])
     d.text((MARG, y0 + 38), pie_lineas[1], font=_fuente(FR, 19), fill=MUTED)
-    ly = y0 + 74
-    for i, (col, txt) in enumerate(leyenda):
-        yy = ly + i * 26
-        d.rectangle([MARG, yy, MARG + 15, yy + 15], fill=col)
-        d.text((MARG + 22, yy - 2), txt, font=_fuente(FR, 19), fill=MUTED)
+    if escala:  # barra horizontal de temperatura (color -> grados)
+        d.text((MARG, y0 + 70), escala["titulo"], font=_fuente(FR, 19), fill=MUTED)
+        sy, sw, sh = y0 + 96, 62, 20
+        for j, (rgb, lab) in enumerate(escala["pasos"]):
+            x = MARG + j * sw
+            d.rectangle([x, sy, x + sw - 3, sy + sh], fill=rgb)
+            d.text((x + (sw - 3) / 2, sy + sh + 3), lab, font=_fuente(FR, 18),
+                   fill=MUTED, anchor="ma")
+    else:
+        ly = y0 + 74
+        for i, (col, txt) in enumerate(leyenda or []):
+            yy = ly + i * 26
+            d.rectangle([MARG, yy, MARG + 15, yy + 15], fill=col)
+            d.text((MARG + 22, yy - 2), txt, font=_fuente(FR, 19), fill=MUTED)
     return cv
 
 
@@ -186,9 +196,10 @@ def estudio_techo_calor():
                     "toda España enrojece; solo las cumbres se quedan en amarillo o naranja."])
     pie = [f"El {enrojece:.0f} % de España llega al rojo ({MAY}32{G}) algún día {P} solo el {nunca_rojo:.0f} % no",
            f"Del {_fecha_larga(fechas[0])} al {_fecha_larga(fechas[-1])} {P} {n} días {P} máximas de AEMET {P} nochetropical.es"]
-    leyenda = [((255, 0, 0), f"alguna vez {MAY}32{G} {P} rojo (casi toda España)"),
-               ((255, 255, 0), f"su día más caliente no pasó del amarillo {P} las cumbres")]
-    _lienzo(mapa, cfg, pie, leyenda).save(OUT / "techo-del-calor.png")
+    escala = {"titulo": f"Escala de la máxima alcanzada ({G}C) {P} el amarillo son las cumbres, el magenta el horno:",
+              "pasos": [((255, 255, 0), "22"), ((255, 191, 0), "26"), ((255, 127, 0), "30"),
+                        ((255, 0, 0), "32"), ((255, 51, 178), "36"), ((208, 52, 113), "40")]}
+    _lienzo(mapa, cfg, pie, escala=escala).save(OUT / "techo-del-calor.png")
     return dict(nunca_rojo=round(nunca_rojo, 1), enrojece=round(enrojece, 1))
 
 

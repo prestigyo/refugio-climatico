@@ -4528,7 +4528,7 @@ __NAV__
     <div class="dcard"><div class="n">__TROPICAL__ %</div><div class="l">alguna noche tropical</div></div>
   </div>
   <figure>
-    <img src="__SITE__/estudios/refugios-nocturnos.png" alt="Mapa de España con los refugios climáticos nocturnos: las zonas donde la temperatura mínima nunca cruza los 20 grados, superponiendo los mapas de mínimas de AEMET de todo el verano" loading="lazy">
+    <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/" aria-label="Encuentra el refugio climático natural más cercano a ti"><img src="__SITE__/estudios/refugios-nocturnos.png" alt="Mapa de España con los refugios climáticos nocturnos: las zonas donde la temperatura mínima nunca cruza los 20 grados, superponiendo los mapas de mínimas de AEMET de todo el verano" loading="lazy"></a>
     <figcaption>En teal, los refugios profundos (montaña interior). En ámbar, el falso alivio que rodea las cumbres. En rojo, la España tropical. Fuente: mapas de mínimas de AEMET, __INI__ – __FIN__.</figcaption>
   </figure>
   <p>Los refugios profundos son <b>montaña interior seca</b>: la Cordillera Cantábrica, el Sistema Central, el Ibérico, el Pirineo. Y fíjate en el <b>halo ámbar</b> que los rodea: al bajar de la sierra hacia el valle, primero se cruza esa franja dudosa. Por eso, para valorar un pueblo, <a href="__SITE__/">no vale la media — hay que mirar su peor noche</a>.</p>
@@ -4538,12 +4538,12 @@ __NAV__
   <h2>De día: la España que no se colorea de rojo</h2>
   <p>¿Y de día? Aquí no hay refugio para casi nadie: en verano <b>España arde de sol a sol</b>. Si pintamos cada zona con <b>su día más caliente</b> de todo el periodo, el <b>__ENROJECE__&nbsp;%</b> del territorio llega al rojo (32&nbsp;°C) alguna jornada. Solo un __NUNCA_ROJO__&nbsp;% —las cumbres— <b>no se colorea de rojo jamás</b>.</p>
   <figure>
-    <img src="__SITE__/estudios/techo-del-calor.png" alt="Mapa de España pintado con la temperatura máxima más alta de cada zona en el verano: casi todo el país enrojece por encima de 32 grados y solo las cumbres se quedan en amarillo, según las máximas de AEMET" loading="lazy">
+    <a href="__SITE__/ola-de-calor/" aria-label="Ver el mapa de la ola de calor en directo"><img src="__SITE__/estudios/techo-del-calor.png" alt="Mapa de España pintado con la temperatura máxima más alta de cada zona en el verano: casi todo el país enrojece por encima de 32 grados y solo las cumbres se quedan en amarillo, según las máximas de AEMET" loading="lazy"></a>
     <figcaption>Cada punto, con la máxima más alta que alcanzó en todo el periodo. Casi toda España enrojece; solo las cumbres (en amarillo/naranja) resisten. Fuente: mapas de máximas de AEMET, __INI__ – __FIN__.</figcaption>
   </figure>
   <p>Solo un puñado de <b>cumbres</b> aguanta fresco también a mediodía. Este otro mapa cuenta, punto por punto, cuántos días la máxima se quedó por debajo de __UMBRAL__&nbsp;°C:</p>
   <figure>
-    <img src="__SITE__/estudios/frescor-dia.png" alt="Mapa de España del frescor de día: las cumbres donde la temperatura máxima se mantiene baja incluso a mediodía en verano, según las máximas de AEMET" loading="lazy">
+    <a href="__SITE__/ola-de-calor/" aria-label="Ver el mapa de la ola de calor en directo"><img src="__SITE__/estudios/frescor-dia.png" alt="Mapa de España del frescor de día: las cumbres donde la temperatura máxima se mantiene baja incluso a mediodía en verano, según las máximas de AEMET" loading="lazy"></a>
     <figcaption>Cuanto más claro, más a menudo hace fresco a mediodía. Brillan Sierra Nevada, el Pirineo, la Cantábrica y, muy cerca, la sierra de Gúdar. Casi todo lo demás está oscuro. Fuente: mapas de máximas de AEMET, __INI__ – __FIN__.</figcaption>
   </figure>
   <p>Sierra Nevada resplandece: tan alta que refresca de día hasta en Andalucía. Y hay sierras que se quedan <b>a un pelo</b> — la <b>sierra de Gúdar</b>, en Teruel, no alcanza ese nivel de brillo pero anda cerquísima. Es exactamente por eso que <a href="__SITE__/">Alcalá de la Selva</a> y La Virgen de la Vega son refugios climáticos naturales de manual: si el día ya perdona algo y <b>la noche siempre refresca</b>, tienes el combo completo.</p>

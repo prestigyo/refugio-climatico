@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-23",
- "total": 844,
- "tropicales": 390,
- "ecuatoriales": 68,
+ "fecha": "2026-07-24",
+ "total": 850,
+ "tropicales": 373,
+ "ecuatoriales": 98,
  "peor": {
-  "id": "7007Y",
-  "nombre": "Mazarrón/las Torres",
-  "min": 28.0,
-  "prov": "Murcia"
+  "id": "6281X",
+  "nombre": "Válor",
+  "min": 29.6,
+  "prov": "Granada"
  },
  "mejor": {
-  "id": "2192C",
-  "nombre": "Cuellar",
-  "min": 6.6,
-  "prov": "Segovia"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": 5.8,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "7007Y",
-   "nombre": "Mazarrón/las Torres",
-   "min": 28.0,
-   "prov": "Murcia"
-  },
-  {
-   "id": "7002Y",
-   "nombre": "Águilas",
-   "min": 27.4,
-   "prov": "Murcia"
-  },
-  {
-   "id": "6325O",
-   "nombre": "Almería/Aeropuerto",
-   "min": 27.3,
-   "prov": "Almería"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 27.3,
-   "prov": "Almería"
-  },
-  {
-   "id": "7023X",
-   "nombre": "Fuente Alamo",
-   "min": 26.9,
-   "prov": "Murcia"
-  },
-  {
-   "id": "6291B",
-   "nombre": "El Ejido (Ayuntamiento - Automatica)",
-   "min": 26.7,
-   "prov": "Almería"
-  },
-  {
    "id": "6281X",
    "nombre": "Válor",
-   "min": 26.6,
+   "min": 29.6,
    "prov": "Granada"
   },
   {
-   "id": "7244X",
-   "nombre": "Orihuela Desamparados",
-   "min": 26.6,
-   "prov": "Alicante"
+   "id": "6127X",
+   "nombre": "Álora las Pelonas",
+   "min": 29.0,
+   "prov": "Málaga"
   },
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 26.5,
+   "id": "6143X",
+   "nombre": "Coin (Automatica)",
+   "min": 28.5,
+   "prov": "Málaga"
+  },
+  {
+   "id": "7218Y",
+   "nombre": "Totana",
+   "min": 28.4,
+   "prov": "Murcia"
+  },
+  {
+   "id": "6312E",
+   "nombre": "Rágol Parque Nacional Sierra Nevada",
+   "min": 28.2,
+   "prov": "Almería"
+  },
+  {
+   "id": "8414A",
+   "nombre": "Valencia/Aeropuerto",
+   "min": 28.1,
+   "prov": "Valencia"
+  },
+  {
+   "id": "B957",
+   "nombre": "Eivissa",
+   "min": 27.9,
    "prov": "Illes Balears"
   },
   {
-   "id": "5038Y",
-   "nombre": "Cazorla (Automatica)",
-   "min": 26.4,
-   "prov": "Jaén"
+   "id": "C623I",
+   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "min": 27.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "6069X",
+   "nombre": "Benahavis (la Zagaleta - Automatica)",
+   "min": 27.8,
+   "prov": "Málaga"
+  },
+  {
+   "id": "7211B",
+   "nombre": "Puerto Lumbreras",
+   "min": 27.7,
+   "prov": "Murcia"
   }
  ],
  "top_fresco": [
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 6.6,
-   "prov": "Segovia"
-  },
-  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 6.7,
+   "min": 5.8,
    "prov": "Zamora"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 6.7,
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 7.2,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2828Y",
+   "nombre": "Barco de Avila",
+   "min": 7.5,
    "prov": "Ávila"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 6.8,
+   "min": 7.6,
    "prov": "Salamanca"
   },
   {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 8.5,
-   "prov": "Ávila"
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 8.1,
+   "prov": "Ourense"
   },
   {
    "id": "2084Y",
    "nombre": "Ucero",
-   "min": 9.2,
+   "min": 8.1,
    "prov": "Soria"
   },
   {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 9.4,
-   "prov": "Cantabria"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 8.9,
+   "prov": "Ávila"
   },
   {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 9.9,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 10.1,
-   "prov": "León"
-  },
-  {
-   "id": "1738U",
-   "nombre": "Muiños-Prado",
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
    "min": 10.2,
-   "prov": "Ourense"
+   "prov": "Burgos"
+  },
+  {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 10.4,
+   "prov": "Madrid"
+  },
+  {
+   "id": "1178Y",
+   "nombre": "Soto de Valdeón (Automatica)",
+   "min": 10.5,
+   "prov": "León"
   }
  ]
 }

@@ -22,7 +22,27 @@ from datetime import date
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, PngImagePlugin
+
+SITE = "https://nochetropical.es"
+KEYWORDS = ("noches tropicales, ola de calor, mapa de calor de España, mapa de "
+            "temperaturas de España, AEMET, refugios climáticos, dónde se duerme "
+            "fresco, verano, cambio climático, nochetropical.es")
+
+
+def _guardar_png(cv, ruta, titulo, descripcion, url):
+    """Guarda el PNG con metadatos: autor, copyright, keywords y URL de origen,
+    para que la atribución y las señales SEO viajen DENTRO del archivo aunque
+    lo copien o lo compartan."""
+    m = PngImagePlugin.PngInfo()
+    m.add_text("Title", titulo)
+    m.add_text("Author", "Ramón J. Lowesting · nochetropical.es")
+    m.add_text("Description", descripcion + " Fuente: AEMET · " + url)
+    m.add_text("Copyright", "© nochetropical.es · datos de AEMET bajo CC BY 4.0")
+    m.add_text("Keywords", KEYWORDS)
+    m.add_text("Source", url)
+    m.add_text("Software", "nochetropical.es")
+    cv.save(ruta, pnginfo=m)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 AEMET_DIR = SCRIPT_DIR.parent
@@ -141,7 +161,12 @@ def estudio_nocturno():
     leyenda = [(C_NUCLEO, f"baja de 18{G} cada noche {P} refugio profundo ({pn:.0f} %)"),
                (C_MARGEN, f"nunca tropical, pero roza los 20{G} {P} alivio justo ({pm:.0f} %)"),
                (C_RESTO, f"alguna noche tropical ({MAY}20{G}) ({pr:.0f} %)")]
-    _lienzo(mapa, cfg, pie, leyenda).save(OUT / "refugios-nocturnos.png")
+    _guardar_png(_lienzo(mapa, cfg, pie, leyenda), OUT / "refugios-nocturnos.png",
+                 "La España que nunca se colorea — refugios climáticos nocturnos",
+                 "Mapa de los refugios climáticos nocturnos de España: dónde la mínima "
+                 "no cruza los 20 grados ni una noche, superponiendo los mapas de "
+                 "mínimas de AEMET del verano.",
+                 SITE + "/la-espana-que-nunca-se-colorea/")
     return dict(profundo=round(pn, 1), margen=round(pm, 1), tropical=round(pr, 1),
                 ini=fechas[0].isoformat(), fin=fechas[-1].isoformat(), n=n)
 
@@ -166,7 +191,11 @@ def estudio_frescor(umbral=24):
            f"Del {_fecha_larga(fechas[0])} al {_fecha_larga(fechas[-1])} {P} {n} días {P} nochetropical.es"]
     leyenda = [((120, 200, 214), "las cumbres que resisten: Sierra Nevada, Pirineo, Cantábrica, Gúdar"),
                ((70, 62, 48), "de día también aprieta")]
-    _lienzo(mapa, cfg, pie, leyenda).save(OUT / "frescor-dia.png")
+    _guardar_png(_lienzo(mapa, cfg, pie, leyenda), OUT / "frescor-dia.png",
+                 "Dónde no aprieta el día — el frescor diurno en España",
+                 "Mapa del frescor de día en España: las cumbres donde la máxima no "
+                 "pasa de 24 grados ni a mediodía en verano, según AEMET.",
+                 SITE + "/la-espana-que-nunca-se-colorea/")
     return dict(medio_verano_fresco=round(p50, 1), umbral=umbral,
                 ini=fechas[0].isoformat(), fin=fechas[-1].isoformat(), n=n)
 
@@ -199,7 +228,12 @@ def estudio_techo_calor():
     escala = {"titulo": f"Escala de la máxima alcanzada ({G}C) {P} el amarillo son las cumbres, el magenta el horno:",
               "pasos": [((255, 255, 0), "22"), ((255, 191, 0), "26"), ((255, 127, 0), "30"),
                         ((255, 0, 0), "32"), ((255, 51, 178), "36"), ((208, 52, 113), "40")]}
-    _lienzo(mapa, cfg, pie, escala=escala).save(OUT / "techo-del-calor.png")
+    _guardar_png(_lienzo(mapa, cfg, pie, escala=escala), OUT / "techo-del-calor.png",
+                 "La España que no se colorea de rojo — el techo del calor",
+                 "Mapa de máximas de España: cada zona pintada con su día más caliente "
+                 "del verano; el 98 % del país enrojece (supera 32 grados) y solo el "
+                 "2 %, las cumbres, no, según AEMET.",
+                 SITE + "/la-espana-que-nunca-se-colorea/")
     return dict(nunca_rojo=round(nunca_rojo, 1), enrojece=round(enrojece, 1))
 
 

@@ -1,8 +1,8 @@
 {
  "fecha": "2026-07-24",
- "total": 850,
+ "total": 851,
  "tropicales": 373,
- "ecuatoriales": 98,
+ "ecuatoriales": 99,
  "peor": {
   "id": "6281X",
   "nombre": "Válor",
@@ -55,7 +55,7 @@
   {
    "id": "B957",
    "nombre": "Eivissa",
-   "min": 27.9,
+   "min": 28.0,
    "prov": "Illes Balears"
   },
   {

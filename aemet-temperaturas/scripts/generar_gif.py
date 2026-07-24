@@ -22,7 +22,28 @@ import glob
 import re
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, PngImagePlugin
+
+# Metadatos incrustados: la atribucion y el enlace viajan DENTRO del archivo
+# aunque un medio lo copie o lo comparta. El comentario GIF va en ASCII plano.
+SITE = "https://nochetropical.es"
+GIF_COMMENT = ("Mapa de la ola de calor en Espana (AEMET) - nochetropical.es | "
+               "noches tropicales, refugios climaticos, donde se duerme fresco | "
+               "Fuente: AEMET, CC BY 4.0 | " + SITE + "/ola-de-calor/")
+
+
+def _png_meta(titulo, descripcion, url):
+    m = PngImagePlugin.PngInfo()
+    m.add_text("Title", titulo)
+    m.add_text("Author", "Ramon J. Lowesting - nochetropical.es")
+    m.add_text("Description", descripcion + " Fuente: AEMET - " + url)
+    m.add_text("Copyright", "(c) nochetropical.es - datos de AEMET bajo CC BY 4.0")
+    m.add_text("Keywords", "noches tropicales, ola de calor, mapa de calor de Espana, "
+               "mapa de temperaturas, AEMET, refugios climaticos, donde se duerme fresco")
+    m.add_text("Source", url)
+    m.add_text("Software", "nochetropical.es")
+    return m
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 AEMET_DIR = SCRIPT_DIR.parent
@@ -109,7 +130,8 @@ def gif_simple(tipo: str, etiqueta: str, salida: Path, color_etq, zona: str = "p
         frames.append(lienzo)
     salida.parent.mkdir(parents=True, exist_ok=True)
     frames[0].save(salida, save_all=True, append_images=frames[1:],
-                   duration=duraciones(len(frames)), loop=0, optimize=True)
+                   duration=duraciones(len(frames)), loop=0, optimize=True,
+                   comment=GIF_COMMENT)
     print(f"  OK {salida.name}: {len(frames)} frames, {salida.stat().st_size/1024:.0f} KB")
 
 
@@ -141,7 +163,8 @@ def gif_dual(salida: Path) -> None:
         frames.append(lienzo)
     salida.parent.mkdir(parents=True, exist_ok=True)
     frames[0].save(salida, save_all=True, append_images=frames[1:],
-                   duration=duraciones(len(frames)), loop=0, optimize=True)
+                   duration=duraciones(len(frames)), loop=0, optimize=True,
+                   comment=GIF_COMMENT)
     print(f"  OK {salida.name}: {len(frames)} frames, {salida.stat().st_size/1024:.0f} KB")
 
 
@@ -175,7 +198,8 @@ def gif_vertical(salida: Path) -> None:
         frames.append(lienzo)
     salida.parent.mkdir(parents=True, exist_ok=True)
     frames[0].save(salida, save_all=True, append_images=frames[1:],
-                   duration=duraciones(len(frames)), loop=0, optimize=True)
+                   duration=duraciones(len(frames)), loop=0, optimize=True,
+                   comment=GIF_COMMENT)
     print(f"  OK {salida.name}: {len(frames)} frames, {salida.stat().st_size/1024:.0f} KB")
 
 
@@ -200,7 +224,10 @@ def og_image(salida: Path) -> None:
     d.text((x, 334), "aguanta tu pueblo?", font=f_s, fill=PAPER)
     d.text((x, 432), "848 estaciones · 10 veranos de AEMET", font=f_m, fill=MUTED)
     salida.parent.mkdir(parents=True, exist_ok=True)
-    canvas.save(salida)
+    canvas.save(salida, pnginfo=_png_meta(
+        "El mapa del calor que no te deja dormir - nochetropical.es",
+        "Portada de nochetropical.es: mapa de las noches tropicales y la ola de "
+        "calor en Espana con 10 veranos de datos de AEMET.", SITE + "/"))
     print(f"  OK {salida.name}: {salida.stat().st_size/1024:.0f} KB")
 
 

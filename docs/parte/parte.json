@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-24",
+ "fecha": "2026-07-25",
  "total": 851,
- "tropicales": 373,
- "ecuatoriales": 99,
+ "tropicales": 250,
+ "ecuatoriales": 73,
  "peor": {
-  "id": "6281X",
-  "nombre": "Válor",
-  "min": 29.6,
-  "prov": "Granada"
+  "id": "B434X",
+  "nombre": "Portocolom",
+  "min": 28.6,
+  "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 5.8,
-  "prov": "Zamora"
+  "id": "9001S",
+  "nombre": "Alto Campoo",
+  "min": 3.1,
+  "prov": "Cantabria"
  },
  "top_calor": [
   {
-   "id": "6281X",
-   "nombre": "Válor",
-   "min": 29.6,
-   "prov": "Granada"
+   "id": "B434X",
+   "nombre": "Portocolom",
+   "min": 28.6,
+   "prov": "Illes Balears"
   },
   {
-   "id": "6127X",
-   "nombre": "Álora las Pelonas",
-   "min": 29.0,
-   "prov": "Málaga"
-  },
-  {
-   "id": "6143X",
-   "nombre": "Coin (Automatica)",
-   "min": 28.5,
-   "prov": "Málaga"
-  },
-  {
-   "id": "7218Y",
-   "nombre": "Totana",
+   "id": "B228",
+   "nombre": "Palma-Portopí",
    "min": 28.4,
-   "prov": "Murcia"
+   "prov": "Illes Balears"
   },
   {
-   "id": "6312E",
-   "nombre": "Rágol Parque Nacional Sierra Nevada",
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
    "min": 28.2,
-   "prov": "Almería"
+   "prov": "Illes Balears"
   },
   {
-   "id": "8414A",
-   "nombre": "Valencia/Aeropuerto",
+   "id": "B860X",
+   "nombre": "Ciutadella-Son Quim",
    "min": 28.1,
-   "prov": "Valencia"
+   "prov": "Illes Balears"
   },
   {
-   "id": "B957",
-   "nombre": "Eivissa",
+   "id": "B301",
+   "nombre": "Llucmajor-Radar",
    "min": 28.0,
    "prov": "Illes Balears"
   },
   {
-   "id": "C623I",
-   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 27.9,
-   "prov": "Las Palmas"
+   "id": "B870C",
+   "nombre": "Ciutadella-Cala Galdana",
+   "min": 28.0,
+   "prov": "Illes Balears"
   },
   {
-   "id": "6069X",
-   "nombre": "Benahavis (la Zagaleta - Automatica)",
+   "id": "B986",
+   "nombre": "Formentera",
+   "min": 28.0,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B410B",
+   "nombre": "Santanyí",
    "min": 27.8,
-   "prov": "Málaga"
+   "prov": "Illes Balears"
   },
   {
-   "id": "7211B",
-   "nombre": "Puerto Lumbreras",
+   "id": "B373X",
+   "nombre": "Campos-Salines Levant",
    "min": 27.7,
-   "prov": "Murcia"
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B275E",
+   "nombre": "Son Bonet Aeropuerto",
+   "min": 27.5,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 5.8,
-   "prov": "Zamora"
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 3.1,
+   "prov": "Cantabria"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 7.2,
-   "prov": "Segovia"
-  },
-  {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 7.5,
-   "prov": "Ávila"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 7.6,
+   "id": "2491C",
+   "nombre": "La Covatilla Estación de Esquí",
+   "min": 5.6,
    "prov": "Salamanca"
   },
   {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 8.1,
-   "prov": "Ourense"
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 6.4,
+   "prov": "Cantabria"
   },
   {
    "id": "2084Y",
    "nombre": "Ucero",
-   "min": 8.1,
+   "min": 6.8,
    "prov": "Soria"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 8.9,
+   "min": 7.4,
    "prov": "Ávila"
+  },
+  {
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 7.5,
+   "prov": "Cuenca"
+  },
+  {
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 7.7,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2462",
+   "nombre": "Navacerrada Puerto",
+   "min": 7.9,
+   "prov": "Madrid"
+  },
+  {
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 8.4,
+   "prov": "Asturias"
   },
   {
    "id": "2298",
    "nombre": "Palacios de la Sierra",
-   "min": 10.2,
+   "min": 8.4,
    "prov": "Burgos"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 10.4,
-   "prov": "Madrid"
-  },
-  {
-   "id": "1178Y",
-   "nombre": "Soto de Valdeón (Automatica)",
-   "min": 10.5,
-   "prov": "León"
   }
  ]
 }

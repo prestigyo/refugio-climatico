@@ -1,7 +1,7 @@
 {
  "fecha": "2026-07-25",
- "total": 851,
- "tropicales": 250,
+ "total": 850,
+ "tropicales": 248,
  "ecuatoriales": 73,
  "peor": {
   "id": "B434X",
@@ -103,16 +103,16 @@
    "prov": "Soria"
   },
   {
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 7.3,
+   "prov": "Cuenca"
+  },
+  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
    "min": 7.4,
    "prov": "Ávila"
-  },
-  {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 7.5,
-   "prov": "Cuenca"
   },
   {
    "id": "1167J",

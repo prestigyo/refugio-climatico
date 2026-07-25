@@ -3999,6 +3999,18 @@ __NAV__
       <div class="niveles" id="niveles">__NIVELES__</div>
     </div>
 
+    <div class="wstep opt" data-step="agusto" id="s-agusto">
+      <h2 class="wq">¿Qué tal se está aquí ahora?</h2>
+      <p class="wsub">La ciencia del confort no mide los grados: mide <b>cuánta gente está a gusto</b> (lo que llaman «satisfacción térmica»). Esta es tu parte.</p>
+      <div class="chips big" id="agusto">
+        <button class="chip" type="button" data-v="5">😍 ¡Qué bien se está!</button>
+        <button class="chip" type="button" data-v="4">🙂 Se está bien</button>
+        <button class="chip" type="button" data-v="3">😐 Ni fu ni fa</button>
+        <button class="chip" type="button" data-v="2">😖 Se está incómodo</button>
+        <button class="chip" type="button" data-v="1">😫 Se está fatal</button>
+      </div>
+    </div>
+
     <div class="wstep opt" data-step="boch" id="s-boch">
       <h2 class="wq">¿El aire se siente húmedo, pegajoso?</h2>
       <p class="wsub">La humedad no es más calor: es sudor que no evapora. Cuenta distinto.</p>
@@ -4063,6 +4075,15 @@ __NAV__
         <button class="chip" type="button" data-v="ciudad">🏙️ Ciudad</button>
         <button class="chip" type="button" data-v="pueblo">🏡 Pueblo / campo</button>
         <button class="chip" type="button" data-v="montana">⛰️ Montaña</button>
+      </div>
+    </div>
+
+    <div class="wstep opt" data-step="origen" id="s-origen">
+      <h2 class="wq">¿Eres de aquí o estás de visita?</h2>
+      <p class="wsub">Un vecino y un forastero sienten distinto el mismo sitio — y comparar las dos cosas es justo lo interesante.</p>
+      <div class="chips big" id="origen">
+        <button class="chip" type="button" data-v="local">🏡 Del pueblo · vivo aquí</button>
+        <button class="chip" type="button" data-v="visita">🧳 De visita · de paso</button>
       </div>
     </div>
 
@@ -4148,7 +4169,7 @@ __FOOTER__
 <script>
 var EST=__EST__;
 var URL_API="__CONFORT_URL__";
-var sel={zona:null,celda:null,nivel:null,boch:null,viento:null,lugar:null,clima:null,cielo:null,entorno:null};
+var sel={zona:null,celda:null,nivel:null,agusto:null,boch:null,viento:null,lugar:null,clima:null,cielo:null,entorno:null,origen:null};
 var t0=Date.now();
 
 function uid(){
@@ -4252,6 +4273,8 @@ function chips(id,campo,cb){
   b.classList.add("sel");sel[campo]=b.getAttribute("data-v");if(cb)cb();
  });
 }
+chips("agusto","agusto",avanzar);
+chips("origen","origen",avanzar);
 chips("boch","boch",avanzar);
 chips("viento","viento",avanzar);
 chips("entorno","entorno",avanzar);
@@ -4269,15 +4292,17 @@ function valida(){
 }
 
 // --- Máquina del asistente: una pregunta por pantalla ---------------------
-var ORDEN=["zona","nivel","boch","viento","cielo","lugar","clima","entorno","enviar"];
+var ORDEN=["zona","nivel","agusto","boch","viento","cielo","lugar","clima","entorno","origen","enviar"];
 var pasoAct="zona";
 function visiblePaso(s){return s==="clima"?!!INTERIOR[sel.lugar]:true;}
 function pasosVis(){return ORDEN.filter(visiblePaso);}
 function resumen(){
  var ETQ=["","Helador","Frío","Fresco","Muy a gusto","Cómodo","Templado","Caluroso","Mucho calor","Insoportable"];
+ var AG=["","fatal","incómodo","ni fu ni fa","bien","de maravilla"];
  var t="Votas «<b>"+(ETQ[sel.nivel]||"—")+"</b>»"+(sel.zona?" desde <b>"+sel.zona[3]+"</b>":"")+".";
- var extra=[sel.boch!==null,sel.viento,sel.cielo,sel.lugar,sel.clima,sel.entorno].filter(Boolean).length;
- t+=extra?" Con "+extra+" dato"+(extra>1?"s":"")+" de contexto para afinar el mapa.":" Sin contexto adicional: rápido y anónimo.";
+ if(sel.agusto)t+=" Aquí se está <b>"+AG[+sel.agusto]+"</b>.";
+ var extra=[sel.boch!==null,sel.viento,sel.cielo,sel.lugar,sel.clima,sel.entorno,sel.origen].filter(Boolean).length;
+ t+=extra?" Con "+extra+" dato"+(extra>1?"s":"")+" de contexto para afinar el mapa.":" Sin más contexto: rápido y anónimo.";
  document.getElementById("resumen").innerHTML=t;
 }
 function irPaso(s){
@@ -4305,7 +4330,7 @@ document.getElementById("enviar").addEventListener("click",function(){
  if(document.getElementById("hp").value){return;}
  if(Date.now()-t0<3000){st.textContent="Un segundo… (comprobación anti-robots)";return;}
  if(!puedeVotar()){st.textContent="Ya has votado hace poco: se admite un voto por hora, para que cada noche cuente una vez.";return;}
- var p={z:sel.zona[0],g:sel.celda,s:sel.nivel,b:sel.boch,w:sel.viento,l:sel.lugar,c:sel.clima,o:sel.cielo,e:sel.entorno,u:uid(),v:1};
+ var p={z:sel.zona[0],g:sel.celda,s:sel.nivel,a:sel.agusto,dq:sel.origen,b:sel.boch,w:sel.viento,l:sel.lugar,c:sel.clima,o:sel.cielo,e:sel.entorno,u:uid(),v:1};
  var fin=function(guardado){
   marcaVoto();
   document.getElementById("wstage").style.display="none";
@@ -4334,8 +4359,15 @@ document.getElementById("enviar").addEventListener("click",function(){
    sh.addEventListener("click",function(){navigator.share({title:document.title,text:txtC,url:urlC}).catch(function(){});});}
   if(guardado&&URL_API){
    fetch(URL_API+"?zona="+encodeURIComponent(z[0])).then(function(x){return x.json();}).then(function(d){
-    if(d&&d.n>=5)
+    if(d&&d.n>=5){
      r.innerHTML+="<br>Ahora mismo en tu zona: <b>"+d.mediana_txt+"</b> (mediana de <span class=\"num\">"+d.n+"</span> votos en 24 h"+(d.pct_bochorno!==null?", "+d.pct_bochorno+" % con bochorno":"")+").";
+     if(d.pct_agusto!==null&&d.pct_agusto!==undefined){
+      var ag="<br>Y el <b>"+d.pct_agusto+" %</b> dice que aquí <b>se está a gusto</b>";
+      if(d.pct_agusto_local!==null&&d.pct_agusto_local!==undefined&&d.pct_agusto_visita!==null&&d.pct_agusto_visita!==undefined)
+       ag+=" — los de visita el "+d.pct_agusto_visita+" %, los de aquí el "+d.pct_agusto_local+" %";
+      r.innerHTML+=ag+".";
+     }
+    }
     else if(d)
      r.innerHTML+="<br>Tu zona aún no llega a 5 votos en 24 h: en cuanto llegue, su resultado se publica abajo, en «El resultado, en directo».";
    }).catch(function(){});

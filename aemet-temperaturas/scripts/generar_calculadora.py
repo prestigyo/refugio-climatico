@@ -1060,6 +1060,9 @@ CSS_NAV_ESCUETO = (
     'border-radius:8px;white-space:nowrap}'
     '.nav-e .links a:hover{color:var(--paper);background:rgba(217,116,78,.14);'
     'text-decoration:none}'
+    '.nav-e .links a.lang{margin-left:4px;border:1px solid var(--line);'
+    'color:var(--teja2);font-weight:600;letter-spacing:.04em}'
+    '.nav-e .links a.lang:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}'
     '@media(max-width:560px){.nav-e .brand span{display:none}'
     '.nav-e .in{gap:8px;padding:0 14px}.nav-e .links a{padding:8px 8px}}'
 )
@@ -1076,6 +1079,9 @@ def nav_escueto_html(site: str) -> str:
     """Header mínimo compartido. En las landings ninguna de las 4 entradas es
     la página actual, así que no se marca aria-current."""
     enlaces = "".join(f'<a href="{site}{href}">{txt}</a>' for txt, href in MENU_ESCUETO)
+    # Conmutador de idioma discreto hacia la versión inglesa (simétrico al "ES"
+    # del menú inglés; refuerza el hreflang con un enlace navegable).
+    enlaces += f'<a href="{site}/en/" hreflang="en" class="lang" aria-label="English version" title="English version">EN</a>'
     return ('<nav class="nav-e" aria-label="principal"><div class="in">'
             f'<a class="brand" href="{site}/" aria-label="nochetropical.es">{_LOGO_ESCUETO}</a>'
             f'<div class="links">{enlaces}</div></div></nav>')
@@ -2046,6 +2052,9 @@ def nav_html(actual: str = "") -> str:
         '<a href="%s"%s>%s</a>' % (destino(k, href),
                                    ' aria-current="page"' if k == actual else "", txt)
         for k, href, txt in _MENU)
+    # Conmutador de idioma discreto: enlace real a la versión inglesa (refuerza
+    # el hreflang y da salida al público angloparlante).
+    enlaces += '<a href="__SITE__/en/" hreflang="en" class="lang" aria-label="English version" title="English version">EN</a>'
     logo = _LOGO.format(px=26, hueco="--bg")
     return ('<nav class="nav"><div class="in">\n'
             '    <a class="brand" href="__HOME__" aria-label="nochetropical.es">' + logo + '</a>\n'
@@ -3177,6 +3186,8 @@ PAGINA_BETA = r"""<!doctype html>
  .menu a{font-size:14.5px;color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;white-space:nowrap}
  .menu a:hover{color:var(--ink);background:rgba(238,151,105,.14)}
  .menu a[aria-current]{color:var(--brand);font-weight:600}
+ .menu a.lang{margin-left:4px;border:1px solid var(--line);color:var(--brand);font-weight:600;letter-spacing:.04em}
+ .menu a.lang:hover{border-color:var(--brand);background:rgba(238,151,105,.14)}
  .hero{padding:50px 0 6px}
  .kick{font:600 12px/1 var(--font-b);letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin:0 0 14px}
  h1{font-family:var(--font-d);font-weight:700;font-size:clamp(30px,5vw,50px);line-height:1.06;margin:0;letter-spacing:-.01em;text-wrap:balance}
@@ -3499,6 +3510,8 @@ PAGINA_CERCA = r"""<!doctype html>
  .menu a{font-size:14.5px;color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;white-space:nowrap}
  .menu a:hover{color:var(--ink);background:rgba(238,151,105,.14)}
  .menu a[aria-current]{color:var(--brand);font-weight:600}
+ .menu a.lang{margin-left:4px;border:1px solid var(--line);color:var(--brand);font-weight:600;letter-spacing:.04em}
+ .menu a.lang:hover{border-color:var(--brand);background:rgba(238,151,105,.14)}
  .hero{padding:50px 0 6px}
  .kick{font:600 12px/1 var(--font-b);letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin:0 0 14px}
  h1{font-family:var(--font-d);font-weight:700;font-size:clamp(30px,5vw,46px);line-height:1.06;margin:0;letter-spacing:-.01em;text-wrap:balance}
@@ -4529,6 +4542,13 @@ PAGINA_ESTUDIO = r"""<!DOCTYPE html>
  figure{margin:8px 0 6px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:12px;overflow:hidden}
  figure img{width:100%;height:auto;display:block;border-radius:9px}
  figcaption{font-size:13.5px;color:var(--muted);margin-top:10px;padding:0 4px}
+ .leg{display:flex;flex-wrap:wrap;gap:7px 18px;margin:12px 4px 2px;font-size:13px;color:var(--muted)}
+ .leg .it{display:inline-flex;align-items:center;gap:7px}
+ .leg .sw{width:14px;height:14px;border-radius:3px;flex:none;border:1px solid rgba(255,255,255,.14)}
+ .esc-t{font-size:12.5px;color:var(--muted);margin:12px 4px 6px}
+ .esc{display:flex;flex-wrap:wrap;gap:3px;margin:0 4px 2px}
+ .esc .st{width:54px;text-align:center;font-size:11.5px;color:var(--muted)}
+ .esc .st .b{display:block;height:16px;border-radius:3px;margin-bottom:3px}
  .dato{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 18px}
  .dcard{flex:1;min-width:150px;background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:14px 16px}
  .dcard .n{font-family:var(--fd);font-weight:900;font-size:30px;color:var(--teja2);line-height:1}
@@ -4566,6 +4586,11 @@ __NAV__
   <figure>
     <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/" aria-label="Encuentra el refugio climático natural más cercano a ti"><img src="__SITE__/estudios/refugios-nocturnos.png" alt="Mapa de España con los refugios climáticos nocturnos: las zonas donde la temperatura mínima nunca cruza los 20 grados, superponiendo los mapas de mínimas de AEMET de todo el verano" loading="lazy"></a>
     <figcaption>En teal, los refugios profundos (montaña interior). En ámbar, el falso alivio que rodea las cumbres. En rojo, la España tropical. Fuente: mapas de mínimas de AEMET, __INI__ – __FIN__.</figcaption>
+    <div class="leg" aria-label="Leyenda del mapa">
+      <span class="it"><span class="sw" style="background:#a9c6d4"></span>Baja de 18° cada noche · refugio profundo (__PROFUNDO__ %)</span>
+      <span class="it"><span class="sw" style="background:#c9a24a"></span>Nunca tropical, pero roza los 20° · falso alivio (__MARGEN__ %)</span>
+      <span class="it"><span class="sw" style="background:#c94a2e"></span>Alguna noche tropical, ≥20° (__TROPICAL__ %)</span>
+    </div>
   </figure>
   <p>Los refugios profundos son <b>montaña interior seca</b>: la Cordillera Cantábrica, el Sistema Central, el Ibérico, el Pirineo. Y fíjate en el <b>halo ámbar</b> que los rodea: al bajar de la sierra hacia el valle, primero se cruza esa franja dudosa. Por eso, para valorar un pueblo, <a href="__SITE__/">no vale la media — hay que mirar su peor noche</a>.</p>
 </div></section>
@@ -4576,11 +4601,24 @@ __NAV__
   <figure>
     <a href="__SITE__/ola-de-calor/" aria-label="Ver el mapa de la ola de calor en directo"><img src="__SITE__/estudios/techo-del-calor.png" alt="Mapa de España pintado con la temperatura máxima más alta de cada zona en el verano: casi todo el país enrojece por encima de 32 grados y solo las cumbres se quedan en amarillo, según las máximas de AEMET" loading="lazy"></a>
     <figcaption>Cada punto, con la máxima más alta que alcanzó en todo el periodo. Casi toda España enrojece; solo las cumbres (en amarillo/naranja) resisten. Fuente: mapas de máximas de AEMET, __INI__ – __FIN__.</figcaption>
+    <div class="esc-t">Escala de la máxima alcanzada (°C) · el amarillo son las cumbres, el magenta el horno:</div>
+    <div class="esc" aria-label="Escala de temperatura máxima">
+      <span class="st"><span class="b" style="background:#ffff00"></span>22°</span>
+      <span class="st"><span class="b" style="background:#ffbf00"></span>26°</span>
+      <span class="st"><span class="b" style="background:#ff7f00"></span>30°</span>
+      <span class="st"><span class="b" style="background:#ff0000"></span>32°</span>
+      <span class="st"><span class="b" style="background:#ff33b2"></span>36°</span>
+      <span class="st"><span class="b" style="background:#d03471"></span>40°</span>
+    </div>
   </figure>
   <p>Solo un puñado de <b>cumbres</b> aguanta fresco también a mediodía. Este otro mapa cuenta, punto por punto, cuántos días la máxima se quedó por debajo de __UMBRAL__&nbsp;°C:</p>
   <figure>
     <a href="__SITE__/ola-de-calor/" aria-label="Ver el mapa de la ola de calor en directo"><img src="__SITE__/estudios/frescor-dia.png" alt="Mapa de España del frescor de día: las cumbres donde la temperatura máxima se mantiene baja incluso a mediodía en verano, según las máximas de AEMET" loading="lazy"></a>
     <figcaption>Cuanto más claro, más a menudo hace fresco a mediodía. Brillan Sierra Nevada, el Pirineo, la Cantábrica y, muy cerca, la sierra de Gúdar. Casi todo lo demás está oscuro. Fuente: mapas de máximas de AEMET, __INI__ – __FIN__.</figcaption>
+    <div class="leg" aria-label="Leyenda del mapa">
+      <span class="it"><span class="sw" style="background:#78c8d6"></span>Cumbres que resisten: Sierra Nevada, Pirineo, Cantábrica, Gúdar</span>
+      <span class="it"><span class="sw" style="background:#463e30"></span>De día también aprieta</span>
+    </div>
   </figure>
   <p>Sierra Nevada resplandece: tan alta que refresca de día hasta en Andalucía. Y hay sierras que se quedan <b>a un pelo</b> — la <b>sierra de Gúdar</b>, en Teruel, no alcanza ese nivel de brillo pero anda cerquísima. Es exactamente por eso que <a href="__SITE__/">Alcalá de la Selva</a> y La Virgen de la Vega son refugios climáticos naturales de manual: si el día ya perdona algo y <b>la noche siempre refresca</b>, tienes el combo completo.</p>
 </div></section>
@@ -5161,7 +5199,7 @@ _CSS_EN = (
     '*{margin:0;padding:0;box-sizing:border-box}'
     'body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.7;'
     '-webkit-font-smoothing:antialiased}'
-    '.wrap{max-width:820px;margin:0 auto;padding:0 24px}'
+    '.wrap{max-width:min(92vw,880px);margin:0 auto;padding:0 24px}'
     'a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}'
     'header.h{padding:46px 0 12px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}'
     '.crumb{font-size:13px;color:var(--muted)}'
@@ -5221,6 +5259,29 @@ _CSS_EN = (
     '.faq p{margin:10px 0 2px;font-size:15px}'
     '.lang-note{font-size:13px;color:var(--muted);background:var(--bg2);border:1px solid var(--line);'
     'border-radius:10px;padding:11px 14px;margin:14px 0}'
+    # Etiqueta "in Spanish": marca los enlaces que cruzan a una página española,
+    # para que el usuario inglés sepa que su navegador se la traducirá.
+    '.estag{display:inline-block;font-size:10.5px;color:var(--teja2);border:1px solid var(--line);'
+    'border-radius:5px;padding:1px 5px;margin-left:6px;letter-spacing:.03em;vertical-align:middle}'
+    # Leyenda de color en HTML (el texto que antes iba incrustado en el mapa).
+    '.leg{display:flex;flex-wrap:wrap;gap:7px 18px;margin:12px 2px 2px;font-size:13px;color:var(--muted)}'
+    '.leg .it{display:inline-flex;align-items:center;gap:7px}'
+    '.leg .sw{width:14px;height:14px;border-radius:3px;flex:none;border:1px solid rgba(255,255,255,.14)}'
+    # Envoltorio de figura (mapa + pie + leyenda) reutilizable.
+    '.fig{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:12px;margin:0}'
+    '.fig img{width:100%;height:auto;display:block;border-radius:9px}'
+    '.fig figcaption{font-size:13px;color:var(--muted);margin-top:10px;padding:0 2px}'
+    # Maquetación de ESCRITORIO: aprovecha el ancho en vez de dejar una columna
+    # estrecha con los lados vacíos. Móvil: una sola columna (por defecto).
+    '@media(min-width:980px){'
+    '.wrap{max-width:min(94vw,1180px)}'
+    '.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:12px 48px;align-items:center}'
+    '.hero-grid .intro{max-width:none}'
+    '.twocol{columns:2;column-gap:52px}'
+    '.twocol>*{break-inside:avoid}'
+    '.twocol h2{margin-top:0}'
+    '.faq.grid2{columns:2;column-gap:52px}.faq.grid2 details{break-inside:avoid}'
+    '}'
 )
 
 _FUENTES_LINK = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
@@ -5282,23 +5343,43 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
         stat_line = ("Only a sliver of Spain — the mountain interior — stays cool enough "
                      "to sleep every night of the summer.")
     tarjetas = [
-        ("pri", "🌙", "The coolest towns to sleep in",
+        ("pri", "🌙", "The coolest towns to sleep in", False,
          "Region by region, the Spanish mountain towns with almost zero tropical nights — "
          "backed by AEMET data.", "/en/coolest-towns-spain/"),
-        ("", "🔥", "Live heatwave map (animated)",
+        ("", "🔥", "Live heatwave map (animated)", True,
          "Watch the heat spread across Spain day by day — highs by day, lows by night, "
          "straight from AEMET maps.", "/ola-de-calor/"),
-        ("", "🗺️", "Interactive station map",
+        ("", "🗺️", "Interactive station map", True,
          "Zoom into 848 weather stations and see the tropical-night count anywhere in Spain.",
          "/mapa-estaciones/"),
-        ("", "🔎", "Search any town (calculator)",
+        ("", "🔎", "Search any town (calculator)", True,
          "Type any Spanish town into the calculator and see how many tropical nights it "
          "endures each summer.", "/"),
     ]
-    cards_html = "".join(
-        f'<a class="card2 {cls}" href="{site}{href}"><div class="ic">{ic}</div>'
-        f'<div class="t">{t}</div><div class="d">{d}</div></a>'
-        for cls, ic, t, d, href in tarjetas)
+    cards_html = ""
+    for cls, ic, t, es, d, href in tarjetas:
+        hl = ' hreflang="es"' if es else ''
+        tag = ' <span class="estag">in Spanish</span>' if es else ''
+        cards_html += (f'<a class="card2 {cls}" href="{site}{href}"{hl}>'
+                       f'<div class="ic">{ic}</div>'
+                       f'<div class="t">{t}{tag}</div>'
+                       f'<div class="d">{d}</div></a>')
+    # Leyenda del mapa nocturno, en inglés (el texto ya no va incrustado).
+    if datos_estudio:
+        nz = datos_estudio["nocturno"]
+        leg_pct = (f' ({nz["profundo"]:.0f}%)', f' ({nz["margen"]:.0f}%)',
+                   f' ({nz["tropical"]:.0f}%)')
+    else:
+        leg_pct = ("", "", "")
+    leyenda_noche = (
+        '<div class="leg" aria-label="Map legend">'
+        f'<span class="it"><span class="sw" style="background:#a9c6d4"></span>'
+        f'Below 18&nbsp;°C every night — deep refuge{leg_pct[0]}</span>'
+        f'<span class="it"><span class="sw" style="background:#c9a24a"></span>'
+        f'Never tropical, but hovers near 20&nbsp;°C — false relief{leg_pct[1]}</span>'
+        f'<span class="it"><span class="sw" style="background:#c94a2e"></span>'
+        f'Some tropical nights, ≥20&nbsp;°C{leg_pct[2]}</span>'
+        '</div>')
     faq = [
         ("What is a coolcation?",
          "A coolcation is a holiday chosen for its cool climate rather than sun and beach — "
@@ -5335,7 +5416,8 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
     ]}, ensure_ascii=False)
     cuerpo = (
         nav_en_html(site)
-        + '<header class="h"><div class="wrap">'
+        + '<header class="h"><div class="wrap"><div class="hero-grid">'
+        '<div>'
         '<nav class="crumb" aria-label="breadcrumb">'
         f'<a href="{site}/en/">NocheTropical.es</a> · Climate refuges in Spain</nav>'
         '<div class="kick">Coolcation Spain · 10 summers of AEMET data</div>'
@@ -5343,39 +5425,43 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
         f'<p class="intro">Not every Spanish summer is a sleepless one. {stat_line} '
         'This is the map of where the night still cools down — town by town, '
         'built from ten years of official AEMET records.</p>'
-        '</div></header>'
-        '<section><div class="wrap">'
-        f'<img class="hero-img" src="{site}/estudios/refugios-nocturnos.png" '
+        '</div>'
+        f'<figure class="fig"><img src="{site}/estudios/refugios-nocturnos.png" '
         'alt="Map of Spain showing overnight climate refuges: the mountain interior stays '
         'below 20°C at night while the coasts glow with tropical nights, from AEMET data" '
-        'width="1000" height="700" loading="eager">'
-        '<p class="cap">Overnight lows superimposed across a full Spanish summer (AEMET). '
-        'The dark zones are the real climate refuges — where the night reliably cools down.</p>'
+        'width="902" height="734" loading="eager">'
+        '<figcaption>Overnight lows superimposed across a full Spanish summer (AEMET). '
+        'The teal zones are the real climate refuges — where the night reliably cools down.'
+        '</figcaption>' + leyenda_noche + '</figure>'
+        '</div></div></header>'
+        '<section><div class="wrap">'
         '<div class="cards">' + cards_html + '</div>'
         '</div></section>'
         '<section><div class="wrap">'
-        '<h2>Why a coolcation in Spain?</h2>'
+        '<div class="twocol">'
+        '<div><h2>Why a coolcation in Spain?</h2>'
         '<p>Spain is famous for sun and beaches — and infamous, in August, for nights you '
         'cannot sleep through. But the country is not one climate: an hour inland and a '
         'few hundred metres up, the air changes completely. In the high sierras the '
         'temperature plunges after dark, and you sleep <b>under a blanket</b> while the '
         'coast swelters. That is a coolcation: choosing your destination for the cool, '
-        'not the heat.</p>'
-        '<h2>How we measure it</h2>'
+        'not the heat.</p></div>'
+        '<div><h2>How we measure it</h2>'
         '<p>We count <b>tropical nights</b> — nights that never drop below 20&nbsp;°C — at '
         '848 AEMET weather stations across the summers of 2017–2026. We do not use averages, '
         'which hide the heat spikes; we use honest thresholds and worst-case streaks. A town '
         'with almost zero tropical nights is a place where you can genuinely sleep in summer, '
-        'no air conditioning required.</p>'
+        'no air conditioning required.</p></div>'
+        '</div>'
         '<div class="cta">'
         '<b>Ready to find where to sleep cool?</b>'
         '<p>Explore the mountain regions where Spain stays fresh all summer long.</p>'
         '<div class="botones">'
         f'<a class="btn pri" href="{site}/en/coolest-towns-spain/">See the coolest towns →</a>'
-        f'<a class="btn sec" href="{site}/ola-de-calor/">Watch the live heatwave map →</a>'
+        f'<a class="btn sec" href="{site}/ola-de-calor/" hreflang="es">Live heatwave map →</a>'
         '</div></div>'
         '<h2>Frequently asked questions</h2>'
-        + _faq_en_html(faq)
+        + _faq_en_html(faq).replace('class="faq"', 'class="faq grid2"')
         + '</div></section>'
         + footer_en_html(site))
     return _cabeza_en(site, titulo, desc, "/en/", "/",
@@ -5448,8 +5534,8 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
                                                    "addressRegion": e["prov"],
                                                    "addressCountry": "ES"}}})
             cards.append(
-                f'<a class="refuge-card" href="{site}/{slug(e["prov"])}/" '
-                f'aria-label="{e["loc"]} climate data">'
+                f'<a class="refuge-card" href="{site}/{slug(e["prov"])}/" hreflang="es" '
+                f'aria-label="{e["loc"]} climate data (page in Spanish)">'
                 f'<div class="rn">{e["loc"]}</div>'
                 f'<div class="rp">{e["prov"]} · {miles(e["alt"])}&nbsp;m above sea level</div>'
                 '<div class="stats">'
@@ -5508,45 +5594,55 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
             for q, a in faq]},
     ]}, ensure_ascii=False)
+    leyenda_dia = (
+        '<div class="leg" aria-label="Map legend">'
+        '<span class="it"><span class="sw" style="background:#78c8d6"></span>'
+        'Peaks that stay cool by day: Sierra Nevada, the Pyrenees, the Cantabrian range, Gúdar</span>'
+        '<span class="it"><span class="sw" style="background:#463e30"></span>'
+        'Hot by day too</span>'
+        '</div>')
     cuerpo = (
         nav_en_html(site)
-        + '<header class="h"><div class="wrap">'
+        + '<header class="h"><div class="wrap"><div class="hero-grid">'
+        '<div>'
         '<nav class="crumb" aria-label="breadcrumb">'
-        f'<a href="{site}/en/">NocheTropical.es</a> · '
-        '<a href="' + site + '/en/">Climate refuges</a> · Coolest towns</nav>'
+        f'<a href="{site}/en/">NocheTropical.es</a> · Coolest towns</nav>'
         '<div class="kick">Coolcation Spain · region by region</div>'
         '<h1>The Coolest Towns to <em>Sleep</em> in Spain in Summer</h1>'
         f'<p class="intro">Where do you actually sleep well in a Spanish August? These are '
         f'the {n_pueblos} mountain towns, grouped by region, where AEMET records almost no '
         '<b>tropical nights</b> — the nights that never drop below 20&nbsp;°C. Real data, '
         'ten summers, no marketing.</p>'
-        '</div></header>'
-        '<section><div class="wrap">'
         f'<div class="contrast"><div class="cc cool"><div class="v">~0</div>'
-        f'<div class="k">tropical nights a year in the coolest mountain villages '
+        f'<div class="k">tropical nights a year in the coolest villages '
         f'(e.g. {coolest["loc"] if coolest else "Sanabria"})</div></div>'
         f'<div class="cc hot"><div class="v">{peor["nt"]:.0f}</div>'
-        f'<div class="k">tropical nights a year in the worst spot for sleep, {peor["loc"]} '
+        f'<div class="k">a year in the worst spot for sleep, {peor["loc"]} '
         f'({peor["prov"]})</div></div></div>'
-        f'<img class="hero-img" src="{site}/estudios/frescor-dia.png" '
+        '</div>'
+        f'<figure class="fig"><img src="{site}/estudios/frescor-dia.png" '
         'alt="Map of Spain\'s daytime coolness: only the high mountain interior stays under '
         '24°C on a typical summer day, from AEMET data" '
-        'width="1000" height="700" loading="lazy">'
-        '<p class="cap">The green islands are the highland interiors that stay coolest by '
-        'day — and coolest by night. Each town below sits inside one of them.</p>'
-        '<div class="lang-note">The town cards link to their Spanish data page (the numbers '
-        'read the same in any language). A fully English destination guide is on its way.</div>'
+        'width="902" height="734" loading="eager">'
+        '<figcaption>The teal islands are the highland interiors that stay coolest by day — '
+        'and coolest by night. Each town below sits inside one of them.</figcaption>'
+        + leyenda_dia + '</figure>'
+        '</div></div></header>'
+        '<section><div class="wrap">'
+        '<div class="lang-note">The town cards open their Spanish data page — the numbers '
+        'read the same in any language, and your browser can translate the rest. A fully '
+        'English destination guide is on its way.</div>'
         + "".join(regiones_html)
         + '<div class="cta">'
         '<b>Not sure which region suits you?</b>'
         '<p>Search any town in the calculator, or watch the heatwave move across Spain in '
         'real time.</p>'
         '<div class="botones">'
-        f'<a class="btn pri" href="{site}/">Search any town →</a>'
-        f'<a class="btn sec" href="{site}/ola-de-calor/">Live heatwave map →</a>'
+        f'<a class="btn pri" href="{site}/" hreflang="es">Search any town →</a>'
+        f'<a class="btn sec" href="{site}/ola-de-calor/" hreflang="es">Live heatwave map →</a>'
         '</div></div>'
         '<h2>Frequently asked questions</h2>'
-        + _faq_en_html(faq)
+        + _faq_en_html(faq).replace('class="faq"', 'class="faq grid2"')
         + '</div></section>'
         + footer_en_html(site))
     return _cabeza_en(site, titulo, desc, "/en/coolest-towns-spain/",

@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-25",
+ "fecha": "2026-07-26",
  "total": 850,
- "tropicales": 248,
- "ecuatoriales": 73,
+ "tropicales": 171,
+ "ecuatoriales": 22,
  "peor": {
-  "id": "B434X",
-  "nombre": "Portocolom",
-  "min": 28.6,
-  "prov": "Illes Balears"
+  "id": "7019X",
+  "nombre": "Cartagena/Salinas Cabo Palos",
+  "min": 26.5,
+  "prov": "Murcia"
  },
  "mejor": {
-  "id": "9001S",
-  "nombre": "Alto Campoo",
-  "min": 3.1,
-  "prov": "Cantabria"
+  "id": "9988B",
+  "nombre": "Cap de Vaqueira",
+  "min": 3.4,
+  "prov": "Lleida"
  },
  "top_calor": [
   {
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
+   "min": 26.5,
+   "prov": "Murcia"
+  },
+  {
    "id": "B434X",
    "nombre": "Portocolom",
-   "min": 28.6,
+   "min": 26.2,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "6088X",
+   "nombre": "Torremolinos",
+   "min": 26.0,
+   "prov": "Málaga"
+  },
+  {
+   "id": "B410B",
+   "nombre": "Santanyí",
+   "min": 26.0,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B780X",
+   "nombre": "Port Pollença-Aerodrom",
+   "min": 26.0,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "6000A",
+   "nombre": "Melilla",
+   "min": 25.9,
+   "prov": "Melilla"
   },
   {
    "id": "B228",
    "nombre": "Palma-Portopí",
-   "min": 28.4,
+   "min": 25.8,
    "prov": "Illes Balears"
   },
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 28.2,
+   "min": 25.8,
    "prov": "Illes Balears"
   },
   {
-   "id": "B860X",
-   "nombre": "Ciutadella-Son Quim",
-   "min": 28.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B301",
-   "nombre": "Llucmajor-Radar",
-   "min": 28.0,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B870C",
-   "nombre": "Ciutadella-Cala Galdana",
-   "min": 28.0,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 28.0,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B410B",
-   "nombre": "Santanyí",
-   "min": 27.8,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B373X",
-   "nombre": "Campos-Salines Levant",
-   "min": 27.7,
-   "prov": "Illes Balears"
+   "id": "7002Y",
+   "nombre": "Águilas",
+   "min": 25.7,
+   "prov": "Murcia"
   },
   {
    "id": "B275E",
    "nombre": "Son Bonet Aeropuerto",
-   "min": 27.5,
+   "min": 25.7,
    "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 3.1,
-   "prov": "Cantabria"
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 3.4,
+   "prov": "Lleida"
   },
   {
-   "id": "2491C",
-   "nombre": "La Covatilla Estación de Esquí",
-   "min": 5.6,
-   "prov": "Salamanca"
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 3.6,
+   "prov": "Huesca"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 6.4,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 6.8,
-   "prov": "Soria"
-  },
-  {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 7.3,
-   "prov": "Cuenca"
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 3.8,
+   "prov": "Lleida"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 7.4,
+   "min": 4.0,
    "prov": "Ávila"
   },
   {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 7.7,
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 4.6,
    "prov": "Cantabria"
   },
   {
-   "id": "2462",
-   "nombre": "Navacerrada Puerto",
-   "min": 7.9,
-   "prov": "Madrid"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 4.7,
+   "prov": "Zamora"
   },
   {
    "id": "1542",
    "nombre": "Puerto de Leitariegos",
-   "min": 8.4,
+   "min": 4.8,
    "prov": "Asturias"
   },
   {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 8.4,
-   "prov": "Burgos"
+   "id": "2737E",
+   "nombre": "Lagunas de Somoza",
+   "min": 4.9,
+   "prov": "León"
+  },
+  {
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 5.2,
+   "prov": "Huesca"
+  },
+  {
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": 5.3,
+   "prov": "Palencia"
   }
  ]
 }

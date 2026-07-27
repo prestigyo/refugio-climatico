@@ -103,12 +103,6 @@
    "prov": "Madrid"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 7.6,
-   "prov": "Lleida"
-  },
-  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
    "min": 7.7,
@@ -118,6 +112,12 @@
    "id": "9590D",
    "nombre": "Cap de Rec",
    "min": 7.8,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 7.9,
    "prov": "Lleida"
   },
   {

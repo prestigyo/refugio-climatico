@@ -1,7 +1,7 @@
 {
  "fecha": "2026-07-28",
- "total": 847,
- "tropicales": 270,
+ "total": 845,
+ "tropicales": 269,
  "ecuatoriales": 10,
  "peor": {
   "id": "5998X",
@@ -71,10 +71,10 @@
    "prov": "Cádiz"
   },
   {
-   "id": "5891X",
-   "nombre": "Las Cabezas de San Juan (Majoleto Automatica)",
-   "min": 24.9,
-   "prov": "Sevilla"
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 24.7,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [

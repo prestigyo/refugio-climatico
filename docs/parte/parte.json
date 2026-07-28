@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-27",
+ "fecha": "2026-07-28",
  "total": 847,
- "tropicales": 192,
- "ecuatoriales": 1,
+ "tropicales": 270,
+ "ecuatoriales": 10,
  "peor": {
   "id": "5998X",
   "nombre": "Osuna Sea",
-  "min": 25.1,
+  "min": 26.7,
   "prov": "Sevilla"
  },
  "mejor": {
-  "id": "9988B",
-  "nombre": "Cap de Vaqueira",
-  "min": 4.8,
-  "prov": "Lleida"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 6.7,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
    "id": "5998X",
    "nombre": "Osuna Sea",
-   "min": 25.1,
+   "min": 26.7,
    "prov": "Sevilla"
   },
   {
-   "id": "4347X",
-   "nombre": "Zorita",
-   "min": 24.6,
-   "prov": "Cáceres"
+   "id": "5270B",
+   "nombre": "Jaén",
+   "min": 26.3,
+   "prov": "Jaén"
+  },
+  {
+   "id": "4325Y",
+   "nombre": "Castuera",
+   "min": 26.2,
+   "prov": "Badajoz"
   },
   {
    "id": "7019X",
    "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 24.6,
+   "min": 26.0,
    "prov": "Murcia"
   },
   {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 24.5,
-   "prov": "Barcelona"
+   "id": "5973",
+   "nombre": "Cádiz Observatorio",
+   "min": 25.5,
+   "prov": "Cádiz"
   },
   {
-   "id": "4608X",
-   "nombre": "El Campillo el Zumajo",
-   "min": 24.4,
-   "prov": "Huelva"
+   "id": "5996B",
+   "nombre": "Barbate Depuradora",
+   "min": 25.5,
+   "prov": "Cádiz"
   },
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 24.3,
-   "prov": "Illes Balears"
+   "id": "5972X",
+   "nombre": "San Fernando",
+   "min": 25.1,
+   "prov": "Cádiz"
   },
   {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 23.7,
-   "prov": "Illes Balears"
+   "id": "4347X",
+   "nombre": "Zorita",
+   "min": 25.0,
+   "prov": "Cáceres"
   },
   {
-   "id": "6000A",
-   "nombre": "Melilla",
-   "min": 23.5,
-   "prov": "Melilla"
+   "id": "5950X",
+   "nombre": "San Jose del Valle-Pt Guadalcacín",
+   "min": 25.0,
+   "prov": "Cádiz"
   },
   {
-   "id": "6045X",
-   "nombre": "Alpandeire",
-   "min": 23.5,
-   "prov": "Málaga"
-  },
-  {
-   "id": "6100B",
-   "nombre": "Antequera",
-   "min": 23.5,
-   "prov": "Málaga"
+   "id": "5891X",
+   "nombre": "Las Cabezas de San Juan (Majoleto Automatica)",
+   "min": 24.9,
+   "prov": "Sevilla"
   }
  ],
  "top_fresco": [
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 4.8,
-   "prov": "Lleida"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 5.0,
+   "min": 6.7,
    "prov": "Ávila"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 7.2,
-   "prov": "Soria"
+   "id": "9060X",
+   "nombre": "Lalastra",
+   "min": 8.4,
+   "prov": "Araba/Álava"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 7.6,
-   "prov": "Madrid"
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 8.7,
+   "prov": "Cantabria"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 7.7,
+   "min": 8.8,
    "prov": "Zamora"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 7.8,
-   "prov": "Lleida"
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 9.1,
+   "prov": "Madrid"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 7.9,
-   "prov": "Lleida"
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": 9.2,
+   "prov": "Palencia"
   },
   {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": 7.9,
-   "prov": "Teruel"
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 9.4,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 9.6,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "9051",
+   "nombre": "Medina de Pomar",
+   "min": 9.6,
+   "prov": "Burgos"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 8.0,
+   "min": 9.7,
    "prov": "León"
-  },
-  {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 8.0,
-   "prov": "Burgos"
   }
  ]
 }

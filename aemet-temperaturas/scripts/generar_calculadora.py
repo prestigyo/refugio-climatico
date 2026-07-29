@@ -5355,6 +5355,9 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
         ("", "🗺️", "Interactive station map", True,
          "Zoom into 848 weather stations and see the tropical-night count anywhere in Spain.",
          "/mapa-estaciones/"),
+        ("", "🏨", "Where to stay: cool-sleep hotels", True,
+         "Hand-picked hotels in Spain's climate refuges, where the night cools down and "
+         "you sleep without air conditioning — the geography of rest.", "/hoteles-refugio-climatico/"),
         ("", "🔎", "Search any town (calculator)", True,
          "Type any Spanish town into the calculator and see how many tropical nights it "
          "endures each summer.", "/"),
@@ -5779,7 +5782,7 @@ def cargar_hoteles(estaciones: list) -> list:
 PAGINA_HOTELES = r"""<!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Los __TOTAL__ hoteles de España donde se duerme con manta en verano (datos AEMET)</title>
+<title>Los __TOTAL__ hoteles donde el verano te deja dormir · La geografía del descanso</title>
 <meta name="description" content="__DESC__">
 <link rel="canonical" href="__SITE__/hoteles-refugio-climatico/">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -5812,6 +5815,14 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .intro b{color:var(--paper)}
  .disc{margin:18px 0 0;font-size:12.5px;color:#8a7a5f;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;max-width:none}
  .disc b{color:var(--muted)}
+ .edwrap{padding:26px 0 6px;background:radial-gradient(120% 70% at 50% 0,#1d150d,var(--bg) 70%)}
+ .ed{max-width:720px}
+ .ed .lead{font-family:var(--fd);font-weight:600;font-size:clamp(22px,4vw,32px);line-height:1.22;color:var(--paper);margin:6px 0 22px}
+ .ed .lead b{color:var(--teja2);font-weight:600}
+ .ed h2{font-family:var(--fd);font-weight:600;font-size:clamp(20px,3.4vw,26px);color:var(--teja2);margin:30px 0 12px;line-height:1.18}
+ .ed p{font-size:clamp(15.5px,2.3vw,17px);color:#d9ccb6;margin:0 0 16px;line-height:1.75}
+ .ed p b{color:var(--paper)}
+ .ed .firma{font-family:var(--fd);font-size:clamp(17px,2.6vw,19px);color:var(--paper);border-left:3px solid var(--teja);padding:4px 0 4px 16px;margin-top:24px}
  section{padding:20px 0}
  h2.reg{font-family:var(--fd);font-weight:600;font-size:clamp(19px,3.2vw,24px);color:var(--teja2);margin:26px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
  .hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
@@ -5831,6 +5842,10 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .ref{font-size:11.5px;color:#8a7a5f;margin:-4px 0 12px;font-style:italic}
  .btn{margin-top:auto;display:block;text-align:center;background:var(--teja);color:#1a1209;font-weight:700;font-size:14px;padding:11px 14px;border-radius:10px}
  .btn:hover{background:var(--teja2);text-decoration:none}
+ .btn.web{background:transparent;border:1px solid var(--teja);color:var(--teja2)}
+ .btn.web:hover{background:rgba(217,116,78,.12)}
+ .noweb{margin-top:auto;font-size:12.5px;color:#8a7a5f;background:#0c0906;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;line-height:1.5}
+ .noweb a{color:var(--teal)}
  .cta{margin:30px 0 6px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
  .cta b{font-family:var(--fd);font-weight:600;font-size:20px;color:var(--paper)}
  .cta p{color:var(--muted);font-size:14.5px;margin:8px auto 0;max-width:56ch}
@@ -5856,6 +5871,23 @@ __NAV__
   <p class="intro">Mientras la ola de calor asa el país y las noches tropicales impiden dormir en la costa, hay una <b>España que no arde</b>: valles y sierras donde la mínima nocturna baja sistemáticamente de los 20&nbsp;°C. Hemos cruzado 10 veranos de <b>datos de AEMET</b> con la oferta hotelera para reunir __TOTAL__ hoteles en <b>refugios climáticos naturales</b>, de __FRIO__ para arriba. Se duerme fresco, sin depender del aire acondicionado.</p>
   <p class="disc"><b>Divulgación:</b> esta página contiene enlaces de afiliado de Booking.com. Si reservas a través de ellos, podemos recibir una comisión <b>sin coste adicional para ti</b>. La certificación climática se basa en datos oficiales de AEMET y es independiente de la relación de afiliación: certifica el clima de la zona, no el interior del establecimiento.</p>
 </div></header>
+
+<section class="edwrap"><div class="wrap ed">
+  <p class="lead">El verano no se mide por la temperatura del día.<br><b>Se mide por cómo has dormido esta noche.</b></p>
+  <p>Durante años nos enseñaron a mirar el tiempo de una forma sencilla: ¿cuál será la máxima?, ¿llegaremos a 40 grados?, ¿habrá ola de calor? Pero casi nadie hace la pregunta más importante —<b>¿a cuánto bajará la temperatura mientras duermes?</b>—, y esa respuesta puede cambiar por completo tus vacaciones.</p>
+  <p>Porque el verdadero problema del verano no siempre es el calor del día. Empieza cuando llega la noche… y el calor nunca se va. El enemigo no es el sol: es <b>una noche que nunca refresca</b>.</p>
+  <p>Anoche, miles de personas volvieron a dormir con 28&nbsp;°C. Con la ventana abierta esperando una brisa que no llegó, el ventilador funcionando durante horas, buscando el lado frío de la almohada, levantándose una y otra vez, esperando que amaneciera. Y hoy dirán simplemente: «estoy cansado». Pero quizá el problema no sea el trabajo, ni el estrés, ni siquiera el calor del día. Quizá lleven semanas <b>sin una verdadera noche de descanso</b>.</p>
+  <h2>Dormir bien no es un lujo: es una necesidad biológica</h2>
+  <p>Nuestro organismo lleva miles de generaciones esperando la misma señal: que al caer la noche <b>la temperatura descienda</b>. Entonces el cuerpo se relaja, baja su temperatura interna y se prepara para un sueño reparador. Es en esas horas cuando el cerebro ordena los recuerdos y recuperamos energía. La noche no es un tiempo muerto: es <b>el taller donde el cuerpo se repara</b>.</p>
+  <p>Pero el calor no termina cuando se pone el sol. Las calles, las fachadas, las paredes, los muebles, el colchón… todo sigue irradiando el calor acumulado durante toda la madrugada. Y aunque duermas ocho horas, puede que <b>no hayas descansado</b>.</p>
+  <h2>Y entonces, una noche, la ventana</h2>
+  <p>Viajas. Quizá a un pequeño pueblo de montaña, porque unos amigos insistieron o encontraste una oferta. Y esa primera noche ocurre algo que casi habías olvidado: abres la ventana y entra aire fresco. No enciendes el aire acondicionado. No necesitas ventilador. Buscas una sábana; de madrugada, tal vez una rebeca. A la mañana siguiente no piensas en grados: piensas algo mucho más simple, <b>«hacía tiempo que no dormía tan bien»</b>.</p>
+  <p>Llamas a un amigo y te cuenta que siguen encerrados, que fuera hay 33 grados, que el aire lleva desde el mediodía. Miras por la ventana, respiras el aire fresco de la mañana y piensas: <b>«¿eso también es verano?»</b></p>
+  <h2>La geografía del descanso</h2>
+  <p>Durante décadas elegimos destino por la playa, la gastronomía, los monumentos, la cercanía. Quizá ha llegado el momento de añadir un criterio mucho más importante: <b>¿cómo se duerme aquí en verano?</b> Porque la temperatura nocturna también es calidad de vida, salud, bienestar y sostenibilidad —y quizá el lujo más valioso que nos queda—.</p>
+  <p>El verdadero lujo del verano no es una piscina infinita, ni cinco estrellas, ni un spa. Es <b>despertarte y darte cuenta de que has dormido tan bien que ni siquiera has pensado en el calor</b>. En estos pueblos, una manta ligera en agosto deja de ser una rareza para convertirse en un privilegio; el silencio sustituye al zumbido de los compresores; y el cuerpo reencuentra el descanso que llevaba semanas buscando.</p>
+  <p class="firma">Estos son los hoteles de esa geografía. Bienvenido al lugar donde el verano <b>todavía te deja dormir</b>.</p>
+</div></section>
 
 <section><div class="wrap">
   __LISTADO__
@@ -5887,17 +5919,29 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
     tmin_min = min((h["tmin"] for h in hoteles), default=0)
     frescos = [h for h in hoteles if h["tmin"] < tmin_min + 0.05]
     hotel_frio = frescos[0] if frescos else (hoteles[0] if hoteles else None)
-    desc = (f"{total} hoteles de España en refugios climáticos naturales donde se "
-            "duerme fresco sin aire acondicionado: la noche baja de 20 °C casi todo "
-            "el verano, medido con 10 años de datos de AEMET. Del Pirineo a Gredos, "
-            "Gúdar o la Cordillera Cantábrica.")
+    desc = (f"El verano no se mide por el día, sino por cómo duermes. {total} hoteles en "
+            "refugios climáticos naturales de España donde la noche baja de 20 °C y se "
+            "duerme fresco —con manta y sin aire acondicionado—, medido con 10 años de "
+            "datos de AEMET. La geografía del descanso.")
 
     def tarjeta(h: dict) -> str:
         niv = h["nivel"]
         badge = ("🛡️ Refugio Certificado" if niv == "A" else "📍 Zona Verificada")
         nt_txt = "0" if h["nt"] < 0.05 else _n_es(h["nt"])
         ref = (f'<div class="ref">Dato de la {h["ref_desc"]}</div>' if niv == "B" and h["ref_desc"] else "")
-        cj = cj_deeplink(h["slug_booking"], h["slug"])
+        # Acción según disponibilidad: Booking (afiliado) > web oficial > sin
+        # enlace (el hotel figura igual: le da visibilidad y es puerta de entrada
+        # a la certificación aunque aún no venda online).
+        if h["slug_booking"]:
+            cj = cj_deeplink(h["slug_booking"], h["slug"])
+            accion = (f'<a class="btn" href="{cj}" target="_blank" rel="sponsored nofollow noopener">'
+                      'Ver disponibilidad en Booking →</a>')
+        elif h.get("web"):
+            accion = (f'<a class="btn web" href="{h["web"]}" target="_blank" rel="nofollow noopener">'
+                      'Web oficial del alojamiento →</a>')
+        else:
+            accion = ('<div class="noweb">Alojamiento local · sin reserva online. '
+                      f'<a href="{site}/tu-hotel/">¿Eres tú? Añade tu enlace →</a></div>')
         return (
             f'<article class="hcard n{niv}">'
             f'<div class="htop"><span class="niv">{badge}</span>'
@@ -5909,9 +5953,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             f'<span class="k">mín. media agosto</span></div>'
             f'<div class="st"><span class="v tj">{nt_txt}</span>'
             f'<span class="k">noches tropicales/año</span></div></div>'
-            f'{ref}'
-            f'<a class="btn" href="{cj}" target="_blank" rel="sponsored nofollow noopener">'
-            f'Ver disponibilidad en Booking →</a>'
+            f'{ref}{accion}'
             f'</article>')
 
     secciones = []

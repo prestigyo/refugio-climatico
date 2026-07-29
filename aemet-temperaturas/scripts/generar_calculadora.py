@@ -5773,7 +5773,8 @@ def cargar_hoteles(estaciones: list) -> list:
             "hotel": fila["hotel"], "municipio": fila["municipio"],
             "provincia": fila["provincia"], "nivel": fila["nivel"].strip().upper(),
             "ref_desc": fila.get("ref_desc", ""), "slug_booking": fila["booking_slug"],
-            "web": fila.get("web", ""), "slug": slug(fila["hotel"]),
+            "web": fila.get("web", ""), "telefono": fila.get("telefono", ""),
+            "slug": slug(fila["hotel"]),
             "tmin": e["tmin"], "nt": e["nt"], "alt": e["alt"], "est": e["loc"],
         })
     return out
@@ -5833,6 +5834,7 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .niv{font-size:11.5px;font-weight:700;letter-spacing:.02em;color:var(--muted)}
  .sello{font-size:11.5px;color:var(--teal)}
  .hcard h3{font-family:var(--fd);font-weight:600;font-size:18px;color:var(--paper);line-height:1.2}
+ .hcard h3 a{color:var(--paper)}.hcard h3 a:hover{color:var(--teja2);text-decoration:none}
  .loc{font-size:13px;color:var(--muted);margin:3px 0 12px}
  .stats{display:flex;gap:14px;margin-bottom:12px}
  .st{flex:1;background:#0c0906;border:1px solid var(--line);border-radius:10px;padding:9px 11px}
@@ -5945,9 +5947,9 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
         return (
             f'<article class="hcard n{niv}">'
             f'<div class="htop"><span class="niv">{badge}</span>'
-            f'<a class="sello" href="{site}/badges/{h["slug"]}.svg" target="_blank" rel="noopener" '
-            f'title="Sello de {h["municipio"]}">ver sello</a></div>'
-            f'<h3>{h["hotel"]}</h3>'
+            f'<a class="sello" href="{site}/hoteles-refugio-climatico/{h["slug"]}/" '
+            f'title="Ficha y certificado de {h["hotel"]}">ficha y certificado →</a></div>'
+            f'<h3><a href="{site}/hoteles-refugio-climatico/{h["slug"]}/">{h["hotel"]}</a></h3>'
             f'<div class="loc">{h["municipio"]} · {h["provincia"]} · {miles(h["alt"])}&nbsp;m</div>'
             f'<div class="stats"><div class="st"><span class="v">{_n_es(h["tmin"])}°</span>'
             f'<span class="k">mín. media agosto</span></div>'
@@ -6015,6 +6017,301 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             .replace("__FRIO__", frio_txt)
             .replace("__LISTADO__", listado)
             .replace("__FAQ__", faq_html(faq))
+            .replace("__SITE__", site)
+            .replace("__HOME__", site + "/"))
+
+
+def _esc(s: str) -> str:
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def construir_pagina_hotel(h: dict, site: str) -> str:
+    """Ficha individual de un hotel: su certificado (verlo + descargarlo +
+    código para embeber), el dato AEMET de la zona, cómo llegar y reservar.
+    Es la página que da al hotel un motivo real para enlazarnos (backlink)."""
+    from urllib.parse import quote_plus
+    sl = h["slug"]
+    niv = h["nivel"]
+    nt_txt = "0" if h["nt"] < 0.05 else _n_es(h["nt"])
+    niv_txt = "Refugio Certificado" if niv == "A" else "Zona Verificada"
+    acento = "var(--teja)" if niv == "A" else "var(--teal)"
+    ficha_url = f"{site}/hoteles-refugio-climatico/{sl}/"
+    fuente_dato = (f"la estación AEMET de {h['municipio']}" if niv == "A"
+                   else (f"la {h['ref_desc'][0].lower()}{h['ref_desc'][1:]}" if h.get("ref_desc")
+                         else "la estación AEMET más cercana"))
+    if h["slug_booking"]:
+        reservar = (f'<a class="btn pri" href="{cj_deeplink(h["slug_booking"], sl)}" '
+                    'target="_blank" rel="sponsored nofollow noopener">Reservar en Booking · precios y opiniones →</a>')
+    elif h.get("web"):
+        reservar = (f'<a class="btn pri" href="{h["web"]}" target="_blank" rel="nofollow noopener">'
+                    'Web oficial del alojamiento →</a>')
+    else:
+        reservar = (f'<a class="btn pri" href="{site}/tu-hotel/">¿Gestionas este alojamiento? '
+                    'Añade tu web y reservas →</a>')
+    tel = h.get("telefono", "").strip()
+    tel_btn = (f'<a class="btn sec" href="tel:{tel.replace(" ", "")}">☎ Reservas: {tel}</a>' if tel else "")
+    maps = "https://www.google.com/maps/search/?api=1&query=" + quote_plus(
+        f'{h["hotel"]} {h["municipio"]} {h["provincia"]}')
+    embed = (f'<a href="{ficha_url}" target="_blank" rel="noopener">\n'
+             f'  <img src="{site}/badges/{sl}.png" width="180" height="180"\n'
+             f'       alt="Refugio Climatico Natural certificado - {h["municipio"]} ({h["provincia"]}) - datos AEMET">\n'
+             f'</a>')
+    desc = (f"{h['hotel']} ({h['municipio']}, {h['provincia']}) es un refugio climático natural: "
+            f"en verano la mínima media baja a {_n_es(h['tmin'])} °C y apenas hay noches "
+            f"tropicales, según datos de AEMET. Se duerme fresco, con manta y sin aire "
+            f"acondicionado. Certificado, cómo llegar y reservas.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Hoteles en refugios climáticos",
+             "item": site + "/hoteles-refugio-climatico/"},
+            {"@type": "ListItem", "position": 3, "name": h["hotel"], "item": ficha_url}]},
+        {"@type": "LodgingBusiness", "name": h["hotel"], "url": ficha_url,
+         "address": {"@type": "PostalAddress", "addressLocality": h["municipio"],
+                     "addressRegion": h["provincia"], "addressCountry": "ES"},
+         **({"telephone": tel} if tel else {}),
+         "description": (f"Alojamiento en un refugio climático natural: mínima media de verano "
+                         f"{_n_es(h['tmin'])} °C, {nt_txt} noches tropicales al año (datos de AEMET).")}]},
+        ensure_ascii=False)
+    css = (
+        ':root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;'
+        '--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;'
+        '--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif;--fm:ui-monospace,monospace}'
+        '*{margin:0;padding:0;box-sizing:border-box}'
+        'body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.65}'
+        '.wrap{max-width:min(94vw,1000px);margin:0 auto;padding:0 24px}'
+        'a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}'
+        'header.h{padding:44px 0 8px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}'
+        '.crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}'
+        '.kick{font:600 12px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:' + acento + ';margin:14px 0 8px}'
+        'h1{font-family:var(--fd);font-weight:900;font-size:clamp(26px,4.6vw,40px);line-height:1.08}'
+        '.loc{color:var(--muted);font-size:15px;margin:10px 0 0}'
+        'section{padding:16px 0}'
+        'h2{font-family:var(--fd);font-weight:600;font-size:clamp(19px,3vw,24px);margin:22px 0 12px;color:var(--paper)}'
+        'p{color:#d9ccb6;font-size:15.5px;margin:0 0 14px;max-width:70ch}p b{color:var(--paper)}'
+        '.hero{display:grid;gap:22px;align-items:center;margin:14px 0 4px}'
+        '@media(min-width:760px){.hero{grid-template-columns:230px 1fr}}'
+        '.sello{width:100%;max-width:230px;margin:0 auto;display:block}'
+        '.stats{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 16px}'
+        '.st{flex:1;min-width:130px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}'
+        '.st .v{font-family:var(--fm);font-weight:700;font-size:22px;color:var(--teal)}'
+        '.st .v.tj{color:var(--teja2)}.st .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}'
+        '.niv{display:inline-block;font-size:12px;font-weight:700;color:' + acento + ';border:1px solid ' + acento + ';border-radius:20px;padding:3px 12px;margin-bottom:6px}'
+        '.acts{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 6px}'
+        '.btn{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px}'
+        '.btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}'
+        '.btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}'
+        '.panel{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin:8px 0}'
+        '.dl{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 4px}'
+        '.dl a{font-size:13.5px;background:#0c0906;border:1px solid var(--line);border-radius:9px;padding:9px 13px;color:var(--paper)}'
+        '.dl a:hover{border-color:var(--teja);text-decoration:none}'
+        'pre{background:#0c0906;border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto;'
+        'font-family:var(--fm);font-size:12.5px;color:#cbb89a;line-height:1.5;margin:10px 0}'
+        '.muted{color:var(--muted);font-size:13px}'
+    )
+    return (
+        '<!doctype html>\n<html lang="es"><head>\n<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f'<title>{h["hotel"]} · Refugio Climático Natural en {h["municipio"]} ({h["provincia"]})</title>\n'
+        f'<meta name="description" content="{desc}">\n'
+        f'<link rel="canonical" href="{ficha_url}">\n'
+        '<meta name="robots" content="index, follow, max-image-preview:large">\n'
+        '<meta name="author" content="Ramón J. Lowesting">\n'
+        '<meta property="og:type" content="article">\n'
+        f'<meta property="og:title" content="{h["hotel"]} · Refugio Climático Natural">\n'
+        f'<meta property="og:description" content="{desc}">\n'
+        f'<meta property="og:url" content="{ficha_url}">\n'
+        f'<meta property="og:image" content="{site}/badges/{sl}.png">\n'
+        '<meta property="og:locale" content="es_ES">\n'
+        f'<link rel="icon" type="image/svg+xml" href="{site}/favicon.svg">\n'
+        f'<script type="application/ld+json">{schema}</script>\n'
+        + _FUENTES_LINK + '\n<style>' + css + CSS_NAV_ESCUETO + CSS_FOOTER_ESCUETO
+        + '</style></head><body>\n' + nav_escueto_html(site)
+        + '<header class="h"><div class="wrap">'
+        '<nav class="crumb" aria-label="breadcrumb">'
+        f'<a href="{site}/">nochetropical.es</a> · '
+        f'<a href="{site}/hoteles-refugio-climatico/">Hoteles refugio</a> · {h["municipio"]}</nav>'
+        f'<div class="kick" style="margin-top:14px">🛡️ {niv_txt} · Datos AEMET</div>'
+        f'<h1>{h["hotel"]}</h1>'
+        f'<p class="loc">{h["municipio"]} · {h["provincia"]} · {miles(h["alt"])}&nbsp;m de altitud</p>'
+        '</div></header>'
+        '<section><div class="wrap"><div class="hero">'
+        f'<img class="sello" src="{site}/badges/{sl}.svg" width="230" height="230" '
+        f'alt="Sello Refugio Climático Natural de {h["municipio"]} ({h["provincia"]}): mínima media '
+        f'de agosto {_n_es(h["tmin"])} grados, {nt_txt} noches tropicales al año, datos de AEMET">'
+        '<div>'
+        f'<span class="niv">🛡️ {niv_txt}</span>'
+        f'<p>En <b>{h["municipio"]}</b> la noche refresca de verdad: según {fuente_dato}, la '
+        f'mínima media de verano baja a <b>{_n_es(h["tmin"])}&nbsp;°C</b> y apenas hay noches '
+        f'tropicales. Aquí se duerme fresco, <b>con manta en agosto y sin aire acondicionado</b>.</p>'
+        '<div class="stats">'
+        f'<div class="st"><div class="v">{_n_es(h["tmin"])}°</div><div class="k">mín. media agosto</div></div>'
+        f'<div class="st"><div class="v tj">{nt_txt}</div><div class="k">noches tropicales/año</div></div>'
+        f'<div class="st"><div class="v">{miles(h["alt"])} m</div><div class="k">altitud</div></div>'
+        '</div>'
+        f'<div class="acts">{reservar}{tel_btn}<a class="btn sec" href="{maps}" target="_blank" rel="noopener">📍 Cómo llegar</a></div>'
+        '</div></div></div></section>'
+        # Certificado
+        '<section><div class="wrap"><div class="panel">'
+        '<h2 style="margin-top:0">El certificado de refugio climático</h2>'
+        f'<p>Este sello acredita que <b>{h["municipio"]}</b> es un refugio climático natural según '
+        '10 veranos de datos de AEMET. <b>Certifica el clima de la zona</b> (la noche refresca), no '
+        'el interior del establecimiento. Puedes descargarlo y mostrarlo en tu web, recepción o redes.</p>'
+        '<div class="dl">'
+        f'<a href="{site}/badges/{sl}.png" download>⬇ PNG (web, fondo oscuro)</a>'
+        f'<a href="{site}/badges/{sl}-imprimir.png" download>⬇ PNG (imprimir, fondo claro)</a>'
+        f'<a href="{site}/badges/{sl}.svg" download>⬇ SVG (vectorial)</a>'
+        '</div>'
+        '<p class="muted" style="margin-top:14px">Para incrustarlo en tu web con enlace de vuelta '
+        '(recomendado):</p>'
+        f'<pre>{_esc(embed)}</pre>'
+        '</div></div></section>'
+        # Reservar / cómo llegar
+        '<section><div class="wrap">'
+        '<h2>Reservar y cómo llegar</h2>'
+        f'<p>Consulta precios, disponibilidad y las opiniones de otros huéspedes, o abre la '
+        f'ubicación en el mapa para calcular tu ruta hasta <b>{h["municipio"]}</b>.</p>'
+        f'<div class="acts">{reservar}{tel_btn}<a class="btn sec" href="{maps}" target="_blank" rel="noopener">📍 Ver en el mapa</a></div>'
+        '</div></section>'
+        # Sigue
+        '<section><div class="wrap"><div class="panel">'
+        '<h2 style="margin-top:0">Explora más refugios</h2>'
+        f'<div class="acts"><a class="btn sec" href="{site}/hoteles-refugio-climatico/">🏨 Los 25 hoteles refugio</a>'
+        f'<a class="btn sec" href="{site}/{slug(h["provincia"])}/">Noches tropicales en {h["provincia"]}</a>'
+        f'<a class="btn sec" href="{site}/dormir-con-manta-en-verano/">Dormir con manta en verano</a></div>'
+        '</div></div></section>'
+        + footer_escueto_html(site) + '</body></html>\n')
+
+
+PAGINA_TUHOTEL = r"""<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certifica tu hotel como Refugio Climático Natural (gratis, datos AEMET)</title>
+<meta name="description" content="¿Tienes un hotel o casa rural en un pueblo fresco? Auditamos gratis los registros de AEMET de tu municipio. Si la noche refresca, entras en el directorio con tu sello de Refugio Climático Natural. Un argumento de venta con aval de datos oficiales.">
+<link rel="canonical" href="__SITE__/tu-hotel/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Certifica tu hotel como Refugio Climático Natural">
+<meta property="og:description" content="Auditamos gratis los datos de AEMET de tu municipio. Si la noche refresca, entras en el directorio con tu sello.">
+<meta property="og:url" content="__SITE__/tu-hotel/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=Lora:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif;--fm:ui-monospace,monospace}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.65}
+ .wrap{max-width:min(92vw,720px);margin:0 auto;padding:0 24px}
+ a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+ header.h{padding:46px 0 10px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.15em;text-transform:uppercase;color:var(--teja);margin:16px 0 8px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(28px,5.2vw,42px);line-height:1.06}
+ h1 em{font-style:italic;color:var(--teja2)}
+ .intro{color:var(--muted);font-size:clamp(15.5px,2.4vw,17.5px);margin:16px 0 0}.intro b{color:var(--paper)}
+ section{padding:18px 0}
+ h2{font-family:var(--fd);font-weight:600;font-size:clamp(19px,3vw,24px);margin:14px 0 12px}
+ p{color:#d9ccb6;font-size:15.5px;margin:0 0 14px}p b{color:var(--paper)}
+ ul{margin:0 0 16px;padding-left:0;list-style:none}
+ li{position:relative;padding:8px 0 8px 30px;color:#d9ccb6;font-size:15.5px;border-bottom:1px solid var(--line)}
+ li::before{content:"✓";position:absolute;left:4px;color:var(--verde);font-weight:700}
+ li b{color:var(--paper)}
+ .capture{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:24px;margin:18px 0}
+ .capture h2{margin:0 0 4px}
+ .capture .sub{color:var(--muted);font-size:14px;margin:0 0 16px}
+ form{display:grid;gap:11px}
+ input,select,textarea{width:100%;background:#0c0906;border:1px solid var(--line);color:var(--paper);padding:12px 14px;border-radius:10px;font-size:15px;font-family:var(--fb)}
+ textarea{min-height:84px;resize:vertical}
+ .rgpd{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--muted)}
+ .rgpd input{width:auto;margin-top:3px}
+ button{background:var(--teja);color:#1a1209;border:0;font-weight:700;font-size:15px;padding:13px 18px;border-radius:11px;cursor:pointer;font-family:var(--fb)}
+ button:hover{background:var(--teja2)}
+ .ok{font-family:var(--fd);font-size:19px;text-align:center;color:var(--verde);padding:20px 0}
+ .honesto{font-size:13px;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:8px}
+ __NAVCSS__
+ __FOOTERCSS__
+</style></head><body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Certifica tu hotel</nav>
+  <div class="kick">Para hoteles y casas rurales · Datos AEMET</div>
+  <h1>Tu hotel está en un <em>refugio climático</em>. Demuéstralo.</h1>
+  <p class="intro">Si tu alojamiento está en un pueblo donde <b>la noche refresca de verdad</b>, tienes un argumento de venta buenísimo y —a diferencia de casi todos— <b>se puede demostrar con datos oficiales de AEMET</b>. Lo auditamos <b>gratis</b> y, si cumple, entras en nuestro directorio con tu sello.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Qué consigues</h2>
+  <ul>
+    <li><b>Tu ficha</b> en el directorio de hoteles refugio, con el dato de AEMET de tu zona.</li>
+    <li><b>El sello «Refugio Climático Natural»</b> descargable (web e impresión) para tu web, recepción y redes.</li>
+    <li><b>Un argumento con aval</b>: «aquí se duerme fresco, avalado por 10 años de datos de AEMET».</li>
+    <li><b>Gratis.</b> Si aún no tienes web ni reservas online, también entras — eres de los primeros.</li>
+  </ul>
+
+  <div class="capture">
+    <h2>Solicita tu auditoría meteorológica</h2>
+    <p class="sub">Rellena esto y comprobamos los registros de AEMET de tu municipio. Si la mínima media de verano baja de 18&nbsp;°C y no hay noches tropicales sostenidas, te certificamos.</p>
+    <form id="leadf">
+      <input type="text" id="hnombre" placeholder="Nombre del hotel o casa rural" required>
+      <input type="text" id="hmun" placeholder="Municipio y provincia (p. ej. Bronchales, Teruel)" required>
+      <input type="text" id="hweb" placeholder="Web o perfil de Booking (si tienes)">
+      <input type="email" id="hemail" placeholder="Email de contacto" required>
+      <input type="text" id="htel" placeholder="Teléfono (opcional)">
+      <textarea id="hmsg" placeholder="Cuéntanos algo de tu alojamiento (opcional)"></textarea>
+      <label class="rgpd"><input type="checkbox" id="hrgpd" required> Acepto que me contactéis sobre la certificación. Sin spam.</label>
+      <button type="submit">Solicitar auditoría gratis</button>
+    </form>
+    <p class="honesto"><b>Honestidad primero:</b> certificamos el <b>clima de la zona</b> (que la noche refresca, medido por AEMET), no el interior de tu edificio. Es lo que lo hace creíble.</p>
+  </div>
+
+  <p style="font-size:13px;color:var(--muted)">¿Prefieres escribir? <a href="mailto:lowesting@gmail.com">lowesting@gmail.com</a>. Mira el <a href="__SITE__/hoteles-refugio-climatico/">directorio de hoteles refugio</a> o la <a href="__SITE__/metodologia/">metodología</a>.</p>
+</div></section>
+__FOOTER__
+<script>
+const APPS_SCRIPT_URL="__APPS_URL__";
+const lf=document.getElementById("leadf");
+lf.addEventListener("submit",ev=>{
+  ev.preventDefault();
+  const lead={timestamp:new Date().toISOString(),
+    email:document.getElementById("hemail").value.trim(),
+    modo:"tu-hotel",
+    hotel:document.getElementById("hnombre").value.trim(),
+    zona_interes:document.getElementById("hmun").value.trim(),
+    web:document.getElementById("hweb").value.trim(),
+    telefono:document.getElementById("htel").value.trim(),
+    peticion:document.getElementById("hmsg").value.trim(),
+    estacion:"",provincia:"",noches_trop:"",veredicto:"",
+    rgpd:document.getElementById("hrgpd").checked?"si":"",
+    source:"tu-hotel",user_agent:navigator.userAgent};
+  const gracias=()=>{lf.outerHTML='<p class="ok">¡Gracias! Auditamos tu zona y te escribimos pronto.</p>';};
+  fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(lead)}).then(gracias).catch(gracias);
+});
+</script>
+</body></html>
+"""
+
+
+def construir_pagina_tuhotel(site: str) -> str:
+    url = site + "/tu-hotel/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Certifica tu hotel", "item": url}]},
+        {"@type": "WebPage", "name": "Certifica tu hotel como Refugio Climático Natural", "url": url,
+         "isPartOf": {"@type": "WebSite", "name": "nochetropical.es", "url": site + "/"}}]},
+        ensure_ascii=False)
+    return (PAGINA_TUHOTEL
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__APPS_URL__", APPS_SCRIPT_URL)
             .replace("__SITE__", site)
             .replace("__HOME__", site + "/"))
 
@@ -6120,7 +6417,16 @@ def main() -> int:
             (badges / f"{h['slug']}.svg").write_text(
                 sello_svg(h["municipio"], h["provincia"], h["tmin"], h["nt"],
                           h["nivel"], h["ref_desc"]), encoding="utf-8")
-        print(f"   hoteles-refugio-climatico: {len(hoteles)} fichas + sellos SVG en /badges/")
+            # Ficha individual por hotel (la página que el hotel querrá enlazar).
+            carpeta = DOCS_DIR / "hoteles-refugio-climatico" / h["slug"]
+            carpeta.mkdir(parents=True, exist_ok=True)
+            (carpeta / "index.html").write_text(
+                construir_pagina_hotel(h, site), encoding="utf-8")
+        # Captación de hoteles (formulario a Apps Script, mismo backend que /tu-pueblo/).
+        (DOCS_DIR / "tu-hotel").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "tu-hotel" / "index.html").write_text(
+            construir_pagina_tuhotel(site), encoding="utf-8")
+        print(f"   hoteles-refugio-climatico: {len(hoteles)} fichas + sellos + /tu-hotel/")
     # Página SEO de destinos frescos / turismo climático.
     (DOCS_DIR / "dormir-con-manta-en-verano").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "dormir-con-manta-en-verano" / "index.html").write_text(

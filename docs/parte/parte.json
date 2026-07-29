@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-28",
- "total": 845,
- "tropicales": 269,
- "ecuatoriales": 10,
+ "fecha": "2026-07-29",
+ "total": 846,
+ "tropicales": 372,
+ "ecuatoriales": 6,
  "peor": {
-  "id": "5998X",
-  "nombre": "Osuna Sea",
-  "min": 26.7,
-  "prov": "Sevilla"
+  "id": "0201D",
+  "nombre": "Barcelona Port Olímpic",
+  "min": 26.1,
+  "prov": "Barcelona"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 6.7,
-  "prov": "Ávila"
+  "id": "1410X",
+  "nombre": "Sobrado dos Monxes",
+  "min": 7.8,
+  "prov": "A Coruña"
  },
  "top_calor": [
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 26.7,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "5270B",
-   "nombre": "Jaén",
-   "min": 26.3,
-   "prov": "Jaén"
-  },
-  {
-   "id": "4325Y",
-   "nombre": "Castuera",
-   "min": 26.2,
-   "prov": "Badajoz"
+   "id": "0201D",
+   "nombre": "Barcelona Port Olímpic",
+   "min": 26.1,
+   "prov": "Barcelona"
   },
   {
    "id": "7019X",
    "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 26.0,
+   "min": 26.1,
    "prov": "Murcia"
-  },
-  {
-   "id": "5973",
-   "nombre": "Cádiz Observatorio",
-   "min": 25.5,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "5996B",
-   "nombre": "Barbate Depuradora",
-   "min": 25.5,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "5972X",
-   "nombre": "San Fernando",
-   "min": 25.1,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "4347X",
-   "nombre": "Zorita",
-   "min": 25.0,
-   "prov": "Cáceres"
-  },
-  {
-   "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 25.0,
-   "prov": "Cádiz"
   },
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 24.7,
+   "min": 25.7,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "9961X",
+   "nombre": "Cabacés",
+   "min": 25.4,
+   "prov": "Tarragona"
+  },
+  {
+   "id": "4121",
+   "nombre": "Ciudad Real",
+   "min": 24.9,
+   "prov": "Ciudad Real"
+  },
+  {
+   "id": "8058Y",
+   "nombre": "Miramar",
+   "min": 24.9,
+   "prov": "Valencia"
+  },
+  {
+   "id": "2140A",
+   "nombre": "Aldeanueva de Serrezuela-el Cerro",
+   "min": 24.8,
+   "prov": "Segovia"
+  },
+  {
+   "id": "3195",
+   "nombre": "Madrid Retiro",
+   "min": 24.8,
+   "prov": "Madrid"
+  },
+  {
+   "id": "6291B",
+   "nombre": "El Ejido (Ayuntamiento - Automatica)",
+   "min": 24.8,
+   "prov": "Almería"
+  },
+  {
+   "id": "B398A",
+   "nombre": "Cabrera Parque Nacional de Cabrera",
+   "min": 24.8,
    "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
+   "id": "1410X",
+   "nombre": "Sobrado dos Monxes",
+   "min": 7.8,
+   "prov": "A Coruña"
+  },
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 7.9,
+   "prov": "Ourense"
+  },
+  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 6.7,
+   "min": 9.0,
    "prov": "Ávila"
   },
   {
-   "id": "9060X",
-   "nombre": "Lalastra",
-   "min": 8.4,
-   "prov": "Araba/Álava"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 8.7,
-   "prov": "Cantabria"
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 9.8,
+   "prov": "Ourense"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 8.8,
+   "min": 10.0,
    "prov": "Zamora"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 9.1,
-   "prov": "Madrid"
-  },
-  {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": 9.2,
-   "prov": "Palencia"
   },
   {
    "id": "9016X",
    "nombre": "Cubillo de Ebro",
-   "min": 9.4,
+   "min": 10.6,
    "prov": "Cantabria"
   },
   {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 9.6,
-   "prov": "Salamanca"
+   "id": "1489A",
+   "nombre": "A Lama",
+   "min": 11.0,
+   "prov": "Pontevedra"
   },
   {
-   "id": "9051",
-   "nombre": "Medina de Pomar",
-   "min": 9.6,
-   "prov": "Burgos"
+   "id": "1700X",
+   "nombre": "O Carballiño",
+   "min": 11.1,
+   "prov": "Ourense"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 9.7,
-   "prov": "León"
+   "id": "1521I",
+   "nombre": "O Paramo",
+   "min": 11.3,
+   "prov": "Lugo"
+  },
+  {
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": 11.4,
+   "prov": "Palencia"
   }
  ]
 }

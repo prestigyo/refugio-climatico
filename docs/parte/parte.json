@@ -1,8 +1,8 @@
 {
  "fecha": "2026-07-29",
  "total": 846,
- "tropicales": 372,
- "ecuatoriales": 6,
+ "tropicales": 373,
+ "ecuatoriales": 7,
  "peor": {
   "id": "0201D",
   "nombre": "Barcelona Port Olímpic",
@@ -41,6 +41,12 @@
    "prov": "Tarragona"
   },
   {
+   "id": "2140A",
+   "nombre": "Aldeanueva de Serrezuela-el Cerro",
+   "min": 25.2,
+   "prov": "Segovia"
+  },
+  {
    "id": "4121",
    "nombre": "Ciudad Real",
    "min": 24.9,
@@ -51,12 +57,6 @@
    "nombre": "Miramar",
    "min": 24.9,
    "prov": "Valencia"
-  },
-  {
-   "id": "2140A",
-   "nombre": "Aldeanueva de Serrezuela-el Cerro",
-   "min": 24.8,
-   "prov": "Segovia"
   },
   {
    "id": "3195",

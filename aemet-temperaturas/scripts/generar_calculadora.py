@@ -1038,8 +1038,9 @@ def fecha_es(fecha: date) -> str:
 # ocupa la herramienta estrella de cercanía.
 MENU_ESCUETO = [
     ("Refugios cerca de mí", "/refugios-climaticos-naturales-cerca-de-mi/"),
-    ("Mapa interactivo", "/mapa-estaciones/"),
+    ("Hoteles", "/hoteles-refugio-climatico/"),
     ("Ola de calor", "/ola-de-calor/"),
+    ("Mapa", "/mapa-estaciones/"),
     ("Ranking", "/ranking-noches-tropicales/"),
 ]
 
@@ -1108,39 +1109,55 @@ CSS_FOOTER_ESCUETO = (
     '.f2bar{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;'
     'font-size:12.5px;color:#82745d}'
     '.f2bar a{color:#9a8a6f}'
-    '@media(max-width:640px){.f2grid{grid-template-columns:1fr}}'
+    '.f2brand{margin-bottom:26px;max-width:42ch}'
+    '.f2brand .brand{display:inline-flex;align-items:center;gap:9px;font-family:var(--fd);'
+    'font-weight:600;font-size:16px;color:var(--paper)}'
+    '.f2brand .brand:hover{text-decoration:none;color:var(--teja2)}'
+    '.f2brand p{color:var(--muted);font-size:13.5px;margin:10px 0 0;line-height:1.6}'
+    '@media(max-width:640px){.f2grid{grid-template-columns:1fr 1fr}}'
+    '@media(max-width:420px){.f2grid{grid-template-columns:1fr}}'
 )
+
+# Columnas del pie, definidas UNA sola vez para que TODA la web (home y páginas
+# de contenido) comparta el mismo pie, bien estructurado y con todos los enlaces
+# (incluida la de hoteles). Rutas relativas; cada footer les antepone el site.
+_F_TAGLINE = ("Diez veranos de datos de AEMET para responder una pregunta: "
+              "¿dónde se duerme fresco en España?")
+_F_EXPLORA = [("Refugios climáticos cerca de mí", "/refugios-climaticos-naturales-cerca-de-mi/"),
+              ("El Confortómetro: vota tu zona", "/confortometro/"),
+              ("Mapa interactivo de estaciones", "/mapa-estaciones/"),
+              ("¿Cuándo acaba la ola de calor?", "/ola-de-calor/"),
+              ("Ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
+              ("El parte de la noche", "/parte/"),
+              ("Certificados de refugio climático", "/certificados/")]
+_F_GUIAS = [("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
+            ("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
+            ("La España que nunca se colorea (estudio)", "/la-espana-que-nunca-se-colorea/"),
+            ("Microclimas: los refugios de la naturaleza", "/microclimas/"),
+            ("Cómo crear un refugio climático natural", "/refugio-climatico-natural/"),
+            ("Refugios y España vaciada", "/refugios-y-espana-vaciada/"),
+            ("La hipoteca térmica", "/hipoteca-termica/")]
+_F_PROYECTO = [("La calculadora de tu pueblo", "/"),
+               ("Sobre el proyecto", "/sobre-el-proyecto/"),
+               ("Metodología y glosario", "/metodologia/"),
+               ("Sala de prensa", "/prensa/"),
+               ("Certifica tu hotel", "/tu-hotel/"),
+               ("¿Tu pueblo no aparece? Ayúdanos", "/tu-pueblo/"),
+               ("Licencia y aviso legal", "/aviso-legal/")]
 
 
 def footer_escueto_html(site: str, extra: str = "") -> str:
-    c1 = [("Refugios climáticos cerca de mí", "/refugios-climaticos-naturales-cerca-de-mi/"),
-          ("El Confortómetro: vota tu zona", "/confortometro/"),
-          ("Mapa interactivo de estaciones", "/mapa-estaciones/"),
-          ("¿Cuándo acaba la ola de calor?", "/ola-de-calor/"),
-          ("Ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
-          ("El parte de la noche", "/parte/"),
-          ("Certificados de refugio climático", "/certificados/")]
-    c2 = [("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
-          ("Hoteles en refugios climáticos naturales", "/hoteles-refugio-climatico/"),
-          ("Cómo crear un refugio climático natural", "/refugio-climatico-natural/"),
-          ("Microclimas: los refugios de la naturaleza", "/microclimas/"),
-          ("Refugios y España vaciada", "/refugios-y-espana-vaciada/"),
-          ("La hipoteca térmica", "/hipoteca-termica/"),
-          ("¿Tu pueblo no aparece? Ayúdanos", "/tu-pueblo/")]
-    c3 = [("La calculadora de tu pueblo", "/"),
-          ("Sobre el proyecto", "/sobre-el-proyecto/"),
-          ("Metodología y glosario", "/metodologia/"),
-          ("Sala de prensa", "/prensa/"),
-          ("Licencia y aviso legal", "/aviso-legal/")]
-
     def col(titulo: str, items: list) -> str:
         enlaces = "".join(f'<a href="{site}{h}">{t}</a>' for t, h in items)
         return f'<div class="f2col"><h4>{titulo}</h4>{enlaces}</div>'
 
-    return ('<footer class="f2"><div class="wrap"><div class="f2grid">'
-            + col("Explora los datos", c1)
-            + col("Guías y artículos", c2)
-            + col("Proyecto", c3)
+    marca = (f'<div class="f2brand"><a class="brand" href="{site}/" '
+             f'aria-label="nochetropical.es">{_LOGO_ESCUETO}</a>'
+             f'<p>{_F_TAGLINE}</p></div>')
+    return ('<footer class="f2"><div class="wrap">' + marca + '<div class="f2grid">'
+            + col("Explora los datos", _F_EXPLORA)
+            + col("Guías y artículos", _F_GUIAS)
+            + col("Proyecto", _F_PROYECTO)
             + '</div><div class="f2bar">Fuente: '
             '<a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a>'
             ' · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" '
@@ -2029,8 +2046,9 @@ _CSS_CHROME = (
 # sigue enlazado desde el pie (FOOTER_HTML) y desde enlaces contextuales.
 _MENU = [
     ("cerca", "__SITE__/refugios-climaticos-naturales-cerca-de-mi/", "Refugios cerca de mí"),
-    ("mapa", "__SITE__/mapa-estaciones/", "Mapa interactivo"),
+    ("hoteles", "__SITE__/hoteles-refugio-climatico/", "Hoteles"),
     ("ola", "__SITE__/ola-de-calor/", "Ola de calor"),
+    ("mapa", "__SITE__/mapa-estaciones/", "Mapa"),
     ("ranking", "__SITE__/ranking-noches-tropicales/", "Ranking"),
 ]
 
@@ -2065,31 +2083,25 @@ def nav_html(actual: str = "") -> str:
             '  </div></nav>')
 
 
+def _fcol_home(titulo: str, items: list) -> str:
+    enlaces = "".join(f'<a href="__SITE__{h}">{t}</a>' for t, h in items)
+    return f'      <div class="fcol"><h4>{titulo}</h4>{enlaces}</div>\n'
+
+
+# Pie de la HOME: mismas 3 columnas compartidas (_F_*) que el pie escueto, más
+# la columna de marca — así el pie es idéntico en toda la web.
 FOOTER_HTML = (
     '<footer>\n'
     '    <div class="in fgrid">\n'
     '      <div class="fcol">\n'
     '        <a class="brand" href="__HOME__" style="margin-bottom:12px">'
     + _LOGO.format(px=24, hueco="--surface") + '</a>\n'
-    '        <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: '
-    '¿dónde se duerme fresco en España?</p>\n'
+    f'        <p class="fabout">{_F_TAGLINE}</p>\n'
     '      </div>\n'
-    '      <div class="fcol"><h4>Explora</h4><a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">Refugios cerca de ti</a>'
-    '<a href="__SITE__/confortometro/">El confortómetro</a>'
-    '<a href="__SITE__/mapa-estaciones/">Mapa de estaciones</a>'
-    '<a href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a>'
-    '<a href="__SITE__/parte/">El parte de la noche</a>'
-    '<a href="__SITE__/certificados/">Certificados</a></div>\n'
-    '      <div class="fcol"><h4>Datos</h4><a href="__SITE__/metodologia/">Metodología</a>'
-    '<a href="__SITE__/prensa/">Sala de prensa</a>'
-    '<a href="https://opendata.aemet.es" target="_blank" rel="noopener">Fuente: AEMET</a>'
-    '<a href="__SITE__/aviso-legal/">Licencia y aviso legal</a></div>\n'
-    '      <div class="fcol"><h4>Proyecto</h4><a href="__SITE__/sobre-el-proyecto/">Sobre el proyecto</a>'
-    '<a href="__SITE__/metodologia/">Metodología</a>'
-    '<a href="__SITE__/tu-pueblo/">¿Y tu pueblo?</a>'
-    '<a href="__SITE__/refugios-y-espana-vaciada/">Refugios y España vaciada</a>'
-    '<a href="https://x.com/nochetropicales" target="_blank" rel="noopener">@nochetropicales</a></div>\n'
-    '    </div>\n'
+    + _fcol_home("Explora los datos", _F_EXPLORA)
+    + _fcol_home("Guías y artículos", _F_GUIAS)
+    + _fcol_home("Proyecto", _F_PROYECTO)
+    + '    </div>\n'
     '    <div class="in fbar">© 2026 nochetropical.es · Datos de AEMET bajo CC BY 4.0 · '
     'Ramón J. Lowesting</div>\n'
     '  </footer>'
@@ -3353,6 +3365,7 @@ __CSS_COMUN__
     <h2 class="sec-h" id="articulos">Artículos y estudios</h2>
     <div class="mods">
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
+      <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>25 hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
       <a class="card2" href="__SITE__/dormir-con-manta-en-verano/"><h3>Dormir con manta en verano</h3><p>Un destino fresco medido por provincia: el mapa del turismo climático.</p></a>
       <a class="card2" href="__SITE__/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
       <a class="card2" href="__SITE__/refugio-climatico-natural/"><h3>Refugio climático natural</h3><p>Combatir el calor sin aire acondicionado, como se hacía antes.</p></a>

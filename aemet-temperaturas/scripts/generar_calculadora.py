@@ -4636,6 +4636,7 @@ __NAV__
       <a class="navcard" href="__SITE__/ranking-noches-tropicales/"><span class="ic">🏆</span><b>Ranking nacional</b><span>Dónde se duerme mejor y peor de toda España.</span></a>
       <a class="navcard" href="__SITE__/ola-de-calor/"><span class="ic">🔥</span><b>Mapa de la ola de calor</b><span>Máximas y mínimas de AEMET, día a día.</span></a>
       <a class="navcard" href="__SITE__/dormir-con-manta-en-verano/"><span class="ic">🛌</span><b>Dormir con manta en agosto</b><span>Los destinos frescos, provincia a provincia.</span></a>
+      <a class="navcard" href="__SITE__/hoteles-refugio-climatico/"><span class="ic">🏨</span><b>Hoteles refugio</b><span>25 hoteles donde dormir en estas zonas frescas.</span></a>
       <a class="navcard" href="__SITE__/microclimas/"><span class="ic">🌿</span><b>Microclimas</b><span>Por qué un valle es más fresco que la cima de al lado.</span></a>
     </div>
   </div>
@@ -4792,7 +4793,8 @@ __NAV__
     <p>Casi todos comparten receta: <b>altitud</b> (600–1.700 m), <b>interior</b> (lejos del mar, que de noche devuelve el calor acumulado) y <b>aire seco</b> de clima continental, que deja escapar el calor del día en cuanto se pone el sol. Es el mecanismo que explican <a href="__SITE__/microclimas/">los microclimas</a>: mientras la costa mediterránea encadena hasta 86 noches tropicales seguidas — compruébalo en <a href="__SITE__/ranking-noches-tropicales/">el ranking nacional</a> —, en estas sierras la manta es obligatoria hasta en pleno agosto.</p>
     <h2>Turismo climático: elegir destino por cómo se siente</h2>
     <p>Cada verano más gente organiza las vacaciones huyendo del calor: es el <b>turismo climático</b>. No va de monumentos, va de <b>cómo se va a sentir el cuerpo</b>: dormir sin ventilador, cenar con chaqueta fina, pasear a mediodía sin sufrir mientras <a href="__SITE__/ola-de-calor/">la ola de calor</a> asa el resto del mapa. Estos datos son su mapa — y <a href="__SITE__/confortometro/">el Confortómetro</a>, nuestro estudio participativo, le está poniendo la capa que faltaba: cómo se siente cada zona, votado por quienes están allí.</p>
-    <p>Y si buscas <b>hoteles rurales frescos</b> — o ese «hotel sin aire acondicionado pero fresco» que promete la búsqueda —, la regla es simple: no tenemos datos de hoteles, pero sí del clima que los rodea; busca alojamiento en estos términos municipales y el aire acondicionado sobrará.</p>
+    <p>¿Y si buscas <b>hoteles rurales frescos</b> — ese «hotel sin aire acondicionado pero fresco» que promete la búsqueda? Hemos seleccionado <b>25 hoteles</b> situados en estos refugios climáticos, con el dato de AEMET de cada zona (medimos el clima del entorno, no el interior del hotel: donde la noche refresca de verdad, se duerme fresco).</p>
+    <p style="margin:6px 0 4px"><a class="btn pri" href="__SITE__/hoteles-refugio-climatico/">🏨 Los 25 hoteles donde se duerme con manta →</a></p>
     <p><a href="__SITE__/refugios-y-espana-vaciada/">Muchos de estos pueblos están en la España vaciada: el frío que los despobló es hoy su activo →</a></p>
   </div>
 

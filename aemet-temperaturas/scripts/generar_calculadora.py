@@ -1037,10 +1037,10 @@ def fecha_es(fecha: date) -> str:
 # "Portada" no va en el menú: la portada ya vive en el logo/marca. Su hueco lo
 # ocupa la herramienta estrella de cercanía.
 MENU_ESCUETO = [
+    ("Observatorio", "/observatorio-del-descanso/"),
     ("Refugios cerca de mí", "/refugios-climaticos-naturales-cerca-de-mi/"),
     ("Hoteles", "/hoteles-refugio-climatico/"),
     ("Ola de calor", "/ola-de-calor/"),
-    ("Mapa", "/mapa-estaciones/"),
     ("Ranking", "/ranking-noches-tropicales/"),
 ]
 
@@ -1123,7 +1123,8 @@ CSS_FOOTER_ESCUETO = (
 # (incluida la de hoteles). Rutas relativas; cada footer les antepone el site.
 _F_TAGLINE = ("Diez veranos de datos de AEMET para responder una pregunta: "
               "¿dónde se duerme fresco en España?")
-_F_EXPLORA = [("Refugios climáticos cerca de mí", "/refugios-climaticos-naturales-cerca-de-mi/"),
+_F_EXPLORA = [("El Observatorio del Descanso", "/observatorio-del-descanso/"),
+              ("Refugios climáticos cerca de mí", "/refugios-climaticos-naturales-cerca-de-mi/"),
               ("El Confortómetro: vota tu zona", "/confortometro/"),
               ("Mapa interactivo de estaciones", "/mapa-estaciones/"),
               ("¿Cuándo acaba la ola de calor?", "/ola-de-calor/"),
@@ -2045,6 +2046,7 @@ _CSS_CHROME = (
 # del menú (refugios cerca, el parte, certificados, metodología, artículos)
 # sigue enlazado desde el pie (FOOTER_HTML) y desde enlaces contextuales.
 _MENU = [
+    ("obs", "__SITE__/observatorio-del-descanso/", "Observatorio"),
     ("cerca", "__SITE__/refugios-climaticos-naturales-cerca-de-mi/", "Refugios cerca de mí"),
     ("hoteles", "__SITE__/hoteles-refugio-climatico/", "Hoteles"),
     ("ola", "__SITE__/ola-de-calor/", "Ola de calor"),
@@ -3354,6 +3356,7 @@ __CSS_COMUN__
     </div>
     <h2 class="sec-h">Explora los datos</h2>
     <div class="mods">
+      <a class="card2 destacada" href="__SITE__/observatorio-del-descanso/"><h3>🌙 El Observatorio del Descanso</h3><p>¿Cómo has dormido esta noche? El mapa ciudadano del descanso: cuéntalo en 10 segundos y descubre dónde se duerme mejor.</p></a>
       <a class="card2 destacada" href="__SITE__/ola-de-calor/"><h3>🔥 Mapa de la ola de calor</h3><p>El mapa de calor de España, día a día: las máximas de hoy y las mínimas de esta noche, con datos de AEMET.</p></a>
       <a class="card2" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/"><h3>Refugios cerca de ti</h3><p>Los refugios climáticos más cercanos, con la distancia y la ruta.</p></a>
       <a class="card2" href="__SITE__/confortometro/"><h3>El Confortómetro</h3><p>El estudio participativo: vota cómo se siente el clima en tu zona.</p></a>
@@ -6038,6 +6041,331 @@ def _esc(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+# ===========================================================================
+# EL OBSERVATORIO DEL DESCANSO — "¿Cómo has dormido esta noche?"
+# Producto de ciencia ciudadana: cada mañana, en 10 s, la gente cuenta cómo ha
+# dormido y entre todos construyen el mapa del descanso. Filosofía: medimos la
+# EXPERIENCIA humana, no la temperatura (que es contexto). Honestidad: la
+# credibilidad es el activo — NADA de votos falsos ni contadores inflados. El
+# mapa nunca está vacío porque se SIEMBRA con la expectativa real de AEMET
+# (etiquetada como tal); los votos reales se superponen ("AEMET esperaba X, la
+# gente dice Y"), que es la tesis del proyecto. Backend Apps Script (fase 2).
+# ===========================================================================
+_OBS_NA = str.maketrans("áàäâéèëêíìïîóòöôúùüûñ", "aaaaeeeeiiiioooouuuun")
+
+
+def _obs_baseline(tmin: float) -> float:
+    """Descanso ESPERADO 0-10 desde la Tmin media de verano (dato AEMET). Se
+    muestra etiquetado como expectativa, no como voto."""
+    return max(1.0, min(9.9, round(10 - (tmin - 9) * 0.52, 1)))
+
+
+def _obs_frase(tmin: float) -> str:
+    return ("Aquí la noche casi siempre refresca." if tmin < 12 else
+            "Suele refrescar de madrugada." if tmin < 16 else
+            "La noche afloja, pero no del todo." if tmin < 19 else
+            "Aquí la noche no perdona.")
+
+
+def seed_observatorio(estaciones: list) -> list:
+    """Semilla del mapa: zonas reconocibles repartidas por España con su índice
+    de descanso ESPERADO según AEMET (para que el mapa nazca vivo, sin mentir)."""
+    frags = ["cedrillas", "albarrac", "benasque", "canfranc", "torla", "rascafr",
+             "sanabria", "reinosa", "alto campoo", "cervera de pisuerga", "vinuesa",
+             "molina de aragon", "puerto del pico", "navacerrada", "isaba", "villablino",
+             "riano", "formigal", "valencia", "palma", "cartagena", "alicante",
+             "malaga aero", "murcia", "sevilla aero", "zaragoza", "barcelona", "bilbao",
+             "madrid, retiro", "valladolid", "cordoba aero", "granada aero", "santander",
+             "coruna", "caceres", "badajoz", "albacete", "toledo", "almeria aero", "gijon"]
+    porloc = [(e, e["loc"].lower().translate(_OBS_NA)) for e in estaciones]
+    seen, out = set(), []
+    for fr in frags:
+        f = fr.translate(_OBS_NA)
+        m = next((e for e, ln in porloc if f in ln), None)
+        if not m or m["id"] in seen or m.get("tmin") is None:
+            continue
+        seen.add(m["id"])
+        out.append({"n": m["loc"].split(",")[0][:22], "p": m["prov"],
+                    "la": round(m["lat"], 3), "lo": round(m["lon"], 3),
+                    "d": _obs_baseline(m["tmin"]), "t": round(m["tmin"], 1),
+                    "f": _obs_frase(m["tmin"])})
+    return out
+
+
+PAGINA_OBSERVATORIO = r"""<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>El Observatorio del Descanso · ¿Cómo has dormido esta noche? | nochetropical.es</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/observatorio-del-descanso/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="El Observatorio del Descanso · Así se siente España">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/observatorio-del-descanso/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#100b06;--bg2:#1a130b;--panel:#241a10;--line:#3a2c1c;--paper:#f3ece0;--muted:#b3a48c;
+--teja:#e0834f;--teja2:#eda877;--teal:#8fc0cf;--verde:#8fb07a;--rojo:#d9604a;--oro:#e8b45c;
+--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;padding:0 22px}
+button{font-family:inherit;cursor:pointer;border:0}
+a{color:var(--teal);text-decoration:none}
+.hero{min-height:calc(100svh - 54px);display:flex;flex-direction:column;justify-content:center;text-align:center;padding:36px 0;background:radial-gradient(130% 90% at 50% 0,#241a10,var(--bg) 65%)}
+.brandmini{font:600 12px/1 var(--fb);letter-spacing:.22em;text-transform:uppercase;color:var(--teja);margin-bottom:22px}
+.hero h1{font-family:var(--fd);font-weight:900;font-size:clamp(32px,8vw,52px);line-height:1.05;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--teja2)}
+.hero .sub{color:var(--muted);font-size:clamp(15.5px,3vw,18px);margin:18px auto 0;max-width:30ch}
+.cta{margin-top:30px;background:var(--teja);color:#160f08;font-weight:700;font-size:17px;padding:17px 30px;border-radius:16px;box-shadow:0 10px 30px rgba(224,131,79,.28);transition:.15s}
+.cta:hover{transform:translateY(-2px);background:var(--teja2)}
+.loc{margin-top:15px;font-size:13px;color:var(--muted)}.loc b{color:var(--paper)}
+.loc select{background:var(--bg2);color:var(--paper);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-family:var(--fb);font-size:13px}
+.scrollhint{margin-top:40px;font-size:12.5px;color:var(--muted);letter-spacing:.05em;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(5px);opacity:1}}
+.public{padding:44px 0 20px;border-top:1px solid var(--line);background:var(--bg2)}
+.public h2{font-family:var(--fd);font-weight:600;font-size:clamp(21px,4vw,27px);text-align:center;margin-bottom:6px}
+.public .when{text-align:center;color:var(--muted);font-size:12.5px;margin-bottom:20px}
+.mapbox{background:#0c0805;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:22px}
+.mapbox svg{width:100%;height:auto;display:block}
+.dot{cursor:pointer}
+.rankcols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rankcol h3{font:600 11px/1 var(--fb);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.rankcol.best h3{color:var(--verde)}.rankcol.worst h3{color:var(--rojo)}
+.rk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.rk .idx{font-family:var(--fd);font-weight:900;font-size:18px;width:42px;text-align:center;border-radius:9px;padding:4px 0}
+.rk .nm{font-size:13.5px;flex:1}.rk .nm small{display:block;color:var(--muted);font-size:11px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:24px 0 0;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.ldot{width:11px;height:11px;border-radius:50%;display:inline-block}
+.flow{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .25s}
+.flow.on{opacity:1;pointer-events:auto}
+.flowtop{display:flex;align-items:center;gap:14px;padding:18px 22px}
+.bar{flex:1;height:4px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teja);width:0;transition:width .35s cubic-bezier(.4,0,.2,1)}
+.close{background:transparent;color:var(--muted);font-size:22px;line-height:1}
+.step{flex:1;display:flex;flex-direction:column;justify-content:center;padding:10px 0 30px}
+.step .q{font-family:var(--fd);font-weight:600;font-size:clamp(24px,6vw,34px);text-align:center;line-height:1.12;padding:0 18px;margin-bottom:24px}
+.opts{display:flex;flex-direction:column;gap:11px;max-width:440px;margin:0 auto;width:100%;padding:0 22px}
+.opt{display:flex;align-items:center;gap:16px;background:var(--bg2);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;color:var(--paper);font-size:17px;text-align:left;transition:.12s}
+.opt:hover{border-color:var(--teja);background:var(--panel)}
+.opt .em{font-size:27px;line-height:1}
+.opt.sel{border-color:var(--teja);background:rgba(224,131,79,.14)}
+.reward{position:fixed;inset:0;z-index:110;background:var(--bg);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .3s}
+.reward.on{opacity:1;pointer-events:auto}
+.rwrap{max-width:520px;margin:0 auto;padding:26px 22px 70px;min-height:100svh}
+.mapglow{position:relative;margin:6px 0}
+.rw-say{text-align:center;margin:16px 0}
+.rw-say .big{font-family:var(--fd);font-weight:600;font-size:clamp(23px,5.5vw,30px);line-height:1.18}
+.rw-say .small{color:var(--muted);font-size:14.5px;margin-top:10px}
+.morehint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:111;background:rgba(224,131,79,.16);border:1px solid var(--teja);color:var(--teja2);font-size:12.5px;padding:8px 16px;border-radius:20px;animation:bob 1.6s ease-in-out infinite;transition:opacity .3s}
+.card{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:22px;margin:18px 0}
+.card h3{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:16px}
+.yourgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini{display:flex;align-items:center;gap:11px}.mini .em{font-size:24px}.mini .l{font-size:12px;color:var(--muted)}.mini .v{font-size:15px;font-weight:600}
+.tuidx{text-align:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.tuidx .n{font-family:var(--fd);font-weight:900;font-size:38px}
+.thesis{text-align:center}.thesis .row{display:flex;justify-content:center;gap:30px;margin-top:6px}
+.thesis .row .c .n{font-family:var(--fd);font-weight:900;font-size:32px}
+.thesis .row .c small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
+.contrast{background:radial-gradient(120% 100% at 50% 0,#2a1a10,var(--bg2));border:1px solid var(--teja);border-radius:20px;padding:26px 22px;margin:22px 0;text-align:center}
+.contrast .pre{color:var(--teja2);font-size:14px;letter-spacing:.04em}
+.contrast .km{font-family:var(--fd);font-weight:900;font-size:clamp(30px,8vw,42px);color:var(--paper);margin:8px 0;line-height:1.1}
+.contrast .txt{font-size:16px;color:var(--paper)}.contrast .txt b{color:var(--verde)}
+.contrast .vs{display:flex;justify-content:center;gap:26px;margin-top:18px}
+.contrast .vs .c .n{font-family:var(--fd);font-weight:900;font-size:26px}.contrast .vs .c small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.nearby .row{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--line)}.nearby .row:last-child{border:0}
+.nearby .idx{font-family:var(--fd);font-weight:900;font-size:20px;width:46px;text-align:center;border-radius:9px;padding:4px 0}
+.nearby .info .n{font-weight:600;font-size:15px}.nearby .info .p{color:var(--muted);font-size:13px;font-style:italic}
+.share{width:100%;background:var(--teja);color:#160f08;font-weight:700;font-size:16px;padding:16px;border-radius:15px;margin-top:8px}.share:hover{background:var(--teja2)}
+.again{width:100%;background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600;font-size:14px;padding:13px;border-radius:14px;margin-top:11px}
+.disc-o{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
+.fade{opacity:0;transform:translateY(14px);animation:rise .5s forwards}@keyframes rise{to{opacity:1;transform:none}}
+.pinp{animation:ping 1.6s ease-out infinite}@keyframes ping{0%{r:4;opacity:1}100%{r:16px;opacity:0}}
+.hidden{display:none!important}
+.desktoponly{margin:8px auto 0;max-width:34ch;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);font-size:14.5px;line-height:1.55}
+.desktoponly b{color:var(--paper)}
+.back{background:transparent;color:var(--muted);font-size:15px;line-height:1;padding:6px 4px;white-space:nowrap}
+.back:hover{color:var(--paper)}
+ __NAVCSS__
+ __FOOTERCSS__
+</style></head><body>
+__NAV__
+<section class="hero"><div class="wrap">
+  <div class="brandmini">El Observatorio del Descanso</div>
+  <h1>¿Cómo has <em>dormido</em><br>esta noche?</h1>
+  <p class="sub">Tu experiencia ayuda a construir el mapa del descanso de España.</p>
+  <button class="cta" id="cta" onclick="startFlow()">Compartir cómo he dormido</button>
+  <div class="loc" id="loc">📍 Detectando tu zona…</div>
+  <div class="desktoponly hidden" id="desknote">📱 El Observatorio se usa desde el <b>móvil</b>: necesita tu ubicación para situar tu noche en el mapa. Ábrelo en tu teléfono. Aquí abajo puedes ver cómo se siente España ahora mismo.</div>
+  <div class="scrollhint">↓ Mira cómo se siente España esta noche</div>
+</div></section>
+<section class="public"><div class="wrap">
+  <h2>Así se siente España</h2>
+  <div class="when" id="when">Índice de descanso · <b>esperado según AEMET</b> · aún sin votos — sé el primero</div>
+  <div class="mapbox"><svg id="map" viewBox="0 0 300 190" aria-label="Mapa del descanso de España"></svg></div>
+  <div class="rankcols">
+    <div class="rankcol best"><h3>😴 Mejor descanso</h3><div id="best"></div></div>
+    <div class="rankcol worst"><h3>🥵 Peor descanso</h3><div id="worst"></div></div>
+  </div>
+  <div class="legend">
+    <span><i class="ldot" style="background:#8fb07a"></i>Excelente</span>
+    <span><i class="ldot" style="background:#b9c47a"></i>Bueno</span>
+    <span><i class="ldot" style="background:#e8b45c"></i>Regular</span>
+    <span><i class="ldot" style="background:#e0834f"></i>Malo</span>
+    <span><i class="ldot" style="background:#d9604a"></i>Muy malo</span>
+  </div>
+  <p class="disc-o" style="margin-top:22px">Aún estamos empezando. El mapa nace con la <b>expectativa de AEMET</b> (10 veranos de datos); cada noche que votas lo hace más real: veremos <b>lo que dicen los datos frente a lo que dice la gente</b>. Sin predicciones, sin temperatura de protagonista: solo cómo se ha vivido la noche.</p>
+</div></section>
+__FOOTER__
+
+<div class="flow" id="flow">
+  <div class="flowtop"><button class="back" id="backbtn" onclick="back()">‹ Atrás</button><div class="bar"><i id="barfill"></i></div><span id="stepn" style="font-size:12px;color:var(--muted);width:34px;text-align:right">1/5</span></div>
+  <div class="step"><div id="stepbody"></div></div>
+</div>
+<div class="reward" id="reward"><div class="rwrap" id="rbody"></div></div>
+<div class="morehint hidden" id="morehint">↓ sigue, hay más</div>
+
+<script>
+var SEED=__SEED__;
+function colorFor(d){return d>=8?"#8fb07a":d>=6?"#b9c47a":d>=4?"#e8b45c":d>=2.5?"#e0834f":"#d9604a";}
+function bgFor(d){return d>=8?"rgba(143,176,122,.18)":d>=6?"rgba(185,196,122,.18)":d>=4?"rgba(232,180,92,.18)":d>=2.5?"rgba(224,131,79,.18)":"rgba(217,96,74,.18)";}
+function km(a,b){var R=6371,dLa=(b.la-a.la)*Math.PI/180,dLo=(b.lo-a.lo)*Math.PI/180,la1=a.la*Math.PI/180,la2=b.la*Math.PI/180;var h=Math.sin(dLa/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(h)));}
+function proj(z){var x=(z.lo+9.4)/(3.4+9.4)*300,y=(43.9-z.la)/(43.9-36)*190;return[x,y];}
+/* mapa de puntos (la silueta la dibujan las propias estaciones) */
+function renderMap(sel){
+  var svg=document.getElementById("map"),h="";
+  SEED.forEach(function(z,i){var p=proj(z);h+='<circle class="dot" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(4+z.d/3.2)+'" fill="'+colorFor(z.d)+'" fill-opacity=".9"><title>'+z.n+' · '+z.d+'/10</title></circle>';});
+  if(sel){var p=proj(sel);h+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}
+  svg.innerHTML=h;
+}
+function renderRanks(){
+  var best=SEED.slice().sort(function(a,b){return b.d-a.d}).slice(0,5);
+  var worst=SEED.slice().sort(function(a,b){return a.d-b.d}).slice(0,5);
+  function row(m){return '<div class="rk"><span class="idx" style="color:'+colorFor(m.d)+';background:'+bgFor(m.d)+'">'+m.d.toFixed(1)+'</span><span class="nm">'+m.n+'<small>'+m.p+'</small></span></div>';}
+  document.getElementById("best").innerHTML=best.map(row).join("");
+  document.getElementById("worst").innerHTML=worst.map(row).join("");
+}
+renderMap();renderRanks();
+
+/* SOLO móvil + SOLO geoposicionamiento (sin entrada manual, que daba falsos
+   positivos como la Valencia de León). La zona = estación AEMET más cercana. */
+var MY=null;
+var isMobile=(('ontouchstart' in window)||navigator.maxTouchPoints>0)&&window.matchMedia("(max-width:860px)").matches;
+function setZone(z){MY=z;document.getElementById("loc").innerHTML='📍 Estás cerca de <b>'+z.n+'</b>';renderMap(z);}
+function nearest(la,lo){var me={la:la,lo:lo},best=SEED[0],bd=1e9;SEED.forEach(function(z){var d=km(me,z);if(d<bd){bd=d;best=z;}});return best;}
+function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){setZone(nearest(pos.coords.latitude,pos.coords.longitude));cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
+function initHero(){
+  if(!isMobile){document.getElementById("cta").classList.add("hidden");document.getElementById("loc").classList.add("hidden");document.getElementById("desknote").classList.remove("hidden");return;}
+  askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});
+}
+initHero();
+
+/* FLUJO */
+var Q=[
+ {q:"¿Cómo has dormido esta noche?",o:[["😴","He dormido de maravilla",5],["🙂","Bastante bien",4],["😐","Regular",3],["🥵","Con mucho calor",2],["🔥","Apenas he dormido",1]]},
+ {q:"¿Cómo se está AHORA mismo?",o:[["😊","Muy agradable",5],["🙂","Bien",4],["😐","Soportable",3],["🥵","Hace calor",2],["🔥","Insoportable",1]]},
+ {q:"¿Qué has necesitado para dormir?",o:[["🪟","Nada, tal cual",5],["🌬️","La ventana abierta",4],["💨","El ventilador",3],["❄️","El aire acondicionado",1],["⛺","Dormir fuera de casa",2],["…","Otro",3]]},
+ {q:"¿Cómo te has despertado?",o:[["😀","Muy descansado",5],["🙂","Descansado",4],["😐","Normal",3],["😴","Cansado",2],["🥱","Muy cansado",1]]},
+ {q:"¿Volverías a dormir aquí esta noche?",o:[["❤️","Sin dudarlo",5],["🙂","Sí",4],["😐","Me da igual",3],["🙁","Preferiría otro sitio",2],["🚗","Si pudiera, me iría",1]]}];
+var cur=0,ans=[null,null,null,null,null];
+var flow=document.getElementById("flow"),reward=document.getElementById("reward");
+function startFlow(){
+ if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
+ if(!MY){askLoc(function(ok){if(ok)startFlow();else document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Necesitamos tu ubicación para situar tu noche. Actívala y vuelve a tocar.</span>';});return;}
+ cur=0;ans=[null,null,null,null,null];flow.classList.add("on");renderStep();
+}
+function closeFlow(){flow.classList.remove("on");}
+function back(){if(cur>0){cur--;renderStep();}else closeFlow();}
+function renderStep(){var s=Q[cur];document.getElementById("barfill").style.width=(cur/5*100)+"%";document.getElementById("stepn").textContent=(cur+1)+"/5";
+ document.getElementById("backbtn").textContent=cur===0?"‹ Salir":"‹ Atrás";
+ document.getElementById("stepbody").innerHTML='<div class="q">'+s.q+'</div><div class="opts">'+s.o.map(function(o,i){return '<button class="opt'+(ans[cur]&&ans[cur].i===i?' sel':'')+'" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';}
+function pick(i,val){ans[cur]={i:i,val:val};document.querySelectorAll(".opt")[i].classList.add("sel");document.getElementById("barfill").style.width=((cur+1)/5*100)+"%";setTimeout(function(){if(cur<4){cur++;renderStep();}else finish();},230);}
+/* scroll suave con easing (robusto en iOS, sin salto brusco) */
+function smoothScroll(el,to,dur){var start=el.scrollTop,ch=to-start,t0=null;function step(t){if(!t0)t0=t;var p=Math.min((t-t0)/dur,1),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;el.scrollTop=start+ch*e;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+
+/* RECOMPENSA */
+var EMO=["🔥","🥵","😐","🙂","😴"],EMOC=["🔥","🥵","😐","🙂","😊"],LBL=["Muy mal","Con calor","Regular","Bien","De maravilla"];
+function finish(){
+ flow.classList.remove("on");
+ var dormir=ans[0].val,confort=ans[1].val,despertar=ans[3].val,perm=ans[4].val;
+ var descanso=((dormir-1)/4*10*0.6+(despertar-1)/4*10*0.4);
+ var zona=MY||SEED[Math.floor(SEED.length/2)];
+ var cand=SEED.filter(function(z){return z.d>=7.5&&z.n!==zona.n;});
+ cand.forEach(function(z){z._km=km(zona,z);});
+ cand.sort(function(a,b){return a._km-b._km;});
+ var contra=cand[0]||SEED.slice().sort(function(a,b){return b.d-a.d})[0];
+ var near=SEED.filter(function(z){return z.n!==zona.n;}).map(function(z){return {z:z,k:km(zona,z)};}).sort(function(a,b){return a.k-b.k;}).slice(0,3);
+ reward.classList.add("on");reward.scrollTop=0;
+ document.getElementById("rbody").innerHTML=
+  '<div class="mapglow fade"><div class="mapbox" style="margin:0"><svg id="rmap" viewBox="0 0 300 190"></svg></div></div>'+
+  '<div class="rw-say fade" style="animation-delay:.15s"><div class="big">Gracias.</div><div class="small">Acabas de sumar tu noche al mapa del descanso de España.</div></div>'+
+  '<div class="card fade" style="animation-delay:.3s"><h3>Tu experiencia de esta noche</h3><div class="yourgrid">'+
+   '<div class="mini"><span class="em">'+EMO[dormir-1]+'</span><div><div class="l">Dormir</div><div class="v">'+LBL[dormir-1]+'</div></div></div>'+
+   '<div class="mini"><span class="em">'+EMOC[confort-1]+'</span><div><div class="l">Confort ahora</div><div class="v">'+LBL[confort-1]+'</div></div></div>'+
+   '<div class="mini"><span class="em">'+EMO[despertar-1]+'</span><div><div class="l">Despertar</div><div class="v">'+LBL[despertar-1]+'</div></div></div>'+
+   '<div class="mini"><span class="em">'+["🚗","🙁","😐","🙂","❤️"][perm-1]+'</span><div><div class="l">Volverías</div><div class="v">'+["Me iría","Otro sitio","Igual","Sí","Sin dudarlo"][perm-1]+'</div></div></div>'+
+   '</div><div class="tuidx"><span style="color:var(--muted);font-size:13px">Tu índice de descanso</span><div class="n" style="color:'+colorFor(descanso)+'">'+descanso.toFixed(1)+'<span style="font-size:16px;color:var(--muted)">/10</span></div></div></div>'+
+  '<div class="card fade thesis" style="animation-delay:.45s"><h3>Tú frente a los datos · '+zona.n+'</h3><div class="row">'+
+   '<div class="c"><div class="n" style="color:'+colorFor(descanso)+'">'+descanso.toFixed(1)+'</div><small>Tú, esta noche</small></div>'+
+   '<div class="c" style="align-self:center;color:var(--muted)">vs</div>'+
+   '<div class="c"><div class="n" style="color:'+colorFor(zona.d)+'">'+zona.d.toFixed(1)+'</div><small>Esperado (AEMET)</small></div></div>'+
+   '<p style="text-align:center;color:var(--muted);font-size:13.5px;margin-top:14px">'+(Math.abs(descanso-zona.d)<1.5?"Tu noche encaja con lo que AEMET esperaba aquí.":descanso>zona.d?"Has dormido mejor de lo que el clima suele dar aquí.":"Has dormido peor de lo que el clima suele dar aquí.")+'</p></div>'+
+  '<div class="contrast fade" style="animation-delay:.6s"><div class="pre">Mientras tú dormías…</div><div class="km">A solo '+contra._km+' km</div><div class="txt">en <b>'+contra.n+'</b> se descansa a <b>'+contra.d.toFixed(1)+'</b>.</div>'+
+   '<div class="vs"><div class="c"><div class="n" style="color:'+colorFor(zona.d)+'">'+zona.d.toFixed(1)+'</div><small>'+zona.n+'</small></div><div class="c" style="align-self:center;color:var(--muted)">vs</div><div class="c"><div class="n" style="color:'+colorFor(contra.d)+'">'+contra.d.toFixed(1)+'</div><small>'+contra.n+'</small></div></div>'+
+   '<p style="color:var(--muted);font-size:12px;margin-top:12px">Según 10 veranos de AEMET. En cuanto haya votos, verás lo que dice la gente.</p></div>'+
+  '<div class="card fade" style="animation-delay:.7s"><h3>Cerca de ti, esta madrugada</h3><div class="nearby">'+
+   near.map(function(o){return '<div class="row"><span class="idx" style="color:'+colorFor(o.z.d)+';background:'+bgFor(o.z.d)+'">'+o.z.d.toFixed(1)+'</span><div class="info"><div class="n">'+o.z.n+' · '+o.k+' km</div><div class="p">"'+o.z.f+'"</div></div></div>';}).join("")+'</div></div>'+
+  '<button class="share fade" style="animation-delay:.8s" onclick="alert(\'La tarjeta para compartir llega en el siguiente incremento.\')">📲 Compartir cómo ha dormido España</button>'+
+  '<button class="again" onclick="reward.classList.remove(\'on\');document.getElementById(\'morehint\').classList.add(\'hidden\');window.scrollTo(0,0)">Volver al observatorio</button>'+
+  '<p class="disc-o">El Observatorio del Descanso · experiencias reales cruzadas con datos de AEMET · sin predicciones, solo lo ocurrido. Sé de los primeros: cuantos más votemos, más real será el mapa.</p>';
+ renderMap();var rm=document.getElementById("rmap");if(rm){var svg=document.getElementById("map");rm.innerHTML=svg.innerHTML;var p=proj(zona);rm.innerHTML+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}
+ /* auto-scroll: revela que hay más (evita el abandono en la primera pantalla) */
+ var mh=document.getElementById("morehint");mh.classList.remove("hidden");
+ setTimeout(function(){smoothScroll(reward,Math.round(window.innerHeight*0.52),1100);},1300);
+ reward.addEventListener("scroll",function(){if(reward.scrollTop>window.innerHeight*0.45)mh.classList.add("hidden");},{passive:true});
+}
+</script>
+</body></html>
+"""
+
+
+def construir_pagina_observatorio(estaciones: list, site: str) -> str:
+    seed = json.dumps(seed_observatorio(estaciones), ensure_ascii=False, separators=(",", ":"))
+    desc = ("¿Cómo has dormido esta noche? El Observatorio del Descanso es el mapa "
+            "ciudadano del descanso climático de España: no medimos la temperatura, "
+            "medimos cómo se duerme. Comparte tu noche en 10 segundos y descubre dónde "
+            "se descansa mejor, con datos cruzados con AEMET.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "El Observatorio del Descanso",
+             "item": site + "/observatorio-del-descanso/"}]},
+        {"@type": "WebApplication", "name": "El Observatorio del Descanso",
+         "url": site + "/observatorio-del-descanso/", "applicationCategory": "LifestyleApplication",
+         "operatingSystem": "Web", "description": desc,
+         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}}]},
+        ensure_ascii=False)
+    return (PAGINA_OBSERVATORIO
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__DESC__", desc)
+            .replace("__SEED__", seed)
+            .replace("__SITE__", site)
+            .replace("__HOME__", site + "/"))
+
+
 def construir_pagina_hotel(h: dict, site: str) -> str:
     """Ficha individual de un hotel: su certificado (verlo + descargarlo +
     código para embeber), el dato AEMET de la zona, cómo llegar y reservar.
@@ -6440,6 +6768,12 @@ def main() -> int:
         (DOCS_DIR / "tu-hotel" / "index.html").write_text(
             construir_pagina_tuhotel(site), encoding="utf-8")
         print(f"   hoteles-refugio-climatico: {len(hoteles)} fichas + sellos + /tu-hotel/")
+    # El Observatorio del Descanso ("¿cómo has dormido esta noche?"): ciencia
+    # ciudadana. Se siembra con la expectativa real de AEMET (nunca vacío).
+    (DOCS_DIR / "observatorio-del-descanso").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "observatorio-del-descanso" / "index.html").write_text(
+        construir_pagina_observatorio(estaciones, site), encoding="utf-8")
+    print("   observatorio-del-descanso: generado (semilla AEMET)")
     # Página SEO de destinos frescos / turismo climático.
     (DOCS_DIR / "dormir-con-manta-en-verano").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "dormir-con-manta-en-verano" / "index.html").write_text(

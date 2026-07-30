@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>El Observatorio del Descanso · ¿Cómo has dormido esta noche? | nochetropical.es</title>
+<meta name="description" content="¿Cómo has dormido esta noche? El Observatorio del Descanso es el mapa ciudadano del descanso climático de España: no medimos la temperatura, medimos cómo se duerme. Comparte tu noche en 10 segundos y descubre dónde se descansa mejor, con datos cruzados con AEMET.">
+<link rel="canonical" href="https://nochetropical.es/observatorio-del-descanso/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="El Observatorio del Descanso · Así se siente España">
+<meta property="og:description" content="¿Cómo has dormido esta noche? El Observatorio del Descanso es el mapa ciudadano del descanso climático de España: no medimos la temperatura, medimos cómo se duerme. Comparte tu noche en 10 segundos y descubre dónde se descansa mejor, con datos cruzados con AEMET.">
+<meta property="og:url" content="https://nochetropical.es/observatorio-del-descanso/">
+<meta property="og:image" content="https://nochetropical.es/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://nochetropical.es/og.png">
+<link rel="icon" type="image/svg+xml" href="https://nochetropical.es/favicon.svg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": "https://nochetropical.es/"}, {"@type": "ListItem", "position": 2, "name": "El Observatorio del Descanso", "item": "https://nochetropical.es/observatorio-del-descanso/"}]}, {"@type": "WebApplication", "name": "El Observatorio del Descanso", "url": "https://nochetropical.es/observatorio-del-descanso/", "applicationCategory": "LifestyleApplication", "operatingSystem": "Web", "description": "¿Cómo has dormido esta noche? El Observatorio del Descanso es el mapa ciudadano del descanso climático de España: no medimos la temperatura, medimos cómo se duerme. Comparte tu noche en 10 segundos y descubre dónde se descansa mejor, con datos cruzados con AEMET.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#100b06;--bg2:#1a130b;--panel:#241a10;--line:#3a2c1c;--paper:#f3ece0;--muted:#b3a48c;
+--teja:#e0834f;--teja2:#eda877;--teal:#8fc0cf;--verde:#8fb07a;--rojo:#d9604a;--oro:#e8b45c;
+--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;padding:0 22px}
+button{font-family:inherit;cursor:pointer;border:0}
+a{color:var(--teal);text-decoration:none}
+.hero{min-height:calc(100svh - 54px);display:flex;flex-direction:column;justify-content:center;text-align:center;padding:36px 0;background:radial-gradient(130% 90% at 50% 0,#241a10,var(--bg) 65%)}
+.brandmini{font:600 12px/1 var(--fb);letter-spacing:.22em;text-transform:uppercase;color:var(--teja);margin-bottom:22px}
+.hero h1{font-family:var(--fd);font-weight:900;font-size:clamp(32px,8vw,52px);line-height:1.05;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--teja2)}
+.hero .sub{color:var(--muted);font-size:clamp(15.5px,3vw,18px);margin:18px auto 0;max-width:30ch}
+.cta{margin-top:30px;background:var(--teja);color:#160f08;font-weight:700;font-size:17px;padding:17px 30px;border-radius:16px;box-shadow:0 10px 30px rgba(224,131,79,.28);transition:.15s}
+.cta:hover{transform:translateY(-2px);background:var(--teja2)}
+.loc{margin-top:15px;font-size:13px;color:var(--muted)}.loc b{color:var(--paper)}
+.loc select{background:var(--bg2);color:var(--paper);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-family:var(--fb);font-size:13px}
+.scrollhint{margin-top:40px;font-size:12.5px;color:var(--muted);letter-spacing:.05em;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(5px);opacity:1}}
+.public{padding:44px 0 20px;border-top:1px solid var(--line);background:var(--bg2)}
+.public h2{font-family:var(--fd);font-weight:600;font-size:clamp(21px,4vw,27px);text-align:center;margin-bottom:6px}
+.public .when{text-align:center;color:var(--muted);font-size:12.5px;margin-bottom:20px}
+.mapbox{background:#0c0805;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:22px}
+.mapbox svg{width:100%;height:auto;display:block}
+.dot{cursor:pointer}
+.rankcols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rankcol h3{font:600 11px/1 var(--fb);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.rankcol.best h3{color:var(--verde)}.rankcol.worst h3{color:var(--rojo)}
+.rk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.rk .idx{font-family:var(--fd);font-weight:900;font-size:18px;width:42px;text-align:center;border-radius:9px;padding:4px 0}
+.rk .nm{font-size:13.5px;flex:1}.rk .nm small{display:block;color:var(--muted);font-size:11px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:24px 0 0;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.ldot{width:11px;height:11px;border-radius:50%;display:inline-block}
+.flow{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .25s}
+.flow.on{opacity:1;pointer-events:auto}
+.flowtop{display:flex;align-items:center;gap:14px;padding:18px 22px}
+.bar{flex:1;height:4px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teja);width:0;transition:width .35s cubic-bezier(.4,0,.2,1)}
+.close{background:transparent;color:var(--muted);font-size:22px;line-height:1}
+.step{flex:1;display:flex;flex-direction:column;justify-content:center;padding:10px 0 30px}
+.step .q{font-family:var(--fd);font-weight:600;font-size:clamp(24px,6vw,34px);text-align:center;line-height:1.12;padding:0 18px;margin-bottom:24px}
+.opts{display:flex;flex-direction:column;gap:11px;max-width:440px;margin:0 auto;width:100%;padding:0 22px}
+.opt{display:flex;align-items:center;gap:16px;background:var(--bg2);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;color:var(--paper);font-size:17px;text-align:left;transition:.12s}
+.opt:hover{border-color:var(--teja);background:var(--panel)}
+.opt .em{font-size:27px;line-height:1}
+.opt.sel{border-color:var(--teja);background:rgba(224,131,79,.14)}
+.reward{position:fixed;inset:0;z-index:110;background:var(--bg);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .3s}
+.reward.on{opacity:1;pointer-events:auto}
+.rwrap{max-width:520px;margin:0 auto;padding:26px 22px 70px;min-height:100svh}
+.mapglow{position:relative;margin:6px 0}
+.rw-say{text-align:center;margin:16px 0}
+.rw-say .big{font-family:var(--fd);font-weight:600;font-size:clamp(23px,5.5vw,30px);line-height:1.18}
+.rw-say .small{color:var(--muted);font-size:14.5px;margin-top:10px}
+.morehint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:111;background:rgba(224,131,79,.16);border:1px solid var(--teja);color:var(--teja2);font-size:12.5px;padding:8px 16px;border-radius:20px;animation:bob 1.6s ease-in-out infinite;transition:opacity .3s}
+.card{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:22px;margin:18px 0}
+.card h3{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:16px}
+.yourgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini{display:flex;align-items:center;gap:11px}.mini .em{font-size:24px}.mini .l{font-size:12px;color:var(--muted)}.mini .v{font-size:15px;font-weight:600}
+.tuidx{text-align:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.tuidx .n{font-family:var(--fd);font-weight:900;font-size:38px}
+.thesis{text-align:center}.thesis .row{display:flex;justify-content:center;gap:30px;margin-top:6px}
+.thesis .row .c .n{font-family:var(--fd);font-weight:900;font-size:32px}
+.thesis .row .c small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
+.contrast{background:radial-gradient(120% 100% at 50% 0,#2a1a10,var(--bg2));border:1px solid var(--teja);border-radius:20px;padding:26px 22px;margin:22px 0;text-align:center}
+.contrast .pre{color:var(--teja2);font-size:14px;letter-spacing:.04em}
+.contrast .km{font-family:var(--fd);font-weight:900;font-size:clamp(30px,8vw,42px);color:var(--paper);margin:8px 0;line-height:1.1}
+.contrast .txt{font-size:16px;color:var(--paper)}.contrast .txt b{color:var(--verde)}
+.contrast .vs{display:flex;justify-content:center;gap:26px;margin-top:18px}
+.contrast .vs .c .n{font-family:var(--fd);font-weight:900;font-size:26px}.contrast .vs .c small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.nearby .row{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--line)}.nearby .row:last-child{border:0}
+.nearby .idx{font-family:var(--fd);font-weight:900;font-size:20px;width:46px;text-align:center;border-radius:9px;padding:4px 0}
+.nearby .info .n{font-weight:600;font-size:15px}.nearby .info .p{color:var(--muted);font-size:13px;font-style:italic}
+.share{width:100%;background:var(--teja);color:#160f08;font-weight:700;font-size:16px;padding:16px;border-radius:15px;margin-top:8px}.share:hover{background:var(--teja2)}
+.again{width:100%;background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600;font-size:14px;padding:13px;border-radius:14px;margin-top:11px}
+.disc-o{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
+.fade{opacity:0;transform:translateY(14px);animation:rise .5s forwards}@keyframes rise{to{opacity:1;transform:none}}
+.pinp{animation:ping 1.6s ease-out infinite}@keyframes ping{0%{r:4;opacity:1}100%{r:16px;opacity:0}}
+ .nav-e{position:sticky;top:0;z-index:30;background:rgba(22,16,9,.88);backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid var(--line)}.nav-e .in{max-width:min(92vw,920px);margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:16px;height:54px}.nav-e .brand{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:600;font-size:16.5px;color:var(--paper);white-space:nowrap}.nav-e .brand:hover{text-decoration:none;color:var(--teja2)}.nav-e .links{margin-left:auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.nav-e .links::-webkit-scrollbar{display:none}.nav-e .links a{font-size:13.5px;color:var(--muted);padding:8px 11px;border-radius:8px;white-space:nowrap}.nav-e .links a:hover{color:var(--paper);background:rgba(217,116,78,.14);text-decoration:none}.nav-e .links a.lang{margin-left:4px;border:1px solid var(--line);color:var(--teja2);font-weight:600;letter-spacing:.04em}.nav-e .links a.lang:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}@media(max-width:560px){.nav-e .brand span{display:none}.nav-e .in{gap:8px;padding:0 14px}.nav-e .links a{padding:8px 8px}}
+ .f2{border-top:1px solid var(--line);background:var(--bg2);margin-top:30px;padding:34px 0 46px}.f2grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}.f2col h4{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin:0 0 12px}.f2col a{display:block;color:var(--muted);font-size:13.5px;margin:0 0 8px;text-decoration:none}.f2col a:hover{color:var(--paper);text-decoration:underline}.f2bar{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-size:12.5px;color:#82745d}.f2bar a{color:#9a8a6f}.f2brand{margin-bottom:26px;max-width:42ch}.f2brand .brand{display:inline-flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:600;font-size:16px;color:var(--paper)}.f2brand .brand:hover{text-decoration:none;color:var(--teja2)}.f2brand p{color:var(--muted);font-size:13.5px;margin:10px 0 0;line-height:1.6}@media(max-width:640px){.f2grid{grid-template-columns:1fr 1fr}}@media(max-width:420px){.f2grid{grid-template-columns:1fr}}
+</style></head><body>
+<nav class="nav-e" aria-label="principal"><div class="in"><a class="brand" href="https://nochetropical.es/" aria-label="nochetropical.es"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--paper)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/><circle cx="73" cy="34" r="6.5" fill="var(--teja)"/></svg><span>nochetropical.es</span></a><div class="links"><a href="https://nochetropical.es/observatorio-del-descanso/">Observatorio</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios cerca de mí</a><a href="https://nochetropical.es/hoteles-refugio-climatico/">Hoteles</a><a href="https://nochetropical.es/ola-de-calor/">Ola de calor</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking</a><a href="https://nochetropical.es/en/" hreflang="en" class="lang" aria-label="English version" title="English version">EN</a></div></div></nav>
+<section class="hero"><div class="wrap">
+  <div class="brandmini">El Observatorio del Descanso</div>
+  <h1>¿Cómo has <em>dormido</em><br>esta noche?</h1>
+  <p class="sub">Tu experiencia ayuda a construir el mapa del descanso de España.</p>
+  <button class="cta" onclick="startFlow()">Compartir cómo he dormido</button>
+  <div class="loc" id="loc">📍 Detectando tu zona…</div>
+  <div class="scrollhint">↓ Mira cómo se siente España esta noche</div>
+</div></section>
+<section class="public"><div class="wrap">
+  <h2>Así se siente España</h2>
+  <div class="when" id="when">Índice de descanso · <b>esperado según AEMET</b> · aún sin votos — sé el primero</div>
+  <div class="mapbox"><svg id="map" viewBox="0 0 300 190" aria-label="Mapa del descanso de España"></svg></div>
+  <div class="rankcols">
+    <div class="rankcol best"><h3>😴 Mejor descanso</h3><div id="best"></div></div>
+    <div class="rankcol worst"><h3>🥵 Peor descanso</h3><div id="worst"></div></div>
+  </div>
+  <div class="legend">
+    <span><i class="ldot" style="background:#8fb07a"></i>Excelente</span>
+    <span><i class="ldot" style="background:#b9c47a"></i>Bueno</span>
+    <span><i class="ldot" style="background:#e8b45c"></i>Regular</span>
+    <span><i class="ldot" style="background:#e0834f"></i>Malo</span>
+    <span><i class="ldot" style="background:#d9604a"></i>Muy malo</span>
+  </div>
+  <p class="disc-o" style="margin-top:22px">Aún estamos empezando. El mapa nace con la <b>expectativa de AEMET</b> (10 veranos de datos); cada noche que votas lo hace más real: veremos <b>lo que dicen los datos frente a lo que dice la gente</b>. Sin predicciones, sin temperatura de protagonista: solo cómo se ha vivido la noche.</p>
+</div></section>
+<footer class="f2"><div class="wrap"><div class="f2brand"><a class="brand" href="https://nochetropical.es/" aria-label="nochetropical.es"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--paper)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/><circle cx="73" cy="34" r="6.5" fill="var(--teja)"/></svg><span>nochetropical.es</span></a><p>Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p></div><div class="f2grid"><div class="f2col"><h4>Explora los datos</h4><a href="https://nochetropical.es/observatorio-del-descanso/">El Observatorio del Descanso</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios climáticos cerca de mí</a><a href="https://nochetropical.es/confortometro/">El Confortómetro: vota tu zona</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa interactivo de estaciones</a><a href="https://nochetropical.es/ola-de-calor/">¿Cuándo acaba la ola de calor?</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking nacional de noches tropicales</a><a href="https://nochetropical.es/parte/">El parte de la noche</a><a href="https://nochetropical.es/certificados/">Certificados de refugio climático</a></div><div class="f2col"><h4>Guías y artículos</h4><a href="https://nochetropical.es/hoteles-refugio-climatico/">🏨 Hoteles donde dormir con manta</a><a href="https://nochetropical.es/dormir-con-manta-en-verano/">Pueblos para dormir con manta en verano</a><a href="https://nochetropical.es/la-espana-que-nunca-se-colorea/">La España que nunca se colorea (estudio)</a><a href="https://nochetropical.es/microclimas/">Microclimas: los refugios de la naturaleza</a><a href="https://nochetropical.es/refugio-climatico-natural/">Cómo crear un refugio climático natural</a><a href="https://nochetropical.es/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://nochetropical.es/hipoteca-termica/">La hipoteca térmica</a></div><div class="f2col"><h4>Proyecto</h4><a href="https://nochetropical.es/">La calculadora de tu pueblo</a><a href="https://nochetropical.es/sobre-el-proyecto/">Sobre el proyecto</a><a href="https://nochetropical.es/metodologia/">Metodología y glosario</a><a href="https://nochetropical.es/prensa/">Sala de prensa</a><a href="https://nochetropical.es/tu-hotel/">Certifica tu hotel</a><a href="https://nochetropical.es/tu-pueblo/">¿Tu pueblo no aparece? Ayúdanos</a><a href="https://nochetropical.es/aviso-legal/">Licencia y aviso legal</a></div></div><div class="f2bar">Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a> · © 2026 <a href="https://nochetropical.es/">nochetropical.es</a> · Ramón J. Lowesting</div></div></footer>
+
+<div class="flow" id="flow">
+  <div class="flowtop"><button class="close" onclick="closeFlow()">✕</button><div class="bar"><i id="barfill"></i></div><span id="stepn" style="font-size:12px;color:var(--muted);width:34px;text-align:right">1/5</span></div>
+  <div class="step"><div id="stepbody"></div></div>
+</div>
+<div class="reward" id="reward"><div class="rwrap" id="rbody"></div></div>
+<div class="morehint hidden" id="morehint">↓ sigue, hay más</div>
+
+<script>
+var SEED=[{"n":"Cedrillas","p":"Teruel","la":40.431,"lo":-0.849,"d":8.6,"t":11.7,"f":"Aquí la noche casi siempre refresca."},{"n":"Albarracín","p":"Teruel","la":40.42,"lo":-1.441,"d":7.8,"t":13.2,"f":"Suele refrescar de madrugada."},{"n":"Benasque","p":"Huesca","la":42.599,"lo":0.521,"d":9.4,"t":10.1,"f":"Aquí la noche casi siempre refresca."},{"n":"Canfranc","p":"Huesca","la":42.749,"lo":-0.516,"d":8.5,"t":11.9,"f":"Aquí la noche casi siempre refresca."},{"n":"Torla - Ordesa","p":"Huesca","la":42.638,"lo":-0.112,"d":7.9,"t":13.0,"f":"Suele refrescar de madrugada."},{"n":"Rascafría","p":"Madrid","la":40.89,"lo":-3.888,"d":9.9,"t":9.2,"f":"Aquí la noche casi siempre refresca."},{"n":"Sanabria","p":"Zamora","la":42.083,"lo":-6.64,"d":9.9,"t":7.6,"f":"Aquí la noche casi siempre refresca."},{"n":"Reinosa","p":"Cantabria","la":42.992,"lo":-4.161,"d":9.6,"t":9.8,"f":"Aquí la noche casi siempre refresca."},{"n":"Alto Campoo","p":"Cantabria","la":43.037,"lo":-4.374,"d":9.8,"t":9.3,"f":"Aquí la noche casi siempre refresca."},{"n":"Cervera de Pisuerga","p":"Palencia","la":42.871,"lo":-4.52,"d":9.3,"t":10.4,"f":"Aquí la noche casi siempre refresca."},{"n":"Vinuesa","p":"Soria","la":41.968,"lo":-2.783,"d":9.4,"t":10.2,"f":"Aquí la noche casi siempre refresca."},{"n":"Molina de Aragón","p":"Guadalajara","la":40.842,"lo":-1.879,"d":8.8,"t":11.4,"f":"Aquí la noche casi siempre refresca."},{"n":"Puerto del Pico","p":"Ávila","la":40.34,"lo":-5.013,"d":9.9,"t":6.6,"f":"Aquí la noche casi siempre refresca."},{"n":"Puerto de Navacerrada","p":"Madrid","la":40.793,"lo":-4.011,"d":8.4,"t":12.1,"f":"Suele refrescar de madrugada."},{"n":"Isaba/Izaba","p":"Navarra","la":42.863,"lo":-0.925,"d":9.2,"t":10.6,"f":"Aquí la noche casi siempre refresca."},{"n":"Villablino","p":"León","la":42.929,"lo":-6.334,"d":9.9,"t":9.1,"f":"Aquí la noche casi siempre refresca."},{"n":"Riaño","p":"León","la":42.958,"lo":-5.008,"d":9.3,"t":10.3,"f":"Aquí la noche casi siempre refresca."},{"n":"Formigal","p":"Huesca","la":42.763,"lo":-0.393,"d":8.8,"t":11.4,"f":"Aquí la noche casi siempre refresca."},{"n":"Valencia de Don Juan","p":"León","la":42.296,"lo":-5.505,"d":8.1,"t":12.6,"f":"Suele refrescar de madrugada."},{"n":"Palma","p":"Illes Balears","la":39.642,"lo":2.644,"d":5.6,"t":17.4,"f":"La noche afloja, pero no del todo."},{"n":"Cartagena","p":"Murcia","la":37.604,"lo":-1.023,"d":3.9,"t":20.8,"f":"Aquí la noche no perdona."},{"n":"Alicante-Elche Aeropue","p":"Alicante","la":38.283,"lo":-0.571,"d":3.6,"t":21.3,"f":"Aquí la noche no perdona."},{"n":"Málaga Aeropuerto","p":"Málaga","la":36.666,"lo":-4.482,"d":3.4,"t":21.7,"f":"Aquí la noche no perdona."},{"n":"Alhama de Murcia","p":"Murcia","la":37.862,"lo":-1.335,"d":4.6,"t":19.3,"f":"Aquí la noche no perdona."},{"n":"Sevilla Aeropuerto","p":"Sevilla","la":37.417,"lo":-5.879,"d":4.3,"t":20.0,"f":"Aquí la noche no perdona."},{"n":"Zaragoza","p":"Zaragoza","la":41.661,"lo":-1.004,"d":4.7,"t":19.1,"f":"Aquí la noche no perdona."},{"n":"Barcelona","p":"Barcelona","la":41.391,"lo":2.2,"d":3.3,"t":21.9,"f":"Aquí la noche no perdona."},{"n":"Bilbao Aeropuerto","p":"Bizkaia","la":43.298,"lo":-2.906,"d":6.3,"t":16.1,"f":"La noche afloja, pero no del todo."},{"n":"Madrid","p":"Madrid","la":40.411,"lo":-3.678,"d":4.4,"t":19.7,"f":"Aquí la noche no perdona."},{"n":"Valladolid Aeropuerto","p":"Valladolid","la":41.712,"lo":-4.856,"d":8.2,"t":12.4,"f":"Suele refrescar de madrugada."},{"n":"Córdoba Aeropuerto","p":"Córdoba","la":37.849,"lo":-4.847,"d":4.8,"t":19.0,"f":"Aquí la noche no perdona."},{"n":"Granada Aeropuerto","p":"Granada","la":37.19,"lo":-3.79,"d":6.0,"t":16.6,"f":"La noche afloja, pero no del todo."},{"n":"Santander Aeropuerto","p":"Cantabria","la":43.429,"lo":-3.831,"d":6.3,"t":16.2,"f":"La noche afloja, pero no del todo."},{"n":"A Coruña Bens","p":"A Coruña","la":43.363,"lo":-8.442,"d":6.3,"t":16.1,"f":"La noche afloja, pero no del todo."},{"n":"Cáceres","p":"Cáceres","la":39.471,"lo":-6.339,"d":5.0,"t":18.6,"f":"La noche afloja, pero no del todo."},{"n":"Badajoz","p":"Badajoz","la":38.886,"lo":-7.009,"d":5.8,"t":17.0,"f":"La noche afloja, pero no del todo."},{"n":"Albacete Base Aérea","p":"Albacete","la":38.954,"lo":-1.856,"d":5.7,"t":17.2,"f":"La noche afloja, pero no del todo."},{"n":"Toledo","p":"Toledo","la":39.885,"lo":-4.045,"d":4.6,"t":19.4,"f":"Aquí la noche no perdona."},{"n":"Almería Aeropuerto","p":"Almería","la":36.846,"lo":-2.357,"d":3.1,"t":22.3,"f":"Aquí la noche no perdona."},{"n":"Gijón","p":"Asturias","la":43.523,"lo":-5.621,"d":6.6,"t":15.6,"f":"Suele refrescar de madrugada."}];
+function colorFor(d){return d>=8?"#8fb07a":d>=6?"#b9c47a":d>=4?"#e8b45c":d>=2.5?"#e0834f":"#d9604a";}
+function bgFor(d){return d>=8?"rgba(143,176,122,.18)":d>=6?"rgba(185,196,122,.18)":d>=4?"rgba(232,180,92,.18)":d>=2.5?"rgba(224,131,79,.18)":"rgba(217,96,74,.18)";}
+function km(a,b){var R=6371,dLa=(b.la-a.la)*Math.PI/180,dLo=(b.lo-a.lo)*Math.PI/180,la1=a.la*Math.PI/180,la2=b.la*Math.PI/180;var h=Math.sin(dLa/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(h)));}
+function proj(z){var x=(z.lo+9.4)/(3.4+9.4)*300,y=(43.9-z.la)/(43.9-36)*190;return[x,y];}
+/* mapa de puntos (la silueta la dibujan las propias estaciones) */
+function renderMap(sel){
+  var svg=document.getElementById("map"),h="";
+  SEED.forEach(function(z,i){var p=proj(z);h+='<circle class="dot" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(4+z.d/3.2)+'" fill="'+colorFor(z.d)+'" fill-opacity=".9"><title>'+z.n+' · '+z.d+'/10</title></circle>';});
+  if(sel){var p=proj(sel);h+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}
+  svg.innerHTML=h;
+}
+function renderRanks(){
+  var best=SEED.slice().sort(function(a,b){return b.d-a.d}).slice(0,5);
+  var worst=SEED.slice().sort(function(a,b){return a.d-b.d}).slice(0,5);
+  function row(m){return '<div class="rk"><span class="idx" style="color:'+colorFor(m.d)+';background:'+bgFor(m.d)+'">'+m.d.toFixed(1)+'</span><span class="nm">'+m.n+'<small>'+m.p+'</small></span></div>';}
+  document.getElementById("best").innerHTML=best.map(row).join("");
+  document.getElementById("worst").innerHTML=worst.map(row).join("");
+}
+renderMap();renderRanks();
+
+/* ubicación: zona semilla más cercana; si falla, selector */
+var MY=null;
+function setZone(z){MY=z;var l=document.getElementById("loc");l.innerHTML='📍 Estás en <b>'+z.n+'</b> · <button style="background:none;border:0;color:var(--teal);font:inherit;cursor:pointer;text-decoration:underline" onclick="pickZone()">cambiar</button>';renderMap(z);}
+function nearest(la,lo){var me={la:la,lo:lo},best=SEED[0],bd=1e9;SEED.forEach(function(z){var d=km(me,z);if(d<bd){bd=d;best=z;}});return best;}
+function pickZone(){var l=document.getElementById("loc");var opts=SEED.slice().sort(function(a,b){return a.n.localeCompare(b.n)}).map(function(z,i){return '<option value="'+i+'">'+z.n+' ('+z.p+')</option>';}).join("");l.innerHTML='📍 <select onchange="setZone(SEED_S[this.value])">'+opts+'</select>';}
+var SEED_S=SEED.slice().sort(function(a,b){return a.n.localeCompare(b.n)});
+if(navigator.geolocation){navigator.geolocation.getCurrentPosition(function(pos){setZone(nearest(pos.coords.latitude,pos.coords.longitude));},function(){document.getElementById("loc").innerHTML='📍 <button style="background:none;border:0;color:var(--teal);font:inherit;cursor:pointer;text-decoration:underline" onclick="pickZone()">Elige tu municipio</button>';setZone(SEED[Math.floor(SEED.length/2)]);},{timeout:5000});}
+else{setZone(SEED[Math.floor(SEED.length/2)]);}
+
+/* FLUJO */
+var Q=[
+ {q:"¿Cómo has dormido esta noche?",o:[["😴","He dormido de maravilla",5],["🙂","Bastante bien",4],["😐","Regular",3],["🥵","Con mucho calor",2],["🔥","Apenas he dormido",1]]},
+ {q:"¿Cómo se está AHORA mismo?",o:[["😊","Muy agradable",5],["🙂","Bien",4],["😐","Soportable",3],["🥵","Hace calor",2],["🔥","Insoportable",1]]},
+ {q:"¿Qué has necesitado para dormir?",o:[["🪟","Nada, tal cual",5],["🌬️","La ventana abierta",4],["💨","El ventilador",3],["❄️","El aire acondicionado",1],["⛺","Dormir fuera de casa",2],["…","Otro",3]]},
+ {q:"¿Cómo te has despertado?",o:[["😀","Muy descansado",5],["🙂","Descansado",4],["😐","Normal",3],["😴","Cansado",2],["🥱","Muy cansado",1]]},
+ {q:"¿Volverías a dormir aquí esta noche?",o:[["❤️","Sin dudarlo",5],["🙂","Sí",4],["😐","Me da igual",3],["🙁","Preferiría otro sitio",2],["🚗","Si pudiera, me iría",1]]}];
+var cur=0,ans=[null,null,null,null,null];
+var flow=document.getElementById("flow"),reward=document.getElementById("reward");
+function startFlow(){cur=0;ans=[null,null,null,null,null];flow.classList.add("on");renderStep();}
+function closeFlow(){flow.classList.remove("on");}
+function renderStep(){var s=Q[cur];document.getElementById("barfill").style.width=(cur/5*100)+"%";document.getElementById("stepn").textContent=(cur+1)+"/5";
+ document.getElementById("stepbody").innerHTML='<div class="q">'+s.q+'</div><div class="opts">'+s.o.map(function(o,i){return '<button class="opt" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';}
+function pick(i,val){ans[cur]={i:i,val:val};document.querySelectorAll(".opt")[i].classList.add("sel");document.getElementById("barfill").style.width=((cur+1)/5*100)+"%";setTimeout(function(){if(cur<4){cur++;renderStep();}else finish();},230);}
+
+/* RECOMPENSA */
+var EMO=["🔥","🥵","😐","🙂","😴"],EMOC=["🔥","🥵","😐","🙂","😊"],LBL=["Muy mal","Con calor","Regular","Bien","De maravilla"];
+function finish(){
+ flow.classList.remove("on");
+ var dormir=ans[0].val,confort=ans[1].val,despertar=ans[3].val,perm=ans[4].val;
+ var descanso=((dormir-1)/4*10*0.6+(despertar-1)/4*10*0.4);
+ var zona=MY||SEED[Math.floor(SEED.length/2)];
+ var cand=SEED.filter(function(z){return z.d>=7.5&&z.n!==zona.n;});
+ cand.forEach(function(z){z._km=km(zona,z);});
+ cand.sort(function(a,b){return a._km-b._km;});
+ var contra=cand[0]||SEED.slice().sort(function(a,b){return b.d-a.d})[0];
+ var near=SEED.filter(function(z){return z.n!==zona.n;}).map(function(z){return {z:z,k:km(zona,z)};}).sort(function(a,b){return a.k-b.k;}).slice(0,3);
+ reward.classList.add("on");reward.scrollTop=0;
+ document.getElementById("rbody").innerHTML=
+  '<div class="mapglow fade"><div class="mapbox" style="margin:0"><svg id="rmap" viewBox="0 0 300 190"></svg></div></div>'+
+  '<div class="rw-say fade" style="animation-delay:.15s"><div class="big">Gracias.</div><div class="small">Acabas de sumar tu noche al mapa del descanso de España.</div></div>'+
+  '<div class="card fade" style="animation-delay:.3s"><h3>Tu experiencia de esta noche</h3><div class="yourgrid">'+
+   '<div class="mini"><span class="em">'+EMO[dormir-1]+'</span><div><div class="l">Dormir</div><div class="v">'+LBL[dormir-1]+'</div></div></div>'+
+   '<div class="mini"><span class="em">'+EMOC[confort-1]+'</span><div><div class="l">Confort ahora</div><div class="v">'+LBL[confort-1]+'</div></div></div>'+
+   '<div class="mini"><span class="em">'+EMO[despertar-1]+'</span><div><div class="l">Despertar</div><div class="v">'+LBL[despertar-1]+'</div></div></div>'+
+   '<div class="mini"><span class="em">'+["🚗","🙁","😐","🙂","❤️"][perm-1]+'</span><div><div class="l">Volverías</div><div class="v">'+["Me iría","Otro sitio","Igual","Sí","Sin dudarlo"][perm-1]+'</div></div></div>'+
+   '</div><div class="tuidx"><span style="color:var(--muted);font-size:13px">Tu índice de descanso</span><div class="n" style="color:'+colorFor(descanso)+'">'+descanso.toFixed(1)+'<span style="font-size:16px;color:var(--muted)">/10</span></div></div></div>'+
+  '<div class="card fade thesis" style="animation-delay:.45s"><h3>Tú frente a los datos · '+zona.n+'</h3><div class="row">'+
+   '<div class="c"><div class="n" style="color:'+colorFor(descanso)+'">'+descanso.toFixed(1)+'</div><small>Tú, esta noche</small></div>'+
+   '<div class="c" style="align-self:center;color:var(--muted)">vs</div>'+
+   '<div class="c"><div class="n" style="color:'+colorFor(zona.d)+'">'+zona.d.toFixed(1)+'</div><small>Esperado (AEMET)</small></div></div>'+
+   '<p style="text-align:center;color:var(--muted);font-size:13.5px;margin-top:14px">'+(Math.abs(descanso-zona.d)<1.5?"Tu noche encaja con lo que AEMET esperaba aquí.":descanso>zona.d?"Has dormido mejor de lo que el clima suele dar aquí.":"Has dormido peor de lo que el clima suele dar aquí.")+'</p></div>'+
+  '<div class="contrast fade" style="animation-delay:.6s"><div class="pre">Mientras tú dormías…</div><div class="km">A solo '+contra._km+' km</div><div class="txt">en <b>'+contra.n+'</b> se descansa a <b>'+contra.d.toFixed(1)+'</b>.</div>'+
+   '<div class="vs"><div class="c"><div class="n" style="color:'+colorFor(zona.d)+'">'+zona.d.toFixed(1)+'</div><small>'+zona.n+'</small></div><div class="c" style="align-self:center;color:var(--muted)">vs</div><div class="c"><div class="n" style="color:'+colorFor(contra.d)+'">'+contra.d.toFixed(1)+'</div><small>'+contra.n+'</small></div></div>'+
+   '<p style="color:var(--muted);font-size:12px;margin-top:12px">Según 10 veranos de AEMET. En cuanto haya votos, verás lo que dice la gente.</p></div>'+
+  '<div class="card fade" style="animation-delay:.7s"><h3>Cerca de ti, esta madrugada</h3><div class="nearby">'+
+   near.map(function(o){return '<div class="row"><span class="idx" style="color:'+colorFor(o.z.d)+';background:'+bgFor(o.z.d)+'">'+o.z.d.toFixed(1)+'</span><div class="info"><div class="n">'+o.z.n+' · '+o.k+' km</div><div class="p">"'+o.z.f+'"</div></div></div>';}).join("")+'</div></div>'+
+  '<button class="share fade" style="animation-delay:.8s" onclick="alert(\'La tarjeta para compartir llega en el siguiente incremento.\')">📲 Compartir cómo ha dormido España</button>'+
+  '<button class="again" onclick="reward.classList.remove(\'on\');document.getElementById(\'morehint\').classList.add(\'hidden\');window.scrollTo(0,0)">Volver al observatorio</button>'+
+  '<p class="disc-o">El Observatorio del Descanso · experiencias reales cruzadas con datos de AEMET · sin predicciones, solo lo ocurrido. Sé de los primeros: cuantos más votemos, más real será el mapa.</p>';
+ renderMap();var rm=document.getElementById("rmap");if(rm){var svg=document.getElementById("map");rm.innerHTML=svg.innerHTML;var p=proj(zona);rm.innerHTML+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}
+ /* auto-scroll: revela que hay más (evita el abandono en la primera pantalla) */
+ var mh=document.getElementById("morehint");mh.classList.remove("hidden");
+ setTimeout(function(){reward.scrollTo({top:Math.round(window.innerHeight*0.60),behavior:"smooth"});},1100);
+ reward.addEventListener("scroll",function(){if(reward.scrollTop>window.innerHeight*0.5)mh.classList.add("hidden");},{passive:true});
+}
+</script>
+</body></html>

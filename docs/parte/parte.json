@@ -1,12 +1,12 @@
 {
  "fecha": "2026-07-30",
- "total": 853,
- "tropicales": 385,
+ "total": 852,
+ "tropicales": 384,
  "ecuatoriales": 18,
  "peor": {
   "id": "C625O",
   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-  "min": 29.1,
+  "min": 29.6,
   "prov": "Las Palmas"
  },
  "mejor": {
@@ -19,8 +19,14 @@
   {
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 29.1,
+   "min": 29.6,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 29.1,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C648C",
@@ -59,21 +65,15 @@
    "prov": "Tarragona"
   },
   {
-   "id": "C916Q",
-   "nombre": "Pinar-Depósito",
+   "id": "C316I",
+   "nombre": "Arure Cementerio",
    "min": 26.1,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "6291B",
-   "nombre": "El Ejido (Ayuntamiento - Automatica)",
-   "min": 26.0,
-   "prov": "Almería"
-  },
-  {
-   "id": "C316I",
-   "nombre": "Arure Cementerio",
-   "min": 26.0,
+   "id": "C916Q",
+   "nombre": "Pinar-Depósito",
+   "min": 26.1,
    "prov": "Santa Cruz de Tenerife"
   }
  ],

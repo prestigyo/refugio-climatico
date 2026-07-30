@@ -6190,6 +6190,11 @@ a{color:var(--teal);text-decoration:none}
 .disc-o{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
 .fade{opacity:0;transform:translateY(14px);animation:rise .5s forwards}@keyframes rise{to{opacity:1;transform:none}}
 .pinp{animation:ping 1.6s ease-out infinite}@keyframes ping{0%{r:4;opacity:1}100%{r:16px;opacity:0}}
+.hidden{display:none!important}
+.desktoponly{margin:8px auto 0;max-width:34ch;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);font-size:14.5px;line-height:1.55}
+.desktoponly b{color:var(--paper)}
+.back{background:transparent;color:var(--muted);font-size:15px;line-height:1;padding:6px 4px;white-space:nowrap}
+.back:hover{color:var(--paper)}
  __NAVCSS__
  __FOOTERCSS__
 </style></head><body>
@@ -6198,8 +6203,9 @@ __NAV__
   <div class="brandmini">El Observatorio del Descanso</div>
   <h1>¿Cómo has <em>dormido</em><br>esta noche?</h1>
   <p class="sub">Tu experiencia ayuda a construir el mapa del descanso de España.</p>
-  <button class="cta" onclick="startFlow()">Compartir cómo he dormido</button>
+  <button class="cta" id="cta" onclick="startFlow()">Compartir cómo he dormido</button>
   <div class="loc" id="loc">📍 Detectando tu zona…</div>
+  <div class="desktoponly hidden" id="desknote">📱 El Observatorio se usa desde el <b>móvil</b>: necesita tu ubicación para situar tu noche en el mapa. Ábrelo en tu teléfono. Aquí abajo puedes ver cómo se siente España ahora mismo.</div>
   <div class="scrollhint">↓ Mira cómo se siente España esta noche</div>
 </div></section>
 <section class="public"><div class="wrap">
@@ -6222,7 +6228,7 @@ __NAV__
 __FOOTER__
 
 <div class="flow" id="flow">
-  <div class="flowtop"><button class="close" onclick="closeFlow()">✕</button><div class="bar"><i id="barfill"></i></div><span id="stepn" style="font-size:12px;color:var(--muted);width:34px;text-align:right">1/5</span></div>
+  <div class="flowtop"><button class="back" id="backbtn" onclick="back()">‹ Atrás</button><div class="bar"><i id="barfill"></i></div><span id="stepn" style="font-size:12px;color:var(--muted);width:34px;text-align:right">1/5</span></div>
   <div class="step"><div id="stepbody"></div></div>
 </div>
 <div class="reward" id="reward"><div class="rwrap" id="rbody"></div></div>
@@ -6250,14 +6256,18 @@ function renderRanks(){
 }
 renderMap();renderRanks();
 
-/* ubicación: zona semilla más cercana; si falla, selector */
+/* SOLO móvil + SOLO geoposicionamiento (sin entrada manual, que daba falsos
+   positivos como la Valencia de León). La zona = estación AEMET más cercana. */
 var MY=null;
-function setZone(z){MY=z;var l=document.getElementById("loc");l.innerHTML='📍 Estás en <b>'+z.n+'</b> · <button style="background:none;border:0;color:var(--teal);font:inherit;cursor:pointer;text-decoration:underline" onclick="pickZone()">cambiar</button>';renderMap(z);}
+var isMobile=(('ontouchstart' in window)||navigator.maxTouchPoints>0)&&window.matchMedia("(max-width:860px)").matches;
+function setZone(z){MY=z;document.getElementById("loc").innerHTML='📍 Estás cerca de <b>'+z.n+'</b>';renderMap(z);}
 function nearest(la,lo){var me={la:la,lo:lo},best=SEED[0],bd=1e9;SEED.forEach(function(z){var d=km(me,z);if(d<bd){bd=d;best=z;}});return best;}
-function pickZone(){var l=document.getElementById("loc");var opts=SEED.slice().sort(function(a,b){return a.n.localeCompare(b.n)}).map(function(z,i){return '<option value="'+i+'">'+z.n+' ('+z.p+')</option>';}).join("");l.innerHTML='📍 <select onchange="setZone(SEED_S[this.value])">'+opts+'</select>';}
-var SEED_S=SEED.slice().sort(function(a,b){return a.n.localeCompare(b.n)});
-if(navigator.geolocation){navigator.geolocation.getCurrentPosition(function(pos){setZone(nearest(pos.coords.latitude,pos.coords.longitude));},function(){document.getElementById("loc").innerHTML='📍 <button style="background:none;border:0;color:var(--teal);font:inherit;cursor:pointer;text-decoration:underline" onclick="pickZone()">Elige tu municipio</button>';setZone(SEED[Math.floor(SEED.length/2)]);},{timeout:5000});}
-else{setZone(SEED[Math.floor(SEED.length/2)]);}
+function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){setZone(nearest(pos.coords.latitude,pos.coords.longitude));cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
+function initHero(){
+  if(!isMobile){document.getElementById("cta").classList.add("hidden");document.getElementById("loc").classList.add("hidden");document.getElementById("desknote").classList.remove("hidden");return;}
+  askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});
+}
+initHero();
 
 /* FLUJO */
 var Q=[
@@ -6268,11 +6278,19 @@ var Q=[
  {q:"¿Volverías a dormir aquí esta noche?",o:[["❤️","Sin dudarlo",5],["🙂","Sí",4],["😐","Me da igual",3],["🙁","Preferiría otro sitio",2],["🚗","Si pudiera, me iría",1]]}];
 var cur=0,ans=[null,null,null,null,null];
 var flow=document.getElementById("flow"),reward=document.getElementById("reward");
-function startFlow(){cur=0;ans=[null,null,null,null,null];flow.classList.add("on");renderStep();}
+function startFlow(){
+ if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
+ if(!MY){askLoc(function(ok){if(ok)startFlow();else document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Necesitamos tu ubicación para situar tu noche. Actívala y vuelve a tocar.</span>';});return;}
+ cur=0;ans=[null,null,null,null,null];flow.classList.add("on");renderStep();
+}
 function closeFlow(){flow.classList.remove("on");}
+function back(){if(cur>0){cur--;renderStep();}else closeFlow();}
 function renderStep(){var s=Q[cur];document.getElementById("barfill").style.width=(cur/5*100)+"%";document.getElementById("stepn").textContent=(cur+1)+"/5";
- document.getElementById("stepbody").innerHTML='<div class="q">'+s.q+'</div><div class="opts">'+s.o.map(function(o,i){return '<button class="opt" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';}
+ document.getElementById("backbtn").textContent=cur===0?"‹ Salir":"‹ Atrás";
+ document.getElementById("stepbody").innerHTML='<div class="q">'+s.q+'</div><div class="opts">'+s.o.map(function(o,i){return '<button class="opt'+(ans[cur]&&ans[cur].i===i?' sel':'')+'" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';}
 function pick(i,val){ans[cur]={i:i,val:val};document.querySelectorAll(".opt")[i].classList.add("sel");document.getElementById("barfill").style.width=((cur+1)/5*100)+"%";setTimeout(function(){if(cur<4){cur++;renderStep();}else finish();},230);}
+/* scroll suave con easing (robusto en iOS, sin salto brusco) */
+function smoothScroll(el,to,dur){var start=el.scrollTop,ch=to-start,t0=null;function step(t){if(!t0)t0=t;var p=Math.min((t-t0)/dur,1),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;el.scrollTop=start+ch*e;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
 
 /* RECOMPENSA */
 var EMO=["🔥","🥵","😐","🙂","😴"],EMOC=["🔥","🥵","😐","🙂","😊"],LBL=["Muy mal","Con calor","Regular","Bien","De maravilla"];
@@ -6312,8 +6330,8 @@ function finish(){
  renderMap();var rm=document.getElementById("rmap");if(rm){var svg=document.getElementById("map");rm.innerHTML=svg.innerHTML;var p=proj(zona);rm.innerHTML+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}
  /* auto-scroll: revela que hay más (evita el abandono en la primera pantalla) */
  var mh=document.getElementById("morehint");mh.classList.remove("hidden");
- setTimeout(function(){reward.scrollTo({top:Math.round(window.innerHeight*0.60),behavior:"smooth"});},1100);
- reward.addEventListener("scroll",function(){if(reward.scrollTop>window.innerHeight*0.5)mh.classList.add("hidden");},{passive:true});
+ setTimeout(function(){smoothScroll(reward,Math.round(window.innerHeight*0.52),1100);},1300);
+ reward.addEventListener("scroll",function(){if(reward.scrollTop>window.innerHeight*0.45)mh.classList.add("hidden");},{passive:true});
 }
 </script>
 </body></html>

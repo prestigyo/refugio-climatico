@@ -5799,7 +5799,7 @@ def cargar_hoteles(estaciones: list) -> list:
 PAGINA_HOTELES = r"""<!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Los __TOTAL__ hoteles donde el verano te deja dormir · La geografía del descanso</title>
+<title>Hoteles donde el verano te deja dormir · La geografía del descanso | nochetropical.es</title>
 <meta name="description" content="__DESC__">
 <link rel="canonical" href="__SITE__/hoteles-refugio-climatico/">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -5885,8 +5885,8 @@ __NAV__
 <header class="h"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Hoteles en refugios climáticos</nav>
   <div class="kick">Turismo climático · Datos AEMET 2017–2026</div>
-  <h1>__TOTAL__ hoteles donde se duerme con <em>manta</em> en verano</h1>
-  <p class="intro">Mientras la ola de calor asa el país y las noches tropicales impiden dormir en la costa, hay una <b>España que no arde</b>: valles y sierras donde la mínima nocturna baja sistemáticamente de los 20&nbsp;°C. Hemos cruzado 10 veranos de <b>datos de AEMET</b> con la oferta hotelera para reunir __TOTAL__ hoteles en <b>refugios climáticos naturales</b>, de __FRIO__ para arriba. Se duerme fresco, sin depender del aire acondicionado.</p>
+  <h1>Hoteles donde se duerme con <em>manta</em> en verano</h1>
+  <p class="intro">Mientras la ola de calor asa el país y las noches tropicales impiden dormir en la costa, hay una <b>España que no arde</b>: valles y sierras donde la mínima nocturna baja sistemáticamente de los 20&nbsp;°C. Hemos cruzado 10 veranos de <b>datos de AEMET</b> con la oferta hotelera para reunir hoteles en <b>refugios climáticos naturales</b>, de __FRIO__ para arriba. Se duerme fresco, sin depender del aire acondicionado.</p>
   <p class="disc"><b>Divulgación:</b> esta página contiene enlaces de afiliado de Booking.com. Si reservas a través de ellos, podemos recibir una comisión <b>sin coste adicional para ti</b>. La certificación climática se basa en datos oficiales de AEMET y es independiente de la relación de afiliación: certifica el clima de la zona, no el interior del establecimiento.</p>
 </div></header>
 
@@ -5911,8 +5911,8 @@ __NAV__
   __LISTADO__
 
   <div class="cta">
-    <b>¿Tienes un hotel o casa rural en un sitio fresco?</b>
-    <p>Auditamos gratis los registros históricos de AEMET de tu municipio. Si cumples el criterio de confort nocturno, entras en el directorio con tu <b>sello de Refugio Climático Natural</b>.</p>
+    <b>¿Tienes un hotel o casa rural en un sitio fresco? ¿O conoces alguno que debería figurar en esta lista?</b>
+    <p>Auditamos gratis los registros históricos de AEMET de ese municipio. Si cumple el criterio de confort nocturno, entra en el directorio con su <b>sello de Refugio Climático Natural</b>.</p>
     <div class="botones">
       <a class="b2 pri" href="__SITE__/tu-hotel/">Solicitar auditoría para mi hotel →</a>
       <a class="b2 sec" href="__SITE__/la-espana-que-nunca-se-colorea/">Ver el estudio del calor →</a>
@@ -5937,10 +5937,10 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
     tmin_min = min((h["tmin"] for h in hoteles), default=0)
     frescos = [h for h in hoteles if h["tmin"] < tmin_min + 0.05]
     hotel_frio = frescos[0] if frescos else (hoteles[0] if hoteles else None)
-    desc = (f"El verano no se mide por el día, sino por cómo duermes. {total} hoteles en "
-            "refugios climáticos naturales de España donde la noche baja de 20 °C y se "
-            "duerme fresco —con manta y sin aire acondicionado—, medido con 10 años de "
-            "datos de AEMET. La geografía del descanso.")
+    desc = ("El verano no se mide por el día, sino por cómo duermes. Hoteles en refugios "
+            "climáticos naturales de España donde la noche baja de 20 °C y se duerme "
+            "fresco —con manta y sin aire acondicionado—, medido con 10 años de datos de "
+            "AEMET. La geografía del descanso.")
 
     def tarjeta(h: dict) -> str:
         niv = h["nivel"]
@@ -6005,7 +6005,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             {"@type": "ListItem", "position": 2, "name": "Hoteles en refugios climáticos",
              "item": site + "/hoteles-refugio-climatico/"}]},
         {"@type": "Article",
-         "headline": f"{total} hoteles de España donde se duerme con manta en verano",
+         "headline": "Hoteles de España donde se duerme con manta en verano",
          "description": desc, "image": site + "/og.png",
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es",
@@ -6073,7 +6073,7 @@ def seed_observatorio(estaciones: list) -> list:
     frags = ["cedrillas", "albarrac", "benasque", "canfranc", "torla", "rascafr",
              "sanabria", "reinosa", "alto campoo", "cervera de pisuerga", "vinuesa",
              "molina de aragon", "puerto del pico", "navacerrada", "isaba", "villablino",
-             "riano", "formigal", "valencia", "palma", "cartagena", "alicante",
+             "riano", "formigal", "valencia aero", "palma", "cartagena", "alicante",
              "malaga aero", "murcia", "sevilla aero", "zaragoza", "barcelona", "bilbao",
              "madrid, retiro", "valladolid", "cordoba aero", "granada aero", "santander",
              "coruna", "caceres", "badajoz", "albacete", "toledo", "almeria aero", "gijon"]
@@ -6236,6 +6236,7 @@ __FOOTER__
 
 <script>
 var SEED=__SEED__;
+var ALL=__ALLZ__.map(function(a){return {la:a[0],lo:a[1],n:a[2],d:a[3]};}); /* 848 estaciones para el geoposicionamiento exacto */
 function colorFor(d){return d>=8?"#8fb07a":d>=6?"#b9c47a":d>=4?"#e8b45c":d>=2.5?"#e0834f":"#d9604a";}
 function bgFor(d){return d>=8?"rgba(143,176,122,.18)":d>=6?"rgba(185,196,122,.18)":d>=4?"rgba(232,180,92,.18)":d>=2.5?"rgba(224,131,79,.18)":"rgba(217,96,74,.18)";}
 function km(a,b){var R=6371,dLa=(b.la-a.la)*Math.PI/180,dLo=(b.lo-a.lo)*Math.PI/180,la1=a.la*Math.PI/180,la2=b.la*Math.PI/180;var h=Math.sin(dLa/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(h)));}
@@ -6258,11 +6259,13 @@ renderMap();renderRanks();
 
 /* SOLO móvil + SOLO geoposicionamiento (sin entrada manual, que daba falsos
    positivos como la Valencia de León). La zona = estación AEMET más cercana. */
-var MY=null;
+var MY=null,MYLL=null;
 var isMobile=(('ontouchstart' in window)||navigator.maxTouchPoints>0)&&window.matchMedia("(max-width:860px)").matches;
-function setZone(z){MY=z;document.getElementById("loc").innerHTML='📍 Estás cerca de <b>'+z.n+'</b>';renderMap(z);}
-function nearest(la,lo){var me={la:la,lo:lo},best=SEED[0],bd=1e9;SEED.forEach(function(z){var d=km(me,z);if(d<bd){bd=d;best=z;}});return best;}
-function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){setZone(nearest(pos.coords.latitude,pos.coords.longitude));cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
+function setZone(z){MY=z;document.getElementById("loc").innerHTML='📍 Estás cerca de <b>'+z.n+'</b>';renderMap(nearSeed(MYLL||z));}
+function nearIn(arr,la,lo){var me={la:la,lo:lo},best=arr[0],bd=1e9;arr.forEach(function(z){var d=km(me,z);if(d<bd){bd=d;best=z;}});return best;}
+function nearest(la,lo){return nearIn(ALL,la,lo);}   /* estación exacta más cercana (848) */
+function nearSeed(p){return p?nearIn(SEED,p.la,p.lo):SEED[0];}  /* semilla reconocible para el mapa */
+function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};setZone(nearest(MYLL.la,MYLL.lo));cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
 function initHero(){
   if(!isMobile){document.getElementById("cta").classList.add("hidden");document.getElementById("loc").classList.add("hidden");document.getElementById("desknote").classList.remove("hidden");return;}
   askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});
@@ -6298,12 +6301,13 @@ function finish(){
  flow.classList.remove("on");
  var dormir=ans[0].val,confort=ans[1].val,despertar=ans[3].val,perm=ans[4].val;
  var descanso=((dormir-1)/4*10*0.6+(despertar-1)/4*10*0.4);
- var zona=MY||SEED[Math.floor(SEED.length/2)];
- var cand=SEED.filter(function(z){return z.d>=7.5&&z.n!==zona.n;});
- cand.forEach(function(z){z._km=km(zona,z);});
+ var zona=MY||nearSeed(MYLL)||SEED[0];
+ var ref=MYLL||zona;
+ var cand=SEED.filter(function(z){return z.d>=7.5;});
+ cand.forEach(function(z){z._km=km(ref,z);});
  cand.sort(function(a,b){return a._km-b._km;});
- var contra=cand[0]||SEED.slice().sort(function(a,b){return b.d-a.d})[0];
- var near=SEED.filter(function(z){return z.n!==zona.n;}).map(function(z){return {z:z,k:km(zona,z)};}).sort(function(a,b){return a.k-b.k;}).slice(0,3);
+ var contra=cand.filter(function(z){return z._km>4})[0]||cand[0]||SEED.slice().sort(function(a,b){return b.d-a.d})[0];
+ var near=SEED.map(function(z){return {z:z,k:km(ref,z)};}).filter(function(o){return o.k>4;}).sort(function(a,b){return a.k-b.k;}).slice(0,3);
  reward.classList.add("on");reward.scrollTop=0;
  document.getElementById("rbody").innerHTML=
   '<div class="mapglow fade"><div class="mapbox" style="margin:0"><svg id="rmap" viewBox="0 0 300 190"></svg></div></div>'+
@@ -6340,6 +6344,13 @@ function finish(){
 
 def construir_pagina_observatorio(estaciones: list, site: str) -> str:
     seed = json.dumps(seed_observatorio(estaciones), ensure_ascii=False, separators=(",", ":"))
+    # TODAS las estaciones (compacto [lat,lon,nombre,baseline]) para que el
+    # geoposicionamiento resuelva la estación REALMENTE más cercana (exacta),
+    # no la más cercana de las 40 semilla. Así "tu zona" nunca se equivoca.
+    allz = json.dumps([[round(e["lat"], 3), round(e["lon"], 3),
+                        e["loc"].split(",")[0][:22], _obs_baseline(e["tmin"])]
+                       for e in estaciones if e.get("tmin") is not None],
+                      ensure_ascii=False, separators=(",", ":"))
     desc = ("¿Cómo has dormido esta noche? El Observatorio del Descanso es el mapa "
             "ciudadano del descanso climático de España: no medimos la temperatura, "
             "medimos cómo se duerme. Comparte tu noche en 10 segundos y descubre dónde "
@@ -6362,6 +6373,7 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
             .replace("__SCHEMA__", schema)
             .replace("__DESC__", desc)
             .replace("__SEED__", seed)
+            .replace("__ALLZ__", allz)
             .replace("__SITE__", site)
             .replace("__HOME__", site + "/"))
 
@@ -6657,6 +6669,34 @@ def construir_pagina_tuhotel(site: str) -> str:
             .replace("__HOME__", site + "/"))
 
 
+# Indicador de scroll reutilizable ("↓ sigue, hay más"): aparece si la página
+# tiene contenido bajo el pliegue, hace un empujón suave una sola vez (si el
+# usuario no ha hecho scroll) y al tocarlo baja con animación. Mejora la
+# usabilidad revelando que hay más, sin secuestrar la lectura. Autónomo (namespace
+# propio), se inyecta antes de </body> en la portada y las páginas del menú.
+SCROLL_CUE = (
+    '<style>@keyframes _scb{0%,100%{transform:translateX(-50%) translateY(0)}'
+    '50%{transform:translateX(-50%) translateY(5px)}}'
+    '#scue{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:60;'
+    'background:rgba(217,116,78,.18);border:1px solid #d9744e;color:#e89a73;'
+    'font:600 12.5px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;'
+    'padding:9px 16px;border-radius:20px;cursor:pointer;display:none;'
+    'backdrop-filter:blur(4px);animation:_scb 1.6s ease-in-out infinite}</style>'
+    '<div id="scue" aria-hidden="true">↓ sigue, hay más</div>'
+    '<script>(function(){var c=document.getElementById("scue");'
+    'function ease(to,d){var s=window.scrollY,ch=to-s,t0=null;function st(t){if(!t0)t0=t;'
+    'var p=Math.min((t-t0)/d,1),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;'
+    'window.scrollTo(0,s+ch*e);if(p<1)requestAnimationFrame(st);}requestAnimationFrame(st);}'
+    'function able(){return document.body.scrollHeight-window.innerHeight>window.innerHeight*.5;}'
+    'if(able()){c.style.display="block";setTimeout(function(){if(window.scrollY<20&&able())'
+    'ease(Math.round(window.innerHeight*.42),900);},2200);}'
+    'c.addEventListener("click",function(){ease(Math.min(window.scrollY+Math.round(window.innerHeight*.82),'
+    'document.body.scrollHeight),700);});'
+    'window.addEventListener("scroll",function(){var b=window.innerHeight+window.scrollY>=document.body.scrollHeight-40;'
+    'c.style.display=(!b&&window.scrollY<window.innerHeight*.6&&able())?"block":"none";},{passive:true});})();</script>'
+)
+
+
 def main() -> int:
     estaciones, total = cargar_estaciones()
     datos = construir_datos(estaciones, total)
@@ -6918,6 +6958,33 @@ def main() -> int:
             if nuevo != h:
                 f.write_text(nuevo, encoding="utf-8")
                 parte_noindex += 1
+    # Indicador de scroll ("↓ sigue, hay más"): en móvil, tras las páginas de
+    # una sola pantalla-aparente, mucha gente no descubre que hay más contenido
+    # abajo. Se inyecta en la portada y en las páginas que cuelgan del menú
+    # principal (las de más tráfico). El Observatorio ya trae el suyo (con su
+    # propio scroll suave tras la secuencia de respuesta), así que se excluye.
+    PAGINAS_SCROLL_CUE = [
+        "index.html",
+        "hoteles-refugio-climatico/index.html",
+        "ola-de-calor/index.html",
+        "ranking-noches-tropicales/index.html",
+        SLUG_CERCA + "/index.html",
+        "dormir-con-manta-en-verano/index.html",
+        "la-espana-que-nunca-se-colorea/index.html",
+    ]
+    con_scue = 0
+    for rel in PAGINAS_SCROLL_CUE:
+        f = DOCS_DIR / rel
+        if not f.exists():
+            continue
+        h = f.read_text(encoding="utf-8")
+        if 'id="scue"' in h or "</body>" not in h:
+            continue  # ya lo tiene, o la página no cierra <body> (raro)
+        f.write_text(h.replace("</body>", SCROLL_CUE + "\n</body>", 1),
+                     encoding="utf-8")
+        con_scue += 1
+    if con_scue:
+        print(f"   indicador de scroll inyectado en {con_scue} páginas")
     # Sitemap AUTOMÁTICO: descubre todas las páginas publicadas escaneando docs/.
     # Excluye redirecciones y CUALQUIER página noindex (informes, consola,
     # certificados finos, beta…) leyendo su meta robots — así nunca anuncia a

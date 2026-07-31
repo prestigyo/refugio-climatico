@@ -1441,7 +1441,7 @@ __NAV__
   <div>
   <table>
     <caption>__CAPTION__</caption>
-    <thead><tr><th>Localidad</th><th class="hide">Altitud</th><th class="r">Noches tropicales/año</th><th>Cómo se duerme</th></tr></thead>
+    <thead><tr><th>Localidad</th><th class="hide">Altitud</th><th class="r">Noches tropicales/año</th>__COLHUM__<th>Cómo se duerme</th></tr></thead>
     <tbody>__TABLE__</tbody>
   </table>
   <p class="note">Una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. Media anual, veranos 2017–2026. Fuente: AEMET. · <a href="datos.csv" download>Descargar estos datos (CSV)</a></p>
@@ -1740,6 +1740,81 @@ def csv_provincia(lista: list[dict]) -> str:
     return buf.getvalue()
 
 
+def _sensacion_nocturna(tmin, hr: int) -> str:
+    """Lectura honesta de la noche combinando la mínima media de agosto y la
+    humedad relativa. El bochorno nocturno necesita calor Y humedad; en los
+    refugios de altura la mínima baja tanto que no hay bochorno aunque el aire
+    sea húmedo. No inventa: solo describe la combinación de dos datos reales."""
+    seco = "aire seco" if hr < 50 else ("humedad media" if hr < 68 else "aire húmedo")
+    if tmin is None:
+        return seco
+    if tmin < 16:
+        return f"noche fresca, {seco}"
+    if tmin < 20:
+        return "templada y húmeda" if hr >= 68 else f"templada, {seco}"
+    # tmin >= 20: la noche ya es de por sí tropical
+    return "noche de bochorno" if hr >= 60 else "noche cálida pero seca"
+
+
+def cargar_humedad_estaciones(estaciones: list) -> dict:
+    """Humedad relativa y viento medios de AGOSTO por estación, leyendo los
+    diarios_humedad_*.csv (backfill histórico) y diarios_humedad.csv (rolling
+    diario). AEMET da la humedad en % y velmedia/racha en m/s en el producto
+    climatológico diario: el viento se pasa a km/h para el público (si el primer
+    dato real desmintiera la unidad, basta cambiar el factor de aquí).
+
+    Devuelve {id: {"hr": %, "viento": km/h?, "sensacion": etiqueta}}. Es un
+    COMPLEMENTO: degrada a {} mientras no exista el dato (antes del primer
+    backfill de humedad), y la web sigue funcionando igual sin él."""
+    from collections import defaultdict
+    datos_dir = AEMET_DIR / "datos"
+    paths = sorted(datos_dir.glob("diarios_humedad_2*.csv"))
+    rolling = datos_dir / "diarios_humedad.csv"
+    if rolling.exists():
+        paths.append(rolling)
+    if not paths:
+        return {}
+    acc_hr: dict = defaultdict(lambda: [0.0, 0])   # id -> [suma, n]
+    acc_v: dict = defaultdict(lambda: [0.0, 0])
+    for path in paths:
+        with path.open(encoding="utf-8", newline="") as fh:
+            rd = csv.reader(fh)
+            cab = next(rd, None)
+            if not cab:
+                continue
+            try:
+                i_f = cab.index("fecha"); i_ind = cab.index("indicativo")
+                i_hr = cab.index("hr_media"); i_v = cab.index("vel_media")
+            except ValueError:
+                continue
+            tope = max(i_f, i_ind, i_hr, i_v)
+            for row in rd:
+                if len(row) <= tope or row[i_f][5:7] != "08":  # solo agosto
+                    continue
+                ind = row[i_ind]
+                try:
+                    acc_hr[ind][0] += float(row[i_hr]); acc_hr[ind][1] += 1
+                except ValueError:
+                    pass
+                try:
+                    acc_v[ind][0] += float(row[i_v]); acc_v[ind][1] += 1
+                except ValueError:
+                    pass
+    tmin_by = {e["id"]: e.get("tmin") for e in estaciones}
+    out: dict = {}
+    for ind in set(acc_hr) | set(acc_v):
+        hs, hn = acc_hr[ind]
+        if hn < 15:  # sin cobertura mínima de agosto no damos el dato (honestidad)
+            continue
+        hr = round(hs / hn)
+        d = {"hr": hr, "sensacion": _sensacion_nocturna(tmin_by.get(ind), hr)}
+        vs, vn = acc_v[ind]
+        if vn >= 15:
+            d["viento"] = round(vs / vn * 3.6)  # m/s -> km/h
+        out[ind] = d
+    return out
+
+
 def cargar_tendencia_provincias(estaciones: list) -> dict:
     """Media de noches tropicales por estación y verano (jun–ago), por provincia
     y año, leyendo los CSV diarios (2017–2026). Devuelve {provincia: {año: media}}.
@@ -1854,17 +1929,28 @@ PROV_TITULO_CORTO = {
 
 def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
                                 fecha_mod: str, fecha_mod_txt: str,
-                                tendencia: dict | None = None) -> str:
+                                tendencia: dict | None = None,
+                                humedad: dict | None = None) -> str:
     sl = slug(prov)
     ordenadas = sorted(lista, key=lambda x: (x["nt"], -x["alt"]))
     mejor, peor, n = ordenadas[0], max(lista, key=lambda x: x["nt"]), len(lista)
+    # Columna de humedad de agosto (complemento): solo si al menos una estación
+    # de la provincia tiene el dato; si no, la tabla queda exactamente igual.
+    hum = humedad or {}
+    hay_hum = any(hum.get(e["id"]) for e in ordenadas)
+    col_hum_head = '<th class="r hide">Humedad ago.</th>' if hay_hum else ""
     filas = []
     for e in ordenadas:
         etq, col, bg = bandas_py(e["nt"])
         alt = f"{e['alt']:,}".replace(",", ".")
+        td_hum = ""
+        if hay_hum:
+            hd = hum.get(e["id"])
+            td_hum = (f'<td class="r hide">{hd["hr"]}%</td>' if hd
+                      else '<td class="r hide">—</td>')
         filas.append(
             f'<tr><td class="loc">{e["loc"]}</td><td class="hide">{alt} m</td>'
-            f'<td class="n">{ntfmt(e["nt"])}</td>'
+            f'<td class="n">{ntfmt(e["nt"])}</td>{td_hum}'
             f'<td><span class="v" style="color:{col};background:{bg}">{etq}</span></td></tr>')
     mtxt = ("prácticamente no hay noches tropicales" if mejor["nt"] < 1
             else f'son unas {round(mejor["nt"])} al año')
@@ -1948,6 +2034,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             .replace("__PROVNAME__", prov)
             .replace("__H1__", h1)
             .replace("__INTRO__", intro)
+            .replace("__COLHUM__", col_hum_head)
             .replace("__TABLE__", "".join(filas))
             .replace("__COMPARTIR__", barra_compartir(url_comp, texto_comp))
             .replace("__CAPTION__", f"Estaciones de AEMET en {prov}, de la más fresca a la más calurosa")
@@ -3555,6 +3642,7 @@ PAGINA_CERCA = r"""<!doctype html>
  .rkm{font-family:var(--font-m);font-weight:700;font-size:16px;color:var(--brand);white-space:nowrap}
  .rp{font-size:13.5px;color:var(--muted);margin:4px 0 0}
  .rp .nt{color:var(--c-ref);font-weight:600}
+ .rp.rh{font-size:12.5px;opacity:.82;margin:2px 0 0}
  .racc{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
  .racc a{font:600 13.5px/1 var(--font-b);padding:9px 14px;border-radius:9px;border:1px solid var(--line);color:var(--ink);text-decoration:none}
  .racc a:hover{border-color:var(--brand);color:var(--brand)}
@@ -3644,6 +3732,7 @@ function pinta(la,lo,origen){
    li.className="ref"+(i===0?" first":"");
    li.innerHTML="<div class='rtop'><span class='rn'>"+x.n+"</span><span class='rkm'>"+km(o.d)+" km</span></div>"
      +"<div class='rp'>"+x.p+" · "+x.a+" m · <span class='nt'>"+ntTxt(x.nt)+"</span></div>"
+     +(x.h?"<div class='rp rh'>"+x.h+"% humedad media en agosto"+(x.v?" · "+x.v+" km/h de viento":"")+"</div>":"")
      +"<div class='racc'><a class='pri' href='"+ruta+"' target='_blank' rel='noopener'>Ver ruta</a>"
      +"<a href='"+SITE+"/certificados/"+x.c+"/'>Ver su certificado</a>"
      +"<a href='"+SITE+"/"+x.s+"/'>Ver "+x.p+"</a></div>";
@@ -3698,12 +3787,24 @@ est.addEventListener("change",function(){
 """
 
 
-def construir_pagina_cerca(estaciones: list, datos: dict, site: str) -> str:
+def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
+                           humedad: dict | None = None) -> str:
     """Los 218 refugios (nt<1) con coordenadas + todas las estaciones para poder
-    elegir origen sin geolocalización. El cálculo (Haversine) va en el navegador."""
-    refs = [{"n": e["loc"], "p": e["prov"], "a": e["alt"], "nt": e["nt"],
+    elegir origen sin geolocalización. El cálculo (Haversine) va en el navegador.
+    Cada refugio lleva, si existe, el complemento de humedad/viento de agosto."""
+    hum = humedad or {}
+
+    def _ref(e):
+        r = {"n": e["loc"], "p": e["prov"], "a": e["alt"], "nt": e["nt"],
              "la": e["lat"], "lo": e["lon"], "c": slug(e["loc"]), "s": slug(e["prov"])}
-            for e in sorted(estaciones, key=lambda x: (x["nt"], -x["alt"])) if e["nt"] < 1]
+        hd = hum.get(e["id"])
+        if hd:
+            r["h"] = hd["hr"]
+            if hd.get("viento") is not None:
+                r["v"] = hd["viento"]
+        return r
+    refs = [_ref(e) for e in sorted(estaciones, key=lambda x: (x["nt"], -x["alt"]))
+            if e["nt"] < 1]
     est = {prov: [{"n": e["loc"], "a": e["alt"], "la": e["lat"], "lo": e["lon"]}
                   for e in sorted(lista, key=lambda x: clave_orden(x["loc"]))]
            for prov, lista in datos["provincias"].items()}
@@ -5790,7 +5891,7 @@ def cargar_hoteles(estaciones: list) -> list:
             "provincia": fila["provincia"], "nivel": fila["nivel"].strip().upper(),
             "ref_desc": fila.get("ref_desc", ""), "slug_booking": fila["booking_slug"],
             "web": fila.get("web", ""), "telefono": fila.get("telefono", ""),
-            "slug": slug(fila["hotel"]),
+            "slug": slug(fila["hotel"]), "est_id": fila["est_ref_indicativo"],
             "tmin": e["tmin"], "nt": e["nt"], "alt": e["alt"], "est": e["loc"],
         })
     return out
@@ -5805,7 +5906,7 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Los __TOTAL__ hoteles de España donde se duerme con manta en verano">
+<meta property="og:title" content="Hoteles de España donde se duerme con manta en verano">
 <meta property="og:description" content="__DESC__">
 <meta property="og:url" content="__SITE__/hoteles-refugio-climatico/">
 <meta property="og:image" content="__SITE__/og.png">
@@ -5832,6 +5933,14 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .intro b{color:var(--paper)}
  .disc{margin:18px 0 0;font-size:12.5px;color:#8a7a5f;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;max-width:none}
  .disc b{color:var(--muted)}
+ /* Sello de ejemplo: imagen REDONDA y prominente en la cabecera. Es la pieza
+    que Google puede tomar como miniatura del resultado (contrasta con las fotos
+    cuadradas), y a la vez enseña al visitante qué certificado otorgamos. */
+ .sello-ej{float:right;width:min(40vw,210px);margin:2px 0 14px 26px;text-align:center}
+ .sello-ej img{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 26px rgba(0,0,0,.45))}
+ .sello-ej figcaption{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.45}
+ .sello-ej figcaption a{color:var(--teja2)}
+ @media(max-width:560px){.sello-ej{float:none;width:200px;margin:16px auto 6px}}
  .edwrap{padding:26px 0 6px;background:radial-gradient(120% 70% at 50% 0,#1d150d,var(--bg) 70%)}
  .ed{max-width:720px}
  .ed .lead{font-family:var(--fd);font-weight:600;font-size:clamp(22px,4vw,32px);line-height:1.22;color:var(--paper);margin:6px 0 22px}
@@ -5885,6 +5994,7 @@ __NAV__
 <header class="h"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Hoteles en refugios climáticos</nav>
   <div class="kick">Turismo climático · Datos AEMET 2017–2026</div>
+  __EJEMPLO__
   <h1>Hoteles donde se duerme con <em>manta</em> en verano</h1>
   <p class="intro">Mientras la ola de calor asa el país y las noches tropicales impiden dormir en la costa, hay una <b>España que no arde</b>: valles y sierras donde la mínima nocturna baja sistemáticamente de los 20&nbsp;°C. Hemos cruzado 10 veranos de <b>datos de AEMET</b> con la oferta hotelera para reunir hoteles en <b>refugios climáticos naturales</b>, de __FRIO__ para arriba. Se duerme fresco, sin depender del aire acondicionado.</p>
   <p class="disc"><b>Divulgación:</b> esta página contiene enlaces de afiliado de Booking.com. Si reservas a través de ellos, podemos recibir una comisión <b>sin coste adicional para ti</b>. La certificación climática se basa en datos oficiales de AEMET y es independiente de la relación de afiliación: certifica el clima de la zona, no el interior del establecimiento.</p>
@@ -5941,6 +6051,26 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             "climáticos naturales de España donde la noche baja de 20 °C y se duerme "
             "fresco —con manta y sin aire acondicionado—, medido con 10 años de datos de "
             "AEMET. La geografía del descanso.")
+    # Sello de EJEMPLO para la cabecera: un refugio emblemático (Nivel A, 0 noches
+    # tropicales) cuyo PNG ya exista. Es imagen RÁSTER (Google no usa SVG como
+    # miniatura) y redonda (contrasta con las fotos cuadradas del resultado).
+    ejemplo = next((h for h in hoteles if h["nivel"] == "A" and h["nt"] < 0.05
+                    and (DOCS_DIR / "badges" / f'{h["slug"]}.png').exists()), None)
+    if ejemplo is None:
+        ejemplo = next((h for h in hoteles
+                        if (DOCS_DIR / "badges" / f'{h["slug"]}.png').exists()), None)
+    ejemplo_url = f'{site}/badges/{ejemplo["slug"]}.png' if ejemplo else ""
+    if ejemplo:
+        ejemplo_html = (
+            '<figure class="sello-ej">'
+            f'<img src="{ejemplo_url}" width="210" height="210" loading="eager" '
+            'alt="Sello Refugio Climático Natural: ejemplo del certificado con datos de '
+            f'AEMET — {ejemplo["municipio"]} ({ejemplo["provincia"]}), 0 noches tropicales al año">'
+            '<figcaption>El sello que otorgamos a cada refugio: acredita el clima '
+            'nocturno de la zona con 10 años de datos de AEMET. '
+            f'<a href="{site}/tu-hotel/">Certifica el tuyo →</a></figcaption></figure>')
+    else:
+        ejemplo_html = ""
 
     def tarjeta(h: dict) -> str:
         niv = h["nivel"]
@@ -6006,7 +6136,8 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
              "item": site + "/hoteles-refugio-climatico/"}]},
         {"@type": "Article",
          "headline": "Hoteles de España donde se duerme con manta en verano",
-         "description": desc, "image": site + "/og.png",
+         "description": desc,
+         "image": ([ejemplo_url, site + "/og.png"] if ejemplo_url else site + "/og.png"),
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
@@ -6030,6 +6161,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             .replace("__SCHEMA__", schema)
             .replace("__DESC__", desc)
             .replace("__TOTAL__", str(total))
+            .replace("__EJEMPLO__", ejemplo_html)
             .replace("__FRIO__", frio_txt)
             .replace("__LISTADO__", listado)
             .replace("__FAQ__", faq_html(faq))
@@ -6385,7 +6517,31 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
     from urllib.parse import quote_plus
     sl = h["slug"]
     niv = h["nivel"]
+    # Los PNG del sello se renderizan aparte (la Action no tiene navegador) y se
+    # commitean; los hoteles recién añadidos aún no lo tienen. Degradamos: el
+    # hero visible ya es el SVG; para og:image (redes/Google, que no admiten SVG)
+    # caemos a la og.png del sitio, y ocultamos las descargas/embed en PNG hasta
+    # que exista. Al renderizar y commitear el PNG, se encienden solas.
+    png_ok = (DOCS_DIR / "badges" / f"{sl}.png").exists()
+    og_img = f"{site}/badges/{sl}.png" if png_ok else f"{site}/og.png"
+    dl_png = ((f'<a href="{site}/badges/{sl}.png" download>⬇ PNG (web, fondo oscuro)</a>'
+               f'<a href="{site}/badges/{sl}-imprimir.png" download>⬇ PNG (imprimir, fondo claro)</a>')
+              if png_ok else "")
     nt_txt = "0" if h["nt"] < 0.05 else _n_es(h["nt"])
+    # Complemento de datos (humedad/viento de la estación de referencia): solo si
+    # hay dato; si no, la ficha queda igual que antes del backfill de humedad.
+    hum = h.get("hum")
+    hum_cards = hum_note = ""
+    if hum:
+        hum_cards = (f'<div class="st"><div class="v">{hum["hr"]}%</div>'
+                     '<div class="k">humedad media agosto</div></div>')
+        if hum.get("viento") is not None:
+            hum_cards += (f'<div class="st"><div class="v">{hum["viento"]} km/h</div>'
+                          '<div class="k">viento medio agosto</div></div>')
+        hum_note = ('<p class="muted" style="margin:-4px 0 14px">Sensación nocturna típica en '
+                    f'agosto: <b style="color:var(--paper)">{hum["sensacion"]}</b>. '
+                    '<span style="opacity:.75">Humedad y viento medios de la estación de '
+                    'referencia, según AEMET.</span></p>')
     niv_txt = "Refugio Certificado" if niv == "A" else "Zona Verificada"
     acento = "var(--teja)" if niv == "A" else "var(--teal)"
     ficha_url = f"{site}/hoteles-refugio-climatico/{sl}/"
@@ -6405,8 +6561,9 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
     tel_btn = (f'<a class="btn sec" href="tel:{tel.replace(" ", "")}">☎ Reservas: {tel}</a>' if tel else "")
     maps = "https://www.google.com/maps/search/?api=1&query=" + quote_plus(
         f'{h["hotel"]} {h["municipio"]} {h["provincia"]}')
+    embed_img = f'{site}/badges/{sl}.png' if png_ok else f'{site}/badges/{sl}.svg'
     embed = (f'<a href="{ficha_url}" target="_blank" rel="noopener">\n'
-             f'  <img src="{site}/badges/{sl}.png" width="180" height="180"\n'
+             f'  <img src="{embed_img}" width="180" height="180"\n'
              f'       alt="Refugio Climatico Natural certificado - {h["municipio"]} ({h["provincia"]}) - datos AEMET">\n'
              f'</a>')
     desc = (f"{h['hotel']} ({h['municipio']}, {h['provincia']}) es un refugio climático natural: "
@@ -6474,7 +6631,7 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         f'<meta property="og:title" content="{h["hotel"]} · Refugio Climático Natural">\n'
         f'<meta property="og:description" content="{desc}">\n'
         f'<meta property="og:url" content="{ficha_url}">\n'
-        f'<meta property="og:image" content="{site}/badges/{sl}.png">\n'
+        f'<meta property="og:image" content="{og_img}">\n'
         '<meta property="og:locale" content="es_ES">\n'
         f'<link rel="icon" type="image/svg+xml" href="{site}/favicon.svg">\n'
         f'<script type="application/ld+json">{schema}</script>\n'
@@ -6501,7 +6658,9 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         f'<div class="st"><div class="v">{_n_es(h["tmin"])}°</div><div class="k">mín. media agosto</div></div>'
         f'<div class="st"><div class="v tj">{nt_txt}</div><div class="k">noches tropicales/año</div></div>'
         f'<div class="st"><div class="v">{miles(h["alt"])} m</div><div class="k">altitud</div></div>'
+        f'{hum_cards}'
         '</div>'
+        f'{hum_note}'
         f'<div class="acts">{reservar}{tel_btn}<a class="btn sec" href="{maps}" target="_blank" rel="noopener">📍 Cómo llegar</a></div>'
         '</div></div></div></section>'
         # Certificado
@@ -6511,8 +6670,7 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         '10 veranos de datos de AEMET. <b>Certifica el clima de la zona</b> (la noche refresca), no '
         'el interior del establecimiento. Puedes descargarlo y mostrarlo en tu web, recepción o redes.</p>'
         '<div class="dl">'
-        f'<a href="{site}/badges/{sl}.png" download>⬇ PNG (web, fondo oscuro)</a>'
-        f'<a href="{site}/badges/{sl}-imprimir.png" download>⬇ PNG (imprimir, fondo claro)</a>'
+        f'{dl_png}'
         f'<a href="{site}/badges/{sl}.svg" download>⬇ SVG (vectorial)</a>'
         '</div>'
         '<p class="muted" style="margin-top:14px">Para incrustarlo en tu web con enlace de vuelta '
@@ -6720,6 +6878,14 @@ def main() -> int:
     fecha_mod_iso, fecha_mod_txt = fecha_mod.isoformat(), fecha_es(fecha_mod)
     tendencias = cargar_tendencia_provincias(estaciones)
     print(f"   tendencia 10 años: {len(tendencias)} provincias con serie")
+    # Complemento de datos por estación: humedad y viento medios de agosto
+    # (leídos de diarios_humedad_*.csv). Degrada a {} hasta el primer backfill
+    # de humedad; entonces aparece solo en las estaciones con dato.
+    humedad = cargar_humedad_estaciones(estaciones)
+    if humedad:
+        print(f"   complemento humedad/viento: {len(humedad)} estaciones con dato de agosto")
+    else:
+        print("   complemento humedad/viento: sin datos aún (lanza el backfill para poblarlo)")
     titulos_prov = []  # (provincia, título) para la tabla de control móvil
     for prov, lista in datos["provincias"].items():
         sl = slug(prov)
@@ -6727,7 +6893,7 @@ def main() -> int:
         carpeta.mkdir(parents=True, exist_ok=True)
         (carpeta / "index.html").write_text(
             construir_pagina_provincia(prov, lista, site, provnav, fecha_mod_iso,
-                                       fecha_mod_txt, tendencias.get(prov)),
+                                       fecha_mod_txt, tendencias.get(prov), humedad),
             encoding="utf-8")
         (carpeta / "datos.csv").write_text(csv_provincia(lista), encoding="utf-8")
         pt = PROV_TITULO_CORTO.get(prov, prov)
@@ -6757,7 +6923,7 @@ def main() -> int:
     # Herramienta: los refugios climáticos más cercanos (geolocalización).
     (DOCS_DIR / "refugios-climaticos-naturales-cerca-de-mi").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "refugios-climaticos-naturales-cerca-de-mi" / "index.html").write_text(
-        construir_pagina_cerca(estaciones, datos, site), encoding="utf-8")
+        construir_pagina_cerca(estaciones, datos, site, humedad), encoding="utf-8")
     # El confortómetro (ciencia ciudadana) + tmin-zonas.json: la última mínima
     # por estación, que es la referencia con la que el backend (Apps Script)
     # contrasta la coherencia de los votos.
@@ -6788,6 +6954,8 @@ def main() -> int:
     print("   versión EN (fase 1): /en/ + /en/coolest-towns-spain/ generadas")
     # Hoteles en refugios climáticos (afiliación Booking) + sello por hotel.
     hoteles = cargar_hoteles(estaciones)
+    for h in hoteles:  # complemento de datos: humedad/viento de su estación ref
+        h["hum"] = humedad.get(h.get("est_id", ""))
     if hoteles:
         (DOCS_DIR / "hoteles-refugio-climatico").mkdir(parents=True, exist_ok=True)
         (DOCS_DIR / "hoteles-refugio-climatico" / "index.html").write_text(

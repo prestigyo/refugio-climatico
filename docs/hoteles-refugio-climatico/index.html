@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Los 33 hoteles de España donde se duerme con manta en verano">
+<meta property="og:title" content="Hoteles de España donde se duerme con manta en verano">
 <meta property="og:description" content="El verano no se mide por el día, sino por cómo duermes. Hoteles en refugios climáticos naturales de España donde la noche baja de 20 °C y se duerme fresco —con manta y sin aire acondicionado—, medido con 10 años de datos de AEMET. La geografía del descanso.">
 <meta property="og:url" content="https://nochetropical.es/hoteles-refugio-climatico/">
 <meta property="og:image" content="https://nochetropical.es/og.png">
@@ -34,6 +34,14 @@
  .intro b{color:var(--paper)}
  .disc{margin:18px 0 0;font-size:12.5px;color:#8a7a5f;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;max-width:none}
  .disc b{color:var(--muted)}
+ /* Sello de ejemplo: imagen REDONDA y prominente en la cabecera. Es la pieza
+    que Google puede tomar como miniatura del resultado (contrasta con las fotos
+    cuadradas), y a la vez enseña al visitante qué certificado otorgamos. */
+ .sello-ej{float:right;width:min(40vw,210px);margin:2px 0 14px 26px;text-align:center}
+ .sello-ej img{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 26px rgba(0,0,0,.45))}
+ .sello-ej figcaption{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.45}
+ .sello-ej figcaption a{color:var(--teja2)}
+ @media(max-width:560px){.sello-ej{float:none;width:200px;margin:16px auto 6px}}
  .edwrap{padding:26px 0 6px;background:radial-gradient(120% 70% at 50% 0,#1d150d,var(--bg) 70%)}
  .ed{max-width:720px}
  .ed .lead{font-family:var(--fd);font-weight:600;font-size:clamp(22px,4vw,32px);line-height:1.22;color:var(--paper);margin:6px 0 22px}
@@ -87,6 +95,7 @@
 <header class="h"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="https://nochetropical.es/">nochetropical.es</a> · Hoteles en refugios climáticos</nav>
   <div class="kick">Turismo climático · Datos AEMET 2017–2026</div>
+  
   <h1>Hoteles donde se duerme con <em>manta</em> en verano</h1>
   <p class="intro">Mientras la ola de calor asa el país y las noches tropicales impiden dormir en la costa, hay una <b>España que no arde</b>: valles y sierras donde la mínima nocturna baja sistemáticamente de los 20&nbsp;°C. Hemos cruzado 10 veranos de <b>datos de AEMET</b> con la oferta hotelera para reunir hoteles en <b>refugios climáticos naturales</b>, de Navarredonda de Gredos (6,6°) para arriba. Se duerme fresco, sin depender del aire acondicionado.</p>
   <p class="disc"><b>Divulgación:</b> esta página contiene enlaces de afiliado de Booking.com. Si reservas a través de ellos, podemos recibir una comisión <b>sin coste adicional para ti</b>. La certificación climática se basa en datos oficiales de AEMET y es independiente de la relación de afiliación: certifica el clima de la zona, no el interior del establecimiento.</p>

@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-30",
- "total": 852,
- "tropicales": 384,
- "ecuatoriales": 18,
+ "fecha": "2026-07-31",
+ "total": 848,
+ "tropicales": 408,
+ "ecuatoriales": 24,
  "peor": {
-  "id": "C625O",
-  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-  "min": 29.6,
+  "id": "C614H",
+  "nombre": "Tejeda Casco",
+  "min": 30.0,
   "prov": "Las Palmas"
  },
  "mejor": {
   "id": "2766E",
   "nombre": "El Puente (Casa Forestal)",
-  "min": 8.1,
+  "min": 5.2,
   "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 29.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C917E",
-   "nombre": "Dehesa-Refugio",
-   "min": 29.1,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 29.0,
-   "prov": "Las Palmas"
-  },
-  {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 28.7,
+   "min": 30.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 29.9,
    "prov": "Las Palmas"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 28.4,
+   "min": 27.3,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C117Z",
+   "nombre": "Tijarafe-Mirador Time",
+   "min": 27.1,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C126A",
+   "nombre": "El Paso-C.F.",
+   "min": 26.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 26.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "3168D",
+   "nombre": "Guadalajara",
+   "min": 26.4,
+   "prov": "Guadalajara"
   },
   {
    "id": "C635B",
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 28.2,
+   "min": 26.4,
    "prov": "Las Palmas"
   },
   {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 26.5,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "9961X",
-   "nombre": "Cabacés",
+   "id": "C117A",
+   "nombre": "Puntagorda",
    "min": 26.3,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "0002I",
+   "nombre": "Vandellós",
+   "min": 25.7,
    "prov": "Tarragona"
-  },
-  {
-   "id": "C316I",
-   "nombre": "Arure Cementerio",
-   "min": 26.1,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C916Q",
-   "nombre": "Pinar-Depósito",
-   "min": 26.1,
-   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 8.1,
+   "min": 5.2,
    "prov": "Zamora"
-  },
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 9.7,
-   "prov": "Ourense"
-  },
-  {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 10.0,
-   "prov": "Ávila"
-  },
-  {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 10.1,
-   "prov": "Ourense"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 11.0,
-   "prov": "Cantabria"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 11.2,
+   "min": 7.4,
    "prov": "Salamanca"
   },
   {
-   "id": "1738U",
-   "nombre": "Muiños-Prado",
-   "min": 11.5,
-   "prov": "Ourense"
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 8.3,
+   "prov": "Segovia"
   },
   {
-   "id": "1639X",
-   "nombre": "Chandrexa de Queixa",
-   "min": 11.6,
-   "prov": "Ourense"
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 9.2,
+   "prov": "Cantabria"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 11.8,
-   "prov": "Madrid"
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 9.4,
+   "prov": "Cantabria"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 11.9,
-   "prov": "Soria"
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 10.1,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 10.1,
+   "prov": "Asturias"
+  },
+  {
+   "id": "2737E",
+   "nombre": "Lagunas de Somoza",
+   "min": 10.6,
+   "prov": "León"
+  },
+  {
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 10.8,
+   "prov": "Ávila"
+  },
+  {
+   "id": "2918Y",
+   "nombre": "El Maillo (Base Aviones - Automatica)",
+   "min": 11.1,
+   "prov": "Salamanca"
   }
  ]
 }

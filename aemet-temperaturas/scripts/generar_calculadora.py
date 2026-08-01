@@ -3089,8 +3089,14 @@ __CSS__
  .tt rect{fill:rgba(20,14,8,.94);stroke:#5a4d3a;stroke-width:.7}
  .tt text{fill:#f2eae0;font-family:var(--font-m);font-size:11px;font-weight:700}
  .note{font-size:13px;color:var(--muted);text-align:center;margin:0 0 18px}
- .aviso{font-size:13.5px;color:var(--muted);line-height:1.65;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:8px auto 24px;max-width:600px}
+ .aviso{font-size:13.5px;color:var(--muted);line-height:1.65;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:12px;padding:15px 18px;margin:0 auto;max-width:600px}
  .aviso b{color:var(--ink)}
+ /* El texto de las flechas se revela justo bajo el botón al activarlas
+    (divulgación progresiva): aparece cuando de verdad hace falta y no satura
+    antes. El truco grid 0fr->1fr anima una altura desconocida con suavidad. */
+ .aviso-wrap{display:grid;grid-template-rows:0fr;opacity:0;margin:0;transition:grid-template-rows .38s ease,opacity .3s ease,margin .38s ease}
+ .aviso-wrap>div{overflow:hidden;min-height:0}
+ .aviso-wrap.abierto{grid-template-rows:1fr;opacity:1;margin:0 0 22px}
  .guia{margin:34px auto 28px;max-width:660px}
  .guia h2{font-family:var(--font-d);font-weight:600;font-size:clamp(18px,3vw,22px);color:var(--ink);margin:0 0 6px;text-align:center}
  .guia .sub{font-size:14.5px;color:var(--muted);text-align:center;margin:0 0 18px}
@@ -3121,7 +3127,11 @@ __NAV__
 </div></header>
 
 <section><div class="wrap">
-  <button class="toggle-refugios" id="toggle" aria-pressed="false">📍 Mostrar refugios climáticos</button>
+  <button class="toggle-refugios" id="toggle" aria-pressed="false" aria-controls="aviso-flechas">📍 Mostrar refugios climáticos</button>
+
+  <div class="aviso-wrap" id="aviso-flechas" aria-hidden="true"><div>
+  <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona. Cada punto es la <b>estación meteorológica</b> y la población donde está; eso <b>no significa que los pueblos de alrededor no pertenezcan a ese mismo refugio climático</b> —el fresco no entiende de límites municipales—. <b>Cedrillas</b>, por ejemplo, abarca también Gúdar, Cabra de Mora, Alcalá de la Selva, Valdelinares, Allepuz o El Castellar. Señalan zonas donde, durante la ola, los colores se mantienen <b>lejos del lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span> y del amarillo<span class="mu" style="background:#FFFF00" aria-hidden="true"></span></b>: la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar el calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
+  </div></div>
 
   <div class="mapa">
     <h2>De noche · temperaturas mínimas</h2>
@@ -3165,8 +3175,6 @@ __NAV__
     <p class="pie">¿Has localizado una zona? Compruébala con el dato exacto en <a href="__SITE__/mapa-estaciones/">el mapa de refugios climáticos</a>, estación a estación, o mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">qué refugios tienes cerca de ti</a>.</p>
   </div>
 
-  <p class="aviso"><b>Las flechas son orientativas.</b> A esta escala tan grande no marcan un punto exacto, sino la zona. Cada punto es la <b>estación meteorológica</b> y la población donde está; eso <b>no significa que los pueblos de alrededor no pertenezcan a ese mismo refugio climático</b> —el fresco no entiende de límites municipales—. <b>Cedrillas</b>, por ejemplo, abarca también Gúdar, Cabra de Mora, Alcalá de la Selva, Valdelinares, Allepuz o El Castellar. Señalan zonas donde, durante la ola, los colores se mantienen <b>lejos del lima<span class="mu" style="background:#CCFF00" aria-hidden="true"></span> y del amarillo<span class="mu" style="background:#FFFF00" aria-hidden="true"></span></b>: la prueba visual de que en España hay <b>refugios climáticos naturales</b> con margen de sobra para aguantar el calor sin artificios ni aire acondicionado. Pasa el ratón —o tócalas en el móvil— para ver el nombre; púlsalas para abrir su provincia. Los datos, pueblo a pueblo, están en la <a href="__HOME__">calculadora</a>.</p>
-
   <div class="cierre">
     <b>¿Y tu pueblo, aguanta fresco de noche?</b><br>
     <div class="botones">
@@ -3192,6 +3200,9 @@ boton.addEventListener("click",()=>{
   boton.classList.toggle("on",mostrar);
   boton.setAttribute("aria-pressed",mostrar?"true":"false");
   boton.textContent=mostrar?"✕ Ocultar refugios":"📍 Mostrar refugios climáticos";
+  const aviso=document.getElementById("aviso-flechas");
+  aviso.classList.toggle("abierto",mostrar);
+  aviso.setAttribute("aria-hidden",mostrar?"false":"true");
 });
 const tactil=window.matchMedia("(hover:none)").matches;
 document.querySelectorAll(".marca").forEach(g=>{

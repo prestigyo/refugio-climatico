@@ -1,8 +1,8 @@
 {
  "fecha": "2026-08-01",
  "total": 846,
- "tropicales": 400,
- "ecuatoriales": 56,
+ "tropicales": 399,
+ "ecuatoriales": 55,
  "peor": {
   "id": "C614H",
   "nombre": "Tejeda Casco",
@@ -25,7 +25,7 @@
   {
    "id": "5998X",
    "nombre": "Osuna Sea",
-   "min": 28.2,
+   "min": 28.1,
    "prov": "Sevilla"
   },
   {
@@ -33,12 +33,6 @@
    "nombre": "Cazorla (Automatica)",
    "min": 27.7,
    "prov": "Jaén"
-  },
-  {
-   "id": "5891X",
-   "nombre": "Las Cabezas de San Juan (Majoleto Automatica)",
-   "min": 27.7,
-   "prov": "Sevilla"
   },
   {
    "id": "C314Z",
@@ -75,6 +69,12 @@
    "nombre": "Olvera-Coop.Agrícola",
    "min": 26.5,
    "prov": "Cádiz"
+  },
+  {
+   "id": "5192",
+   "nombre": "Villarrodrigo",
+   "min": 26.4,
+   "prov": "Jaén"
   }
  ],
  "top_fresco": [

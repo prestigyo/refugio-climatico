@@ -1,142 +1,142 @@
 {
- "fecha": "2026-07-31",
- "total": 848,
- "tropicales": 408,
- "ecuatoriales": 24,
+ "fecha": "2026-08-01",
+ "total": 846,
+ "tropicales": 400,
+ "ecuatoriales": 56,
  "peor": {
   "id": "C614H",
   "nombre": "Tejeda Casco",
-  "min": 30.0,
+  "min": 30.1,
   "prov": "Las Palmas"
  },
  "mejor": {
   "id": "2766E",
   "nombre": "El Puente (Casa Forestal)",
-  "min": 5.2,
+  "min": 7.8,
   "prov": "Zamora"
  },
  "top_calor": [
   {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 30.0,
+   "min": 30.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 29.9,
-   "prov": "Las Palmas"
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 28.2,
+   "prov": "Sevilla"
   },
   {
-   "id": "C623I",
-   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "id": "5038Y",
+   "nombre": "Cazorla (Automatica)",
+   "min": 27.7,
+   "prov": "Jaén"
+  },
+  {
+   "id": "5891X",
+   "nombre": "Las Cabezas de San Juan (Majoleto Automatica)",
+   "min": 27.7,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "C314Z",
+   "nombre": "Vallehermoso-Alto Igualero",
+   "min": 27.6,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "5427X",
+   "nombre": "Doña Mencia",
    "min": 27.3,
-   "prov": "Las Palmas"
+   "prov": "Córdoba"
   },
   {
-   "id": "C117Z",
-   "nombre": "Tijarafe-Mirador Time",
-   "min": 27.1,
+   "id": "5270B",
+   "nombre": "Jaén",
+   "min": 27.2,
+   "prov": "Jaén"
+  },
+  {
+   "id": "6281X",
+   "nombre": "Válor",
+   "min": 26.6,
+   "prov": "Granada"
+  },
+  {
+   "id": "C316I",
+   "nombre": "Arure Cementerio",
+   "min": 26.6,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C126A",
-   "nombre": "El Paso-C.F.",
+   "id": "5919X",
+   "nombre": "Olvera-Coop.Agrícola",
    "min": 26.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C917E",
-   "nombre": "Dehesa-Refugio",
-   "min": 26.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "3168D",
-   "nombre": "Guadalajara",
-   "min": 26.4,
-   "prov": "Guadalajara"
-  },
-  {
-   "id": "C635B",
-   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 26.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C117A",
-   "nombre": "Puntagorda",
-   "min": 26.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "0002I",
-   "nombre": "Vandellós",
-   "min": 25.7,
-   "prov": "Tarragona"
+   "prov": "Cádiz"
   }
  ],
  "top_fresco": [
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 5.2,
+   "min": 7.8,
    "prov": "Zamora"
+  },
+  {
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 8.4,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 8.7,
+   "prov": "Ávila"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 7.4,
+   "min": 9.1,
    "prov": "Salamanca"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 8.3,
+   "min": 9.3,
    "prov": "Segovia"
-  },
-  {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 9.2,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 9.4,
-   "prov": "Cantabria"
   },
   {
    "id": "1167G",
    "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 10.1,
+   "min": 9.4,
    "prov": "Cantabria"
   },
   {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 10.1,
-   "prov": "Asturias"
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 9.6,
+   "prov": "Soria"
   },
   {
-   "id": "2737E",
-   "nombre": "Lagunas de Somoza",
-   "min": 10.6,
-   "prov": "León"
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 9.7,
+   "prov": "Cantabria"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 10.8,
-   "prov": "Ávila"
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 9.7,
+   "prov": "Burgos"
   },
   {
-   "id": "2918Y",
-   "nombre": "El Maillo (Base Aviones - Automatica)",
-   "min": 11.1,
-   "prov": "Salamanca"
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 9.9,
+   "prov": "Ourense"
   }
  ]
 }

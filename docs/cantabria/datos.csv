@@ -1,21 +1,23 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-Alto Campoo,1650,0.0,0.0,43.037,-4.374,9.0
-"Camaleño, Fuente de",1100,0.0,0.0,43.144,-4.813,9.0
-Reinosa,870,0.0,0.0,42.992,-4.161,9.0
-"Valderredible, Cubillo de Ebro",770,0.0,0.0,42.81,-4.032,9.0
+Alto Campoo,1650,0.0,0.0,43.037,-4.374,10.0
+"Camaleño, Fuente de",1100,0.0,0.0,43.144,-4.813,10.0
+Reinosa,870,0.0,0.0,42.992,-4.161,10.0
+"Valderredible, Cubillo de Ebro",770,0.0,0.0,42.81,-4.032,10.0
 "Valderredible, Polientes",720,0.0,0.0,42.806,-3.934,9.0
-"Los Tojos, Bárcena Mayor",460,0.0,0.0,43.147,-4.214,9.0
-"Cillorigo de Liébana, Tama",250,0.2,0.0,43.183,-4.602,9.0
-Villacarriedo,196,0.2,0.0,43.246,-3.849,9.0
-San Felices de Buelna,105,0.4,0.0,43.272,-4.049,9.0
-Ramales de la Victoria,80,0.6,0.0,43.256,-3.471,9.0
-"Santillana del Mar, Altamira",150,0.7,0.0,43.377,-4.124,9.0
-"Torrelavega, Sierrapando",110,1.7,0.0,43.359,-4.027,9.0
-"Barcena de Cicero, Treto",10,1.7,0.0,43.397,-3.47,9.0
-Tresviso,940,2.2,0.0,43.256,-4.668,9.0
+"Los Tojos, Bárcena Mayor",460,0.0,0.0,43.147,-4.214,10.0
+"Mirador del Cable, Parque Nacional Picos de Europa",1910,0.2,0.0,43.155,-4.803,5.0
+"Cillorigo de Liébana, Tama",250,0.3,0.0,43.183,-4.602,10.0
+"Coriscao, Parque Nacional Picos de Europa",1722,0.4,0.0,43.089,-4.774,5.0
+Villacarriedo,196,0.4,0.0,43.246,-3.849,10.0
+San Felices de Buelna,105,0.8,0.0,43.272,-4.049,10.0
+"Santillana del Mar, Altamira",150,0.9,0.0,43.377,-4.124,10.0
+Ramales de la Victoria,80,0.9,0.0,43.256,-3.471,10.0
+"Torrelavega, Sierrapando",110,1.8,0.0,43.359,-4.027,10.0
+"Barcena de Cicero, Treto",10,2.0,0.0,43.397,-3.47,10.0
+Tresviso,940,2.3,0.1,43.256,-4.668,10.0
 Santander,52,3.9,0.0,43.491,-3.801,7.0
-San Vicente de la Barquera,38,3.9,0.0,43.393,-4.392,9.0
-Santander Aeropuerto,3,4.3,0.0,43.429,-3.831,9.0
-Santander,51,5.2,0.0,43.491,-3.801,9.0
-Castro Urdiales,45,6.4,0.0,43.395,-3.234,9.0
+San Vicente de la Barquera,38,4.1,0.0,43.393,-4.392,10.0
+Santander Aeropuerto,3,4.5,0.0,43.429,-3.831,10.0
+Santander,51,6.2,0.0,43.491,-3.801,10.0
+Castro Urdiales,45,7.0,0.0,43.395,-3.234,10.0
 Santander Aeropuerto,3,7.1,0.0,43.424,-3.826,7.0

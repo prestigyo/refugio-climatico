@@ -1,11 +1,11 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-"Abadiño, Urkiola",747,0.1,0.0,43.099,-2.644,9.0
-"Orozko, Ibarra",270,0.1,0.0,43.096,-2.86,9.0
+"Abadiño, Urkiola",747,0.4,0.0,43.099,-2.644,10.0
 Güeñes,208,0.4,0.0,43.203,-3.105,8.0
-Sopuerta,177,0.4,0.0,43.28,-3.169,9.0
-Balmaseda,210,0.6,0.0,43.181,-3.21,9.0
-Amorebieta-Etxano,100,0.9,0.0,43.203,-2.706,9.0
-Forua,45,2.1,0.0,43.343,-2.671,9.0
-Bilbao Aeropuerto,42,5.0,0.0,43.298,-2.906,9.0
-Punta Galea,81,7.5,0.0,43.375,-3.022,6.0
-Matxitxako,93,9.0,0.0,43.454,-2.753,8.0
+"Orozko, Ibarra",270,0.5,0.0,43.096,-2.86,10.0
+Sopuerta,177,0.6,0.0,43.28,-3.169,10.0
+Balmaseda,210,0.7,0.0,43.181,-3.21,10.0
+Amorebieta-Etxano,100,1.4,0.0,43.203,-2.706,10.0
+Forua,45,2.6,0.0,43.343,-2.671,10.0
+Bilbao Aeropuerto,42,5.9,0.0,43.298,-2.906,10.0
+Punta Galea,81,8.7,0.0,43.375,-3.022,7.0
+Matxitxako,93,10.9,0.0,43.454,-2.753,9.0

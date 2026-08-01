@@ -1,17 +1,17 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-Cazalla de la Sierra,550,4.3,0.0,37.926,-5.77,9.0
-La Puebla de los Infantes,200,6.4,0.0,37.787,-5.371,9.0
-Carrión de los Céspedes,76,14.8,0.1,37.36,-6.334,9.0
-La Roda de Andalucía,410,23.1,0.3,37.194,-4.77,9.0
-Guadalcanal,720,27.1,1.1,38.099,-5.819,9.0
-Almadén de la Plata,450,29.4,1.3,37.791,-6.075,9.0
-Carmona,50,33.2,0.7,37.566,-5.741,9.0
-Las Cabezas de San Juan,105,35.3,0.8,36.953,-5.847,9.0
-"Tomares, Zaudín",84,36.4,1.0,37.362,-6.06,7.0
-Morón de la Frontera,87,38.1,0.8,37.164,-5.611,9.0
-Écija,130,38.4,1.1,37.516,-5.085,9.0
-"Sevilla, Tablada",9,43.1,1.4,37.364,-6.006,9.0
-Fuentes de Andalucía,165,44.0,2.4,37.497,-5.433,9.0
-Sevilla Aeropuerto,34,45.4,1.6,37.417,-5.879,9.0
-Lora de Estepa,450,46.3,6.3,37.27,-4.827,9.0
-Osuna,255,62.8,15.4,37.243,-5.112,9.0
+Cazalla de la Sierra,550,4.1,0.0,37.926,-5.77,10.0
+La Puebla de los Infantes,200,6.2,0.0,37.787,-5.371,10.0
+Carrión de los Céspedes,76,14.0,0.1,37.36,-6.334,10.0
+La Roda de Andalucía,410,22.2,0.3,37.194,-4.77,10.0
+Guadalcanal,720,26.1,1.0,38.099,-5.819,10.0
+Almadén de la Plata,450,28.2,1.2,37.791,-6.075,10.0
+Carmona,50,31.7,0.6,37.566,-5.741,10.0
+Las Cabezas de San Juan,105,34.4,0.7,36.953,-5.847,10.0
+"Tomares, Zaudín",84,35.0,0.9,37.362,-6.06,8.0
+Écija,130,36.3,1.0,37.516,-5.085,10.0
+Morón de la Frontera,87,36.7,0.7,37.164,-5.611,10.0
+"Sevilla, Tablada",9,41.8,1.4,37.364,-6.006,10.0
+Fuentes de Andalucía,165,42.7,2.2,37.497,-5.433,10.0
+Lora de Estepa,450,44.3,5.9,37.27,-4.827,10.0
+Sevilla Aeropuerto,34,44.8,1.5,37.417,-5.879,10.0
+Osuna,255,61.2,15.1,37.243,-5.112,10.0

@@ -1,10 +1,10 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-Villafranca del Cid/Vilafranca,1130,0.4,0.0,40.433,-0.256,9.0
-La Pobla de Benifassà-Fredes,1165,3.2,0.0,40.694,0.165,9.0
-Segorbe,400,4.7,0.0,39.796,-0.485,9.0
-Atzeneta del Maestrat,420,6.0,0.0,40.227,-0.17,9.0
-Montanejos,601,8.4,0.0,40.088,-0.547,9.0
-Castellfort,1220,9.8,0.0,40.499,-0.187,9.0
-Morella,990,11.7,0.0,40.622,-0.102,9.0
-Torreblanca,35,65.0,1.6,40.211,0.184,9.0
-Castelló - Almassora,43,70.2,3.9,39.957,-0.072,9.0
+Villafranca del Cid/Vilafranca,1130,0.7,0.0,40.433,-0.256,10.0
+La Pobla de Benifassà-Fredes,1165,3.8,0.0,40.694,0.165,10.0
+Segorbe,400,5.1,0.0,39.796,-0.485,10.0
+Atzeneta del Maestrat,420,6.4,0.0,40.227,-0.17,10.0
+Montanejos,601,8.8,0.0,40.088,-0.547,10.0
+Castellfort,1220,10.0,0.1,40.499,-0.187,10.0
+Morella,990,12.0,0.0,40.622,-0.102,10.0
+Torreblanca,35,62.4,2.1,40.211,0.184,10.0
+Castelló - Almassora,43,67.4,4.7,39.957,-0.072,10.0

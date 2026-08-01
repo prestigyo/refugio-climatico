@@ -1,14 +1,15 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-"Sanabria, Robleda-Cervantes",933,0.0,0.0,42.083,-6.64,9.0
-Fresno de Sayago,804,0.0,0.0,41.304,-6.022,9.0
-Villardeciervos,850,0.1,0.0,41.941,-6.28,9.0
-Santibañez de Vidriales,737,0.3,0.0,42.078,-6.007,9.0
-Villafáfila,690,0.4,0.0,41.856,-5.592,9.0
-Pozuelo de Tabara,711,0.8,0.0,41.786,-5.909,8.0
-Alcañices,840,0.9,0.0,41.683,-6.301,9.0
-Benavente,715,1.0,0.0,42.011,-5.667,9.0
-Morales del Toro,710,1.9,0.0,41.548,-5.271,9.0
-Fuentesauco,811,2.0,0.0,41.237,-5.481,9.0
-Villadepera,790,2.7,0.0,41.534,-6.142,9.0
-Zamora,656,5.3,0.0,41.516,-5.735,9.0
-Peñausende,1003,6.3,0.4,41.239,-5.897,9.0
+"Sanabria, Robleda-Cervantes",933,0.0,0.0,42.083,-6.64,10.0
+Fresno de Sayago,804,0.0,0.0,41.304,-6.022,10.0
+Villardeciervos,850,0.1,0.0,41.941,-6.28,10.0
+Santibañez de Vidriales,737,0.3,0.0,42.078,-6.007,10.0
+Villafáfila,690,0.5,0.0,41.856,-5.592,10.0
+Pozuelo de Tabara,711,0.7,0.0,41.786,-5.909,9.0
+Alcañices,840,0.8,0.0,41.683,-6.301,10.0
+Benavente,715,1.0,0.0,42.011,-5.667,10.0
+Morales del Toro,710,1.8,0.0,41.548,-5.271,10.0
+Fuentesauco,811,2.1,0.0,41.237,-5.481,10.0
+Coreses,702,2.4,0.0,41.555,-5.631,5.0
+Villadepera,790,2.7,0.0,41.534,-6.142,10.0
+Zamora,656,5.2,0.0,41.516,-5.735,10.0
+Peñausende,1003,5.8,0.4,41.239,-5.897,10.0

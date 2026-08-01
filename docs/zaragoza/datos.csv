@@ -1,15 +1,15 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-Alhama de Aragon,703,2.6,0.0,41.293,-1.895,9.0
-Sos del Rey Católico,626,2.9,0.0,42.491,-1.213,9.0
-Daroca,774,3.6,0.1,41.114,-1.41,9.0
-Calatayud,582,6.1,0.0,41.331,-1.645,9.0
-Tarazona,475,6.1,0.0,41.915,-1.723,9.0
-Valmadrid,535,7.1,0.1,41.443,-0.886,9.0
-La Almunia de Doña Godina,370,9.3,0.0,41.481,-1.381,9.0
-Castejon de Valdejasa,543,9.9,0.2,41.984,-0.996,9.0
+Alhama de Aragon,703,2.4,0.0,41.293,-1.895,10.0
+Sos del Rey Católico,626,3.4,0.0,42.491,-1.213,10.0
+Daroca,774,3.6,0.1,41.114,-1.41,10.0
+Calatayud,582,5.7,0.0,41.331,-1.645,10.0
+Tarazona,475,6.6,0.0,41.915,-1.723,10.0
+Valmadrid,535,7.4,0.1,41.443,-0.886,10.0
+La Almunia de Doña Godina,370,9.5,0.0,41.481,-1.381,10.0
 Ejea de los Caballeros,321,10.8,0.1,42.121,-1.14,8.0
-Leciñena,405,13.4,0.2,41.797,-0.617,9.0
-Quinto,205,27.3,0.1,41.429,-0.504,9.0
-"Zaragoza, Valdespartera",258,35.0,0.7,41.621,-0.935,9.0
-"Zaragoza, Aeropuerto",249,37.6,0.3,41.661,-1.004,9.0
-"Caspe, Plana del Pilón",215,37.6,0.1,41.242,-0.069,8.0
+Castejon de Valdejasa,543,10.9,0.3,41.984,-0.996,10.0
+Leciñena,405,13.9,0.3,41.797,-0.617,10.0
+Quinto,205,27.2,0.1,41.429,-0.504,10.0
+"Zaragoza, Valdespartera",258,35.2,0.6,41.621,-0.935,10.0
+"Caspe, Plana del Pilón",215,37.1,0.1,41.242,-0.069,9.0
+"Zaragoza, Aeropuerto",249,37.5,0.4,41.661,-1.004,10.0

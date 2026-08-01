@@ -1,26 +1,26 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-Sant Julià de Vilatorta,578,0.4,0.0,41.926,2.317,8.0
+Sant Julià de Vilatorta,578,0.6,0.0,41.926,2.317,9.0
 Tona (Escola),607,0.7,0.0,41.847,2.223,9.0
 Tona,607,1.2,0.0,41.847,2.223,8.0
-Prats de Lluçanès,700,1.4,0.0,42.007,2.027,9.0
-Pontons,632,1.8,0.0,41.417,1.519,9.0
-Balsareny,361,2.8,0.0,41.866,1.873,9.0
-Berga,682,8.1,0.0,42.101,1.858,9.0
+Pontons,632,1.7,0.0,41.417,1.519,10.0
+Prats de Lluçanès,700,1.9,0.0,42.007,2.027,10.0
+Balsareny,361,2.9,0.0,41.866,1.873,10.0
 Santa Susanna,40,8.8,0.0,41.651,2.697,5.0
-Moià,742,10.6,0.0,41.813,2.095,9.0
-Manresa,291,11.6,0.0,41.72,1.84,9.0
+Berga,682,9.0,0.0,42.101,1.858,10.0
+Moià,742,11.7,0.0,41.813,2.095,10.0
+Igualada,313,12.0,0.0,41.579,1.618,10.0
+Manresa,291,12.0,0.0,41.72,1.84,10.0
 Manresa (la Culla),291,13.0,0.1,41.72,1.84,9.0
-Igualada,313,13.2,0.0,41.579,1.618,9.0
-Fogars de Montclús,936,13.6,0.2,41.76,2.431,9.0
-Caldes de Montbui,175,14.8,0.0,41.613,2.168,9.0
-"Corbera, Puig D'agulles",647,21.2,1.0,41.408,1.885,8.0
-Vilafranca del Penedès,177,23.9,0.0,41.33,1.677,9.0
+Fogars de Montclús,936,14.6,0.2,41.76,2.431,10.0
+Caldes de Montbui,175,14.8,0.0,41.613,2.168,10.0
+"Corbera, Puig D'agulles",647,22.4,1.0,41.408,1.885,9.0
+Vilafranca del Penedès,177,23.5,0.0,41.33,1.677,10.0
 Montserrat,738,24.1,1.8,41.594,1.839,9.0
-Monistrol de Montserrat,738,24.3,1.4,41.594,1.839,9.0
+Monistrol de Montserrat,738,25.7,1.4,41.594,1.839,10.0
 Arenys de Mar,74,42.7,0.2,41.587,2.54,9.0
-"Barcelona, Fabra",408,48.7,3.0,41.418,2.124,9.0
-Sitges,58,50.3,0.2,41.244,1.853,9.0
-Vilassar de Dalt,56,64.2,2.0,41.505,2.363,9.0
+"Barcelona, Fabra",408,48.0,3.2,41.418,2.124,10.0
+Sitges,58,48.9,0.2,41.244,1.853,10.0
+Vilassar de Dalt,56,62.5,2.0,41.505,2.363,10.0
 "Barcelona, Port Olímpic",26,65.7,5.3,41.391,2.2,9.0
-Barcelona Aeropuerto,4,71.4,5.0,41.293,2.07,9.0
-"Barcelona, Drassanes",11,71.7,9.1,41.375,2.174,7.0
+Barcelona Aeropuerto,4,68.7,5.0,41.293,2.07,10.0
+"Barcelona, Drassanes",11,68.8,9.2,41.375,2.174,8.0

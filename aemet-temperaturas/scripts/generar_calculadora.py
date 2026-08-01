@@ -5909,10 +5909,11 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
 <meta property="og:title" content="Hoteles de España donde se duerme con manta en verano">
 <meta property="og:description" content="__DESC__">
 <meta property="og:url" content="__SITE__/hoteles-refugio-climatico/">
-<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:image" content="__OGIMG__">
+<meta property="og:image:alt" content="Sello Refugio Climático Natural: certificado con datos de AEMET">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="__SITE__/og.png">
+<meta name="twitter:image" content="__OGIMG__">
 <link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
 <script type="application/ld+json">__SCHEMA__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -6051,21 +6052,38 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             "climáticos naturales de España donde la noche baja de 20 °C y se duerme "
             "fresco —con manta y sin aire acondicionado—, medido con 10 años de datos de "
             "AEMET. La geografía del descanso.")
-    # Sello de EJEMPLO para la cabecera: un refugio emblemático (Nivel A, 0 noches
-    # tropicales) cuyo PNG ya exista. Es imagen RÁSTER (Google no usa SVG como
-    # miniatura) y redonda (contrasta con las fotos cuadradas del resultado).
-    ejemplo = next((h for h in hoteles if h["nivel"] == "A" and h["nt"] < 0.05
-                    and (DOCS_DIR / "badges" / f'{h["slug"]}.png').exists()), None)
-    if ejemplo is None:
-        ejemplo = next((h for h in hoteles
-                        if (DOCS_DIR / "badges" / f'{h["slug"]}.png').exists()), None)
-    ejemplo_url = f'{site}/badges/{ejemplo["slug"]}.png' if ejemplo else ""
-    if ejemplo:
+    # Imagen DESTACADA de la página: el sello de refugio climático, en alta
+    # resolución (>=1200 px), RÁSTER (Google no usa SVG como miniatura) y con
+    # fondo transparente. Se sirve en tres relaciones de aspecto (1:1, 4:3,
+    # 16:9) para el array "image" del schema, tal y como recomienda Google para
+    # optimizar la miniatura del resultado. Los ficheros se renderizan aparte y
+    # se commitean en docs/ (la Action no tiene navegador); si aún no están,
+    # degradamos al sello de un hotel con PNG y a la og.png del sitio.
+    feat = {r: f"sello-refugio-climatico-{r}.png" for r in ("1x1", "4x3", "16x9")}
+    feat_ok = all((DOCS_DIR / f).exists() for f in feat.values())
+    if feat_ok:
+        og_img = f"{site}/{feat['1x1']}"
+        schema_image = [f"{site}/{feat[r]}" for r in ("1x1", "4x3", "16x9")]
+        destacada_src, destacada_w, destacada_h = og_img, "1200", "1200"
+        destacada_alt = ("Sello Refugio Climático Natural: el certificado que otorgamos, "
+                         "con datos de AEMET — mínima media de agosto y noches tropicales de la zona")
+    else:
+        ej = next((h for h in hoteles if h["nivel"] == "A" and h["nt"] < 0.05
+                   and (DOCS_DIR / "badges" / f'{h["slug"]}.png').exists()), None)
+        ej = ej or next((h for h in hoteles
+                         if (DOCS_DIR / "badges" / f'{h["slug"]}.png').exists()), None)
+        destacada_src = f'{site}/badges/{ej["slug"]}.png' if ej else ""
+        destacada_w = destacada_h = "210"
+        destacada_alt = (f'Sello Refugio Climático Natural con datos de AEMET — '
+                         f'{ej["municipio"]} ({ej["provincia"]})' if ej else "")
+        og_img = f"{site}/og.png"
+        schema_image = ([destacada_src, f"{site}/og.png"] if destacada_src
+                        else f"{site}/og.png")
+    if destacada_src:
         ejemplo_html = (
             '<figure class="sello-ej">'
-            f'<img src="{ejemplo_url}" width="210" height="210" loading="eager" '
-            'alt="Sello Refugio Climático Natural: ejemplo del certificado con datos de '
-            f'AEMET — {ejemplo["municipio"]} ({ejemplo["provincia"]}), 0 noches tropicales al año">'
+            f'<img src="{destacada_src}" width="{destacada_w}" height="{destacada_h}" '
+            f'loading="eager" fetchpriority="high" alt="{destacada_alt}">'
             '<figcaption>El sello que otorgamos a cada refugio: acredita el clima '
             'nocturno de la zona con 10 años de datos de AEMET. '
             f'<a href="{site}/tu-hotel/">Certifica el tuyo →</a></figcaption></figure>')
@@ -6137,7 +6155,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
         {"@type": "Article",
          "headline": "Hoteles de España donde se duerme con manta en verano",
          "description": desc,
-         "image": ([ejemplo_url, site + "/og.png"] if ejemplo_url else site + "/og.png"),
+         "image": schema_image,
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
@@ -6162,6 +6180,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             .replace("__DESC__", desc)
             .replace("__TOTAL__", str(total))
             .replace("__EJEMPLO__", ejemplo_html)
+            .replace("__OGIMG__", og_img)
             .replace("__FRIO__", frio_txt)
             .replace("__LISTADO__", listado)
             .replace("__FAQ__", faq_html(faq))

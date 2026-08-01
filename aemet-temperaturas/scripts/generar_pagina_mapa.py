@@ -112,7 +112,7 @@ def construir_schema(fecha_iso: str) -> str:
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": SITE + "/"},
             {"@type": "ListItem", "position": 2, "name": "El mapa interactivo", "item": url}]},
         {"@type": "Article",
-         "headline": "El mapa interactivo de los refugios climáticos de España",
+         "headline": "Mapa de refugios climáticos y estaciones meteorológicas de España",
          "description": desc,
          "image": SITE + "/og.png",
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
@@ -129,8 +129,8 @@ TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El mapa interactivo de los refugios climáticos de España | Refugio Climático</title>
-<meta name="description" content="Mapa interactivo de las 848 estaciones de AEMET coloreadas por noches tropicales. Pulsa cualquier punto y descubre dónde se duerme fresco en España. Veranos 2017–2026.">
+<title>Mapa de refugios climáticos y estaciones meteorológicas de España | nochetropical.es</title>
+<meta name="description" content="Mapa interactivo de las 848 estaciones meteorológicas de AEMET, coloreadas por sus noches tropicales. Pulsa cualquier punto y descubre los refugios climáticos donde mejor se duerme en verano. Veranos 2017–2026.">
 <link rel="canonical" href="__SITE__/mapa-estaciones/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="article">
@@ -189,6 +189,11 @@ __CSS_CHROME__
  .notas{font-size:13px;color:var(--muted2);border-top:1px dashed var(--line);padding-top:16px;margin-top:34px;line-height:1.65}
  .notas b{color:var(--muted)}
  .notas a{color:var(--muted)}
+ .explica{margin:34px 0 0;border-top:1px dashed var(--line);padding-top:22px}
+ .explica h2{font-size:clamp(1.25rem,3.6vw,1.65rem);line-height:1.15;margin:0 0 .6rem}
+ .explica p{font-size:1rem;color:var(--muted);max-width:44rem;margin:0;line-height:1.72}
+ .explica b{color:var(--ink)}
+ .explica a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
  @media(max-width:560px){.lead{font-size:1rem}.cont{width:100%}}
 </style>
 </head>
@@ -228,6 +233,11 @@ __CIRCULOS__
 
   <div class="leyenda"><span>se duerme fresco</span><span class="barra"></span><span>no refresca</span></div>
   <p class="ayuda"><b>Azul<span class="mu" style="background:rgb(134,176,196)" aria-hidden="true"></span></b> = duerme tapadito todo el verano · <b>Rojo<span class="mu" style="background:rgb(150,30,20)" aria-hidden="true"></span></b> = se suda. Ojo: esta escala es nuestra, no la de AEMET — aquí el color no son grados, son <b>noches tropicales al año</b>. Pulsa cualquier punto para ver los detalles. El recuadro de abajo a la izquierda son las <b>Canarias</b>.</p>
+
+  <section class="explica">
+    <h2>Mapa de estaciones meteorológicas y refugios climáticos en España</h2>
+    <p>Cada punto es una <b>estación meteorológica de AEMET</b>, y su color resume diez veranos de mínimas nocturnas. Ahí está la clave para leer este mapa como un <b>mapa de refugios climáticos</b>: donde manda el azul —montaña interior, valles secos, mesetas altas— la noche refresca y se duerme fresco; donde tira al rojo —costa mediterránea, vegas del sur, interior de Gran Canaria— no afloja hasta el amanecer. Un <b>refugio climático natural</b> no es más que la zona alrededor de una estación cuyas noches casi nunca cruzan los 20 °C. Busca tu pueblo en el buscador de arriba, o mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">qué refugios climáticos tienes cerca de ti</a>.</p>
+  </section>
 
   <p class="notas">Fuente: <b>AEMET</b> (OpenData). Noches tropicales medidas en verano (jun–ago), veranos 2017–2026. Datos abiertos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC BY 4.0</a>. Actualizado en <time datetime="__FECHA_ISO__">__FECHA_TXT__</time>.</p>
   </div>

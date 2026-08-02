@@ -1,9 +1,9 @@
 {
   "periodo": {
     "ini": "2026-05-27",
-    "fin": "2026-08-01",
-    "noches": 66,
-    "dias": 66
+    "fin": "2026-08-02",
+    "noches": 67,
+    "dias": 67
   },
   "nocturno": {
     "profundo": 4.4,
@@ -11,7 +11,7 @@
     "tropical": 83.6
   },
   "dia": {
-    "medio_verano_fresco": 1.5,
+    "medio_verano_fresco": 1.4,
     "umbral": 24,
     "nunca_rojo": 1.5,
     "enrojece": 98.5

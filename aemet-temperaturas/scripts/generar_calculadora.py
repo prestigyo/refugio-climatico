@@ -1023,6 +1023,11 @@ def fecha_es(fecha: date) -> str:
     return f"{MESES_ES[fecha.month - 1]} de {fecha.year}"
 
 
+def fecha_es_dia(fecha: date) -> str:
+    """date(2026, 7, 13) -> '13 de julio de 2026' (con día, para fechar una noche)."""
+    return f"{fecha.day} de {MESES_ES[fecha.month - 1]} de {fecha.year}"
+
+
 # ---------------------------------------------------------------------------
 # Menú global ESCUETO: header compartido de solo 4 entradas (Portada · Mapa
 # interactivo · Ola de calor · Ranking). Es el patrón con el que unificar el
@@ -1424,6 +1429,24 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
   .dcols .prose h2:first-child{margin-top:0}
   .faq{max-width:none;display:grid;grid-template-columns:1fr 1fr;gap:0 48px}
  }
+ .reg-band{padding:20px 0 2px}
+ .registro{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+ .reg-cab{margin-bottom:14px}
+ .reg-kick{font:600 12px/1 var(--fb);letter-spacing:.13em;text-transform:uppercase;color:var(--teja)}
+ .reg-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+ @media(max-width:640px){.reg-cols{grid-template-columns:1fr}}
+ .reg-item{display:flex;flex-direction:column;gap:6px;padding:15px 16px;background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:12px}
+ .reg-big{background:rgba(217,116,78,.09);border-color:rgba(217,116,78,.4)}
+ .reg-lab{font:600 11.5px/1.3 var(--fb);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+ .reg-val{font-family:var(--fd);font-weight:900;font-size:clamp(28px,6vw,38px);line-height:1;color:var(--paper)}
+ .reg-sub{font-size:13px;color:var(--muted)}
+ .reg-badge{align-self:flex-start;font:700 12.5px/1 var(--fb);padding:6px 11px;border-radius:999px;margin-top:1px}
+ .reg-badge.ec{background:rgba(184,52,80,.22);color:#eaa6b2;border:1px solid #B83450}
+ .reg-badge.tr{background:rgba(217,116,78,.18);color:var(--teja2);border:1px solid var(--teja)}
+ .reg-badge.fr{background:rgba(150,182,196,.16);color:var(--teal);border:1px solid var(--teal)}
+ .reg-nota{font-size:13.5px;color:var(--muted);margin:14px 0 0}
+ .reg-nota b{color:var(--paper)}
+ .reg-nota a{color:var(--teal)}
 </style>
 </head>
 <body>
@@ -1434,6 +1457,8 @@ __NAV__
   <h1>__H1__</h1>
   <p class="intro">__INTRO__</p>
 </div></header>
+
+__WIDGET__
 
 <section><div class="wrap"><div class="dcols">
   <div><div class="prose">__PROSA__</div></div>
@@ -1866,6 +1891,174 @@ def cargar_tendencia_provincias(estaciones: list) -> dict:
     return resultado
 
 
+def cargar_ultima_noche(estaciones: list) -> dict:
+    """Mínima de la ÚLTIMA noche con dato VALIDADO de AEMET, por estación, leyendo
+    el rolling datos/diarios_estaciones.csv (y de refuerzo el diario del año en
+    curso). Devuelve {indicativo: {"fecha": "YYYY-MM-DD", "tmin": float}} con la
+    fecha más reciente que tenga mínima válida en cada estación.
+
+    Es un COMPLEMENTO honesto: el dato climatológico de AEMET llega con 3-5 días de
+    retraso, así que NO se etiqueta como 'anoche' sino con su fecha real. Degrada a
+    {} si no hay CSV y la web funciona igual sin él."""
+    datos_dir = AEMET_DIR / "datos"
+    paths = [datos_dir / "diarios_estaciones.csv"]
+    diario_anio = datos_dir / f"diarios_{date.today().year}.csv"
+    if diario_anio.exists():
+        paths.append(diario_anio)
+    out: dict = {}
+    for path in paths:
+        if not path.exists():
+            continue
+        with path.open(encoding="utf-8", newline="") as fh:
+            rd = csv.reader(fh)
+            cab = next(rd, None)
+            if not cab:
+                continue
+            try:
+                i_f, i_ind, i_tmin = cab.index("fecha"), cab.index("indicativo"), cab.index("tmin")
+            except ValueError:
+                continue
+            tope = max(i_f, i_ind, i_tmin)
+            for row in rd:
+                if len(row) <= tope:
+                    continue
+                try:
+                    tmin = float(row[i_tmin])
+                except ValueError:
+                    continue
+                ind, fecha = row[i_ind], row[i_f]  # ISO -> orden lexicográfico = cronológico
+                prev = out.get(ind)
+                if prev is None or fecha > prev["fecha"]:
+                    out[ind] = {"fecha": fecha, "tmin": tmin}
+    return out
+
+
+def cargar_verano_actual(estaciones: list) -> dict:
+    """Recuento de noches tropicales del VERANO EN CURSO (jun–ago del año actual)
+    por estación, leyendo datos/diarios_{año}.csv. Devuelve
+    {indicativo: {"nt": int, "noches": int, "hasta": "YYYY-MM-DD"}}. Degrada a {} si
+    todavía no hay datos de verano (p.ej. antes de junio)."""
+    from collections import defaultdict
+    datos_dir = AEMET_DIR / "datos"
+    anio = str(date.today().year)
+    # El fichero del año es la fuente canónica; el rolling se suma para no perder
+    # las noches más recientes si aquel va por detrás. Se deduplica por (est, noche).
+    paths = [datos_dir / f"diarios_{anio}.csv", datos_dir / "diarios_estaciones.csv"]
+    acc: dict = defaultdict(lambda: {"nt": 0, "noches": 0, "hasta": ""})
+    vistos: set = set()
+    for path in paths:
+        if not path.exists():
+            continue
+        with path.open(encoding="utf-8", newline="") as fh:
+            rd = csv.reader(fh)
+            cab = next(rd, None)
+            if not cab:
+                continue
+            try:
+                i_f, i_ind, i_tmin = cab.index("fecha"), cab.index("indicativo"), cab.index("tmin")
+            except ValueError:
+                continue
+            tope = max(i_f, i_ind, i_tmin)
+            for row in rd:
+                if len(row) <= tope:
+                    continue
+                f = row[i_f]
+                if f[:4] != anio or f[5:7] not in ("06", "07", "08"):
+                    continue
+                try:
+                    tmin = float(row[i_tmin])
+                except ValueError:
+                    continue
+                clave = (row[i_ind], f)
+                if clave in vistos:
+                    continue
+                vistos.add(clave)
+                c = acc[row[i_ind]]
+                c["noches"] += 1
+                if tmin >= 20:
+                    c["nt"] += 1
+                if f > c["hasta"]:
+                    c["hasta"] = f
+    return dict(acc)
+
+
+def estado_noche(tmin: float | None) -> tuple[str, str] | None:
+    """(etiqueta, clase CSS) según la mínima nocturna. None si no hay dato.
+    Umbrales de AEMET: noche tropical ≥ 20 °C, noche ecuatorial ≥ 25 °C."""
+    if tmin is None:
+        return None
+    if tmin >= 25:
+        return ("Noche ecuatorial", "ec")
+    if tmin >= 20:
+        return ("Noche tropical", "tr")
+    return ("Noche fresca", "fr")
+
+
+def estacion_ciudad(prov: str, lista: list, peor: dict) -> dict:
+    """La estación que mejor representa a la capital/ciudad de la provincia. La
+    mayoría de capitales españolas comparten nombre con su provincia (Valencia,
+    Sevilla, Córdoba, Badajoz…): se prefiere la coincidencia de nombre, excluyendo
+    aeropuertos; a igualdad, la de menor altitud (la de dentro de la ciudad). Si no
+    hay coincidencia (capital con otro nombre: Oviedo, Bilbao…), cae al 'horno'
+    local (la estación más calurosa), que sigue siendo un dato real de la zona."""
+    pn = clave_orden(prov)
+
+    def sin_aero(e: dict) -> bool:
+        return "aeropuerto" not in clave_orden(e["loc"])
+
+    exactas = [e for e in lista if clave_orden(e["loc"]) == pn]
+    if exactas:
+        return exactas[0]
+    empiezan = [e for e in lista if clave_orden(e["loc"]).startswith(pn) and sin_aero(e)]
+    if empiezan:
+        return sorted(empiezan, key=lambda e: e["alt"])[0]
+    contienen = [e for e in lista if pn in clave_orden(e["loc"]) and sin_aero(e)]
+    if contienen:
+        return sorted(contienen, key=lambda e: e["alt"])[0]
+    return peor
+
+
+def construir_widget_registro(prov: str, ciudad: dict, ultima: dict | None,
+                              verano: dict | None, site: str) -> str:
+    """Banda 'El registro nocturno de {ciudad}' sobre la tabla (above the fold):
+    última noche con dato de AEMET, recuento del verano en curso y media de 10
+    veranos. Todo con dato real; si no hay ni última noche ni verano, devuelve ''
+    (la página queda exactamente igual). Traspasa autoridad a /ola-de-calor/."""
+    un = (ultima or {}).get(ciudad["id"])
+    ve = (verano or {}).get(ciudad["id"])
+    if not un and not ve:
+        return ""
+    items = []
+    if un:
+        est = estado_noche(un["tmin"])
+        badge = f'<span class="reg-badge {est[1]}">{est[0]}</span>' if est else ""
+        tmin_txt = f"{un['tmin']:.1f}".replace(".", ",")
+        items.append(
+            '<div class="reg-item reg-big">'
+            '<span class="reg-lab">Última noche registrada</span>'
+            f'<span class="reg-val">{tmin_txt}&nbsp;°C</span>{badge}'
+            f'<span class="reg-sub">dato de AEMET · {fecha_es_dia(date.fromisoformat(un["fecha"]))}</span></div>')
+    if ve and ve["noches"] >= 10:
+        items.append(
+            '<div class="reg-item">'
+            '<span class="reg-lab">Este verano ya</span>'
+            f'<span class="reg-val">{int(ve["nt"])}</span>'
+            f'<span class="reg-sub">noches tropicales de {int(ve["noches"])} contabilizadas</span></div>')
+    items.append(
+        '<div class="reg-item">'
+        '<span class="reg-lab">Media de 10 veranos</span>'
+        f'<span class="reg-val">{ntfmt(ciudad["nt"])}</span>'
+        '<span class="reg-sub">noches tropicales al año</span></div>')
+    nota = (f'Datos de <b>{ciudad["loc"]}</b>, la estación de AEMET de referencia en {prov}. '
+            f'<a href="{site}/ola-de-calor/">Mira cómo va la ola de calor hoy en el mapa de España →</a>')
+    return (
+        '<section class="reg-band"><div class="wrap"><div class="registro">'
+        f'<div class="reg-cab"><span class="reg-kick">🌙 El registro nocturno de {ciudad["loc"]}</span></div>'
+        f'<div class="reg-cols">{"".join(items)}</div>'
+        f'<p class="reg-nota">{nota}</p>'
+        '</div></div></section>')
+
+
 def prosa_tendencia(prov: str, serie: dict) -> str:
     """Sección '¿Están aumentando las noches tropicales en {prov}?' con la serie
     real por año y un mini-gráfico de barras. Contenido único por provincia. Se
@@ -1930,10 +2123,24 @@ PROV_TITULO_CORTO = {
 def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
                                 fecha_mod: str, fecha_mod_txt: str,
                                 tendencia: dict | None = None,
-                                humedad: dict | None = None) -> str:
+                                humedad: dict | None = None,
+                                ultima_noche: dict | None = None,
+                                verano: dict | None = None) -> str:
     sl = slug(prov)
     ordenadas = sorted(lista, key=lambda x: (x["nt"], -x["alt"]))
     mejor, peor, n = ordenadas[0], max(lista, key=lambda x: x["nt"]), len(lista)
+    # Widget "registro nocturno" de la capital/ciudad (above the fold): última
+    # noche con dato de AEMET + verano en curso + media de 10 años. Todo con dato
+    # real; degrada a "" si no hay datos recientes.
+    ciudad = estacion_ciudad(prov, lista, peor)
+    # Si la estación de referencia no tiene dato reciente (p.ej. dejó de reportar),
+    # cae a la más calurosa de la provincia que SÍ lo tenga: así el widget no
+    # desaparece por un hueco puntual de una sola estación.
+    if ultima_noche and ciudad["id"] not in ultima_noche:
+        con_dato = [e for e in lista if e["id"] in ultima_noche]
+        if con_dato:
+            ciudad = max(con_dato, key=lambda e: e["nt"])
+    widget = construir_widget_registro(prov, ciudad, ultima_noche, verano, site)
     # Columna de humedad de agosto (complemento): solo si al menos una estación
     # de la provincia tiene el dato; si no, la tabla queda exactamente igual.
     hum = humedad or {}
@@ -2034,6 +2241,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             .replace("__PROVNAME__", prov)
             .replace("__H1__", h1)
             .replace("__INTRO__", intro)
+            .replace("__WIDGET__", widget)
             .replace("__COLHUM__", col_hum_head)
             .replace("__TABLE__", "".join(filas))
             .replace("__COMPARTIR__", barra_compartir(url_comp, texto_comp))
@@ -6917,6 +7125,16 @@ def main() -> int:
         print(f"   complemento humedad/viento: {len(humedad)} estaciones con dato de agosto")
     else:
         print("   complemento humedad/viento: sin datos aún (lanza el backfill para poblarlo)")
+    # Widget "registro nocturno" de cada provincia: última noche con dato de AEMET
+    # (rolling) y noches tropicales del verano en curso. Complemento honesto: si no
+    # hay datos recientes, el widget no aparece y la página queda igual.
+    ultima_noche = cargar_ultima_noche(estaciones)
+    verano = cargar_verano_actual(estaciones)
+    if ultima_noche:
+        print(f"   registro nocturno: última noche en {len(ultima_noche)} estaciones · "
+              f"verano en curso en {len(verano)}")
+    else:
+        print("   registro nocturno: sin datos recientes (no se pinta el widget)")
     titulos_prov = []  # (provincia, título) para la tabla de control móvil
     for prov, lista in datos["provincias"].items():
         sl = slug(prov)
@@ -6924,7 +7142,8 @@ def main() -> int:
         carpeta.mkdir(parents=True, exist_ok=True)
         (carpeta / "index.html").write_text(
             construir_pagina_provincia(prov, lista, site, provnav, fecha_mod_iso,
-                                       fecha_mod_txt, tendencias.get(prov), humedad),
+                                       fecha_mod_txt, tendencias.get(prov), humedad,
+                                       ultima_noche, verano),
             encoding="utf-8")
         (carpeta / "datos.csv").write_text(csv_provincia(lista), encoding="utf-8")
         pt = PROV_TITULO_CORTO.get(prov, prov)

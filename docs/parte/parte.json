@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-01",
+ "fecha": "2026-08-02",
  "total": 846,
- "tropicales": 399,
- "ecuatoriales": 55,
+ "tropicales": 362,
+ "ecuatoriales": 43,
  "peor": {
-  "id": "C614H",
-  "nombre": "Tejeda Casco",
-  "min": 30.1,
+  "id": "C648C",
+  "nombre": "Agüimes-el Milano",
+  "min": 31.5,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 7.8,
-  "prov": "Zamora"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 7.0,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 30.1,
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 31.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
+   "min": 31.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C668V",
+   "nombre": "Agaete - Suerte Alta",
+   "min": 30.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C623I",
+   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "min": 28.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+   "min": 28.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C648N",
+   "nombre": "Telde-Centro Forestal Doramas",
+   "min": 28.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
    "min": 28.1,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "5038Y",
-   "nombre": "Cazorla (Automatica)",
-   "min": 27.7,
-   "prov": "Jaén"
-  },
-  {
-   "id": "C314Z",
-   "nombre": "Vallehermoso-Alto Igualero",
-   "min": 27.6,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "5427X",
-   "nombre": "Doña Mencia",
-   "min": 27.3,
-   "prov": "Córdoba"
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
+   "min": 27.9,
+   "prov": "Las Palmas"
   },
   {
-   "id": "5270B",
-   "nombre": "Jaén",
-   "min": 27.2,
-   "prov": "Jaén"
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
+   "min": 27.8,
+   "prov": "Las Palmas"
   },
   {
-   "id": "6281X",
-   "nombre": "Válor",
-   "min": 26.6,
-   "prov": "Granada"
-  },
-  {
-   "id": "C316I",
-   "nombre": "Arure Cementerio",
-   "min": 26.6,
+   "id": "C916Q",
+   "nombre": "Pinar-Depósito",
+   "min": 27.4,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "5919X",
-   "nombre": "Olvera-Coop.Agrícola",
-   "min": 26.5,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "5192",
-   "nombre": "Villarrodrigo",
-   "min": 26.4,
-   "prov": "Jaén"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 7.8,
-   "prov": "Zamora"
-  },
-  {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 8.4,
-   "prov": "Cantabria"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 8.7,
+   "min": 7.0,
    "prov": "Ávila"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 9.1,
+   "min": 7.6,
    "prov": "Salamanca"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 9.3,
+   "min": 8.5,
    "prov": "Segovia"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 9.4,
-   "prov": "Cantabria"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 8.5,
+   "prov": "Zamora"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 9.6,
-   "prov": "Soria"
-  },
-  {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 9.7,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 9.7,
-   "prov": "Burgos"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 10.3,
+   "prov": "León"
   },
   {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 9.9,
+   "min": 10.3,
    "prov": "Ourense"
+  },
+  {
+   "id": "2828Y",
+   "nombre": "Barco de Avila",
+   "min": 10.4,
+   "prov": "Ávila"
+  },
+  {
+   "id": "1226X",
+   "nombre": "Cuevas de Felechosa",
+   "min": 10.7,
+   "prov": "Asturias"
+  },
+  {
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 10.7,
+   "prov": "Zamora"
+  },
+  {
+   "id": "9060X",
+   "nombre": "Lalastra",
+   "min": 10.9,
+   "prov": "Araba/Álava"
   }
  ]
 }

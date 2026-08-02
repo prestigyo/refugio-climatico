@@ -1,11 +1,11 @@
 {
  "fecha": "2026-08-02",
- "total": 846,
- "tropicales": 362,
- "ecuatoriales": 43,
+ "total": 845,
+ "tropicales": 359,
+ "ecuatoriales": 42,
  "peor": {
-  "id": "C648C",
-  "nombre": "Agüimes-el Milano",
+  "id": "C639U",
+  "nombre": "San Bartolome Tirajana (el Matorral)",
   "min": 31.5,
   "prov": "Las Palmas"
  },
@@ -17,15 +17,15 @@
  },
  "top_calor": [
   {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
    "min": 31.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "C639U",
-   "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 31.0,
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 31.5,
    "prov": "Las Palmas"
   },
   {
@@ -41,14 +41,20 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C635B",
-   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 28.5,
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 28.8,
    "prov": "Las Palmas"
   },
   {
    "id": "C648N",
    "nombre": "Telde-Centro Forestal Doramas",
+   "min": 28.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
    "min": 28.5,
    "prov": "Las Palmas"
   },
@@ -69,12 +75,6 @@
    "nombre": "Las Palmas de Gran Canaria/Gando",
    "min": 27.8,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C916Q",
-   "nombre": "Pinar-Depósito",
-   "min": 27.4,
-   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [

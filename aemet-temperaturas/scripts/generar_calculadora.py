@@ -3042,8 +3042,8 @@ PAGINA_OLA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>¿Cuándo acaba la ola de calor? Mapa AEMET de hoy: máximas y mínimas</title>
-<meta name="description" content="Míralo día a día en el mapa animado de AEMET: las temperaturas máximas de hoy, las mínimas de esta noche y cómo evoluciona la ola de calor. Y si no da tregua, dónde refugiarte.">
+<title>Mapa de la ola de calor en España hoy: máximas y mínimas de AEMET</title>
+<meta name="description" content="Mapa de la ola de calor en España, animado día a día con datos de AEMET: las temperaturas máximas de hoy y las mínimas de esta noche. Ve si la ola afloja o aprieta y, si no da tregua, dónde refugiarte.">
 <link rel="canonical" href="__SITE__/ola-de-calor/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -3064,6 +3064,7 @@ __CSS__
  .wrap{max-width:720px;margin:0 auto;padding:0 22px}
  p{font-size:clamp(15.5px,2.3vw,17px);color:var(--muted);margin:0 0 14px}p b{color:var(--ink)}
  .crumb{font-size:13px;color:var(--muted2)}.crumb a{color:var(--muted2)}
+ .hero{padding:26px 0 4px}
  .hero .wrap{padding:0 22px}
  .lede{max-width:none}
  .btn{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px;text-decoration:none}
@@ -3122,8 +3123,8 @@ __NAV__
 <header class="hero"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Mapa de la ola de calor</nav>
   <p class="kick">Mapa animado · Datos AEMET</p>
-  <h1>¿Cuándo acaba la ola de calor? Míralo en el mapa, <em>día y noche</em></h1>
-  <p class="lede">Los <b>mapas de temperaturas de AEMET</b>, animados: las <b>máximas de hoy</b> y las <b>mínimas de esta noche</b>, un fotograma por jornada — la forma más rápida de ver si la ola <b>afloja o aprieta</b>. De día arde el 98 % del país. De noche, España se parte en dos: <b>una quinta parte del territorio no cruza los 20 °C ni una sola noche</b>. Ahí es donde se duerme. Pulsa el botón para ver <b>dónde están algunos de los mejores refugios</b>.</p>
+  <h1>Mapa de la ola de calor en España, hoy: <em>día y noche</em></h1>
+  <p class="lede">El <b>mapa de la ola de calor en España</b>, animado día a día con los datos de AEMET: las <b>máximas de hoy</b> y las <b>mínimas de esta noche</b>. La forma más rápida de ver si la ola <b>afloja o aprieta</b> — y dónde, pese a todo, <b>se sigue durmiendo fresco</b>.</p>
 </div></header>
 
 <section><div class="wrap">
@@ -3136,7 +3137,7 @@ __NAV__
   <div class="mapa">
     <h2>De noche · temperaturas mínimas</h2>
     <div class="gifwrap">
-      <img src="__SITE__/ola-minimas.gif" width="630" height="546" alt="Mapa de las temperaturas mínimas de noche en España durante la ola de calor (AEMET): dónde no se baja de 20 °C y dónde se duerme fresco" loading="lazy">
+      <img src="__SITE__/ola-minimas.gif" width="630" height="546" alt="Mapa de las temperaturas mínimas de noche en España durante la ola de calor (AEMET): dónde no se baja de 20 °C y dónde se duerme fresco" loading="eager" fetchpriority="high">
       <svg class="capa oculta" viewBox="0 0 630 546" aria-label="Refugios climáticos señalados sobre el mapa">__MARCADORES__</svg>
     </div>
   </div>

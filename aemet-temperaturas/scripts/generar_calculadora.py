@@ -1519,14 +1519,14 @@ def bandas_py(nt: float):
 def ntfmt(nt: float) -> str:
     if nt < 1:
         return "&lt;1"
-    return f"{nt:.1f}" if nt < 10 else f"{round(nt)}"
+    return f"{nt:.1f}".replace(".", ",") if nt < 10 else f"{round(nt)}"
 
 
 def nt_prosa(nt: float) -> str:
     """Como ntfmt pero para texto plano (meta description): sin entidades HTML."""
     if nt < 1:
         return "menos de 1"
-    return f"{nt:.1f}" if nt < 10 else f"{round(nt)}"
+    return f"{nt:.1f}".replace(".", ",") if nt < 10 else f"{round(nt)}"
 
 
 def construir_schema_provincia(prov: str, site: str, sl: str, n: int, titulo: str,
@@ -1968,7 +1968,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
     # largos se acortan solo en el título (Tenerife, Baleares, Álava): caben en
     # móvil y además coinciden con lo que la gente busca de verdad.
     prov_titulo = PROV_TITULO_CORTO.get(prov, prov)
-    title = f"Noches tropicales en {prov_titulo}: dónde se libra uno"
+    title = f"Noches tropicales en {prov_titulo}: dónde se duerme fresco"
     h1 = (f'¿Se duerme bien en verano en <em>{prov}</em>? '
           f'Te lo contamos con 10 años de datos')
     # Meta description: dato concreto + invitación. Degrada con elegancia según
@@ -6927,7 +6927,7 @@ def main() -> int:
             encoding="utf-8")
         (carpeta / "datos.csv").write_text(csv_provincia(lista), encoding="utf-8")
         pt = PROV_TITULO_CORTO.get(prov, prov)
-        titulos_prov.append(f"Noches tropicales en {pt}: dónde se libra uno")
+        titulos_prov.append(f"Noches tropicales en {pt}: dónde se duerme fresco")
     # Control de longitud del <title> en móvil (Google corta ~50-55 car.):
     # marca con ! las que se pasen de 52 para revisarlas de un vistazo.
     print("   títulos de provincia (nº car. · ! si >52):")

@@ -4081,8 +4081,8 @@ APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbwjIxpPVGrwc
 # scripts/apps_script_observatorio.gs. Con la URL vacía el Observatorio funciona
 # en modo demostración: deja votar, enseña el resultado y AVISA de que la noche
 # no se ha guardado. En cuanto se pegue aquí la URL /exec, empieza a guardarlas.
-APPS_SCRIPT_OBS_URL = ("https://script.google.com/macros/s/AKfycbxGYceGTDHu6JV4q6y-"
-                       "bJHVvcVFibHgFGa9IDRQOfSs0J31z_g4-aAMOYJ_8qXrpStb/exec")
+APPS_SCRIPT_OBS_URL = ("https://script.google.com/macros/s/AKfycbz4bvNwAVEBDA0NId5_"
+                       "uv42a_Q9oXlA2h4q25CZ8ZuDRmWilVIDbg2qAmGGHDChmVhmyg/exec")
 
 # Palabra secreta del atajo de teclado de la sala de prensa: tecléala en
 # /prensa/ y saltas a la consola interna de informes (/informes/). Va ofuscada
@@ -6805,6 +6805,13 @@ a{color:var(--teal);text-decoration:none}
 .obsestado b{font-weight:700}
 .obsestado.ok{color:#cfe0c2;background:rgba(143,176,122,.14);border:1px solid #8fb07a}
 .obsestado.ko{color:#f0c9bd;background:rgba(217,96,74,.14);border:1px solid #d9604a}
+.again.pri2{border-color:var(--teja);color:var(--teja2);font-weight:700}
+.again.pri2:hover{background:rgba(217,116,78,.12)}
+.deudasec{padding:6px 0 30px}
+.votabox{background:radial-gradient(120% 90% at 50% 0,#241a10,var(--bg) 72%);border-top:1px solid var(--line);padding:34px 0 40px;text-align:center}
+.votabox h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,4.4vw,30px);color:var(--paper);margin:0 0 8px;line-height:1.15}
+.votasub{color:var(--muted);font-size:clamp(14px,2.3vw,16px);line-height:1.65;max-width:44ch;margin:0 auto 18px}
+.votasub b{color:var(--paper)}
 .deuda-ed{margin:30px auto 0;max-width:640px}
 .deuda-ed h3{font-family:var(--fd);font-weight:600;font-size:clamp(19px,3.6vw,25px);color:var(--paper);margin:0 0 12px;line-height:1.2}
 .deuda-ed p{color:var(--muted);font-size:clamp(14.5px,2.3vw,16px);line-height:1.75;margin:0 0 14px}
@@ -6817,15 +6824,11 @@ a{color:var(--teal);text-decoration:none}
 __NAV__
 <section class="hero"><div class="wrap">
   <div class="brandmini">El Observatorio del Descanso</div>
-  <h1>¿Cómo has <em>dormido</em><br>esta noche?</h1>
-  <p class="sub">El mapa del <b>sueño profundo</b> en España: dónde el cuerpo se repara de verdad. Tu noche ayuda a construirlo.</p>
-  <button class="cta" id="cta" onclick="startFlow()">Compartir cómo he dormido</button>
-  <div class="loc" id="loc">📍 Detectando tu zona…</div>
-  <div class="desktoponly hidden" id="desknote">📱 El Observatorio se usa desde el <b>móvil</b>: necesita tu ubicación para situar tu noche en el mapa. Ábrelo en tu teléfono. Aquí abajo puedes ver cómo se siente España ahora mismo.</div>
-  <div class="scrollhint">↓ Mira cómo se siente España esta noche</div>
+  <h1>Así se <em>duerme</em><br>en España</h1>
+  <p class="sub">El mapa del <b>sueño profundo</b>: dónde el cuerpo se repara de verdad, según diez veranos de AEMET y las noches que cuenta la gente.</p>
 </div></section>
 <section class="public"><div class="wrap">
-  <h2>Así se siente España</h2>
+  <h2>El mapa del descanso, estación a estación</h2>
   <div class="when" id="when">Índice de descanso · <b>esperado según AEMET</b> · aún sin votos — sé el primero</div>
   <div class="mapbox"><svg id="map" viewBox="0 0 300 190" aria-label="Mapa del descanso de España"></svg></div>
   <div class="rankcols">
@@ -6840,21 +6843,32 @@ __NAV__
     <span><i class="ldot" style="background:#d9604a"></i>Muy malo</span>
   </div>
   <div class="curioso" id="curioso">
-    <h3>👀 ¿Solo curioseando? Mira cómo se está en otro lugar</h3>
-    <p class="cursub">Elige una zona y compárala con la tuya, ahora mismo. Es el índice de descanso <b>esperado según AEMET</b> (10 veranos); en cuanto lleguen los votos, verás además lo que dice la gente.</p>
+    <h3>¿Quieres saber cómo se duerme en otra población española?</h3>
+    <p class="cursub">Busca cualquier pueblo o ciudad de España. Si allí ya se han contado noches, verás lo que dice la gente; si no, verás lo que <b>cabe esperar según AEMET</b> — y te lo decimos claramente.</p>
     <input id="curbusca" type="search" autocomplete="off" placeholder="Escribe tu pueblo… (Dénia, Cedrillas, Gijón…)" aria-label="Buscar una población">
     <ul class="cursug" id="cursug"></ul>
     <div class="curout" id="curout"></div>
   </div>
 
+
+  <p class="disc-o" style="margin-top:22px">Aún estamos empezando. El mapa nace con la <b>expectativa de AEMET</b> (10 veranos de datos); cada noche que votas lo hace más real: veremos <b>lo que dicen los datos frente a lo que dice la gente</b>. Sin predicciones, sin temperatura de protagonista: solo cómo se ha vivido la noche.</p>
+</div></section>
+
+<section class="votabox"><div class="wrap">
+  <h2>¿Y tú, cómo has dormido esta noche?</h2>
+  <p class="votasub">Cuéntalo en 10 segundos y tu noche entra en el mapa. Es anónimo, y así sabremos <b>dónde se descansa de verdad</b> en España.</p>
+  <button class="cta" id="cta" onclick="startFlow()">Contar cómo he dormido</button>
+  <div class="loc" id="loc">📍 Detectando tu zona…</div>
+  <div class="desktoponly hidden" id="desknote">📱 Para contar tu noche hace falta el <b>móvil</b>: necesitamos tu ubicación para situarla en el mapa. Ábrelo en tu teléfono — el mapa de arriba se ve igual desde aquí.</div>
+</div></section>
+
+<section class="deudasec"><div class="wrap">
   <div class="deuda-ed">
     <h3>La deuda de sueño: lo que pagas al día siguiente</h3>
     <p>Dormir mal una noche se nota; dormir mal <b>varias seguidas</b> se acumula. Eso es la <b>deuda de sueño</b>: el déficit que arrastras y que no se salda con echarle horas el fin de semana. Y hay un matiz que casi nadie cuenta: <b>puedes dormir las mismas horas y descansar mucho menos</b>. Cuando la noche no baja de 20&nbsp;°C, el cuerpo no consigue soltar calor, el sueño se fragmenta y <b>la fase profunda —la reparadora— se acorta</b>. El reloj marca ocho horas; el cuerpo, al levantarse, dice otra cosa.</p>
     <p>Por eso este observatorio no mide la temperatura: mide <b>el descanso</b>. Si entrenas, ya sabes que la sesión no te hace mejor — <b>te hace mejor lo que recuperas mientras duermes</b>: ahí se libera la hormona del crecimiento, se repara el músculo y se consolida el aprendizaje. Un verano de noches tropicales es un verano de recuperación a medias. Y un <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">refugio climático natural</a> —donde la madrugada refresca sin aire acondicionado— es, sencillamente, <b>el mejor sitio para dormir profundo</b>.</p>
     <p class="wear-note">⌚ <b>¿Llevas pulsera o reloj de sueño?</b> Al contar tu noche puedes añadir, si quieres, <b>las horas y la puntuación</b> que te dio tu dispositivo. Así cruzamos tres cosas que casi nunca se miran juntas: <b>lo que midió AEMET</b> fuera, <b>lo que midió tu aparato</b> y <b>lo que sentiste tú</b>. Es opcional y anónimo: no conectamos con ninguna cuenta ni servicio, lo escribes tú.</p>
   </div>
-
-  <p class="disc-o" style="margin-top:22px">Aún estamos empezando. El mapa nace con la <b>expectativa de AEMET</b> (10 veranos de datos); cada noche que votas lo hace más real: veremos <b>lo que dicen los datos frente a lo que dice la gente</b>. Sin predicciones, sin temperatura de protagonista: solo cómo se ha vivido la noche.</p>
 </div></section>
 __FOOTER__
 
@@ -6913,6 +6927,15 @@ function showCurioso(z){
   h+='<p class="curmsg">'+(Math.abs(dif)<0.8?"Se descansa parecido en los dos sitios.":(dif>0?"Ahí se descansa <b>mejor</b> que en tu zona.":"En tu zona se descansa <b>mejor</b> que ahí."))+'</p>';
  }
  out.innerHTML=h+'</div>';
+}
+/* Desde el resultado del voto: cerrar la recompensa y llevar al buscador de
+   poblaciones, con el cursor puesto (es la pregunta que engancha después). */
+function verCurioso(){
+ var r=document.getElementById("reward");if(r)r.classList.remove("on");
+ var mh=document.getElementById("morehint");if(mh)mh.classList.add("hidden");
+ var c=document.getElementById("curioso");
+ if(c){c.scrollIntoView({behavior:"smooth",block:"center"});
+  setTimeout(function(){var i=document.getElementById("curbusca");if(i)i.focus();},600);}
 }
 /* Invitación a que alguien de esa población cuente su noche. */
 function pideVoto(nombre){
@@ -7226,6 +7249,7 @@ function finish(){
    near.map(function(o){return '<div class="row"><span class="idx" style="color:'+colorFor(o.z.d)+';background:'+bgFor(o.z.d)+'">'+o.z.d.toFixed(1)+'</span><div class="info"><div class="n">'+o.z.n+' · '+o.k+' km</div><div class="p">"'+o.z.f+'"</div></div></div>';}).join("")+'</div></div>'+
   deudaCard(deuda,descanso,WEAR)+
   '<button class="share fade" style="animation-delay:.8s" onclick="shareNoche()">📲 Comparte tu noche</button>'+
+  '<button class="again pri2" onclick="verCurioso()">🔎 ¿Y cómo se duerme en otra población española?</button>'+
   '<button class="again" onclick="reward.classList.remove(\'on\');document.getElementById(\'morehint\').classList.add(\'hidden\');window.scrollTo(0,0)">Volver al observatorio</button>'+
   '<p class="obsestado" id="obsestado" style="display:none"></p>'+
   (URL_OBS?'':'<p class="obsdemo" id="obsdemo">Modo demostración: el buzón de noches aún no está desplegado, así que <b>esta noche no se ha guardado</b>.</p>')+

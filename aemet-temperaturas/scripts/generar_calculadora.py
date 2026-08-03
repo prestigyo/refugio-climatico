@@ -6239,6 +6239,8 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .hr-acc a.pri{background:var(--teja);color:#1a1209;border-color:var(--teja)}
  .hr-acc a:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none}
  .hr-acc a.pri:hover{color:#1a1209;background:var(--teja2)}
+ .dirnote{font-size:13.5px;color:var(--muted);margin:0 0 18px;line-height:1.55}
+ .dirnote b{color:var(--paper)}
  __NAVCSS__
  __FOOTERCSS__
 </style></head><body>
@@ -6290,7 +6292,7 @@ __NAV__
   <p>Nuestro organismo lleva miles de generaciones esperando la misma señal: que al caer la noche <b>la temperatura descienda</b>. Entonces el cuerpo se relaja, baja su temperatura interna y se prepara para un sueño reparador. Es en esas horas cuando el cerebro ordena los recuerdos y recuperamos energía. La noche no es un tiempo muerto: es <b>el taller donde el cuerpo se repara</b>.</p>
   <p>Pero el calor no termina cuando se pone el sol. Las calles, las fachadas, las paredes, los muebles, el colchón… todo sigue irradiando el calor acumulado durante toda la madrugada. Y aunque duermas ocho horas, puede que <b>no hayas descansado</b>.</p>
   <h2>Y entonces, una noche, la ventana</h2>
-  <p>Viajas. Quizá a un pequeño pueblo de montaña, porque unos amigos insistieron o encontraste una oferta. Y esa primera noche ocurre algo que casi habías olvidado: abres la ventana y entra aire fresco. No enciendes el aire acondicionado. No necesitas ventilador. Buscas una sábana; de madrugada, tal vez una rebeca. A la mañana siguiente no piensas en grados: piensas algo mucho más simple, <b>«hacía tiempo que no dormía tan bien»</b>.</p>
+  <p>Viajas. Quizá a un pequeño pueblo de montaña, porque unos amigos insistieron o encontraste una oferta. Y esa primera noche ocurre algo que casi habías olvidado: abres la ventana y entra aire fresco. No enciendes el aire acondicionado. No necesitas ventilador. Buscas una sábana; de madrugada, tal vez una rebeca. A la mañana siguiente no piensas en grados: piensas algo mucho más simple, <b>«hacía tiempo que no dormía tan bien»</b>. Y casualmente, la noche siguiente se repite, vuelves a percibir la misma sensación. Y al final te das cuenta de que es el sitio: tiene <a href="__SITE__/microclimas/">su propio microclima</a>, al que la ola de calor le afecta, <b>pero menos</b>.</p>
   <p>Llamas a un amigo y te cuenta que siguen encerrados, que fuera hay 33 grados, que el aire lleva desde el mediodía. Miras por la ventana, respiras el aire fresco de la mañana y piensas: <b>«¿eso también es verano?»</b></p>
   <h2>La geografía del descanso</h2>
   <p>Durante décadas elegimos destino por la playa, la gastronomía, los monumentos, la cercanía. Quizá ha llegado el momento de añadir un criterio mucho más importante: <b>¿cómo se duerme aquí en verano?</b> Porque la temperatura nocturna también es calidad de vida, salud, bienestar y sostenibilidad —y quizá el lujo más valioso que nos queda—.</p>
@@ -6303,11 +6305,13 @@ __NAV__
     <h2>¿Dónde se duerme fresco cerca de ti?</h2>
     <p class="sub">Comparte tu ubicación y te ordenamos estos hoteles-refugio del más cercano al más lejano, con la distancia en línea recta. Todos en zonas donde la mínima de verano baja de 20&nbsp;°C, medido con 10 años de datos de AEMET.</p>
     <button class="geobtn" id="geoh">📍 Usar mi ubicación</button>
-    <p class="ghint" id="ghinth">No guardamos tu ubicación: el cálculo ocurre en tu propio navegador.</p>
+    <p class="ghint" id="ghinth">Funciona mejor desde el <b>móvil</b>: en el ordenador el navegador puede no tener activada la ubicación. No la guardamos — el cálculo ocurre en tu propio navegador.</p>
     <div class="prov-pick"><select id="provh" aria-label="Elegir provincia"><option value="">O elige por provincia…</option></select></div>
     <p class="msg" id="hmsgh"></p>
     <ul class="hres" id="hresh"></ul>
   </div>
+
+  <p class="dirnote">Abajo, el <b>directorio completo</b> de hoteles-refugio agrupado <b>por regiones</b> (no por distancia): esa lista es igual para todo el mundo. Para ordenarla por <b>cercanía a ti</b>, usa el buscador de aquí arriba.</p>
 
   __LISTADO__
 
@@ -6342,10 +6346,10 @@ function fila(h,distTxt,first){
 }
 function msg(t){document.getElementById("hmsgh").textContent=t;}
 function pinta(la,lo,origen){
- var L=HOT.map(function(h){return {h:h,d:hav(la,lo,h.la,h.lo)};}).sort(function(a,b){return a.d-b.d;}).slice(0,6);
+ var L=HOT.map(function(h){return {h:h,d:hav(la,lo,h.la,h.lo)};}).sort(function(a,b){return a.d-b.d;});
  var ol=document.getElementById("hresh"); ol.innerHTML="";
  L.forEach(function(o,i){ol.appendChild(fila(o.h,km(o.d)+" km",i===0));});
- msg("Los hoteles-refugio más cercanos"+(origen?" a "+origen:"")+":");
+ msg("Los "+L.length+" hoteles-refugio, del más cercano al más lejano"+(origen?" a "+origen:"")+":");
  document.getElementById("hmsgh").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function pintaProv(p){

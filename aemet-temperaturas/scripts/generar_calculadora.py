@@ -4076,6 +4076,14 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
 APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbwjIxpPVGrwcUJb"
                            "29i6L75tTQyN5h6IB243GblSXwIHAonMiQB9cEtJk2zaRI3P4W4PWg/exec")
 
+# Buzón del OBSERVATORIO DEL DESCANSO (las noches: cómo se ha dormido). Es un
+# despliegue DISTINTO del confortómetro —otra hoja, otras columnas—: ver
+# scripts/apps_script_observatorio.gs. Con la URL vacía el Observatorio funciona
+# en modo demostración: deja votar, enseña el resultado y AVISA de que la noche
+# no se ha guardado. En cuanto se pegue aquí la URL /exec, empieza a guardarlas.
+APPS_SCRIPT_OBS_URL = ("https://script.google.com/macros/s/AKfycbxGYceGTDHu6JV4q6y-"
+                       "bJHVvcVFibHgFGa9IDRQOfSs0J31z_g4-aAMOYJ_8qXrpStb/exec")
+
 # Palabra secreta del atajo de teclado de la sala de prensa: tecléala en
 # /prensa/ y saltas a la consola interna de informes (/informes/). Va ofuscada
 # en base64 en el HTML (no en claro), pero es seguridad por oscuridad: cámbiala
@@ -6601,7 +6609,7 @@ def seed_observatorio(estaciones: list) -> list:
         out.append({"n": m["loc"].split(",")[0][:22], "p": m["prov"],
                     "la": round(m["lat"], 3), "lo": round(m["lon"], 3),
                     "d": _obs_baseline(m["tmin"]), "t": round(m["tmin"], 1),
-                    "f": _obs_frase(m["tmin"])})
+                    "f": _obs_frase(m["tmin"]), "id": m["id"]})
     return out
 
 
@@ -6724,6 +6732,31 @@ a{color:var(--teal);text-decoration:none}
 .curcmp{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:14px;font-size:14px;color:var(--muted);flex-wrap:wrap}
 .curcmp .vs{font-size:12px}
 .curmsg{color:var(--paper);font-size:14px;margin-top:9px}
+.wsub2{color:var(--muted);font-size:13.5px;line-height:1.55;margin:-4px 0 14px}
+.wsub2 b{color:var(--paper)}
+.wfields{display:grid;gap:12px;margin-bottom:16px}
+.wfields label{display:block;font-size:13px;color:var(--muted)}
+.wfields input{width:100%;margin-top:6px;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--paper);font-size:17px;padding:12px 14px;font-family:inherit}
+.wfields input:focus{outline:2px solid var(--teja);outline-offset:1px}
+.sleepdebt .dgrid{margin:6px 0 10px}
+.sleepdebt .dbar{height:10px;background:#0c0906;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.sleepdebt .dbar i{display:block;height:100%;border-radius:999px}
+.sleepdebt .dlab{font-weight:700;font-size:14px;margin-top:7px;text-align:center}
+.sleepdebt .dtxt{color:var(--muted);font-size:13.5px;line-height:1.6;margin:0}
+.sleepdebt .dtxt b{color:var(--paper)}
+.wcmp{margin-top:14px;border-top:1px dashed var(--line);padding-top:13px}
+.wtit{font-size:12px;color:var(--teja);letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px}
+.wcmp .wrow{display:flex;gap:10px;justify-content:space-around;text-align:center}
+.wcmp .wrow .n{font-family:var(--fd);font-weight:700;font-size:26px;color:var(--paper);line-height:1.1}
+.wcmp .wrow small{color:var(--muted);font-size:11.5px}
+.obsdemo{margin:14px auto 0;max-width:34ch;text-align:center;font-size:12.5px;color:var(--muted);background:var(--bg2);border:1px dashed var(--line);border-radius:12px;padding:11px 14px;line-height:1.55}
+.obsdemo b{color:var(--paper)}
+.deuda-ed{margin:30px auto 0;max-width:640px}
+.deuda-ed h3{font-family:var(--fd);font-weight:600;font-size:clamp(19px,3.6vw,25px);color:var(--paper);margin:0 0 12px;line-height:1.2}
+.deuda-ed p{color:var(--muted);font-size:clamp(14.5px,2.3vw,16px);line-height:1.75;margin:0 0 14px}
+.deuda-ed p b{color:var(--paper)}
+.deuda-ed a{color:var(--teja2)}
+.wear-note{background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--teja);border-radius:12px;padding:14px 16px;font-size:13.5px!important;line-height:1.65!important}
  __NAVCSS__
  __FOOTERCSS__
 </style></head><body>
@@ -6731,7 +6764,7 @@ __NAV__
 <section class="hero"><div class="wrap">
   <div class="brandmini">El Observatorio del Descanso</div>
   <h1>¿Cómo has <em>dormido</em><br>esta noche?</h1>
-  <p class="sub">Tu experiencia ayuda a construir el mapa del descanso de España.</p>
+  <p class="sub">El mapa del <b>sueño profundo</b> en España: dónde el cuerpo se repara de verdad. Tu noche ayuda a construirlo.</p>
   <button class="cta" id="cta" onclick="startFlow()">Compartir cómo he dormido</button>
   <div class="loc" id="loc">📍 Detectando tu zona…</div>
   <div class="desktoponly hidden" id="desknote">📱 El Observatorio se usa desde el <b>móvil</b>: necesita tu ubicación para situar tu noche en el mapa. Ábrelo en tu teléfono. Aquí abajo puedes ver cómo se siente España ahora mismo.</div>
@@ -6759,6 +6792,13 @@ __NAV__
     <div class="curout" id="curout"></div>
   </div>
 
+  <div class="deuda-ed">
+    <h3>La deuda de sueño: lo que pagas al día siguiente</h3>
+    <p>Dormir mal una noche se nota; dormir mal <b>varias seguidas</b> se acumula. Eso es la <b>deuda de sueño</b>: el déficit que arrastras y que no se salda con echarle horas el fin de semana. Y hay un matiz que casi nadie cuenta: <b>puedes dormir las mismas horas y descansar mucho menos</b>. Cuando la noche no baja de 20&nbsp;°C, el cuerpo no consigue soltar calor, el sueño se fragmenta y <b>la fase profunda —la reparadora— se acorta</b>. El reloj marca ocho horas; el cuerpo, al levantarse, dice otra cosa.</p>
+    <p>Por eso este observatorio no mide la temperatura: mide <b>el descanso</b>. Si entrenas, ya sabes que la sesión no te hace mejor — <b>te hace mejor lo que recuperas mientras duermes</b>: ahí se libera la hormona del crecimiento, se repara el músculo y se consolida el aprendizaje. Un verano de noches tropicales es un verano de recuperación a medias. Y un <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">refugio climático natural</a> —donde la madrugada refresca sin aire acondicionado— es, sencillamente, <b>el mejor sitio para dormir profundo</b>.</p>
+    <p class="wear-note">⌚ <b>¿Llevas pulsera o reloj de sueño?</b> Al contar tu noche puedes añadir, si quieres, <b>las horas y la puntuación</b> que te dio tu dispositivo. Así cruzamos tres cosas que casi nunca se miran juntas: <b>lo que midió AEMET</b> fuera, <b>lo que midió tu aparato</b> y <b>lo que sentiste tú</b>. Es opcional y anónimo: no conectamos con ninguna cuenta ni servicio, lo escribes tú.</p>
+  </div>
+
   <p class="disc-o" style="margin-top:22px">Aún estamos empezando. El mapa nace con la <b>expectativa de AEMET</b> (10 veranos de datos); cada noche que votas lo hace más real: veremos <b>lo que dicen los datos frente a lo que dice la gente</b>. Sin predicciones, sin temperatura de protagonista: solo cómo se ha vivido la noche.</p>
 </div></section>
 __FOOTER__
@@ -6772,7 +6812,9 @@ __FOOTER__
 
 <script>
 var SEED=__SEED__;
-var ALL=__ALLZ__.map(function(a){return {la:a[0],lo:a[1],n:a[2],d:a[3]};}); /* 848 estaciones para el geoposicionamiento exacto */
+var ALL=__ALLZ__.map(function(a){return {la:a[0],lo:a[1],n:a[2],d:a[3],id:a[4],p:a[5]};}); /* 848 estaciones para el geoposicionamiento exacto */
+var URL_OBS="__OBS_URL__";   /* buzón de noches; vacío = modo demostración */
+function obsUid(){try{var u=localStorage.getItem("obs_uid");if(!u){u=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem("obs_uid",u);}return u;}catch(e){return "anon";}}
 function colorFor(d){return d>=8?"#8fb07a":d>=6?"#b9c47a":d>=4?"#e8b45c":d>=2.5?"#e0834f":"#d9604a";}
 function bgFor(d){return d>=8?"rgba(143,176,122,.18)":d>=6?"rgba(185,196,122,.18)":d>=4?"rgba(232,180,92,.18)":d>=2.5?"rgba(224,131,79,.18)":"rgba(217,96,74,.18)";}
 function km(a,b){var R=6371,dLa=(b.la-a.la)*Math.PI/180,dLo=(b.lo-a.lo)*Math.PI/180,la1=a.la*Math.PI/180,la2=b.la*Math.PI/180;var h=Math.sin(dLa/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(h)));}
@@ -6808,11 +6850,47 @@ function showCurioso(z){
  }
  out.innerHTML=h+'</div>';
 }
+/* Lista del curioso = las 40 zonas semilla + TODA zona que reciba votos (si
+   alguien vota en Dénia, Dénia entra en la lista). Se resuelve contra las 848
+   estaciones para tener nombre, provincia y coordenadas reales. */
+var CURZ=SEED.slice();
+function pintaCurSelect(){
+ var sel=document.getElementById("curz");if(!sel)return;
+ var prev=sel.value;
+ sel.innerHTML='<option value="">Elige un pueblo o ciudad…</option>';
+ CURZ.map(function(z,i){return {z:z,i:i};}).sort(function(a,b){return a.z.n.localeCompare(b.z.n);})
+  .forEach(function(o){var op=document.createElement("option");op.value=o.i;
+   op.textContent=o.z.n+" ("+o.z.p+")"+(o.z.votos?" · "+o.z.votos+" noches":"");sel.appendChild(op);});
+ if(prev!=="")sel.value=prev;
+}
+function addZonasVotadas(d){
+ if(!d||!d.zonas||!d.zonas.length)return;
+ d.zonas.forEach(function(zv){
+  var ya=CURZ.filter(function(z){return z.id===zv.z;})[0];
+  if(ya){ya.votos=zv.n;if(typeof zv.d==="number")ya.d=zv.d;return;}
+  var est=ALL.filter(function(a){return a.id===zv.z;})[0];
+  if(!est)return;
+  CURZ.push({n:est.n,p:est.p,la:est.la,lo:est.lo,id:est.id,votos:zv.n,
+             d:(typeof zv.d==="number"?zv.d:est.d),
+             f:"Según las noches que ha votado la gente."});
+ });
+ pintaCurSelect();
+}
 (function(){
  var sel=document.getElementById("curz");if(!sel)return;
- SEED.map(function(z,i){return {z:z,i:i};}).sort(function(a,b){return a.z.n.localeCompare(b.z.n);})
-  .forEach(function(o){var op=document.createElement("option");op.value=o.i;op.textContent=o.z.n+" ("+o.z.p+")";sel.appendChild(op);});
- sel.addEventListener("change",function(){if(sel.value!=="")showCurioso(SEED[+sel.value]);});
+ pintaCurSelect();
+ sel.addEventListener("change",function(){if(sel.value!=="")showCurioso(CURZ[+sel.value]);});
+ /* Al cargar: si el buzón está desplegado, traemos las zonas con noches
+    votadas y las sumamos a la lista (y actualizamos el rótulo del mapa). */
+ if(URL_OBS){
+  fetch(URL_OBS+"?global=1").then(function(x){return x.json();}).then(function(d){
+   if(!d||!d.ok)return;
+   addZonasVotadas(d);
+   if(d.n>0){var w=document.getElementById("when");
+    if(w)w.innerHTML="Índice de descanso · <b>"+d.n+" noches votadas</b> en las últimas 24 h"
+     +(d.deuda_media?" · deuda de sueño media "+String(d.deuda_media).replace(".",",")+"/5":"");}
+  }).catch(function(){});
+ }
 })();
 
 /* FICHA DE COMPARTIR: comparte tu resultado (nativo en móvil; si no, copia). */
@@ -6846,25 +6924,82 @@ var Q=[
  {q:"¿Cómo se está AHORA mismo?",o:[["😊","Muy agradable",5],["🙂","Bien",4],["😐","Soportable",3],["🥵","Hace calor",2],["🔥","Insoportable",1]]},
  {q:"¿Qué has necesitado para dormir?",o:[["🪟","Nada, tal cual",5],["🌬️","La ventana abierta",4],["💨","El ventilador",3],["❄️","El aire acondicionado",1],["⛺","Dormir fuera de casa",2],["…","Otro",3]]},
  {q:"¿Cómo te has despertado?",o:[["😀","Muy descansado",5],["🙂","Descansado",4],["😐","Normal",3],["😴","Cansado",2],["🥱","Muy cansado",1]]},
- {q:"¿Volverías a dormir aquí esta noche?",o:[["❤️","Sin dudarlo",5],["🙂","Sí",4],["😐","Me da igual",3],["🙁","Preferiría otro sitio",2],["🚗","Si pudiera, me iría",1]]}];
-var cur=0,ans=[null,null,null,null,null];
+ {q:"¿Volverías a dormir aquí esta noche?",o:[["❤️","Sin dudarlo",5],["🙂","Sí",4],["😐","Me da igual",3],["🙁","Preferiría otro sitio",2],["🚗","Si pudiera, me iría",1]]},
+ {q:"¿Cuánta deuda de sueño arrastras?",sub:"Si llevas noches durmiendo mal, la deuda se acumula: es lo que te deja fundido al día siguiente.",o:[["✅","Ninguna, estoy a cero",1],["🙂","Poca",2],["😐","Alguna, se nota",3],["😮‍💨","Bastante",4],["🪫","Muchísima, voy fundido",5]]}];
+var cur=0,ans=[null,null,null,null,null,null];
 var flow=document.getElementById("flow"),reward=document.getElementById("reward");
+var NPASOS=Q.length+1;   /* las preguntas + el paso opcional de la pulsera */
+var WEAR={h:"",s:""};
 function startFlow(){
  if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
  if(!MY){askLoc(function(ok){if(ok)startFlow();else document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Necesitamos tu ubicación para situar tu noche. Actívala y vuelve a tocar.</span>';});return;}
- cur=0;ans=[null,null,null,null,null];flow.classList.add("on");renderStep();
+ cur=0;ans=[null,null,null,null,null,null];WEAR={h:"",s:""};flow.classList.add("on");renderStep();
 }
 function closeFlow(){flow.classList.remove("on");}
 function back(){if(cur>0){cur--;renderStep();}else closeFlow();}
-function renderStep(){var s=Q[cur];document.getElementById("barfill").style.width=(cur/5*100)+"%";document.getElementById("stepn").textContent=(cur+1)+"/5";
+function renderStep(){
+ document.getElementById("barfill").style.width=(cur/NPASOS*100)+"%";
+ document.getElementById("stepn").textContent=(cur+1)+"/"+NPASOS;
  document.getElementById("backbtn").textContent=cur===0?"‹ Salir":"‹ Atrás";
- document.getElementById("stepbody").innerHTML='<div class="q">'+s.q+'</div><div class="opts">'+s.o.map(function(o,i){return '<button class="opt'+(ans[cur]&&ans[cur].i===i?' sel':'')+'" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';}
-function pick(i,val){ans[cur]={i:i,val:val};document.querySelectorAll(".opt")[i].classList.add("sel");document.getElementById("barfill").style.width=((cur+1)/5*100)+"%";setTimeout(function(){if(cur<4){cur++;renderStep();}else finish();},230);}
+ var b=document.getElementById("stepbody");
+ if(cur===Q.length){   /* paso opcional: lo que marcó la pulsera o el reloj */
+  b.innerHTML='<div class="q">⌚ ¿Llevas pulsera o reloj de sueño?</div>'
+   +'<p class="wsub2">Opcional. Si tu dispositivo te da estos datos, escríbelos: así contrastamos lo que <b>sientes</b> con lo que <b>midió el aparato</b> — y ambos con lo que decía AEMET.</p>'
+   +'<div class="wfields"><label>Horas dormidas<input id="wh" type="number" inputmode="decimal" step="0.1" min="0" max="16" placeholder="7,5"></label>'
+   +'<label>Puntuación de sueño (0-100)<input id="ws" type="number" inputmode="numeric" step="1" min="0" max="100" placeholder="82"></label></div>'
+   +'<div class="opts"><button class="opt" onclick="finishWear(true)"><span class="em">✅</span><span>Enviar con estos datos</span></button>'
+   +'<button class="opt" onclick="finishWear(false)"><span class="em">⏭️</span><span>No llevo / omitir</span></button></div>';
+  return;
+ }
+ var s=Q[cur];
+ b.innerHTML='<div class="q">'+s.q+'</div>'+(s.sub?'<p class="wsub2">'+s.sub+'</p>':'')
+  +'<div class="opts">'+s.o.map(function(o,i){return '<button class="opt'+(ans[cur]&&ans[cur].i===i?' sel':'')+'" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';
+}
+function finishWear(usar){
+ if(usar){var h=parseFloat(String((document.getElementById("wh")||{}).value||"").replace(",","."));
+  var s=parseInt((document.getElementById("ws")||{}).value,10);
+  WEAR.h=(h>=0&&h<=16)?h:"";WEAR.s=(s>=0&&s<=100)?s:"";}
+ finish();
+}
+function pick(i,val){ans[cur]={i:i,val:val};document.querySelectorAll(".opt")[i].classList.add("sel");document.getElementById("barfill").style.width=((cur+1)/NPASOS*100)+"%";setTimeout(function(){cur++;renderStep();},230);}
 /* scroll suave con easing (robusto en iOS, sin salto brusco) */
 function smoothScroll(el,to,dur){var start=el.scrollTop,ch=to-start,t0=null;function step(t){if(!t0)t0=t;var p=Math.min((t-t0)/dur,1),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;el.scrollTop=start+ch*e;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
 
 /* RECOMPENSA */
 var EMO=["🔥","🥵","😐","🙂","😴"],EMOC=["🔥","🥵","😐","🙂","😊"],LBL=["Muy mal","Con calor","Regular","Bien","De maravilla"];
+var DEU=["","Ninguna, a cero","Poca","Alguna","Bastante","Muchísima"];
+/* Deuda de sueño + contraste con la pulsera: la tarjeta que da sentido al
+   estudio para quien cuida su descanso (deportistas, insomnes, curiosos). */
+function deudaCard(deuda,descanso,w){
+ if(!deuda&&w.h===""&&w.s==="")return "";
+ var h='<div class="card fade sleepdebt" style="animation-delay:.75s"><h3>🛌 Tu deuda de sueño</h3>';
+ if(deuda){
+  var col=deuda<=2?"#8fb07a":deuda===3?"#e8b45c":"#d9604a";
+  h+='<div class="dgrid"><div class="dbar"><i style="width:'+(deuda*20)+'%;background:'+col+'"></i></div>'
+   +'<div class="dlab" style="color:'+col+'">'+DEU[deuda]+'</div></div>';
+  h+='<p class="dtxt">'+(deuda>=4
+    ? "Arrastras déficit. La deuda de sueño no se paga con una sola noche: hacen falta <b>varias noches seguidas de sueño profundo</b> — y para eso el cuerpo necesita que la temperatura baje de madrugada."
+    : deuda===3
+    ? "Empiezas a acumular. Cuando la noche no refresca, el sueño profundo se fragmenta aunque duermas las mismas horas: <b>duermes igual, descansas menos</b>."
+    : "Vas bien. Mantener la deuda a cero en verano depende menos de las horas que de <b>la temperatura a la que duermes</b>.")+'</p>';
+ }
+ if(w.h!==""||w.s!==""){
+  h+='<div class="wcmp"><div class="wtit">⌚ Lo que midió tu dispositivo</div><div class="wrow">';
+  if(w.h!=="")h+='<div class="c"><div class="n">'+String(w.h).replace(".",",")+'</div><small>horas</small></div>';
+  if(w.s!=="")h+='<div class="c"><div class="n" style="color:'+colorFor(w.s/10)+'">'+w.s+'</div><small>puntuación</small></div>';
+  h+='<div class="c"><div class="n" style="color:'+colorFor(descanso)+'">'+descanso.toFixed(1)+'</div><small>tu sensación</small></div></div>';
+  if(w.s!==""){
+   var dif=(w.s/10)-descanso;
+   h+='<p class="dtxt" style="margin-top:10px">'+(Math.abs(dif)<1.5
+     ? "Tu cuerpo y tu dispositivo <b>coinciden</b>."
+     : dif>0
+     ? "Tu reloj puntúa <b>mejor</b> de lo que tú sientes: a veces el aparato cuenta horas, pero no lo reparador que fue el sueño."
+     : "Tú lo has sentido <b>mejor</b> de lo que marca tu reloj.")+'</p>';
+  }
+  h+='</div>';
+ }
+ return h+'</div>';
+}
 function finish(){
  flow.classList.remove("on");
  var dormir=ans[0].val,confort=ans[1].val,despertar=ans[3].val,perm=ans[4].val;
@@ -6872,6 +7007,16 @@ function finish(){
  var zona=MY||nearSeed(MYLL)||SEED[0];
  window._obsShare={idx:descanso.toFixed(1),zona:zona.n};
  var ref=MYLL||zona;
+ /* Envío de la noche al buzón (si está desplegado). El resultado se enseña
+    igual: nunca se bloquea la recompensa por un fallo de red. */
+ var deuda=ans[5]?ans[5].val:"";
+ if(URL_OBS&&zona.id){
+  var pay={z:zona.id,d:dormir,c:confort,r:ans[2]?ans[2].val:"",w:despertar,k:perm,
+           sd:deuda,wh:WEAR.h,ws:WEAR.s,u:obsUid(),v:1};
+  if(MYLL)pay.g=MYLL.la.toFixed(2)+","+MYLL.lo.toFixed(2);
+  try{fetch(URL_OBS,{method:"POST",body:JSON.stringify(pay)}).then(function(x){return x.json();})
+   .then(function(d){if(d&&d.ok){window._obsGuardado=true;var dm=document.getElementById("obsdemo");if(dm)dm.style.display="none";}}).catch(function(){});}catch(e){}
+ }
  var cand=SEED.filter(function(z){return z.d>=7.5;});
  cand.forEach(function(z){z._km=km(ref,z);});
  cand.sort(function(a,b){return a._km-b._km;});
@@ -6897,8 +7042,10 @@ function finish(){
    '<p style="color:var(--muted);font-size:12px;margin-top:12px">Según 10 veranos de AEMET. En cuanto haya votos, verás lo que dice la gente.</p></div>'+
   '<div class="card fade" style="animation-delay:.7s"><h3>Cerca de ti, esta madrugada</h3><div class="nearby">'+
    near.map(function(o){return '<div class="row"><span class="idx" style="color:'+colorFor(o.z.d)+';background:'+bgFor(o.z.d)+'">'+o.z.d.toFixed(1)+'</span><div class="info"><div class="n">'+o.z.n+' · '+o.k+' km</div><div class="p">"'+o.z.f+'"</div></div></div>';}).join("")+'</div></div>'+
+  deudaCard(deuda,descanso,WEAR)+
   '<button class="share fade" style="animation-delay:.8s" onclick="shareNoche()">📲 Comparte tu noche</button>'+
   '<button class="again" onclick="reward.classList.remove(\'on\');document.getElementById(\'morehint\').classList.add(\'hidden\');window.scrollTo(0,0)">Volver al observatorio</button>'+
+  (URL_OBS?'':'<p class="obsdemo" id="obsdemo">Modo demostración: el buzón de noches aún no está desplegado, así que <b>esta noche no se ha guardado</b>.</p>')+
   '<p class="disc-o">El Observatorio del Descanso · experiencias reales cruzadas con datos de AEMET · sin predicciones, solo lo ocurrido. Sé de los primeros: cuantos más votemos, más real será el mapa.</p>';
  renderMap();var rm=document.getElementById("rmap");if(rm){var svg=document.getElementById("map");rm.innerHTML=svg.innerHTML;var p=proj(zona);rm.innerHTML+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}
  /* auto-scroll: revela que hay más (evita el abandono en la primera pantalla) */
@@ -6917,7 +7064,8 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
     # geoposicionamiento resuelva la estación REALMENTE más cercana (exacta),
     # no la más cercana de las 40 semilla. Así "tu zona" nunca se equivoca.
     allz = json.dumps([[round(e["lat"], 3), round(e["lon"], 3),
-                        e["loc"].split(",")[0][:22], _obs_baseline(e["tmin"])]
+                        e["loc"].split(",")[0][:22], _obs_baseline(e["tmin"]),
+                        e["id"], e["prov"]]
                        for e in estaciones if e.get("tmin") is not None],
                       ensure_ascii=False, separators=(",", ":"))
     desc = ("¿Cómo has dormido esta noche? El Observatorio del Descanso es el mapa "
@@ -6943,6 +7091,7 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
             .replace("__DESC__", desc)
             .replace("__SEED__", seed)
             .replace("__ALLZ__", allz)
+            .replace("__OBS_URL__", APPS_SCRIPT_OBS_URL)
             .replace("__SITE__", site)
             .replace("__HOME__", site + "/"))
 

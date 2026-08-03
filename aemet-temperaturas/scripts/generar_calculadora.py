@@ -6113,6 +6113,7 @@ def cargar_hoteles(estaciones: list) -> list:
             "web": fila.get("web", ""), "telefono": fila.get("telefono", ""),
             "slug": slug(fila["hotel"]), "est_id": fila["est_ref_indicativo"],
             "tmin": e["tmin"], "nt": e["nt"], "alt": e["alt"], "est": e["loc"],
+            "lat": e["lat"], "lon": e["lon"],  # coords de la estación de ref. (para el buscador cercano)
         })
     return out
 
@@ -6208,10 +6209,69 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .faq details[open] summary::before{content:"– "}
  .faq p{margin:10px 0 2px;font-size:15px;color:var(--muted)}
  @media(min-width:900px){.faq{columns:2;column-gap:48px}.faq details{break-inside:avoid}}
+ /* Banner de cabecera (ilustración SVG nocturna, autocontenida) */
+ .heroimg{width:100%;max-height:300px;overflow:hidden;line-height:0;border-bottom:1px solid var(--line)}
+ .heroimg svg{width:100%;height:auto;display:block}
+ @media(max-width:560px){.heroimg{max-height:190px}}
+ /* Buscador "cerca de mí" */
+ .buscar{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px 22px 24px;margin:6px 0 28px}
+ .buscar h2{font-family:var(--fd);font-weight:600;font-size:clamp(19px,3.4vw,26px);color:var(--paper);margin:0 0 5px;border:0;padding:0}
+ .buscar .sub{font-size:14.5px;color:var(--muted);margin:0 0 16px;max-width:64ch}
+ .geobtn{width:100%;background:var(--teja);color:#1a1209;border:0;border-radius:12px;font-weight:700;font-size:16px;padding:14px;cursor:pointer;font-family:var(--fb)}
+ .geobtn:hover{background:var(--teja2)}
+ .geobtn:disabled{opacity:.6;cursor:default}
+ .ghint{font-size:12.5px;color:#8a7a5f;margin:10px 0 0}
+ .prov-pick{margin-top:14px;position:relative}
+ .prov-pick select{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--paper);font-size:15px;padding:12px 14px;font-family:var(--fb);cursor:pointer;appearance:none;-webkit-appearance:none}
+ .prov-pick select:focus{outline:2px solid var(--teja);outline-offset:1px}
+ .prov-pick::after{content:"";position:absolute;right:16px;top:50%;width:9px;height:9px;border-right:2.5px solid var(--teja);border-bottom:2.5px solid var(--teja);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+ .buscar .msg{font-family:var(--fd);font-weight:600;font-size:16px;color:var(--paper);margin:20px 0 0}
+ .hres{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:11px}
+ .hres li{background:#0c0906;border:1px solid var(--line);border-radius:13px;padding:14px 16px}
+ .hres li.first{border-color:var(--teja)}
+ .hr-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+ .hr-n{font-family:var(--fd);font-weight:600;font-size:17px;color:var(--paper)}
+ .hr-km{font-family:var(--fm);font-weight:700;font-size:15px;color:var(--teja2);white-space:nowrap}
+ .hr-loc{font-size:13px;color:var(--muted);margin:3px 0 0;line-height:1.5}
+ .hr-loc .b{color:var(--teal)}
+ .hr-acc{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+ .hr-acc a{font:600 13px/1 var(--fb);padding:8px 13px;border-radius:9px;border:1px solid var(--line);color:var(--paper);text-decoration:none}
+ .hr-acc a.pri{background:var(--teja);color:#1a1209;border-color:var(--teja)}
+ .hr-acc a:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none}
+ .hr-acc a.pri:hover{color:#1a1209;background:var(--teja2)}
  __NAVCSS__
  __FOOTERCSS__
 </style></head><body>
 __NAV__
+<div class="heroimg">
+  <svg viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Ilustración de un pueblo de montaña de noche bajo la luna: una casa con la ventana iluminada y las cumbres frescas donde se duerme sin aire acondicionado">
+    <defs>
+      <linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#160f08"/><stop offset=".5" stop-color="#33220f"/><stop offset="1" stop-color="#7a4326"/>
+      </linearGradient>
+      <radialGradient id="hmoon" cx="42%" cy="40%" r="60%">
+        <stop offset="0" stop-color="#fdf6e9"/><stop offset="1" stop-color="#e6c295"/>
+      </radialGradient>
+      <mask id="hcut"><rect width="1200" height="300" fill="#fff"/><circle cx="1012" cy="60" r="30" fill="#000"/></mask>
+    </defs>
+    <rect width="1200" height="300" fill="url(#hsky)"/>
+    <g fill="#efe6d6" opacity=".9">
+      <circle cx="120" cy="48" r="1.6"/><circle cx="230" cy="92" r="1.1"/><circle cx="300" cy="38" r="1.9"/>
+      <circle cx="440" cy="66" r="1.3"/><circle cx="560" cy="34" r="1.6"/><circle cx="655" cy="96" r="1"/>
+      <circle cx="770" cy="52" r="1.5"/><circle cx="900" cy="40" r="1.2"/><circle cx="185" cy="128" r="1"/>
+      <circle cx="392" cy="120" r="1.2"/><circle cx="520" cy="140" r=".9"/><circle cx="705" cy="128" r="1.3"/>
+    </g>
+    <g mask="url(#hcut)"><circle cx="994" cy="66" r="38" fill="url(#hmoon)"/></g>
+    <path d="M0 205 L150 152 L320 200 L470 142 L640 196 L820 138 L1000 192 L1200 150 L1200 300 L0 300 Z" fill="#2a1c10" opacity=".9"/>
+    <path d="M0 250 L180 198 L360 246 L520 190 L720 250 L900 200 L1080 250 L1200 214 L1200 300 L0 300 Z" fill="#160f08"/>
+    <g transform="translate(150 196)">
+      <rect x="0" y="0" width="58" height="46" fill="#0c0805"/>
+      <path d="M-8 0 L29 -24 L66 0 Z" fill="#241b11"/>
+      <rect x="21" y="15" width="16" height="18" fill="#f6b567"/>
+      <rect x="21" y="15" width="16" height="18" fill="none" stroke="#0c0805" stroke-width="2.4"/>
+    </g>
+  </svg>
+</div>
 <header class="h"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Hoteles en refugios climáticos</nav>
   <div class="kick">Turismo climático · Datos AEMET 2017–2026</div>
@@ -6239,6 +6299,16 @@ __NAV__
 </div></section>
 
 <section><div class="wrap">
+  <div class="buscar" id="cerca">
+    <h2>¿Dónde se duerme fresco cerca de ti?</h2>
+    <p class="sub">Comparte tu ubicación y te ordenamos estos hoteles-refugio del más cercano al más lejano, con la distancia en línea recta. Todos en zonas donde la mínima de verano baja de 20&nbsp;°C, medido con 10 años de datos de AEMET.</p>
+    <button class="geobtn" id="geoh">📍 Usar mi ubicación</button>
+    <p class="ghint" id="ghinth">No guardamos tu ubicación: el cálculo ocurre en tu propio navegador.</p>
+    <div class="prov-pick"><select id="provh" aria-label="Elegir provincia"><option value="">O elige por provincia…</option></select></div>
+    <p class="msg" id="hmsgh"></p>
+    <ul class="hres" id="hresh"></ul>
+  </div>
+
   __LISTADO__
 
   <div class="cta">
@@ -6254,6 +6324,55 @@ __NAV__
   <div class="faq">__FAQ__</div>
 </div></section>
 __FOOTER__
+<script>
+const HOT=__HOTELES__, SITE="__SITE__";
+function hav(la1,lo1,la2,lo2){var R=6371,r=Math.PI/180,dLa=(la2-la1)*r,dLo=(lo2-lo1)*r;
+ var x=Math.sin(dLa/2)**2+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
+function km(d){return d<10?d.toFixed(1).replace(".",","):Math.round(d)+"";}
+function d1(x){return x.toFixed(1).replace(".",",");}
+function ntTxt(nt){return nt<0.05?"0 noches tropicales/año":(nt<1?"<1 noche tropical/año":d1(nt)+" noches/año");}
+function fila(h,distTxt,first){
+ var li=document.createElement("li"); li.className=first?"first":"";
+ var acc="<a class='pri' href='"+h.u+"'"+(h.rel?" target='_blank' rel='"+h.rel+"'":"")+">"+h.ut+"</a>"
+   +"<a href='"+SITE+"/hoteles-refugio-climatico/"+h.s+"/'>Ficha y datos</a>";
+ li.innerHTML="<div class='hr-top'><span class='hr-n'>"+h.n+"</span>"+(distTxt?"<span class='hr-km'>"+distTxt+"</span>":"")+"</div>"
+   +"<div class='hr-loc'>"+h.m+" · "+h.p+" · "+h.a+"&nbsp;m · <span class='b'>"+d1(h.t)+"° mín. agosto · "+ntTxt(h.nt)+"</span></div>"
+   +"<div class='hr-acc'>"+acc+"</div>";
+ return li;
+}
+function msg(t){document.getElementById("hmsgh").textContent=t;}
+function pinta(la,lo,origen){
+ var L=HOT.map(function(h){return {h:h,d:hav(la,lo,h.la,h.lo)};}).sort(function(a,b){return a.d-b.d;}).slice(0,6);
+ var ol=document.getElementById("hresh"); ol.innerHTML="";
+ L.forEach(function(o,i){ol.appendChild(fila(o.h,km(o.d)+" km",i===0));});
+ msg("Los hoteles-refugio más cercanos"+(origen?" a "+origen:"")+":");
+ document.getElementById("hmsgh").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function pintaProv(p){
+ var L=HOT.filter(function(h){return h.p===p;}).sort(function(a,b){return a.nt-b.nt;});
+ var ol=document.getElementById("hresh"); ol.innerHTML="";
+ L.forEach(function(h,i){ol.appendChild(fila(h,"",i===0));});
+ msg("Hoteles-refugio en "+p+" (del más fresco al menos):");
+}
+(function(){
+ var gb=document.getElementById("geoh"), gh=document.getElementById("ghinth");
+ gb.addEventListener("click",function(){
+  if(!navigator.geolocation){gh.textContent="Tu navegador no permite la geolocalización. Elige tu provincia aquí abajo.";return;}
+  gb.disabled=true; gb.textContent="Buscando tu ubicación…";
+  navigator.geolocation.getCurrentPosition(function(p){
+   gb.disabled=false; gb.textContent="📍 Usar mi ubicación";
+   pinta(p.coords.latitude,p.coords.longitude,"tu ubicación");
+  },function(){
+   gb.disabled=false; gb.textContent="📍 Usar mi ubicación";
+   gh.textContent="No se pudo obtener tu ubicación (¿permiso denegado?). Elige tu provincia aquí abajo.";
+  },{timeout:9000});
+ });
+ var sel=document.getElementById("provh");
+ HOT.map(function(h){return h.p;}).filter(function(v,i,a){return a.indexOf(v)===i;})
+   .forEach(function(p){var o=document.createElement("option");o.value=p;o.textContent=p;sel.appendChild(o);});
+ sel.addEventListener("change",function(){ if(sel.value) pintaProv(sel.value); });
+})();
+</script>
 </body></html>
 """
 
@@ -6348,6 +6467,24 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
         secciones.append(f'<h2 class="reg">{prov}</h2><div class="hgrid">{cards}</div>')
     listado = "".join(secciones)
 
+    # Payload del BUSCADOR "cerca de mí": mismo dataset que la lista (así un hotel
+    # nuevo en hoteles.csv aparece a la vez en la lista y en el buscador). La
+    # ubicación de cada hotel es la de su estación de AEMET de referencia; para el
+    # enlace de acción se prioriza Booking (afiliado) > web oficial > ficha.
+    def _accion_hotel(h: dict) -> tuple[str, str, str]:
+        if h["slug_booking"]:
+            return (cj_deeplink(h["slug_booking"], h["slug"]),
+                    "Ver disponibilidad en Booking →", "sponsored nofollow noopener")
+        if h.get("web"):
+            return (h["web"], "Web oficial →", "nofollow noopener")
+        return (f'{site}/hoteles-refugio-climatico/{h["slug"]}/', "Ver ficha y datos →", "")
+
+    hoteles_js = json.dumps([
+        dict(n=h["hotel"], m=h["municipio"], p=h["provincia"], la=h["lat"], lo=h["lon"],
+             t=h["tmin"], nt=h["nt"], a=h["alt"], s=h["slug"], niv=h["nivel"],
+             u=_accion_hotel(h)[0], ut=_accion_hotel(h)[1], rel=_accion_hotel(h)[2])
+        for h in hoteles], ensure_ascii=False)
+
     faq = [
         ("¿De verdad se duerme sin aire acondicionado en estos hoteles?",
          "El sello certifica el CLIMA de la zona, no el interior del edificio: en la "
@@ -6403,6 +6540,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             .replace("__OGIMG__", og_img)
             .replace("__FRIO__", frio_txt)
             .replace("__LISTADO__", listado)
+            .replace("__HOTELES__", hoteles_js)
             .replace("__FAQ__", faq_html(faq))
             .replace("__SITE__", site)
             .replace("__HOME__", site + "/"))

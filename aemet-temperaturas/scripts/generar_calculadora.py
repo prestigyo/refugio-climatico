@@ -6753,8 +6753,16 @@ a{color:var(--teal);text-decoration:none}
 .curioso h3{font-family:var(--fd);font-weight:600;font-size:clamp(17px,3.4vw,21px);color:var(--paper);margin:0 0 6px}
 .cursub{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 14px}
 .cursub b{color:var(--paper)}
-#curz{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--paper);font-size:15px;padding:12px 14px;font-family:inherit;cursor:pointer}
-#curz:focus{outline:2px solid var(--teja);outline-offset:1px}
+#curbusca{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--paper);font-size:15px;padding:12px 14px;font-family:inherit}
+#curbusca:focus{outline:2px solid var(--teja);outline-offset:1px}
+.cursug{list-style:none;margin:8px 0 0;padding:0;max-height:230px;overflow:auto}
+.cursug li{padding:11px 13px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;font-size:14.5px;background:var(--bg)}
+.cursug li:hover{border-color:var(--teja);color:var(--teja2)}
+.curfuente{font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line)}
+.curfuente b{color:var(--paper)}
+.curfuente.vot{color:#cfe0c2}
+.curped{width:100%;margin-top:11px;background:var(--teja);color:#160f08;border:0;border-radius:11px;font-weight:700;font-size:14px;padding:12px;cursor:pointer;font-family:inherit;line-height:1.35}
+.curped:hover{background:var(--teja2)}
 .curout{margin-top:14px}
 .curcard{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;text-align:center}
 .curz-n{font-family:var(--fd);font-weight:600;font-size:17px;color:var(--paper)}
@@ -6793,6 +6801,10 @@ a{color:var(--teal);text-decoration:none}
 .wcmp .wrow small{color:var(--muted);font-size:11.5px}
 .obsdemo{margin:14px auto 0;max-width:34ch;text-align:center;font-size:12.5px;color:var(--muted);background:var(--bg2);border:1px dashed var(--line);border-radius:12px;padding:11px 14px;line-height:1.55}
 .obsdemo b{color:var(--paper)}
+.obsestado{margin:14px auto 0;max-width:36ch;text-align:center;font-size:13px;border-radius:12px;padding:12px 15px;line-height:1.55}
+.obsestado b{font-weight:700}
+.obsestado.ok{color:#cfe0c2;background:rgba(143,176,122,.14);border:1px solid #8fb07a}
+.obsestado.ko{color:#f0c9bd;background:rgba(217,96,74,.14);border:1px solid #d9604a}
 .deuda-ed{margin:30px auto 0;max-width:640px}
 .deuda-ed h3{font-family:var(--fd);font-weight:600;font-size:clamp(19px,3.6vw,25px);color:var(--paper);margin:0 0 12px;line-height:1.2}
 .deuda-ed p{color:var(--muted);font-size:clamp(14.5px,2.3vw,16px);line-height:1.75;margin:0 0 14px}
@@ -6830,7 +6842,8 @@ __NAV__
   <div class="curioso" id="curioso">
     <h3>👀 ¿Solo curioseando? Mira cómo se está en otro lugar</h3>
     <p class="cursub">Elige una zona y compárala con la tuya, ahora mismo. Es el índice de descanso <b>esperado según AEMET</b> (10 veranos); en cuanto lleguen los votos, verás además lo que dice la gente.</p>
-    <select id="curz" aria-label="Elegir una zona para comparar"><option value="">Elige un pueblo o ciudad…</option></select>
+    <input id="curbusca" type="search" autocomplete="off" placeholder="Escribe tu pueblo… (Dénia, Cedrillas, Gijón…)" aria-label="Buscar una población">
+    <ul class="cursug" id="cursug"></ul>
     <div class="curout" id="curout"></div>
   </div>
 
@@ -6881,10 +6894,19 @@ renderMap();renderRanks();
    semilla (índice esperado según AEMET); cuando haya backend, mostrará votos. */
 function showCurioso(z){
  var out=document.getElementById("curout");
- var h='<div class="curcard"><div class="curz-n">'+z.n+' <small>'+z.p+'</small></div>'
+ var h='<div class="curcard"><div class="curz-n">'+z.n+(z.p?' <small>'+z.p+'</small>':'')+'</div>'
   +'<div class="curz-idx" style="color:'+colorFor(z.d)+'">'+z.d.toFixed(1)+'<span>/10</span></div>'
   +'<div class="curz-f">"'+z.f+'"</div>';
- if(MY){
+ /* De dónde sale el número: de votos reales o de la expectativa de AEMET. Se
+    dice SIEMPRE, y si no hay votos se invita a que alguien de allí los aporte. */
+ if(z.votos)
+  h+='<div class="curfuente vot">🌙 <b>'+z.votos+'</b> noche'+(z.votos>1?'s':'')+' votada'+(z.votos>1?'s':'')+' aquí en las últimas 24 h</div>';
+ else{
+  h+='<div class="curfuente">📊 Aún <b>no hay noches votadas</b> aquí. Este número es lo que <b>cabe esperar según AEMET</b>'
+   +(z.est?' (estación de '+z.est+(z.estkm!=null?', a '+z.estkm+' km':'')+')':'')+', con diez veranos de datos.</div>'
+   +'<button type="button" class="curped" onclick="pideVoto(\''+z.n.replace(/'/g,"\\'")+'\')">📲 ¿Conoces a alguien allí? Pídele que cuente su noche</button>';
+ }
+ if(MY&&MY.d!=null){
   h+='<div class="curcmp"><span>Tu zona ('+MY.n+'): <b style="color:'+colorFor(MY.d)+'">'+MY.d.toFixed(1)+'</b></span>'
     +'<span class="vs">vs</span><span>'+z.n+': <b style="color:'+colorFor(z.d)+'">'+z.d.toFixed(1)+'</b></span></div>';
   var dif=z.d-MY.d;
@@ -6892,21 +6914,20 @@ function showCurioso(z){
  }
  out.innerHTML=h+'</div>';
 }
+/* Invitación a que alguien de esa población cuente su noche. */
+function pideVoto(nombre){
+ var url="__SITE__/observatorio-del-descanso/";
+ var txt="¿Cómo se duerme en "+nombre+"? Todavía no hay ni una noche contada allí. Si estás por la zona, cuéntalo en 10 segundos (es anónimo) y lo sabremos:";
+ if(navigator.share)navigator.share({title:"El Observatorio del Descanso",text:txt,url:url}).catch(function(){});
+ else if(navigator.clipboard)navigator.clipboard.writeText(txt+" "+url).then(function(){alert("Copiado: pégaselo a quien esté por allí.");});
+ else window.open("https://wa.me/?text="+encodeURIComponent(txt+" "+url),"_blank");
+}
 /* Lista del curioso = las 40 zonas semilla + TODA zona que reciba votos (si
    alguien vota en Dénia, Dénia entra en la lista). Se resuelve contra las 848
    estaciones para tener nombre, provincia y coordenadas reales. */
 var CURZ=SEED.slice();
-function pintaCurSelect(){
- var sel=document.getElementById("curz");if(!sel)return;
- var prev=sel.value;
- sel.innerHTML='<option value="">Elige un pueblo o ciudad…</option>';
- CURZ.map(function(z,i){return {z:z,i:i};}).sort(function(a,b){return a.z.n.localeCompare(b.z.n);})
-  .forEach(function(o){var op=document.createElement("option");op.value=o.i;
-   op.textContent=o.z.n+" ("+o.z.p+")"+(o.z.votos?" · "+o.z.votos+" noches":"");sel.appendChild(op);});
- if(prev!=="")sel.value=prev;
-}
 function addZonasVotadas(d){
- if(!d||!d.zonas||!d.zonas.length)return;
+ if(!d)return;
  (d.zonas||[]).forEach(function(zv){
   var ya=CURZ.filter(function(z){return z.id===zv.z&&!z.mun;})[0];
   if(ya){ya.votos=zv.n;if(typeof zv.d==="number")ya.d=zv.d;return;}
@@ -6927,12 +6948,52 @@ function addZonasVotadas(d){
              id:mv.z,mun:mv.m,votos:mv.n,d:mv.d,
              f:"Según las noches que ha votado la gente"+(est?" · referencia AEMET: "+est.n:"")+"."});
  });
- pintaCurSelect();
+}
+/* Buscador sobre las 7.157 poblaciones: se puede consultar CUALQUIER pueblo,
+   haya votos o no. Si no los hay se enseña la expectativa de AEMET de su
+   estación más cercana, diciéndolo, y se ofrece pedir el voto a alguien de allí. */
+var LUG=null;
+function na_(s){return s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();}
+function cargaLugares(cb){
+ if(LUG){cb(LUG);return;}
+ fetch("__SITE__/datos/lugares.json").then(function(x){return x.json();})
+  .then(function(d){LUG=d;cb(d);}).catch(function(){cb(null);});
+}
+function zonaDeLugar(p){
+ /* p = [id, nombre, lat, lon] -> tarjeta lista para showCurioso */
+ var votada=CURZ.filter(function(z){return z.mun===p[0]||na_(z.n)===na_(p[1]);})[0];
+ if(votada&&votada.votos)return votada;
+ var est=null,bd=1e9;
+ ALL.forEach(function(a){var d=km({la:p[2],lo:p[3]},a);if(d<bd){bd=d;est=a;}});
+ return {n:p[1],p:(est?est.p:""),d:(est?est.d:5),est:(est?est.n:""),estkm:(est?Math.round(bd):null),
+         f:"Lo que cabe esperar en esta zona según diez veranos de AEMET."};
+}
+function pintaSug(lista){
+ var ul=document.getElementById("cursug");if(!ul)return;
+ ul.innerHTML="";
+ lista.forEach(function(p){
+  var li=document.createElement("li");
+  li.textContent=p[1];
+  li.onclick=function(){
+   document.getElementById("curbusca").value=p[1];
+   ul.innerHTML="";showCurioso(zonaDeLugar(p));
+  };
+  ul.appendChild(li);
+ });
 }
 (function(){
- var sel=document.getElementById("curz");if(!sel)return;
- pintaCurSelect();
- sel.addEventListener("change",function(){if(sel.value!=="")showCurioso(CURZ[+sel.value]);});
+ var inp=document.getElementById("curbusca");if(!inp)return;
+ inp.addEventListener("input",function(){
+  var q=na_(inp.value.trim());
+  if(q.length<2){document.getElementById("cursug").innerHTML="";return;}
+  cargaLugares(function(d){
+   if(!d)return;
+   var pre=[],con=[];
+   for(var i=0;i<d.length&&pre.length<8;i++){var n=na_(d[i][1]);
+    if(n.indexOf(q)===0)pre.push(d[i]);else if(con.length<8&&n.indexOf(q)>=0)con.push(d[i]);}
+   pintaSug(pre.concat(con).slice(0,8));
+  });
+ });
  /* Al cargar: si el buzón está desplegado, traemos las zonas con noches
     votadas y las sumamos a la lista (y actualizamos el rótulo del mapa). */
  if(URL_OBS){
@@ -7055,7 +7116,8 @@ function renderStep(){
 function finishWear(usar){
  if(usar){var h=parseFloat(String((document.getElementById("wh")||{}).value||"").replace(",","."));
   var s=parseInt((document.getElementById("ws")||{}).value,10);
-  WEAR.h=(h>=0&&h<=16)?h:"";WEAR.s=(s>=0&&s<=100)?s:"";}
+  /* un campo vacío no es un 0: si no hay dato, no se manda nada */
+  WEAR.h=(isFinite(h)&&h>0&&h<=16)?h:"";WEAR.s=(isFinite(s)&&s>0&&s<=100)?s:"";}
  finish();
 }
 function pick(i,val){ans[cur]={i:i,val:val};document.querySelectorAll(".opt")[i].classList.add("sel");document.getElementById("barfill").style.width=((cur+1)/NPASOS*100)+"%";setTimeout(function(){cur++;renderStep();},230);}
@@ -7114,8 +7176,26 @@ function finish(){
   var pay={z:zona.id,d:dormir,c:confort,r:ans[2]?ans[2].val:"",w:despertar,k:perm,
            sd:deuda,wh:WEAR.h,ws:WEAR.s,m:MUN.id,mn:MUN.n,mp:PROP,u:obsUid(),v:1};
   if(MYLL)pay.g=MYLL.la.toFixed(2)+","+MYLL.lo.toFixed(2);
-  try{fetch(URL_OBS,{method:"POST",body:JSON.stringify(pay)}).then(function(x){return x.json();})
-   .then(function(d){if(d&&d.ok){window._obsGuardado=true;var dm=document.getElementById("obsdemo");if(dm)dm.style.display="none";}}).catch(function(){});}catch(e){}
+  /* El resultado del guardado SIEMPRE se dice. Antes se tragaba los errores en
+     silencio y la pantalla daba las gracias aunque la noche se hubiera perdido. */
+  var diEstado=function(txt,ok){
+   var el=document.getElementById("obsestado");if(!el)return;
+   el.className="obsestado "+(ok?"ok":"ko");el.innerHTML=txt;el.style.display="block";
+  };
+  try{
+   fetch(URL_OBS,{method:"POST",body:JSON.stringify(pay)}).then(function(x){return x.json();})
+    .then(function(d){
+      if(d&&d.ok){window._obsGuardado=true;
+       diEstado("✅ Guardado. Tu noche en <b>"+nombreLugar+"</b> ya cuenta en el estudio.",true);
+       fetch(URL_OBS+"?global=1").then(function(x){return x.json();}).then(addZonasVotadas).catch(function(){});
+      }
+      else if(d&&d.error==="ritmo")
+       diEstado("🕗 Ya habías contado una noche hace poco: <b>se admite una cada 8 horas</b> — dormir se vota una vez al día. Esta no se ha guardado.",false);
+      else
+       diEstado("⚠️ No se ha podido guardar tu noche"+(d&&d.error?" ("+d.error+")":"")+". Vuelve a intentarlo más tarde.",false);
+    })
+    .catch(function(){diEstado("⚠️ No se ha podido guardar tu noche (sin conexión o el buzón no responde). Tu resultado sí se muestra aquí.",false);});
+  }catch(e){diEstado("⚠️ No se ha podido enviar tu noche.",false);}
  }
  var cand=SEED.filter(function(z){return z.d>=7.5;});
  cand.forEach(function(z){z._km=km(ref,z);});
@@ -7147,6 +7227,7 @@ function finish(){
   deudaCard(deuda,descanso,WEAR)+
   '<button class="share fade" style="animation-delay:.8s" onclick="shareNoche()">📲 Comparte tu noche</button>'+
   '<button class="again" onclick="reward.classList.remove(\'on\');document.getElementById(\'morehint\').classList.add(\'hidden\');window.scrollTo(0,0)">Volver al observatorio</button>'+
+  '<p class="obsestado" id="obsestado" style="display:none"></p>'+
   (URL_OBS?'':'<p class="obsdemo" id="obsdemo">Modo demostración: el buzón de noches aún no está desplegado, así que <b>esta noche no se ha guardado</b>.</p>')+
   '<p class="disc-o">El Observatorio del Descanso · experiencias reales cruzadas con datos de AEMET · sin predicciones, solo lo ocurrido. Sé de los primeros: cuantos más votemos, más real será el mapa.</p>';
  renderMap();var rm=document.getElementById("rmap");if(rm){var svg=document.getElementById("map");rm.innerHTML=svg.innerHTML;var p=proj(zona);rm.innerHTML+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}

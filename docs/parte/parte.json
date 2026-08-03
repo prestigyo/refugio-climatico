@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-02",
- "total": 845,
- "tropicales": 359,
- "ecuatoriales": 42,
+ "fecha": "2026-08-03",
+ "total": 846,
+ "tropicales": 395,
+ "ecuatoriales": 71,
  "peor": {
-  "id": "C639U",
-  "nombre": "San Bartolome Tirajana (el Matorral)",
-  "min": 31.5,
+  "id": "C635B",
+  "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+  "min": 31.7,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 7.0,
-  "prov": "Ávila"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": 9.4,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C639U",
-   "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 31.5,
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+   "min": 31.7,
    "prov": "Las Palmas"
   },
   {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 31.5,
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 30.8,
    "prov": "Las Palmas"
   },
   {
-   "id": "C668V",
-   "nombre": "Agaete - Suerte Alta",
-   "min": 30.5,
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 30.1,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C126A",
+   "nombre": "El Paso-C.F.",
+   "min": 29.7,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 28.9,
+   "min": 29.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 28.8,
-   "prov": "Las Palmas"
+   "id": "6088X",
+   "nombre": "Torremolinos",
+   "min": 29.4,
+   "prov": "Málaga"
   },
   {
-   "id": "C648N",
-   "nombre": "Telde-Centro Forestal Doramas",
-   "min": 28.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C635B",
-   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 28.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 28.1,
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 29.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 27.9,
+   "min": 29.3,
    "prov": "Las Palmas"
   },
   {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 27.8,
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
+   "min": 29.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 28.9,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 7.0,
-   "prov": "Ávila"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 7.6,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 8.5,
-   "prov": "Segovia"
-  },
-  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 8.5,
+   "min": 9.4,
    "prov": "Zamora"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 10.3,
-   "prov": "León"
   },
   {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 10.3,
+   "min": 10.9,
    "prov": "Ourense"
   },
   {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 10.4,
-   "prov": "Ávila"
-  },
-  {
-   "id": "1226X",
-   "nombre": "Cuevas de Felechosa",
-   "min": 10.7,
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 11.0,
    "prov": "Asturias"
   },
   {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": 10.7,
-   "prov": "Zamora"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 11.1,
+   "prov": "Ávila"
   },
   {
-   "id": "9060X",
-   "nombre": "Lalastra",
-   "min": 10.9,
-   "prov": "Araba/Álava"
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 11.1,
+   "prov": "Cuenca"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 11.5,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 11.7,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 11.7,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 11.7,
+   "prov": "Granada"
+  },
+  {
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": 11.8,
+   "prov": "Cuenca"
   }
  ]
 }

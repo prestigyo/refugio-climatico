@@ -117,6 +117,15 @@ a{color:var(--teal);text-decoration:none}
 .curcmp{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:14px;font-size:14px;color:var(--muted);flex-wrap:wrap}
 .curcmp .vs{font-size:12px}
 .curmsg{color:var(--paper);font-size:14px;margin-top:9px}
+.lugarchip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin:0 0 16px;font-size:13px;color:var(--muted);min-height:22px}
+.lugarchip b{color:var(--paper)}
+.lc-fix{background:transparent;border:1px solid var(--line);color:var(--teja2);font-size:12px;padding:5px 11px;border-radius:999px;cursor:pointer;font-family:inherit}
+.lc-fix:hover{border-color:var(--teja)}
+.lc-form{width:100%;display:flex;gap:8px;align-items:flex-end}
+.lc-form label{flex:1;font-size:12px;color:var(--muted);text-align:left}
+.lc-form input{width:100%;margin-top:5px;background:#2c2216;border:1.5px solid #5f5138;border-radius:10px;color:var(--paper);font-size:15px;padding:10px 12px;font-family:inherit}
+.lc-form input:focus{outline:2px solid var(--teja);outline-offset:1px}
+.lc-ok{background:var(--teja);color:#160f08;border:0;border-radius:10px;font-weight:700;font-size:14px;padding:11px 15px;cursor:pointer;font-family:inherit;white-space:nowrap}
 .wsub2{color:var(--muted);font-size:13.5px;line-height:1.55;margin:-4px 0 14px}
 .wsub2 b{color:var(--paper)}
 .wfields{display:grid;gap:12px;margin-bottom:16px}
@@ -190,7 +199,7 @@ a{color:var(--teal);text-decoration:none}
 
 <div class="flow" id="flow">
   <div class="flowtop"><button class="back" id="backbtn" onclick="back()">‹ Atrás</button><div class="bar"><i id="barfill"></i></div><span id="stepn" style="font-size:12px;color:var(--muted);width:34px;text-align:right">1/5</span></div>
-  <div class="step"><div id="stepbody"></div></div>
+  <div class="step"><div class="lugarchip" id="lugarchip"></div><div id="stepbody"></div></div>
 </div>
 <div class="reward" id="reward"><div class="rwrap" id="rbody"></div></div>
 <div class="morehint hidden" id="morehint">↓ sigue, hay más</div>
@@ -250,14 +259,25 @@ function pintaCurSelect(){
 }
 function addZonasVotadas(d){
  if(!d||!d.zonas||!d.zonas.length)return;
- d.zonas.forEach(function(zv){
-  var ya=CURZ.filter(function(z){return z.id===zv.z;})[0];
+ (d.zonas||[]).forEach(function(zv){
+  var ya=CURZ.filter(function(z){return z.id===zv.z&&!z.mun;})[0];
   if(ya){ya.votos=zv.n;if(typeof zv.d==="number")ya.d=zv.d;return;}
   var est=ALL.filter(function(a){return a.id===zv.z;})[0];
   if(!est)return;
   CURZ.push({n:est.n,p:est.p,la:est.la,lo:est.lo,id:est.id,votos:zv.n,
              d:(typeof zv.d==="number"?zv.d:est.d),
              f:"Según las noches que ha votado la gente."});
+ });
+ /* MUNICIPIOS votados: entran con su nombre propio (Dénia), no con el de su
+    estación. Se apunta de qué estación de AEMET viene su referencia. */
+ (d.municipios||[]).forEach(function(mv){
+  if(!mv.nom)return;
+  var est=ALL.filter(function(a){return a.id===mv.z;})[0];
+  var ya=CURZ.filter(function(z){return z.mun===mv.m;})[0];
+  if(ya){ya.votos=mv.n;ya.d=mv.d;return;}
+  CURZ.push({n:mv.nom,p:(est?est.p:""),la:(est?est.la:null),lo:(est?est.lo:null),
+             id:mv.z,mun:mv.m,votos:mv.n,d:mv.d,
+             f:"Según las noches que ha votado la gente"+(est?" · referencia AEMET: "+est.n:"")+"."});
  });
  pintaCurSelect();
 }
@@ -296,7 +316,21 @@ function setZone(z){MY=z;document.getElementById("loc").innerHTML='📍 Estás c
 function nearIn(arr,la,lo){var me={la:la,lo:lo},best=arr[0],bd=1e9;arr.forEach(function(z){var d=km(me,z);if(d<bd){bd=d;best=z;}});return best;}
 function nearest(la,lo){return nearIn(ALL,la,lo);}   /* estación exacta más cercana (848) */
 function nearSeed(p){return p?nearIn(SEED,p.la,p.lo):SEED[0];}  /* semilla reconocible para el mapa */
-function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};setZone(nearest(MYLL.la,MYLL.lo));cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
+/* POBLACIÓN donde se ha dormido: la más cercana de las 7.157 con coordenadas
+   (GeoNames + grafía del INE). Se detecta SOLA desde la ubicación: sin pasos ni
+   preguntas. Da nombre a la noche —Dénia es Dénia—, mientras que la referencia
+   climática sigue siendo su estación de AEMET (Pego). Si el fichero no carga,
+   simplemente se usa el nombre de la estación, como antes. */
+function resuelveLugar(la,lo){
+ fetch("https://nochetropical.es/datos/lugares.json").then(function(x){return x.json();}).then(function(L){
+  var me={la:la,lo:lo},best=null,bd=1e9;
+  L.forEach(function(p){var d=km(me,{la:p[2],lo:p[3]});if(d<bd){bd=d;best=p;}});
+  if(best&&bd<=25){MUN={id:best[0],n:best[1]};
+   var el=document.getElementById("loc");
+   if(el&&MY)el.innerHTML='📍 Estás en <b>'+best[1]+'</b> <span style="opacity:.7">· referencia AEMET: '+MY.n+'</span>';}
+ }).catch(function(){});
+}
+function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};setZone(nearest(MYLL.la,MYLL.lo));resuelveLugar(MYLL.la,MYLL.lo);cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
 function initHero(){
   if(!isMobile){document.getElementById("cta").classList.add("hidden");document.getElementById("loc").classList.add("hidden");document.getElementById("desknote").classList.remove("hidden");return;}
   askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});
@@ -315,17 +349,47 @@ var cur=0,ans=[null,null,null,null,null,null];
 var flow=document.getElementById("flow"),reward=document.getElementById("reward");
 var NPASOS=Q.length+1;   /* las preguntas + el paso opcional de la pulsera */
 var WEAR={h:"",s:""};
+var MUN={id:"",n:""};    /* población detectada automáticamente (GeoNames+INE) */
+var PROP="";             /* corrección que teclea quien vota, si no acertamos */
 function startFlow(){
  if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
  if(!MY){askLoc(function(ok){if(ok)startFlow();else document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Necesitamos tu ubicación para situar tu noche. Actívala y vuelve a tocar.</span>';});return;}
- cur=0;ans=[null,null,null,null,null,null];WEAR={h:"",s:""};flow.classList.add("on");renderStep();
+ cur=0;ans=[null,null,null,null,null,null];WEAR={h:"",s:""};PROP="";flow.classList.add("on");renderStep();
 }
 function closeFlow(){flow.classList.remove("on");}
 function back(){if(cur>0){cur--;renderStep();}else closeFlow();}
+/* Chip con la población detectada, visible MIENTRAS se vota: así se ve dónde
+   se está guardando la noche y se puede corregir si no es el pueblo correcto
+   (o si no hemos sabido detectarlo). */
+function chipLugar(){
+ var el=document.getElementById("lugarchip");if(!el)return;
+ if(MUN.n){
+  el.innerHTML='<span class="lc-txt">📍 Tu noche se guarda en <b>'+MUN.n+'</b></span>'
+   +'<button type="button" class="lc-fix" onclick="abreCorrige()">¿No es aquí?</button>';
+ }else{
+  el.innerHTML='<span class="lc-txt">📍 No hemos sabido detectar tu pueblo'
+   +(MY?' — usaremos <b>'+MY.n+'</b>':'')+'</span>'
+   +'<button type="button" class="lc-fix" onclick="abreCorrige()">Decirnos cuál es</button>';
+ }
+}
+function abreCorrige(){
+ var el=document.getElementById("lugarchip");if(!el)return;
+ el.innerHTML='<div class="lc-form"><label>¿En qué pueblo has dormido?'
+  +'<input id="lugarprop" type="text" maxlength="60" placeholder="Escribe el nombre" value="'+(MUN.n||"")+'"></label>'
+  +'<button type="button" class="lc-ok" onclick="guardaCorrige()">Guardar</button></div>';
+ var i=document.getElementById("lugarprop");if(i)i.focus();
+}
+function guardaCorrige(){
+ var i=document.getElementById("lugarprop");
+ PROP=i?i.value.trim().slice(0,60):"";
+ var el=document.getElementById("lugarchip");
+ if(el)el.innerHTML='<span class="lc-txt">✅ Gracias'+(PROP?': anotamos <b>'+PROP+'</b> y lo revisamos':"")+'. Tu noche cuenta igual.</span>';
+}
 function renderStep(){
  document.getElementById("barfill").style.width=(cur/NPASOS*100)+"%";
  document.getElementById("stepn").textContent=(cur+1)+"/"+NPASOS;
  document.getElementById("backbtn").textContent=cur===0?"‹ Salir":"‹ Atrás";
+ setTimeout(chipLugar,0);
  var b=document.getElementById("stepbody");
  if(cur===Q.length){   /* paso opcional: lo que marcó la pulsera o el reloj */
   b.innerHTML='<div class="q">⌚ ¿Llevas pulsera o reloj de sueño?</div>'
@@ -390,14 +454,17 @@ function finish(){
  var dormir=ans[0].val,confort=ans[1].val,despertar=ans[3].val,perm=ans[4].val;
  var descanso=((dormir-1)/4*10*0.6+(despertar-1)/4*10*0.4);
  var zona=MY||nearSeed(MYLL)||SEED[0];
- window._obsShare={idx:descanso.toFixed(1),zona:zona.n};
+ /* El nombre que se enseña es el del pueblo elegido (Dénia); la referencia
+    climática sigue siendo la estación de AEMET (Pego), y se dice cuál es. */
+ var nombreLugar=MUN.n||zona.n;
+ window._obsShare={idx:descanso.toFixed(1),zona:nombreLugar};
  var ref=MYLL||zona;
  /* Envío de la noche al buzón (si está desplegado). El resultado se enseña
     igual: nunca se bloquea la recompensa por un fallo de red. */
  var deuda=ans[5]?ans[5].val:"";
  if(URL_OBS&&zona.id){
   var pay={z:zona.id,d:dormir,c:confort,r:ans[2]?ans[2].val:"",w:despertar,k:perm,
-           sd:deuda,wh:WEAR.h,ws:WEAR.s,u:obsUid(),v:1};
+           sd:deuda,wh:WEAR.h,ws:WEAR.s,m:MUN.id,mn:MUN.n,mp:PROP,u:obsUid(),v:1};
   if(MYLL)pay.g=MYLL.la.toFixed(2)+","+MYLL.lo.toFixed(2);
   try{fetch(URL_OBS,{method:"POST",body:JSON.stringify(pay)}).then(function(x){return x.json();})
    .then(function(d){if(d&&d.ok){window._obsGuardado=true;var dm=document.getElementById("obsdemo");if(dm)dm.style.display="none";}}).catch(function(){});}catch(e){}
@@ -417,7 +484,9 @@ function finish(){
    '<div class="mini"><span class="em">'+EMO[despertar-1]+'</span><div><div class="l">Despertar</div><div class="v">'+LBL[despertar-1]+'</div></div></div>'+
    '<div class="mini"><span class="em">'+["🚗","🙁","😐","🙂","❤️"][perm-1]+'</span><div><div class="l">Volverías</div><div class="v">'+["Me iría","Otro sitio","Igual","Sí","Sin dudarlo"][perm-1]+'</div></div></div>'+
    '</div><div class="tuidx"><span style="color:var(--muted);font-size:13px">Tu índice de descanso</span><div class="n" style="color:'+colorFor(descanso)+'">'+descanso.toFixed(1)+'<span style="font-size:16px;color:var(--muted)">/10</span></div></div></div>'+
-  '<div class="card fade thesis" style="animation-delay:.45s"><h3>Tú frente a los datos · '+zona.n+'</h3><div class="row">'+
+  '<div class="card fade thesis" style="animation-delay:.45s"><h3>Tú frente a los datos · '+nombreLugar+'</h3>'+
+   (MUN.n&&MUN.n!==zona.n?'<p style="text-align:center;color:var(--muted);font-size:12.5px;margin:-4px 0 10px">Referencia climática: estación de AEMET de <b>'+zona.n+'</b></p>':'')+
+   '<div class="row">'+
    '<div class="c"><div class="n" style="color:'+colorFor(descanso)+'">'+descanso.toFixed(1)+'</div><small>Tú, esta noche</small></div>'+
    '<div class="c" style="align-self:center;color:var(--muted)">vs</div>'+
    '<div class="c"><div class="n" style="color:'+colorFor(zona.d)+'">'+zona.d.toFixed(1)+'</div><small>Esperado (AEMET)</small></div></div>'+

@@ -6708,6 +6708,22 @@ a{color:var(--teal);text-decoration:none}
 .desktoponly b{color:var(--paper)}
 .back{background:transparent;color:var(--muted);font-size:15px;line-height:1;padding:6px 4px;white-space:nowrap}
 .back:hover{color:var(--paper)}
+.curioso{margin:30px auto 0;max-width:520px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:20px 20px 22px}
+.curioso h3{font-family:var(--fd);font-weight:600;font-size:clamp(17px,3.4vw,21px);color:var(--paper);margin:0 0 6px}
+.cursub{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 14px}
+.cursub b{color:var(--paper)}
+#curz{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--paper);font-size:15px;padding:12px 14px;font-family:inherit;cursor:pointer}
+#curz:focus{outline:2px solid var(--teja);outline-offset:1px}
+.curout{margin-top:14px}
+.curcard{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;text-align:center}
+.curz-n{font-family:var(--fd);font-weight:600;font-size:17px;color:var(--paper)}
+.curz-n small{color:var(--muted);font-weight:400;font-size:13px;font-style:italic;margin-left:5px}
+.curz-idx{font-family:var(--fd);font-weight:700;font-size:40px;line-height:1.1;margin:4px 0}
+.curz-idx span{font-size:16px;color:var(--muted)}
+.curz-f{color:var(--muted);font-size:13.5px;font-style:italic}
+.curcmp{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:14px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.curcmp .vs{font-size:12px}
+.curmsg{color:var(--paper);font-size:14px;margin-top:9px}
  __NAVCSS__
  __FOOTERCSS__
 </style></head><body>
@@ -6736,6 +6752,13 @@ __NAV__
     <span><i class="ldot" style="background:#e0834f"></i>Malo</span>
     <span><i class="ldot" style="background:#d9604a"></i>Muy malo</span>
   </div>
+  <div class="curioso" id="curioso">
+    <h3>👀 ¿Solo curioseando? Mira cómo se está en otro lugar</h3>
+    <p class="cursub">Elige una zona y compárala con la tuya, ahora mismo. Es el índice de descanso <b>esperado según AEMET</b> (10 veranos); en cuanto lleguen los votos, verás además lo que dice la gente.</p>
+    <select id="curz" aria-label="Elegir una zona para comparar"><option value="">Elige un pueblo o ciudad…</option></select>
+    <div class="curout" id="curout"></div>
+  </div>
+
   <p class="disc-o" style="margin-top:22px">Aún estamos empezando. El mapa nace con la <b>expectativa de AEMET</b> (10 veranos de datos); cada noche que votas lo hace más real: veremos <b>lo que dicen los datos frente a lo que dice la gente</b>. Sin predicciones, sin temperatura de protagonista: solo cómo se ha vivido la noche.</p>
 </div></section>
 __FOOTER__
@@ -6769,6 +6792,38 @@ function renderRanks(){
   document.getElementById("worst").innerHTML=worst.map(row).join("");
 }
 renderMap();renderRanks();
+
+/* FICHA DEL CURIOSO: comparar cómo se está en otra zona (sin votar). Usa la
+   semilla (índice esperado según AEMET); cuando haya backend, mostrará votos. */
+function showCurioso(z){
+ var out=document.getElementById("curout");
+ var h='<div class="curcard"><div class="curz-n">'+z.n+' <small>'+z.p+'</small></div>'
+  +'<div class="curz-idx" style="color:'+colorFor(z.d)+'">'+z.d.toFixed(1)+'<span>/10</span></div>'
+  +'<div class="curz-f">"'+z.f+'"</div>';
+ if(MY){
+  h+='<div class="curcmp"><span>Tu zona ('+MY.n+'): <b style="color:'+colorFor(MY.d)+'">'+MY.d.toFixed(1)+'</b></span>'
+    +'<span class="vs">vs</span><span>'+z.n+': <b style="color:'+colorFor(z.d)+'">'+z.d.toFixed(1)+'</b></span></div>';
+  var dif=z.d-MY.d;
+  h+='<p class="curmsg">'+(Math.abs(dif)<0.8?"Se descansa parecido en los dos sitios.":(dif>0?"Ahí se descansa <b>mejor</b> que en tu zona.":"En tu zona se descansa <b>mejor</b> que ahí."))+'</p>';
+ }
+ out.innerHTML=h+'</div>';
+}
+(function(){
+ var sel=document.getElementById("curz");if(!sel)return;
+ SEED.map(function(z,i){return {z:z,i:i};}).sort(function(a,b){return a.z.n.localeCompare(b.z.n);})
+  .forEach(function(o){var op=document.createElement("option");op.value=o.i;op.textContent=o.z.n+" ("+o.z.p+")";sel.appendChild(op);});
+ sel.addEventListener("change",function(){if(sel.value!=="")showCurioso(SEED[+sel.value]);});
+})();
+
+/* FICHA DE COMPARTIR: comparte tu resultado (nativo en móvil; si no, copia). */
+function shareNoche(){
+ var s=window._obsShare||{idx:"",zona:""};
+ var url="__SITE__/observatorio-del-descanso/";
+ var txt="Esta noche en "+s.zona+" he descansado "+s.idx+"/10 en el Observatorio del Descanso. ¿Y tú, cómo has dormido? Cuéntalo en 10 segundos:";
+ if(navigator.share){navigator.share({title:"El Observatorio del Descanso",text:txt,url:url}).catch(function(){});}
+ else if(navigator.clipboard){navigator.clipboard.writeText(txt+" "+url).then(function(){alert("Copiado para compartir.");});}
+ else{window.open("https://wa.me/?text="+encodeURIComponent(txt+" "+url),"_blank");}
+}
 
 /* SOLO móvil + SOLO geoposicionamiento (sin entrada manual, que daba falsos
    positivos como la Valencia de León). La zona = estación AEMET más cercana. */
@@ -6815,6 +6870,7 @@ function finish(){
  var dormir=ans[0].val,confort=ans[1].val,despertar=ans[3].val,perm=ans[4].val;
  var descanso=((dormir-1)/4*10*0.6+(despertar-1)/4*10*0.4);
  var zona=MY||nearSeed(MYLL)||SEED[0];
+ window._obsShare={idx:descanso.toFixed(1),zona:zona.n};
  var ref=MYLL||zona;
  var cand=SEED.filter(function(z){return z.d>=7.5;});
  cand.forEach(function(z){z._km=km(ref,z);});
@@ -6841,7 +6897,7 @@ function finish(){
    '<p style="color:var(--muted);font-size:12px;margin-top:12px">Según 10 veranos de AEMET. En cuanto haya votos, verás lo que dice la gente.</p></div>'+
   '<div class="card fade" style="animation-delay:.7s"><h3>Cerca de ti, esta madrugada</h3><div class="nearby">'+
    near.map(function(o){return '<div class="row"><span class="idx" style="color:'+colorFor(o.z.d)+';background:'+bgFor(o.z.d)+'">'+o.z.d.toFixed(1)+'</span><div class="info"><div class="n">'+o.z.n+' · '+o.k+' km</div><div class="p">"'+o.z.f+'"</div></div></div>';}).join("")+'</div></div>'+
-  '<button class="share fade" style="animation-delay:.8s" onclick="alert(\'La tarjeta para compartir llega en el siguiente incremento.\')">📲 Compartir cómo ha dormido España</button>'+
+  '<button class="share fade" style="animation-delay:.8s" onclick="shareNoche()">📲 Comparte tu noche</button>'+
   '<button class="again" onclick="reward.classList.remove(\'on\');document.getElementById(\'morehint\').classList.add(\'hidden\');window.scrollTo(0,0)">Volver al observatorio</button>'+
   '<p class="disc-o">El Observatorio del Descanso · experiencias reales cruzadas con datos de AEMET · sin predicciones, solo lo ocurrido. Sé de los primeros: cuantos más votemos, más real será el mapa.</p>';
  renderMap();var rm=document.getElementById("rmap");if(rm){var svg=document.getElementById("map");rm.innerHTML=svg.innerHTML;var p=proj(zona);rm.innerHTML+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}

@@ -1,7 +1,7 @@
 {
  "fecha": "2026-08-04",
- "total": 849,
- "tropicales": 288,
+ "total": 848,
+ "tropicales": 286,
  "ecuatoriales": 45,
  "peor": {
   "id": "C668V",
@@ -105,7 +105,7 @@
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 9.1,
+   "min": 9.5,
    "prov": "Lleida"
   },
   {

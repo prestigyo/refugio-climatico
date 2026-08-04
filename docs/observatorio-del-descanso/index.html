@@ -180,7 +180,7 @@ a{color:var(--teal);text-decoration:none}
   <p class="sub">El mapa del <b>sueño profundo</b>: dónde el cuerpo se repara de verdad, según diez veranos de AEMET y las noches que cuenta la gente.</p>
 </div></section>
 <section class="public"><div class="wrap">
-  <h2>El mapa del descanso, estación a estación</h2>
+  <h2>El mapa del descanso, población por población</h2>
   <div class="when" id="when">Índice de descanso · <b>esperado según AEMET</b> · aún sin votos — sé el primero</div>
   <div class="mapbox"><svg id="map" viewBox="0 0 300 190" aria-label="Mapa del descanso de España"></svg></div>
   <div class="rankcols">
@@ -420,6 +420,28 @@ function initHero(){
   askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});
 }
 initHero();
+
+/* Al aterrizar, un desplazamiento suave a 1,3 s que asoma el mapa: sin él, la
+   portada se queda en el titular y no se ve que hay un mapa debajo. Se anula en
+   cuanto la persona toca, hace scroll o usa el teclado — nunca le quitamos el
+   control — y no se hace si ya ha bajado por su cuenta o si tiene activado el
+   ajuste del sistema de "reducir movimiento". */
+(function(){
+ var cancelado=false;
+ var quieto=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ function cancela(){cancelado=true;}
+ ["wheel","touchstart","keydown","pointerdown"].forEach(function(ev){
+  window.addEventListener(ev,cancela,{passive:true,once:true});
+ });
+ if(quieto)return;
+ setTimeout(function(){
+  if(cancelado||window.scrollY>8)return;
+  var destino=document.querySelector(".public");
+  if(!destino)return;
+  var y=destino.getBoundingClientRect().top+window.scrollY-56;
+  window.scrollTo({top:Math.max(0,y),behavior:"smooth"});
+ },1300);
+})();
 
 /* FLUJO */
 var Q=[

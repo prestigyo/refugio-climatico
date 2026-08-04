@@ -2159,15 +2159,31 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             f'<tr><td class="loc">{e["loc"]}</td><td class="hide">{alt} m</td>'
             f'<td class="n">{ntfmt(e["nt"])}</td>{td_hum}'
             f'<td><span class="v" style="color:{col};background:{bg}">{etq}</span></td></tr>')
-    mtxt = ("prácticamente no hay noches tropicales" if mejor["nt"] < 1
-            else f'son unas {round(mejor["nt"])} al año')
+    # La unidad se NOMBRA siempre ("noches tropicales al año"): decir "son unas 2
+    # al año" dejaba al lector adivinando si eran noches, grados o estaciones, y
+    # además desaprovechaba la palabra clave de la página en su primer párrafo.
+    def _nt_frase(nt: float, con_al_anio: bool = True) -> str:
+        sufijo = " al año" if con_al_anio else ""
+        if nt < 1:
+            return f"menos de <b>1 noche tropical</b>{sufijo}"
+        n_ = round(nt)
+        if n_ == 1:
+            return f"<b>1 noche tropical</b>{sufijo}"
+        return f"<b>{n_} noches tropicales</b>{sufijo}"
+
     alt_mejor = f"{mejor['alt']:,}".replace(",", ".")
     if n <= 1:
+        mtxt = ("prácticamente no se registran <b>noches tropicales</b>"
+                if mejor["nt"] < 1 else f'se cuentan {_nt_frase(mejor["nt"])}')
         intro = (f'En <b>{prov}</b>, en su única estación de AEMET con datos suficientes — '
                  f'<b>{mejor["loc"]}</b> ({alt_mejor} m) — {mtxt}.')
     else:
-        intro = (f'En <b>{prov}</b>, en <b>{mejor["loc"]}</b> ({alt_mejor} m) {mtxt}, '
-                 f'mientras que en <b>{peor["loc"]}</b> se cuentan unas <b>{round(peor["nt"])}</b>. '
+        mtxt = ("prácticamente no se registran <b>noches tropicales</b>"
+                if mejor["nt"] < 1 else f'se cuentan {_nt_frase(mejor["nt"])}')
+        intro = (f'En <b>{prov}</b>, en <b>{mejor["loc"]}</b> ({alt_mejor} m) {mtxt} '
+                 f'—noches en las que la temperatura mínima no baja de 20&nbsp;°C—, '
+                 f'mientras que en <b>{peor["loc"]}</b> suben hasta '
+                 f'{_nt_frase(peor["nt"], con_al_anio=False)}. '
                  f'Estas son sus {n} estaciones de AEMET, de la más fresca a la más calurosa.')
     # Title orientado a CTR y a MÓVIL (76% del tráfico): Google corta el título
     # a ~50-55 caracteres en móvil, así que el gancho va POR DELANTE (no al
@@ -6828,7 +6844,7 @@ __NAV__
   <p class="sub">El mapa del <b>sueño profundo</b>: dónde el cuerpo se repara de verdad, según diez veranos de AEMET y las noches que cuenta la gente.</p>
 </div></section>
 <section class="public"><div class="wrap">
-  <h2>El mapa del descanso, estación a estación</h2>
+  <h2>El mapa del descanso, población por población</h2>
   <div class="when" id="when">Índice de descanso · <b>esperado según AEMET</b> · aún sin votos — sé el primero</div>
   <div class="mapbox"><svg id="map" viewBox="0 0 300 190" aria-label="Mapa del descanso de España"></svg></div>
   <div class="rankcols">
@@ -7068,6 +7084,28 @@ function initHero(){
   askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});
 }
 initHero();
+
+/* Al aterrizar, un desplazamiento suave a 1,3 s que asoma el mapa: sin él, la
+   portada se queda en el titular y no se ve que hay un mapa debajo. Se anula en
+   cuanto la persona toca, hace scroll o usa el teclado — nunca le quitamos el
+   control — y no se hace si ya ha bajado por su cuenta o si tiene activado el
+   ajuste del sistema de "reducir movimiento". */
+(function(){
+ var cancelado=false;
+ var quieto=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ function cancela(){cancelado=true;}
+ ["wheel","touchstart","keydown","pointerdown"].forEach(function(ev){
+  window.addEventListener(ev,cancela,{passive:true,once:true});
+ });
+ if(quieto)return;
+ setTimeout(function(){
+  if(cancelado||window.scrollY>8)return;
+  var destino=document.querySelector(".public");
+  if(!destino)return;
+  var y=destino.getBoundingClientRect().top+window.scrollY-56;
+  window.scrollTo({top:Math.max(0,y),behavior:"smooth"});
+ },1300);
+})();
 
 /* FLUJO */
 var Q=[

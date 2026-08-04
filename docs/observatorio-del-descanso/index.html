@@ -434,12 +434,31 @@ initHero();
   window.addEventListener(ev,cancela,{passive:true,once:true});
  });
  if(quieto)return;
+ /* Animación propia en vez del scroll nativo: el del navegador va muy rápido en
+    móvil y el salto se siente brusco. Aquí el recorrido dura ~2,2 s con arranque
+    y frenada suaves (easeInOutCubic), y se interrumpe en cuanto la persona toca. */
+ function bajaSuave(destinoY,dur){
+  var ini=window.scrollY,dist=destinoY-ini,t0=null,parar=false;
+  var evs=["wheel","touchstart","keydown","pointerdown"];
+  function stop(){parar=true;}
+  function limpia(){evs.forEach(function(ev){window.removeEventListener(ev,stop);});}
+  evs.forEach(function(ev){window.addEventListener(ev,stop,{passive:true});});
+  function paso(t){
+   if(parar){limpia();return;}
+   if(!t0)t0=t;
+   var p=Math.min((t-t0)/dur,1);
+   var e=0.5*(1-Math.cos(Math.PI*p));   /* easeInOutSine: la más suave */
+   window.scrollTo(0,ini+dist*e);
+   if(p<1)requestAnimationFrame(paso);else limpia();
+  }
+  requestAnimationFrame(paso);
+ }
  setTimeout(function(){
   if(cancelado||window.scrollY>8)return;
   var destino=document.querySelector(".public");
   if(!destino)return;
   var y=destino.getBoundingClientRect().top+window.scrollY-56;
-  window.scrollTo({top:Math.max(0,y),behavior:"smooth"});
+  bajaSuave(Math.max(0,y),3000);
  },1300);
 })();
 

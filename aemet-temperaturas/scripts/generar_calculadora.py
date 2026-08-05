@@ -6823,6 +6823,16 @@ a{color:var(--teal);text-decoration:none}
 .obsestado.ko{color:#f0c9bd;background:rgba(217,96,74,.14);border:1px solid #d9604a}
 .again.pri2{border-color:var(--teja);color:var(--teja2);font-weight:700}
 .again.pri2:hover{background:rgba(217,116,78,.12)}
+.preg{margin:34px auto 0;max-width:640px;border-top:1px dashed var(--line);padding-top:26px}
+.preg h2{font-family:var(--fd);font-weight:600;font-size:clamp(18px,3.4vw,24px);color:var(--paper);margin:0 0 10px;line-height:1.22;text-align:left}
+.preg h2+p{margin-top:0}
+.preg p{color:var(--muted);font-size:clamp(14.5px,2.3vw,16px);line-height:1.72;margin:0 0 16px;text-align:left}
+.preg p b{color:var(--paper)}
+.preg a{color:var(--teja2)}
+.preg .cajaref{background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:14px;padding:16px 18px;margin:0 0 26px}
+.preg .cajaref p{font-size:14px;margin:0 0 13px}
+.btnref{display:inline-block;background:var(--teja);color:#160f08!important;font-weight:700;font-size:14px;padding:11px 16px;border-radius:11px;text-decoration:none}
+.btnref:hover{background:var(--teja2)}
 .deudasec{padding:6px 0 30px}
 .votabox{background:radial-gradient(120% 90% at 50% 0,#241a10,var(--bg) 72%);border-top:1px solid var(--line);padding:34px 0 40px;text-align:center}
 .votabox h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,4.4vw,30px);color:var(--paper);margin:0 0 8px;line-height:1.15}
@@ -6866,6 +6876,8 @@ __NAV__
     <div class="curout" id="curout"></div>
   </div>
 
+
+__PREGUNTAS__
 
   <p class="disc-o" style="margin-top:22px">Aún estamos empezando. El mapa nace con la <b>expectativa de AEMET</b> (10 veranos de datos); cada noche que votas lo hace más real: veremos <b>lo que dicen los datos frente a lo que dice la gente</b>. Sin predicciones, sin temperatura de protagonista: solo cómo se ha vivido la noche.</p>
 </div></section>
@@ -7322,6 +7334,44 @@ function finish(){
 """
 
 
+def bloque_preguntas_descanso(estaciones: list, site: str) -> str:
+    """Bloque de preguntas frecuentes del Observatorio, escrito para las búsquedas
+    reales que traen gente a la web («dónde hace menos calor hoy en España»,
+    «cuándo termina la ola de calor», «harta del calor»).
+
+    Los ejemplos NO se escriben a mano: salen de las estaciones con la mínima de
+    verano más baja, así que el texto se actualiza solo con los datos. Y se habla
+    de lo que *suele* pasar, no de esta noche concreta: el dato climatológico de
+    AEMET llega con días de retraso y aquí no hacemos predicción."""
+    frescas = sorted((e for e in estaciones if e.get("tmin") is not None),
+                     key=lambda e: e["tmin"])[:3]
+    if not frescas:
+        return ""
+    ejemplos = ", ".join(
+        f'<b>{e["loc"].split(",")[0]}</b> ({e["prov"]}, {_n_es(e["tmin"])}&nbsp;°C de media)'
+        for e in frescas[:2])
+    umbral = str(int(round(frescas[0]["tmin"] + 3)))  # entero: "10 °C", no "10,0 °C"
+    # Las peores: el contraste que busca quien está harto del calor.
+    peores = sorted((e for e in estaciones if e.get("tmin") is not None),
+                    key=lambda e: -e["tmin"])[:1]
+    peor_txt = (f'<b>{peores[0]["loc"].split(",")[0]}</b> ({peores[0]["prov"]}), '
+                f'con <b>{_n_es(peores[0]["tmin"])}&nbsp;°C</b> de mínima media'
+                if peores else "")
+    return f"""
+  <section class="preg">
+    <h2>¿Dónde hace menos calor hoy en España para poder dormir?</h2>
+    <p>Si estás harto del calor y necesitas un respiro, no todo el país sufre igual. Mientras en la costa mediterránea y el sur se encadenan <b>noches tropicales</b> (mínima que no baja de 20&nbsp;°C) y hasta <b>ecuatoriales</b> (por encima de 25&nbsp;°C), hay una España donde <b>la madrugada sigue refrescando por debajo de los {umbral}&nbsp;°C</b>.</p>
+    <div class="cajaref">
+      <p>❄️ <b>Dónde se duerme fresco:</b> la montaña interior y los valles altos —Pirineo, sistema Ibérico, cordillera Cantábrica y el interior de Galicia—. Con diez veranos de AEMET, las más frescas son {ejemplos}. En el otro extremo, {peor_txt}.</p>
+      <a class="btnref" href="{site}/mapa-estaciones/">Consultar el mapa de refugios climáticos →</a>
+    </div>
+    <h2>¿Cuándo termina la ola de calor y refrescará por la noche?</h2>
+    <p>Nadie puede decirte el día exacto —y aquí no hacemos predicción: <b>medimos lo que ya ha pasado</b>—. Lo que sí sabemos es qué hay en juego: cuando se encadenan noches sin bajar de 20&nbsp;°C, el sueño profundo se acorta y <b>la deuda de sueño se acumula</b> noche tras noche. Por eso el alivio no llega cuando baja la máxima del mediodía, sino <b>cuando vuelve a refrescar de madrugada</b>.</p>
+    <p>Puedes seguirlo día a día en el <a href="{site}/ola-de-calor/">mapa de la ola de calor en España</a>, con las mínimas de cada noche según AEMET: ahí se ve, jornada a jornada, si la ola afloja o aprieta en tu provincia. Y si necesitas escapar ya, mira <a href="{site}/refugios-climaticos-naturales-cerca-de-mi/">qué refugios climáticos tienes cerca</a>.</p>
+  </section>
+"""
+
+
 def construir_pagina_observatorio(estaciones: list, site: str) -> str:
     seed = json.dumps(seed_observatorio(estaciones), ensure_ascii=False, separators=(",", ":"))
     # TODAS las estaciones (compacto [lat,lon,nombre,baseline]) para que el
@@ -7344,7 +7394,27 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
         {"@type": "WebApplication", "name": "El Observatorio del Descanso",
          "url": site + "/observatorio-del-descanso/", "applicationCategory": "LifestyleApplication",
          "operatingSystem": "Web", "description": desc,
-         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}}]},
+         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}},
+        # FAQ con las dos preguntas que trae la gente desde Google, para que
+        # pueda mostrarse como respuesta directa en el buscador.
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question",
+             "name": "¿Dónde hace menos calor hoy en España para poder dormir?",
+             "acceptedAnswer": {"@type": "Answer", "text":
+                "Las noches más frescas de España se dan en la montaña interior y los "
+                "valles altos: Pirineo, sistema Ibérico, cordillera Cantábrica y el "
+                "interior de Galicia, donde la mínima de verano baja de los 15 °C. En "
+                "la costa mediterránea y el sur, en cambio, se encadenan noches "
+                "tropicales (mínima por encima de 20 °C) y ecuatoriales (por encima de "
+                "25 °C). El mapa de estaciones de AEMET muestra el dato de cada zona."}},
+            {"@type": "Question",
+             "name": "¿Cuándo termina la ola de calor y refrescará por la noche?",
+             "acceptedAnswer": {"@type": "Answer", "text":
+                "No hacemos predicción: publicamos lo ya medido por AEMET, día a día. "
+                "El alivio real no llega cuando baja la máxima del mediodía, sino "
+                "cuando la mínima vuelve a bajar de 20 °C de madrugada, que es cuando "
+                "el sueño profundo se recupera. En el mapa de la ola de calor se puede "
+                "seguir jornada a jornada si afloja o aprieta en cada provincia."}}]}]},
         ensure_ascii=False)
     return (PAGINA_OBSERVATORIO
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
@@ -7355,6 +7425,7 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
             .replace("__DESC__", desc)
             .replace("__SEED__", seed)
             .replace("__ALLZ__", allz)
+            .replace("__PREGUNTAS__", bloque_preguntas_descanso(estaciones, site))
             .replace("__OBS_URL__", APPS_SCRIPT_OBS_URL)
             .replace("__SITE__", site)
             .replace("__HOME__", site + "/"))

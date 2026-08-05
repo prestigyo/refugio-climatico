@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-04",
- "total": 848,
- "tropicales": 286,
- "ecuatoriales": 45,
+ "fecha": "2026-08-05",
+ "total": 852,
+ "tropicales": 336,
+ "ecuatoriales": 65,
  "peor": {
-  "id": "C668V",
-  "nombre": "Agaete - Suerte Alta",
-  "min": 32.5,
+  "id": "C625O",
+  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+  "min": 31.8,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 7.8,
-  "prov": "Ávila"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": 8.1,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C668V",
-   "nombre": "Agaete - Suerte Alta",
-   "min": 32.5,
-   "prov": "Las Palmas"
-  },
-  {
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 31.2,
+   "min": 31.8,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C117Z",
-   "nombre": "Tijarafe-Mirador Time",
-   "min": 30.9,
-   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C635B",
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 30.0,
+   "min": 29.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 29.6,
    "prov": "Las Palmas"
   },
   {
    "id": "C917E",
    "nombre": "Dehesa-Refugio",
-   "min": 29.9,
+   "min": 29.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 29.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C117A",
-   "nombre": "Puntagorda",
-   "min": 29.5,
+   "id": "C117Z",
+   "nombre": "Tijarafe-Mirador Time",
+   "min": 29.2,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 29.1,
-   "prov": "Las Palmas"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 28.7,
+   "min": 29.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "6155A",
-   "nombre": "Málaga/Aeropuerto",
-   "min": 28.5,
+   "id": "C668V",
+   "nombre": "Agaete - Suerte Alta",
+   "min": 29.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C628B",
+   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "min": 29.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "6088X",
+   "nombre": "Torremolinos",
+   "min": 28.9,
    "prov": "Málaga"
+  },
+  {
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
+   "min": 28.7,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 7.8,
-   "prov": "Ávila"
-  },
-  {
-   "id": "2491C",
-   "nombre": "La Covatilla Estación de Esquí",
-   "min": 7.9,
-   "prov": "Salamanca"
-  },
-  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 8.5,
+   "min": 8.1,
    "prov": "Zamora"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 8.8,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 9.5,
-   "prov": "Lleida"
-  },
-  {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 10.0,
-   "prov": "Granada"
-  },
-  {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 10.0,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 10.1,
-   "prov": "Soria"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 8.2,
+   "prov": "Ávila"
   },
   {
    "id": "1542",
    "nombre": "Puerto de Leitariegos",
+   "min": 9.1,
+   "prov": "Asturias"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 9.5,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 9.7,
+   "prov": "Zamora"
+  },
+  {
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 9.7,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 10.0,
+   "prov": "Soria"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 10.0,
+   "prov": "Lleida"
+  },
+  {
+   "id": "1221D",
+   "nombre": "Pajares - Valgrande",
    "min": 10.2,
    "prov": "Asturias"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 10.3,
-   "prov": "Lleida"
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 10.2,
+   "prov": "Ourense"
   }
  ]
 }

@@ -1,7 +1,7 @@
 {
  "fecha": "2026-08-05",
- "total": 852,
- "tropicales": 336,
+ "total": 850,
+ "tropicales": 335,
  "ecuatoriales": 65,
  "peor": {
   "id": "C625O",
@@ -23,6 +23,18 @@
    "prov": "Las Palmas"
   },
   {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 31.1,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 29.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
    "id": "C635B",
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
    "min": 29.8,
@@ -33,12 +45,6 @@
    "nombre": "Agüimes-el Milano",
    "min": 29.6,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C917E",
-   "nombre": "Dehesa-Refugio",
-   "min": 29.4,
-   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C117Z",
@@ -69,12 +75,6 @@
    "nombre": "Torremolinos",
    "min": 28.9,
    "prov": "Málaga"
-  },
-  {
-   "id": "C639U",
-   "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 28.7,
-   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [

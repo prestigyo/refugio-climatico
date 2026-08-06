@@ -380,7 +380,7 @@ PLANTILLA = r"""<!doctype html>
  .duelo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:6px 0 26px}
  .card{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:16px 18px}
  .card .t{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
- .card.calor .t{color:#cf4b34}.card.fresco .t{color:var(--verde)}
+ .card.calor .t{color:#e0705a}.card.fresco .t{color:var(--verde)}
  .card .loc{font-family:var(--fd);font-weight:600;font-size:19px;line-height:1.2}
  .card .m{font-family:var(--fm);font-weight:700;font-size:30px;margin-top:4px}
  .card.calor .m{color:var(--teja2)}.card.fresco .m{color:var(--teal)}
@@ -414,7 +414,7 @@ PLANTILLA = r"""<!doctype html>
  .cta{margin:26px 0;text-align:center}
  .cta a{display:inline-block;background:var(--teja);color:#1a1209;font-weight:700;padding:13px 22px;border-radius:12px}
  .cta a:hover{background:var(--teja2);text-decoration:none}
- footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#82745d;font-size:12.5px;margin-top:24px}
+ footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#9a8a6f;font-size:12.5px;margin-top:24px}
  footer a{color:#9a8a6f}
  @media(max-width:560px){.nums{grid-template-columns:1fr 1fr}.duelo{grid-template-columns:1fr}}
 </style>

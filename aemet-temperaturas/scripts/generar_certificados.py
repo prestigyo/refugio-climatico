@@ -190,7 +190,7 @@ _CSS_CERT = (
     'text-transform:uppercase;color:var(--teja);margin-bottom:8px}'
     '.sigue{font-size:14.5px;color:var(--muted);margin:0 0 30px;max-width:70ch;line-height:1.7}'
     '.sigue a{font-weight:600}'
-    'footer{border-top:1px solid var(--line);padding:26px 0 60px;color:#82745d;font-size:12.5px}'
+    'footer{border-top:1px solid var(--line);padding:26px 0 60px;color:#9a8a6f;font-size:12.5px}'
     'footer a{color:#9a8a6f}'
 )
 

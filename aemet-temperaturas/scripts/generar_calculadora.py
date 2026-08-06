@@ -389,7 +389,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .pueblo.hot{border-color:#4a2a1d} .pueblo.hot .big{color:var(--rojo)}
   .vs-line{text-align:center;margin-top:18px;color:var(--muted);font-size:14px}
   .vs-line b{color:var(--teja2)}
-  .lt-note{display:inline-block;font-family:var(--fb);font-size:12px;font-weight:600;color:var(--muted);
+  .lt-note{display:inline-block;font-family:var(--fb);font-size:12.5px;font-weight:600;color:var(--muted);
     text-transform:none;letter-spacing:0;margin-left:10px;vertical-align:middle;line-height:1.1}
   .metodo{margin-top:30px;border-left:3px solid var(--teja);background:var(--bg2);
     border-radius:0 12px 12px 0;padding:16px 18px;max-width:780px}
@@ -422,7 +422,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .bars{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px}
   .barcol h4{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
   .barcol.ref h4{color:var(--teal)} .barcol.inf h4{color:var(--rojo)}
-  .barcol .csub{font-size:12px;color:var(--muted);margin-bottom:18px}
+  .barcol .csub{font-size:12.5px;color:var(--muted);margin-bottom:18px}
   .barrow{margin-bottom:14px}
   .barrow-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
   .bn{font-size:13.5px;color:var(--paper);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -431,7 +431,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .bartrack>i{display:block;height:100%;width:0;border-radius:5px;transition:width 1.1s cubic-bezier(.22,1,.36,1)}
   .reveal.in .bartrack>i{width:var(--w)}
   .bp{font-size:11.5px;color:var(--muted)}
-  .barnote{margin-top:8px;font-size:12px;color:var(--muted)}
+  .barnote{margin-top:8px;font-size:12.5px;color:var(--muted)}
   @media(max-width:560px){.bars{grid-template-columns:1fr;gap:34px}}
 
   /* CALCULADORA */
@@ -466,7 +466,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 6px}
   .fact{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
   .fact b{display:block;font-family:var(--fm);font-size:20px;font-weight:700}
-  .fact span{font-size:12px;color:var(--muted)}
+  .fact span{font-size:12.5px;color:var(--muted)}
   .minimap-h{font-size:13.5px;color:var(--muted);margin-top:18px}
   .minimap-h b{color:var(--paper)}
   .minimap{width:100%;height:auto;display:block;margin-top:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
@@ -494,7 +494,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .leadform{display:flex;flex-direction:column;gap:9px}
   .leadform input[type=email],.leadform input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--paper);font-size:14.5px;padding:11px 12px;border-radius:10px}
   .leadform input:focus{outline:none;border-color:var(--teja)}
-  .capture .lrgpd{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0;margin:2px 0;font-weight:400}
+  .capture .lrgpd{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--muted);text-transform:none;letter-spacing:0;margin:2px 0;font-weight:400}
   .capture .lrgpd input{margin-top:3px;width:auto}
   .leadform button{background:var(--teja);border:none;color:#1a1209;font-weight:700;font-size:15px;padding:12px;border-radius:10px;cursor:pointer;transition:.15s}
   .leadform button:hover{background:var(--teja2)}
@@ -503,7 +503,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   .provnav{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:18px;font-size:14px}
   .provnav a{color:var(--teal);text-decoration:none}
   .provnav a:hover{color:var(--teja2);text-decoration:underline}
-  footer{border-top:1px solid var(--line);padding:34px 0 60px;color:#82745d;font-size:12.5px;line-height:1.6}
+  footer{border-top:1px solid var(--line);padding:34px 0 60px;color:#9a8a6f;font-size:12.5px;line-height:1.6}
   footer a{color:#9a8a6f}
   @media(max-width:430px){.vs{grid-template-columns:1fr}}
 </style>
@@ -1112,7 +1112,7 @@ CSS_FOOTER_ESCUETO = (
     'text-decoration:none}'
     '.f2col a:hover{color:var(--paper);text-decoration:underline}'
     '.f2bar{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;'
-    'font-size:12.5px;color:#82745d}'
+    'font-size:12.5px;color:#9a8a6f}'
     '.f2bar a{color:#9a8a6f}'
     '.f2brand{margin-bottom:26px;max-width:42ch}'
     '.f2brand .brand{display:inline-flex;align-items:center;gap:9px;font-family:var(--fd);'
@@ -1200,7 +1200,7 @@ CONSOLA_INFORMES = r"""<!DOCTYPE html>
  li a{font-family:var(--fd);font-weight:600;font-size:17px;color:var(--teja2)}
  li span{color:var(--muted);font-size:13px}
  .vacio{color:var(--muted);font-style:italic}
- footer{border-top:1px solid var(--line);margin-top:30px;padding:22px 0 60px;color:#82745d;font-size:12.5px}
+ footer{border-top:1px solid var(--line);margin-top:30px;padding:22px 0 60px;color:#9a8a6f;font-size:12.5px}
 </style></head><body>
 <header><div class="wrap"><div class="kick">Panel interno · nochetropical.es</div>
 <h1>Consola de informes de zona</h1>
@@ -1394,7 +1394,7 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
  .compartir .cb{font:600 13.5px/1 var(--fb);padding:9px 15px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--paper);cursor:pointer;text-decoration:none;display:inline-block}
  .compartir .cb:hover{border-color:var(--teja);color:var(--teja2);text-decoration:none;background:rgba(217,116,78,.10)}
  .provnav{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:14px;font-size:13.5px}
- footer{border-top:1px solid var(--line);padding:30px 0 60px;color:#82745d;font-size:12.5px;margin-top:18px}
+ footer{border-top:1px solid var(--line);padding:30px 0 60px;color:#9a8a6f;font-size:12.5px;margin-top:18px}
  footer a{color:#9a8a6f}
  caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600}
  .prose{margin:28px 0;max-width:760px}
@@ -2335,7 +2335,7 @@ _CSS_CHROME = (
     '.btn{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px}'
     '.btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}'
     '.btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}'
-    'footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#82745d;font-size:12.5px;margin-top:24px}'
+    'footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#9a8a6f;font-size:12.5px;margin-top:24px}'
     'footer a{color:#9a8a6f}'
     '.compartir{margin:22px 0;padding:15px 18px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}'
     '.compartir .ct{display:block;font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:11px}'
@@ -2504,14 +2504,14 @@ PAGINA_PRENSA = r"""<!doctype html>
  .descargas{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0}
  .card{display:block;padding:14px 16px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:12px;color:var(--teja2);font-weight:700;font-size:14px}
  .card:hover{border-color:var(--teja);text-decoration:none}
- .card span{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:3px}
+ .card span{display:block;color:var(--muted);font-weight:400;font-size:12.5px;margin-top:3px}
  .cita{font-family:var(--fm);font-size:13px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px;color:#e3d8c4;line-height:1.5}
  ul.medios{list-style:none;margin:6px 0 0;padding:0}
  ul.medios li{padding:14px 0;border-bottom:1px solid var(--line)}
  ul.medios li:last-child{border-bottom:none}
  ul.medios a{display:block;color:var(--teja2);font-family:var(--fd);font-weight:600;font-size:clamp(16px,2.4vw,18.5px);line-height:1.3;text-decoration:none}
  ul.medios a:hover{text-decoration:underline}
- ul.medios .meta{display:block;font-family:var(--fm);font-size:12px;color:var(--muted);margin-top:6px}
+ ul.medios .meta{display:block;font-family:var(--fm);font-size:12.5px;color:var(--muted);margin-top:6px}
  @media(max-width:520px){.descargas{grid-template-columns:1fr}}
 </style>
 </head>
@@ -6177,14 +6177,14 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  h1 em{font-style:italic;color:var(--teja2)}
  .intro{color:var(--muted);font-size:clamp(15px,2.4vw,17.5px);margin:16px 0 0;max-width:66ch}
  .intro b{color:var(--paper)}
- .disc{margin:18px 0 0;font-size:12.5px;color:#8a7a5f;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;max-width:none}
+ .disc{margin:18px 0 0;font-size:12.5px;color:#9a8a6f;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;max-width:none}
  .disc b{color:var(--muted)}
  /* Sello de ejemplo: imagen REDONDA y prominente en la cabecera. Es la pieza
     que Google puede tomar como miniatura del resultado (contrasta con las fotos
     cuadradas), y a la vez enseña al visitante qué certificado otorgamos. */
  .sello-ej{float:right;width:min(40vw,210px);margin:2px 0 14px 26px;text-align:center}
  .sello-ej img{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 26px rgba(0,0,0,.45))}
- .sello-ej figcaption{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.45}
+ .sello-ej figcaption{font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.45}
  .sello-ej figcaption a{color:var(--teja2)}
  @media(max-width:560px){.sello-ej{float:none;width:200px;margin:16px auto 6px}}
  .edwrap{padding:26px 0 6px;background:radial-gradient(120% 70% at 50% 0,#1d150d,var(--bg) 70%)}
@@ -6212,12 +6212,12 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .st .v{display:block;font-family:var(--fm);font-weight:700;font-size:19px;color:var(--teal)}
  .st .v.tj{color:var(--teja2)}
  .st .k{display:block;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
- .ref{font-size:11.5px;color:#8a7a5f;margin:-4px 0 12px;font-style:italic}
+ .ref{font-size:12.5px;color:#9a8a6f;margin:-4px 0 12px;font-style:italic}
  .btn{margin-top:auto;display:block;text-align:center;background:var(--teja);color:#1a1209;font-weight:700;font-size:14px;padding:11px 14px;border-radius:10px}
  .btn:hover{background:var(--teja2);text-decoration:none}
  .btn.web{background:transparent;border:1px solid var(--teja);color:var(--teja2)}
  .btn.web:hover{background:rgba(217,116,78,.12)}
- .noweb{margin-top:auto;font-size:12.5px;color:#8a7a5f;background:#0c0906;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;line-height:1.5}
+ .noweb{margin-top:auto;font-size:12.5px;color:#9a8a6f;background:#0c0906;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;line-height:1.5}
  .noweb a{color:var(--teal)}
  .cta{margin:30px 0 6px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
  .cta b{font-family:var(--fd);font-weight:600;font-size:20px;color:var(--paper)}
@@ -6244,7 +6244,7 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .geobtn{width:100%;background:var(--teja);color:#1a1209;border:0;border-radius:12px;font-weight:700;font-size:16px;padding:14px;cursor:pointer;font-family:var(--fb)}
  .geobtn:hover{background:var(--teja2)}
  .geobtn:disabled{opacity:.6;cursor:default}
- .ghint{font-size:12.5px;color:#8a7a5f;margin:10px 0 0}
+ .ghint{font-size:12.5px;color:#9a8a6f;margin:10px 0 0}
  .prov-pick{margin-top:14px;position:relative}
  .prov-pick select{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--paper);font-size:15px;padding:12px 14px;font-family:var(--fb);cursor:pointer;appearance:none;-webkit-appearance:none}
  .prov-pick select:focus{outline:2px solid var(--teja);outline-offset:1px}
@@ -6737,6 +6737,14 @@ a{color:var(--teal);text-decoration:none}
 .rw-say .big{font-family:var(--fd);font-weight:600;font-size:clamp(23px,5.5vw,30px);line-height:1.18}
 .rw-say .small{color:var(--muted);font-size:14.5px;margin-top:10px}
 .morehint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:111;background:rgba(224,131,79,.16);border:1px solid var(--teja);color:var(--teja2);font-size:12.5px;padding:8px 16px;border-radius:20px;animation:bob 1.6s ease-in-out infinite;transition:opacity .3s}
+/* Dos accesos fijos a lo que se viene a hacer aquí: contar tu noche y mirar
+   otro pueblo. Aparecen al pasar la portada y se apartan mientras se vota o se
+   lee el resultado. No mueven ninguna sección: solo llevan hasta ellas. */
+.fabs{position:fixed;left:50%;transform:translateX(-50%) translateY(14px);bottom:calc(14px + env(safe-area-inset-bottom));z-index:90;display:flex;gap:9px;padding:0 12px;max-width:100%;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.fabs.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.fab{background:rgba(36,26,16,.94);border:1px solid var(--line);color:var(--paper);font-family:var(--fb);font-size:13px;padding:11px 16px;border-radius:22px;backdrop-filter:blur(6px);box-shadow:0 8px 24px rgba(0,0,0,.45);white-space:nowrap}
+.fab-pri{background:var(--teja);border-color:var(--teja);color:#160f08;font-weight:700}
+@media (prefers-reduced-motion:reduce){.fabs{transition:opacity .25s}}
 .card{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:22px;margin:18px 0}
 .card h3{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:16px}
 .yourgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -6757,7 +6765,7 @@ a{color:var(--teal);text-decoration:none}
 .nearby .info .n{font-weight:600;font-size:15px}.nearby .info .p{color:var(--muted);font-size:13px;font-style:italic}
 .share{width:100%;background:var(--teja);color:#160f08;font-weight:700;font-size:16px;padding:16px;border-radius:15px;margin-top:8px}.share:hover{background:var(--teja2)}
 .again{width:100%;background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600;font-size:14px;padding:13px;border-radius:14px;margin-top:11px}
-.disc-o{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
+.disc-o{text-align:center;color:var(--muted);font-size:13px;margin-top:20px;line-height:1.6}
 .fade{opacity:0;transform:translateY(14px);animation:rise .5s forwards}@keyframes rise{to{opacity:1;transform:none}}
 .pinp{animation:ping 1.6s ease-out infinite}@keyframes ping{0%{r:4;opacity:1}100%{r:16px;opacity:0}}
 .hidden{display:none!important}
@@ -6791,10 +6799,10 @@ a{color:var(--teal);text-decoration:none}
 .curmsg{color:var(--paper);font-size:14px;margin-top:9px}
 .lugarchip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin:0 0 16px;font-size:13px;color:var(--muted);min-height:22px}
 .lugarchip b{color:var(--paper)}
-.lc-fix{background:transparent;border:1px solid var(--line);color:var(--teja2);font-size:12px;padding:5px 11px;border-radius:999px;cursor:pointer;font-family:inherit}
+.lc-fix{background:transparent;border:1px solid var(--line);color:var(--teja2);font-size:12.5px;padding:5px 11px;border-radius:999px;cursor:pointer;font-family:inherit}
 .lc-fix:hover{border-color:var(--teja)}
 .lc-form{width:100%;display:flex;gap:8px;align-items:flex-end}
-.lc-form label{flex:1;font-size:12px;color:var(--muted);text-align:left}
+.lc-form label{flex:1;font-size:12.5px;color:var(--muted);text-align:left}
 .lc-form input{width:100%;margin-top:5px;background:#2c2216;border:1.5px solid #5f5138;border-radius:10px;color:var(--paper);font-size:15px;padding:10px 12px;font-family:inherit}
 .lc-form input:focus{outline:2px solid var(--teja);outline-offset:1px}
 .lc-ok{background:var(--teja);color:#160f08;border:0;border-radius:10px;font-weight:700;font-size:14px;padding:11px 15px;cursor:pointer;font-family:inherit;white-space:nowrap}
@@ -6906,6 +6914,10 @@ __FOOTER__
 </div>
 <div class="reward" id="reward"><div class="rwrap" id="rbody"></div></div>
 <div class="morehint hidden" id="morehint">↓ sigue, hay más</div>
+<div class="fabs" id="fabs">
+  <button class="fab fab-pri" onclick="irAVotar()">🌙 Contar mi noche</button>
+  <button class="fab" onclick="irACurioso()">🔎 Otro pueblo</button>
+</div>
 
 <script>
 var SEED=__SEED__;
@@ -7152,10 +7164,17 @@ var NPASOS=Q.length+1;   /* las preguntas + el paso opcional de la pulsera */
 var WEAR={h:"",s:""};
 var MUN={id:"",n:""};    /* población detectada automáticamente (GeoNames+INE) */
 var PROP="";             /* corrección que teclea quien vota, si no acertamos */
+var ANCLA=null;          /* punto al que se ancla la noche: el pueblo corregido manda sobre el GPS */
+var OBSCONF=false;       /* ya ha confirmado que durmió donde decimos */
+var OBSQ=false;          /* la noche se guarda apartada, hasta que otras de allí la respalden */
+var OBSINT=0;            /* veces que hemos preguntado por el sitio (no insistimos más de dos) */
+var TRASCORREGIR=null;   /* qué hacer al terminar de corregir el pueblo */
 function startFlow(){
  if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
  if(!MY){askLoc(function(ok){if(ok)startFlow();else document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Necesitamos tu ubicación para situar tu noche. Actívala y vuelve a tocar.</span>';});return;}
- cur=0;ans=[null,null,null,null,null,null];WEAR={h:"",s:""};PROP="";flow.classList.add("on");renderStep();
+ cur=0;ans=[null,null,null,null,null,null];WEAR={h:"",s:""};PROP="";
+ OBSCONF=false;OBSQ=false;OBSINT=0;TRASCORREGIR=null;
+ flow.classList.add("on");renderStep();
 }
 function closeFlow(){flow.classList.remove("on");}
 function back(){if(cur>0){cur--;renderStep();}else closeFlow();}
@@ -7180,11 +7199,54 @@ function abreCorrige(){
   +'<button type="button" class="lc-ok" onclick="guardaCorrige()">Guardar</button></div>';
  var i=document.getElementById("lugarprop");if(i)i.focus();
 }
+/* Corregir el pueblo no es dejar una nota: RE-ANCLA la noche. Si lo que se
+   teclea está entre las 7.157 poblaciones, la noche pasa a guardarse allí y su
+   referencia climática pasa a ser la estación de AEMET más cercana a ESE
+   pueblo, con su valor esperado. Quien durmió en Rascafría y vota de paso por
+   Valencia cuenta una noche de Rascafría, medida contra Rascafría. Si el
+   nombre no está en la lista no podemos anclar nada: se anota tal cual para
+   revisarlo a mano, como antes. */
+function buscaLugar(L,txt){
+ if(!L||!txt)return null;
+ var q=na_(txt),ex=null,pre=null;
+ for(var i=0;i<L.length;i++){
+  var n=na_(L[i][1]);
+  if(n===q)return L[i];
+  if(!pre&&n.indexOf(q)===0)pre=L[i];
+ }
+ return ex||pre;
+}
 function guardaCorrige(){
  var i=document.getElementById("lugarprop");
- PROP=i?i.value.trim().slice(0,60):"";
- var el=document.getElementById("lugarchip");
- if(el)el.innerHTML='<span class="lc-txt">✅ Gracias'+(PROP?': anotamos <b>'+PROP+'</b> y lo revisamos':"")+'. Tu noche cuenta igual.</span>';
+ var txt=i?i.value.trim().slice(0,60):"";
+ if(!txt){rematarCorrige("",false);return;}
+ cargaLugares(function(L){
+  var p=buscaLugar(L,txt);
+  if(p){
+   MUN={id:p[0],n:p[1]};PROP="";
+   ANCLA={la:p[2],lo:p[3]};
+   MY=nearest(p[2],p[3]);
+   var loc=document.getElementById("loc");
+   if(loc)loc.innerHTML='📍 Tu noche es de <b>'+MUN.n+'</b> <span style="opacity:.7">· referencia AEMET: '+MY.n+'</span>';
+   rematarCorrige('<span class="lc-txt">✅ Tu noche se guarda en <b>'+MUN.n+'</b> <span style="opacity:.7">· referencia AEMET: '+MY.n+'</span></span>',true);
+  }else{
+   PROP=txt;
+   rematarCorrige('<span class="lc-txt">✅ Gracias: anotamos <b>'+PROP+'</b> y lo revisamos. Tu noche cuenta igual.</span>',false);
+  }
+ });
+}
+/* Cierra la corrección. Si veníamos de la comprobación de coherencia, seguimos
+   con el envío; y si no hemos sabido anclar el pueblo, la noche no puede contar
+   como una noche normal del sitio que dice el GPS: se guarda apartada. */
+function rematarCorrige(html,anclado){
+ var seguir=TRASCORREGIR;TRASCORREGIR=null;
+ if(!seguir){
+  var el=document.getElementById("lugarchip");
+  if(el&&html)el.innerHTML=html;
+  return;
+ }
+ if(!anclado){OBSCONF=true;OBSQ=true;}
+ seguir();
 }
 function renderStep(){
  document.getElementById("barfill").style.width=(cur/NPASOS*100)+"%";
@@ -7251,23 +7313,71 @@ function deudaCard(deuda,descanso,w){
  }
  return h+'</div>';
 }
+/* COHERENCIA — el caso de quien durmió en la sierra y vota a mediodía desde la
+   ciudad: el móvil dice Valencia y la noche fue de Rascafría. NO se rechaza el
+   voto: se pregunta por el SITIO. Un voto que se aparta de lo esperado suele
+   ser justo el dato que buscamos —el microclima de tu calle— y tirarlo
+   convertiría el observatorio en un espejo de AEMET. Por eso el umbral solo
+   caza lo imposible: un microclima real se mueve 2-4 grados de mínima; de la
+   sierra a la costa hay ocho o diez. Se fija en grados y se traduce al índice
+   con la misma constante del baseline (0,52 puntos por grado). */
+var OBS_GRADOS=6,OBS_UMBRAL=OBS_GRADOS*0.52;
+function incoherente(descanso,zona){return Math.abs(descanso-zona.d)>=OBS_UMBRAL;}
+function pideCoherencia(descanso,zona){
+ var lugar=MUN.n||zona.n;
+ var b=document.getElementById("stepbody");if(!b)return;
+ var sn=document.getElementById("stepn");if(sn)sn.textContent="✓";
+ b.innerHTML='<div class="q">Antes de guardar, una comprobación</div>'
+  +'<p class="wsub2">En <b>'+lugar+'</b> lo normal son <b>'+zona.d.toFixed(1).replace(".",",")+'/10</b> según diez veranos de AEMET'
+  +(MUN.n&&MUN.n!==zona.n?' (estación de '+zona.n+')':'')
+  +', y nos has contado una noche de <b>'+descanso.toFixed(1).replace(".",",")+'/10</b>. '
+  +(descanso>zona.d?'Puede ser: hay sitios que se portan mucho mejor que su estación, y encontrarlos es justo lo que buscamos.'
+                  :'Puede ser: hay sitios que se portan mucho peor que su estación, y encontrarlos es justo lo que buscamos.')
+  +' Pero si has dormido en otro pueblo y estás votando de paso por aquí, la noche se guardaría en el sitio equivocado.</p>'
+  +'<div class="opts"><button class="opt" onclick="confirmaLugar()"><span class="em">🛏️</span><span>Sí, he dormido en '+lugar+'</span></button>'
+  +'<button class="opt" onclick="corrigeDesdeCoherencia()"><span class="em">📍</span><span>No, he dormido en otro pueblo</span></button></div>';
+}
+/* Si confirma, la noche se guarda igual, pero apartada: no entra en el
+   certificado ni en el ranking hasta que otras noches de ese pueblo la
+   respalden. Si de verdad hay un refugio ahí, aparecerá al repetirse. */
+function confirmaLugar(){OBSCONF=true;OBSQ=true;finish();}
+function corrigeDesdeCoherencia(){
+ var b=document.getElementById("stepbody");if(!b)return;
+ TRASCORREGIR=function(){finish();};
+ b.innerHTML='<div class="q">¿En qué pueblo has dormido?</div>'
+  +'<p class="wsub2">La noche se guardará allí, con la estación de AEMET y el valor esperado de ese pueblo.</p>'
+  +'<div class="lc-form"><label><input id="lugarprop" type="text" maxlength="60" placeholder="Escribe el nombre" value=""></label>'
+  +'<button type="button" class="lc-ok" onclick="guardaCorrige()">Guardar</button></div>';
+ var i=document.getElementById("lugarprop");if(i)i.focus();
+}
 function finish(){
- flow.classList.remove("on");
  var dormir=ans[0].val,confort=ans[1].val,despertar=ans[3].val,perm=ans[4].val;
  var descanso=((dormir-1)/4*10*0.6+(despertar-1)/4*10*0.4);
- var zona=MY||nearSeed(MYLL)||SEED[0];
+ var zona=MY||nearSeed(ANCLA||MYLL)||SEED[0];
+ /* La comprobación va aquí: con la zona ya re-anclada al pueblo corregido, no
+    antes. Se pregunta como mucho dos veces; a la tercera se guarda apartada. */
+ if(!OBSCONF&&incoherente(descanso,zona)){
+  if(OBSINT<2){OBSINT++;pideCoherencia(descanso,zona);return;}
+  OBSQ=true;
+ }
+ flow.classList.remove("on");
  /* El nombre que se enseña es el del pueblo elegido (Dénia); la referencia
     climática sigue siendo la estación de AEMET (Pego), y se dice cuál es. */
  var nombreLugar=MUN.n||zona.n;
  window._obsShare={idx:descanso.toFixed(1),zona:nombreLugar};
- var ref=MYLL||zona;
+ var ref=ANCLA||MYLL||zona;
  /* Envío de la noche al buzón (si está desplegado). El resultado se enseña
     igual: nunca se bloquea la recompensa por un fallo de red. */
  var deuda=ans[5]?ans[5].val:"";
  if(URL_OBS&&zona.id){
   var pay={z:zona.id,d:dormir,c:confort,r:ans[2]?ans[2].val:"",w:despertar,k:perm,
            sd:deuda,wh:WEAR.h,ws:WEAR.s,m:MUN.id,mn:MUN.n,mp:PROP,u:obsUid(),v:1};
+  /* g = dónde estaba el móvil al votar; mc = la noche va anclada a un pueblo
+     corregido a mano (g y la zona pueden estar lejísimos, y es correcto);
+     q = guardar apartada hasta que otras noches de ese pueblo la respalden. */
   if(MYLL)pay.g=MYLL.la.toFixed(2)+","+MYLL.lo.toFixed(2);
+  if(ANCLA)pay.mc=1;
+  if(OBSQ)pay.q=1;
   /* El resultado del guardado SIEMPRE se dice. Antes se tragaba los errores en
      silencio y la pantalla daba las gracias aunque la noche se hubiera perdido. */
   var diEstado=function(txt,ok){
@@ -7278,7 +7388,9 @@ function finish(){
    fetch(URL_OBS,{method:"POST",body:JSON.stringify(pay)}).then(function(x){return x.json();})
     .then(function(d){
       if(d&&d.ok){window._obsGuardado=true;
-       diEstado("✅ Guardado. Tu noche en <b>"+nombreLugar+"</b> ya cuenta en el estudio.",true);
+       diEstado(OBSQ
+        ? "✅ Guardada tu noche en <b>"+nombreLugar+"</b>. Como se aparta mucho de lo normal allí, queda aparte del cálculo hasta que otras noches de "+nombreLugar+" la respalden."
+        : "✅ Guardado. Tu noche en <b>"+nombreLugar+"</b> ya cuenta en el estudio.",true);
        fetch(URL_OBS+"?global=1").then(function(x){return x.json();}).then(addZonasVotadas).catch(function(){});
       }
       else if(d&&d.error==="ritmo")
@@ -7313,7 +7425,7 @@ function finish(){
    '<p style="text-align:center;color:var(--muted);font-size:13.5px;margin-top:14px">'+(Math.abs(descanso-zona.d)<1.5?"Tu noche encaja con lo que AEMET esperaba aquí.":descanso>zona.d?"Has dormido mejor de lo que el clima suele dar aquí.":"Has dormido peor de lo que el clima suele dar aquí.")+'</p></div>'+
   '<div class="contrast fade" style="animation-delay:.6s"><div class="pre">Mientras tú dormías…</div><div class="km">A solo '+contra._km+' km</div><div class="txt">en <b>'+contra.n+'</b> se descansa a <b>'+contra.d.toFixed(1)+'</b>.</div>'+
    '<div class="vs"><div class="c"><div class="n" style="color:'+colorFor(zona.d)+'">'+zona.d.toFixed(1)+'</div><small>'+zona.n+'</small></div><div class="c" style="align-self:center;color:var(--muted)">vs</div><div class="c"><div class="n" style="color:'+colorFor(contra.d)+'">'+contra.d.toFixed(1)+'</div><small>'+contra.n+'</small></div></div>'+
-   '<p style="color:var(--muted);font-size:12px;margin-top:12px">Según 10 veranos de AEMET. En cuanto haya votos, verás lo que dice la gente.</p></div>'+
+   '<p style="color:var(--muted);font-size:12.5px;margin-top:12px">Según 10 veranos de AEMET. En cuanto haya votos, verás lo que dice la gente.</p></div>'+
   '<div class="card fade" style="animation-delay:.7s"><h3>Cerca de ti, esta madrugada</h3><div class="nearby">'+
    near.map(function(o){return '<div class="row"><span class="idx" style="color:'+colorFor(o.z.d)+';background:'+bgFor(o.z.d)+'">'+o.z.d.toFixed(1)+'</span><div class="info"><div class="n">'+o.z.n+' · '+o.k+' km</div><div class="p">"'+o.z.f+'"</div></div></div>';}).join("")+'</div></div>'+
   deudaCard(deuda,descanso,WEAR)+
@@ -7329,6 +7441,53 @@ function finish(){
  setTimeout(function(){smoothScroll(reward,Math.round(window.innerHeight*0.52),1100);},1300);
  reward.addEventListener("scroll",function(){if(reward.scrollTop>window.innerHeight*0.45)mh.classList.add("hidden");},{passive:true});
 }
+
+/* BOTONES FLOTANTES — desplazamiento con la misma curva suave que usa la
+   portada (el scroll nativo va a tirones en iOS). Si el sistema pide reducir
+   movimiento, el salto es directo. Ninguna sección cambia de sitio: los
+   botones solo llevan hasta ellas. */
+function scrollSuaveA(destinoY,dur){
+ var quieto=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ if(quieto||!dur){window.scrollTo(0,destinoY);return;}
+ var ini=window.scrollY,dist=destinoY-ini,t0=null,parar=false;
+ var evs=["wheel","touchstart","keydown","pointerdown"];
+ function stop(){parar=true;}
+ function limpia(){evs.forEach(function(ev){window.removeEventListener(ev,stop);});}
+ evs.forEach(function(ev){window.addEventListener(ev,stop,{passive:true});});
+ function paso(t){
+  if(parar){limpia();return;}
+  if(!t0)t0=t;
+  var p=Math.min((t-t0)/dur,1);
+  window.scrollTo(0,ini+dist*(0.5*(1-Math.cos(Math.PI*p))));   /* easeInOutSine */
+  if(p<1)requestAnimationFrame(paso);else limpia();
+ }
+ requestAnimationFrame(paso);
+}
+function aSeccion(sel,dur){
+ var el=document.querySelector(sel);if(!el)return null;
+ scrollSuaveA(Math.max(0,el.getBoundingClientRect().top+window.scrollY-46),dur||900);
+ return el;
+}
+function irAVotar(){aSeccion(".votabox",900);}
+function irACurioso(){
+ aSeccion("#curioso",900);
+ setTimeout(function(){var i=document.getElementById("curbusca");if(i)i.focus();},950);
+}
+(function(){
+ var fabs=document.getElementById("fabs");if(!fabs)return;
+ function pinta(){
+  var tapado=flow.classList.contains("on")||reward.classList.contains("on");
+  fabs.classList.toggle("on",window.scrollY>window.innerHeight*0.55&&!tapado);
+ }
+ window.addEventListener("scroll",pinta,{passive:true});
+ window.addEventListener("resize",pinta,{passive:true});
+ if(window.MutationObserver){
+  var mo=new MutationObserver(pinta);
+  mo.observe(flow,{attributes:true,attributeFilter:["class"]});
+  mo.observe(reward,{attributes:true,attributeFilter:["class"]});
+ }
+ pinta();
+})();
 </script>
 </body></html>
 """

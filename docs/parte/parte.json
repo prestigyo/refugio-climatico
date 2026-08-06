@@ -1,7 +1,7 @@
 {
  "fecha": "2026-08-06",
  "total": 852,
- "tropicales": 388,
+ "tropicales": 387,
  "ecuatoriales": 60,
  "peor": {
   "id": "C917E",
@@ -29,6 +29,12 @@
    "prov": "Las Palmas"
   },
   {
+   "id": "C117Z",
+   "nombre": "Tijarafe-Mirador Time",
+   "min": 28.2,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
    "min": 27.9,
@@ -39,12 +45,6 @@
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
    "min": 27.8,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C117Z",
-   "nombre": "Tijarafe-Mirador Time",
-   "min": 27.6,
-   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C625O",

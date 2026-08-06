@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-05",
- "total": 850,
- "tropicales": 335,
- "ecuatoriales": 65,
+ "fecha": "2026-08-06",
+ "total": 852,
+ "tropicales": 388,
+ "ecuatoriales": 60,
  "peor": {
-  "id": "C625O",
-  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-  "min": 31.8,
-  "prov": "Las Palmas"
+  "id": "C917E",
+  "nombre": "Dehesa-Refugio",
+  "min": 28.8,
+  "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
   "id": "2766E",
   "nombre": "El Puente (Casa Forestal)",
-  "min": 8.1,
+  "min": 8.8,
   "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 31.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 31.1,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
    "id": "C917E",
    "nombre": "Dehesa-Refugio",
-   "min": 29.9,
+   "min": 28.8,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C635B",
-   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 29.8,
+   "id": "C668V",
+   "nombre": "Agaete - Suerte Alta",
+   "min": 28.7,
    "prov": "Las Palmas"
   },
   {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 29.6,
+   "min": 27.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+   "min": 27.8,
    "prov": "Las Palmas"
   },
   {
    "id": "C117Z",
    "nombre": "Tijarafe-Mirador Time",
-   "min": 29.2,
+   "min": 27.6,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 27.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 27.4,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "0429X",
+   "nombre": "Figueres Els Aspres",
+   "min": 27.1,
+   "prov": "Girona"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 29.1,
+   "min": 27.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "C668V",
-   "nombre": "Agaete - Suerte Alta",
-   "min": 29.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C628B",
-   "nombre": "San Nicolas T.-Tasarte/Coparlita",
-   "min": 29.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "6088X",
-   "nombre": "Torremolinos",
-   "min": 28.9,
-   "prov": "Málaga"
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 26.9,
+   "prov": "Murcia"
   }
  ],
  "top_fresco": [
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 8.1,
+   "min": 8.8,
    "prov": "Zamora"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 8.2,
-   "prov": "Ávila"
-  },
-  {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 9.1,
-   "prov": "Asturias"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 9.5,
-   "prov": "Segovia"
-  },
-  {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": 9.7,
-   "prov": "Zamora"
-  },
-  {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 9.7,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 10.0,
-   "prov": "Soria"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 10.0,
-   "prov": "Lleida"
-  },
-  {
-   "id": "1221D",
-   "nombre": "Pajares - Valgrande",
-   "min": 10.2,
-   "prov": "Asturias"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 9.0,
+   "prov": "León"
   },
   {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 10.2,
+   "min": 9.2,
    "prov": "Ourense"
+  },
+  {
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 9.2,
+   "prov": "Ourense"
+  },
+  {
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 9.3,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 9.8,
+   "prov": "Ávila"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 10.0,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 10.1,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "1221D",
+   "nombre": "Pajares - Valgrande",
+   "min": 10.1,
+   "prov": "Asturias"
+  },
+  {
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 10.1,
+   "prov": "Asturias"
   }
  ]
 }

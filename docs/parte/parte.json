@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-06",
- "total": 852,
- "tropicales": 387,
- "ecuatoriales": 60,
+ "fecha": "2026-08-07",
+ "total": 849,
+ "tropicales": 349,
+ "ecuatoriales": 38,
  "peor": {
-  "id": "C917E",
-  "nombre": "Dehesa-Refugio",
-  "min": 28.8,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "B569X",
+  "nombre": "Capdepera-Faro",
+  "min": 27.6,
+  "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 8.8,
-  "prov": "Zamora"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 8.9,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 27.6,
+   "prov": "Illes Balears"
+  },
+  {
    "id": "C917E",
    "nombre": "Dehesa-Refugio",
-   "min": 28.8,
+   "min": 27.5,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C668V",
-   "nombre": "Agaete - Suerte Alta",
-   "min": 28.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C117Z",
-   "nombre": "Tijarafe-Mirador Time",
-   "min": 28.2,
+   "id": "C916Q",
+   "nombre": "Pinar-Depósito",
+   "min": 27.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 27.9,
+   "min": 26.7,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "B051A",
+   "nombre": "Sóller",
+   "min": 26.6,
+   "prov": "Illes Balears"
   },
   {
    "id": "C635B",
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 27.8,
+   "min": 26.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 27.6,
-   "prov": "Las Palmas"
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 26.5,
+   "prov": "Almería"
   },
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 27.4,
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 26.5,
    "prov": "Illes Balears"
   },
   {
-   "id": "0429X",
-   "nombre": "Figueres Els Aspres",
-   "min": 27.1,
-   "prov": "Girona"
+   "id": "6325O",
+   "nombre": "Almería/Aeropuerto",
+   "min": 26.4,
+   "prov": "Almería"
   },
   {
-   "id": "C623I",
-   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 27.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "7012X",
-   "nombre": "Cartagena",
-   "min": 26.9,
-   "prov": "Murcia"
+   "id": "B398A",
+   "nombre": "Cabrera Parque Nacional de Cabrera",
+   "min": 26.3,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 8.8,
-   "prov": "Zamora"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 9.0,
-   "prov": "León"
-  },
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 9.2,
-   "prov": "Ourense"
-  },
-  {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 9.2,
-   "prov": "Ourense"
-  },
-  {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 9.3,
-   "prov": "Cantabria"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 9.8,
+   "min": 8.9,
    "prov": "Ávila"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 9.5,
+   "prov": "Zamora"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 10.0,
+   "min": 9.5,
    "prov": "Salamanca"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 9.6,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 9.9,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "9060X",
+   "nombre": "Lalastra",
+   "min": 10.2,
+   "prov": "Araba/Álava"
+  },
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 10.3,
+   "prov": "Ourense"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 10.3,
+   "prov": "Lleida"
   },
   {
    "id": "1167J",
    "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 10.1,
+   "min": 10.5,
    "prov": "Cantabria"
   },
   {
-   "id": "1221D",
-   "nombre": "Pajares - Valgrande",
-   "min": 10.1,
-   "prov": "Asturias"
-  },
-  {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 10.1,
-   "prov": "Asturias"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 10.7,
+   "prov": "León"
   }
  ]
 }

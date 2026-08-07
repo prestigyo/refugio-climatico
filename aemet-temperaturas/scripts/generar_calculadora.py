@@ -6605,8 +6605,23 @@ def _obs_frase(tmin: float) -> str:
 
 
 def publicar_lugares() -> int:
-    """Publica docs/datos/lugares.json — [[id, nombre, lat, lon], ...] — desde
-    datos/lugares.csv: 7.157 poblaciones españolas con coordenadas.
+    """Publica la lista de poblaciones — [[id, nombre, lat, lon, provincia], …] —
+    desde datos/lugares.csv, PARTIDA EN DOS ficheros:
+
+      · lugares.json — los 8.038 municipios y núcleos con nombre propio. 132 KB
+        comprimidos. Es lo que se baja siempre.
+      · aldeas.json  — las 12.785 aldeas y pedanías. 230 KB comprimidos. Solo se
+        baja si de verdad hace falta: cuando quien vota está lejos de todo
+        pueblo, o cuando busca algo que no aparece en la lista corta.
+
+    El motivo del corte: casi nadie duerme en una aldea, y quien lo hace es
+    justo el que más nos interesa. Cobrarle 362 KB a todo el mundo para servir a
+    unos pocos es al revés de como debe ser; así el caso normal baja un tercio y
+    el caso raro paga su parte cuando toca.
+
+    La provincia viaja porque sin ella el buscador es ambiguo: quien escribe
+    «Formentera» ve «Formentera de Segura» y «Sant Francesc de Formentera» sin
+    manera de saber cuál es la isla y cuál el pueblo de Alicante.
 
     Para qué: el Observatorio guarda la noche con el nombre del PUEBLO donde se
     ha dormido, no con el de la estación de AEMET más cercana. Quien vota en
@@ -6621,20 +6636,25 @@ def publicar_lugares() -> int:
     origen = AEMET_DIR / "datos" / "lugares.csv"
     if not origen.exists():
         return 0
-    filas = []
+    pueblos, aldeas = [], []
     with origen.open(encoding="utf-8", newline="") as fh:
         for f in csv.DictReader(fh):
             try:
-                filas.append([f["id"], f["nombre"],
-                              round(float(f["lat"]), 4), round(float(f["lon"]), 4)])
+                fila = [f["id"], f["nombre"],
+                        round(float(f["lat"]), 4), round(float(f["lon"]), 4),
+                        f.get("provincia", "")]
             except (KeyError, ValueError):
                 continue
+            (aldeas if f.get("tipo") == "aldea" else pueblos).append(fila)
     destino = DOCS_DIR / "datos"
     destino.mkdir(parents=True, exist_ok=True)
     (destino / "lugares.json").write_text(
-        json.dumps(filas, ensure_ascii=False, separators=(",", ":")),
+        json.dumps(pueblos, ensure_ascii=False, separators=(",", ":")),
         encoding="utf-8")
-    return len(filas)
+    (destino / "aldeas.json").write_text(
+        json.dumps(aldeas, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8")
+    return len(pueblos) + len(aldeas)
 
 
 def seed_observatorio(estaciones: list) -> list:
@@ -6859,7 +6879,8 @@ a{color:var(--teal);text-decoration:none}
 #curbusca{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--paper);font-size:15px;padding:12px 14px;font-family:inherit}
 #curbusca:focus{outline:2px solid var(--teja);outline-offset:1px}
 .cursug{list-style:none;margin:8px 0 0;padding:0;max-height:230px;overflow:auto}
-.cursug li{padding:11px 13px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;font-size:14.5px;background:var(--bg)}
+.cursug li{padding:11px 13px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;font-size:14.5px;background:var(--bg);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.cursug li small{color:var(--muted);font-size:12.5px;font-style:italic;white-space:nowrap}
 .cursug li:hover{border-color:var(--teja);color:var(--teja2)}
 .curfuente{font-size:13.5px;color:var(--muted);line-height:1.55;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line)}
 .curfuente b{color:var(--paper)}
@@ -7149,20 +7170,34 @@ function addZonasVotadas(d){
 /* Buscador sobre las 7.157 poblaciones: se puede consultar CUALQUIER pueblo,
    haya votos o no. Si no los hay se enseña la expectativa de AEMET de su
    estación más cercana, diciéndolo, y se ofrece pedir el voto a alguien de allí. */
-var LUG=null;
+var LUG=null,ALDEAS=null;   /* ALDEAS: null = sin pedir, true = ya están, false = no hubo */
 function na_(s){return s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();}
+/* La lista va en dos ficheros. El corto —municipios— se baja cuando se necesita
+   un nombre de pueblo. El de aldeas solo si el corto no da la respuesta: si
+   quien vota está lejos de cualquier pueblo, o si busca algo que no sale.
+   Así el que duerme en Dénia no paga los 230 KB de las aldeas de Sanabria. */
 function cargaLugares(cb){
  if(LUG){cb(LUG);return;}
  fetch("__SITE__/datos/lugares.json").then(function(x){return x.json();})
   .then(function(d){LUG=d;cb(d);}).catch(function(){cb(null);});
 }
+function cargaAldeas(cb){
+ if(ALDEAS===false){cb(LUG);return;}          /* ya lo intentamos y no había */
+ if(ALDEAS){cb(LUG);return;}
+ cargaLugares(function(L){
+  if(!L){cb(null);return;}
+  fetch("__SITE__/datos/aldeas.json").then(function(x){return x.json();})
+   .then(function(d){ALDEAS=true;LUG=L.concat(d);cb(LUG);})
+   .catch(function(){ALDEAS=false;cb(L);});
+ });
+}
 function zonaDeLugar(p){
- /* p = [id, nombre, lat, lon] -> tarjeta lista para showCurioso */
+ /* p = [id, nombre, lat, lon, provincia] -> tarjeta lista para showCurioso */
  var votada=CURZ.filter(function(z){return z.mun===p[0]||na_(z.n)===na_(p[1]);})[0];
  if(votada&&votada.votos)return votada;
  var est=null,bd=1e9;
  ALL.forEach(function(a){var d=km({la:p[2],lo:p[3]},a);if(d<bd){bd=d;est=a;}});
- return {n:p[1],p:(est?est.p:""),d:(est?est.d:5),est:(est?est.n:""),estkm:(est?Math.round(bd):null),
+ return {n:p[1],p:(p[4]||(est?est.p:"")),d:(est?est.d:5),est:(est?est.n:""),estkm:(est?Math.round(bd):null),
          f:"Lo que cabe esperar en esta zona según diez veranos de AEMET."};
 }
 function pintaSug(lista){
@@ -7170,7 +7205,10 @@ function pintaSug(lista){
  ul.innerHTML="";
  lista.forEach(function(p){
   var li=document.createElement("li");
+  /* Con la provincia al lado: sin ella, «Formentera de Segura» y «Sant Francesc
+     de Formentera» se parecen demasiado para saber cuál es la isla. */
   li.textContent=p[1];
+  if(p[4]){var s=document.createElement("small");s.textContent=p[4];li.appendChild(s);}
   li.onclick=function(){
    document.getElementById("curbusca").value=p[1];
    ul.innerHTML="";showCurioso(zonaDeLugar(p));
@@ -7183,12 +7221,29 @@ function pintaSug(lista){
  inp.addEventListener("input",function(){
   var q=na_(inp.value.trim());
   if(q.length<2){document.getElementById("cursug").innerHTML="";return;}
+  /* Tres cestas por orden de mérito: el que se llama EXACTAMENTE así, el que
+     empieza así y el que lo lleva dentro. Antes iban mezclados y quien escribía
+     «Formentera» veía primero Formentera de Segura, en Alicante. */
+  var busca=function(d){
+   var ex=[],pre=[],con=[];
+   for(var i=0;i<d.length;i++){var n=na_(d[i][1]);
+    if(n===q)ex.push(d[i]);
+    else if(n.indexOf(q)===0){if(pre.length<8)pre.push(d[i]);}
+    else if(n.indexOf(q)>=0&&con.length<8)con.push(d[i]);
+    if(ex.length+pre.length>=8&&con.length>=8)break;}
+   return {lista:ex.concat(pre,con).slice(0,8),bueno:ex.length+pre.length};
+  };
   cargaLugares(function(d){
    if(!d)return;
-   var pre=[],con=[];
-   for(var i=0;i<d.length&&pre.length<8;i++){var n=na_(d[i][1]);
-    if(n.indexOf(q)===0)pre.push(d[i]);else if(con.length<8&&n.indexOf(q)>=0)con.push(d[i]);}
-   pintaSug(pre.concat(con).slice(0,8));
+   if(na_(inp.value.trim())!==q)return;      /* ha seguido escribiendo */
+   var r=busca(d);
+   pintaSug(r.lista);
+   /* Solo se bajan las aldeas cuando NINGÚN municipio se llama así ni empieza
+      así. Quien escribe «Dénia» encuentra Dénia y no se entera de que existe
+      otro fichero; quien escribe «Bulnes» no encuentra nada, y entonces sí. */
+   if(!r.bueno)cargaAldeas(function(t){
+    if(t&&na_(inp.value.trim())===q)pintaSug(busca(t).lista);
+   });
   });
  });
  /* Al cargar: si el buzón está desplegado, traemos las zonas con noches
@@ -7222,19 +7277,33 @@ function setZone(z){MY=z;document.getElementById("loc").innerHTML='📍 Estás c
 function nearIn(arr,la,lo){var me={la:la,lo:lo},best=arr[0],bd=1e9;arr.forEach(function(z){var d=km(me,z);if(d<bd){bd=d;best=z;}});return best;}
 function nearest(la,lo){return nearIn(ALL,la,lo);}   /* estación exacta más cercana (848) */
 function nearSeed(p){return p?nearIn(SEED,p.la,p.lo):SEED[0];}  /* semilla reconocible para el mapa */
-/* POBLACIÓN donde se ha dormido: la más cercana de las 7.157 con coordenadas
-   (GeoNames + grafía del INE). Se detecta SOLA desde la ubicación: sin pasos ni
+/* POBLACIÓN donde se ha dormido: la más cercana de la lista de poblaciones
+   (GeoNames, municipios + aldeas). Se detecta SOLA desde la ubicación: sin pasos ni
    preguntas. Da nombre a la noche —Dénia es Dénia—, mientras que la referencia
    climática sigue siendo su estación de AEMET (Pego). Si el fichero no carga,
    simplemente se usa el nombre de la estación, como antes. */
 function resuelveLugar(la,lo){
- fetch("__SITE__/datos/lugares.json").then(function(x){return x.json();}).then(function(L){
-  var me={la:la,lo:lo},best=null,bd=1e9;
+ var me={la:la,lo:lo};
+ function elMasCerca(L){
+  var best=null,bd=1e9;
   L.forEach(function(p){var d=km(me,{la:p[2],lo:p[3]});if(d<bd){bd=d;best=p;}});
-  if(best&&bd<=25){MUN={id:best[0],n:best[1]};
-   var el=document.getElementById("loc");
-   if(el&&MY)el.innerHTML='📍 Estás en <b>'+best[1]+'</b> <span style="opacity:.7">· referencia AEMET: '+MY.n+'</span>';}
- }).catch(function(){});
+  return {p:best,d:bd};
+ }
+ function pinta(r){
+  if(!r.p||r.d>25)return;
+  MUN={id:r.p[0],n:r.p[1]};
+  var el=document.getElementById("loc");
+  if(el&&MY)el.innerHTML='📍 Estás en <b>'+r.p[1]+'</b> <span style="opacity:.7">· referencia AEMET: '+MY.n+'</span>';
+ }
+ cargaLugares(function(L){
+  if(!L)return;
+  var r=elMasCerca(L);
+  pinta(r);
+  /* A más de 4 km del pueblo más cercano no estás EN ese pueblo: estarás en una
+     aldea, un valle o un puerto de montaña. Solo entonces vale la pena bajarse
+     el resto, y se vuelve a mirar con la lista completa. */
+  if(r.d>4)cargaAldeas(function(T){if(T)pinta(elMasCerca(T));});
+ });
 }
 function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};setZone(nearest(MYLL.la,MYLL.lo));resuelveLugar(MYLL.la,MYLL.lo);cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
 function initHero(){
@@ -7334,7 +7403,7 @@ function abreCorrige(){
  var i=document.getElementById("lugarprop");if(i)i.focus();
 }
 /* Corregir el pueblo no es dejar una nota: RE-ANCLA la noche. Si lo que se
-   teclea está entre las 7.157 poblaciones, la noche pasa a guardarse allí y su
+   teclea está entre las 20.824 poblaciones, la noche pasa a guardarse allí y su
    referencia climática pasa a ser la estación de AEMET más cercana a ESE
    pueblo, con su valor esperado. Quien durmió en Rascafría y vota de paso por
    Valencia cuenta una noche de Rascafría, medida contra Rascafría. Si el
@@ -7354,8 +7423,11 @@ function guardaCorrige(){
  var i=document.getElementById("lugarprop");
  var txt=i?i.value.trim().slice(0,60):"";
  if(!txt){rematarCorrige("",false);return;}
- cargaLugares(function(L){
+ /* Aquí sí se buscan las aldeas si el nombre no sale entre los municipios:
+    quien se molesta en corregir a mano su pueblo merece que lo encontremos. */
+ var conLista=function(L){
   var p=buscaLugar(L,txt);
+  if(!p&&!ALDEAS){cargaAldeas(function(T){conLista(T||L);});return;}
   if(p){
    MUN={id:p[0],n:p[1]};PROP="";
    ANCLA={la:p[2],lo:p[3]};
@@ -7367,7 +7439,8 @@ function guardaCorrige(){
    PROP=txt;
    rematarCorrige('<span class="lc-txt">✅ Gracias: anotamos <b>'+PROP+'</b> y lo revisamos. Tu noche cuenta igual.</span>',false);
   }
- });
+ };
+ cargaLugares(function(L){conLista(L||[]);});
 }
 /* Cierra la corrección. Si veníamos de la comprobación de coherencia, seguimos
    con el envío; y si no hemos sabido anclar el pueblo, la noche no puede contar

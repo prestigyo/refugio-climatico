@@ -6662,6 +6662,79 @@ def seed_observatorio(estaciones: list) -> list:
     return out
 
 
+# Silueta de España para el mapa del Observatorio: SOLO el contorno —costa y
+# frontera—, sin las rayas de las provincias, y ya proyectada al lienzo de
+# 300x190 con la misma fórmula con la que proj() coloca los puntos. Se calculó
+# una vez desde datos/spain-provinces.geojson (pintando el país en una rejilla
+# fina y trazando su contorno: el geojson no es topológicamente limpio y unir
+# los polígonos por sus tramos devolvía las 52 provincias) y se escribe aquí
+# hecha, para no arrastrar 1,4 MB de geojson hasta el navegador. Si algún día
+# cambia la proyección del mapa, hay que volver a generarla.
+SILUETA_ES = (
+    "M102.0 189.9L105.0 188.3L105.1 186.2L105.9 185.7L107.0 186.0L109.1 181.0L110.0 180.0L1"
+    "14.5 178.0L115.7 177.8L118.0 178.4L119.5 177.9L120.5 176.5L122.1 175.7L124.5 172.6L128"
+    ".5 172.8L130.4 172.0L132.5 172.5L134.4 171.9L136.7 172.6L138.5 172.0L141.9 173.4L143.8"
+    " 172.3L146.5 171.8L151.3 172.0L152.8 173.2L155.3 173.5L157.0 172.5L158.3 170.3L159.4 1"
+    "69.9L160.6 170.4L161.8 169.8L163.1 170.4L164.9 172.6L165.8 172.5L168.4 169.8L168.6 168"
+    ".7L169.5 167.6L170.2 167.2L172.1 160.7L174.5 157.4L177.9 155.6L178.6 154.2L181.0 152.4"
+    "L183.2 152.2L184.3 153.0L185.4 152.0L187.1 151.8L188.2 152.6L191.9 151.4L192.2 150.6L1"
+    "90.4 150.0L189.6 148.2L190.7 146.5L191.4 146.6L191.4 144.6L193.3 141.9L193.7 138.2L194"
+    ".4 137.5L195.7 137.0L196.0 134.0L197.7 133.2L198.5 131.2L202.2 129.2L203.5 129.2L205.0"
+    " 126.9L206.6 126.5L209.4 124.0L208.6 122.5L207.5 121.5L204.4 120.6L201.6 116.3L200.9 1"
+    "14.4L201.1 113.0L199.2 108.0L199.5 105.1L201.4 102.1L203.4 97.8L205.2 95.7L206.2 93.2L"
+    "207.9 91.8L208.8 89.8L212.7 85.3L215.6 79.7L216.8 78.8L219.0 78.6L221.2 77.1L221.3 76."
+    "3L219.4 75.0L218.7 75.1L218.4 74.4L222.2 69.9L224.3 68.4L225.9 68.0L226.8 68.3L227.7 6"
+    "7.2L229.3 66.6L230.9 66.6L233.1 65.5L243.9 62.9L247.0 58.8L256.3 54.2L257.2 53.3L258.9"
+    " 52.7L261.4 50.9L262.4 49.5L263.7 49.0L264.7 46.9L264.2 45.3L264.3 44.0L262.9 42.5L262"
+    ".8 40.6L263.5 39.5L264.4 39.9L265.3 39.7L266.0 37.8L263.8 37.3L263.5 35.3L262.0 35.3L2"
+    "61.0 34.3L257.7 34.7L256.9 35.5L254.6 35.9L254.2 37.4L252.9 37.1L251.7 37.7L249.9 36.2"
+    "L247.0 35.2L244.8 35.7L243.7 36.9L242.4 37.3L241.5 36.5L240.9 34.9L238.4 33.9L236.2 33"
+    ".7L233.7 35.2L232.4 35.2L231.7 34.2L232.2 33.4L231.7 32.6L231.8 31.1L230.0 28.5L226.8 "
+    "28.6L225.2 26.8L222.4 26.6L218.5 25.1L217.5 25.7L217.5 29.0L213.2 29.1L211.9 28.4L210."
+    "6 29.4L209.7 28.3L208.5 28.0L205.0 29.2L203.4 28.3L202.3 26.7L199.5 25.3L197.9 26.5L19"
+    "6.0 25.9L195.0 26.8L193.0 24.7L192.0 24.2L191.4 22.6L187.9 22.7L183.0 20.5L182.0 20.5L"
+    "181.4 20.1L181.4 18.9L180.8 19.2L180.2 20.9L178.7 20.5L178.3 19.5L179.8 17.0L179.5 15."
+    "3L177.0 14.6L175.8 15.6L175.1 14.3L173.5 14.3L172.1 12.3L169.9 13.6L166.1 14.7L164.4 1"
+    "4.2L162.1 14.4L160.0 13.6L158.8 12.5L155.3 11.7L154.4 10.8L153.4 11.3L151.2 11.2L149.5"
+    " 12.6L149.6 13.6L148.8 13.0L147.1 13.1L143.8 11.6L142.2 11.7L141.4 11.3L141.9 10.9L141"
+    ".8 10.5L139.2 9.3L135.7 10.8L135.3 11.7L135.0 11.0L135.8 10.3L135.4 9.9L129.8 11.2L128"
+    ".0 12.1L120.5 12.1L114.8 10.6L109.3 10.2L107.8 8.9L106.1 8.8L105.3 8.3L100.6 8.5L97.7 "
+    "6.0L95.6 7.6L94.3 7.6L92.7 8.3L90.5 7.4L87.8 8.5L86.2 8.1L84.4 8.5L83.1 7.9L80.0 8.3L7"
+    "7.5 7.9L75.7 8.4L71.6 8.2L69.7 5.5L66.4 4.0L65.3 5.3L64.5 3.8L63.8 3.6L63.8 2.9L61.0 4"
+    ".8L60.5 4.7L60.2 5.4L60.4 3.4L59.9 3.1L58.0 4.5L56.8 4.6L56.4 5.8L53.2 8.1L52.3 8.2L51"
+    ".8 10.5L53.0 11.5L54.3 11.6L53.8 13.3L52.1 12.0L51.6 12.2L51.2 13.4L50.7 12.6L49.8 12."
+    "6L48.2 14.0L46.7 13.9L44.9 14.6L43.4 14.4L42.4 13.6L40.9 14.7L39.8 14.9L40.3 16.1L39.2"
+    " 16.3L38.1 17.3L36.3 17.2L35.7 18.2L36.4 18.4L36.3 19.1L35.5 19.1L34.2 20.5L34.6 21.6L"
+    "34.2 23.6L36.2 23.1L36.9 24.0L36.8 24.9L37.4 25.9L36.9 26.6L37.7 27.8L38.7 26.6L39.5 2"
+    "6.9L41.0 26.6L39.0 28.8L38.1 31.8L39.2 33.1L41.2 30.4L42.0 30.9L42.4 29.5L43.1 30.3L43"
+    ".9 30.1L42.6 32.4L42.7 34.5L42.1 34.7L41.7 33.8L40.7 34.5L41.6 34.9L42.4 36.3L43.6 36."
+    "3L45.1 35.4L45.3 35.7L43.8 37.6L42.8 37.8L42.7 38.8L42.1 38.8L42.1 39.4L43.3 39.7L44.3"
+    " 38.9L45.4 39.0L42.9 41.3L42.6 42.7L41.4 43.0L41.8 48.7L43.7 47.5L46.2 44.7L48.3 43.9L"
+    "51.5 43.7L53.6 42.3L54.2 42.4L54.5 43.8L55.7 43.8L56.3 44.7L53.9 47.8L55.4 50.2L57.6 4"
+    "9.8L58.3 48.8L59.2 48.6L59.8 47.6L60.2 49.2L61.0 48.5L63.3 47.9L65.3 48.6L65.3 49.7L67"
+    ".6 48.9L68.6 50.1L69.5 49.3L70.6 49.4L72.6 48.6L73.4 46.0L74.4 46.2L75.3 46.9L76.7 46."
+    "4L77.8 47.1L79.0 47.1L80.1 46.0L81.8 47.3L84.0 46.6L84.5 47.0L84.4 48.4L85.1 49.0L84.3"
+    " 51.7L84.9 53.4L85.6 53.8L86.8 53.3L89.0 53.7L91.1 55.9L88.6 60.3L87.7 60.5L86.5 62.4L"
+    "84.4 63.8L82.6 64.0L80.7 66.5L80.7 67.4L79.9 68.8L77.8 69.2L79.9 73.0L79.5 75.7L80.0 7"
+    "7.8L79.3 79.9L80.0 81.3L79.1 83.2L80.2 85.3L78.6 87.3L77.3 87.6L75.9 88.8L76.2 90.7L77"
+    ".4 91.1L78.7 93.4L78.0 96.9L76.6 98.4L76.0 101.6L73.7 102.2L71.7 101.8L70.3 102.4L66.6"
+    " 102.1L67.2 103.7L70.7 106.9L70.4 109.0L71.9 110.9L72.0 112.8L73.7 113.7L74.1 115.4L76"
+    ".2 115.3L77.1 117.1L75.5 119.8L75.5 121.1L71.6 124.5L71.7 127.1L70.7 129.0L70.3 131.3L"
+    "71.3 132.0L74.7 137.7L77.2 136.8L77.4 137.1L76.2 141.3L74.4 140.9L73.8 141.8L71.7 142."
+    "3L71.0 145.2L68.5 148.1L66.8 153.1L67.9 155.0L68.4 160.0L68.9 161.6L75.3 160.9L78.4 16"
+    "2.1L84.9 166.3L86.5 168.2L87.4 170.4L88.1 170.8L86.7 172.3L87.5 174.6L90.3 176.1L90.4 "
+    "177.7L91.3 177.5L90.1 179.2L94.0 185.4L96.2 185.6L98.1 187.7L100.9 188.6ZM261.4 111.3L"
+    "264.7 109.2L266.0 105.9L268.7 102.1L269.0 100.7L268.9 100.0L267.2 99.1L265.1 100.2L263"
+    ".1 99.0L262.9 97.9L263.9 97.5L264.1 96.7L262.6 97.1L262.1 96.5L263.8 95.3L263.8 94.9L2"
+    "62.2 95.6L259.5 95.8L257.7 97.1L256.6 97.3L248.6 103.8L249.3 105.1L250.7 105.1L251.4 1"
+    "06.8L252.3 105.1L254.5 104.4L255.7 105.5L255.8 108.0L256.4 108.9L259.8 109.2ZM283.7 98"
+    ".3L284.4 97.6L284.3 95.9L283.7 94.2L282.2 93.1L281.9 92.3L276.8 92.4L275.3 93.1L275.3 "
+    "93.8L275.9 94.0L275.9 95.6L278.4 95.4ZM230.6 121.7L231.8 120.0L232.6 119.8L234.9 117.3"
+    "L234.6 115.7L233.4 115.1L230.0 116.3L229.2 117.1L229.0 118.4L227.8 118.6L228.0 121.1L2"
+    "29.0 120.8ZM230.9 126.1L231.9 125.5L233.4 126.2L234.3 125.7L233.0 125.4L231.7 123.8L23"
+    "0.8 124.6Z"
+)
+
 PAGINA_OBSERVATORIO = r"""<!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -6706,14 +6779,20 @@ a{color:var(--teal);text-decoration:none}
 .public .when{text-align:center;color:var(--muted);font-size:12.5px;margin-bottom:20px}
 .mapbox{background:#0c0805;border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:22px}
 .mapbox svg{width:100%;height:auto;display:block}
+/* Silueta del país: solo insinuada. Tiene que leerse como el papel sobre el que
+   se posan los puntos, nunca competir con ellos. */
+.silueta{fill:none;stroke:#6b5b45;stroke-width:.7;stroke-linejoin:round;stroke-linecap:round;opacity:.5}
 .dot{cursor:pointer}
+.dot:hover,.dot:focus{stroke:#f3ece0;stroke-width:1.3;outline:none}
+/* En el mapa del resultado los puntos son decorado: ni cursor ni clic. */
+#rmap .dot{cursor:default;pointer-events:none}
 .rankcols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .rankcol h3{font:600 11px/1 var(--fb);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
 .rankcol.best h3{color:var(--verde)}.rankcol.worst h3{color:var(--rojo)}
 .rk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
 .rk .idx{font-family:var(--fd);font-weight:900;font-size:18px;width:42px;text-align:center;border-radius:9px;padding:4px 0}
-.rk .nm{font-size:13.5px;flex:1}.rk .nm small{display:block;color:var(--muted);font-size:11px}
-.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:24px 0 0;font-size:12px;color:var(--muted)}
+.rk .nm{font-size:14px;flex:1}.rk .nm small{display:block;color:var(--muted);font-size:12.5px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:24px 0 0;font-size:13px;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .ldot{width:11px;height:11px;border-radius:50%;display:inline-block}
 .flow{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -6748,21 +6827,21 @@ a{color:var(--teal);text-decoration:none}
 .card{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:22px;margin:18px 0}
 .card h3{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:16px}
 .yourgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.mini{display:flex;align-items:center;gap:11px}.mini .em{font-size:24px}.mini .l{font-size:12px;color:var(--muted)}.mini .v{font-size:15px;font-weight:600}
+.mini{display:flex;align-items:center;gap:11px}.mini .em{font-size:24px}.mini .l{font-size:12.5px;color:var(--muted)}.mini .v{font-size:15px;font-weight:600}
 .tuidx{text-align:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
 .tuidx .n{font-family:var(--fd);font-weight:900;font-size:38px}
 .thesis{text-align:center}.thesis .row{display:flex;justify-content:center;gap:30px;margin-top:6px}
 .thesis .row .c .n{font-family:var(--fd);font-weight:900;font-size:32px}
-.thesis .row .c small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
+.thesis .row .c small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
 .contrast{background:radial-gradient(120% 100% at 50% 0,#2a1a10,var(--bg2));border:1px solid var(--teja);border-radius:20px;padding:26px 22px;margin:22px 0;text-align:center}
 .contrast .pre{color:var(--teja2);font-size:14px;letter-spacing:.04em}
 .contrast .km{font-family:var(--fd);font-weight:900;font-size:clamp(30px,8vw,42px);color:var(--paper);margin:8px 0;line-height:1.1}
 .contrast .txt{font-size:16px;color:var(--paper)}.contrast .txt b{color:var(--verde)}
 .contrast .vs{display:flex;justify-content:center;gap:26px;margin-top:18px}
-.contrast .vs .c .n{font-family:var(--fd);font-weight:900;font-size:26px}.contrast .vs .c small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.contrast .vs .c .n{font-family:var(--fd);font-weight:900;font-size:26px}.contrast .vs .c small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
 .nearby .row{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--line)}.nearby .row:last-child{border:0}
 .nearby .idx{font-family:var(--fd);font-weight:900;font-size:20px;width:46px;text-align:center;border-radius:9px;padding:4px 0}
-.nearby .info .n{font-weight:600;font-size:15px}.nearby .info .p{color:var(--muted);font-size:13px;font-style:italic}
+.nearby .info .n{font-weight:600;font-size:15px}.nearby .info .p{color:var(--muted);font-size:13.5px;font-style:italic}
 .share{width:100%;background:var(--teja);color:#160f08;font-weight:700;font-size:16px;padding:16px;border-radius:15px;margin-top:8px}.share:hover{background:var(--teja2)}
 .again{width:100%;background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:600;font-size:14px;padding:13px;border-radius:14px;margin-top:11px}
 .disc-o{text-align:center;color:var(--muted);font-size:13px;margin-top:20px;line-height:1.6}
@@ -6775,14 +6854,14 @@ a{color:var(--teal);text-decoration:none}
 .back:hover{color:var(--paper)}
 .curioso{margin:30px auto 0;max-width:520px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:20px 20px 22px}
 .curioso h3{font-family:var(--fd);font-weight:600;font-size:clamp(17px,3.4vw,21px);color:var(--paper);margin:0 0 6px}
-.cursub{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 14px}
+.cursub{color:var(--muted);font-size:14.5px;line-height:1.55;margin:0 0 14px}
 .cursub b{color:var(--paper)}
 #curbusca{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--paper);font-size:15px;padding:12px 14px;font-family:inherit}
 #curbusca:focus{outline:2px solid var(--teja);outline-offset:1px}
 .cursug{list-style:none;margin:8px 0 0;padding:0;max-height:230px;overflow:auto}
 .cursug li{padding:11px 13px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;font-size:14.5px;background:var(--bg)}
 .cursug li:hover{border-color:var(--teja);color:var(--teja2)}
-.curfuente{font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line)}
+.curfuente{font-size:13.5px;color:var(--muted);line-height:1.55;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line)}
 .curfuente b{color:var(--paper)}
 .curfuente.vot{color:#cfe0c2}
 .curped{width:100%;margin-top:11px;background:var(--teja);color:#160f08;border:0;border-radius:11px;font-weight:700;font-size:14px;padding:12px;cursor:pointer;font-family:inherit;line-height:1.35}
@@ -6790,12 +6869,12 @@ a{color:var(--teal);text-decoration:none}
 .curout{margin-top:14px}
 .curcard{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;text-align:center}
 .curz-n{font-family:var(--fd);font-weight:600;font-size:17px;color:var(--paper)}
-.curz-n small{color:var(--muted);font-weight:400;font-size:13px;font-style:italic;margin-left:5px}
+.curz-n small{color:var(--muted);font-weight:400;font-size:13.5px;font-style:italic;margin-left:5px}
 .curz-idx{font-family:var(--fd);font-weight:700;font-size:40px;line-height:1.1;margin:4px 0}
 .curz-idx span{font-size:16px;color:var(--muted)}
-.curz-f{color:var(--muted);font-size:13.5px;font-style:italic}
+.curz-f{color:var(--muted);font-size:14.5px;font-style:italic}
 .curcmp{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:14px;font-size:14px;color:var(--muted);flex-wrap:wrap}
-.curcmp .vs{font-size:12px}
+.curcmp .vs{font-size:12.5px}
 .curmsg{color:var(--paper);font-size:14px;margin-top:9px}
 .lugarchip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin:0 0 16px;font-size:13px;color:var(--muted);min-height:22px}
 .lugarchip b{color:var(--paper)}
@@ -6819,10 +6898,10 @@ a{color:var(--teal);text-decoration:none}
 .sleepdebt .dtxt{color:var(--muted);font-size:13.5px;line-height:1.6;margin:0}
 .sleepdebt .dtxt b{color:var(--paper)}
 .wcmp{margin-top:14px;border-top:1px dashed var(--line);padding-top:13px}
-.wtit{font-size:12px;color:var(--teja);letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px}
+.wtit{font-size:12.5px;color:var(--teja);letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px}
 .wcmp .wrow{display:flex;gap:10px;justify-content:space-around;text-align:center}
 .wcmp .wrow .n{font-family:var(--fd);font-weight:700;font-size:26px;color:var(--paper);line-height:1.1}
-.wcmp .wrow small{color:var(--muted);font-size:11.5px}
+.wcmp .wrow small{color:var(--muted);font-size:12.5px}
 .obsdemo{margin:14px auto 0;max-width:34ch;text-align:center;font-size:12.5px;color:var(--muted);background:var(--bg2);border:1px dashed var(--line);border-radius:12px;padding:11px 14px;line-height:1.55}
 .obsdemo b{color:var(--paper)}
 .obsestado{margin:14px auto 0;max-width:36ch;text-align:center;font-size:13px;border-radius:12px;padding:12px 15px;line-height:1.55}
@@ -6852,6 +6931,25 @@ a{color:var(--teal);text-decoration:none}
 .deuda-ed p b{color:var(--paper)}
 .deuda-ed a{color:var(--teja2)}
 .wear-note{background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--teja);border-radius:12px;padding:14px 16px;font-size:13.5px!important;line-height:1.65!important}
+.maphint{text-align:center;color:var(--muted);font-size:12.5px;margin:11px 0 0}
+/* ESCRITORIO. La página nació para el móvil y en horizontal se quedaba en una
+   columna estrecha con la pantalla vacía a los lados. A partir de 900px el
+   bloque público se ensancha y el mapa y los rankings se ponen en paralelo, que
+   es lo que pide una pantalla apaisada. El texto largo NO se ensancha: una
+   línea de mil píxeles no hay quien la lea. Por debajo de 900px no cambia nada:
+   el móvil sigue exactamente igual que hasta ahora. */
+@media(min-width:900px){
+ .public{padding:54px 0 30px}
+ .public .wrap{max-width:1060px}
+ .pubgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:36px;align-items:start}
+ .curioso{max-width:none;margin:26px 0 0}
+ .rk{padding:11px 0}
+ .legend{margin-top:18px}
+ .public .disc-o{max-width:68ch;margin-left:auto;margin-right:auto}
+ .hero .sub{max-width:36ch}
+ .votabox{padding:44px 0 50px}
+ .preg{margin-top:44px}
+}
  __NAVCSS__
  __FOOTERCSS__
 </style></head><body>
@@ -6864,24 +6962,34 @@ __NAV__
 <section class="public"><div class="wrap">
   <h2>El mapa del descanso, población por población</h2>
   <div class="when" id="when">Índice de descanso · <b>esperado según AEMET</b> · aún sin votos — sé el primero</div>
-  <div class="mapbox"><svg id="map" viewBox="0 0 300 190" aria-label="Mapa del descanso de España"></svg></div>
-  <div class="rankcols">
-    <div class="rankcol best"><h3>😴 Mejor descanso</h3><div id="best"></div></div>
-    <div class="rankcol worst"><h3>🥵 Peor descanso</h3><div id="worst"></div></div>
-  </div>
-  <div class="legend">
-    <span><i class="ldot" style="background:#8fb07a"></i>Excelente</span>
-    <span><i class="ldot" style="background:#b9c47a"></i>Bueno</span>
-    <span><i class="ldot" style="background:#e8b45c"></i>Regular</span>
-    <span><i class="ldot" style="background:#e0834f"></i>Malo</span>
-    <span><i class="ldot" style="background:#d9604a"></i>Muy malo</span>
-  </div>
-  <div class="curioso" id="curioso">
+  <!-- Dos bloques: el mapa con su leyenda, y al lado los rankings y el buscador.
+       En móvil van uno detrás de otro, tal cual; en pantalla ancha se ponen en
+       paralelo (ver .pubgrid), que es lo que pide una pantalla horizontal. -->
+  <div class="pubgrid">
+   <div class="pg-mapa">
+    <div class="mapbox"><svg id="map" viewBox="0 0 300 190" aria-label="Mapa del descanso de España"></svg></div>
+    <div class="legend">
+      <span><i class="ldot" style="background:#8fb07a"></i>Excelente</span>
+      <span><i class="ldot" style="background:#b9c47a"></i>Bueno</span>
+      <span><i class="ldot" style="background:#e8b45c"></i>Regular</span>
+      <span><i class="ldot" style="background:#e0834f"></i>Malo</span>
+      <span><i class="ldot" style="background:#d9604a"></i>Muy malo</span>
+    </div>
+    <p class="maphint">Toca cualquier punto del mapa para ver cómo se duerme allí.</p>
+   </div>
+   <div class="pg-lado">
+    <div class="rankcols">
+      <div class="rankcol best"><h3>😴 Mejor descanso</h3><div id="best"></div></div>
+      <div class="rankcol worst"><h3>🥵 Peor descanso</h3><div id="worst"></div></div>
+    </div>
+    <div class="curioso" id="curioso">
     <h3>¿Quieres saber cómo se duerme en otra población española?</h3>
     <p class="cursub">Busca cualquier pueblo o ciudad de España. Si allí ya se han contado noches, verás lo que dice la gente; si no, verás lo que <b>cabe esperar según AEMET</b> — y te lo decimos claramente.</p>
     <input id="curbusca" type="search" autocomplete="off" placeholder="Escribe tu pueblo… (Dénia, Cedrillas, Gijón…)" aria-label="Buscar una población">
     <ul class="cursug" id="cursug"></ul>
     <div class="curout" id="curout"></div>
+    </div>
+   </div>
   </div>
 
 
@@ -6909,7 +7017,7 @@ __PREGUNTAS__
 __FOOTER__
 
 <div class="flow" id="flow">
-  <div class="flowtop"><button class="back" id="backbtn" onclick="back()">‹ Atrás</button><div class="bar"><i id="barfill"></i></div><span id="stepn" style="font-size:12px;color:var(--muted);width:34px;text-align:right">1/5</span></div>
+  <div class="flowtop"><button class="back" id="backbtn" onclick="back()">‹ Atrás</button><div class="bar"><i id="barfill"></i></div><span id="stepn" style="font-size:12.5px;color:var(--muted);width:34px;text-align:right">1/5</span></div>
   <div class="step"><div class="lugarchip" id="lugarchip"></div><div id="stepbody"></div></div>
 </div>
 <div class="reward" id="reward"><div class="rwrap" id="rbody"></div></div>
@@ -6927,11 +7035,22 @@ function obsUid(){try{var u=localStorage.getItem("obs_uid");if(!u){u=Math.random
 function colorFor(d){return d>=8?"#8fb07a":d>=6?"#b9c47a":d>=4?"#e8b45c":d>=2.5?"#e0834f":"#d9604a";}
 function bgFor(d){return d>=8?"rgba(143,176,122,.18)":d>=6?"rgba(185,196,122,.18)":d>=4?"rgba(232,180,92,.18)":d>=2.5?"rgba(224,131,79,.18)":"rgba(217,96,74,.18)";}
 function km(a,b){var R=6371,dLa=(b.la-a.la)*Math.PI/180,dLo=(b.lo-a.lo)*Math.PI/180,la1=a.la*Math.PI/180,la2=b.la*Math.PI/180;var h=Math.sin(dLa/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLo/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(h)));}
-function proj(z){var x=(z.lo+9.4)/(3.4+9.4)*300,y=(43.9-z.la)/(43.9-36)*190;return[x,y];}
-/* mapa de puntos (la silueta la dibujan las propias estaciones) */
+/* Un grado de longitud es más corto que uno de latitud (a 40° de latitud, un
+   77% de largo). Sin corregirlo España salía ensanchada; mientras el mapa eran
+   solo puntos sueltos no se notaba, pero con la silueta dibujada detrás sí. Se
+   corrige y el dibujo se centra en el mismo lienzo de 300x190: los puntos se
+   desplazan un poco y el país queda con su forma. OJO: SILUETA_ES se generó con
+   esta misma fórmula — si se toca aquí, hay que volver a generarla. */
+var MAPK=Math.cos(40*Math.PI/180),MAPS=190/7.9,MAPDX=(300-12.8*MAPK*MAPS)/2;
+function proj(z){return[MAPDX+(z.lo+9.4)*MAPK*MAPS,(43.9-z.la)*MAPS];}
+/* El mapa: la silueta del país al fondo y encima un punto por zona. Cada punto
+   lleva a la ficha de su población — el cursor de mano ya prometía un clic, y
+   ahora existe. No se hacen tabulables los 40 puntos para no plantar 40 paradas
+   de teclado delante del resto: quien navegue así tiene el buscador, que lleva
+   exactamente a la misma ficha. */
 function renderMap(sel){
-  var svg=document.getElementById("map"),h="";
-  SEED.forEach(function(z,i){var p=proj(z);h+='<circle class="dot" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(4+z.d/3.2)+'" fill="'+colorFor(z.d)+'" fill-opacity=".9"><title>'+z.n+' · '+z.d+'/10</title></circle>';});
+  var svg=document.getElementById("map"),h='<path class="silueta" d="__SILUETA__"/>';
+  SEED.forEach(function(z,i){var p=proj(z);h+='<circle class="dot" role="button" onclick="verEnMapa('+i+')" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(4+z.d/3.2)+'" fill="'+colorFor(z.d)+'" fill-opacity=".9"><title>'+z.n+' · '+z.d+'/10 — toca para verlo</title></circle>';});
   if(sel){var p=proj(sel);h+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}
   svg.innerHTML=h;
 }
@@ -6943,6 +7062,21 @@ function renderRanks(){
   document.getElementById("worst").innerHTML=worst.map(row).join("");
 }
 renderMap();renderRanks();
+
+/* Tocar un punto del mapa = buscar esa población: escribe su nombre en el
+   buscador, abre su ficha y marca el punto. En escritorio la ficha ya está al
+   lado del mapa, así que solo se desplaza la página si se ha quedado fuera. */
+function verEnMapa(i){
+ var z=SEED[i];if(!z)return;
+ renderMap(z);
+ var inp=document.getElementById("curbusca");if(inp)inp.value=z.n;
+ var sug=document.getElementById("cursug");if(sug)sug.innerHTML="";
+ showCurioso(z);
+ var c=document.getElementById("curioso");if(!c)return;
+ var r=c.getBoundingClientRect();
+ if(r.top<0||r.bottom>window.innerHeight)
+  scrollSuaveA(Math.max(0,r.top+window.scrollY-46),700);
+}
 
 /* FICHA DEL CURIOSO: comparar cómo se está en otra zona (sin votar). Usa la
    semilla (índice esperado según AEMET); cuando haya backend, mostrará votos. */
@@ -7583,6 +7717,7 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
             .replace("__SCHEMA__", schema)
             .replace("__DESC__", desc)
             .replace("__SEED__", seed)
+            .replace("__SILUETA__", SILUETA_ES)
             .replace("__ALLZ__", allz)
             .replace("__PREGUNTAS__", bloque_preguntas_descanso(estaciones, site))
             .replace("__OBS_URL__", APPS_SCRIPT_OBS_URL)

@@ -1,8 +1,8 @@
 {
  "fecha": "2026-08-07",
- "total": 849,
- "tropicales": 349,
- "ecuatoriales": 38,
+ "total": 853,
+ "tropicales": 342,
+ "ecuatoriales": 37,
  "peor": {
   "id": "B569X",
   "nombre": "Capdepera-Faro",
@@ -26,12 +26,6 @@
    "id": "C917E",
    "nombre": "Dehesa-Refugio",
    "min": 27.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C916Q",
-   "nombre": "Pinar-Depósito",
-   "min": 27.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
@@ -69,6 +63,12 @@
    "nombre": "Almería/Aeropuerto",
    "min": 26.4,
    "prov": "Almería"
+  },
+  {
+   "id": "C916Q",
+   "nombre": "Pinar-Depósito",
+   "min": 26.4,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "B398A",
@@ -121,6 +121,12 @@
    "prov": "Ourense"
   },
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 10.3,
+   "prov": "Segovia"
+  },
+  {
    "id": "9677",
    "nombre": "Port Aine L?orri",
    "min": 10.3,
@@ -131,12 +137,6 @@
    "nombre": "Coriscao Parque Nacional Picos de Europa",
    "min": 10.5,
    "prov": "Cantabria"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 10.7,
-   "prov": "León"
   }
  ]
 }

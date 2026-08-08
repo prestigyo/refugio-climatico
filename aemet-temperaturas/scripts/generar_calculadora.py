@@ -371,7 +371,8 @@ TEMPLATE = r"""<!DOCTYPE html>
   .cue{display:inline-flex;align-items:center;gap:10px;width:fit-content;margin-top:40px;
     background:rgba(217,116,78,.14);border:1px solid var(--teja);color:var(--teja2);
     padding:13px 24px;border-radius:999px;font-size:14.5px;font-weight:600;letter-spacing:.02em;
-    text-decoration:none;cursor:pointer;transition:background .2s,color .2s}
+    text-decoration:none;cursor:pointer;transition:background .2s,color .2s;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
   .cue:hover{background:var(--teja);color:#1a1209}
   .cue .chev{display:inline-block;font-size:17px;animation:bounce 1.5s ease-in-out infinite}
   @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
@@ -6815,6 +6816,11 @@ PAGINA_OBSERVATORIO = r"""<!doctype html>
 body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 .wrap{max-width:560px;margin:0 auto;padding:0 22px}
 button{font-family:inherit;cursor:pointer;border:0}
+/* Nada de esto es texto para leer: son mandos. Si se pueden seleccionar, el
+   Chrome de Android abre su panel «Tocar para buscar» —una definición del
+   diccionario por la parte de abajo— y parece un error de la página. El texto
+   de los artículos sí se puede seguir seleccionando y copiando. */
+button,.fab,.morehint,.legend,#map,#rmap,.mn-idx,.rk .idx{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 a{color:var(--teal);text-decoration:none}
 .hero{min-height:calc(100svh - 54px);display:flex;flex-direction:column;justify-content:center;text-align:center;padding:36px 0;background:radial-gradient(130% 90% at 50% 0,#241a10,var(--bg) 65%)}
 .brandmini{font:600 12px/1 var(--fb);letter-spacing:.22em;text-transform:uppercase;color:var(--teja);margin-bottom:22px}
@@ -6916,6 +6922,9 @@ a{color:var(--teal);text-decoration:none}
 .mn-share{background:transparent;border:1px solid var(--line);color:var(--teja2);font-family:inherit;font-size:12.5px;padding:7px 12px;border-radius:999px;cursor:pointer;flex:none}
 .mn-share:hover{border-color:var(--teja)}
 .mn-pie{color:var(--muted);font-size:12.5px;line-height:1.55;margin:11px 0 0}
+/* Al llegar aquí desde el resultado, la tarjeta se enciende un momento para
+   que se vea que es aquí donde ha caído tu noche. */
+.misnoches.recien{border-color:var(--teja);box-shadow:0 0 0 3px rgba(224,131,79,.16)}
 .desktoponly{margin:8px auto 0;max-width:34ch;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);font-size:14.5px;line-height:1.55}
 .desktoponly b{color:var(--paper)}
 .back{background:transparent;color:var(--muted);font-size:15px;line-height:1;padding:6px 4px;white-space:nowrap}
@@ -7125,7 +7134,16 @@ function proj(z){return[MAPDX+(z.lo+9.4)*MAPK*MAPS,(43.9-z.la)*MAPS];}
    exactamente a la misma ficha. */
 function renderMap(sel){
   var svg=document.getElementById("map"),h='<path class="silueta" d="__SILUETA__"/>';
-  SEED.forEach(function(z,i){var p=proj(z);h+='<circle class="dot" role="button" onclick="verEnMapa('+i+')" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(4+z.d/3.2)+'" fill="'+colorFor(z.d)+'" fill-opacity=".9"><title>'+z.n+' · '+z.d+'/10 — toca para verlo</title></circle>';});
+  /* El <title> del SVG lo pinta el navegador como globo al pasar por encima.
+     En escritorio ayuda; en el móvil no hay «pasar por encima», así que salía
+     un globo suelto al tocar —abajo del mapa, sin decir de qué era— y encima
+     se quedaba ahí. En táctil no se pone: el propio toque ya abre la ficha, que
+     dice mucho más. El nombre accesible va en aria-label, que no pinta nada. */
+  var sinHover=window.matchMedia&&window.matchMedia("(hover:none)").matches;
+  SEED.forEach(function(z,i){var p=proj(z);
+   var et=z.n+' · '+z.d+'/10';
+   h+='<circle class="dot" role="button" aria-label="'+et+'" onclick="verEnMapa('+i+')" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(4+z.d/3.2)+'" fill="'+colorFor(z.d)+'" fill-opacity=".9">'
+    +(sinHover?'':'<title>'+et+' — pulsa para verlo</title>')+'</circle>';});
   if(sel){var p=proj(sel);h+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="none" stroke="#f3ece0" stroke-width="1.5"/><circle class="pinp" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" fill="#e0834f"/>';}
   svg.innerHTML=h;
 }
@@ -7312,6 +7330,24 @@ function pintaSug(lista){
   }).catch(function(){});
  }
 })();
+
+/* Al cerrar el resultado no se vuelve al principio de la página, que era como
+   no haber votado: se aterriza en «Tus noches contadas», donde está tu noche
+   con su botón de compartir. Si por lo que sea no hay tarjeta —el guardado
+   falló, o el navegador no deja escribir—, entonces sí, al principio. */
+function cierraResultado(){
+ reward.classList.remove("on");
+ var mh=document.getElementById("morehint");if(mh)mh.classList.add("hidden");
+ var c=document.getElementById("misnoches");
+ if(c&&!c.classList.contains("hidden")){
+  var y=c.getBoundingClientRect().top+window.scrollY-70;
+  window.scrollTo(0,Math.max(0,y));
+  c.classList.add("recien");
+  setTimeout(function(){c.classList.remove("recien");},2400);
+  return;
+ }
+ window.scrollTo(0,0);
+}
 
 /* TUS NOCHES. El resultado y su botón de compartir duraban un momento: si
    seguías navegando, se perdían. Cada noche guardada queda ahora anotada en
@@ -7722,7 +7758,7 @@ function finish(){
   deudaCard(deuda,descanso,WEAR)+
   '<button class="share fade" style="animation-delay:.8s" onclick="shareNoche()">📲 Comparte tu noche</button>'+
   '<button class="again pri2" onclick="verCurioso()">🔎 ¿Y cómo se duerme en otra población española?</button>'+
-  '<button class="again" onclick="reward.classList.remove(\'on\');document.getElementById(\'morehint\').classList.add(\'hidden\');window.scrollTo(0,0)">Volver al observatorio</button>'+
+  '<button class="again" onclick="cierraResultado()">Volver al observatorio</button>'+
   '<p class="obsestado" id="obsestado" style="display:none"></p>'+
   (URL_OBS?'':'<p class="obsdemo" id="obsdemo">Modo demostración: el buzón de noches aún no está desplegado, así que <b>esta noche no se ha guardado</b>.</p>')+
   '<p class="disc-o">El Observatorio del Descanso · experiencias reales cruzadas con datos de AEMET · sin predicciones, solo lo ocurrido. Sé de los primeros: cuantos más votemos, más real será el mapa.</p>';
@@ -8212,6 +8248,11 @@ SCROLL_CUE = (
     'background:rgba(217,116,78,.18);border:1px solid #d9744e;color:#e89a73;'
     'font:600 12.5px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;'
     'padding:9px 16px;border-radius:20px;cursor:pointer;display:none;'
+    # Sin esto, al tocarlo en Chrome de Android salta «Tocar para buscar»: el
+    # navegador toma la palabra que hay bajo el dedo y abre por abajo su panel
+    # de definiciones. No es nuestro, pero parece nuestro. Es un botón, no un
+    # texto para leer: que no se pueda seleccionar y el panel no aparece.
+    '-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;'
     'backdrop-filter:blur(4px);animation:_scb 1.6s ease-in-out infinite}</style>'
     '<div id="scue" aria-hidden="true">↓ sigue, hay más</div>'
     '<script>(function(){var c=document.getElementById("scue");'

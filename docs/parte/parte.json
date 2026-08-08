@@ -1,56 +1,62 @@
 {
- "fecha": "2026-08-07",
- "total": 853,
- "tropicales": 342,
- "ecuatoriales": 37,
+ "fecha": "2026-08-08",
+ "total": 849,
+ "tropicales": 428,
+ "ecuatoriales": 44,
  "peor": {
-  "id": "B569X",
-  "nombre": "Capdepera-Faro",
-  "min": 27.6,
-  "prov": "Illes Balears"
+  "id": "C648C",
+  "nombre": "Agüimes-el Milano",
+  "min": 29.3,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 8.9,
-  "prov": "Ávila"
+  "id": "9001S",
+  "nombre": "Alto Campoo",
+  "min": -7.8,
+  "prov": "Cantabria"
  },
  "top_calor": [
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 27.6,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "C917E",
-   "nombre": "Dehesa-Refugio",
-   "min": 27.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 26.7,
+   "min": 29.3,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "B051A",
-   "nombre": "Sóller",
-   "min": 26.6,
-   "prov": "Illes Balears"
   },
   {
    "id": "C635B",
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 26.6,
+   "min": 29.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 26.5,
-   "prov": "Almería"
+   "id": "0201D",
+   "nombre": "Barcelona Port Olímpic",
+   "min": 27.5,
+   "prov": "Barcelona"
+  },
+  {
+   "id": "C648N",
+   "nombre": "Telde-Centro Forestal Doramas",
+   "min": 27.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C623I",
+   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "min": 26.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 26.7,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 26.6,
+   "prov": "Illes Balears"
   },
   {
    "id": "B228",
@@ -59,83 +65,77 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "6325O",
-   "nombre": "Almería/Aeropuerto",
+   "id": "B860X",
+   "nombre": "Ciutadella-Son Quim",
    "min": 26.4,
-   "prov": "Almería"
+   "prov": "Illes Balears"
   },
   {
-   "id": "C916Q",
-   "nombre": "Pinar-Depósito",
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
    "min": 26.4,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "B398A",
-   "nombre": "Cabrera Parque Nacional de Cabrera",
-   "min": 26.3,
-   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 8.9,
-   "prov": "Ávila"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 9.5,
-   "prov": "Zamora"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 9.5,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 9.6,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 9.9,
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": -7.8,
    "prov": "Cantabria"
   },
   {
-   "id": "9060X",
-   "nombre": "Lalastra",
-   "min": 10.2,
-   "prov": "Araba/Álava"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 9.3,
+   "prov": "Ávila"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 10.1,
+   "prov": "Granada"
   },
   {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 10.3,
+   "min": 10.2,
    "prov": "Ourense"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 10.3,
-   "prov": "Segovia"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 10.3,
-   "prov": "Lleida"
-  },
-  {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "id": "2084Y",
+   "nombre": "Ucero",
    "min": 10.5,
+   "prov": "Soria"
+  },
+  {
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 11.1,
+   "prov": "Burgos"
+  },
+  {
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 11.1,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2302N",
+   "nombre": "Monterrubio de la Demanda",
+   "min": 11.2,
+   "prov": "Burgos"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 11.2,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 11.3,
    "prov": "Cantabria"
   }
  ]

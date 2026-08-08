@@ -6657,6 +6657,39 @@ def publicar_lugares() -> int:
     return len(pueblos) + len(aldeas)
 
 
+def intro_observatorio(estaciones: list) -> str:
+    """Párrafo de entrada del Observatorio: qué es esto, para quien aterriza sin
+    contexto y en diez segundos decide si se queda.
+
+    Los números NO se escriben a mano —salen de los datos y envejecen con
+    ellos—, y la tesis que sostiene el proyecto (que para dormir fresco no hace
+    falta subir al norte) se defiende CONTANDO estaciones, no opinando: cuántas
+    no registran una sola noche tropical y cuántas de esas caen por debajo del
+    paralelo de Burgos. Si algún año el dato dejara de darnos la razón, la frase
+    lo diría sola."""
+    cero = [e for e in estaciones if e.get("nt") is not None and e["nt"] < 1]
+    sur = [e for e in cero if e.get("lat") is not None and e["lat"] < 42]
+    provs, vistas = [], set()
+    for e in sorted(sur, key=lambda e: e["nt"]):
+        if e["prov"] not in vistas:
+            vistas.add(e["prov"])
+            provs.append(e["prov"])
+        if len(provs) == 4:
+            break
+    lista = (", ".join(provs[:-1]) + " o " + provs[-1]) if len(provs) > 1 else "".join(provs)
+    return (
+        "Un <b>refugio climático natural</b> es un sitio donde, en pleno agosto, la "
+        "madrugada sigue refrescando: se duerme tapado y sin aire acondicionado. "
+        f"En España hay <b>{len(cero)} estaciones de AEMET</b> donde no se registra "
+        "<b>ni una sola noche tropical</b> al año, ni una madrugada que se quede por "
+        "encima de los 20&nbsp;°C. "
+        + (f"Y no están todas en el norte: <b>{len(sur)}</b> caen por debajo del "
+           f"paralelo de Burgos —en {lista}—. " if provs else "")
+        + "Localiza el tuyo en el mapa; y si has dormido en uno, cuéntalo: "
+        "<b>cada noche votada hace el mapa más real</b>."
+    )
+
+
 def seed_observatorio(estaciones: list) -> list:
     """Semilla del mapa: zonas reconocibles repartidas por España con su índice
     de descanso ESPERADO según AEMET (para que el mapa nazca vivo, sin mentir)."""
@@ -6788,6 +6821,10 @@ a{color:var(--teal);text-decoration:none}
 .hero h1{font-family:var(--fd);font-weight:900;font-size:clamp(32px,8vw,52px);line-height:1.05;letter-spacing:-.02em}
 .hero h1 em{font-style:italic;color:var(--teja2)}
 .hero .sub{color:var(--muted);font-size:clamp(15.5px,3vw,18px);margin:18px auto 0;max-width:30ch}
+/* El párrafo que explica de qué va esto a quien cae aquí de nuevas. Va a la
+   izquierda y no centrado: son cuatro líneas y centradas no se leen. */
+.hero .sub2{color:var(--muted);font-size:14.5px;line-height:1.72;margin:20px auto 0;max-width:52ch;text-align:left;background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:14px;padding:15px 17px}
+.hero .sub2 b{color:var(--paper);font-weight:600}
 .cta{margin-top:30px;background:var(--teja);color:#160f08;font-weight:700;font-size:17px;padding:17px 30px;border-radius:16px;box-shadow:0 10px 30px rgba(224,131,79,.28);transition:.15s}
 .cta:hover{transform:translateY(-2px);background:var(--teja2)}
 .loc{margin-top:15px;font-size:13px;color:var(--muted)}.loc b{color:var(--paper)}
@@ -6868,6 +6905,17 @@ a{color:var(--teal);text-decoration:none}
 .fade{opacity:0;transform:translateY(14px);animation:rise .5s forwards}@keyframes rise{to{opacity:1;transform:none}}
 .pinp{animation:ping 1.6s ease-out infinite}@keyframes ping{0%{r:4;opacity:1}100%{r:16px;opacity:0}}
 .hidden{display:none!important}
+.misnoches{margin:22px auto 0;max-width:38ch;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:16px 17px 14px;text-align:left}
+.misnoches h3{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin:0 0 12px}
+.mn-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+.mn-row:last-of-type{border-bottom:0}
+.mn-idx{font-family:var(--fd);font-weight:900;font-size:17px;width:44px;text-align:center;border-radius:9px;padding:4px 0;flex:none}
+.mn-info{flex:1;min-width:0}
+.mn-info b{display:block;font-size:14.5px;font-weight:600;color:var(--paper);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mn-info small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.mn-share{background:transparent;border:1px solid var(--line);color:var(--teja2);font-family:inherit;font-size:12.5px;padding:7px 12px;border-radius:999px;cursor:pointer;flex:none}
+.mn-share:hover{border-color:var(--teja)}
+.mn-pie{color:var(--muted);font-size:12.5px;line-height:1.55;margin:11px 0 0}
 .desktoponly{margin:8px auto 0;max-width:34ch;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);font-size:14.5px;line-height:1.55}
 .desktoponly b{color:var(--paper)}
 .back{background:transparent;color:var(--muted);font-size:15px;line-height:1;padding:6px 4px;white-space:nowrap}
@@ -6970,6 +7018,10 @@ a{color:var(--teal);text-decoration:none}
  .hero .sub{max-width:36ch}
  .votabox{padding:44px 0 50px}
  .preg{margin-top:44px}
+ /* Los botones flotantes se quedan en el móvil, que es de donde vienen. En
+    escritorio tapaban el mapa y no llevaban a nada nuevo: el mapa y el buscador
+    ya están juntos a la vista, y para votar hace falta el teléfono. */
+ .fabs{display:none}
 }
  __NAVCSS__
  __FOOTERCSS__
@@ -6979,6 +7031,7 @@ __NAV__
   <div class="brandmini">El Observatorio del Descanso</div>
   <h1>Así se <em>duerme</em><br>en España</h1>
   <p class="sub">El mapa del <b>sueño profundo</b>: dónde el cuerpo se repara de verdad, según diez veranos de AEMET y las noches que cuenta la gente.</p>
+  <p class="sub2">__INTRO__</p>
 </div></section>
 <section class="public"><div class="wrap">
   <h2>El mapa del descanso, población por población</h2>
@@ -7025,6 +7078,7 @@ __PREGUNTAS__
   <button class="cta" id="cta" onclick="startFlow()">Contar cómo he dormido</button>
   <div class="loc" id="loc">📍 Detectando tu zona…</div>
   <div class="desktoponly hidden" id="desknote">📱 Para contar tu noche hace falta el <b>móvil</b>: necesitamos tu ubicación para situarla en el mapa. Ábrelo en tu teléfono — el mapa de arriba se ve igual desde aquí.</div>
+  <div class="misnoches hidden" id="misnoches"></div>
 </div></section>
 
 <section class="deudasec"><div class="wrap">
@@ -7259,9 +7313,36 @@ function pintaSug(lista){
  }
 })();
 
-/* FICHA DE COMPARTIR: comparte tu resultado (nativo en móvil; si no, copia). */
-function shareNoche(){
- var s=window._obsShare||{idx:"",zona:""};
+/* TUS NOCHES. El resultado y su botón de compartir duraban un momento: si
+   seguías navegando, se perdían. Cada noche guardada queda ahora anotada en
+   ESTE teléfono —no en el buzón, que es anónimo y no sabe quién eres— y se
+   puede recuperar y compartir cuando quieras. */
+function misNoches(){try{return JSON.parse(localStorage.getItem("obs_noches")||"[]");}catch(e){return [];}}
+function guardaMiNoche(n){
+ try{var L=misNoches();L.unshift(n);localStorage.setItem("obs_noches",JSON.stringify(L.slice(0,20)));}catch(e){}
+ pintaMisNoches();
+}
+function pintaMisNoches(){
+ var c=document.getElementById("misnoches");if(!c)return;
+ var L=misNoches();
+ if(!L.length){c.classList.add("hidden");return;}
+ c.classList.remove("hidden");
+ c.innerHTML='<h3>Tus noches contadas</h3>'+L.map(function(n,i){
+  var d=Number(n.d)||0;
+  return '<div class="mn-row"><span class="mn-idx" style="color:'+colorFor(d)+';background:'+bgFor(d)+'">'+d.toFixed(1)+'</span>'
+   +'<span class="mn-info"><b>'+n.n+'</b><small>'+n.f+(n.q?' · apartada del cálculo':'')+'</small></span>'
+   +'<button class="mn-share" onclick="shareNoche('+i+')">Compartir</button></div>';
+ }).join("")
+ +'<p class="mn-pie">Guardadas solo en este teléfono. Si borras los datos del navegador, desaparecen de aquí — la noche seguirá contando en el estudio igual.</p>';
+}
+pintaMisNoches();
+
+/* FICHA DE COMPARTIR: comparte tu resultado (nativo en móvil; si no, copia).
+   Con un número, comparte esa noche de tu lista; sin él, la recién votada. */
+function shareNoche(i){
+ var s=null;
+ if(typeof i==="number"){var n=misNoches()[i];if(n)s={idx:(Number(n.d)||0).toFixed(1),zona:n.n};}
+ s=s||window._obsShare||{idx:"",zona:""};
  var url="__SITE__/observatorio-del-descanso/";
  var txt="Esta noche en "+s.zona+" he descansado "+s.idx+"/10 en el Observatorio del Descanso. ¿Y tú, cómo has dormido? Cuéntalo en 10 segundos:";
  if(navigator.share){navigator.share({title:"El Observatorio del Descanso",text:txt,url:url}).catch(function(){});}
@@ -7595,6 +7676,9 @@ function finish(){
    fetch(URL_OBS,{method:"POST",body:JSON.stringify(pay)}).then(function(x){return x.json();})
     .then(function(d){
       if(d&&d.ok){window._obsGuardado=true;
+       var hoy=new Date();
+       guardaMiNoche({n:nombreLugar,d:Number(descanso.toFixed(1)),q:OBSQ?1:0,
+        f:("0"+hoy.getDate()).slice(-2)+"/"+("0"+(hoy.getMonth()+1)).slice(-2)});
        diEstado(OBSQ
         ? "✅ Guardada tu noche en <b>"+nombreLugar+"</b>. Como se aparta mucho de lo normal allí, queda aparte del cálculo hasta que otras noches de "+nombreLugar+" la respalden."
         : "✅ Guardado. Tu noche en <b>"+nombreLugar+"</b> ya cuenta en el estudio.",true);
@@ -7791,6 +7875,7 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
             .replace("__DESC__", desc)
             .replace("__SEED__", seed)
             .replace("__SILUETA__", SILUETA_ES)
+            .replace("__INTRO__", intro_observatorio(estaciones))
             .replace("__ALLZ__", allz)
             .replace("__PREGUNTAS__", bloque_preguntas_descanso(estaciones, site))
             .replace("__OBS_URL__", APPS_SCRIPT_OBS_URL)

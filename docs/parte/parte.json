@@ -1,8 +1,8 @@
 {
  "fecha": "2026-08-08",
- "total": 849,
- "tropicales": 428,
- "ecuatoriales": 44,
+ "total": 850,
+ "tropicales": 424,
+ "ecuatoriales": 41,
  "peor": {
   "id": "C648C",
   "nombre": "Agüimes-el Milano",
@@ -47,12 +47,6 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 26.7,
-   "prov": "Sevilla"
-  },
-  {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
    "min": 26.6,
@@ -75,6 +69,12 @@
    "nombre": "Dehesa-Refugio",
    "min": 26.4,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "0201X",
+   "nombre": "Barcelona Drassanes",
+   "min": 26.3,
+   "prov": "Barcelona"
   }
  ],
  "top_fresco": [
@@ -109,6 +109,12 @@
    "prov": "Soria"
   },
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 10.5,
+   "prov": "Segovia"
+  },
+  {
    "id": "2298",
    "nombre": "Palacios de la Sierra",
    "min": 11.1,
@@ -131,12 +137,6 @@
    "nombre": "Navasfrias",
    "min": 11.2,
    "prov": "Salamanca"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 11.3,
-   "prov": "Cantabria"
   }
  ]
 }

@@ -5104,6 +5104,14 @@ _CSS_ARTICULO = (
     '.faq dt{font-family:var(--fd);font-weight:600;font-size:clamp(16.5px,2.7vw,19px);'
     'color:var(--paper);margin:20px 0 7px}'
     '.faq dd{margin:0;color:var(--muted);font-size:clamp(15px,2.3vw,16.5px);line-height:1.75}'
+    'table{width:100%;border-collapse:collapse;font-size:14.5px;margin:6px 0 10px}'
+    'th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}'
+    'th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}'
+    'th.r,td.n{text-align:right}'
+    'td.n{font-family:var(--fb);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}'
+    'td.loc{font-weight:600}'
+    'tbody tr:hover{background:rgba(217,116,78,.05)}'
+    '@media(max-width:520px){th.hide,td.hide{display:none}}'
     '.foto{margin:8px 0 22px}'
     '.foto img{width:100%;height:auto;display:block;border-radius:16px;border:1px solid var(--line);'
     'background:var(--bg2)}'
@@ -5151,6 +5159,21 @@ def credito_unsplash(autor: str, url_autor: str, url_foto: str) -> str:
     return (f'Foto de <a href="{url_autor}" target="_blank" rel="noopener">{autor}</a> '
             f'en <a href="{url_foto}" target="_blank" rel="noopener">Unsplash</a>')
 
+
+# Medidas de la NOCHE de julio y agosto, sacadas una vez de datos/diarios_2025.csv
+# (837-844 estaciones con 40+ días válidos en esos dos meses). Van escritas aquí
+# porque generar_calculadora.py es solo biblioteca estándar y estos números
+# salen de un fichero de 300.000 filas que no toca abrir en cada build. Para
+# rehacerlas: agrupar por indicativo, quedarse con julio y agosto, y calcular la
+# moda de la hora de horatmin y la media de (tmax - tmin).
+NOCHE_2025 = {
+    "hora_minima_5h": 70,      # % de estaciones cuya mínima típica cae a las 05 h
+    "oscilacion_media": 13.4,  # °C que separan la máxima de la mínima, de media
+    "poca_oscilacion": 108,    # estaciones que no llegan a 8 °C de recorrido
+    # El par que lo explica todo: bajan lo mismo y no tiene nada que ver.
+    "sevilla": {"nombre": "Sevilla Aeropuerto", "cae": 15.9, "acaba": 21.8},
+    "cedrillas": {"nombre": "Cedrillas (Teruel)", "cae": 15.6, "acaba": 12.1},
+}
 
 # ---------------------------------------------------------------------------
 # Página /dormir-con-calor/: la pieza PUENTE. Es la búsqueda de más volumen de
@@ -5257,6 +5280,52 @@ __NAV__
 </div></section>
 
 <section><div class="wrap">
+  <h2>¿Y si abrir la ventana no sirve donde vives?</h2>
+  <p>El consejo de abrir de madrugada se repite en todas partes como si funcionara igual
+  en Soria que en Almería. No es así, y se puede medir. Cogimos julio y agosto de las
+  estaciones de AEMET y salieron dos cosas que casi nadie cuenta.</p>
+  <h3>No es cuánto baja: es dónde acaba</h3>
+  <p>Lo intuitivo sería que en el interior la noche se desploma y en la costa no. Falso:</p>
+  <table>
+    <thead><tr><th>Julio y agosto</th><th class="r">Lo que cae al día</th><th class="r">Dónde acaba de madrugada</th></tr></thead>
+    <tbody>__TABLA_NOCHE__</tbody>
+  </table>
+  <p>Bajan lo mismo. Lo que cambia es el punto de partida: cuando en __CIU__ el aire de
+  las cinco de la mañana está a <b>__CIU_T__&nbsp;°C</b>, abrir la ventana no te enfría
+  —el cuerpo necesita que el aire esté por debajo de tu piel para soltar calor—. Con los
+  <b>__PUE_T__&nbsp;°C</b> de __PUE__, en cambio, hay que taparse.</p>
+  <p>La regla práctica, entonces, no es una hora: <b>abre cuando la calle esté más fresca
+  que tu casa</b>. Y si la mínima de tu zona no baja de 22&nbsp;°C, la ventana no va a
+  resolverlo — ahí mandan los otros siete puntos de la lista de arriba.</p>
+  <h3>El aire bueno llega cuando ya estás dormido</h3>
+  <p>En el <b>__H5__&nbsp;% de las estaciones</b> la temperatura mínima se alcanza <b>a
+  las cinco de la mañana</b>, y en el resto entre las cuatro y las seis. Es la misma hora
+  en toda España, porque depende del amanecer y no del sitio. O sea: no hay que poner el
+  despertador para ventilar. Lo que importa es <b>dejar la ventana abierta</b> para que
+  ese aire entre solo cuando llegue.</p>
+  <p>Y un aviso para la costa: <b>__POCA__ estaciones</b> no llegan a 8&nbsp;°C de
+  recorrido entre el día y la noche, frente a los __OSC__&nbsp;°C de media del país. Son
+  las del litoral y las islas, donde la humedad frena el enfriamiento. Ahí la noche
+  cambia tan poco que abrir apenas se nota.</p>
+  <h3>Cuándo es mala idea abrir</h3>
+  <p>Hay tres motivos para no hacerlo, y ninguno es térmico. El <b>ruido</b> —la primera
+  causa de despertares en ciudad, y despertarse cuesta más que pasar algo de calor—; el
+  <b>tráfico</b>, si vives sobre una vía con circulación nocturna, donde dos grados no
+  compensan lo que entra con ellos; y las <b>alergias</b>, en primavera y principio de
+  verano.</p>
+  <p>Con una matización que conviene no ahorrarse: en el campo el aire de madrugada es
+  más fresco, pero no siempre más limpio. El <b>ozono</b> es un contaminante de verano
+  que se forma con sol y calor y viaja a favor del viento desde las ciudades, así que
+  suele estar más alto en las zonas rurales a sotavento que en el centro urbano donde se
+  originó. No cambia el consejo —el ozono baja de noche—, pero sí la idea de que campo
+  equivale automáticamente a aire puro.</p>
+  <div class="cta">
+    <b>¿A cuánto baja la noche en tu pueblo?</b>
+    <div class="botones"><a class="btn pri" href="__HOME__">Míralo en la calculadora</a></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
   <h2>Lo que no funciona</h2>
   <div class="nova">
     <ul>
@@ -5307,7 +5376,24 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
     desc = ("Cómo dormir con calor sin aire acondicionado: qué hacer esta noche, qué no "
             "sirve y por qué. Con los datos de AEMET de las noches tropicales de España, "
             f"donde {m30} estaciones acumulan un mes o más de madrugadas sobre 20 °C.")
+    ciu, pue = NOCHE_2025["sevilla"], NOCHE_2025["cedrillas"]
+    tabla_noche = "".join(
+        f'<tr><td class="loc">{x["nombre"]}</td>'
+        f'<td class="n">{_n_es(x["cae"])} °C</td>'
+        f'<td class="n">{_n_es(x["acaba"])} °C</td></tr>' for x in (ciu, pue))
     faq = [
+        ("¿A qué hora hay que abrir las ventanas en verano?",
+         "No hay una hora fija: hay que abrir cuando la temperatura de la calle baje de "
+         "la de casa, y eso depende de cada vivienda. Lo que sí es igual en toda España "
+         f"es cuándo llega el aire más fresco: en el {NOCHE_2025['hora_minima_5h']} % de "
+         "las estaciones de AEMET la temperatura mínima se alcanza a las cinco de la "
+         "mañana. Por eso lo práctico no es madrugar para ventilar, sino dejar la "
+         "ventana abierta para que ese aire entre cuando llegue."),
+        ("¿Es bueno dormir con la ventana abierta?",
+         "Si la calle está más fresca que la habitación, sí: es lo que más baja la "
+         "temperatura de un dormitorio sin gastar nada. Deja de compensar cuando la "
+         "mínima de la noche no baja de 22 °C —el aire que entra ya no puede enfriarte—, "
+         "cuando hay ruido de tráfico que va a despertarte, o en época de alergias."),
         ("¿Cómo puedo enfriar una habitación sin aire acondicionado?",
          "Cerrando persianas y ventanas durante todo el día para que no entre sol, y "
          "abriendo de par en par en cuanto la temperatura de la calle baje de la de "
@@ -5357,6 +5443,14 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
         site, pie="La noche de verano que se pasa fuera porque dentro no se puede estar.",
         credito="Ilustración generada con IA", primera=True)
     return (PAGINA_DORMIR
+            .replace("__TABLA_NOCHE__", tabla_noche)
+            .replace("__CIU_T__", _n_es(ciu["acaba"]))
+            .replace("__CIU__", ciu["nombre"].split(" Aero")[0])
+            .replace("__PUE_T__", _n_es(pue["acaba"]))
+            .replace("__PUE__", pue["nombre"].split(" (")[0])
+            .replace("__H5__", str(NOCHE_2025["hora_minima_5h"]))
+            .replace("__POCA__", str(NOCHE_2025["poca_oscilacion"]))
+            .replace("__OSC__", _n_es(NOCHE_2025["oscilacion_media"]))
             .replace("__FOTO_APERTURA__", foto)
             .replace("__OGIMG__", f"{site}/img/cena-noche-verano.jpg")
             .replace("__SCHEMA__", schema)
@@ -5424,20 +5518,6 @@ PAGINA_VACACIONES = r"""<!doctype html>
    font-weight:700;font-size:19px;color:var(--teja)}
  ol.factores b{display:block;color:var(--paper);margin-bottom:4px;font-size:16px}
  ol.factores span{color:var(--muted);font-size:14.5px;line-height:1.65}
- table{width:100%;border-collapse:collapse;font-size:14.5px;margin:6px 0 10px}
- th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
- th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
- th.r,td.n{text-align:right}
- /* Los números de las tablas NO van en la monoespaciada. El cero de JetBrains Mono
-    lleva un punto dentro y a 14-15 px, en negrita y sobre fondo oscuro, se lee como
-    un ocho: un lector nos dijo que la tabla de refugios marcaba «8,3 noches
-    tropicales» donde pone 0,3. La variante slashed-zero no sirve —Google no sirve
-    esa característica en su subconjunto—, así que estos números van en la tipografía
-    de texto con cifras tabulares: siguen alineando en columna y el cero es un cero.
-    La monoespaciada se queda en los números grandes, donde se lee sin dudar. */
- td.n{font-family:var(--fb);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
- td.loc{font-weight:600}
- tbody tr:hover{background:rgba(217,116,78,.05)}
  @media(max-width:520px){th.hide,td.hide{display:none}}
 </style>
 </head>

@@ -1383,7 +1383,14 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
  th{font:600 11px/1 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
  th.r,td.n{text-align:right}
- td.n{font-family:var(--fm);font-weight:700}
+ /* Los números de las tablas NO van en la monoespaciada. El cero de JetBrains Mono
+    lleva un punto dentro y a 14-15 px, en negrita y sobre fondo oscuro, se lee como
+    un ocho: un lector nos dijo que la tabla de refugios marcaba «8,3 noches
+    tropicales» donde pone 0,3. La variante slashed-zero no sirve —Google no sirve
+    esa característica en su subconjunto—, así que estos números van en la tipografía
+    de texto con cifras tabulares: siguen alineando en columna y el cero es un cero.
+    La monoespaciada se queda en los números grandes, donde se lee sin dudar. */
+ td.n{font-family:var(--fb);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
  td.loc{font-weight:600}
  .v{display:inline-block;font:600 11px/1 var(--fb);padding:5px 9px;border-radius:999px}
  .note{font-size:12.5px;color:var(--muted);margin-top:12px}
@@ -2636,7 +2643,14 @@ PAGINA_RANKING = r"""<!doctype html>
  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line)}
  th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
  th.r,td.n{text-align:right}
- td.n{font-family:var(--fm);font-weight:700}
+ /* Los números de las tablas NO van en la monoespaciada. El cero de JetBrains Mono
+    lleva un punto dentro y a 14-15 px, en negrita y sobre fondo oscuro, se lee como
+    un ocho: un lector nos dijo que la tabla de refugios marcaba «8,3 noches
+    tropicales» donde pone 0,3. La variante slashed-zero no sirve —Google no sirve
+    esa característica en su subconjunto—, así que estos números van en la tipografía
+    de texto con cifras tabulares: siguen alineando en columna y el cero es un cero.
+    La monoespaciada se queda en los números grandes, donde se lee sin dudar. */
+ td.n{font-family:var(--fb);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
  td.pos{font-family:var(--fm);color:var(--teja2);width:34px}
  td.loc{font-weight:600}
  tbody tr:hover{background:rgba(217,116,78,.05)}
@@ -5414,7 +5428,14 @@ PAGINA_VACACIONES = r"""<!doctype html>
  th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
  th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
  th.r,td.n{text-align:right}
- td.n{font-family:var(--fm);font-weight:700}
+ /* Los números de las tablas NO van en la monoespaciada. El cero de JetBrains Mono
+    lleva un punto dentro y a 14-15 px, en negrita y sobre fondo oscuro, se lee como
+    un ocho: un lector nos dijo que la tabla de refugios marcaba «8,3 noches
+    tropicales» donde pone 0,3. La variante slashed-zero no sirve —Google no sirve
+    esa característica en su subconjunto—, así que estos números van en la tipografía
+    de texto con cifras tabulares: siguen alineando en columna y el cero es un cero.
+    La monoespaciada se queda en los números grandes, donde se lee sin dudar. */
+ td.n{font-family:var(--fb);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
  td.loc{font-weight:600}
  tbody tr:hover{background:rgba(217,116,78,.05)}
  @media(max-width:520px){th.hide,td.hide{display:none}}
@@ -5460,6 +5481,7 @@ __NAV__
     <thead><tr><th>Lugar</th><th>Provincia</th><th class="r hide">Altitud</th><th class="r">Noches tropicales/año</th></tr></thead>
     <tbody>__TABLA__</tbody>
   </table>
+  <p class="note">__LEYENDA__</p>
   <p>El caso más reconocible es la <b>Serranía de Albarracín</b>, en Teruel, donde el nórdico en agosto no es una rareza. Pero el mismo patrón se repite en la Serranía de Cuenca, el Sistema Central —Gredos, el Jerte, Somosierra—, los Montes Universales, la sierra de Segura o las zonas altas de la Alpujarra. Ninguno de esos sitios está en el norte.</p>
   <div class="destacado">
     <p>Un matiz honesto: estos números son <b>medias de diez veranos</b> de la estación de AEMET más cercana, no una predicción de la noche que te va a tocar. Sirven para elegir zona, no para reservar a ciegas. Y a menudo <b>tu calle no es tu estación</b>: por eso montamos <a href="__SITE__/observatorio-del-descanso/">el Observatorio del Descanso</a>, donde la gente cuenta cómo ha dormido de verdad.</p>
@@ -5525,6 +5547,15 @@ def construir_pagina_vacaciones(estaciones: list, site: str) -> str:
     denia = next((e for e in estaciones if "PEGO" in e["loc"].upper()), None)
     nt_denia = _n_es(denia["nt"]) if denia else "más de 40"
 
+    # Qué significa un 0,0 en la tabla, dicho con el contraste que se entiende
+    # solo: la estación que peor duerme de España. Sale del dato, no de memoria.
+    peor = max(estaciones, key=lambda e: e["nt"])
+    leyenda = (
+        "Cómo se lee: <b>0,0</b> significa que en diez veranos AEMET no ha registrado "
+        "allí <b>ni una sola madrugada</b> por encima de 20&nbsp;°C; <b>0,7</b>, que hay "
+        f"una cada año y medio. Para hacerse una idea del otro extremo: en "
+        f"<b>{peor['loc']}</b> ({peor['prov']}) son <b>{_n_es(peor['nt'])} al año</b> — "
+        "casi tres meses seguidos de noches en las que el cuerpo no llega a enfriarse.")
     desc = (f"Dónde ir en verano en España sin calor: {len(cero_sur)} zonas medidas por AEMET "
             f"al sur del paralelo de Burgos no registran ni una noche tropical al año. "
             f"El mapa de los refugios climáticos naturales donde se duerme con manta en agosto.")
@@ -5604,6 +5635,7 @@ def construir_pagina_vacaciones(estaciones: list, site: str) -> str:
             .replace("__NAV__", nav_escueto_html(site))
             .replace("__FOOTER__", footer_escueto_html(site))
             .replace("__TABLA__", tabla)
+            .replace("__LEYENDA__", leyenda)
             .replace("__FAQ__", faq_html)
             .replace("__CERO_SUR__", str(len(cero_sur)))
             .replace("__CERO__", str(len(cero)))
@@ -5654,7 +5686,7 @@ PAGINA_MANTA = r"""<!DOCTYPE html>
  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
  th{font:600 11px/1 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
  th.r,td.n{text-align:right}
- td.n{font-family:var(--fm);font-weight:700;color:var(--verde)}
+ td.n{font-family:var(--fb);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em;color:var(--verde)}
  td.loc{font-weight:600}
  caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600}
  .note{font-size:12.5px;color:var(--muted);margin-top:12px}

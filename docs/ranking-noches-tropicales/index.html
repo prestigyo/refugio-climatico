@@ -31,7 +31,14 @@
  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line)}
  th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
  th.r,td.n{text-align:right}
- td.n{font-family:var(--fm);font-weight:700}
+ /* Los números de las tablas NO van en la monoespaciada. El cero de JetBrains Mono
+    lleva un punto dentro y a 14-15 px, en negrita y sobre fondo oscuro, se lee como
+    un ocho: un lector nos dijo que la tabla de refugios marcaba «8,3 noches
+    tropicales» donde pone 0,3. La variante slashed-zero no sirve —Google no sirve
+    esa característica en su subconjunto—, así que estos números van en la tipografía
+    de texto con cifras tabulares: siguen alineando en columna y el cero es un cero.
+    La monoespaciada se queda en los números grandes, donde se lee sin dudar. */
+ td.n{font-family:var(--fb);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
  td.pos{font-family:var(--fm);color:var(--teja2);width:34px}
  td.loc{font-weight:600}
  tbody tr:hover{background:rgba(217,116,78,.05)}

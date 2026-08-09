@@ -1,8 +1,8 @@
 {
  "fecha": "2026-08-09",
- "total": 841,
- "tropicales": 409,
- "ecuatoriales": 47,
+ "total": 838,
+ "tropicales": 393,
+ "ecuatoriales": 45,
  "peor": {
   "id": "B569X",
   "nombre": "Capdepera-Faro",
@@ -59,12 +59,6 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 26.7,
-   "prov": "Las Palmas"
-  },
-  {
    "id": "8446Y",
    "nombre": "Sagunto (Montiver Pontazgo - Semiautomatica)",
    "min": 26.5,
@@ -75,6 +69,12 @@
    "nombre": "Portocolom",
    "min": 26.4,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 26.2,
+   "prov": "Murcia"
   }
  ],
  "top_fresco": [
@@ -91,28 +91,22 @@
    "prov": "Cantabria"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 8.5,
-   "prov": "Lleida"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
    "min": 8.7,
    "prov": "Ávila"
   },
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 9.5,
-   "prov": "Lleida"
-  },
-  {
    "id": "1221D",
    "nombre": "Pajares - Valgrande",
    "min": 9.8,
    "prov": "Asturias"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 9.8,
+   "prov": "Lleida"
   },
   {
    "id": "2737E",
@@ -125,6 +119,12 @@
    "nombre": "Astún - la Raca",
    "min": 10.2,
    "prov": "Huesca"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 10.2,
+   "prov": "Lleida"
   },
   {
    "id": "9839V",

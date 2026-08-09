@@ -5090,7 +5090,53 @@ _CSS_ARTICULO = (
     '.faq dt{font-family:var(--fd);font-weight:600;font-size:clamp(16.5px,2.7vw,19px);'
     'color:var(--paper);margin:20px 0 7px}'
     '.faq dd{margin:0;color:var(--muted);font-size:clamp(15px,2.3vw,16.5px);line-height:1.75}'
+    '.foto{margin:8px 0 22px}'
+    '.foto img{width:100%;height:auto;display:block;border-radius:16px;border:1px solid var(--line);'
+    'background:var(--bg2)}'
+    '.foto figcaption{font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.55}'
+    '.foto figcaption a{color:var(--teja2)}'
 )
+
+# ---------------------------------------------------------------------------
+# Imágenes de los artículos. Las prepara scripts/preparar_imagenes.py y viven en
+# docs/img/. Aquí solo se escribe el <figure>, pero con tres cosas que no son
+# adorno: srcset para que el móvil no se baje la versión de 1600 px, width y
+# height para que el texto no dé un salto cuando carga (Google lo penaliza), y
+# alt de verdad — descriptivo, no una lista de palabras clave.
+#
+# El pie es donde se paga lo que se debe: si la foto es de un tercero, va su
+# nombre y su enlace. La licencia de Unsplash no obliga a citar, pero se cita.
+# ---------------------------------------------------------------------------
+def figura_articulo(nombre: str, alt: str, site: str, pie: str = "",
+                    credito: str = "", primera: bool = False) -> str:
+    """Bloque de imagen de artículo. `nombre` es el del fichero sin extensión ni
+    tamaño: figura_articulo("bosque-sombra", ...) usa docs/img/bosque-sombra-*.
+
+    La primera imagen de la página se carga con prioridad (es la que ve quien
+    llega, y suele ser el elemento que marca el tiempo de carga); las demás,
+    perezosas."""
+    base = f"{site}/img/{nombre}"
+    carga = ('loading="eager" fetchpriority="high"' if primera
+             else 'loading="lazy" decoding="async"')
+    pie_html = ""
+    if pie or credito:
+        partes = [t for t in (pie, credito) if t]
+        pie_html = f'<figcaption>{" · ".join(partes)}</figcaption>'
+    return (
+        f'<figure class="foto">'
+        f'<img src="{base}.jpg" '
+        f'srcset="{base}-800.webp 800w, {base}-1200.webp 1200w, {base}-1600.webp 1600w" '
+        f'sizes="(max-width: 860px) 100vw, 820px" '
+        f'width="1200" height="800" {carga} alt="{alt}">'
+        f'{pie_html}</figure>')
+
+
+def credito_unsplash(autor: str, url_autor: str, url_foto: str) -> str:
+    """Crédito de una foto de Unsplash, con los dos enlaces que pide su forma de
+    citar: el del autor y el de la foto."""
+    return (f'Foto de <a href="{url_autor}" target="_blank" rel="noopener">{autor}</a> '
+            f'en <a href="{url_foto}" target="_blank" rel="noopener">Unsplash</a>')
+
 
 # ---------------------------------------------------------------------------
 # Página /dormir-con-calor/: la pieza PUENTE. Es la búsqueda de más volumen de
@@ -5117,10 +5163,12 @@ PAGINA_DORMIR = r"""<!doctype html>
 <meta property="og:title" content="Cómo dormir con calor sin aire acondicionado: lo que funciona esta noche">
 <meta property="og:description" content="__DESC__">
 <meta property="og:url" content="__SITE__/dormir-con-calor/">
-<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:image" content="__OGIMG__">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="800">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="__SITE__/og.png">
+<meta name="twitter:image" content="__OGIMG__">
 <link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
 <script type="application/ld+json">__SCHEMA__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5160,6 +5208,7 @@ __NAV__
 </div></header>
 
 <section><div class="wrap">
+  __FOTO_APERTURA__
   <h2>Por qué el calor no te deja dormir</h2>
   <p>Para dormirte, tu cuerpo tiene que <b>bajar su temperatura interna</b> alrededor de un grado. No es un detalle: es la señal que abre el sueño. Y esa bajada se consigue de una sola manera, soltando calor por la piel —sobre todo por las manos, los pies y la cara, donde los vasos se dilatan y hacen de radiador.</p>
   <p>Ese radiador necesita que el aire de alrededor esté <b>más frío que tu piel</b>. Cuando la habitación no baja de los 20&nbsp;°C, el margen se estrecha; por encima de 25&nbsp;°C prácticamente desaparece. El cuerpo lo compensa sudando y subiendo el pulso, y el sueño se fragmenta: te despiertas sin recordarlo, y la <b>fase profunda —la que repara— se acorta</b>. Por eso puedes dormir las mismas horas y levantarte como si no hubieras dormido.</p>
@@ -5282,12 +5331,20 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
          "description": desc, "url": url, "inLanguage": "es-ES",
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es", "url": site + "/"},
-         "mainEntityOfPage": url, "image": site + "/og.png"},
+         "mainEntityOfPage": url, "image": site + "/img/cena-noche-verano.jpg"},
         {"@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": p,
              "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in faq]}]},
         ensure_ascii=False)
+    foto = figura_articulo(
+        "cena-noche-verano",
+        "Cena al aire libre en el jardín de una casa de piedra, de noche, con guirnaldas "
+        "de bombillas encendidas y gente sentada a la mesa",
+        site, pie="La noche de verano que se pasa fuera porque dentro no se puede estar.",
+        credito="Ilustración generada con IA", primera=True)
     return (PAGINA_DORMIR
+            .replace("__FOTO_APERTURA__", foto)
+            .replace("__OGIMG__", f"{site}/img/cena-noche-verano.jpg")
             .replace("__SCHEMA__", schema)
             .replace("__CSS__", _CSS_CHROME)
             .replace("__CSSART__", _CSS_ARTICULO)
@@ -5330,10 +5387,12 @@ PAGINA_VACACIONES = r"""<!doctype html>
 <meta property="og:title" content="¿Vacaciones fresquitas fuera del norte? El mapa de los refugios climáticos naturales">
 <meta property="og:description" content="__DESC__">
 <meta property="og:url" content="__SITE__/vacaciones-sin-calor/">
-<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:image" content="__OGIMG__">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="800">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="__SITE__/og.png">
+<meta name="twitter:image" content="__OGIMG__">
 <link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
 <script type="application/ld+json">__SCHEMA__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5376,6 +5435,7 @@ __NAV__
 </div></section>
 
 <section><div class="wrap">
+  __FOTO_APERTURA__
   <h2>El mito del Cantábrico: por qué creemos que solo el norte es fresco</h2>
   <p>La idea de que el litoral norteño tiene el monopolio de las noches frescas ha empujado un fenómeno global: la <b>coolcation</b>, el viaje que busca frío en verano. Y no es falsa —el norte es suave por la influencia oceánica—, pero sí incompleta.</p>
   <p>El norte es suave <b>de día</b>. De noche, la humedad del aire marítimo funciona como una manta: retiene el calor que el suelo suelta al anochecer y frena el enfriamiento. Por eso hay puntos de la cornisa donde la mínima de agosto no baja tanto como se supone, mientras a mil doscientos metros del interior la madrugada se desploma. <b>Lo que enfría una noche no es la latitud: es la altitud, el aire seco y el relieve.</b></p>
@@ -5389,6 +5449,7 @@ __NAV__
     <li><b>Aire seco y radiación nocturna</b><span>El suelo se enfría de noche emitiendo radiación infrarroja hacia el cielo. El vapor de agua la intercepta y la devuelve: por eso una noche húmeda del litoral enfría poco. En el aire seco del interior esa energía escapa sin obstáculo y la temperatura cae en picado en cuanto se pone el sol.</span></li>
     <li><b>El aire frío baja por su propio peso</b><span>Al anochecer, el aire en contacto con las laderas se enfría, se vuelve más denso y drena ladera abajo hacia los valles y altiplanos, donde se acumula. Es el viento catabático, y produce la inversión térmica nocturna: el fondo del valle amanece más frío que la ladera que lo domina.</span></li>
   </ol>
+  __FOTO_BOSQUE__
   <p>El resultado es una <b>oscilación térmica enorme</b>: días soleados y agradables que dan paso a madrugadas de un dígito. Ahí nacen los <a href="__SITE__/dormir-con-manta-en-verano/">pueblos donde se duerme con manta en agosto</a>. Si quieres el detalle físico de por qué un valle puede ser más fresco que la cima de al lado, está en <a href="__SITE__/microclimas/">microclimas</a>.</p>
 </div></section>
 
@@ -5509,13 +5570,32 @@ def construir_pagina_vacaciones(estaciones: list, site: str) -> str:
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es",
                        "url": site + "/"},
-         "mainEntityOfPage": url, "image": site + "/og.png",
+         "mainEntityOfPage": url, "image": site + "/img/bosque-fresco-verano.jpg",
          "isBasedOn": "Datos diarios de temperatura mínima de AEMET, 2017-2026"},
         {"@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": p,
              "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in faq]}]},
         ensure_ascii=False)
+    apertura = figura_articulo(
+        "bosque-fresco-verano",
+        "Rayos de sol filtrándose entre las hayas de un bosque de montaña, con un camino "
+        "de tierra en sombra",
+        site, pie="Los refugios climáticos naturales no son una excepción del norte: "
+                  "están repartidos por todo el interior peninsular.",
+        credito="Ilustración generada con IA", primera=True)
+    bosque = figura_articulo(
+        "bosque-sombra",
+        "Camino de tierra entre árboles altos, a la sombra del bosque",
+        site, pie="La sombra del bosque y el aire seco de altura son dos de los tres "
+                  "mecanismos que desploman la temperatura en cuanto se pone el sol.",
+        credito=credito_unsplash(
+            "Darya Karaliova",
+            "https://unsplash.com/es/@daryakor",
+            "https://unsplash.com/es/fotos/un-camino-de-tierra-en-medio-de-un-bosque-Ot7twqXMvgU"))
     return (PAGINA_VACACIONES
+            .replace("__FOTO_APERTURA__", apertura)
+            .replace("__FOTO_BOSQUE__", bosque)
+            .replace("__OGIMG__", f"{site}/img/bosque-fresco-verano.jpg")
             .replace("__SCHEMA__", schema)
             .replace("__CSS__", _CSS_CHROME)
             .replace("__CSSART__", _CSS_ARTICULO)
@@ -7111,6 +7191,31 @@ def _obs_frase(tmin: float) -> str:
             "Suele refrescar de madrugada." if tmin < 16 else
             "La noche afloja, pero no del todo." if tmin < 19 else
             "Aquí la noche no perdona.")
+
+
+def copiar_imagenes() -> int:
+    """Copia aemet-temperaturas/img/ -> docs/img/.
+
+    Las imágenes de los artículos se preparan una vez con
+    scripts/preparar_imagenes.py y se guardan en aemet-temperaturas/img/, que es
+    donde vive el material de origen del proyecto. Pero GitHub Pages solo sirve
+    docs/, así que el build las lleva allí. Solo copia lo que ha cambiado, para
+    no ensuciar el repo con commits de ficheros idénticos."""
+    origen = AEMET_DIR / "img"
+    if not origen.exists():
+        return 0
+    destino = DOCS_DIR / "img"
+    destino.mkdir(parents=True, exist_ok=True)
+    copiadas = 0
+    for f in sorted(origen.iterdir()):
+        if f.suffix.lower() not in (".webp", ".jpg", ".jpeg", ".png", ".avif"):
+            continue
+        fin = destino / f.name
+        if fin.exists() and fin.stat().st_size == f.stat().st_size:
+            continue
+        fin.write_bytes(f.read_bytes())
+        copiadas += 1
+    return copiadas
 
 
 def publicar_lugares() -> int:
@@ -8955,6 +9060,13 @@ def main() -> int:
     print(f"   observatorio-del-descanso: generado (semilla AEMET) · "
           f"{nlug} poblaciones publicadas" if nlug else
           "   observatorio-del-descanso: generado (semilla AEMET) · sin lugares.csv")
+    # IMÁGENES de los artículos. Los originales preparados viven FUERA de docs/
+    # —en aemet-temperaturas/img/, que es material fuente, como los CSV— y el
+    # build los copia a docs/img/, que es lo único que sirve GitHub Pages. Así
+    # no hay que acordarse de subirlos dos veces ni de a qué carpeta.
+    copiadas = copiar_imagenes()
+    print(f"   imágenes de artículo: {copiadas} copiadas a docs/img/")
+
     # Guía práctica: la búsqueda de más volumen («no puedo dormir por el calor»).
     (DOCS_DIR / "dormir-con-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "dormir-con-calor" / "index.html").write_text(

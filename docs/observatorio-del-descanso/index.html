@@ -134,7 +134,15 @@ a{color:var(--teal);text-decoration:none}
 /* Al llegar aquí desde el resultado, la tarjeta se enciende un momento para
    que se vea que es aquí donde ha caído tu noche. */
 .misnoches.recien{border-color:var(--teja);box-shadow:0 0 0 3px rgba(224,131,79,.16)}
-.desktoponly{margin:8px auto 0;max-width:34ch;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);font-size:14.5px;line-height:1.55}
+.desktoponly p{margin:0}
+.desktoponly .dn-sub{margin:12px 0 10px;color:var(--muted)}
+.dn-btns{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.dn-b{background:transparent;border:1px solid var(--teja);color:var(--teja2);font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 15px;border-radius:11px;cursor:pointer}
+.dn-b:hover{background:rgba(217,116,78,.12)}
+.dn-b.wa{background:var(--teja);border-color:var(--teja);color:#160f08}
+.dn-b.wa:hover{background:var(--teja2)}
+.desktoponly.recien{border-color:var(--teja);box-shadow:0 0 0 3px rgba(224,131,79,.16)}
+.desktoponly{margin:8px auto 0;max-width:40ch;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);font-size:14.5px;line-height:1.55}
 .desktoponly b{color:var(--paper)}
 .back{background:transparent;color:var(--muted);font-size:15px;line-height:1;padding:6px 4px;white-space:nowrap}
 .back:hover{color:var(--paper)}
@@ -236,10 +244,11 @@ a{color:var(--teal);text-decoration:none}
  .hero .sub{max-width:36ch}
  .votabox{padding:44px 0 50px}
  .preg{margin-top:44px}
- /* Los botones flotantes se quedan en el móvil, que es de donde vienen. En
-    escritorio tapaban el mapa y no llevaban a nada nuevo: el mapa y el buscador
-    ya están juntos a la vista, y para votar hace falta el teléfono. */
- .fabs{display:none}
+ /* Los botones flotantes se quedan también en escritorio: quien llega desde un
+    ordenador tiene que ver que aquí se vota, aunque para votar necesite el
+    móvil. Se apartan a la derecha para no taparle el mapa. */
+ .fabs{left:auto;right:22px;transform:none;bottom:22px}
+ .fabs.on{transform:none}
 }
  .nav-e{position:sticky;top:0;z-index:30;background:rgba(22,16,9,.88);backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid var(--line)}.nav-e .in{max-width:min(92vw,920px);margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:16px;height:54px}.nav-e .brand{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:600;font-size:16.5px;color:var(--paper);white-space:nowrap}.nav-e .brand:hover{text-decoration:none;color:var(--teja2)}.nav-e .links{margin-left:auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.nav-e .links::-webkit-scrollbar{display:none}.nav-e .links a{font-size:13.5px;color:var(--muted);padding:8px 11px;border-radius:8px;white-space:nowrap}.nav-e .links a:hover{color:var(--paper);background:rgba(217,116,78,.14);text-decoration:none}.nav-e .links a.lang{margin-left:4px;border:1px solid var(--line);color:var(--teja2);font-weight:600;letter-spacing:.04em}.nav-e .links a.lang:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}@media(max-width:560px){.nav-e .brand span{display:none}.nav-e .in{gap:8px;padding:0 14px}.nav-e .links a{padding:8px 8px}}
  .f2{border-top:1px solid var(--line);background:var(--bg2);margin-top:30px;padding:34px 0 46px}.f2grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}.f2col h4{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin:0 0 12px}.f2col a{display:block;color:var(--muted);font-size:13.5px;margin:0 0 8px;text-decoration:none}.f2col a:hover{color:var(--paper);text-decoration:underline}.f2bar{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-size:12.5px;color:#9a8a6f}.f2bar a{color:#9a8a6f}.f2brand{margin-bottom:26px;max-width:42ch}.f2brand .brand{display:inline-flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:600;font-size:16px;color:var(--paper)}.f2brand .brand:hover{text-decoration:none;color:var(--teja2)}.f2brand p{color:var(--muted);font-size:13.5px;margin:10px 0 0;line-height:1.6}@media(max-width:640px){.f2grid{grid-template-columns:1fr 1fr}}@media(max-width:420px){.f2grid{grid-template-columns:1fr}}
@@ -307,7 +316,14 @@ a{color:var(--teal);text-decoration:none}
   <p class="votasub">Cuéntalo en 10 segundos y tu noche entra en el mapa. Es anónimo, y así sabremos <b>dónde se descansa de verdad</b> en España.</p>
   <button class="cta" id="cta" onclick="startFlow()">Contar cómo he dormido</button>
   <div class="loc" id="loc">📍 Detectando tu zona…</div>
-  <div class="desktoponly hidden" id="desknote">📱 Para contar tu noche hace falta el <b>móvil</b>: necesitamos tu ubicación para situarla en el mapa. Ábrelo en tu teléfono — el mapa de arriba se ve igual desde aquí.</div>
+  <div class="desktoponly hidden" id="desknote">
+    <p>📱 Para contar tu noche hace falta el <b>móvil</b>: necesitamos tu ubicación para situarla en el mapa. Desde el ordenador puedes mirarlo todo, pero no votar.</p>
+    <p class="dn-sub">Mándate el enlace y lo tienes en el teléfono sin buscarlo:</p>
+    <div class="dn-btns">
+      <button class="dn-b wa" onclick="enviameElEnlace()">Enviármelo por WhatsApp</button>
+      <button class="dn-b" id="dncopiar" onclick="copiaElEnlace()">Copiar el enlace</button>
+    </div>
+  </div>
   <div class="misnoches hidden" id="misnoches"></div>
 </div></section>
 
@@ -319,7 +335,7 @@ a{color:var(--teal);text-decoration:none}
     <p class="wear-note">⌚ <b>¿Llevas pulsera o reloj de sueño?</b> Al contar tu noche puedes añadir, si quieres, <b>las horas y la puntuación</b> que te dio tu dispositivo. Así cruzamos tres cosas que casi nunca se miran juntas: <b>lo que midió AEMET</b> fuera, <b>lo que midió tu aparato</b> y <b>lo que sentiste tú</b>. Es opcional y anónimo: no conectamos con ninguna cuenta ni servicio, lo escribes tú.</p>
   </div>
 </div></section>
-<footer class="f2"><div class="wrap"><div class="f2brand"><a class="brand" href="https://nochetropical.es/" aria-label="nochetropical.es"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--paper)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/><circle cx="73" cy="34" r="6.5" fill="var(--teja)"/></svg><span>nochetropical.es</span></a><p>Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p></div><div class="f2grid"><div class="f2col"><h4>Explora los datos</h4><a href="https://nochetropical.es/observatorio-del-descanso/">El Observatorio del Descanso</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios climáticos cerca de mí</a><a href="https://nochetropical.es/confortometro/">El Confortómetro: vota tu zona</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa interactivo de estaciones</a><a href="https://nochetropical.es/ola-de-calor/">¿Cuándo acaba la ola de calor?</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking nacional de noches tropicales</a><a href="https://nochetropical.es/parte/">El parte de la noche</a><a href="https://nochetropical.es/certificados/">Certificados de refugio climático</a></div><div class="f2col"><h4>Guías y artículos</h4><a href="https://nochetropical.es/hoteles-refugio-climatico/">🏨 Hoteles donde dormir con manta</a><a href="https://nochetropical.es/dormir-con-manta-en-verano/">Pueblos para dormir con manta en verano</a><a href="https://nochetropical.es/la-espana-que-nunca-se-colorea/">La España que nunca se colorea (estudio)</a><a href="https://nochetropical.es/microclimas/">Microclimas: los refugios de la naturaleza</a><a href="https://nochetropical.es/refugio-climatico-natural/">Cómo crear un refugio climático natural</a><a href="https://nochetropical.es/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://nochetropical.es/hipoteca-termica/">La hipoteca térmica</a></div><div class="f2col"><h4>Proyecto</h4><a href="https://nochetropical.es/">La calculadora de tu pueblo</a><a href="https://nochetropical.es/sobre-el-proyecto/">Sobre el proyecto</a><a href="https://nochetropical.es/metodologia/">Metodología y glosario</a><a href="https://nochetropical.es/prensa/">Sala de prensa</a><a href="https://nochetropical.es/tu-hotel/">Certifica tu hotel</a><a href="https://nochetropical.es/tu-pueblo/">¿Tu pueblo no aparece? Ayúdanos</a><a href="https://nochetropical.es/aviso-legal/">Licencia y aviso legal</a></div></div><div class="f2bar">Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a> · © 2026 <a href="https://nochetropical.es/">nochetropical.es</a> · Ramón J. Lowesting</div></div></footer>
+<footer class="f2"><div class="wrap"><div class="f2brand"><a class="brand" href="https://nochetropical.es/" aria-label="nochetropical.es"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--paper)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/><circle cx="73" cy="34" r="6.5" fill="var(--teja)"/></svg><span>nochetropical.es</span></a><p>Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p></div><div class="f2grid"><div class="f2col"><h4>Explora los datos</h4><a href="https://nochetropical.es/observatorio-del-descanso/">El Observatorio del Descanso</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios climáticos cerca de mí</a><a href="https://nochetropical.es/confortometro/">El Confortómetro: vota tu zona</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa interactivo de estaciones</a><a href="https://nochetropical.es/ola-de-calor/">¿Cuándo acaba la ola de calor?</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking nacional de noches tropicales</a><a href="https://nochetropical.es/parte/">El parte de la noche</a><a href="https://nochetropical.es/certificados/">Certificados de refugio climático</a></div><div class="f2col"><h4>Guías y artículos</h4><a href="https://nochetropical.es/dormir-con-calor/">Cómo dormir con calor sin aire acondicionado</a><a href="https://nochetropical.es/vacaciones-sin-calor/">Vacaciones sin calor: dónde ir en verano</a><a href="https://nochetropical.es/hoteles-refugio-climatico/">🏨 Hoteles donde dormir con manta</a><a href="https://nochetropical.es/dormir-con-manta-en-verano/">Pueblos para dormir con manta en verano</a><a href="https://nochetropical.es/la-espana-que-nunca-se-colorea/">La España que nunca se colorea (estudio)</a><a href="https://nochetropical.es/microclimas/">Microclimas: los refugios de la naturaleza</a><a href="https://nochetropical.es/refugio-climatico-natural/">Cómo crear un refugio climático natural</a><a href="https://nochetropical.es/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://nochetropical.es/hipoteca-termica/">La hipoteca térmica</a></div><div class="f2col"><h4>Proyecto</h4><a href="https://nochetropical.es/">La calculadora de tu pueblo</a><a href="https://nochetropical.es/sobre-el-proyecto/">Sobre el proyecto</a><a href="https://nochetropical.es/metodologia/">Metodología y glosario</a><a href="https://nochetropical.es/prensa/">Sala de prensa</a><a href="https://nochetropical.es/tu-hotel/">Certifica tu hotel</a><a href="https://nochetropical.es/tu-pueblo/">¿Tu pueblo no aparece? Ayúdanos</a><a href="https://nochetropical.es/aviso-legal/">Licencia y aviso legal</a></div></div><div class="f2bar">Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a> · © 2026 <a href="https://nochetropical.es/">nochetropical.es</a> · Ramón J. Lowesting</div></div></footer>
 
 <div class="flow" id="flow">
   <div class="flowtop"><button class="back" id="backbtn" onclick="back()">‹ Atrás</button><div class="bar"><i id="barfill"></i></div><span id="stepn" style="font-size:12.5px;color:var(--muted);width:34px;text-align:right">1/5</span></div>
@@ -1016,7 +1032,28 @@ function aSeccion(sel,dur){
  scrollSuaveA(Math.max(0,el.getBoundingClientRect().top+window.scrollY-46),dur||900);
  return el;
 }
-function irAVotar(){aSeccion(".votabox",900);}
+/* Desde el ordenador el botón lleva al mismo sitio, pero allí lo que hay es la
+   explicación de por qué no se puede votar desde aquí y cómo llevarse el enlace
+   al teléfono. Se enciende un momento para que se lea, en vez de dejar a la
+   persona mirando un botón que no hace lo que promete. */
+function irAVotar(){
+ aSeccion(".votabox",900);
+ var dn=document.getElementById("desknote");
+ if(dn&&!dn.classList.contains("hidden")){
+  dn.classList.add("recien");
+  setTimeout(function(){dn.classList.remove("recien");},2400);
+ }
+}
+var TXT_ENLACE="El Observatorio del Descanso: cuenta cómo has dormido esta noche y mira dónde se duerme mejor en España. Ábrelo en el móvil: ";
+function enviameElEnlace(){
+ window.open("https://wa.me/?text="+encodeURIComponent(TXT_ENLACE+"https://nochetropical.es/observatorio-del-descanso/"),"_blank");
+}
+function copiaElEnlace(){
+ var u="https://nochetropical.es/observatorio-del-descanso/",b=document.getElementById("dncopiar");
+ var ok=function(){if(b){b.textContent="Enlace copiado";setTimeout(function(){b.textContent="Copiar el enlace";},2200);}};
+ if(navigator.clipboard)navigator.clipboard.writeText(u).then(ok).catch(function(){window.prompt("Copia el enlace:",u);});
+ else window.prompt("Copia el enlace:",u);
+}
 function irACurioso(){
  aSeccion("#curioso",900);
  setTimeout(function(){var i=document.getElementById("curbusca");if(i)i.focus();},950);

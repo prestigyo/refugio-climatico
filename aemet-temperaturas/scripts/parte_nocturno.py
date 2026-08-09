@@ -473,6 +473,8 @@ PLANTILLA = r"""<!doctype html>
   <p class="nota">Datos de la red de observación de AEMET (últimas 24 h, provisionales y sin validar; ventana nocturna 18:00–08:00 UTC). La media histórica, pueblo a pueblo y con diez veranos validados, está en la <a href="__SITE__/">calculadora</a>.</p>
 
   <div class="cta"><a href="__SITE__/">¿Y tu pueblo? Míralo en la calculadora →</a></div>
+
+  <p class="nota">¿Mala noche? <a href="__SITE__/dormir-con-calor/">Qué funciona de verdad para dormir con calor</a> —sin comprar nada—, y <a href="__SITE__/vacaciones-sin-calor/">dónde se duerme fresco</a> si lo que quieres es escaparte.</p>
 </div></section>
 
 <footer><div class="wrap">

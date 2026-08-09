@@ -1137,7 +1137,9 @@ _F_EXPLORA = [("El Observatorio del Descanso", "/observatorio-del-descanso/"),
               ("Ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
               ("El parte de la noche", "/parte/"),
               ("Certificados de refugio climático", "/certificados/")]
-_F_GUIAS = [("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
+_F_GUIAS = [("Cómo dormir con calor sin aire acondicionado", "/dormir-con-calor/"),
+            ("Vacaciones sin calor: dónde ir en verano", "/vacaciones-sin-calor/"),
+            ("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
             ("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
             ("La España que nunca se colorea (estudio)", "/la-espana-que-nunca-se-colorea/"),
             ("Microclimas: los refugios de la naturaleza", "/microclimas/"),
@@ -1695,6 +1697,14 @@ def vecinas_html(prov: str, site: str) -> str:
         bloque = f'<div class="kick">Provincias vecinas</div><p class="vecinas">{enlaces}</p>'
     bloque += (f'<p class="vecinas"><a href="{site}/mapa-estaciones/">'
                f'Ver el mapa interactivo de toda España →</a></p>')
+    # Quien llega a la página de su provincia quiere una de dos cosas: aguantar
+    # la noche donde está, o irse a otra parte. Un enlace para cada una.
+    bloque += (f'<div class="kick">Y ahora qué</div>'
+               f'<p class="vecinas">Si esta noche aprieta: '
+               f'<a href="{site}/dormir-con-calor/">cómo dormir con calor sin aire '
+               f'acondicionado</a>. Si prefieres irte: '
+               f'<a href="{site}/vacaciones-sin-calor/">dónde pasar unas vacaciones '
+               f'sin calor</a>.</p>')
     return bloque
 
 
@@ -3405,6 +3415,7 @@ __NAV__
     <b>¿Y tu pueblo, aguanta fresco de noche?</b><br>
     <div class="botones">
       <a class="btn pri" href="__HOME__">Búscalo en la calculadora →</a>
+      <a class="btn sec" href="__SITE__/dormir-con-calor/">Cómo dormir esta noche</a>
       <a class="btn sec" href="__SITE__/mapa-estaciones/">Ver el mapa interactivo</a>
       <a class="btn sec" href="__SHARE_X__" target="_blank" rel="noopener">Compartir en X</a>
     </div>
@@ -3693,6 +3704,8 @@ __CSS_COMUN__
     <div class="mods">
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
       <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>25 hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
+      <a class="card2 destacada" href="__SITE__/dormir-con-calor/"><h3>😴 Cómo dormir con calor sin aire acondicionado</h3><p>Lo que de verdad funciona esta noche, lo que no sirve de nada, y a partir de qué temperatura ya no hay truco que valga.</p></a>
+      <a class="card2" href="__SITE__/vacaciones-sin-calor/"><h3>Vacaciones sin calor</h3><p>Dónde ir en verano sin subir al norte: los refugios al sur del paralelo de Burgos.</p></a>
       <a class="card2" href="__SITE__/dormir-con-manta-en-verano/"><h3>Dormir con manta en verano</h3><p>Un destino fresco medido por provincia: el mapa del turismo climático.</p></a>
       <a class="card2" href="__SITE__/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
       <a class="card2" href="__SITE__/refugio-climatico-natural/"><h3>Refugio climático natural</h3><p>Combatir el calor sin aire acondicionado, como se hacía antes.</p></a>
@@ -5058,6 +5071,468 @@ def construir_pagina_estudio(site: str, datos: dict) -> str:
 # AEMET, uno por provincia para que sirva de mapa de destinos. Es además la
 # página pilar del concepto "turismo climático".
 # ===========================================================================
+# Tipografía de lectura larga, compartida por las páginas-artículo. Columna
+# estrecha y línea alta: aquí se viene a leer, no a consultar una tabla.
+_CSS_ARTICULO = (
+    '.wrap{max-width:min(92vw,820px);margin:0 auto;padding:0 22px}'
+    'section{padding:22px 0}'
+    'h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,4vw,29px);'
+    'margin:26px 0 12px;letter-spacing:-.01em;line-height:1.16}'
+    'h3{font-family:var(--fd);font-weight:600;font-size:clamp(17px,3vw,21px);'
+    'margin:22px 0 8px;color:var(--teja2)}'
+    'p{margin:0 0 16px;font-size:clamp(15.5px,2.4vw,17px);line-height:1.78}'
+    'p b{color:var(--paper)}'
+    '.note{font-size:12.5px;color:var(--muted);margin:0 0 16px;line-height:1.6}'
+    '.destacado{background:linear-gradient(180deg,var(--bg2),var(--panel));'
+    'border:1px solid var(--line);border-left:3px solid var(--teal);'
+    'border-radius:0 14px 14px 0;padding:18px 20px;margin:22px 0}'
+    '.destacado p:last-child{margin-bottom:0}'
+    '.faq dt{font-family:var(--fd);font-weight:600;font-size:clamp(16.5px,2.7vw,19px);'
+    'color:var(--paper);margin:20px 0 7px}'
+    '.faq dd{margin:0;color:var(--muted);font-size:clamp(15px,2.3vw,16.5px);line-height:1.75}'
+)
+
+# ---------------------------------------------------------------------------
+# Página /dormir-con-calor/: la pieza PUENTE. Es la búsqueda de más volumen de
+# todo nuestro terreno («no puedo dormir por el calor», «cómo enfriar una
+# habitación»), la hace la misma gente que busca aire acondicionado pero en otro
+# momento —a las tres de la mañana, sin ganas de comprar nada—, y no la gana un
+# vendedor de aparatos porque no vende nada. Es informativa.
+#
+# Regla de la página: primero se ayuda de verdad esta noche, y solo al final se
+# dice lo nuestro — que todo esto compra dos o tres grados y lo que decide si
+# duermes es la mínima de tu calle. Si se hace al revés, es publicidad.
+# ---------------------------------------------------------------------------
+PAGINA_DORMIR = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cómo dormir con calor sin aire acondicionado: lo que funciona esta noche | nochetropical.es</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/dormir-con-calor/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cómo dormir con calor sin aire acondicionado: lo que funciona esta noche">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/dormir-con-calor/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ __NAVCSS__
+ __FOOTERCSS__
+ __CSSART__
+ .pasos{list-style:none;counter-reset:p;margin:6px 0 20px}
+ .pasos li{counter-increment:p;position:relative;padding:18px 20px 18px 60px;margin-bottom:11px;
+   background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}
+ .pasos li::before{content:counter(p);position:absolute;left:20px;top:17px;font-family:var(--fm);
+   font-weight:700;font-size:20px;color:var(--teja)}
+ .pasos b{display:block;color:var(--paper);margin-bottom:5px;font-size:16.5px;font-family:var(--fd);font-weight:600}
+ .pasos p{margin:0 0 8px;font-size:15px;line-height:1.7;color:var(--muted)}
+ .pasos p:last-child{margin-bottom:0}
+ .pasos p b{display:inline;font-family:var(--fb);font-size:inherit;color:var(--paper)}
+ .nova{background:#0f0b07;border:1px dashed var(--line);border-radius:14px;padding:18px 20px;margin:20px 0}
+ .nova h3{margin-top:0;color:var(--paper)}
+ .nova ul{margin:0;padding-left:20px}
+ .nova li{color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:10px}
+ .nova li b{color:var(--paper)}
+ .aviso{background:rgba(217,96,74,.10);border:1px solid #8a4436;border-radius:14px;padding:16px 18px;margin:22px 0}
+ .aviso p{font-size:14.5px;margin:0;line-height:1.7}
+ .aviso b{color:#f0c9bd}
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Dormir con calor</nav>
+  <div class="kick">Guía práctica · sin comprar nada</div>
+  <h1>Cómo dormir con calor <em>sin aire acondicionado</em></h1>
+  <p class="intro">Lo que de verdad funciona esta noche, lo que no sirve de nada y por qué a partir de cierta temperatura ya no hay truco que valga.</p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Por qué el calor no te deja dormir</h2>
+  <p>Para dormirte, tu cuerpo tiene que <b>bajar su temperatura interna</b> alrededor de un grado. No es un detalle: es la señal que abre el sueño. Y esa bajada se consigue de una sola manera, soltando calor por la piel —sobre todo por las manos, los pies y la cara, donde los vasos se dilatan y hacen de radiador.</p>
+  <p>Ese radiador necesita que el aire de alrededor esté <b>más frío que tu piel</b>. Cuando la habitación no baja de los 20&nbsp;°C, el margen se estrecha; por encima de 25&nbsp;°C prácticamente desaparece. El cuerpo lo compensa sudando y subiendo el pulso, y el sueño se fragmenta: te despiertas sin recordarlo, y la <b>fase profunda —la que repara— se acorta</b>. Por eso puedes dormir las mismas horas y levantarte como si no hubieras dormido.</p>
+  <p>De ahí que aquí midamos las <a href="__SITE__/metodologia/">noches tropicales</a>: las madrugadas en que la mínima no baja de 20&nbsp;°C. Es el umbral a partir del cual el cuerpo empieza a no poder.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Lo que funciona, por orden de importancia</h2>
+  <p>Ninguna de estas cosas cuesta dinero. Están ordenadas por lo que más cambia la temperatura de tu habitación, no por lo más conocido.</p>
+  <ol class="pasos">
+    <li><b>Cierra la casa de día, ábrela de noche</b>
+      <p>Es, con diferencia, lo que más pesa, y casi todo el mundo lo hace al revés. Persianas bajadas y ventanas cerradas <b>desde media mañana hasta que el sol se va</b>: cada rayo que entra por un cristal se queda dentro convertido en calor. Y en cuanto la temperatura de la calle baje de la de tu casa, abrir todo de par en par.</p>
+      <p>El momento exacto de abrir importa: si abres a las nueve de la noche y fuera hay 32&nbsp;°C, estás metiendo calor. Mejor tarde y de golpe que pronto y a medias.</p></li>
+    <li><b>Haz corriente, no ventiles una sola ventana</b>
+      <p>Una ventana abierta apenas mueve aire. Dos ventanas <b>enfrentadas</b>, en fachadas opuestas, cambian el aire de la casa en minutos. Si solo tienes ventanas al mismo lado, abre también las puertas interiores y la del baño o la cocina para crear un recorrido.</p></li>
+    <li><b>Dúchate con agua templada, no fría</b>
+      <p>Parece al revés y no lo es. El agua muy fría hace que los vasos de la piel <b>se cierren</b> para protegerte, y el calor se queda dentro: sales fresco un minuto y a los diez estás peor. El agua templada, casi tibia, hace lo contrario —abre la piel y deja salir el calor— y esa bajada posterior de temperatura corporal es justo la señal que provoca el sueño.</p></li>
+    <li><b>Saca los pies de la sábana</b>
+      <p>Las plantas de los pies y las palmas de las manos son las zonas por donde el cuerpo suelta calor más rápido. Destaparlas hace más que destaparse entero. Mojarse las muñecas y los tobillos con agua fresca antes de acostarse va en la misma dirección y dura un rato.</p></li>
+    <li><b>Sábana fina sí, dormir sin nada no</b>
+      <p>Sin nada encima, el sudor se queda en la piel y no evapora bien. Una <b>sábana fina de algodón o lino</b> lo absorbe y lo evapora por ti, que es como el cuerpo se enfría de verdad. Lo mismo con la ropa: mejor una camiseta fina de algodón que nada. El poliéster, fuera.</p></li>
+    <li><b>El ventilador que ya tienes, en la ventana</b>
+      <p>Casi todo el mundo lo pone apuntándose a la cara toda la noche, y así reseca garganta y ojos y acaba despertando. De noche rinde mucho más <b>en la ventana, mirando hacia fuera</b>: saca el aire caliente de la habitación y obliga a entrar el fresco por otra abertura. Si lo quieres cerca, que sea oscilando y a la altura del suelo.</p></li>
+    <li><b>Apaga lo que calienta</b>
+      <p>Un horno a las tres de la tarde, las bombillas viejas, el ordenador, la televisión, el router: cada aparato encendido es una estufa pequeña. Cocinar temprano o en frío los días de ola de calor baja grados reales en un piso pequeño.</p></li>
+    <li><b>Cena ligero y deja el alcohol</b>
+      <p>Digerir produce calor, así que una cena pesada juega en tu contra. Y el alcohol, aunque dé sueño al principio, <b>fragmenta la segunda mitad de la noche</b> y estorba a la regulación de la temperatura: es de las peores ideas en una noche tropical. Agua a temperatura ambiente, y sin miedo a beberla.</p></li>
+  </ol>
+  <div class="destacado">
+    <p><b>La toalla húmeda, solo si el aire es seco.</b> Colgar un paño mojado o poner un barreño de agua enfría por evaporación, y por eso funciona en el interior de Teruel o Soria y no funciona en la costa: donde el aire ya está cargado de humedad, no evapora nada y encima empeora la sensación. Es el mismo motivo por el que <a href="__SITE__/microclimas/">se duerme peor en el litoral que a la misma temperatura tierra adentro</a>.</p>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Lo que no funciona</h2>
+  <div class="nova">
+    <ul>
+      <li><b>La ducha helada antes de acostarte.</b> Cierra los vasos de la piel y retiene el calor dentro. Alivia un minuto y se paga después.</li>
+      <li><b>Tener la casa cerrada también de noche.</b> Sirve de día, cuando fuera hace más calor que dentro. De madrugada, con la calle más fresca, cerrar es encerrarse con el calor del día.</li>
+      <li><b>El ventilador dándote toda la noche.</b> No baja la temperatura de la habitación ni un grado: solo mueve aire. Si el aire que mueve está a 30&nbsp;°C, te seca sin refrescarte.</li>
+      <li><b>Congelar la almohada o la sábana.</b> Dura los primeros diez minutos, que además son los que menos importan: el problema es a las cuatro de la mañana.</li>
+      <li><b>Dormir en el suelo.</b> Sirve en casas de piedra o con suelo frío de verdad; en un piso normal el suelo está a la misma temperatura que el resto.</li>
+    </ul>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Cuándo esto ya no basta</h2>
+  <p>Todo lo anterior te compra, con suerte, <b>dos o tres grados</b>. Eso es mucho cuando fuera se está quedando en 21 y decisivo cuando se queda en 22. No sirve de nada cuando la calle no baja de 26.</p>
+  <p>Y esa es la parte que no depende de ti. Con diez veranos de datos de AEMET, <b>__M30__ estaciones de España acumulan treinta o más noches tropicales al año</b> —un mes entero de madrugadas por encima de 20&nbsp;°C— y __M60__ pasan de sesenta. En el otro extremo, <b>__CERO__ no registran ni una sola</b>. Entre las dos Españas hay a veces menos de cien kilómetros.</p>
+  <div class="cta">
+    <b>¿Cuántas noches tropicales tiene tu pueblo?</b>
+    <div class="botones">
+      <a class="btn pri" href="__HOME__">Búscalo en la calculadora</a>
+      <a class="btn sec" href="__SITE__/parte/">Cómo se durmió anoche en España</a>
+      <a class="btn sec" href="__SITE__/vacaciones-sin-calor/">Dónde ir a dormir fresco</a>
+    </div>
+  </div>
+  <p>Y hay un matiz que ningún dato de estación recoge: <b>tu calle no es tu estación</b>. Un patio interior, una vaguada, una zona con arbolado o una última planta bajo cubierta pueden separarse varios grados del dato oficial. Por eso montamos <a href="__SITE__/observatorio-del-descanso/">el Observatorio del Descanso</a>: para que la gente cuente cómo ha dormido de verdad y aparezcan en el mapa los sitios que los termómetros oficiales no ven. Se tarda diez segundos y es anónimo.</p>
+  <div class="aviso">
+    <p><b>Una advertencia que no es de sueño, sino de salud.</b> El calor nocturno sostenido es un riesgo real para bebés, personas mayores, embarazadas y quien tenga enfermedades crónicas o tome ciertos medicamentos. Si alguien deja de sudar, se desorienta, tiene la piel muy caliente y seca o vomita, no es cuestión de dormir mejor: es una urgencia y hay que llamar al <b>112</b>. Ante dudas con la medicación y el calor, pregunta en tu centro de salud.</p>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Preguntas frecuentes</h2>
+  <dl class="faq">__FAQ__</dl>
+</div></section>
+
+__FOOTER__
+</body>
+</html>
+"""
+
+
+def construir_pagina_dormir(estaciones: list, site: str) -> str:
+    """La guía práctica. Los recuentos salen de los datos, igual que en el
+    resto: es lo que separa esto de las mil listas de trucos que hay."""
+    m30 = sum(1 for e in estaciones if e["nt"] >= 30)
+    m60 = sum(1 for e in estaciones if e["nt"] >= 60)
+    cero = sum(1 for e in estaciones if e["nt"] < 1)
+    desc = ("Cómo dormir con calor sin aire acondicionado: qué hacer esta noche, qué no "
+            "sirve y por qué. Con los datos de AEMET de las noches tropicales de España, "
+            f"donde {m30} estaciones acumulan un mes o más de madrugadas sobre 20 °C.")
+    faq = [
+        ("¿Cómo puedo enfriar una habitación sin aire acondicionado?",
+         "Cerrando persianas y ventanas durante todo el día para que no entre sol, y "
+         "abriendo de par en par en cuanto la temperatura de la calle baje de la de "
+         "dentro, haciendo corriente entre dos ventanas enfrentadas. Es lo que más baja "
+         "la temperatura de una habitación sin gastar nada."),
+        ("¿Es mejor ducharse con agua fría o templada para dormir con calor?",
+         "Templada. El agua muy fría contrae los vasos de la piel y retiene el calor "
+         "dentro del cuerpo: refresca un minuto y luego se nota peor. El agua tibia "
+         "dilata la piel, deja salir el calor y provoca la bajada de temperatura "
+         "corporal que da paso al sueño."),
+        ("¿Sirve dormir con el ventilador puesto toda la noche?",
+         "El ventilador no baja la temperatura del aire, solo lo mueve. Ayuda si el aire "
+         "está por debajo de la temperatura de la piel, y de noche rinde más colocado en "
+         "la ventana expulsando aire hacia fuera que apuntando a la cama, donde reseca "
+         "garganta y ojos y termina despertando."),
+        ("¿A partir de qué temperatura no se puede dormir bien?",
+         "El sueño empieza a deteriorarse cuando la mínima de la noche no baja de 20 °C "
+         "—lo que se llama noche tropical— y se degrada mucho por encima de 25 °C, la "
+         "noche ecuatorial. No es que no te duermas: es que la fase profunda se acorta y "
+         "te levantas sin haber descansado."),
+        ("¿Por qué se duerme peor en la costa que en el interior con la misma temperatura?",
+         "Por la humedad. El cuerpo se enfría evaporando sudor, y en aire muy húmedo la "
+         "evaporación se frena. Además el vapor de agua retiene de noche el calor que el "
+         "suelo emite, así que la temperatura baja menos. Con los mismos grados, una "
+         "noche húmeda del litoral se lleva mucho peor que una seca del interior."),
+    ]
+    faq_html = "".join(f"<dt>{p}</dt><dd>{r}</dd>" for p, r in faq)
+    url = site + "/dormir-con-calor/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Dormir con calor", "item": url}]},
+        {"@type": "Article",
+         "headline": "Cómo dormir con calor sin aire acondicionado",
+         "description": desc, "url": url, "inLanguage": "es-ES",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es", "url": site + "/"},
+         "mainEntityOfPage": url, "image": site + "/og.png"},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": p,
+             "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in faq]}]},
+        ensure_ascii=False)
+    return (PAGINA_DORMIR
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__CSSART__", _CSS_ARTICULO)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__FAQ__", faq_html)
+            .replace("__M30__", str(m30))
+            .replace("__M60__", str(m60))
+            .replace("__CERO__", str(cero))
+            .replace("__DESC__", desc)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
+# ---------------------------------------------------------------------------
+# Página /vacaciones-sin-calor/: la que va a por la búsqueda de VIAJE («dónde ir
+# en verano que no haga calor», «vacaciones sin calor», «coolcation»), que es
+# otra intención distinta de las que ya cubrimos: /dormir-con-manta-en-verano/
+# es la lista de destinos, /refugio-climatico-natural/ explica el concepto y
+# /microclimas/ el porqué físico. Aquí se responde a quien está DECIDIENDO
+# dónde pasar sus vacaciones y da por hecho que hay que subir al norte.
+#
+# La tesis —que no hace falta— no se afirma: se demuestra con la tabla, que sale
+# de las estaciones de AEMET por debajo del paralelo de Burgos sin una sola
+# noche tropical. Es contenido que no tiene nadie más.
+# ---------------------------------------------------------------------------
+PAGINA_VACACIONES = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vacaciones sin calor en España: dónde ir en verano y dormir con manta | nochetropical.es</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/vacaciones-sin-calor/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="¿Vacaciones fresquitas fuera del norte? El mapa de los refugios climáticos naturales">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/vacaciones-sin-calor/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ __NAVCSS__
+ __FOOTERCSS__
+ __CSSART__
+ ol.factores{list-style:none;counter-reset:f;margin:6px 0 18px}
+ ol.factores li{counter-increment:f;position:relative;padding:16px 18px 16px 56px;margin-bottom:11px;
+   background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}
+ ol.factores li::before{content:counter(f);position:absolute;left:18px;top:16px;font-family:var(--fm);
+   font-weight:700;font-size:19px;color:var(--teja)}
+ ol.factores b{display:block;color:var(--paper);margin-bottom:4px;font-size:16px}
+ ol.factores span{color:var(--muted);font-size:14.5px;line-height:1.65}
+ table{width:100%;border-collapse:collapse;font-size:14.5px;margin:6px 0 10px}
+ th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+ th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+ th.r,td.n{text-align:right}
+ td.n{font-family:var(--fm);font-weight:700}
+ td.loc{font-weight:600}
+ tbody tr:hover{background:rgba(217,116,78,.05)}
+ @media(max-width:520px){th.hide,td.hide{display:none}}
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Vacaciones sin calor</nav>
+  <div class="kick">Turismo climático · Datos AEMET 2017–2026</div>
+  <h1>¿Vacaciones fresquitas <em>fuera del norte</em>?</h1>
+  <p class="intro">La ciencia de los <b>refugios climáticos naturales</b>: dónde ir en verano en España para dormir con manta en pleno agosto, sin subir al Cantábrico.</p>
+</div></header>
+
+<section><div class="wrap">
+  <p>Durante décadas, la receta para buscar <b>vacaciones sin calor</b> en julio y agosto parecía escrita en piedra: coger el coche y poner rumbo a las costas del Cantábrico o a las montañas de Galicia y Asturias. Pero los datos de AEMET cuentan otra cosa: en España hay <b>__CERO__ estaciones meteorológicas</b> que no registran <b>ni una sola noche tropical</b> al año —ninguna madrugada que se quede por encima de los 20&nbsp;°C—, y <b>__CERO_SUR__ de ellas están por debajo del paralelo de Burgos</b>.</p>
+  <p>Si te preguntas <b>dónde ir en verano que no haga calor</b>, o cómo planificar unas vacaciones en las que de verdad se descanse, conviene romper el mito primero y mirar el mapa después.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>El mito del Cantábrico: por qué creemos que solo el norte es fresco</h2>
+  <p>La idea de que el litoral norteño tiene el monopolio de las noches frescas ha empujado un fenómeno global: la <b>coolcation</b>, el viaje que busca frío en verano. Y no es falsa —el norte es suave por la influencia oceánica—, pero sí incompleta.</p>
+  <p>El norte es suave <b>de día</b>. De noche, la humedad del aire marítimo funciona como una manta: retiene el calor que el suelo suelta al anochecer y frena el enfriamiento. Por eso hay puntos de la cornisa donde la mínima de agosto no baja tanto como se supone, mientras a mil doscientos metros del interior la madrugada se desploma. <b>Lo que enfría una noche no es la latitud: es la altitud, el aire seco y el relieve.</b></p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Por qué en estos refugios se duerme con manta</h2>
+  <p>No es casualidad ni microclima misterioso. Son tres mecanismos que se suman:</p>
+  <ol class="factores">
+    <li><b>El gradiente térmico por altitud</b><span>La temperatura del aire baja del orden de 0,65&nbsp;°C por cada 100 metros de ascenso. Un pueblo a 1.200 o 1.400 metros parte con entre 8 y 10&nbsp;°C de ventaja sobre la costa antes de que intervenga nada más.</span></li>
+    <li><b>Aire seco y radiación nocturna</b><span>El suelo se enfría de noche emitiendo radiación infrarroja hacia el cielo. El vapor de agua la intercepta y la devuelve: por eso una noche húmeda del litoral enfría poco. En el aire seco del interior esa energía escapa sin obstáculo y la temperatura cae en picado en cuanto se pone el sol.</span></li>
+    <li><b>El aire frío baja por su propio peso</b><span>Al anochecer, el aire en contacto con las laderas se enfría, se vuelve más denso y drena ladera abajo hacia los valles y altiplanos, donde se acumula. Es el viento catabático, y produce la inversión térmica nocturna: el fondo del valle amanece más frío que la ladera que lo domina.</span></li>
+  </ol>
+  <p>El resultado es una <b>oscilación térmica enorme</b>: días soleados y agradables que dan paso a madrugadas de un dígito. Ahí nacen los <a href="__SITE__/dormir-con-manta-en-verano/">pueblos donde se duerme con manta en agosto</a>. Si quieres el detalle físico de por qué un valle puede ser más fresco que la cima de al lado, está en <a href="__SITE__/microclimas/">microclimas</a>.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>El mapa que no se ve: refugios al sur del paralelo de Burgos</h2>
+  <p class="note">Un destino por provincia, el de mayor altitud entre las estaciones que <b>no llegan a una noche tropical al año</b> con diez veranos de datos, y todas <b>por debajo del paralelo 42</b> —es decir, fuera de la franja norte—. Se dejan fuera aeropuertos y observatorios de alta montaña: aquí solo hay sitios donde se puede dormir. Pincha la provincia para ver todas sus estaciones.</p>
+  <table>
+    <thead><tr><th>Lugar</th><th>Provincia</th><th class="r hide">Altitud</th><th class="r">Noches tropicales/año</th></tr></thead>
+    <tbody>__TABLA__</tbody>
+  </table>
+  <p>El caso más reconocible es la <b>Serranía de Albarracín</b>, en Teruel, donde el nórdico en agosto no es una rareza. Pero el mismo patrón se repite en la Serranía de Cuenca, el Sistema Central —Gredos, el Jerte, Somosierra—, los Montes Universales, la sierra de Segura o las zonas altas de la Alpujarra. Ninguno de esos sitios está en el norte.</p>
+  <div class="destacado">
+    <p>Un matiz honesto: estos números son <b>medias de diez veranos</b> de la estación de AEMET más cercana, no una predicción de la noche que te va a tocar. Sirven para elegir zona, no para reservar a ciegas. Y a menudo <b>tu calle no es tu estación</b>: por eso montamos <a href="__SITE__/observatorio-del-descanso/">el Observatorio del Descanso</a>, donde la gente cuenta cómo ha dormido de verdad.</p>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>De la cubierta del barco al interior: lo que se ve en Jávea o Dénia</h2>
+  <p>En la costa alicantina el verano fue durante generaciones sinónimo de barco: fondear en una cala, la brisa, el buen ambiente a pocos metros de la orilla. Esa foto sigue existiendo de día. La que ha cambiado es la de la noche.</p>
+  <p>El calor nocturno sostenido y la humedad del Mediterráneo hacen que <b>evitar el bochorno para dormir</b> sea cada vez más difícil, también a bordo y a pie de playa. De ahí una decisión que cada verano se oye más entre familias de la zona: <b>alquilar la casa de la costa en el pico de demanda y marcharse al interior</b>. La casa rinde justo cuando más vale, y el descanso se recupera. El cálculo económico y el térmico apuntan, por una vez, en la misma dirección.</p>
+  <p class="note">Esto último es observación de campo, no un dato que hayamos medido: lo que sí está medido es el bochorno del que se huye. Dénia acumula <b>__NT_DENIA__ noches tropicales al año</b> de media según su estación de referencia de AEMET.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Cómo planificarlo sin cruzar la península</h2>
+  <p>Descubrir que a dos horas de casa hay valles donde el termómetro nocturno cae en picado cambia el viaje: deja de ser una expedición y se convierte en un fin de semana. Estas son las tres herramientas para hacerlo, y todas parten de los mismos datos de AEMET:</p>
+  <div class="cta">
+    <b>Encuentra tu refugio</b>
+    <div class="botones">
+      <a class="btn pri" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">Los refugios más cercanos a mí</a>
+      <a class="btn sec" href="__SITE__/ranking-noches-tropicales/">Ranking nacional</a>
+      <a class="btn sec" href="__SITE__/observatorio-del-descanso/">Cómo se durmió anoche</a>
+    </div>
+  </div>
+  <p>En nochetropical.es seguimos día a día lo que marcan las mínimas nocturnas de toda España para poner en el mapa dónde están estos refugios. Para disfrutar del verano no hace falta sufrir el calor: hace falta saber dónde mirar.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Preguntas frecuentes</h2>
+  <dl class="faq">__FAQ__</dl>
+</div></section>
+
+__FOOTER__
+</body>
+</html>
+"""
+
+
+def construir_pagina_vacaciones(estaciones: list, site: str) -> str:
+    """La landing de intención de viaje. Todo lo que afirma sale de los datos:
+    la tabla, los recuentos del texto y hasta el ejemplo de Dénia. Si el año que
+    viene los números cambian, el artículo cambia con ellos."""
+    # Fuera lo que no es un sitio donde alguien pueda dormir: aeropuertos,
+    # observatorios de alta montaña y estaciones de esquí falsean una lista que
+    # se lee como destinos de vacaciones.
+    fuera = ("AEROPUERTO", "RADIOTELESCOPIO", "OBSERVATORIO", "ESTACION DE ESQUI",
+             "ESTACIÓN DE ESQUÍ", "CAÑADAS", "EMBALSE", "FARO ", "PUERTO DE NAVACERRADA")
+    cero = [e for e in estaciones if e["nt"] < 1]
+    cero_sur = [e for e in cero if e["lat"] < 42]
+    candidatos = [e for e in cero_sur
+                  if not any(f in e["loc"].upper() for f in fuera) and e["alt"] <= 1600]
+    por_prov: dict[str, dict] = {}
+    for e in candidatos:
+        actual = por_prov.get(e["prov"])
+        if actual is None or e["alt"] > actual["alt"]:
+            por_prov[e["prov"]] = e
+    destinos = sorted(por_prov.values(), key=lambda x: -x["alt"])[:18]
+    tabla = "".join(
+        f'<tr><td class="loc"><a href="{site}/{slug(e["prov"])}/">{e["loc"]}</a></td>'
+        f'<td>{e["prov"]}</td><td class="hide n">{miles(e["alt"])} m</td>'
+        f'<td class="n">{_n_es(e["nt"])}</td></tr>' for e in destinos)
+
+    denia = next((e for e in estaciones if "PEGO" in e["loc"].upper()), None)
+    nt_denia = _n_es(denia["nt"]) if denia else "más de 40"
+
+    desc = (f"Dónde ir en verano en España sin calor: {len(cero_sur)} zonas medidas por AEMET "
+            f"al sur del paralelo de Burgos no registran ni una noche tropical al año. "
+            f"El mapa de los refugios climáticos naturales donde se duerme con manta en agosto.")
+
+    faq = [
+        ("¿Dónde ir de vacaciones en España para no pasar calor?",
+         f"No hace falta subir al norte. De las {len(cero)} estaciones de AEMET sin ninguna "
+         f"noche tropical al año, {len(cero_sur)} están por debajo del paralelo de Burgos: "
+         "sierras de Teruel y Cuenca, Sistema Central, Sierra de Segura, montañas de "
+         "Granada y Almería o el norte de Burgos y Soria. En la tabla de esta página hay "
+         "un destino medido por provincia."),
+        ("¿Qué es un refugio climático natural?",
+         "Un lugar donde la madrugada sigue refrescando en pleno verano sin necesidad de "
+         "aire acondicionado, por la combinación de altitud, aire seco y drenaje nocturno "
+         "de aire frío. Se mide con las noches tropicales: las madrugadas en que la "
+         "temperatura mínima no baja de 20 °C."),
+        ("¿Por qué se duerme mejor en el interior que en la costa si hace más calor de día?",
+         "Porque lo que impide dormir es la mínima, no la máxima. El aire húmedo del "
+         "litoral retiene de noche el calor acumulado y frena el enfriamiento; el aire "
+         "seco del interior lo deja escapar, y la temperatura cae en picado al ponerse el "
+         "sol. Un día de 34 °C en la sierra puede terminar en una noche de 12 °C."),
+        ("¿Qué es una coolcation?",
+         "El viaje que elige destino por el confort térmico en lugar de por el sol: huir "
+         "de las olas de calor y del bochorno nocturno. En España no obliga a ir al "
+         "Cantábrico — el interior de montaña ofrece noches más frescas que buena parte "
+         "de la cornisa."),
+        ("¿Cuándo es mejor reservar unas vacaciones sin calor?",
+         "Las diferencias entre zonas se mantienen todo el verano, así que el destino "
+         "importa más que la fecha. Julio y agosto son los meses con más noches "
+         "tropicales en la costa y, por tanto, cuando más se nota el contraste con un "
+         "refugio de interior."),
+    ]
+    faq_html = "".join(f"<dt>{p}</dt><dd>{r}</dd>" for p, r in faq)
+    url = site + "/vacaciones-sin-calor/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Vacaciones sin calor", "item": url}]},
+        {"@type": "Article",
+         "headline": "¿Vacaciones fresquitas fuera del norte? La ciencia de los refugios "
+                     "climáticos naturales",
+         "description": desc, "url": url, "inLanguage": "es-ES",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es",
+                       "url": site + "/"},
+         "mainEntityOfPage": url, "image": site + "/og.png",
+         "isBasedOn": "Datos diarios de temperatura mínima de AEMET, 2017-2026"},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": p,
+             "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in faq]}]},
+        ensure_ascii=False)
+    return (PAGINA_VACACIONES
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__CSSART__", _CSS_ARTICULO)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__TABLA__", tabla)
+            .replace("__FAQ__", faq_html)
+            .replace("__CERO_SUR__", str(len(cero_sur)))
+            .replace("__CERO__", str(len(cero)))
+            .replace("__NT_DENIA__", nt_denia)
+            .replace("__DESC__", desc)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
 PAGINA_MANTA = r"""<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6186,6 +6661,12 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .sello-ej{float:right;width:min(40vw,210px);margin:2px 0 14px 26px;text-align:center}
  .sello-ej img{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 26px rgba(0,0,0,.45))}
  .sello-ej figcaption{font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.45}
+ .provindex{margin:22px 0 8px;padding:14px 16px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;font-size:14px;line-height:2}
+ .provindex b{color:var(--paper);margin-right:6px}
+ .provindex a{color:var(--teja2);white-space:nowrap}
+ .regsub{color:var(--muted);font-size:14.5px;line-height:1.7;margin:-4px 0 16px;max-width:74ch}
+ .regsub b{color:var(--paper)}
+ h2.reg{scroll-margin-top:70px}
  .sello-ej figcaption a{color:var(--teja2)}
  @media(max-width:560px){.sello-ej{float:none;width:200px;margin:16px auto 6px}}
  .edwrap{padding:26px 0 6px;background:radial-gradient(120% 70% at 50% 0,#1d150d,var(--bg) 70%)}
@@ -6490,11 +6971,38 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             f'{ref}{accion}'
             f'</article>')
 
-    secciones = []
+    # Cada provincia abre con SU encabezado y SU dato. Quien busca «hoteles en
+    # Huesca» se encuentra un H2 que lo dice y, debajo, el único motivo por el
+    # que esta lista existe: lo que marca AEMET en esa zona. No es rellenar de
+    # palabras clave — es que cada bloque responda por sí solo a la pregunta con
+    # la que se llega, y que enlace a la página de datos de la provincia.
+    indice, secciones = [], []
     for prov in orden_prov:
-        cards = "".join(tarjeta(h) for h in hoteles if h["provincia"] == prov)
-        secciones.append(f'<h2 class="reg">{prov}</h2><div class="hgrid">{cards}</div>')
-    listado = "".join(secciones)
+        de_prov = [h for h in hoteles if h["provincia"] == prov]
+        if not de_prov:
+            continue
+        ancla = "hoteles-en-" + slug(prov)
+        indice.append(f'<a href="#{ancla}">{prov}</a>')
+        frio = min(de_prov, key=lambda h: h["tmin"])
+        nt_max = max(h["nt"] for h in de_prov)
+        n = len(de_prov)
+        rotulo = "hotel" if n == 1 else "hoteles"
+        clima = ("en zonas donde AEMET no registra ni una sola noche tropical al año"
+                 if nt_max < 0.05 else
+                 f"en zonas que no pasan de {_n_es(nt_max)} noches tropicales al año")
+        lead = (f'{n} {rotulo} en <b>{prov}</b> {clima}. '
+                f'{"El" if n == 1 else "El más fresco está"} en '
+                f'<b>{frio["municipio"]}</b>, con una mínima media de agosto de '
+                f'<b>{_n_es(frio["tmin"])}&nbsp;°C</b>: ahí se duerme con manta y sin aire '
+                f'acondicionado. <a href="{site}/{slug(prov)}/">Todos los datos de '
+                f'{prov} →</a>')
+        cards = "".join(tarjeta(h) for h in de_prov)
+        secciones.append(
+            f'<h2 class="reg" id="{ancla}">Hoteles en {prov} donde se duerme fresco</h2>'
+            f'<p class="regsub">{lead}</p><div class="hgrid">{cards}</div>')
+    listado = ('<nav class="provindex" aria-label="Hoteles por provincia">'
+               '<b>Salta a tu zona:</b> ' + " · ".join(indice) + '</nav>'
+               + "".join(secciones))
 
     # Payload del BUSCADOR "cerca de mí": mismo dataset que la lista (así un hotel
     # nuevo en hoteles.csv aparece a la vez en la lista y en el buscador). La
@@ -6925,7 +7433,15 @@ a{color:var(--teal);text-decoration:none}
 /* Al llegar aquí desde el resultado, la tarjeta se enciende un momento para
    que se vea que es aquí donde ha caído tu noche. */
 .misnoches.recien{border-color:var(--teja);box-shadow:0 0 0 3px rgba(224,131,79,.16)}
-.desktoponly{margin:8px auto 0;max-width:34ch;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);font-size:14.5px;line-height:1.55}
+.desktoponly p{margin:0}
+.desktoponly .dn-sub{margin:12px 0 10px;color:var(--muted)}
+.dn-btns{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.dn-b{background:transparent;border:1px solid var(--teja);color:var(--teja2);font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 15px;border-radius:11px;cursor:pointer}
+.dn-b:hover{background:rgba(217,116,78,.12)}
+.dn-b.wa{background:var(--teja);border-color:var(--teja);color:#160f08}
+.dn-b.wa:hover{background:var(--teja2)}
+.desktoponly.recien{border-color:var(--teja);box-shadow:0 0 0 3px rgba(224,131,79,.16)}
+.desktoponly{margin:8px auto 0;max-width:40ch;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);font-size:14.5px;line-height:1.55}
 .desktoponly b{color:var(--paper)}
 .back{background:transparent;color:var(--muted);font-size:15px;line-height:1;padding:6px 4px;white-space:nowrap}
 .back:hover{color:var(--paper)}
@@ -7027,10 +7543,11 @@ a{color:var(--teal);text-decoration:none}
  .hero .sub{max-width:36ch}
  .votabox{padding:44px 0 50px}
  .preg{margin-top:44px}
- /* Los botones flotantes se quedan en el móvil, que es de donde vienen. En
-    escritorio tapaban el mapa y no llevaban a nada nuevo: el mapa y el buscador
-    ya están juntos a la vista, y para votar hace falta el teléfono. */
- .fabs{display:none}
+ /* Los botones flotantes se quedan también en escritorio: quien llega desde un
+    ordenador tiene que ver que aquí se vota, aunque para votar necesite el
+    móvil. Se apartan a la derecha para no taparle el mapa. */
+ .fabs{left:auto;right:22px;transform:none;bottom:22px}
+ .fabs.on{transform:none}
 }
  __NAVCSS__
  __FOOTERCSS__
@@ -7086,7 +7603,14 @@ __PREGUNTAS__
   <p class="votasub">Cuéntalo en 10 segundos y tu noche entra en el mapa. Es anónimo, y así sabremos <b>dónde se descansa de verdad</b> en España.</p>
   <button class="cta" id="cta" onclick="startFlow()">Contar cómo he dormido</button>
   <div class="loc" id="loc">📍 Detectando tu zona…</div>
-  <div class="desktoponly hidden" id="desknote">📱 Para contar tu noche hace falta el <b>móvil</b>: necesitamos tu ubicación para situarla en el mapa. Ábrelo en tu teléfono — el mapa de arriba se ve igual desde aquí.</div>
+  <div class="desktoponly hidden" id="desknote">
+    <p>📱 Para contar tu noche hace falta el <b>móvil</b>: necesitamos tu ubicación para situarla en el mapa. Desde el ordenador puedes mirarlo todo, pero no votar.</p>
+    <p class="dn-sub">Mándate el enlace y lo tienes en el teléfono sin buscarlo:</p>
+    <div class="dn-btns">
+      <button class="dn-b wa" onclick="enviameElEnlace()">Enviármelo por WhatsApp</button>
+      <button class="dn-b" id="dncopiar" onclick="copiaElEnlace()">Copiar el enlace</button>
+    </div>
+  </div>
   <div class="misnoches hidden" id="misnoches"></div>
 </div></section>
 
@@ -7795,7 +8319,28 @@ function aSeccion(sel,dur){
  scrollSuaveA(Math.max(0,el.getBoundingClientRect().top+window.scrollY-46),dur||900);
  return el;
 }
-function irAVotar(){aSeccion(".votabox",900);}
+/* Desde el ordenador el botón lleva al mismo sitio, pero allí lo que hay es la
+   explicación de por qué no se puede votar desde aquí y cómo llevarse el enlace
+   al teléfono. Se enciende un momento para que se lea, en vez de dejar a la
+   persona mirando un botón que no hace lo que promete. */
+function irAVotar(){
+ aSeccion(".votabox",900);
+ var dn=document.getElementById("desknote");
+ if(dn&&!dn.classList.contains("hidden")){
+  dn.classList.add("recien");
+  setTimeout(function(){dn.classList.remove("recien");},2400);
+ }
+}
+var TXT_ENLACE="El Observatorio del Descanso: cuenta cómo has dormido esta noche y mira dónde se duerme mejor en España. Ábrelo en el móvil: ";
+function enviameElEnlace(){
+ window.open("https://wa.me/?text="+encodeURIComponent(TXT_ENLACE+"__SITE__/observatorio-del-descanso/"),"_blank");
+}
+function copiaElEnlace(){
+ var u="__SITE__/observatorio-del-descanso/",b=document.getElementById("dncopiar");
+ var ok=function(){if(b){b.textContent="Enlace copiado";setTimeout(function(){b.textContent="Copiar el enlace";},2200);}};
+ if(navigator.clipboard)navigator.clipboard.writeText(u).then(ok).catch(function(){window.prompt("Copia el enlace:",u);});
+ else window.prompt("Copia el enlace:",u);
+}
 function irACurioso(){
  aSeccion("#curioso",900);
  setTimeout(function(){var i=document.getElementById("curbusca");if(i)i.focus();},950);
@@ -8410,6 +8955,14 @@ def main() -> int:
     print(f"   observatorio-del-descanso: generado (semilla AEMET) · "
           f"{nlug} poblaciones publicadas" if nlug else
           "   observatorio-del-descanso: generado (semilla AEMET) · sin lugares.csv")
+    # Guía práctica: la búsqueda de más volumen («no puedo dormir por el calor»).
+    (DOCS_DIR / "dormir-con-calor").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "dormir-con-calor" / "index.html").write_text(
+        construir_pagina_dormir(estaciones, site), encoding="utf-8")
+    # Landing de intención de VIAJE («dónde ir en verano que no haga calor»).
+    (DOCS_DIR / "vacaciones-sin-calor").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "vacaciones-sin-calor" / "index.html").write_text(
+        construir_pagina_vacaciones(estaciones, site), encoding="utf-8")
     # Página SEO de destinos frescos / turismo climático.
     (DOCS_DIR / "dormir-con-manta-en-verano").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "dormir-con-manta-en-verano" / "index.html").write_text(

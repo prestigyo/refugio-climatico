@@ -187,6 +187,8 @@ __CSS_CHROME__
  .ayuda{font-size:.9rem;color:var(--muted);margin:.7rem 0 0}
  .ayuda b{color:#e7dcc8;font-weight:600}
  .notas{font-size:13px;color:var(--muted2);border-top:1px dashed var(--line);padding-top:16px;margin-top:34px;line-height:1.65}
+ .fichadatos{font-size:12.5px;color:var(--muted);margin:14px 0 0;padding:8px 12px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;display:inline-block}
+ .fichadatos b{color:var(--paper);font-weight:600}
  .notas b{color:var(--muted)}
  .notas a{color:var(--muted)}
  .explica{margin:34px 0 0;border-top:1px dashed var(--line);padding-top:22px}
@@ -204,6 +206,7 @@ __CSS_CHROME__
   <div class="wrap">
   <div class="crumb"><a href="__SITE__/">Refugio Climático</a> · El mapa interactivo</div>
   <h1>El mapa de los refugios climáticos de España</h1>
+  <p class="fichadatos"><b>Fuente:</b> AEMET · veranos 2017–2026 · Revisado en <time datetime="__FECHA_ISO__">__FECHA_TXT__</time></p>
   <p class="lead">Las <b>848 estaciones de AEMET</b>, una a una, sobre el mapa. El color dice cuántas <b>noches tropicales</b> (mínima ≥ 20 °C) sufre cada una al año. Pasa el ratón —o toca en el móvil— sobre cualquier punto para ver sus datos y abrir su provincia. Es la <b>media de diez veranos</b>: para ver qué pasa en el peor momento, está el <a href="__SITE__/ola-de-calor/">mapa de la ola de calor en España</a>; y si buscas lo práctico, <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">qué refugios tienes cerca de ti</a>.</p>
 
   <div class="tools">
@@ -239,7 +242,7 @@ __CIRCULOS__
     <p>Cada punto es una <b>estación meteorológica de AEMET</b>, y su color resume diez veranos de mínimas nocturnas. Ahí está la clave para leer este mapa como un <b>mapa de refugios climáticos</b>: donde manda el azul —montaña interior, valles secos, mesetas altas— la noche refresca y se duerme fresco; donde tira al rojo —costa mediterránea, vegas del sur, interior de Gran Canaria— no afloja hasta el amanecer. Un <b>refugio climático natural</b> no es más que la zona alrededor de una estación cuyas noches casi nunca cruzan los 20 °C. Busca tu pueblo en el buscador de arriba, o mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">qué refugios climáticos tienes cerca de ti</a>.</p>
   </section>
 
-  <p class="notas">Fuente: <b>AEMET</b> (OpenData). Noches tropicales medidas en verano (jun–ago), veranos 2017–2026. Datos abiertos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC BY 4.0</a>. Actualizado en <time datetime="__FECHA_ISO__">__FECHA_TXT__</time>.</p>
+  <p class="notas">Fuente: <b>AEMET</b> (OpenData). Noches tropicales medidas en verano (jun–ago), veranos 2017–2026. Datos abiertos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC BY 4.0</a>.</p>
   </div>
 
   __FOOTER__

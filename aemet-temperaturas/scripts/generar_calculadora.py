@@ -1467,6 +1467,7 @@ __NAV__
   <div class="kick">Noches tropicales · Datos AEMET</div>
   <h1>__H1__</h1>
   <p class="intro">__INTRO__</p>
+  __FICHA__
 </div></header>
 
 __WIDGET__
@@ -1663,6 +1664,30 @@ def prosa_metodologia(prov: str, n: int, fecha_txt: str) -> str:
 def miles(n: int) -> str:
     """1699 -> '1.699' (separador de miles con punto, como el resto de la página)."""
     return f"{n:,}".replace(",", ".")
+
+
+# ---------------------------------------------------------------------------
+# FICHA DE DATOS: la línea que dice de dónde sale esto y de cuándo es, justo
+# debajo del titular en vez de enterrada en el pie.
+#
+# Y dice la verdad de cada página, que no es la misma. Una página cuyo contenido
+# cambia de verdad cada mañana —la ola, el parte— se fecha con el DÍA. Una que
+# resume diez veranos no: ahí lo que importa es el periodo que cubre, y poner
+# «actualizado ayer» insinuaría una novedad que no hay. Esa mentira pequeña es
+# la que hace que alguien entre buscando la previsión de esta noche, encuentre
+# una climatología y se vuelva a Google — y eso Google lo cuenta.
+#
+# El <time datetime> lleva la fecha exacta en formato máquina aunque el texto
+# visible diga solo el mes: quien la necesita, la tiene.
+# ---------------------------------------------------------------------------
+def ficha_datos(fecha_iso: str, fecha_txt: str, periodo: str = "veranos 2017–2026",
+                diaria: bool = False) -> str:
+    # «el 10 de agosto» pero «en agosto»: la preposición depende de si la fecha
+    # trae día o solo mes, y las dos formas conviven en el sitio.
+    prep = "el" if fecha_txt[:1].isdigit() else "en"
+    verbo = "Actualizado" if diaria else "Revisado"
+    cuando = f'{verbo} {prep} <time datetime="{fecha_iso}">{fecha_txt}</time>' 
+    return (f'<p class="fichadatos"><b>Fuente:</b> AEMET · {periodo} · {cuando}</p>')
 
 
 def construir_faq_provincia(prov: str, mejor: dict, peor: dict, n: int) -> list[tuple[str, str]]:
@@ -2273,6 +2298,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             .replace("__FOOTER__", footer_escueto_html(
                 site, f"Última actualización de los datos: {fecha_mod_txt}"))
             .replace("__OGTITLE__", title)
+            .replace("__FICHA__", ficha_datos(fecha_mod, fecha_mod_txt))
             .replace("__TITLE__", title)
             .replace("__DESC__", desc)
             .replace("__CANONICAL__", f"{site}/{sl}/")
@@ -2363,6 +2389,9 @@ _CSS_CHROME = (
     'footer{border-top:1px solid var(--line);padding:28px 0 60px;color:#9a8a6f;font-size:12.5px;margin-top:24px}'
     'footer a{color:#9a8a6f}'
     '.compartir{margin:22px 0;padding:15px 18px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}'
+    '.fichadatos{font-size:12.5px;color:var(--muted);margin:14px 0 0;padding:8px 12px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;display:inline-block}'
+    '.fichadatos b{color:var(--paper);font-weight:600}'
+    '.fichadatos time{font-variant-numeric:tabular-nums}'
     '.compartir .ct{display:block;font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin-bottom:11px}'
     '.compartir .cbtns{display:flex;flex-wrap:wrap;gap:9px}'
     '.compartir .cb{font:600 13.5px/1 var(--fb);padding:9px 15px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--paper);cursor:pointer;text-decoration:none;display:inline-block}'
@@ -2673,6 +2702,7 @@ PAGINA_RANKING = r"""<!doctype html>
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Ranking</nav>
   <div class="kick">Ranking · Datos AEMET 2017–2026</div>
   <h1>Dónde se duerme <em>mejor</em> y <em>peor</em> en verano en España</h1>
+  __FICHA__
   <p class="intro">El ranking de <b>noches tropicales</b> —noches en que la mínima no baja de 20&nbsp;°C— de __TOTAL__ estaciones de AEMET, con diez veranos de datos. Cuantas más noches tropicales, peor se duerme.</p>
 </div></header>
 
@@ -2840,6 +2870,7 @@ def construir_pagina_ranking(estaciones: list, site: str,
             .replace("__SCHEMA__", schema)
             .replace("__COMPARTIR__", barra_compartir(url, texto_comp))
             .replace("__CSS__", _CSS_CHROME)
+            .replace("__FICHA__", ficha_datos(fecha_iso, fecha_txt))
             .replace("__PEOR__", filas_peor)
             .replace("__MEJOR__", filas_mejor)
             .replace("__CERO__", str(cero))
@@ -3380,6 +3411,7 @@ __NAV__
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Mapa de la ola de calor</nav>
   <p class="kick">Mapa animado · Datos AEMET</p>
   <h1>Mapa de la ola de calor en España, hoy: <em>día y noche</em></h1>
+  __FICHA__
   <p class="lede">El <b>mapa de la ola de calor en España</b>, animado día a día con los datos de AEMET: las <b>máximas de hoy</b> y las <b>mínimas de esta noche</b>. La forma más rápida de ver si la ola <b>afloja o aprieta</b> — y dónde, pese a todo, <b>se sigue durmiendo fresco</b>.</p>
 </div></header>
 
@@ -3501,6 +3533,8 @@ def construir_pagina_ola(site: str, fecha_iso: str, fecha_txt: str) -> str:
          "datePublished": FECHA_PUBLICACION_LANDINGS, "dateModified": fecha_iso,
          "mainEntityOfPage": url}]}, ensure_ascii=False)
     return (PAGINA_OLA
+            .replace("__FICHA__", ficha_datos(fecha_iso, fecha_txt,
+                     "mapas diarios, jornada a jornada", diaria=True))
             .replace("__SCHEMA__", schema)
             .replace("__SHARE_X__", share_x)
             # chrome nuevo: paleta negra + menú + pie, compartidos con la portada

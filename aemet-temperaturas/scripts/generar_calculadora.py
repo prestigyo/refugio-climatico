@@ -21,6 +21,7 @@ Uso:
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import re
 import unicodedata
@@ -307,7 +308,7 @@ TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El mapa del calor que no te deja dormir · Refugio Climático</title>
+<title>El mapa del calor que no te deja dormir</title>
 <meta name="description" content="Reportaje con 10 veranos de datos de AEMET: dónde se duerme fresco en España y dónde se suda hasta el amanecer. Y la calculadora de tu pueblo.">
 <meta property="og:title" content="El mapa del calor que no te deja dormir">
 <meta property="og:description" content="848 estaciones, diez veranos de AEMET. ¿Cuántas noches tropicales aguanta tu pueblo?">
@@ -2492,8 +2493,8 @@ PAGINA_PRENSA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sala de prensa · Refugio Climático (datos de noches tropicales, AEMET)</title>
-<meta name="description" content="Material para prensa del proyecto Refugio Climático: 5 datos para titular, titulares sugeridos, gráficos descargables, metodología y contacto. Datos de AEMET, 2017–2026.">
+<title>Sala de prensa: datos de noches tropicales de AEMET</title>
+<meta name="description" content="Cinco datos para titular, gráficos descargables, metodología y contacto. Con diez veranos de AEMET, libres para citar.">
 <link rel="canonical" href="__SITE__/prensa/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -2621,8 +2622,8 @@ PAGINA_RANKING = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dónde se duerme mejor y peor en verano en España (ranking de noches tropicales) | Refugio Climático</title>
-<meta name="description" content="Ranking de noches tropicales en España con 10 veranos de datos de AEMET: los lugares donde peor se duerme (más noches con la mínima sobre 20 °C) y los refugios donde mejor.">
+<title>Dónde se duerme mejor y peor de España: el ranking</title>
+<meta name="description" content="Las estaciones de AEMET ordenadas por noches tropicales: los treinta sitios donde peor se duerme y los treinta refugios donde mejor.">
 <link rel="canonical" href="__SITE__/ranking-noches-tropicales/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -2858,8 +2859,8 @@ PAGINA_METODOLOGIA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Metodología y glosario: cómo medimos dónde se duerme fresco | Noche Tropical</title>
-<meta name="description" content="Qué es una noche tropical, de dónde salen los datos (AEMET OpenData, 2017–2026, 848 estaciones), cómo se otorga el certificado de Refugio Climático y qué diferencia un refugio climático medido, uno natural y uno publicitario.">
+<title>Metodología: cómo medimos dónde se duerme fresco</title>
+<meta name="description" content="Qué es una noche tropical, de dónde salen los datos, cómo se otorga el certificado y qué distingue un refugio medido de uno publicitario.">
 <link rel="canonical" href="__SITE__/metodologia/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -2980,8 +2981,8 @@ PAGINA_TUPUEBLO = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>¿Tu pueblo no aparece? Ayúdanos a medirlo | Noche Tropical</title>
-<meta name="description" content="Solo podemos certificar refugios climáticos donde hay estación meteorológica con datos suficientes. Si tu pueblo no aparece, cuéntanos: ¿conoces una estación que no controlamos? ¿Quieres que estudiemos tu zona?">
+<title>¿Tu pueblo no aparece? Ayúdanos a medirlo</title>
+<meta name="description" content="Solo certificamos donde hay estación meteorológica con datos suficientes. ¿Conoces una que no tengamos? ¿Quieres que estudiemos tu zona?">
 <link rel="canonical" href="__SITE__/tu-pueblo/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -3107,8 +3108,8 @@ PAGINA_VACIADA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Refugios climáticos y España vaciada: el frío que los despobló es hoy su activo | Noche Tropical</title>
-<meta name="description" content="Muchos de los pueblos de España donde mejor se duerme en verano están en la España vaciada. El mismo frío de montaña que un día los despobló es hoy, con el cambio climático, su mayor activo. Análisis con datos de AEMET.">
+<title>Refugios climáticos y España vaciada: el frío como activo</title>
+<meta name="description" content="El frío de montaña que un día despobló estos pueblos es hoy, con el cambio climático, su mayor activo. Análisis con datos de AEMET.">
 <link rel="canonical" href="__SITE__/refugios-y-espana-vaciada/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -3297,8 +3298,8 @@ PAGINA_OLA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mapa de la ola de calor en España hoy: máximas y mínimas de AEMET</title>
-<meta name="description" content="Mapa de la ola de calor en España, animado día a día con datos de AEMET: las temperaturas máximas de hoy y las mínimas de esta noche. Ve si la ola afloja o aprieta y, si no da tregua, dónde refugiarte.">
+<title>Ola de calor en España: el mapa de AEMET, noche a noche</title>
+<meta name="description" content="Cómo va la ola, jornada a jornada, en los mapas de AEMET: las máximas y —lo que de verdad importa— las mínimas. Y dónde refugiarte.">
 <link rel="canonical" href="__SITE__/ola-de-calor/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -3441,7 +3442,7 @@ __NAV__
     </div>
   </div>
 
-  <p class="notas">Mapas: <b>AEMET</b> (© Agencia Estatal de Meteorología), animados por el proyecto <a href="__HOME__">Refugio Climático</a>. Un fotograma por día. Datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado en __FECHA__.</p>
+  <p class="notas">Mapas: <b>AEMET</b> (© Agencia Estatal de Meteorología), animados por el proyecto <a href="__HOME__">Refugio Climático</a>. Un fotograma por día. Datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>. Actualizado el __FECHA__.</p>
 </div></section>
 
 __FOOTER__
@@ -3517,8 +3518,8 @@ PAGINA_BETA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El termómetro de las noches tropicales: ¿dónde se duerme fresco en España? | nochetropical.es</title>
-<meta name="description" content="¿Dónde se duerme fresco en España? Diez veranos de datos de AEMET (2017–2026) sobre las noches tropicales, pueblo a pueblo. Busca tu pueblo en el termómetro, mira el mapa animado de la ola de calor y aprende a localizar los refugios climáticos naturales.">
+<title>¿Dónde se duerme fresco en España? Noches tropicales</title>
+<meta name="description" content="Diez veranos de AEMET, pueblo a pueblo. Busca el tuyo en el termómetro y mira dónde la madrugada todavía refresca de verdad.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="__SITE__/">
 <meta property="og:type" content="website">
@@ -3855,8 +3856,8 @@ PAGINA_CERCA = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Refugios climáticos cerca de ti: dónde se duerme fresco más cerca | nochetropical.es</title>
-<meta name="description" content="¿Cuál es el refugio climático natural más cercano a ti? Los pueblos de España sin noches tropicales, con la distancia y la ruta para llegar. Diez veranos de datos de AEMET.">
+<title>Refugios climáticos cerca de ti: el más próximo</title>
+<meta name="description" content="Los pueblos sin noches tropicales más cercanos a ti, con la distancia y la ruta para llegar. Diez veranos de datos de AEMET.">
 <link rel="canonical" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -4233,13 +4234,13 @@ PAGINA_CONFORTOMETRO = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El Confortómetro: el estudio que mide cómo se siente el clima en España</title>
-<meta name="description" content="Estudio de investigación participativa: miles de votos anónimos, de helador a insoportable, contrastados con AEMET. Vota cómo se siente tu zona ahora — de día, de noche, en verano y en invierno.">
+<title>El Confortómetro: cómo se siente el clima en España</title>
+<meta name="description" content="Votos anónimos, de helador a insoportable, contrastados con AEMET. Cuenta cómo se siente tu zona ahora: de día, de noche, todo el año.">
 <link rel="canonical" href="__SITE__/confortometro/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
 <meta property="og:type" content="website">
-<meta property="og:title" content="El Confortómetro: el estudio que mide cómo se siente el clima en España">
+<meta property="og:title" content="El Confortómetro: cómo se siente el clima en España">
 <meta property="og:description" content="De helador a insoportable: el clima que se siente, votado por la gente y contrastado con AEMET. Participa: son 10 segundos.">
 <meta property="og:url" content="__SITE__/confortometro/">
 <meta property="og:image" content="__SITE__/og.png">
@@ -5197,7 +5198,7 @@ PAGINA_DORMIR = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cómo dormir con calor sin aire acondicionado: lo que funciona esta noche | nochetropical.es</title>
+<title>Cómo dormir con calor sin aire acondicionado</title>
 <meta name="description" content="__DESC__">
 <link rel="canonical" href="__SITE__/dormir-con-calor/">
 <meta name="robots" content="index,follow,max-image-preview:large">
@@ -5379,9 +5380,8 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
     m30 = sum(1 for e in estaciones if e["nt"] >= 30)
     m60 = sum(1 for e in estaciones if e["nt"] >= 60)
     cero = sum(1 for e in estaciones if e["nt"] < 1)
-    desc = ("Cómo dormir con calor sin aire acondicionado: qué hacer esta noche, qué no "
-            "sirve y por qué. Con los datos de AEMET de las noches tropicales de España, "
-            f"donde {m30} estaciones acumulan un mes o más de madrugadas sobre 20 °C.")
+    desc = (f"Qué hacer esta noche, qué no sirve de nada y por qué. Con los datos de "
+            f"AEMET: {m30} estaciones acumulan un mes o más de madrugadas sobre 20 °C.")
     ciu, pue = NOCHE_2025["sevilla"], NOCHE_2025["cedrillas"]
     tabla_noche = "".join(
         f'<tr><td class="loc">{x["nombre"]}</td>'
@@ -5492,7 +5492,7 @@ PAGINA_VACACIONES = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vacaciones sin calor en España: dónde ir en verano y dormir con manta | nochetropical.es</title>
+<title>Vacaciones sin calor: dónde ir en verano en España</title>
 <meta name="description" content="__DESC__">
 <link rel="canonical" href="__SITE__/vacaciones-sin-calor/">
 <meta name="robots" content="index,follow,max-image-preview:large">
@@ -5642,9 +5642,8 @@ def construir_pagina_vacaciones(estaciones: list, site: str) -> str:
         f"una cada año y medio. Para hacerse una idea del otro extremo: en "
         f"<b>{peor['loc']}</b> ({peor['prov']}) son <b>{_n_es(peor['nt'])} al año</b> — "
         "casi tres meses seguidos de noches en las que el cuerpo no llega a enfriarse.")
-    desc = (f"Dónde ir en verano en España sin calor: {len(cero_sur)} zonas medidas por AEMET "
-            f"al sur del paralelo de Burgos no registran ni una noche tropical al año. "
-            f"El mapa de los refugios climáticos naturales donde se duerme con manta en agosto.")
+    desc = (f"{len(cero_sur)} zonas medidas por AEMET al sur del paralelo de Burgos no "
+            f"registran ni una noche tropical al año. No hace falta subir al norte.")
 
     faq = [
         ("¿Dónde ir de vacaciones en España para no pasar calor?",
@@ -5736,13 +5735,13 @@ PAGINA_MANTA = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pueblos de España donde dormir con manta en verano: destinos frescos</title>
+<title>Pueblos donde dormir con manta en verano</title>
 <meta name="description" content="__DESC__">
 <link rel="canonical" href="__SITE__/dormir-con-manta-en-verano/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Pueblos de España donde dormir con manta en verano: destinos frescos">
+<meta property="og:title" content="Pueblos donde dormir con manta en verano">
 <meta property="og:description" content="__DESC__">
 <meta property="og:url" content="__SITE__/dormir-con-manta-en-verano/">
 <meta property="og:image" content="__SITE__/og.png">
@@ -5899,7 +5898,7 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
             {"@type": "ListItem", "position": 2, "name": "Dormir con manta en verano",
              "item": site + "/dormir-con-manta-en-verano/"}]},
         {"@type": "Article",
-         "headline": "Pueblos de España donde dormir con manta en verano: destinos frescos",
+         "headline": "Pueblos donde dormir con manta en verano",
          "description": desc,
          "image": site + "/og.png",
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
@@ -5931,8 +5930,8 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
 PAGINA_AVISO_LEGAL = r"""<!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Licencia, derechos de autor y aviso legal | nochetropical.es</title>
-<meta name="description" content="Qué puedes reutilizar de nochetropical.es y cómo citarlo: los datos de noches tropicales están bajo licencia CC BY 4.0; la marca, el diseño y los textos están reservados. Fuente de los datos: AEMET.">
+<title>Licencia, derechos de autor y aviso legal</title>
+<meta name="description" content="Qué puedes reutilizar y cómo citarlo: los datos van bajo CC BY 4.0; la marca, el diseño y los textos, reservados. Fuente: AEMET.">
 <link rel="canonical" href="__SITE__/aviso-legal/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -6023,13 +6022,13 @@ __FOOTER__
 PAGINA_SOBRE = r"""<!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sobre el proyecto: quién hay detrás de nochetropical.es y por qué</title>
-<meta name="description" content="Quién está detrás de nochetropical.es: no una empresa ni una redacción, sino una persona, sus ratos libres y una pregunta —¿por qué no se conocen los pueblos donde de verdad se duerme fresco?—. Datos abiertos de AEMET, método reproducible, sin publicidad.">
+<title>Sobre el proyecto: quién hay detrás y por qué</title>
+<meta name="description" content="No una empresa ni una redacción: una persona, sus ratos libres y una pregunta. Datos abiertos de AEMET, método reproducible, sin publicidad.">
 <link rel="canonical" href="__SITE__/sobre-el-proyecto/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Sobre el proyecto: quién hay detrás de nochetropical.es y por qué">
+<meta property="og:title" content="Sobre el proyecto: quién hay detrás y por qué">
 <meta property="og:description" content="Una persona, sus ratos libres y una pregunta que lleva años rondando. Datos abiertos de AEMET, método reproducible, sin publicidad ni rastreo.">
 <meta property="og:url" content="__SITE__/sobre-el-proyecto/">
 <meta property="og:image" content="__SITE__/og.png">
@@ -6819,7 +6818,7 @@ def cargar_hoteles(estaciones: list) -> list:
 PAGINA_HOTELES = r"""<!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hoteles donde el verano te deja dormir · La geografía del descanso | nochetropical.es</title>
+<title>Hoteles donde se duerme con manta en agosto</title>
 <meta name="description" content="__DESC__">
 <link rel="canonical" href="__SITE__/hoteles-refugio-climatico/">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -7095,10 +7094,8 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
     tmin_min = min((h["tmin"] for h in hoteles), default=0)
     frescos = [h for h in hoteles if h["tmin"] < tmin_min + 0.05]
     hotel_frio = frescos[0] if frescos else (hoteles[0] if hoteles else None)
-    desc = ("El verano no se mide por el día, sino por cómo duermes. Hoteles en refugios "
-            "climáticos naturales de España donde la noche baja de 20 °C y se duerme "
-            "fresco —con manta y sin aire acondicionado—, medido con 10 años de datos de "
-            "AEMET. La geografía del descanso.")
+    desc = ("Hoteles en refugios climáticos naturales: la noche baja de 20 °C y se duerme "
+            "con manta, sin aire acondicionado. Con el dato de AEMET de cada zona.")
     # Imagen DESTACADA de la página: el sello de refugio climático, en alta
     # resolución (>=1200 px), RÁSTER (Google no usa SVG como miniatura) y con
     # fondo transparente. Se sirve en tres relaciones de aspecto (1:1, 4:3,
@@ -7523,7 +7520,7 @@ SILUETA_ES = (
 PAGINA_OBSERVATORIO = r"""<!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>El Observatorio del Descanso · ¿Cómo has dormido esta noche? | nochetropical.es</title>
+<title>El Observatorio del Descanso: ¿cómo has dormido?</title>
 <meta name="description" content="__DESC__">
 <link rel="canonical" href="__SITE__/observatorio-del-descanso/">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -8636,10 +8633,8 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
                         e["id"], e["prov"]]
                        for e in estaciones if e.get("tmin") is not None],
                       ensure_ascii=False, separators=(",", ":"))
-    desc = ("¿Cómo has dormido esta noche? El Observatorio del Descanso es el mapa "
-            "ciudadano del descanso climático de España: no medimos la temperatura, "
-            "medimos cómo se duerme. Comparte tu noche en 10 segundos y descubre dónde "
-            "se descansa mejor, con datos cruzados con AEMET.")
+    desc = ("El mapa ciudadano del descanso en España: no medimos la temperatura, medimos "
+            "cómo se duerme. Cuenta tu noche en 10 segundos, es anónimo.")
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
@@ -8874,8 +8869,8 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
 PAGINA_TUHOTEL = r"""<!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Certifica tu hotel como Refugio Climático Natural (gratis, datos AEMET)</title>
-<meta name="description" content="¿Tienes un hotel o casa rural en un pueblo fresco? Auditamos gratis los registros de AEMET de tu municipio. Si la noche refresca, entras en el directorio con tu sello de Refugio Climático Natural. Un argumento de venta con aval de datos oficiales.">
+<title>Certifica tu hotel como Refugio Climático Natural</title>
+<meta name="description" content="¿Tienes un hotel o casa rural en un pueblo fresco? Auditamos gratis los datos de AEMET de tu municipio y, si refresca, te damos el sello.">
 <link rel="canonical" href="__SITE__/tu-hotel/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Ramón J. Lowesting">
@@ -9112,7 +9107,8 @@ def main() -> int:
         encoding="utf-8")
     (DOCS_DIR / "ola-de-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "ola-de-calor" / "index.html").write_text(
-        construir_pagina_ola(site, fecha_mod_iso, fecha_mod_txt), encoding="utf-8")
+        construir_pagina_ola(site, fecha_mod_iso, fecha_es_dia(fecha_mod)),
+        encoding="utf-8")
     # Herramienta: los refugios climáticos más cercanos (geolocalización).
     (DOCS_DIR / "refugios-climaticos-naturales-cerca-de-mi").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "refugios-climaticos-naturales-cerca-de-mi" / "index.html").write_text(
@@ -9370,26 +9366,73 @@ def main() -> int:
     # Google una URL que le pedimos no indexar.
     hoy = date.today().isoformat()
 
+    # FECHA DE MODIFICACIÓN REAL, página a página. Antes el sitemap ponía la
+    # fecha del build en las 137 URLs todos los días: un sitemap donde todo
+    # cambió ayer es un sitemap que Google acaba ignorando, y es en las páginas
+    # pegadas a la actualidad —la ola de calor, el parte— donde más cuesta esa
+    # desconfianza.
+    #
+    # Ahora se guarda una huella del contenido de cada página en
+    # docs/datos/lastmod.json y la fecha solo avanza cuando la huella cambia.
+    # Antes de calcularla se borran las fechas del propio build (el «9 de agosto
+    # de 2026» del pie, el ISO del schema): si no, cada página cambiaría todos
+    # los días por su propia marca de tiempo y volveríamos al punto de partida.
+    fichero_fechas = DOCS_DIR / "datos" / "lastmod.json"
+    try:
+        registro_fechas = json.loads(fichero_fechas.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        registro_fechas = {}
+
+    _MESES_RE = ("enero|febrero|marzo|abril|mayo|junio|julio|agosto|"
+                 "septiembre|octubre|noviembre|diciembre")
+    _FECHAS = re.compile(r"\d{4}-\d{2}-\d{2}"
+                         r"|\d{1,2} de (?:" + _MESES_RE + r") de \d{4}"
+                         r"|(?:" + _MESES_RE + r") de \d{4}", re.I)
+
+    def _fecha_de(rel: str, f: Path) -> str:
+        """Cuándo cambió por última vez el CONTENIDO de esta página. Si la
+        huella coincide con la guardada, se conserva la fecha anterior."""
+        try:
+            cuerpo = _FECHAS.sub("", f.read_text(encoding="utf-8"))
+        except OSError:
+            return hoy
+        huella = hashlib.sha1(cuerpo.encode("utf-8")).hexdigest()[:16]
+        previo = registro_fechas.get(rel)
+        if isinstance(previo, dict) and previo.get("h") == huella:
+            return previo.get("f", hoy)
+        registro_fechas[rel] = {"h": huella, "f": hoy}
+        return hoy
+
     def _es_noindex(f: Path) -> bool:
         try:
             return 'content="noindex' in f.read_text(encoding="utf-8")
         except OSError:
             return False
 
-    urls = [site + "/"] + sorted(
-        f"{site}/{rel}/"
+    paginas = [("", DOCS_DIR / "index.html")] + sorted(
+        (rel, f)
         for patron in ("*/index.html", "*/*/index.html")
         for f in DOCS_DIR.glob(patron)
         if (rel := f.parent.relative_to(DOCS_DIR).as_posix()) not in REDIRECCIONES
         and not _es_noindex(f))
+    urls = [f"{site}/{rel}/" if rel else site + "/" for rel, _ in paginas]
     filas = "\n".join(
-        f'  <url><loc>{u}</loc><lastmod>{hoy}</lastmod><changefreq>weekly</changefreq>'
-        f'<priority>{"1.0" if u == site + "/" else "0.7"}</priority></url>' for u in urls)
+        f'  <url><loc>{u}</loc><lastmod>{_fecha_de(rel, f)}</lastmod>'
+        f'<changefreq>weekly</changefreq>'
+        f'<priority>{"1.0" if not rel else "0.7"}</priority></url>'
+        for u, (rel, f) in zip(urls, paginas))
+    fichero_fechas.parent.mkdir(parents=True, exist_ok=True)
+    fichero_fechas.write_text(
+        json.dumps(registro_fechas, ensure_ascii=False, sort_keys=True, indent=0),
+        encoding="utf-8")
+    cambiadas = sum(1 for v in registro_fechas.values()
+                    if isinstance(v, dict) and v.get("f") == hoy)
     (DOCS_DIR / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + filas + "\n</urlset>\n", encoding="utf-8")
     print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"
+          + f" · {cambiadas} con contenido nuevo hoy"
           + (f" · {migradas} páginas estáticas migradas de dominio" if migradas else "")
           + (f" · menú escueto inyectado en {con_menu} páginas estáticas" if con_menu else "")
           + (f" · pie unificado en {con_footer} páginas estáticas" if con_footer else "")

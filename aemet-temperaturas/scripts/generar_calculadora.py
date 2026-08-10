@@ -5007,7 +5007,7 @@ __NAV__
 </div></header>
 
 <section><div class="wrap">
-  <h2>De noche: el mapa del sueño</h2>
+  <h2>Dónde refresca de noche en España: el mapa del sueño</h2>
   <p>Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Pero el termómetro engaña: una mínima <i>puntual</i> de 19,5&nbsp;°C al amanecer, tras una noche infernal, es un <b>falso alivio</b>. Por eso distinguimos tres Españas: la que <b>baja de 18&nbsp;°C cada noche</b> (frescor real, sueño garantizado), la que nunca es tropical pero <b>roza los 18-20</b> (el espejismo), y la que <b>alguna noche cruza los 20</b>.</p>
   <div class="dato">
     <div class="dcard"><div class="n">__PROFUNDO__ %</div><div class="l">baja de 18° cada noche · refugio profundo</div></div>
@@ -5027,7 +5027,7 @@ __NAV__
 </div></section>
 
 <section><div class="wrap">
-  <h2>De día: la España que no se colorea de rojo</h2>
+  <h2>Las zonas más frescas de España de día: la que no se colorea de rojo</h2>
   <p>¿Y de día? Aquí no hay refugio para casi nadie: en verano <b>España arde de sol a sol</b>. Si pintamos cada zona con <b>su día más caliente</b> de todo el periodo, el <b>__ENROJECE__&nbsp;%</b> del territorio llega al rojo (32&nbsp;°C) alguna jornada. Solo un __NUNCA_ROJO__&nbsp;% —las cumbres— <b>no se colorea de rojo jamás</b>.</p>
   <figure>
     <a href="__SITE__/ola-de-calor/" aria-label="Ver el mapa de la ola de calor en directo"><img src="__SITE__/estudios/techo-del-calor.png" alt="Mapa de España pintado con la temperatura máxima más alta de cada zona en el verano: casi todo el país enrojece por encima de 32 grados y solo las cumbres se quedan en amarillo, según las máximas de AEMET" loading="lazy"></a>
@@ -5055,7 +5055,7 @@ __NAV__
 </div></section>
 
 <section><div class="wrap">
-  <h2>El refugio total está donde coinciden los dos mapas</h2>
+  <h2>Dónde ir en agosto sin calor: el refugio total, de día y de noche</h2>
   <p>De noche hay refugio para bastantes; de día, casi solo para las cumbres. <b>Donde se solapan</b> — Pirineo, Cantábrica, las sierras altas de Teruel y Gúdar, el techo del Sistema Central — está el <b>refugio total</b>: fresco al mediodía y fresco de madrugada. Son los pueblos donde en agosto se cena con chaqueta y se duerme con manta.</p>
   <p class="metodo"><b>Cómo está hecho.</b> Superponemos los mapas diarios de AEMET (__N__ jornadas de este verano) y, con su propia escala de color, clasificamos cada píxel por su banda de temperatura. Es una <b>ventana</b>: el titular «nunca» se refiere al periodo observado (__INI__ – __FIN__); a medida que avanza el verano la mancha crece y el refugio se ajusta. Iremos publicando los estudios de veranos anteriores y posteriores. Todo es regenerable con <code>scripts/estudio_colores.py</code> sobre datos de AEMET.</p>
   <div class="sigue">
@@ -5083,10 +5083,13 @@ def construir_pagina_estudio(site: str, datos: dict) -> str:
     ini = fecha_es(date.fromisoformat(per["ini"]))
     fin = fecha_es(date.fromisoformat(per["fin"]))
     n = per["noches"]
-    title = "La España que nunca se colorea: el mapa de los refugios climáticos"
-    desc = (f"Superponemos {n} mapas de AEMET: solo el {noc['profundo']:.0f} % de España baja "
-            f"de 18° cada noche y apenas un puñado de cumbres resiste el calor de día. El mapa "
-            f"honesto de los refugios climáticos reales, de noche y de día.")
+    # El nombre del reportaje se queda —es la marca de la pieza y lo que citará
+    # la prensa—, pero acompañado de lo que la gente escribe en Google. Y la
+    # descripción deja de regalar el dato estrella: sin ese porcentaje, la
+    # curiosidad solo se resuelve entrando.
+    title = "La España que nunca se colorea: zonas frescas en verano"
+    desc = (f"¿Qué parte de España se libra del calor en verano? Superponemos {n} mapas "
+            f"de AEMET para encontrar las zonas que no se colorean, de día y de noche.")
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},

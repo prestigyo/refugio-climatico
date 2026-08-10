@@ -8145,11 +8145,111 @@ function pintaMisNoches(){
   var d=Number(n.d)||0;
   return '<div class="mn-row"><span class="mn-idx" style="color:'+colorFor(d)+';background:'+bgFor(d)+'">'+d.toFixed(1)+'</span>'
    +'<span class="mn-info"><b>'+n.n+'</b><small>'+n.f+(n.q?' · apartada del cálculo':'')+'</small></span>'
-   +'<button class="mn-share" onclick="shareNoche('+i+')">Compartir</button></div>';
+   +'<button class="mn-share" onclick="compartirImagen(misNoches()['+i+'],this)">Compartir</button></div>';
  }).join("")
  +'<p class="mn-pie">Guardadas solo en este teléfono. Si borras los datos del navegador, desaparecen de aquí — la noche seguirá contando en el estudio igual.</p>';
 }
 pintaMisNoches();
+
+
+/* TARJETA COMPARTIBLE — se dibuja una IMAGEN, no se manda un enlace.
+   Un enlace en WhatsApp es una línea azul que casi nadie abre; una imagen se
+   ve sin tocar nada. El Observatorio ya crea el momento —acabas de contar tu
+   noche— y hasta ahora ese momento se gastaba en una URL.
+
+   Formato 1080x1350 (4:5), que es el que menos recorta Instagram y el que
+   mejor se ve en una conversación. Se dibuja con canvas en el propio móvil: ni
+   servidor, ni librería, ni dato que salga de aquí. */
+var TARJETA_W=1080,TARJETA_H=1350;
+function _redonda(x,a,b,an,al,r){
+ x.beginPath();x.moveTo(a+r,b);x.arcTo(a+an,b,a+an,b+al,r);x.arcTo(a+an,b+al,a,b+al,r);
+ x.arcTo(a,b+al,a,b,r);x.arcTo(a,b,a+an,b,r);x.closePath();
+}
+function _lineas(x,txt,ancho){
+ var pal=txt.split(" "),li=[],ac="";
+ for(var i=0;i<pal.length;i++){
+  var p=ac?ac+" "+pal[i]:pal[i];
+  if(x.measureText(p).width>ancho&&ac){li.push(ac);ac=pal[i];}else ac=p;
+ }
+ if(ac)li.push(ac);
+ return li;
+}
+function dibujaTarjeta(n){
+ var c=document.createElement("canvas");c.width=TARJETA_W;c.height=TARJETA_H;
+ var x=c.getContext("2d"),d=Number(n.d)||0,col=colorFor(d);
+ var g=x.createLinearGradient(0,0,TARJETA_W,TARJETA_H);
+ g.addColorStop(0,"#241a10");g.addColorStop(.55,"#16100a");g.addColorStop(1,"#0e0b07");
+ x.fillStyle=g;x.fillRect(0,0,TARJETA_W,TARJETA_H);
+ x.strokeStyle="#d9744e";x.lineWidth=4;_redonda(x,28,28,TARJETA_W-56,TARJETA_H-56,44);x.stroke();
+ x.textAlign="center";
+ x.fillStyle="#d9744e";x.font='600 30px '+FB;
+ x.letterSpacing&&(x.letterSpacing="7px");
+ x.fillText("EL OBSERVATORIO DEL DESCANSO",TARJETA_W/2,150);
+ x.letterSpacing&&(x.letterSpacing="0px");
+ /* el número, que es lo que se lee de lejos en una lista de chats */
+ x.fillStyle=col;x.font='900 300px '+FD;
+ x.fillText(d.toFixed(1).replace(".",","),TARJETA_W/2,500);
+ x.fillStyle="#b3a48c";x.font='400 34px '+FB;
+ x.fillText("de 10 · así dormí anoche",TARJETA_W/2,600);
+ x.strokeStyle="#3a2c1c";x.lineWidth=2;
+ x.beginPath();x.moveTo(300,660);x.lineTo(780,660);x.stroke();
+ x.fillStyle="#efe6d6";x.font='600 74px '+FD;
+ var nom=n.n||"",tam=74;
+ while(x.measureText(nom).width>880&&tam>36){tam-=4;x.font='600 '+tam+'px '+FD;}
+ x.fillText(nom,TARJETA_W/2,762);
+ if(n.f){
+  x.fillStyle="#b3a48c";x.font='400 38px '+FB;
+  var li=_lineas(x,n.f,840),y=844;
+  for(var i=0;i<li.length&&i<3;i++){x.fillText(li[i],TARJETA_W/2,y);y+=54;}
+ }
+ /* la barra de color: sitúa tu nota sin tener que explicar la escala */
+ var bx=140,bw=TARJETA_W-280,by=1058;
+ var bg=x.createLinearGradient(bx,0,bx+bw,0);
+ bg.addColorStop(0,"#d9604a");bg.addColorStop(.35,"#e0834f");
+ bg.addColorStop(.6,"#e8b45c");bg.addColorStop(.8,"#b9c47a");bg.addColorStop(1,"#8fb07a");
+ x.fillStyle=bg;_redonda(x,bx,by,bw,18,9);x.fill();
+ var px=bx+bw*Math.max(0,Math.min(10,d))/10;
+ x.fillStyle=col;x.beginPath();x.arc(px,by+9,26,0,6.284);x.fill();
+ x.strokeStyle="#efe6d6";x.lineWidth=5;x.beginPath();x.arc(px,by+9,26,0,6.284);x.stroke();
+ x.fillStyle="#b3a48c";x.font='400 26px '+FB;
+ x.textAlign="left";x.fillText("se suda",bx,by+72);
+ x.textAlign="right";x.fillText("se duerme",bx+bw,by+72);
+ x.textAlign="center";
+ x.fillStyle="#d9744e";x.font='600 32px '+FB;
+ x.fillText("nochetropical.es",TARJETA_W/2,1250);
+ return c;
+}
+var FD='Fraunces,Georgia,serif',FB='-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif';
+/* Las fuentes tienen que estar cargadas ANTES de dibujar: si no, el canvas usa
+   la de respaldo y la tarjeta sale con otra letra. */
+function conFuentes(cb){
+ if(!document.fonts||!document.fonts.load){cb();return;}
+ Promise.all([document.fonts.load('900 300px Fraunces'),
+              document.fonts.load('600 74px Fraunces')]).then(cb).catch(cb);
+}
+function compartirImagen(n,boton){
+ var txt0=boton?boton.textContent:"";
+ if(boton)boton.textContent="Preparando…";
+ conFuentes(function(){
+  var c=dibujaTarjeta(n);
+  c.toBlob(function(blob){
+   if(boton)boton.textContent=txt0;
+   if(!blob){shareNoche();return;}
+   var fich=new File([blob],"mi-noche-"+(n.n||"").toLowerCase().replace(/[^a-z0-9]+/g,"-")+".png",{type:"image/png"});
+   var texto="Así dormí anoche en "+n.n+": "+(Number(n.d)||0).toFixed(1).replace(".",",")+"/10. ¿Y tú? __SITE__/observatorio-del-descanso/";
+   if(navigator.canShare&&navigator.canShare({files:[fich]})){
+    navigator.share({files:[fich],text:texto}).catch(function(){});
+    return;
+   }
+   /* Sin compartir nativo —casi siempre, en escritorio— se descarga la imagen
+      y se copia el texto: el resultado para la persona es el mismo. */
+   var u=URL.createObjectURL(blob),a=document.createElement("a");
+   a.href=u;a.download=fich.name;document.body.appendChild(a);a.click();a.remove();
+   setTimeout(function(){URL.revokeObjectURL(u);},4000);
+   if(navigator.clipboard)navigator.clipboard.writeText(texto).catch(function(){});
+  },"image/png");
+ });
+}
 
 /* FICHA DE COMPARTIR: comparte tu resultado (nativo en móvil; si no, copia).
    Con un número, comparte esa noche de tu lista; sin él, la recién votada. */
@@ -8534,7 +8634,7 @@ function finish(){
   '<div class="card fade" style="animation-delay:.7s"><h3>Cerca de ti, esta madrugada</h3><div class="nearby">'+
    near.map(function(o){return '<div class="row"><span class="idx" style="color:'+colorFor(o.z.d)+';background:'+bgFor(o.z.d)+'">'+o.z.d.toFixed(1)+'</span><div class="info"><div class="n">'+o.z.n+' · '+o.k+' km</div><div class="p">"'+o.z.f+'"</div></div></div>';}).join("")+'</div></div>'+
   deudaCard(deuda,descanso,WEAR)+
-  '<button class="share fade" style="animation-delay:.8s" onclick="shareNoche()">📲 Comparte tu noche</button>'+
+  '<button class="share fade" style="animation-delay:.8s" onclick="compartirImagen({n:nombreLugar,d:descanso,f:zona.f},this)">📲 Comparte tu noche</button>'+
   '<button class="again pri2" onclick="verCurioso()">🔎 ¿Y cómo se duerme en otra población española?</button>'+
   '<button class="again" onclick="cierraResultado()">Volver al observatorio</button>'+
   '<p class="obsestado" id="obsestado" style="display:none"></p>'+

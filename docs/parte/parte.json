@@ -1,12 +1,12 @@
 {
  "fecha": "2026-08-10",
- "total": 844,
- "tropicales": 315,
+ "total": 843,
+ "tropicales": 312,
  "ecuatoriales": 66,
  "peor": {
   "id": "B087X",
   "nombre": "Banyalbufar",
-  "min": 28.1,
+  "min": 28.3,
   "prov": "Illes Balears"
  },
  "mejor": {
@@ -19,7 +19,7 @@
   {
    "id": "B087X",
    "nombre": "Banyalbufar",
-   "min": 28.1,
+   "min": 28.3,
    "prov": "Illes Balears"
   },
   {
@@ -109,12 +109,6 @@
    "prov": "Cantabria"
   },
   {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 8.7,
-   "prov": "Cantabria"
-  },
-  {
    "id": "1542",
    "nombre": "Puerto de Leitariegos",
    "min": 9.0,
@@ -137,6 +131,12 @@
    "nombre": "Navasfrias",
    "min": 9.5,
    "prov": "Salamanca"
+  },
+  {
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 9.6,
+   "prov": "Cantabria"
   }
  ]
 }

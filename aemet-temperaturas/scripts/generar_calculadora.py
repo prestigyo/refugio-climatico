@@ -2209,27 +2209,33 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
     # largos se acortan solo en el título (Tenerife, Baleares, Álava): caben en
     # móvil y además coinciden con lo que la gente busca de verdad.
     prov_titulo = PROV_TITULO_CORTO.get(prov, prov)
-    title = f"Noches tropicales en {prov_titulo}: dónde se duerme fresco"
+    # El título lleva delante el lenguaje con el que la gente busca de verdad
+    # («dónde se duerme fresco en X»), y detrás el término que nos trae los
+    # clics: en Search Console, «noches tropicales zaragoza» convierte al 13,9 %
+    # desde la posición 2,6. Perder ese término por modernizar el título sería
+    # tirar lo único que ya funciona.
+    title = f"Dónde se duerme fresco en {prov_titulo}: noches tropicales"
     h1 = (f'¿Se duerme bien en verano en <em>{prov}</em>? '
           f'Te lo contamos con 10 años de datos')
-    # Meta description: dato concreto + invitación. Degrada con elegancia según
-    # los datos de la provincia (una sola estación, o sin pueblo "fresco").
+    # Meta description: la TENSIÓN, no la respuesta. La anterior decía cuál era
+    # el pueblo más fresco y cuántas noches tenía; quien buscaba justo eso ya lo
+    # tenía resuelto en el resultado de Google y no necesitaba entrar. Ahora se
+    # da el tamaño del contraste —que es lo que engancha— y se guarda el nombre,
+    # que es lo que se viene a buscar. Se dice «estaciones meteorológicas»
+    # entero: «estaciones» a secas se confunde con las del año o las de tren.
     if n <= 1:
         cuenta = ("no se cuenta ni 1 noche tropical al año" if mejor["nt"] < 1
                   else f"se cuentan {nt_prosa(mejor['nt'])} noches tropicales al año")
-        desc = (f"En {mejor['loc']} ({alt_mejor} m), la única estación de AEMET de "
-                f"{prov} con datos suficientes, {cuenta}. Consulta el detalle completo.")
+        desc = (f"La única estación meteorológica de AEMET en {prov_titulo}, con diez "
+                f"veranos de datos: {cuenta}. ¿Se duerme bien ahí?")
     else:
-        if mejor["nt"] < 1:
-            primera = f"En {mejor['loc']} ({alt_mejor} m) no hay ni 1 noche tropical al año"
-        elif mejor["nt"] < 10:
-            primera = (f"En {mejor['loc']} ({alt_mejor} m) apenas "
-                       f"{nt_prosa(mejor['nt'])} noches tropicales al año")
+        hueco = max(0.0, peor["nt"] - mejor["nt"])
+        if hueco >= 1:
+            tension = f"{nt_prosa(hueco)} noches tropicales separan la mejor de la peor"
         else:
-            primera = (f"En {mejor['loc']} ({alt_mejor} m), "
-                       f"{nt_prosa(mejor['nt'])} noches tropicales al año")
-        desc = (f"{primera}; en {peor['loc']}, {nt_prosa(peor['nt'])}. "
-                f"Descubre el mapa completo de {prov} con datos de AEMET.")
+            tension = "en ninguna se llega a una noche tropical al año"
+        desc = (f"Las {n} estaciones meteorológicas de AEMET en {prov_titulo} ordenadas "
+                f"por lo que refresca su noche: {tension}. ¿Y tu pueblo?")
 
     refugios = [e for e in ordenadas if e["nt"] < 1]
     peores = sorted(lista, key=lambda x: -x["nt"])[:3] if n > 1 else []

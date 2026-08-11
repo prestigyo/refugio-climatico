@@ -1,7 +1,7 @@
 {
  "fecha": "2026-08-11",
- "total": 846,
- "tropicales": 270,
+ "total": 847,
+ "tropicales": 266,
  "ecuatoriales": 46,
  "peor": {
   "id": "B051A",
@@ -91,6 +91,12 @@
    "prov": "Granada"
   },
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 8.2,
+   "prov": "Segovia"
+  },
+  {
    "id": "9001D",
    "nombre": "Nestares",
    "min": 9.3,
@@ -103,10 +109,10 @@
    "prov": "Zamora"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 10.1,
-   "prov": "Segovia"
+   "id": "1410X",
+   "nombre": "Sobrado dos Monxes",
+   "min": 10.0,
+   "prov": "A Coruña"
   },
   {
    "id": "2930Y",
@@ -131,12 +137,6 @@
    "nombre": "Barco de Avila",
    "min": 10.6,
    "prov": "Ávila"
-  },
-  {
-   "id": "5516D",
-   "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 10.8,
-   "prov": "Granada"
   }
  ]
 }

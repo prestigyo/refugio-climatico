@@ -768,6 +768,7 @@ function resuelveLugar(la,lo){
   MUN={id:r.p[0],n:r.p[1]};
   var el=document.getElementById("loc");
   if(el&&MY)el.innerHTML='📍 Estás en <b>'+r.p[1]+'</b> <span style="opacity:.7">· referencia AEMET: '+MY.n+'</span>';
+  llamadaSegunLugar();
  }
  cargaLugares(function(L){
   if(!L)return;
@@ -778,6 +779,22 @@ function resuelveLugar(la,lo){
      el resto, y se vuelve a mirar con la lista completa. */
   if(r.d>4)cargaAldeas(function(T){if(T)pinta(elMasCerca(T));});
  });
+}
+/* Quien duerme en su propia casa rara vez va a contar que allí se duerme mal:
+   nadie critica el sitio que ha elegido. El viajero no tiene esa atadura, y
+   además es el único cuya noche le sirve a otro para decidir. Así que en cuanto
+   sabemos que está fuera, la web deja de pedirle un dato y le pide una
+   referencia. */
+function llamadaSegunLugar(){
+ if(!esNocheFuera())return;
+ var h=document.querySelector(".votabox h2"),p=document.querySelector(".votasub"),
+     c=document.getElementById("cta"),f=document.querySelector(".fab-pri");
+ var donde=MUN.n||"aquí";
+ if(h)h.textContent="Estás de viaje. ¿Cómo se duerme en "+donde+"?";
+ if(p)p.innerHTML="Cuéntalo en 10 segundos y quedará como <b>referencia de "+donde+"</b> "
+   +"para quien busque dónde se descansa de verdad. Es anónimo.";
+ if(c)c.textContent="Contar cómo se duerme aquí";
+ if(f)f.textContent="🧳 Contar esta noche";
 }
 function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};setZone(nearest(MYLL.la,MYLL.lo));resuelveLugar(MYLL.la,MYLL.lo);cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
 function initHero(){

@@ -24,6 +24,7 @@ import csv
 import hashlib
 import json
 import re
+import urllib.request
 import unicodedata
 from datetime import date
 from pathlib import Path
@@ -4169,6 +4170,16 @@ APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbwjIxpPVGrwc
 APPS_SCRIPT_OBS_URL = ("https://script.google.com/macros/s/AKfycbz4bvNwAVEBDA0NId5_"
                        "uv42a_Q9oXlA2h4q25CZ8ZuDRmWilVIDbg2qAmGGHDChmVhmyg/exec")
 
+# INDEXNOW: avisar a los buscadores de qué páginas han cambiado, sin esperar a
+# que pasen a mirar. La clave es pública por diseño —tiene que estar colgada en
+# la raíz del sitio para demostrar que el dominio es nuestro—, así que no es un
+# secreto y puede vivir aquí.
+#
+# OJO CON LAS EXPECTATIVAS: IndexNow lo usan Bing, Yandex, Seznam y Naver.
+# GOOGLE NO LO USA. Lo probó y no lo adoptó, así que esto no acelera nada en
+# Google; sirve para el resto. Vacía la constante para desactivarlo.
+INDEXNOW_KEY = "ea184884381440dd98e760a573498d81"
+
 # Palabra secreta del atajo de teclado de la sala de prensa: tecléala en
 # /prensa/ y saltas a la consola interna de informes (/informes/). Va ofuscada
 # en base64 en el HTML (no en claro), pero es seguridad por oscuridad: cámbiala
@@ -7345,6 +7356,35 @@ def _obs_frase(tmin: float) -> str:
             "Aquí la noche no perdona.")
 
 
+def avisar_indexnow(site: str, urls: list) -> str:
+    """Avisa a los buscadores que usan IndexNow de las páginas que han cambiado
+    HOY —las que el sitemap acaba de fechar con la fecha de hoy—, no de las 137.
+
+    Se manda solo lo que cambió porque avisar cada día de todo el sitio es
+    exactamente lo que estos buscadores consideran abuso. Y si algo falla, se
+    dice y se sigue: el build no puede caerse porque un buscador esté de
+    mantenimiento."""
+    if not INDEXNOW_KEY or not urls:
+        return "sin avisos que mandar"
+    if len(urls) > 200:                     # algo va mal: no se avisa a ciegas
+        return f"{len(urls)} URLs cambiadas: demasiadas, no se avisa (revisar lastmod)"
+    dominio = site.split("//")[-1].strip("/")
+    cuerpo = json.dumps({
+        "host": dominio,
+        "key": INDEXNOW_KEY,
+        "keyLocation": f"{site}/{INDEXNOW_KEY}.txt",
+        "urlList": urls,
+    }, ensure_ascii=False).encode("utf-8")
+    peticion = urllib.request.Request(
+        "https://api.indexnow.org/IndexNow", data=cuerpo,
+        headers={"Content-Type": "application/json; charset=utf-8"})
+    try:
+        with urllib.request.urlopen(peticion, timeout=20) as r:
+            return f"{len(urls)} URLs avisadas a IndexNow (HTTP {r.status})"
+    except Exception as e:                  # noqa: BLE001 - da igual por qué falle
+        return f"IndexNow no respondió ({type(e).__name__}); el build sigue igual"
+
+
 def copiar_imagenes() -> int:
     """Copia aemet-temperaturas/img/ -> docs/img/.
 
@@ -9632,10 +9672,20 @@ def main() -> int:
         encoding="utf-8")
     cambiadas = sum(1 for v in registro_fechas.values()
                     if isinstance(v, dict) and v.get("f") == hoy)
+    # La clave de IndexNow, colgada en la raíz: es como el buscador comprueba
+    # que quien avisa es el dueño del dominio. Se reescribe en cada build para
+    # que no se pierda si alguien limpia docs/.
+    if INDEXNOW_KEY:
+        (DOCS_DIR / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")
+    nuevas = [f"{site}/{rel}/" if rel else site + "/"
+              for rel, _ in paginas
+              if isinstance(registro_fechas.get(rel), dict)
+              and registro_fechas[rel].get("f") == hoy]
     (DOCS_DIR / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + filas + "\n</urlset>\n", encoding="utf-8")
+    print("   indexnow: " + avisar_indexnow(site, nuevas))
     print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"
           + f" · {cambiadas} con contenido nuevo hoy"
           + (f" · {migradas} páginas estáticas migradas de dominio" if migradas else "")

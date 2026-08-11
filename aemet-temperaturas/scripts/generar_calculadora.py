@@ -7896,6 +7896,26 @@ __FOOTER__
 var SEED=__SEED__;
 var ALL=__ALLZ__.map(function(a){return {la:a[0],lo:a[1],n:a[2],d:a[3],id:a[4],p:a[5]};}); /* 848 estaciones para el geoposicionamiento exacto */
 var URL_OBS="__OBS_URL__";   /* buzón de noches; vacío = modo demostración */
+/* La «casa» de este teléfono: el pueblo en el que más noches ha contado. No se
+   pregunta ni se guarda en el buzón —vive solo aquí— y sirve para una cosa:
+   saber cuándo la noche que se está contando es de viaje. Hacen falta al menos
+   dos noches en el mismo sitio para no confundir la primera vez con un viaje. */
+function casaObs(){try{return JSON.parse(localStorage.getItem("obs_casa")||"null");}catch(e){return null;}}
+function apuntaCasa(id,n,la,lo){
+ if(!id)return;
+ var c=casaObs();
+ if(c&&c.id===id){c.veces=(c.veces||1)+1;}
+ else if(c&&(c.veces||1)>1){return;}          /* una noche fuera no cambia tu casa */
+ else c={id:id,n:n,la:la,lo:lo,veces:1};
+ try{localStorage.setItem("obs_casa",JSON.stringify(c));}catch(e){}
+}
+function esNocheFuera(){
+ var c=casaObs();
+ if(!c||(c.veces||1)<2||!MUN.id||MUN.id===c.id)return false;
+ var aqui=ANCLA||MYLL;
+ if(!aqui||c.la==null)return true;            /* pueblo distinto y sin coordenadas: fuera */
+ return km(aqui,{la:c.la,lo:c.lo})>25;        /* 25 km: el pueblo de al lado no es un viaje */
+}
 function obsUid(){try{var u=localStorage.getItem("obs_uid");if(!u){u=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem("obs_uid",u);}return u;}catch(e){return "anon";}}
 function colorFor(d){return d>=8?"#8fb07a":d>=6?"#b9c47a":d>=4?"#e8b45c":d>=2.5?"#e0834f":"#d9604a";}
 function bgFor(d){return d>=8?"rgba(143,176,122,.18)":d>=6?"rgba(185,196,122,.18)":d>=4?"rgba(232,180,92,.18)":d>=2.5?"rgba(224,131,79,.18)":"rgba(217,96,74,.18)";}
@@ -8147,7 +8167,7 @@ function pintaMisNoches(){
  c.innerHTML='<h3>Tus noches contadas</h3>'+L.map(function(n,i){
   var d=Number(n.d)||0;
   return '<div class="mn-row"><span class="mn-idx" style="color:'+colorFor(d)+';background:'+bgFor(d)+'">'+d.toFixed(1)+'</span>'
-   +'<span class="mn-info"><b>'+n.n+'</b><small>'+n.f+(n.q?' · apartada del cálculo':'')+'</small></span>'
+   +'<span class="mn-info"><b>'+n.n+'</b><small>'+n.f+(n.vj?' · reseña de viaje':'')+(n.q?' · apartada del cálculo':'')+'</small></span>'
    +'<button class="mn-share" onclick="compartirImagen(misNoches()['+i+'],this)">Compartir</button></div>';
  }).join("")
  +'<p class="mn-pie">Guardadas solo en este teléfono. Si borras los datos del navegador, desaparecen de aquí — la noche seguirá contando en el estudio igual.</p>';
@@ -8352,16 +8372,28 @@ initHero();
 })();
 
 /* FLUJO */
-var Q=[
+var QBASE=[
  {q:"¿Cómo has dormido esta noche?",o:[["😴","He dormido de maravilla",5],["🙂","Bastante bien",4],["😐","Regular",3],["🥵","Con mucho calor",2],["🔥","Apenas he dormido",1]]},
  {q:"¿Cómo se está AHORA mismo?",o:[["😊","Muy agradable",5],["🙂","Bien",4],["😐","Soportable",3],["🥵","Hace calor",2],["🔥","Insoportable",1]]},
  {q:"¿Qué has necesitado para dormir?",o:[["🪟","Nada, tal cual",5],["🌬️","La ventana abierta",4],["💨","El ventilador",3],["❄️","El aire acondicionado",1],["⛺","Dormir fuera de casa",2],["…","Otro",3]]},
  {q:"¿Cómo te has despertado?",o:[["😀","Muy descansado",5],["🙂","Descansado",4],["😐","Normal",3],["😴","Cansado",2],["🥱","Muy cansado",1]]},
  {q:"¿Volverías a dormir aquí esta noche?",o:[["❤️","Sin dudarlo",5],["🙂","Sí",4],["😐","Me da igual",3],["🙁","Preferiría otro sitio",2],["🚗","Si pudiera, me iría",1]]},
  {q:"¿Cuánta deuda de sueño arrastras?",sub:"Si llevas noches durmiendo mal, la deuda se acumula: es lo que te deja fundido al día siguiente.",o:[["✅","Ninguna, estoy a cero",1],["🙂","Poca",2],["😐","Alguna, se nota",3],["😮‍💨","Bastante",4],["🪫","Muchísima, voy fundido",5]]}];
-var cur=0,ans=[null,null,null,null,null,null];
+/* RESEÑA DE VIAJE. Las seis preguntas de arriba son un sensor: las contesta
+   casi siempre alguien en su propia cama, y eso da un dato del clima, no una
+   referencia que le sirva a otro para elegir dónde ir.
+   La reseña nace en otro momento —cuando duermes FUERA—, y entonces sí importa
+   lo que ningún portal de viajes pregunta: si se podía abrir la ventana y qué
+   te despertó antes de tiempo. Booking te dice si la habitación estaba limpia;
+   nadie te dice si a las cuatro de la mañana se podía dormir. */
+var QVIAJE=[
+ {q:"¿Se podía dormir con la ventana abierta?",sub:"Esto no lo cuenta nadie, y es lo que decide una noche de verano fuera de casa.",
+  o:[["🪟","Sí, y se agradecía",5],["🔊","No: demasiado ruido",2],["🥵","No: no entraba aire fresco",2],["🦟","No: bichos o no abría",3],["🤷","No hizo falta abrirla",4]]},
+ {q:"¿Qué te despertó antes de tiempo?",o:[["😴","Nada, de un tirón",5],["🥵","El calor",1],["🔊","El ruido",2],["☀️","La luz de la mañana",3],["🤔","Otra cosa",3]]}];
+var Q=QBASE.slice(),cur=0,ans=[];
+var VIAJE=false;   /* esta noche se ha dormido fuera: el voto vale como reseña */
 var flow=document.getElementById("flow"),reward=document.getElementById("reward");
-var NPASOS=Q.length+1;   /* las preguntas + el paso opcional de la pulsera */
+var NPASOS=Q.length+1;   /* preguntas + el paso opcional de la pulsera; cambia si es reseña de viaje */
 var WEAR={h:"",s:""};
 var MUN={id:"",n:""};    /* población detectada automáticamente (GeoNames+INE) */
 var PROP="";             /* corrección que teclea quien vota, si no acertamos */
@@ -8373,7 +8405,11 @@ var TRASCORREGIR=null;   /* qué hacer al terminar de corregir el pueblo */
 function startFlow(){
  if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
  if(!MY){askLoc(function(ok){if(ok)startFlow();else document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Necesitamos tu ubicación para situar tu noche. Actívala y vuelve a tocar.</span>';});return;}
- cur=0;ans=[null,null,null,null,null,null];WEAR={h:"",s:""};PROP="";
+ VIAJE=esNocheFuera();
+ Q=VIAJE?QBASE.concat(QVIAJE):QBASE.slice();
+ NPASOS=Q.length+1;
+ cur=0;ans=[];for(var _i=0;_i<Q.length;_i++)ans.push(null);
+ WEAR={h:"",s:""};PROP="";
  OBSCONF=false;OBSQ=false;OBSINT=0;TRASCORREGIR=null;
  flow.classList.add("on");renderStep();
 }
@@ -8469,7 +8505,12 @@ function renderStep(){
   return;
  }
  var s=Q[cur];
- b.innerHTML='<div class="q">'+s.q+'</div>'+(s.sub?'<p class="wsub2">'+s.sub+'</p>':'')
+ var aviso=(VIAJE&&cur===0)
+  ? '<p class="wsub2">📍 Parece que esta noche has dormido <b>fuera de tu sitio habitual</b>. '
+    +'Te preguntamos un par de cosas más: lo que cuentes queda como <b>referencia de '
+    +(MUN.n||"este sitio")+'</b> para quien busque dónde se duerme bien.</p>'
+  : "";
+ b.innerHTML='<div class="q">'+s.q+'</div>'+aviso+(s.sub?'<p class="wsub2">'+s.sub+'</p>':'')
   +'<div class="opts">'+s.o.map(function(o,i){return '<button class="opt'+(ans[cur]&&ans[cur].i===i?' sel':'')+'" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';
 }
 function finishWear(usar){
@@ -8577,6 +8618,13 @@ function finish(){
  if(URL_OBS&&zona.id){
   var pay={z:zona.id,d:dormir,c:confort,r:ans[2]?ans[2].val:"",w:despertar,k:perm,
            sd:deuda,wh:WEAR.h,ws:WEAR.s,m:MUN.id,mn:MUN.n,mp:PROP,u:obsUid(),v:1};
+  /* vj = esta noche es una reseña de viaje; vn = si se podía abrir la ventana;
+     vd = qué te despertó. Son las dos preguntas que no hace ningún portal. */
+  if(VIAJE){
+   pay.vj=1;
+   if(ans[6])pay.vn=ans[6].i+1;
+   if(ans[7])pay.vd=ans[7].i+1;
+  }
   /* g = dónde estaba el móvil al votar; mc = la noche va anclada a un pueblo
      corregido a mano (g y la zona pueden estar lejísimos, y es correcto);
      q = guardar apartada hasta que otras noches de ese pueblo la respalden. */
@@ -8594,10 +8642,13 @@ function finish(){
     .then(function(d){
       if(d&&d.ok){window._obsGuardado=true;
        var hoy=new Date();
-       guardaMiNoche({n:nombreLugar,d:Number(descanso.toFixed(1)),q:OBSQ?1:0,
+       if(!VIAJE)apuntaCasa(MUN.id,MUN.n,(ANCLA||MYLL||{}).la,(ANCLA||MYLL||{}).lo);
+       guardaMiNoche({n:nombreLugar,d:Number(descanso.toFixed(1)),q:OBSQ?1:0,vj:VIAJE?1:0,
         f:("0"+hoy.getDate()).slice(-2)+"/"+("0"+(hoy.getMonth()+1)).slice(-2)});
        diEstado(OBSQ
         ? "✅ Guardada tu noche en <b>"+nombreLugar+"</b>. Como se aparta mucho de lo normal allí, queda aparte del cálculo hasta que otras noches de "+nombreLugar+" la respalden."
+        : VIAJE
+        ? "✅ Gracias: tu noche queda como <b>referencia de "+nombreLugar+"</b>. Quien busque dónde se duerme bien va a leer justo esto."
         : "✅ Guardado. Tu noche en <b>"+nombreLugar+"</b> ya cuenta en el estudio.",true);
        fetch(URL_OBS+"?global=1").then(function(x){return x.json();}).then(addZonasVotadas).catch(function(){});
       }

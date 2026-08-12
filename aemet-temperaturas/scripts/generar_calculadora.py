@@ -7481,7 +7481,7 @@ def copiar_imagenes() -> int:
     destino.mkdir(parents=True, exist_ok=True)
     copiadas = 0
     for f in sorted(origen.iterdir()):
-        if f.suffix.lower() not in (".webp", ".jpg", ".jpeg", ".png", ".avif"):
+        if f.suffix.lower() not in (".webp", ".jpg", ".jpeg", ".png", ".avif", ".svg"):
             continue
         fin = destino / f.name
         if fin.exists() and fin.stat().st_size == f.stat().st_size:

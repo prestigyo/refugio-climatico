@@ -7374,6 +7374,69 @@ def _obs_frase(tmin: float) -> str:
             "Aquí la noche no perdona.")
 
 
+def revisar_enlaces(site: str) -> str:
+    """Revisa docs/ al terminar el build y avisa de dos cosas.
+
+    ROTOS: enlaces internos que apuntan a una página que no existe.
+    HUÉRFANAS: páginas publicadas a las que NO apunta ningún enlace del sitio.
+
+    La segunda es la que importa y la que nadie mira. Así se nos colaron los
+    217 certificados de pueblo: existían, se generaban bien y estaban en el
+    sitemap, pero ninguna tabla enlazaba a ellos. Cada script funcionaba
+    perfectamente por su cuenta; el fallo estaba en el hueco entre dos, que es
+    donde no mira nadie. Una página huérfana es trabajo hecho que no le llega a
+    nadie, y ahora el build lo dice en voz alta.
+
+    No detiene la construcción: avisa. Un enlace roto no justifica dejar el
+    sitio sin publicar."""
+    paginas, enlaces = {}, {}
+    for f in list(DOCS_DIR.glob("index.html")) + list(DOCS_DIR.glob("*/index.html"))             + list(DOCS_DIR.glob("*/*/index.html")):
+        rel = f.parent.relative_to(DOCS_DIR).as_posix()
+        rel = "" if rel == "." else rel
+        try:
+            html = f.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        paginas[rel] = ('content="noindex' in html) or (rel in REDIRECCIONES)
+        for href in re.findall(r'href="([^"#?]+)', html):
+            if href.startswith(site):
+                href = href[len(site):]
+            elif href.startswith(("http", "mailto:", "tel:", "//")):
+                continue
+            destino = href.strip("/")
+            if destino.endswith((".png", ".jpg", ".webp", ".svg", ".xml", ".txt",
+                                 ".csv", ".json", ".gif", ".pdf", ".ico")):
+                continue
+            enlaces.setdefault(rel, set()).add(destino)
+
+    entrantes = {rel: 0 for rel in paginas}
+    rotos = []
+    for origen, destinos in enlaces.items():
+        for d in destinos:
+            if d in paginas:
+                if d != origen:
+                    entrantes[d] += 1
+            elif d and not (DOCS_DIR / d).exists():
+                rotos.append((origen or "/", d))
+    huerfanas = sorted(r for r, oculta in paginas.items()
+                       if r and not oculta and entrantes.get(r, 0) == 0)
+
+    lineas = [f"{len(paginas)} páginas revisadas"]
+    if rotos:
+        lineas[0] += f" · {len(rotos)} ENLACES ROTOS"
+        for o, d in sorted(rotos)[:6]:
+            lineas.append(f"      roto: /{o} -> /{d}/")
+    if huerfanas:
+        lineas[0] += f" · {len(huerfanas)} HUÉRFANAS (nadie enlaza a ellas)"
+        for h in huerfanas[:8]:
+            lineas.append(f"      huérfana: /{h}/")
+        if len(huerfanas) > 8:
+            lineas.append(f"      … y {len(huerfanas) - 8} más")
+    if not rotos and not huerfanas:
+        lineas[0] += " · sin enlaces rotos ni páginas huérfanas"
+    return "\n".join(lineas)
+
+
 def avisar_indexnow(site: str, urls: list) -> str:
     """Avisa a los buscadores que usan IndexNow de las páginas que han cambiado
     HOY —las que el sitemap acaba de fechar con la fecha de hoy—, no de las 137.
@@ -8398,7 +8461,38 @@ function llamadaSegunLugar(){
  if(c)c.textContent="Contar cómo se duerme aquí";
  if(f)f.textContent="🧳 Contar esta noche";
 }
-function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};setZone(nearest(MYLL.la,MYLL.lo));resuelveLugar(MYLL.la,MYLL.lo);cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
+/* UBICACIÓN. La primera posición que da un móvil casi nunca es la buena: llega
+   por wifi y antenas, con un error de entre medio kilómetro y varios, y solo
+   unos segundos después el GPS afina. Pedíamos una sola posición y nos
+   quedábamos con esa, por eso la primera vez salía el pueblo de al lado y al
+   insistir salía el tuyo.
+
+   Ahora se escucha durante unos segundos y la posición se refina sola: cada
+   vez que llega una lectura mejor que la anterior se vuelve a resolver el
+   pueblo. Se deja de escuchar en cuanto la precisión baja de 150 m —ya no va a
+   cambiar el resultado— o a los 20 segundos. */
+function askLoc(cb){
+ if(!navigator.geolocation){cb(false);return;}
+ var mejor=1e9,visto=false,vigia=null,corte=null;
+ function usa(pos){
+  var pre=pos.coords.accuracy||9999;
+  if(pre>=mejor)return;                    /* peor que lo que ya teníamos */
+  mejor=pre;
+  MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};
+  setZone(nearest(MYLL.la,MYLL.lo));
+  resuelveLugar(MYLL.la,MYLL.lo);
+  if(!visto){visto=true;cb(true);}
+  if(pre<150)para();                       /* con 150 m el pueblo ya no cambia */
+ }
+ function para(){
+  if(vigia!=null){navigator.geolocation.clearWatch(vigia);vigia=null;}
+  if(corte){clearTimeout(corte);corte=null;}
+ }
+ vigia=navigator.geolocation.watchPosition(usa,function(){
+  para();if(!visto)cb(false);
+ },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+ corte=setTimeout(function(){para();if(!visto)cb(false);},20000);
+}
 function initHero(){
   if(!isMobile){document.getElementById("cta").classList.add("hidden");document.getElementById("loc").classList.add("hidden");document.getElementById("desknote").classList.remove("hidden");return;}
   askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});
@@ -9703,6 +9797,7 @@ def main() -> int:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + filas + "\n</urlset>\n", encoding="utf-8")
+    print("   enlaces: " + revisar_enlaces(site))
     print("   indexnow: " + avisar_indexnow(site, nuevas))
     print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"
           + f" · {cambiadas} con contenido nuevo hoy"

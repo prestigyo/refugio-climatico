@@ -1325,6 +1325,22 @@ _SIGUE_LINKS = [
 ]
 
 
+def enlace_certificado(e: dict, site: str) -> str:
+    """El nombre del lugar, enlazado a su certificado si lo tiene.
+
+    Un certificado existe para cada estación con menos de 1 noche tropical al
+    año — la misma regla con la que los genera scripts/generar_certificados.py,
+    y su URL sale del nombre de la ESTACIÓN, no del municipio. Sin este enlace
+    los certificados eran inalcanzables: aparecían 217 pueblos en las tablas y
+    ninguno llevaba al suyo, porque nadie adivina que «Cerler, Cogulla» está en
+    /certificados/cerler-cogulla/."""
+    if e.get("nt") is None or e["nt"] >= 1:
+        return e["loc"]
+    return (f'<a href="{site}/certificados/{slug(e["loc"])}/" '
+            f'title="Certificado de Refugio Climático Natural de {e["loc"]}">'
+            f'{e["loc"]}</a>')
+
+
 def enriquecer_estatica(html: str, site: str, carpeta: str) -> str:
     """En páginas antiguas con el pie 'Pieza de divulgación…': lo sustituye por
     el pie unificado (3 columnas con interlinks) precedido de un bloque 'Sigue
@@ -2201,7 +2217,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             td_hum = (f'<td class="r hide">{hd["hr"]}%</td>' if hd
                       else '<td class="r hide">—</td>')
         filas.append(
-            f'<tr><td class="loc">{e["loc"]}</td><td class="hide">{alt} m</td>'
+            f'<tr><td class="loc">{enlace_certificado(e, site)}</td><td class="hide">{alt} m</td>'
             f'<td class="n">{ntfmt(e["nt"])}</td>{td_hum}'
             f'<td><span class="v" style="color:{col};background:{bg}">{etq}</span></td></tr>')
     # La unidad se NOMBRA siempre ("noches tropicales al año"): decir "son unas 2
@@ -2845,7 +2861,7 @@ def construir_pagina_ranking(estaciones: list, site: str,
         f'<td class="n">{ntfmt(e["nt"])}</td></tr>'
         for i, e in enumerate(peor, 1))
     filas_mejor = "".join(
-        f'<tr><td class="loc">{e["loc"]}</td>'
+        f'<tr><td class="loc">{enlace_certificado(e, site)}</td>'
         f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
         f'<td class="n hide">{miles(e["alt"])}&nbsp;m</td>'
         f'<td class="n">{ntfmt(e["nt"])}</td></tr>'
@@ -5674,8 +5690,9 @@ def construir_pagina_vacaciones(estaciones: list, site: str) -> str:
             por_prov[e["prov"]] = e
     destinos = sorted(por_prov.values(), key=lambda x: -x["alt"])[:18]
     tabla = "".join(
-        f'<tr><td class="loc"><a href="{site}/{slug(e["prov"])}/">{e["loc"]}</a></td>'
-        f'<td>{e["prov"]}</td><td class="hide n">{miles(e["alt"])} m</td>'
+        f'<tr><td class="loc">{enlace_certificado(e, site)}</td>'
+        f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
+        f'<td class="hide n">{miles(e["alt"])} m</td>'
         f'<td class="n">{_n_es(e["nt"])}</td></tr>' for e in destinos)
 
     denia = next((e for e in estaciones if "PEGO" in e["loc"].upper()), None)
@@ -5915,8 +5932,9 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
     filas = []
     for e in destinos:
         filas.append(
-            f'<tr><td class="loc"><a href="{site}/{slug(e["prov"])}/">{e["loc"]}</a></td>'
-            f'<td>{e["prov"]}</td><td class="hide n">{miles(e["alt"])} m</td>'
+            f'<tr><td class="loc">{enlace_certificado(e, site)}</td>'
+            f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
+            f'<td class="hide n">{miles(e["alt"])} m</td>'
             f'<td class="n">&lt;1</td></tr>')
     top = destinos[0]
     desc = (f"{len(destinos)} pueblos medidos por AEMET donde se duerme con manta en pleno "

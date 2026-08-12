@@ -59,12 +59,6 @@
    "prov": "Almería"
   },
   {
-   "id": "8446Y",
-   "nombre": "Sagunto (Montiver Pontazgo - Semiautomatica)",
-   "min": 26.9,
-   "prov": "Valencia"
-  },
-  {
    "id": "7012X",
    "nombre": "Cartagena",
    "min": 26.8,
@@ -75,6 +69,12 @@
    "nombre": "Palma-Portopí",
    "min": 26.8,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "8057C",
+   "nombre": "Pego",
+   "min": 26.7,
+   "prov": "Alicante"
   }
  ],
  "top_fresco": [

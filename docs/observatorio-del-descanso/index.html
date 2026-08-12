@@ -796,7 +796,38 @@ function llamadaSegunLugar(){
  if(c)c.textContent="Contar cómo se duerme aquí";
  if(f)f.textContent="🧳 Contar esta noche";
 }
-function askLoc(cb){if(!navigator.geolocation){cb(false);return;}navigator.geolocation.getCurrentPosition(function(pos){MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};setZone(nearest(MYLL.la,MYLL.lo));resuelveLugar(MYLL.la,MYLL.lo);cb(true);},function(){cb(false);},{enableHighAccuracy:true,timeout:8000});}
+/* UBICACIÓN. La primera posición que da un móvil casi nunca es la buena: llega
+   por wifi y antenas, con un error de entre medio kilómetro y varios, y solo
+   unos segundos después el GPS afina. Pedíamos una sola posición y nos
+   quedábamos con esa, por eso la primera vez salía el pueblo de al lado y al
+   insistir salía el tuyo.
+
+   Ahora se escucha durante unos segundos y la posición se refina sola: cada
+   vez que llega una lectura mejor que la anterior se vuelve a resolver el
+   pueblo. Se deja de escuchar en cuanto la precisión baja de 150 m —ya no va a
+   cambiar el resultado— o a los 20 segundos. */
+function askLoc(cb){
+ if(!navigator.geolocation){cb(false);return;}
+ var mejor=1e9,visto=false,vigia=null,corte=null;
+ function usa(pos){
+  var pre=pos.coords.accuracy||9999;
+  if(pre>=mejor)return;                    /* peor que lo que ya teníamos */
+  mejor=pre;
+  MYLL={la:pos.coords.latitude,lo:pos.coords.longitude};
+  setZone(nearest(MYLL.la,MYLL.lo));
+  resuelveLugar(MYLL.la,MYLL.lo);
+  if(!visto){visto=true;cb(true);}
+  if(pre<150)para();                       /* con 150 m el pueblo ya no cambia */
+ }
+ function para(){
+  if(vigia!=null){navigator.geolocation.clearWatch(vigia);vigia=null;}
+  if(corte){clearTimeout(corte);corte=null;}
+ }
+ vigia=navigator.geolocation.watchPosition(usa,function(){
+  para();if(!visto)cb(false);
+ },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+ corte=setTimeout(function(){para();if(!visto)cb(false);},20000);
+}
 function initHero(){
   if(!isMobile){document.getElementById("cta").classList.add("hidden");document.getElementById("loc").classList.add("hidden");document.getElementById("desknote").classList.remove("hidden");return;}
   askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});

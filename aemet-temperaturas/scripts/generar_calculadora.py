@@ -8488,14 +8488,50 @@ function askLoc(cb){
   if(vigia!=null){navigator.geolocation.clearWatch(vigia);vigia=null;}
   if(corte){clearTimeout(corte);corte=null;}
  }
- vigia=navigator.geolocation.watchPosition(usa,function(){
-  para();if(!visto)cb(false);
+ vigia=navigator.geolocation.watchPosition(usa,function(err){
+  para();if(!visto)cb(false,err&&err.code);
  },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
- corte=setTimeout(function(){para();if(!visto)cb(false);},20000);
+ corte=setTimeout(function(){para();if(!visto)cb(false,3);},20000);
+}
+/* Por qué ha fallado, dicho de manera que se pueda arreglar. «Activa la
+   ubicación» era mentira en dos de los tres casos: si el navegador la tiene
+   bloqueada para esta web, activarla en el móvil no sirve de nada —hay que
+   desbloquearla en el candado de la barra de direcciones—, y si simplemente ha
+   tardado, no hay nada que activar. */
+function porQueSinUbicacion(codigo){
+ if(codigo===1)
+  return 'Tu navegador tiene <b>bloqueada la ubicación para esta web</b>. '
+   +'Toca el candado 🔒 que hay junto a la dirección, entra en Ubicación y '
+   +'elige Permitir. Tenerla activa en Google Maps no basta: cada web se '
+   +'autoriza por separado.';
+ if(codigo===2)
+  return 'No hemos podido situarte. Si estás bajo techo o en un sótano, '
+   +'acércate a una ventana y vuelve a tocar.';
+ return 'Está tardando más de lo normal en encontrarte. Vuelve a tocar.';
 }
 function initHero(){
   if(!isMobile){document.getElementById("cta").classList.add("hidden");document.getElementById("loc").classList.add("hidden");document.getElementById("desknote").classList.remove("hidden");return;}
-  askLoc(function(ok){if(!ok)document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Activa la ubicación para participar</span>';});
+  /* NO se pide la ubicación al abrir la página. Un navegador que pregunta
+     nada más entrar, antes de que se sepa para qué, se lleva un «no» — y ese
+     «no» lo recuerda PARA SIEMPRE: la próxima visita ya ni pregunta y la
+     persona jura que tiene la ubicación activada, porque la tiene, solo que
+     bloqueada para esta web en concreto.
+     Así que solo se pide cuando ya se ha decidido antes que sí (y entonces no
+     hay pregunta, es silencioso) o cuando se toca el botón de contar la
+     noche, que es cuando se entiende para qué. */
+  var pinta=function(txt){
+   var el=document.getElementById("loc");if(el)el.innerHTML='📍 <span style="color:var(--teja2)">'+txt+'</span>';
+  };
+  var pideYa=function(){
+   askLoc(function(ok,codigo){if(!ok)pinta(porQueSinUbicacion(codigo));});
+  };
+  if(navigator.permissions&&navigator.permissions.query){
+   navigator.permissions.query({name:"geolocation"}).then(function(p){
+    if(p.state==="granted")pideYa();
+    else if(p.state==="denied")pinta(porQueSinUbicacion(1));
+    else pinta("Toca el botón y te situamos: es lo que coloca tu noche en el mapa");
+   }).catch(pideYa);
+  }else pideYa();
 }
 initHero();
 
@@ -8573,7 +8609,11 @@ var OBSINT=0;            /* veces que hemos preguntado por el sitio (no insistim
 var TRASCORREGIR=null;   /* qué hacer al terminar de corregir el pueblo */
 function startFlow(){
  if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
- if(!MY){askLoc(function(ok){if(ok)startFlow();else document.getElementById("loc").innerHTML='📍 <span style="color:var(--teja2)">Necesitamos tu ubicación para situar tu noche. Actívala y vuelve a tocar.</span>';});return;}
+ if(!MY){askLoc(function(ok,codigo){
+   if(ok){startFlow();return;}
+   var el=document.getElementById("loc");
+   if(el)el.innerHTML='📍 <span style="color:var(--teja2)">'+porQueSinUbicacion(codigo)+'</span>';
+  });return;}
  VIAJE=esNocheFuera();
  Q=VIAJE?QBASE.concat(QVIAJE):QBASE.slice();
  NPASOS=Q.length+1;

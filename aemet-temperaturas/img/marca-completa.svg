@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 100" width="420" height="100" role="img" aria-label="nochetropical.es">
+  <mask id="lunac">
+    <rect width="100%" height="100%" fill="#fff"/>
+    <circle cx="43.20" cy="41.28" r="17.98" fill="#000"/>
+  </mask>
+  <circle cx="33.90" cy="46.24" r="18.60" fill="#efe6d6" mask="url(#lunac)"/>
+  <circle cx="51.26" cy="35.08" r="4.03" fill="#d9744e"/>
+  <text x="86" y="63" font-family="Fraunces,Georgia,serif" font-weight="600" font-size="38" fill="#efe6d6">nochetropical.es</text>
+</svg>

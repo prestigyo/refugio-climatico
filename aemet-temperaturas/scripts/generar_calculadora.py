@@ -7719,6 +7719,15 @@ a{color:var(--teal);text-decoration:none}
 .hero .sub2 b{color:var(--paper);font-weight:600}
 .cta{margin-top:30px;background:var(--teja);color:#160f08;font-weight:700;font-size:17px;padding:17px 30px;border-radius:16px;box-shadow:0 10px 30px rgba(224,131,79,.28);transition:.15s}
 .cta:hover{transform:translateY(-2px);background:var(--teja2)}
+/* Mientras el móvil busca dónde está, el botón lo dice y no se deja pulsar: sin
+   esto parecía roto —se tocaba y no pasaba nada durante varios segundos—. */
+.cta.buscando{background:var(--panel);color:var(--muted);box-shadow:none;cursor:default;
+  transform:none;display:inline-flex;align-items:center;gap:11px}
+.cta.buscando:hover{transform:none;background:var(--panel)}
+.cta .giro{width:19px;height:19px;border:2.5px solid rgba(179,164,140,.35);
+  border-top-color:var(--teja2);border-radius:50%;animation:girar .8s linear infinite;flex:none}
+@keyframes girar{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.cta .giro{animation-duration:2.4s}}
 .loc{margin-top:15px;font-size:13px;color:var(--muted)}.loc b{color:var(--paper)}
 .loc select{background:var(--bg2);color:var(--paper);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-family:var(--fb);font-size:13px}
 .scrollhint{margin-top:40px;font-size:12.5px;color:var(--muted);letter-spacing:.05em;animation:bob 2s ease-in-out infinite}
@@ -7807,6 +7816,10 @@ a{color:var(--teal);text-decoration:none}
 .mn-info small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
 .mn-share{background:transparent;border:1px solid var(--line);color:var(--teja2);font-family:inherit;font-size:12.5px;padding:7px 12px;border-radius:999px;cursor:pointer;flex:none}
 .mn-share:hover{border-color:var(--teja)}
+.mn-intro{color:var(--muted);font-size:13px;margin:-6px 0 10px}
+/* La noche recién contada, señalada un momento entre las demás. */
+.mn-row.mn-nueva{background:rgba(224,131,79,.12);border-radius:12px;
+  box-shadow:0 0 0 1px var(--teja) inset;transition:background .4s}
 .mn-pie{color:var(--muted);font-size:12.5px;line-height:1.55;margin:11px 0 0}
 /* Al llegar aquí desde el resultado, la tarjeta se enciende un momento para
    que se vea que es aquí donde ha caído tu noche. */
@@ -8265,6 +8278,9 @@ function cierraResultado(){
   var y=c.getBoundingClientRect().top+window.scrollY-70;
   window.scrollTo(0,Math.max(0,y));
   c.classList.add("recien");
+  var fila=c.querySelector(".mn-row");
+  if(fila){fila.classList.add("mn-nueva");
+   setTimeout(function(){fila.classList.remove("mn-nueva");},3200);}
   setTimeout(function(){c.classList.remove("recien");},2400);
   return;
  }
@@ -8285,7 +8301,9 @@ function pintaMisNoches(){
  var L=misNoches();
  if(!L.length){c.classList.add("hidden");return;}
  c.classList.remove("hidden");
- c.innerHTML='<h3>Tus noches contadas</h3>'+L.map(function(n,i){
+ c.innerHTML='<h3>Tus noches contadas</h3>'
+ +'<p class="mn-intro">Elige la que quieras compartir.</p>'
+ +L.map(function(n,i){
   var d=Number(n.d)||0;
   return '<div class="mn-row"><span class="mn-idx" style="color:'+colorFor(d)+';background:'+bgFor(d)+'">'+d.toFixed(1)+'</span>'
    +'<span class="mn-info"><b>'+n.n+'</b><small>'+n.f+(n.vj?' · reseña de viaje':'')+(n.q?' · apartada del cálculo':'')+'</small></span>'
@@ -8450,6 +8468,21 @@ function resuelveLugar(la,lo){
    además es el único cuya noche le sirve a otro para decidir. Así que en cuanto
    sabemos que está fuera, la web deja de pedirle un dato y le pide una
    referencia. */
+/* El botón, mientras se busca la ubicación: con su reloj y sin poder pulsarse.
+   Guarda el texto que tenía para devolvérselo, porque ese texto cambia según
+   estés en casa o de viaje. */
+var TXT_CTA="";
+function botonBuscando(si){
+ var c=document.getElementById("cta");if(!c)return;
+ if(si){
+  if(!TXT_CTA)TXT_CTA=c.textContent;
+  c.classList.add("buscando");c.disabled=true;
+  c.innerHTML='<span class="giro"></span><span>Buscando dónde estás…</span>';
+ }else{
+  c.classList.remove("buscando");c.disabled=false;
+  c.textContent=TXT_CTA||"Contar cómo he dormido";TXT_CTA="";
+ }
+}
 function llamadaSegunLugar(){
  if(!esNocheFuera())return;
  var h=document.querySelector(".votabox h2"),p=document.querySelector(".votasub"),
@@ -8523,7 +8556,8 @@ function initHero(){
    var el=document.getElementById("loc");if(el)el.innerHTML='📍 <span style="color:var(--teja2)">'+txt+'</span>';
   };
   var pideYa=function(){
-   askLoc(function(ok,codigo){if(!ok)pinta(porQueSinUbicacion(codigo));});
+   botonBuscando(true);
+   askLoc(function(ok,codigo){botonBuscando(false);if(!ok)pinta(porQueSinUbicacion(codigo));});
   };
   if(navigator.permissions&&navigator.permissions.query){
    navigator.permissions.query({name:"geolocation"}).then(function(p){
@@ -8609,7 +8643,9 @@ var OBSINT=0;            /* veces que hemos preguntado por el sitio (no insistim
 var TRASCORREGIR=null;   /* qué hacer al terminar de corregir el pueblo */
 function startFlow(){
  if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
- if(!MY){askLoc(function(ok,codigo){
+ if(!MY){botonBuscando(true);
+  askLoc(function(ok,codigo){
+   botonBuscando(false);
    if(ok){startFlow();return;}
    var el=document.getElementById("loc");
    if(el)el.innerHTML='📍 <span style="color:var(--teja2)">'+porQueSinUbicacion(codigo)+'</span>';
@@ -8897,7 +8933,7 @@ function finish(){
   '<div class="card fade" style="animation-delay:.7s"><h3>Cerca de ti, esta madrugada</h3><div class="nearby">'+
    near.map(function(o){return '<div class="row"><span class="idx" style="color:'+colorFor(o.z.d)+';background:'+bgFor(o.z.d)+'">'+o.z.d.toFixed(1)+'</span><div class="info"><div class="n">'+o.z.n+' · '+o.k+' km</div><div class="p">"'+o.z.f+'"</div></div></div>';}).join("")+'</div></div>'+
   deudaCard(deuda,descanso,WEAR)+
-  '<button class="share fade" style="animation-delay:.8s" onclick="compartirImagen({n:nombreLugar,d:descanso,f:zona.f},this)">📲 Comparte tu noche</button>'+
+  '<button class="share fade" style="animation-delay:.8s" onclick="cierraResultado()">📲 Compartir mi noche</button>'+
   '<button class="again pri2" onclick="verCurioso()">🔎 ¿Y cómo se duerme en otra población española?</button>'+
   '<button class="again" onclick="cierraResultado()">Volver al observatorio</button>'+
   '<p class="obsestado" id="obsestado" style="display:none"></p>'+

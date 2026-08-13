@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-12",
- "total": 849,
- "tropicales": 394,
- "ecuatoriales": 50,
+ "fecha": "2026-08-13",
+ "total": 853,
+ "tropicales": 509,
+ "ecuatoriales": 57,
  "peor": {
-  "id": "B569X",
-  "nombre": "Capdepera-Faro",
-  "min": 27.9,
-  "prov": "Illes Balears"
+  "id": "6329X",
+  "nombre": "Cabo de Gata Faro",
+  "min": 28.3,
+  "prov": "Almería"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 6.6,
-  "prov": "Ávila"
+  "id": "9001S",
+  "nombre": "Alto Campoo",
+  "min": -5.8,
+  "prov": "Cantabria"
  },
  "top_calor": [
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 27.9,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "6329X",
    "nombre": "Cabo de Gata Faro",
-   "min": 27.7,
+   "min": 28.3,
+   "prov": "Almería"
+  },
+  {
+   "id": "6325O",
+   "nombre": "Almería/Aeropuerto",
+   "min": 28.0,
    "prov": "Almería"
   },
   {
    "id": "7019X",
    "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 27.6,
+   "min": 28.0,
    "prov": "Murcia"
   },
   {
-   "id": "0201X",
-   "nombre": "Barcelona Drassanes",
-   "min": 27.5,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 27.4,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "6325O",
-   "nombre": "Almería/Aeropuerto",
-   "min": 27.4,
-   "prov": "Almería"
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 27.3,
+   "prov": "Sevilla"
   },
   {
    "id": "6291B",
    "nombre": "El Ejido (Ayuntamiento - Automatica)",
-   "min": 26.9,
+   "min": 27.3,
    "prov": "Almería"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 27.3,
+   "prov": "Illes Balears"
   },
   {
    "id": "7012X",
    "nombre": "Cartagena",
-   "min": 26.8,
+   "min": 27.2,
    "prov": "Murcia"
   },
   {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 26.8,
-   "prov": "Illes Balears"
+   "id": "0201D",
+   "nombre": "Barcelona Port Olímpic",
+   "min": 27.1,
+   "prov": "Barcelona"
   },
   {
-   "id": "8057C",
-   "nombre": "Pego",
-   "min": 26.7,
-   "prov": "Alicante"
+   "id": "6000A",
+   "nombre": "Melilla",
+   "min": 26.8,
+   "prov": "Melilla"
+  },
+  {
+   "id": "0201X",
+   "nombre": "Barcelona Drassanes",
+   "min": 26.5,
+   "prov": "Barcelona"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 6.6,
-   "prov": "Ávila"
-  },
-  {
    "id": "9001S",
    "nombre": "Alto Campoo",
-   "min": 8.1,
+   "min": -5.8,
    "prov": "Cantabria"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 9.6,
-   "prov": "Lleida"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 8.5,
+   "prov": "Ávila"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 10.0,
+   "min": 9.3,
    "prov": "Segovia"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 9.8,
+   "prov": "Zamora"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 10.8,
+   "prov": "Salamanca"
   },
   {
    "id": "3104Y",
    "nombre": "El Paular- Rascafría (Automática)",
-   "min": 10.0,
+   "min": 11.1,
    "prov": "Madrid"
+  },
+  {
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 11.3,
+   "prov": "Zamora"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 11.7,
+   "prov": "León"
   },
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 10.1,
+   "min": 11.7,
    "prov": "Granada"
   },
   {
    "id": "2828Y",
    "nombre": "Barco de Avila",
-   "min": 10.4,
+   "min": 12.2,
    "prov": "Ávila"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 10.5,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 10.6,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 10.9,
-   "prov": "Lleida"
   }
  ]
 }

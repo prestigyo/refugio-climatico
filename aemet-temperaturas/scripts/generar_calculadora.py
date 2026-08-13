@@ -7813,7 +7813,12 @@ a{color:var(--teal);text-decoration:none}
 .mn-idx{font-family:var(--fd);font-weight:900;font-size:17px;width:44px;text-align:center;border-radius:9px;padding:4px 0;flex:none}
 .mn-info{flex:1;min-width:0}
 .mn-info b{display:block;font-size:14.5px;font-weight:600;color:var(--paper);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mn-info small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.mn-info small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* En teal, que es el color de dato del sitio: ni compite con la nota ni se
+   confunde con el botón. */
+.mn-fecha{flex:none;color:var(--teal);font-size:12.5px;white-space:nowrap;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em}
 .mn-share{background:transparent;border:1px solid var(--line);color:var(--teja2);font-family:inherit;font-size:12.5px;padding:7px 12px;border-radius:999px;cursor:pointer;flex:none}
 .mn-share:hover{border-color:var(--teja)}
 .mn-intro{color:var(--muted);font-size:13px;margin:-6px 0 10px}
@@ -8291,6 +8296,15 @@ function cierraResultado(){
    seguías navegando, se perdían. Cada noche guardada queda ahora anotada en
    ESTE teléfono —no en el buzón, que es anónimo y no sabe quién eres— y se
    puede recuperar y compartir cuando quieras. */
+var MESES_CORTOS=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+/* «11/08» al lado de un «9,2» son cuatro números seguidos y no se distingue
+   cuál es cuál. «11 ago» se lee de un golpe y ya no hay confusión posible. */
+function fechaCorta(f){
+ var m=String(f||"").match(/^(\d{1,2})[\/\-](\d{1,2})/);
+ if(!m)return String(f||"");
+ var mes=MESES_CORTOS[parseInt(m[2],10)-1];
+ return mes?parseInt(m[1],10)+" "+mes:String(f);
+}
 function misNoches(){try{return JSON.parse(localStorage.getItem("obs_noches")||"[]");}catch(e){return [];}}
 function guardaMiNoche(n){
  try{var L=misNoches();L.unshift(n);localStorage.setItem("obs_noches",JSON.stringify(L.slice(0,20)));}catch(e){}
@@ -8305,8 +8319,12 @@ function pintaMisNoches(){
  +'<p class="mn-intro">Elige la que quieras compartir.</p>'
  +L.map(function(n,i){
   var d=Number(n.d)||0;
+  var marcas=[];
+  if(n.vj)marcas.push("reseña de viaje");
+  if(n.q)marcas.push("apartada del cálculo");
   return '<div class="mn-row"><span class="mn-idx" style="color:'+colorFor(d)+';background:'+bgFor(d)+'">'+d.toFixed(1)+'</span>'
-   +'<span class="mn-info"><b>'+n.n+'</b><small>'+n.f+(n.vj?' · reseña de viaje':'')+(n.q?' · apartada del cálculo':'')+'</small></span>'
+   +'<span class="mn-info"><b>'+n.n+'</b>'+(marcas.length?'<small>'+marcas.join(" · ")+'</small>':'')+'</span>'
+   +'<span class="mn-fecha">'+fechaCorta(n.f)+'</span>'
    +'<button class="mn-share" onclick="compartirImagen(misNoches()['+i+'],this)">Compartir</button></div>';
  }).join("")
  +'<p class="mn-pie">Guardadas solo en este teléfono. Si borras los datos del navegador, desaparecen de aquí — la noche seguirá contando en el estudio igual.</p>';

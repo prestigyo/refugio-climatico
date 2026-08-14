@@ -1,13 +1,13 @@
 {
  "fecha": "2026-08-14",
  "total": 851,
- "tropicales": 510,
+ "tropicales": 505,
  "ecuatoriales": 46,
  "peor": {
-  "id": "C648C",
-  "nombre": "Agüimes-el Milano",
-  "min": 28.8,
-  "prov": "Las Palmas"
+  "id": "0201D",
+  "nombre": "Barcelona Port Olímpic",
+  "min": 28.1,
+  "prov": "Barcelona"
  },
  "mejor": {
   "id": "5511",
@@ -16,12 +16,6 @@
   "prov": "Granada"
  },
  "top_calor": [
-  {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 28.8,
-   "prov": "Las Palmas"
-  },
   {
    "id": "0201D",
    "nombre": "Barcelona Port Olímpic",
@@ -38,6 +32,12 @@
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
    "min": 28.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 27.8,
    "prov": "Las Palmas"
   },
   {
@@ -71,8 +71,8 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
+   "id": "6325O",
+   "nombre": "Almería/Aeropuerto",
    "min": 26.7,
    "prov": "Almería"
   }
@@ -133,10 +133,10 @@
    "prov": "León"
   },
   {
-   "id": "9838B",
-   "nombre": "Benasque",
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
    "min": 12.3,
-   "prov": "Huesca"
+   "prov": "Lleida"
   }
  ]
 }

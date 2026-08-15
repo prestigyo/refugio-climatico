@@ -1,141 +1,141 @@
 {
- "fecha": "2026-08-14",
- "total": 851,
- "tropicales": 505,
+ "fecha": "2026-08-15",
+ "total": 849,
+ "tropicales": 412,
  "ecuatoriales": 46,
  "peor": {
-  "id": "0201D",
-  "nombre": "Barcelona Port Olímpic",
-  "min": 28.1,
-  "prov": "Barcelona"
+  "id": "5998X",
+  "nombre": "Osuna Sea",
+  "min": 27.7,
+  "prov": "Sevilla"
  },
  "mejor": {
   "id": "5511",
   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 10.0,
+  "min": 4.5,
   "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 28.1,
-   "prov": "Barcelona"
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 27.7,
+   "prov": "Sevilla"
   },
   {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 28.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 28.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 27.8,
-   "prov": "Las Palmas"
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
+   "min": 27.5,
+   "prov": "Murcia"
   },
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 27.7,
+   "min": 27.3,
    "prov": "Illes Balears"
   },
   {
-   "id": "C623I",
-   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 27.7,
-   "prov": "Las Palmas"
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 27.1,
+   "prov": "Almería"
+  },
+  {
+   "id": "5281X",
+   "nombre": "Bailén",
+   "min": 26.9,
+   "prov": "Jaén"
   },
   {
    "id": "0201X",
    "nombre": "Barcelona Drassanes",
-   "min": 27.6,
+   "min": 26.9,
    "prov": "Barcelona"
   },
   {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 27.0,
-   "prov": "Illes Balears"
+   "id": "6268Y",
+   "nombre": "Motril Puerto Naútico",
+   "min": 26.7,
+   "prov": "Granada"
+  },
+  {
+   "id": "8500A",
+   "nombre": "Castellón-Almassora",
+   "min": 26.7,
+   "prov": "Castellón"
   },
   {
    "id": "B603X",
    "nombre": "Colònia Sant Pere-Can Mengol",
-   "min": 26.9,
+   "min": 26.6,
    "prov": "Illes Balears"
   },
   {
-   "id": "6325O",
-   "nombre": "Almería/Aeropuerto",
-   "min": 26.7,
-   "prov": "Almería"
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 26.5,
+   "prov": "Murcia"
   }
  ],
  "top_fresco": [
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 10.0,
+   "min": 4.5,
    "prov": "Granada"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 10.8,
-   "prov": "León"
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 6.5,
+   "prov": "Granada"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 11.2,
+   "min": 8.5,
    "prov": "Ávila"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 11.5,
-   "prov": "Segovia"
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 10.7,
+   "prov": "Asturias"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 11.5,
-   "prov": "Zamora"
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 10.9,
+   "prov": "Cantabria"
   },
   {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
+   "id": "5103E",
+   "nombre": "Camarate 2 Parque Nacional Sierra Nevada",
+   "min": 11.3,
+   "prov": "Granada"
+  },
+  {
+   "id": "1221D",
+   "nombre": "Pajares - Valgrande",
+   "min": 11.4,
+   "prov": "Asturias"
+  },
+  {
+   "id": "9838B",
+   "nombre": "Benasque",
+   "min": 11.6,
+   "prov": "Huesca"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
    "min": 11.7,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 12.1,
-   "prov": "Madrid"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": 12.1,
-   "prov": "Lleida"
-  },
-  {
-   "id": "1178Y",
-   "nombre": "Soto de Valdeón (Automatica)",
-   "min": 12.3,
    "prov": "León"
   },
   {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 12.3,
+   "id": "9632X",
+   "nombre": "Tuixent",
+   "min": 11.9,
    "prov": "Lleida"
   }
  ]

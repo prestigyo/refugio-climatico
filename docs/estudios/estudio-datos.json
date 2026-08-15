@@ -1,14 +1,14 @@
 {
   "periodo": {
     "ini": "2026-05-27",
-    "fin": "2026-08-14",
-    "noches": 79,
-    "dias": 79
+    "fin": "2026-08-15",
+    "noches": 80,
+    "dias": 80
   },
   "nocturno": {
     "profundo": 4.2,
     "margen": 11.5,
-    "tropical": 84.2
+    "tropical": 84.3
   },
   "dia": {
     "medio_verano_fresco": 1.2,

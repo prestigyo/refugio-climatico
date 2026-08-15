@@ -2375,8 +2375,11 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
     peores = sorted(lista, key=lambda x: -x["nt"])[:3] if n > 1 else []
     # Enlace contextual tras la prosa de refugios (las páginas que no van en el
     # menú escueto se enlazan aquí, integradas en el cuerpo).
-    cta_refugio = (f'<p class="ctain"><a href="{site}/refugio-climatico-natural/">'
-                   'Descubre el refugio climático natural más cerca de tu casa →</a></p>')
+    cta_refugio = (
+        f'<p class="ctain"><a href="{site}/refugios-climaticos-naturales-cerca-de-mi/">'
+        'Descubre el refugio climático natural más cerca de tu casa →</a></p>'
+        f'<p class="ctain"><a href="{site}/refugio-climatico-natural/">'
+        'Y por qué en esos sitios refresca de noche sin aire acondicionado →</a></p>')
     cta_ola = (f'<p class="ctain"><a href="{site}/ola-de-calor/">'
                f'Sigue la ola de calor de este verano en {prov}, noche a noche, en el mapa de AEMET →</a></p>')
     # La escapada va DESPUES del contraste -cuando ya se ha entendido el

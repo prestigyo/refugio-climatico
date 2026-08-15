@@ -23,6 +23,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import math
 import re
 import urllib.request
 import unicodedata
@@ -2181,6 +2182,96 @@ PROV_TITULO_CORTO = {
 }
 
 
+# Todas las estaciones, para poder mirar fuera de la provincia: el refugio más
+# cercano a Zaragoza está en Teruel, y hasta ahora la página de Zaragoza no
+# tenía manera de saberlo. Lo rellena main() antes de construir las provincias.
+_TODAS_ESTACIONES: list = []
+
+
+def refugios_desde(origen: dict, cuantos: int = 5, max_km: float = 220.0) -> list:
+    """Los refugios más cercanos a un sitio, estén en la provincia que estén.
+
+    Quien busca «noches tropicales Zaragoza» no quiere un dato: quiere dormir.
+    Y la respuesta útil no está en Zaragoza —ahí no hay refugio— sino a hora y
+    media, en la sierra de Teruel o en el Moncayo. Esta es la salida que la
+    página no le daba.
+
+    Se ordena por distancia y no por frescura: a igualdad de alivio, gana el
+    que está más cerca, porque el viaje de verdad se decide por el tiempo de
+    coche. Se descartan los sitios donde no vive nadie —cumbres, pistas,
+    embalses—: aquí se recomienda dónde dormir, no dónde medir."""
+    if not _TODAS_ESTACIONES or origen.get("lat") is None:
+        return []
+    fuera = ("AEROPUERTO", "EMBALSE", "PANTANO", "RADIOTELESC", "OBSERVATORIO",
+             "ESTACION DE ESQUI", "ESTACIÓN DE ESQUÍ", "MIRADOR", "CAÑADAS",
+             "PUERTO DE NAVACERRADA")
+    def candidatos(solo_refugios: bool) -> list:
+        out = []
+        for e in _TODAS_ESTACIONES:
+            if e["id"] == origen.get("id"):
+                continue
+            if any(f in e["loc"].upper() for f in fuera) or e["alt"] > 1600:
+                continue
+            if solo_refugios:
+                if e["nt"] >= 1:
+                    continue
+            # Sin refugio puro cerca -basta con bajar al sur- vale lo que
+            # alivie de verdad: al menos 3 grados menos de minima. No es un
+            # refugio y la tabla no lo llama asi, pero es la respuesta util
+            # para quien no tiene ninguno a mano.
+            elif origen["tmin"] - e["tmin"] < 3:
+                continue
+            d = math.hypot((e["lat"] - origen["lat"]) * 111.0,
+                           (e["lon"] - origen["lon"]) * 85.0)
+            if d <= max_km:
+                out.append((d, e))
+        out.sort(key=lambda x: x[0])
+        return out
+
+    cerca = candidatos(True)
+    if len(cerca) < 3:
+        cerca = candidatos(False)
+    # Uno por provincia como mucho: cinco pueblos del mismo valle no son cinco
+    # opciones, son una.
+    vistas, salida = set(), []
+    for d, e in cerca:
+        if e["prov"] in vistas:
+            continue
+        vistas.add(e["prov"])
+        salida.append((round(d), e))
+        if len(salida) == cuantos:
+            break
+    return salida
+
+
+def bloque_escapada(prov: str, peor: dict, site: str) -> str:
+    """La tabla de huida, para la página de provincia."""
+    lista = refugios_desde(peor)
+    if not lista or peor.get("tmin") is None:
+        return ""
+    filas = "".join(
+        f'<tr><td class="loc">{enlace_certificado(e, site)}</td>'
+        f'<td>{e["prov"]}</td>'
+        f'<td class="n">{d}&nbsp;km</td>'
+        f'<td class="n">{_n_es(e["tmin"])}&nbsp;°C</td>'
+        f'<td class="n" style="color:var(--teal)">−{_n_es(round(peor["tmin"] - e["tmin"], 1))}&nbsp;°C</td></tr>'
+        for d, e in lista)
+    mas_cerca = lista[0]
+    return (
+        f'<h2 id="escapada">¿Te achicharras en {prov}? Dónde dormir fresco cerca</h2>'
+        f'<p>En <b>{peor["loc"]}</b>, el sitio donde peor se duerme de la provincia, la '
+        f'mínima media de verano es de <b>{_n_es(peor["tmin"])}&nbsp;°C</b>. A '
+        f'<b>{mas_cerca[0]}&nbsp;km</b> hay un pueblo donde la madrugada baja '
+        f'{_n_es(round(peor["tmin"] - mas_cerca[1]["tmin"], 1))}&nbsp;°C más.</p>'
+        '<table>'
+        '<thead><tr><th>Dónde dormir</th><th>Provincia</th><th class="r">Distancia</th>'
+        '<th class="r">Mínima media</th><th class="r">Alivio</th></tr></thead>'
+        f'<tbody>{filas}</tbody></table>'
+        '<p class="note">Distancia en línea recta desde la estación de referencia, no por '
+        'carretera. Solo pueblos: se dejan fuera cumbres, pistas de esquí y embalses. '
+        'Uno por provincia, para que sean cinco opciones de verdad.</p>')
+
+
 def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
                                 fecha_mod: str, fecha_mod_txt: str,
                                 tendencia: dict | None = None,
@@ -2288,8 +2379,14 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
                    'Descubre el refugio climático natural más cerca de tu casa →</a></p>')
     cta_ola = (f'<p class="ctain"><a href="{site}/ola-de-calor/">'
                f'Sigue la ola de calor de este verano en {prov}, noche a noche, en el mapa de AEMET →</a></p>')
+    # La escapada va DESPUES del contraste -cuando ya se ha entendido el
+    # problema- y antes de la prosa de refugios. Quien llega buscando "noches
+    # tropicales Zaragoza" esta sufriendo el calor: primero se le ensena cuanto,
+    # y acto seguido donde ir. Hasta ahora se le ensenaba el problema y se le
+    # dejaba con el.
     prosa = (prosa_contraste(prov, mejor, peor, n)
              + prosa_tendencia(prov, tendencia or {})
+             + bloque_escapada(prov, peor, site)
              + prosa_refugios(prov, refugios)
              + cta_refugio
              + (prosa_peores(prov, peores, mejor) + cta_ola if peores else "")
@@ -7875,6 +7972,15 @@ a{color:var(--teal);text-decoration:none}
 .lc-form input{width:100%;margin-top:5px;background:#2c2216;border:1.5px solid #5f5138;border-radius:10px;color:var(--paper);font-size:15px;padding:10px 12px;font-family:inherit}
 .lc-form input:focus{outline:2px solid var(--teja);outline-offset:1px}
 .lc-ok{background:var(--teja);color:#160f08;border:0;border-radius:10px;font-weight:700;font-size:14px;padding:11px 15px;cursor:pointer;font-family:inherit;white-space:nowrap}
+/* El aviso de estar de viaje va en teal y con recuadro: es lo que cambia el
+   sentido de todo lo que viene después, y con el gris de una nota al pie se lo
+   saltaba todo el mundo. */
+.avisoviaje{display:flex;gap:12px;align-items:flex-start;margin:-2px 0 16px;padding:13px 15px;
+  background:rgba(150,182,196,.10);border:1px solid var(--teal);border-radius:14px;text-align:left}
+.avisoviaje .av-ico{font-size:22px;line-height:1.1;flex:none}
+.avisoviaje b{display:block;color:var(--teal);font-size:14.5px;margin-bottom:3px}
+.avisoviaje span span{display:block;color:var(--muted);font-size:13px;line-height:1.55}
+.avisoviaje em{font-style:normal;color:var(--paper);font-weight:600}
 .wsub2{color:var(--muted);font-size:13.5px;line-height:1.55;margin:-4px 0 14px}
 .wsub2 b{color:var(--paper)}
 .wfields{display:grid;gap:12px;margin-bottom:16px}
@@ -8769,9 +8875,10 @@ function renderStep(){
  }
  var s=Q[cur];
  var aviso=(VIAJE&&cur===0)
-  ? '<p class="wsub2">📍 Parece que esta noche has dormido <b>fuera de tu sitio habitual</b>. '
-    +'Te preguntamos un par de cosas más: lo que cuentes queda como <b>referencia de '
-    +(MUN.n||"este sitio")+'</b> para quien busque dónde se duerme bien.</p>'
+  ? '<div class="avisoviaje"><span class="av-ico">🧳</span><div>'
+    +'<b>Has dormido fuera de tu sitio habitual</b>'
+    +'<span>Te preguntamos un par de cosas más: lo que cuentes queda como <em>referencia de '
+    +(MUN.n||"este sitio")+'</em> para quien busque dónde se duerme bien.</span></div></div>'
   : "";
  b.innerHTML='<div class="q">'+s.q+'</div>'+aviso+(s.sub?'<p class="wsub2">'+s.sub+'</p>':'')
   +'<div class="opts">'+s.o.map(function(o,i){return '<button class="opt'+(ans[cur]&&ans[cur].i===i?' sel':'')+'" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';
@@ -9525,6 +9632,8 @@ def main() -> int:
     else:
         print("   registro nocturno: sin datos recientes (no se pinta el widget)")
     titulos_prov = []  # (provincia, título) para la tabla de control móvil
+    # Para que cada provincia pueda mirar fuera de si misma al buscar refugios.
+    globals()["_TODAS_ESTACIONES"] = estaciones
     for prov, lista in datos["provincias"].items():
         sl = slug(prov)
         carpeta = DOCS_DIR / sl

@@ -1,13 +1,13 @@
 {
  "fecha": "2026-08-15",
- "total": 849,
- "tropicales": 412,
+ "total": 848,
+ "tropicales": 405,
  "ecuatoriales": 46,
  "peor": {
-  "id": "5998X",
-  "nombre": "Osuna Sea",
-  "min": 27.7,
-  "prov": "Sevilla"
+  "id": "7019X",
+  "nombre": "Cartagena/Salinas Cabo Palos",
+  "min": 27.5,
+  "prov": "Murcia"
  },
  "mejor": {
   "id": "5511",
@@ -16,12 +16,6 @@
   "prov": "Granada"
  },
  "top_calor": [
-  {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 27.7,
-   "prov": "Sevilla"
-  },
   {
    "id": "7019X",
    "nombre": "Cartagena/Salinas Cabo Palos",
@@ -35,22 +29,28 @@
    "prov": "Illes Balears"
   },
   {
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 27.1,
+   "prov": "Sevilla"
+  },
+  {
    "id": "6329X",
    "nombre": "Cabo de Gata Faro",
    "min": 27.1,
    "prov": "Almería"
   },
   {
-   "id": "5281X",
-   "nombre": "Bailén",
-   "min": 26.9,
-   "prov": "Jaén"
-  },
-  {
    "id": "0201X",
    "nombre": "Barcelona Drassanes",
    "min": 26.9,
    "prov": "Barcelona"
+  },
+  {
+   "id": "5281X",
+   "nombre": "Bailén",
+   "min": 26.9,
+   "prov": "Jaén"
   },
   {
    "id": "6268Y",
@@ -103,6 +103,12 @@
    "prov": "Asturias"
   },
   {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 10.8,
+   "prov": "Madrid"
+  },
+  {
    "id": "1167J",
    "nombre": "Coriscao Parque Nacional Picos de Europa",
    "min": 10.9,
@@ -131,12 +137,6 @@
    "nombre": "Villablino",
    "min": 11.7,
    "prov": "León"
-  },
-  {
-   "id": "9632X",
-   "nombre": "Tuixent",
-   "min": 11.9,
-   "prov": "Lleida"
   }
  ]
 }

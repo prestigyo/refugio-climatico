@@ -198,6 +198,15 @@ a{color:var(--teal);text-decoration:none}
 .lc-form input{width:100%;margin-top:5px;background:#2c2216;border:1.5px solid #5f5138;border-radius:10px;color:var(--paper);font-size:15px;padding:10px 12px;font-family:inherit}
 .lc-form input:focus{outline:2px solid var(--teja);outline-offset:1px}
 .lc-ok{background:var(--teja);color:#160f08;border:0;border-radius:10px;font-weight:700;font-size:14px;padding:11px 15px;cursor:pointer;font-family:inherit;white-space:nowrap}
+/* El aviso de estar de viaje va en teal y con recuadro: es lo que cambia el
+   sentido de todo lo que viene después, y con el gris de una nota al pie se lo
+   saltaba todo el mundo. */
+.avisoviaje{display:flex;gap:12px;align-items:flex-start;margin:-2px 0 16px;padding:13px 15px;
+  background:rgba(150,182,196,.10);border:1px solid var(--teal);border-radius:14px;text-align:left}
+.avisoviaje .av-ico{font-size:22px;line-height:1.1;flex:none}
+.avisoviaje b{display:block;color:var(--teal);font-size:14.5px;margin-bottom:3px}
+.avisoviaje span span{display:block;color:var(--muted);font-size:13px;line-height:1.55}
+.avisoviaje em{font-style:normal;color:var(--paper);font-weight:600}
 .wsub2{color:var(--muted);font-size:13.5px;line-height:1.55;margin:-4px 0 14px}
 .wsub2 b{color:var(--paper)}
 .wfields{display:grid;gap:12px;margin-bottom:16px}
@@ -1104,9 +1113,10 @@ function renderStep(){
  }
  var s=Q[cur];
  var aviso=(VIAJE&&cur===0)
-  ? '<p class="wsub2">📍 Parece que esta noche has dormido <b>fuera de tu sitio habitual</b>. '
-    +'Te preguntamos un par de cosas más: lo que cuentes queda como <b>referencia de '
-    +(MUN.n||"este sitio")+'</b> para quien busque dónde se duerme bien.</p>'
+  ? '<div class="avisoviaje"><span class="av-ico">🧳</span><div>'
+    +'<b>Has dormido fuera de tu sitio habitual</b>'
+    +'<span>Te preguntamos un par de cosas más: lo que cuentes queda como <em>referencia de '
+    +(MUN.n||"este sitio")+'</em> para quien busque dónde se duerme bien.</span></div></div>'
   : "";
  b.innerHTML='<div class="q">'+s.q+'</div>'+aviso+(s.sub?'<p class="wsub2">'+s.sub+'</p>':'')
   +'<div class="opts">'+s.o.map(function(o,i){return '<button class="opt'+(ans[cur]&&ans[cur].i===i?' sel':'')+'" onclick="pick('+i+','+o[2]+')"><span class="em">'+o[0]+'</span><span>'+o[1]+'</span></button>';}).join("")+'</div>';

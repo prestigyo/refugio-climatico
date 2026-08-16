@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-15",
- "total": 848,
- "tropicales": 405,
- "ecuatoriales": 46,
+ "fecha": "2026-08-16",
+ "total": 844,
+ "tropicales": 341,
+ "ecuatoriales": 34,
  "peor": {
-  "id": "7019X",
-  "nombre": "Cartagena/Salinas Cabo Palos",
-  "min": 27.5,
-  "prov": "Murcia"
+  "id": "6329X",
+  "nombre": "Cabo de Gata Faro",
+  "min": 28.6,
+  "prov": "Almería"
  },
  "mejor": {
-  "id": "5511",
-  "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 4.5,
-  "prov": "Granada"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 6.4,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 28.6,
+   "prov": "Almería"
+  },
+  {
    "id": "7019X",
    "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 27.5,
+   "min": 27.8,
+   "prov": "Murcia"
+  },
+  {
+   "id": "6325O",
+   "nombre": "Almería/Aeropuerto",
+   "min": 27.7,
+   "prov": "Almería"
+  },
+  {
+   "id": "6291B",
+   "nombre": "El Ejido (Ayuntamiento - Automatica)",
+   "min": 27.6,
+   "prov": "Almería"
+  },
+  {
+   "id": "6175X",
+   "nombre": "Rincon de la Victoria (Automatica)",
+   "min": 26.9,
+   "prov": "Málaga"
+  },
+  {
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 26.7,
    "prov": "Murcia"
   },
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 27.3,
+   "min": 26.7,
    "prov": "Illes Balears"
   },
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 27.1,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 27.1,
+   "id": "6332Y",
+   "nombre": "Carboneras - Faro Mesa Roldán",
+   "min": 26.6,
    "prov": "Almería"
   },
   {
    "id": "0201X",
    "nombre": "Barcelona Drassanes",
-   "min": 26.9,
+   "min": 26.5,
    "prov": "Barcelona"
   },
   {
-   "id": "5281X",
-   "nombre": "Bailén",
-   "min": 26.9,
-   "prov": "Jaén"
-  },
-  {
-   "id": "6268Y",
-   "nombre": "Motril Puerto Naútico",
-   "min": 26.7,
-   "prov": "Granada"
-  },
-  {
-   "id": "8500A",
-   "nombre": "Castellón-Almassora",
-   "min": 26.7,
-   "prov": "Castellón"
-  },
-  {
-   "id": "B603X",
-   "nombre": "Colònia Sant Pere-Can Mengol",
-   "min": 26.6,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "7012X",
-   "nombre": "Cartagena",
-   "min": 26.5,
+   "id": "7007Y",
+   "nombre": "Mazarrón/las Torres",
+   "min": 26.4,
    "prov": "Murcia"
   }
  ],
  "top_fresco": [
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 4.5,
-   "prov": "Granada"
-  },
-  {
-   "id": "5516D",
-   "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 6.5,
-   "prov": "Granada"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 8.5,
+   "min": 6.4,
    "prov": "Ávila"
   },
   {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 10.7,
-   "prov": "Asturias"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 10.8,
-   "prov": "Madrid"
-  },
-  {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 10.9,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "5103E",
-   "nombre": "Camarate 2 Parque Nacional Sierra Nevada",
-   "min": 11.3,
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 7.3,
    "prov": "Granada"
   },
   {
-   "id": "1221D",
-   "nombre": "Pajares - Valgrande",
-   "min": 11.4,
-   "prov": "Asturias"
+   "id": "C406G",
+   "nombre": "Cañadas Parador",
+   "min": 8.6,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "9838B",
-   "nombre": "Benasque",
-   "min": 11.6,
-   "prov": "Huesca"
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 8.9,
+   "prov": "Lleida"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 11.7,
+   "min": 9.3,
    "prov": "León"
+  },
+  {
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 9.5,
+   "prov": "Granada"
+  },
+  {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 9.8,
+   "prov": "Madrid"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 9.8,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 10.0,
+   "prov": "Huesca"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 10.0,
+   "prov": "Lleida"
   }
  ]
 }

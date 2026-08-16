@@ -1342,6 +1342,36 @@ def enlace_certificado(e: dict, site: str) -> str:
             f'{e["loc"]}</a>')
 
 
+# El atajo a la herramienta que localiza el refugio mas cercano. Se escribe una
+# sola vez y se usa en la portada y en las paginas estaticas: es la pregunta que
+# trae a la gente y hasta ahora habia que bajar a buscarla.
+ATAJO_CERCA = ('<p class="atajo"><a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">'
+               '📍 ¿Dónde puedo dormir fresco en España cerca de mí? →</a></p>')
+CSS_ATAJO = ('.atajo{margin:18px 0}'
+             '.atajo a{display:inline-flex;align-items:center;gap:9px;padding:12px 18px;'
+             'border-radius:999px;border:1px solid var(--teal);color:var(--teal);'
+             'font-weight:600;font-size:15px;background:rgba(150,182,196,.08);'
+             'text-decoration:none}'
+             '.atajo a:hover{background:rgba(150,182,196,.18);text-decoration:none}')
+
+
+def inyectar_atajo(html: str, site: str, carpeta: str) -> str:
+    """Mete el atajo justo debajo del primer titular de una pagina estatica.
+
+    Estas paginas explican el concepto —que es lo que hacen bien— pero no daban
+    ninguna salida: quien acababa de entender que existen los refugios
+    climaticos no tenia como averiguar cual le queda cerca. Idempotente: si ya
+    esta puesto, no lo repite."""
+    if 'class="atajo"' in html or carpeta == "refugios-climaticos-naturales-cerca-de-mi":
+        return html
+    i = html.find("</h1>")
+    if i < 0:
+        return html
+    i += len("</h1>")
+    html = html[:i] + ATAJO_CERCA.replace("__SITE__", site) + html[i:]
+    return html.replace("</style>", CSS_ATAJO + "</style>", 1)
+
+
 def enriquecer_estatica(html: str, site: str, carpeta: str) -> str:
     """En páginas antiguas con el pie 'Pieza de divulgación…': lo sustituye por
     el pie unificado (3 columnas con interlinks) precedido de un bloque 'Sigue
@@ -3814,7 +3844,8 @@ __CSS_COMUN__
   <header class="hero"><div class="in">
     <p class="kick">¿Dónde se duerme fresco en España?</p>
     <h1>El termómetro de las noches tropicales</h1>
-    <p class="lede">Cuántas noches al año no baja de 20&nbsp;°C, según diez veranos de datos de AEMET (2017–2026). Cuantas más noches tropicales, peor se duerme. Elige tu pueblo y mira en qué zona cae:</p>
+    <p class="lede"><b>Esta web no mide el calor: mide dónde se puede dormir.</b> Diez veranos de datos de AEMET (2017–2026) para encontrar los sitios de España donde la noche todavía refresca — y llevarte a ellos. La medida es la <b>noche tropical</b>: cuántas veces al año la mínima no baja de 20&nbsp;°C. Cuantas más, peor se duerme.</p>
+    __ATAJO__
   </div></header>
   <section><div class="in">
     <div class="scale-card">
@@ -3988,9 +4019,10 @@ def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> s
                      + hreflang_block("/", "/en/"))
             .replace("__NAV__", nav_html("inicio"))
             .replace("__FOOTER__", FOOTER_HTML)
-            .replace("__CSS_COMUN__", " " + _CSS_COMUN)
+            .replace("__CSS_COMUN__", " " + _CSS_COMUN + CSS_ATAJO)
             .replace("__DATA__", data_json)
             .replace("__SCHEMA__", schema)
+            .replace("__ATAJO__", ATAJO_CERCA)
             .replace("__APPS_URL__", APPS_SCRIPT_URL)
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
@@ -5742,7 +5774,10 @@ __NAV__
   <h2>De la cubierta del barco al interior: lo que se ve en Jávea o Dénia</h2>
   <p>En la costa alicantina el verano fue durante generaciones sinónimo de barco: fondear en una cala, la brisa, el buen ambiente a pocos metros de la orilla. Esa foto sigue existiendo de día. La que ha cambiado es la de la noche.</p>
   <p>El calor nocturno sostenido y la humedad del Mediterráneo hacen que <b>evitar el bochorno para dormir</b> sea cada vez más difícil, también a bordo y a pie de playa. De ahí una decisión que cada verano se oye más entre familias de la zona: <b>alquilar la casa de la costa en el pico de demanda y marcharse al interior</b>. La casa rinde justo cuando más vale, y el descanso se recupera. El cálculo económico y el térmico apuntan, por una vez, en la misma dirección.</p>
-  <p class="note">Esto último es observación de campo, no un dato que hayamos medido: lo que sí está medido es el bochorno del que se huye. Dénia acumula <b>__NT_DENIA__ noches tropicales al año</b> de media según su estación de referencia de AEMET.</p>
+  <h3>Y el apartamento pequeño empeora la noche</h3>
+  <p>Hay una parte de esto que no aparece en ningún dato de temperatura y que reconoce cualquiera que haya veraneado en la costa. El alojamiento de playa suele ser <b>un apartamento</b>, y en agosto se llena: cuatro personas en una habitación doble, la puerta cerrada, y de madrugada el aire acondicionado o el ventilador encendidos porque no hay otra manera. Cada cuerpo en esa habitación es una fuente de calor más.</p>
+  <p>Ahí empieza un círculo del que cuesta salir. Los <b>niños pequeños son los que peor lo llevan</b>, y además son los únicos que no pueden hacer nada: no se destapan, no abren la ventana, no dicen «tengo calor» — se despiertan y lloran. Al día siguiente están irritables, duermen peor la siesta y llegan a la noche siguiente más cansados. Los padres tampoco descansan. Y las vacaciones acaban dando lo contrario de lo que se fue a buscar.</p>
+  <p class="note">Lo del apartamento es observación, no medición. Lo que sí está medido es el bochorno del que se huye: la estación de referencia de Dénia y Jávea acumula <b>__NT_DENIA__ noches tropicales al año</b> de media, con una mínima de verano de <b>22,2&nbsp;°C</b>. A dos horas hacia el interior, en la sierra de Gúdar, esa misma madrugada se queda en <b>11,7&nbsp;°C</b> y no hay <b>ni una sola</b> noche tropical al año. Diez grados y medio: la distancia entre necesitar aire acondicionado y necesitar una manta.</p>
 </div></section>
 
 <section><div class="wrap">
@@ -7970,6 +8005,11 @@ a{color:var(--teal);text-decoration:none}
 .lugarchip b{color:var(--paper)}
 .lc-fix{background:transparent;border:1px solid var(--line);color:var(--teja2);font-size:12.5px;padding:5px 11px;border-radius:999px;cursor:pointer;font-family:inherit}
 .lc-fix:hover{border-color:var(--teja)}
+/* A partir de la segunda pregunta la salida sigue ahí, pero deja de reclamar
+   atención: ya se ha visto una vez y quien la necesita sabe buscarla. */
+.lc-fix.lc-tenue{border-color:transparent;color:var(--muted);font-size:12px;padding:5px 8px;
+  text-decoration:underline;text-underline-offset:3px}
+.lc-fix.lc-tenue:hover{color:var(--teja2);border-color:transparent}
 .lc-form{width:100%;display:flex;gap:8px;align-items:flex-end}
 .lc-form label{flex:1;font-size:12.5px;color:var(--muted);text-align:left}
 .lc-form input{width:100%;margin-top:5px;background:#2c2216;border:1.5px solid #5f5138;border-radius:10px;color:var(--paper);font-size:15px;padding:10px 12px;font-family:inherit}
@@ -8793,8 +8833,15 @@ function back(){if(cur>0){cur--;renderStep();}else closeFlow();}
 function chipLugar(){
  var el=document.getElementById("lugarchip");if(!el)return;
  if(MUN.n){
+  /* El botón de corregir sigue haciendo falta: es la ÚNICA manera de arreglar
+     el pueblo antes de votar. La comprobación de coherencia solo salta cuando
+     la noche se desvía mucho de lo esperado, así que a quien está en el pueblo
+     equivocado con una nota verosímil no le pregunta nadie.
+     Lo que sobraba era repetir la oferta en las ocho pantallas: en la primera
+     va entera, y a partir de ahí queda discreta, sin desaparecer. */
   el.innerHTML='<span class="lc-txt">📍 Tu noche se guarda en <b>'+MUN.n+'</b></span>'
-   +'<button type="button" class="lc-fix" onclick="abreCorrige()">¿No es aquí?</button>';
+   +'<button type="button" class="lc-fix'+(cur>0?' lc-tenue':'')+'" onclick="abreCorrige()">'
+   +(cur>0?'cambiar':'¿No es aquí?')+'</button>';
  }else{
   el.innerHTML='<span class="lc-txt">📍 No hemos sabido detectar tu pueblo'
    +(MY?' — usaremos <b>'+MY.n+'</b>':'')+'</span>'
@@ -9855,6 +9902,7 @@ def main() -> int:
             con_pie = enriquecer_estatica(nuevo, site, carpeta)
             if con_pie != nuevo:
                 nuevo, con_footer = con_pie, con_footer + 1
+            nuevo = inyectar_atajo(nuevo, site, carpeta)
         if nuevo != html_est:
             f.write_text(nuevo, encoding="utf-8")
     # Certificados: las ~218 páginas individuales (una por estación) son finas y

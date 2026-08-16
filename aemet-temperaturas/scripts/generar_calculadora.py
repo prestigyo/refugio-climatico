@@ -1355,6 +1355,13 @@ CSS_ATAJO = ('.atajo{margin:18px 0}'
              '.atajo a:hover{background:rgba(150,182,196,.18);text-decoration:none}')
 
 
+# Paginas donde el atajo NO va. En la herramienta misma sobra, y en el
+# Observatorio estorba: quien entra ahi viene a contar su noche, y una puerta de
+# salida en la cabecera se lleva al visitante antes de que vote. Lo que hace
+# falta alli no es un enlace fuera, sino decirle para que ha llegado.
+SIN_ATAJO = {"refugios-climaticos-naturales-cerca-de-mi", "observatorio-del-descanso"}
+
+
 def inyectar_atajo(html: str, site: str, carpeta: str) -> str:
     """Mete el atajo justo debajo del primer titular de una pagina estatica.
 
@@ -1362,7 +1369,7 @@ def inyectar_atajo(html: str, site: str, carpeta: str) -> str:
     ninguna salida: quien acababa de entender que existen los refugios
     climaticos no tenia como averiguar cual le queda cerca. Idempotente: si ya
     esta puesto, no lo repite."""
-    if 'class="atajo"' in html or carpeta == "refugios-climaticos-naturales-cerca-de-mi":
+    if 'class="atajo"' in html or carpeta in SIN_ATAJO:
         return html
     i = html.find("</h1>")
     if i < 0:
@@ -7847,6 +7854,10 @@ a{color:var(--teal);text-decoration:none}
 .brandmini{font:600 12px/1 var(--fb);letter-spacing:.22em;text-transform:uppercase;color:var(--teja);margin-bottom:22px}
 .hero h1{font-family:var(--fd);font-weight:900;font-size:clamp(32px,8vw,52px);line-height:1.05;letter-spacing:-.02em}
 .hero h1 em{font-style:italic;color:var(--teja2)}
+/* Para que ha llegado aqui, en una linea. Va pegada al titular porque el
+   titular dice de que va la pagina pero no que se lleva uno. No es enlace a
+   proposito: aqui no se saca al visitante, que viene a contar su noche. */
+.hero .promesa{font-weight:600;font-size:clamp(15px,3.4vw,18px);color:var(--teal);margin:14px auto 0;max-width:26ch;line-height:1.4}
 .hero .sub{color:var(--muted);font-size:clamp(15.5px,3vw,18px);margin:18px auto 0;max-width:30ch}
 /* El párrafo que explica de qué va esto a quien cae aquí de nuevas. Va a la
    izquierda y no centrado: son cuatro líneas y centradas no se leen. */
@@ -8101,6 +8112,7 @@ __NAV__
 <section class="hero"><div class="wrap">
   <div class="brandmini">El Observatorio del Descanso</div>
   <h1>Así se <em>duerme</em><br>en España</h1>
+  <p class="promesa">Resuelve tu descanso y tu sueño sin pasar calor</p>
   <p class="sub">El mapa del <b>sueño profundo</b>: dónde el cuerpo se repara de verdad, según diez veranos de AEMET y las noches que cuenta la gente.</p>
   <p class="sub2">__INTRO__</p>
 </div></section>

@@ -1,8 +1,8 @@
 {
  "fecha": "2026-08-16",
- "total": 844,
- "tropicales": 341,
- "ecuatoriales": 34,
+ "total": 841,
+ "tropicales": 336,
+ "ecuatoriales": 33,
  "peor": {
   "id": "6329X",
   "nombre": "Cabo de Gata Faro",
@@ -109,16 +109,16 @@
    "prov": "León"
   },
   {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 9.4,
+   "prov": "Madrid"
+  },
+  {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
    "min": 9.5,
    "prov": "Granada"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 9.8,
-   "prov": "Madrid"
   },
   {
    "id": "9677",

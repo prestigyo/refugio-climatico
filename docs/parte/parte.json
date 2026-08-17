@@ -1,8 +1,8 @@
 {
  "fecha": "2026-08-17",
- "total": 843,
- "tropicales": 408,
- "ecuatoriales": 48,
+ "total": 840,
+ "tropicales": 401,
+ "ecuatoriales": 46,
  "peor": {
   "id": "6329X",
   "nombre": "Cabo de Gata Faro",
@@ -85,6 +85,12 @@
    "prov": "Ávila"
   },
   {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 8.9,
+   "prov": "Madrid"
+  },
+  {
    "id": "C406G",
    "nombre": "Cañadas Parador",
    "min": 9.1,
@@ -95,12 +101,6 @@
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
    "min": 9.4,
    "prov": "Granada"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 9.7,
-   "prov": "Madrid"
   },
   {
    "id": "1541B",
@@ -121,6 +121,12 @@
    "prov": "Lleida"
   },
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 10.4,
+   "prov": "Segovia"
+  },
+  {
    "id": "9677",
    "nombre": "Port Aine L?orri",
    "min": 10.5,
@@ -131,12 +137,6 @@
    "nombre": "Cap de Vaqueira",
    "min": 10.8,
    "prov": "Lleida"
-  },
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 10.9,
-   "prov": "Ourense"
   }
  ]
 }

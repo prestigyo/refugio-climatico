@@ -1,7 +1,7 @@
 {
  "fecha": "2026-08-18",
- "total": 847,
- "tropicales": 398,
+ "total": 848,
+ "tropicales": 392,
  "ecuatoriales": 38,
  "peor": {
   "id": "0201X",
@@ -21,6 +21,12 @@
    "nombre": "Barcelona Drassanes",
    "min": 27.4,
    "prov": "Barcelona"
+  },
+  {
+   "id": "3562X",
+   "nombre": "Aliseda la Umbría",
+   "min": 27.4,
+   "prov": "Cáceres"
   },
   {
    "id": "B569X",
@@ -69,12 +75,6 @@
    "nombre": "Banyalbufar",
    "min": 26.4,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "0385X",
-   "nombre": "L?estartit",
-   "min": 26.2,
-   "prov": "Girona"
   }
  ],
  "top_fresco": [
@@ -109,6 +109,12 @@
    "prov": "León"
   },
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 10.1,
+   "prov": "Segovia"
+  },
+  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
    "min": 10.3,
@@ -131,12 +137,6 @@
    "nombre": "Cap de Rec",
    "min": 10.5,
    "prov": "Lleida"
-  },
-  {
-   "id": "2235U",
-   "nombre": "Cervera de Pisuerga",
-   "min": 10.6,
-   "prov": "Palencia"
   }
  ]
 }

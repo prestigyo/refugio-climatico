@@ -1,68 +1,26 @@
 {
- "fecha": "2026-08-17",
- "total": 840,
- "tropicales": 401,
- "ecuatoriales": 46,
+ "fecha": "2026-08-18",
+ "total": 847,
+ "tropicales": 398,
+ "ecuatoriales": 38,
  "peor": {
-  "id": "6329X",
-  "nombre": "Cabo de Gata Faro",
-  "min": 28.7,
-  "prov": "Almería"
+  "id": "0201X",
+  "nombre": "Barcelona Drassanes",
+  "min": 27.4,
+  "prov": "Barcelona"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 7.7,
-  "prov": "Ávila"
+  "id": "1178Y",
+  "nombre": "Soto de Valdeón (Automatica)",
+  "min": 8.7,
+  "prov": "León"
  },
  "top_calor": [
   {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 28.7,
-   "prov": "Almería"
-  },
-  {
-   "id": "7019X",
-   "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 28.3,
-   "prov": "Murcia"
-  },
-  {
-   "id": "6325O",
-   "nombre": "Almería/Aeropuerto",
-   "min": 27.7,
-   "prov": "Almería"
-  },
-  {
-   "id": "6291B",
-   "nombre": "El Ejido (Ayuntamiento - Automatica)",
-   "min": 27.5,
-   "prov": "Almería"
-  },
-  {
-   "id": "6293X",
-   "nombre": "Roquetas de Mar-Faro Sabinar",
-   "min": 27.5,
-   "prov": "Almería"
-  },
-  {
-   "id": "7007Y",
-   "nombre": "Mazarrón/las Torres",
-   "min": 27.5,
-   "prov": "Murcia"
-  },
-  {
-   "id": "7012X",
-   "nombre": "Cartagena",
-   "min": 27.5,
-   "prov": "Murcia"
-  },
-  {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
+   "id": "0201X",
+   "nombre": "Barcelona Drassanes",
    "min": 27.4,
-   "prov": "Málaga"
+   "prov": "Barcelona"
   },
   {
    "id": "B569X",
@@ -71,72 +29,114 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "6088X",
-   "nombre": "Torremolinos",
+   "id": "6332Y",
+   "nombre": "Carboneras - Faro Mesa Roldán",
+   "min": 26.9,
+   "prov": "Almería"
+  },
+  {
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
    "min": 26.8,
    "prov": "Málaga"
+  },
+  {
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 26.8,
+   "prov": "Almería"
+  },
+  {
+   "id": "6325O",
+   "nombre": "Almería/Aeropuerto",
+   "min": 26.7,
+   "prov": "Almería"
+  },
+  {
+   "id": "6000A",
+   "nombre": "Melilla",
+   "min": 26.6,
+   "prov": "Melilla"
+  },
+  {
+   "id": "7007Y",
+   "nombre": "Mazarrón/las Torres",
+   "min": 26.6,
+   "prov": "Murcia"
+  },
+  {
+   "id": "B087X",
+   "nombre": "Banyalbufar",
+   "min": 26.4,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "0385X",
+   "nombre": "L?estartit",
+   "min": 26.2,
+   "prov": "Girona"
   }
  ],
  "top_fresco": [
   {
+   "id": "1178Y",
+   "nombre": "Soto de Valdeón (Automatica)",
+   "min": 8.7,
+   "prov": "León"
+  },
+  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 7.7,
+   "min": 9.0,
    "prov": "Ávila"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 8.9,
-   "prov": "Madrid"
+   "id": "9453X",
+   "nombre": "Biescas Embalse de Búbal",
+   "min": 9.0,
+   "prov": "Huesca"
   },
   {
-   "id": "C406G",
-   "nombre": "Cañadas Parador",
-   "min": 9.1,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "id": "9207",
+   "nombre": "Valle de Hecho Hecho-Depósito",
    "min": 9.4,
-   "prov": "Granada"
+   "prov": "Huesca"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 10.0,
+   "min": 9.6,
    "prov": "León"
   },
   {
-   "id": "C611E",
-   "nombre": "San Mateo (Corral de los Juncos)",
-   "min": 10.0,
-   "prov": "Las Palmas"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 10.3,
+   "prov": "Zamora"
+  },
+  {
+   "id": "9218A",
+   "nombre": "Isaba/Izaba",
+   "min": 10.4,
+   "prov": "Navarra"
+  },
+  {
+   "id": "9460X",
+   "nombre": "Sabiñánigo",
+   "min": 10.4,
+   "prov": "Huesca"
   },
   {
    "id": "9590D",
    "nombre": "Cap de Rec",
-   "min": 10.2,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 10.4,
-   "prov": "Segovia"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
    "min": 10.5,
    "prov": "Lleida"
   },
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 10.8,
-   "prov": "Lleida"
+   "id": "2235U",
+   "nombre": "Cervera de Pisuerga",
+   "min": 10.6,
+   "prov": "Palencia"
   }
  ]
 }

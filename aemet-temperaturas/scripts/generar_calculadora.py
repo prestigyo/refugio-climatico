@@ -5288,6 +5288,398 @@ def construir_pagina_estudio(site: str, datos: dict) -> str:
             .replace("__HOME__", site + "/"))
 
 
+# ---------------------------------------------------------------------------
+# ESTUDIO ABIERTO: la deuda de sueño (/deuda-de-sueno/)
+#
+# Sale de docs/estudios/noches-datos.json, que escribe scripts/resumen_noches.py
+# con la hoja del Observatorio. Si el JSON no está, la página no se genera:
+# mismo trato que el estudio de los colores.
+#
+# Es un estudio con 24 noches, y eso condiciona TODO lo que se escribe aquí. La
+# página no está para demostrar nada: está para que quien vota vea qué se hace
+# con su noche y para que quien no ha votado entienda qué falta. Por eso las
+# limitaciones no van en una nota al pie —van en su propia sección, con el mismo
+# tamaño de letra que los resultados—. Un estudio pequeño que dice que es
+# pequeño es honesto; el mismo estudio callando el tamaño es propaganda.
+# ---------------------------------------------------------------------------
+
+# Escala de la deuda de sueño, tal cual se pregunta en el Observatorio.
+_DEUDA_ET = ["Ninguna", "Poca", "Alguna", "Bastante", "Muchísima"]
+_DEUDA_COL = ["#8fb07a", "#b9c47a", "#e8b45c", "#e0834f", "#d9604a"]
+
+
+def _esc(t: str) -> str:
+    """Los nombres de población salen de lo que escribe la gente: van escapados
+    antes de entrar en el HTML, aquí y en cualquier sitio."""
+    return (str(t).replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;").replace('"', "&quot;"))
+
+
+def _dec(x: float, n: int = 1) -> str:
+    """Número con coma decimal, que es como se escribe en español."""
+    return f"{x:.{n}f}".replace(".", ",")
+
+
+def _rango_es(a: date, b: date) -> str:
+    """'del 3 al 17 de agosto de 2026'. Sin repetir el mes ni el año cuando
+    coinciden, que es lo normal en un recuento mensual."""
+    if a == b:
+        return "el " + fecha_es_dia(a)
+    if (a.year, a.month) == (b.year, b.month):
+        return f"del {a.day} al {fecha_es_dia(b)}"
+    if a.year == b.year:
+        return (f"del {a.day} de {MESES_ES[a.month - 1]} "
+                f"al {fecha_es_dia(b)}")
+    return f"del {fecha_es_dia(a)} al {fecha_es_dia(b)}"
+
+
+# Los dos gráficos se dibujan sobre un lienzo ESTRECHO (420 unidades) y la hoja
+# les pone un ancho máximo. El motivo es el móvil: un SVG de 700 unidades que se
+# estira al 100 % de una columna de 330 px encoge su texto a la mitad, y una
+# etiqueta de 13 px acaba dibujándose a 6. Con el lienzo estrecho, la misma
+# figura se lee igual de bien en un teléfono que en un portátil.
+_SVG_W = 380
+
+
+def _svg_reparto(reparto: list) -> str:
+    """Las cinco respuestas de deuda, en barras. Lo que se ve es que no hay
+    término medio: la gente contesta en los extremos."""
+    tot = sum(reparto) or 1
+    alto, base, w, hueco = 118, 176, 62, 9
+    margen = (_SVG_W - (5 * w + 4 * hueco)) / 2
+    barras = []
+    for i, v in enumerate(reparto):
+        x = margen + i * (w + hueco)
+        h = max(3, round(alto * v / max(reparto)))
+        barras.append(
+            f'<rect x="{x:.0f}" y="{base - h}" width="{w}" height="{h}" rx="4" '
+            f'fill="{_DEUDA_COL[i]}"/>'
+            f'<text x="{x + w / 2:.0f}" y="{base - h - 8}" text-anchor="middle" '
+            f'font-size="17" font-weight="700" fill="{_DEUDA_COL[i]}" '
+            f'font-family="sans-serif">{v}</text>'
+            f'<text x="{x + w / 2:.0f}" y="{base + 17}" text-anchor="middle" '
+            f'font-size="13" fill="#b3a48c" font-family="sans-serif">'
+            f'{_DEUDA_ET[i]}</text>')
+    return (f'<svg viewBox="0 0 {_SVG_W} 200" role="img" '
+            f'aria-label="Reparto de las respuestas de deuda de sueño: '
+            f'{", ".join(f"{_DEUDA_ET[i].lower()} {v}" for i, v in enumerate(reparto))} '
+            f'de {tot} noches">'
+            f'<line x1="{margen:.0f}" y1="{base}" '
+            f'x2="{_SVG_W - margen:.0f}" y2="{base}" '
+            f'stroke="#3a2c1c"/>{"".join(barras)}</svg>')
+
+
+def _svg_anomalias(anomalias: list) -> str:
+    """Lo que la estación predice frente a lo que cuenta quien duerme allí.
+
+    Cada fila es un sitio: círculo hueco donde AEMET dice que debería estar, y
+    punto lleno donde lo pone la gente. Es el gráfico que explica para qué sirve
+    el Observatorio: la distancia entre los dos puntos es lo que ninguna red de
+    218 estaciones puede medir."""
+    if not anomalias:
+        return ""
+    x0, x1, alto = 104, _SVG_W - 14, 31
+    filas = []
+    for i, a in enumerate(anomalias):
+        y = 26 + i * alto
+        col = "#8fb07a" if a["mejor"] else "#d9604a"
+        px = x0 + (x1 - x0) * a["esperado"] / 10.0
+        dx = x0 + (x1 - x0) * a["dijo"] / 10.0
+        # La cifra va al lado contrario del punto hueco, para no taparlo. Pero
+        # cuando el índice es casi 0 el punto ya está pegado al eje y la
+        # etiqueta se metía encima del nombre del pueblo: entonces se pasa al
+        # otro lado, que ahí sí hay sitio.
+        izquierda = a["dijo"] < a["esperado"] and dx - 11 > x0 + 6
+        etx = dx + (-11 if izquierda else 11)
+        anc = "end" if izquierda else "start"
+        # El nombre se recorta si no cabe: en el lienzo estrecho hay sitio para
+        # unos 15 caracteres, y un nombre largo se metería encima del eje.
+        nom = a["lugar"] if len(a["lugar"]) <= 13 else a["lugar"][:12] + "…"
+        filas.append(
+            f'<text x="{x0 - 10}" y="{y + 4}" text-anchor="end" font-size="13.5" '
+            f'fill="#efe6d6" font-family="sans-serif">{_esc(nom)}</text>'
+            f'<line x1="{px:.0f}" y1="{y}" x2="{dx:.0f}" y2="{y}" stroke="{col}" '
+            f'stroke-width="2.5" stroke-linecap="round" opacity=".65"/>'
+            f'<circle cx="{px:.0f}" cy="{y}" r="4.5" fill="none" stroke="#b3a48c" '
+            f'stroke-width="1.8"/>'
+            f'<circle cx="{dx:.0f}" cy="{y}" r="5.5" fill="{col}"/>'
+            # Con halo del color de la figura: cuando la etiqueta cae sobre la
+            # línea, el trazo de debajo se recorta y el número sigue legible.
+            f'<text x="{etx:.0f}" y="{y + 4}" text-anchor="{anc}" font-size="13" '
+            f'font-weight="700" fill="{col}" font-family="sans-serif" '
+            f'paint-order="stroke" stroke="#1f1810" stroke-width="3.5" '
+            f'stroke-linejoin="round">{_dec(a["dijo"], 1)}</text>')
+    h = 26 + len(anomalias) * alto + 6
+    ejes = "".join(
+        f'<line x1="{x0 + (x1 - x0) * v / 10.0:.0f}" y1="10" '
+        f'x2="{x0 + (x1 - x0) * v / 10.0:.0f}" y2="{h - 20}" stroke="#3a2c1c"/>'
+        f'<text x="{x0 + (x1 - x0) * v / 10.0:.0f}" y="{h - 6}" text-anchor="middle" '
+        f'font-size="11.5" fill="#b3a48c" font-family="sans-serif">{v}</text>'
+        for v in (0, 2, 4, 6, 8, 10))
+    return (f'<svg viewBox="0 0 {_SVG_W} {h}" role="img" '
+            f'aria-label="Diferencia entre el descanso que predice la estación de '
+            f'AEMET y el que cuenta la gente que duerme allí">{ejes}'
+            f'{"".join(filas)}</svg>')
+
+
+def _fila_lugar(d: dict) -> str:
+    col = "#8fb07a" if d["indice"] >= 7 else "#e8b45c" if d["indice"] >= 4 else "#d9604a"
+    return (f'<tr><td><b>{_esc(d["lugar"])}</b><small>{d["n"]} noches · '
+            f'{d["dispositivos"]} personas</small></td>'
+            f'<td>{_dec(d["tmin"], 1)}&nbsp;°C</td>'
+            f'<td style="color:{col};font-weight:700">{_dec(d["indice"], 1)}</td>'
+            f'<td>{_dec(d["deuda"], 1)}</td></tr>')
+
+
+PAGINA_NOCHES = r"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/deuda-de-sueno/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__TITLE__">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/deuda-de-sueno/">
+<meta property="og:image" content="__SITE__/img/marca-luna-oscuro-1024.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/img/marca-luna-oscuro-1024.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--rojo:#d9604a;--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.7;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:min(92vw,760px);margin:0 auto;padding:0 22px}
+ a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+ header.h{padding:46px 0 10px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:18px 0 8px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(30px,6vw,48px);line-height:1.04;letter-spacing:-.01em}
+ h1 em{font-style:italic;color:var(--teja2)}
+ .intro{color:var(--muted);font-size:clamp(15px,2.4vw,17.5px);margin:18px 0 0}
+ .intro b{color:var(--paper)}
+ /* El aviso de que esto es provisional. Va arriba, no al final, y con borde
+    teal para que se lea como una advertencia y no como una promoción. */
+ .prov{margin:20px 0 4px;background:rgba(150,182,196,.08);border:1px solid var(--teal);border-radius:13px;padding:14px 17px;font-size:14.5px;color:var(--muted)}
+ .prov b{color:var(--paper)}
+ section{padding:22px 0}
+ h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,3.6vw,27px);margin:0 0 12px;line-height:1.15}
+ h3{font-family:var(--fd);font-weight:600;font-size:clamp(17px,2.8vw,20px);margin:22px 0 8px;color:var(--paper)}
+ p{font-size:clamp(15px,2.2vw,16.5px);color:var(--muted);margin:0 0 14px}p b{color:var(--paper)}
+ figure{margin:14px 0 6px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:16px 14px;overflow:hidden}
+ /* Tope de ancho: los gráficos se dibujan en un lienzo estrecho para que el
+    texto se lea en el móvil, y estirarlos a 760 px los haría gigantes. */
+ figure svg{display:block;width:100%;max-width:420px;height:auto;margin:0 auto}
+ figcaption{font-size:13.5px;color:var(--muted);margin-top:12px;padding:0 4px;line-height:1.6}
+ .leg{display:flex;flex-wrap:wrap;gap:7px 18px;margin:12px 4px 2px;font-size:13px;color:var(--muted)}
+ .leg .it{display:inline-flex;align-items:center;gap:7px}
+ .leg .sw{width:14px;height:14px;border-radius:3px;flex:none;border:1px solid rgba(255,255,255,.14)}
+ .leg .ho{width:13px;height:13px;border-radius:50%;flex:none;border:2px solid var(--muted)}
+ .dato{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 18px}
+ .dcard{flex:1;min-width:170px;background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:15px 17px}
+ .dcard .n{font-family:var(--fd);font-weight:900;font-size:32px;line-height:1}
+ .dcard .l{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}
+ table{width:100%;border-collapse:collapse;margin:10px 0 6px;font-size:14.5px}
+ th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 8px 8px 0;border-bottom:1px solid var(--line)}
+ td{padding:11px 8px 11px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+ td b{color:var(--paper);font-weight:600;display:block}
+ td small{font-size:12.5px;color:var(--muted)}
+ th:not(:first-child),td:not(:first-child){text-align:right;white-space:nowrap}
+ .metodo{background:var(--bg2);border-left:3px solid var(--teja);border-radius:0 12px 12px 0;padding:16px 18px;font-size:14px;color:var(--muted)}
+ .metodo b{color:var(--paper)}
+ /* Las limitaciones. Mismo peso visual que un resultado: es lo que hace
+    creíble al resto de la página. */
+ .limi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 20px 4px;margin:8px 0 6px}
+ .limi li{font-size:15px;color:var(--muted);margin:14px 0;line-height:1.65;list-style:none;padding-left:26px;position:relative}
+ .limi li:before{content:"—";position:absolute;left:0;color:var(--teja)}
+ .limi li b{color:var(--paper)}
+ .cta{display:block;margin:26px 0 6px;background:var(--teja);color:#160f08;font-weight:700;font-size:17px;padding:17px 26px;border-radius:15px;text-align:center;text-decoration:none;box-shadow:0 10px 30px rgba(224,131,79,.24)}
+ .cta:hover{background:var(--teja2);text-decoration:none}
+ .ctasub{text-align:center;font-size:13.5px;color:var(--muted);margin:0}
+ .sigue{border-top:1px solid var(--line);margin-top:28px;padding-top:22px}
+ .navcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;margin-top:4px}
+ .navcard{display:block;background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:15px 16px;text-decoration:none}
+ .navcard:hover{border-color:var(--teja);background:var(--panel);text-decoration:none}
+ .navcard .ic{font-size:22px;display:block;margin-bottom:7px}
+ .navcard b{display:block;color:var(--paper);font-family:var(--fd);font-weight:600;font-size:15.5px;margin-bottom:3px}
+ .navcard span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
+ __NAVCSS__
+ __FOOTERCSS__
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Deuda de sueño</nav>
+  <div class="kick">Estudio abierto · __NOCHES__ noches · datos a __CORTE__</div>
+  <h1>La deuda de sueño <em>que deja el calor</em></h1>
+  <p class="intro">El Observatorio del Descanso no pregunta la temperatura: pregunta <b>cómo has dormido</b> y <b>cuánta deuda de sueño arrastras</b>. Llevamos <b>__NOCHES__ noches</b> contadas por <b>__DISPOSITIVOS__ personas</b> en <b>__POBLACIONES__ sitios</b>, __RANGO__. Esto es todo lo que dicen — y todo lo que todavía no pueden decir.</p>
+  <p class="prov"><b>Esto es un recuento provisional, no una conclusión.</b> Con __NOCHES__ noches no se demuestra nada sobre España: se comprueba que la pregunta funciona y se ve qué falta. Publicamos las cifras en abierto desde el primer día porque quien cuenta su noche merece ver qué se hace con ella. <b>Se actualiza una vez al mes.</b></p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Lo que sale hasta ahora</h2>
+  <p>Partimos las noches en dos: las que <b>bajaron de 20&nbsp;°C</b> según la estación de AEMET más cercana, y las <b>noches tropicales</b>, en las que la madrugada no llegó a bajar de ahí. La deuda de sueño se pregunta de 1 (ninguna) a 5 (voy fundido).</p>
+  <div class="dato">
+    <div class="dcard"><div class="n" style="color:var(--verde)">__D_FRESCA__ / 5</div><div class="l">de deuda cuando la noche refresca<br><b style="color:var(--muted);font-weight:400">__N_FRESCA__ noches · mínima media __T_FRESCA__&nbsp;°C</b></div></div>
+    <div class="dcard"><div class="n" style="color:var(--rojo)">__D_TROP__ / 5</div><div class="l">de deuda tras una noche tropical<br><b style="color:var(--muted);font-weight:400">__N_TROP__ noches · mínima media __T_TROP__&nbsp;°C</b></div></div>
+  </div>
+  <p><b>__DIF_T__ grados</b> de diferencia en la madrugada, y <b>__DIF_D__ puntos de deuda</b> sobre cinco. Dicho de otro modo: la misma persona que en un sitio se levanta a cero, en el otro se levanta debiendo. La correlación entre la mínima de AEMET y la deuda que cuenta la gente es de <b>__R__</b> — alta, aunque con esta muestra hay que leerla como un indicio, no como una ley.</p>
+  <h3>Sitio por sitio</h3>
+  <p>Solo aparecen los que llevan <b>dos noches o más</b>: con una sola, el nombre del pueblo señalaría a una persona y el dato no diría nada.</p>
+  <table><thead><tr><th>Dónde</th><th>Mínima</th><th>Descanso</th><th>Deuda</th></tr></thead><tbody>__TABLA_LUGARES__</tbody></table>
+  <p>Los extremos hablan solos: entre <b>__MEJOR__</b> y <b>__PEOR__</b> hay <b>__DIF_LT__ grados</b> de diferencia en la madrugada, y con ellos <b>__DIF_LI__ puntos</b> de descanso y <b>__DIF_LD__</b> de deuda.</p>
+  <h3>No hay término medio</h3>
+  <figure>
+    __SVG_REPARTO__
+    <figcaption>Las __NOCHES__ respuestas a «¿cuánta deuda de sueño arrastras?». Casi todo el mundo contesta en un extremo o en el otro: <b>o estás a cero, o vas fundido</b>. El centro de la escala está prácticamente vacío. Si se confirma con más noches, dice algo incómodo: en verano no se duerme «regular», se duerme bien o se acumula déficit.</figcaption>
+  </figure>
+  <h3>Nadie encendió el aire acondicionado</h3>
+  <p>Ni una sola vez en __NOCHES__ noches. <b>__R_VENTANA__</b> abrieron la ventana, <b>__R_VENTILADOR__</b> tiraron del ventilador y <b>__R_NADA__</b> no hicieron nada. No es que el aire acondicionado no exista: es que quien contesta a este observatorio es justo la gente que duerme sin él. Y en las noches tropicales el ventilador no arregló nada — donde la mínima rondó los 24&nbsp;°C, el descanso medio se quedó en <b>__I_TROP__ sobre 10</b> con el ventilador puesto.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Para qué sirve esto</h2>
+  <p>Dos cosas distintas, y la segunda es la que no puede hacer nadie más.</p>
+  <h3>1. Traducir los grados a consecuencias</h3>
+  <p>Un parte meteorológico dice «mínima de 24&nbsp;°C» y no significa nada para la mayoría. <b>«Deuda de sueño 4,5 sobre 5»</b> sí. Es la misma noche contada en la unidad que de verdad le importa a quien la sufre: cómo va a estar mañana en el trabajo, cómo van a estar los niños, cuánto se recupera de un entrenamiento. Esta web lleva desde el principio demostrando <i>dónde</i> hace calor de noche; esto empieza a medir <b>qué te cuesta</b>.</p>
+  <h3>2. Detectar pueblos, barrios y zonas con ventaja — y con desventaja</h3>
+  <p>AEMET mide en unos cientos de puntos. España tiene más de <b>8.000 municipios</b>, y dentro de cada ciudad hay barrios que no se parecen entre sí. Entre una estación y tu cama caben una vaguada, una brisa marina, una manzana de asfalto o un ático bajo cubierta — y varios grados. <b>Eso no lo mide ninguna red oficial: solo lo sabe quien duerme allí.</b></p>
+  <p>Cuando alguien cuenta una noche que no cuadra con lo que predice su estación, ahí hay algo. Con __NOCHES__ noches ya han aparecido los dos casos:</p>
+  <figure>
+    __SVG_ANOMALIAS__
+    <div class="leg" aria-label="Leyenda">
+      <span class="it"><span class="ho"></span>Lo que predice la estación de AEMET</span>
+      <span class="it"><span class="sw" style="background:#8fb07a"></span>Se durmió mejor de lo previsto</span>
+      <span class="it"><span class="sw" style="background:#d9604a"></span>Se durmió peor de lo previsto</span>
+    </div>
+    <figcaption>Índice de descanso de 0 a 10. El círculo hueco es lo que cabría esperar según la estación de AEMET de referencia esa noche; el punto lleno, lo que contó quien durmió allí.</figcaption>
+  </figure>
+  <p><b>Ventaja.</b> En <b>Ayamonte</b> la mínima fue de 23,5&nbsp;°C —noche tropical de manual, la estación predecía un 3,4 sobre 10— y quien la contó puso un <b>9</b>, sin ventilador y sin aire: «nada, tal cual». Ahí hay algo real: el estuario, la brisa del Atlántico, o una casa que se porta. Un solo dato no prueba nada, pero es exactamente la pista que hay que seguir.</p>
+  <p><b>Desventaja.</b> En <b>Delicias</b>, un barrio denso de Zaragoza, cuatro personas distintas han contado cuatro noches con una media de <b>1,2 sobre 10</b> y una deuda de <b>4,5 sobre 5</b>. Su estación de referencia está en el borde sur de la ciudad y predice bastante mejor. Eso tiene nombre: <b>isla de calor urbana</b>. No sale en ningún parte meteorológico, y es donde vive la mayor parte de la gente.</p>
+  <p>Un mapa así —qué pueblos y qué barrios duermen mejor o peor de lo que dice su termómetro más cercano— <b>no existe en España</b>. Es lo que se puede construir con noches contadas, y solo con noches contadas.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Lo que todavía no demuestra</h2>
+  <p>Por si alguien quiere citar estas cifras, aquí están sus grietas antes de que las encuentre:</p>
+  <ul class="limi">
+    <li><b>__NOCHES__ noches son pocas.</b> Cualquiera de los números de arriba puede moverse mucho con veinte noches más. Ninguno es un resultado cerrado.</li>
+    <li><b>La muestra está concentrada.</b> Quien más vota aporta el <b>__CONC__&nbsp;%</b> de las noches, y las tres personas más activas suman el <b>__TOP3__&nbsp;%</b>. Buena parte del contraste que se ve arriba es, en realidad, «Teruel frente a Zaragoza», no «el frescor frente al calor».</li>
+    <li><b>La deuda y el descanso van casi de la mano</b> (correlación __R2__). Ahora mismo la pregunta de la deuda está confirmando a la primera —quien durmió mal dice que arrastra déficit—, más que aportando información nueva. Empezará a aportarla cuando haya gente contando varias noches seguidas: ahí se verá la deuda que <i>una</i> noche no explica.</li>
+    <li><b>Quien vota no es una muestra al azar.</b> Es gente que ha entrado en una web sobre calor nocturno. Nadie ha usado aire acondicionado, y eso ya dice que este grupo no representa a España entera.</li>
+    <li><b>__APARTADAS__ noches están apartadas del mapa.</b> Cuando alguien cuenta una noche muy distinta de lo previsto, se guarda pero no entra en los rankings hasta que otras noches del mismo sitio la respalden. En este recuento sí se cuentan, y por eso se avisa.</li>
+  </ul>
+  <p class="metodo"><b>Cómo está hecho.</b> Cada noche se guarda con la estación de AEMET más cercana al pueblo que se indica —no al punto donde se vota, que puede ser otro—, y se compara con lo que esa estación registró esa madrugada. Se cuenta <b>una noche por persona y día</b>: de __RESPUESTAS__ respuestas recibidas, __REPETIDAS__ eran la misma noche contada dos veces y se han descartado. Todo es anónimo: no se guarda ni nombre ni correo ni posición exacta, solo una celda aproximada y un identificador del navegador para no contar dos veces. Regenerable con <code>scripts/resumen_noches.py</code>. Periodo: __RANGO__.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Qué falta</h2>
+  <p>Gente. No más preguntas ni más algoritmo: <b>más noches y de más sitios</b>. Para que la anomalía de un pueblo deje de ser una anécdota y entre en el mapa hacen falta al menos <b>tres personas distintas</b> contando noches parecidas allí. Ahora mismo hay sitios que se quedan en dos.</p>
+  <p>Si duermes mal, cuéntalo. Si duermes de maravilla, cuéntalo también — un refugio solo aparece en el mapa si alguien dice que allí se duerme bien. Son <b>diez segundos</b>, es anónimo y no hay que registrarse.</p>
+  <a class="cta" href="__SITE__/observatorio-del-descanso/">Contar cómo he dormido esta noche</a>
+  <p class="ctasub">Y si quieres, añade las horas y la puntuación de tu pulsera: cruzamos lo que midió AEMET, lo que midió tu aparato y lo que sentiste tú.</p>
+  <div class="sigue">
+    <h2>Sigue explorando</h2>
+    <div class="navcards">
+      <a class="navcard" href="__SITE__/observatorio-del-descanso/"><span class="ic">🌙</span><b>El Observatorio</b><span>El mapa del descanso, población por población.</span></a>
+      <a class="navcard" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/"><span class="ic">📍</span><b>Refugios cerca de ti</b><span>Dónde se duerme fresco más cerca de donde estás.</span></a>
+      <a class="navcard" href="__SITE__/dormir-con-calor/"><span class="ic">🛏️</span><b>Dormir con calor</b><span>Qué funciona de verdad sin aire acondicionado.</span></a>
+      <a class="navcard" href="__SITE__/la-espana-que-nunca-se-colorea/"><span class="ic">🗺️</span><b>La España que nunca se colorea</b><span>El estudio de los mapas de AEMET, píxel a píxel.</span></a>
+      <a class="navcard" href="__SITE__/metodologia/"><span class="ic">📐</span><b>Cómo medimos</b><span>Qué es una noche tropical y de dónde salen los datos.</span></a>
+      <a class="navcard" href="__SITE__/"><span class="ic">🏡</span><b>Tu pueblo</b><span>¿Cuántas noches tropicales tiene al año?</span></a>
+    </div>
+  </div>
+</div></section>
+
+__FOOTER__
+</body>
+</html>
+"""
+
+
+def construir_pagina_noches(site: str, d: dict) -> str:
+    """La página del estudio abierto de la deuda de sueño."""
+    fr, tr = d["frescas"], d["tropicales"]
+    # La tabla llega ordenada de mejor a peor descanso: los extremos son
+    # sus dos puntas, y asi la prosa sigue siendo cierta el mes que viene.
+    mejor, peor = d["lugares"][0], d["lugares"][-1]
+    # El título no lleva el número de noches: cambia cada mes y un título que
+    # baila es un título que Google deja de reconocer. El recuento va en la
+    # descripción, que sí puede moverse.
+    title = "¿Cuánta deuda de sueño deja una noche tropical?"
+    desc = (f"Las primeras {d['noches']} noches contadas en el Observatorio del Descanso, "
+            f"cruzadas con AEMET: cuánta deuda de sueño deja una madrugada que no baja "
+            f"de 20 °C.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Deuda de sueño",
+             "item": site + "/deuda-de-sueno/"}]},
+        {"@type": "Article", "headline": title, "description": desc,
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es"},
+         "dateModified": d["corte"],
+         "isBasedOn": "https://opendata.aemet.es"}],
+    }, ensure_ascii=False)
+    rec = d["recurso"]
+    return (PAGINA_NOCHES
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__TITLE__", title)
+            .replace("__DESC__", desc)
+            .replace("__TABLA_LUGARES__",
+                     "".join(_fila_lugar(x) for x in d["lugares"]))
+            .replace("__SVG_REPARTO__", _svg_reparto(d["reparto"]))
+            .replace("__SVG_ANOMALIAS__", _svg_anomalias(d["anomalias"]))
+            .replace("__NOCHES__", str(d["noches"]))
+            .replace("__RESPUESTAS__", str(d["respuestas"]))
+            .replace("__REPETIDAS__", str(d["repetidas"]))
+            .replace("__DISPOSITIVOS__", str(d["dispositivos"]))
+            .replace("__POBLACIONES__", str(d["poblaciones"]))
+            .replace("__APARTADAS__", str(d["apartadas"]))
+            .replace("__D_FRESCA__", _dec(fr["deuda"], 1))
+            .replace("__N_FRESCA__", str(fr["n"]))
+            .replace("__T_FRESCA__", _dec(fr["tmin"], 1))
+            .replace("__D_TROP__", _dec(tr["deuda"], 1))
+            .replace("__N_TROP__", str(tr["n"]))
+            .replace("__T_TROP__", _dec(tr["tmin"], 1))
+            .replace("__I_TROP__", _dec(tr["indice"], 1))
+            .replace("__DIF_T__", _dec(tr["tmin"] - fr["tmin"], 1))
+            .replace("__DIF_D__", _dec(tr["deuda"] - fr["deuda"], 1))
+            .replace("__MEJOR__", _esc(mejor["lugar"]))
+            .replace("__PEOR__", _esc(peor["lugar"]))
+            .replace("__DIF_LT__", _dec(peor["tmin"] - mejor["tmin"], 1))
+            .replace("__DIF_LI__", _dec(mejor["indice"] - peor["indice"], 1))
+            .replace("__DIF_LD__", _dec(peor["deuda"] - mejor["deuda"], 1))
+            .replace("__R__", _dec(d["r_tmin_deuda"], 2))
+            .replace("__R2__", _dec(d["r_indice_deuda"], 2))
+            .replace("__R_NADA__", str(rec.get("nada", 0)))
+            .replace("__R_VENTANA__", str(rec.get("ventana", 0)))
+            .replace("__R_VENTILADOR__", str(rec.get("ventilador", 0)))
+            .replace("__CONC__", str(d["concentracion"]))
+            .replace("__TOP3__", str(d["top3"]))
+            # Con día: un estudio que se refresca cada mes tiene que decir
+            # exactamente hasta cuándo llegan sus datos, no solo el mes.
+            .replace("__CORTE__", fecha_es_dia(date.fromisoformat(d["corte"])))
+            .replace("__RANGO__", _rango_es(date.fromisoformat(d["desde"]),
+                                            date.fromisoformat(d["hasta"])))
+            .replace("__SITE__", site)
+            .replace("__HOME__", site + "/"))
+
+
 # ===========================================================================
 # Página SEO "dormir con manta en verano": la búsqueda clásica del calor
 # ("pueblos de España donde dormir con manta", "destinos frescos para agosto",
@@ -8176,6 +8568,7 @@ __PREGUNTAS__
     <h3>La deuda de sueño: lo que pagas al día siguiente</h3>
     <p>Dormir mal una noche se nota; dormir mal <b>varias seguidas</b> se acumula. Eso es la <b>deuda de sueño</b>: el déficit que arrastras y que no se salda con echarle horas el fin de semana. Y hay un matiz que casi nadie cuenta: <b>puedes dormir las mismas horas y descansar mucho menos</b>. Cuando la noche no baja de 20&nbsp;°C, el cuerpo no consigue soltar calor, el sueño se fragmenta y <b>la fase profunda —la reparadora— se acorta</b>. El reloj marca ocho horas; el cuerpo, al levantarse, dice otra cosa.</p>
     <p>Por eso este observatorio no mide la temperatura: mide <b>el descanso</b>. Si entrenas, ya sabes que la sesión no te hace mejor — <b>te hace mejor lo que recuperas mientras duermes</b>: ahí se libera la hormona del crecimiento, se repara el músculo y se consolida el aprendizaje. Un verano de noches tropicales es un verano de recuperación a medias. Y un <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">refugio climático natural</a> —donde la madrugada refresca sin aire acondicionado— es, sencillamente, <b>el mejor sitio para dormir profundo</b>.</p>
+    <p>Y esto no se queda en la hoja de cálculo: <b>publicamos el recuento en abierto</b> y lo actualizamos cada mes. Puedes ver <a href="__SITE__/deuda-de-sueno/">qué dicen las noches contadas hasta ahora</a> —cuánta deuda deja una noche tropical frente a una que refresca, qué sitios duermen mejor o peor de lo que predice su estación— y también todo lo que ese recuento <b>todavía no puede demostrar</b>. Tu noche va ahí.</p>
     <p class="wear-note">⌚ <b>¿Llevas pulsera o reloj de sueño?</b> Al contar tu noche puedes añadir, si quieres, <b>las horas y la puntuación</b> que te dio tu dispositivo. Así cruzamos tres cosas que casi nunca se miran juntas: <b>lo que midió AEMET</b> fuera, <b>lo que midió tu aparato</b> y <b>lo que sentiste tú</b>. Es opcional y anónimo: no conectamos con ninguna cuenta ni servicio, lo escribes tú.</p>
   </div>
 </div></section>
@@ -9754,6 +10147,21 @@ def main() -> int:
         print("   estudio 'nunca se colorea': landing generada")
     else:
         print("   estudio 'nunca se colorea': sin datos (ejecuta estudio_colores.py); se omite")
+    # Estudio abierto de la deuda de sueño: las cifras del Observatorio, en
+    # abierto y con sus limitaciones delante. Mismo trato que el de arriba: sale
+    # de un JSON que escribe otro script, y sin JSON no hay página. Se refresca
+    # una vez al mes, no en cada build: con una muestra pequeña, republicar a
+    # diario mueve los decimales sin que cambie nada de fondo.
+    noches_json = DOCS_DIR / "estudios" / "noches-datos.json"
+    if noches_json.exists():
+        datos_noches = json.loads(noches_json.read_text(encoding="utf-8"))
+        (DOCS_DIR / "deuda-de-sueno").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "deuda-de-sueno" / "index.html").write_text(
+            construir_pagina_noches(site, datos_noches), encoding="utf-8")
+        print(f"   deuda-de-sueno: estudio con {datos_noches['noches']} noches "
+              f"(datos a {datos_noches['corte']})")
+    else:
+        print("   deuda-de-sueno: sin datos (ejecuta resumen_noches.py); se omite")
     # Versión en inglés (fase 1): home /en/ + guía /en/coolest-towns-spain/.
     # SEO propio, hreflang bidireccional y navegación con tarjetas/botones.
     (DOCS_DIR / "en").mkdir(parents=True, exist_ok=True)

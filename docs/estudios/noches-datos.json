@@ -1,0 +1,114 @@
+{
+ "corte": "2026-08-19",
+ "desde": "2026-08-03",
+ "hasta": "2026-08-17",
+ "noches": 24,
+ "respuestas": 27,
+ "repetidas": 3,
+ "dispositivos": 14,
+ "poblaciones": 8,
+ "apartadas": 3,
+ "frescas": {
+  "n": 16,
+  "tmin": 14.0,
+  "deuda": 1.4,
+  "indice": 9.2
+ },
+ "tropicales": {
+  "n": 8,
+  "tmin": 23.7,
+  "deuda": 3.8,
+  "indice": 3.1
+ },
+ "r_tmin_deuda": 0.8,
+ "r_indice_deuda": -0.92,
+ "reparto": [
+  10,
+  8,
+  1,
+  2,
+  3
+ ],
+ "recurso": {
+  "nada": 4,
+  "ventana": 15,
+  "ventilador": 5,
+  "aire": 0,
+  "fuera": 0
+ },
+ "lugares": [
+  {
+   "n": 10,
+   "tmin": 13.7,
+   "deuda": 1.4,
+   "indice": 9.5,
+   "lugar": "Alcalá de la Selva",
+   "dispositivos": 5
+  },
+  {
+   "n": 2,
+   "tmin": 13.6,
+   "deuda": 1.0,
+   "indice": 8.5,
+   "lugar": "Allepuz",
+   "dispositivos": 2
+  },
+  {
+   "n": 4,
+   "tmin": 24.2,
+   "deuda": 4.5,
+   "indice": 1.2,
+   "lugar": "Delicias",
+   "dispositivos": 3
+  }
+ ],
+ "anomalias": [
+  {
+   "lugar": "Ayamonte",
+   "tmin": 23.5,
+   "esperado": 3.4,
+   "dijo": 9.0,
+   "deuda": 2,
+   "recurso": "nada",
+   "mejor": true
+  },
+  {
+   "lugar": "València",
+   "tmin": 22.8,
+   "esperado": 3.8,
+   "dijo": 7.5,
+   "deuda": 2,
+   "recurso": "ventana",
+   "mejor": true
+  },
+  {
+   "lugar": "Esponellà",
+   "tmin": 21.1,
+   "esperado": 4.7,
+   "dijo": 1.0,
+   "deuda": 5,
+   "recurso": "ventana",
+   "mejor": false
+  },
+  {
+   "lugar": "Delicias",
+   "tmin": 24.3,
+   "esperado": 3.5,
+   "dijo": 0.0,
+   "deuda": 5,
+   "recurso": "ventilador",
+   "mejor": false
+  },
+  {
+   "lugar": "Delicias",
+   "tmin": 24.1,
+   "esperado": 3.6,
+   "dijo": 1.0,
+   "deuda": 4,
+   "recurso": "ventilador",
+   "mejor": false
+  }
+ ],
+ "concentracion": 25,
+ "top3": 54
+}

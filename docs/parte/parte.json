@@ -1,21 +1,27 @@
 {
- "fecha": "2026-08-18",
- "total": 848,
- "tropicales": 392,
+ "fecha": "2026-08-19",
+ "total": 845,
+ "tropicales": 416,
  "ecuatoriales": 38,
  "peor": {
-  "id": "0201X",
-  "nombre": "Barcelona Drassanes",
-  "min": 27.4,
+  "id": "0201D",
+  "nombre": "Barcelona Port Olímpic",
+  "min": 28.4,
   "prov": "Barcelona"
  },
  "mejor": {
-  "id": "1178Y",
-  "nombre": "Soto de Valdeón (Automatica)",
-  "min": 8.7,
-  "prov": "León"
+  "id": "9218A",
+  "nombre": "Isaba/Izaba",
+  "min": 10.4,
+  "prov": "Navarra"
  },
  "top_calor": [
+  {
+   "id": "0201D",
+   "nombre": "Barcelona Port Olímpic",
+   "min": 28.4,
+   "prov": "Barcelona"
+  },
   {
    "id": "0201X",
    "nombre": "Barcelona Drassanes",
@@ -23,103 +29,55 @@
    "prov": "Barcelona"
   },
   {
-   "id": "3562X",
-   "nombre": "Aliseda la Umbría",
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
    "min": 27.4,
-   "prov": "Cáceres"
+   "prov": "Almería"
   },
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 27.0,
+   "id": "8059C",
+   "nombre": "Alcoy",
+   "min": 27.4,
+   "prov": "Alicante"
+  },
+  {
+   "id": "B986",
+   "nombre": "Formentera",
+   "min": 27.1,
    "prov": "Illes Balears"
   },
   {
-   "id": "6332Y",
-   "nombre": "Carboneras - Faro Mesa Roldán",
-   "min": 26.9,
-   "prov": "Almería"
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 26.5,
+   "prov": "Illes Balears"
   },
   {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
-   "min": 26.8,
-   "prov": "Málaga"
+   "id": "0244X",
+   "nombre": "Vilassar de Dalt",
+   "min": 26.3,
+   "prov": "Barcelona"
   },
   {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 26.8,
-   "prov": "Almería"
+   "id": "B398A",
+   "nombre": "Cabrera Parque Nacional de Cabrera",
+   "min": 26.3,
+   "prov": "Illes Balears"
   },
   {
-   "id": "6325O",
-   "nombre": "Almería/Aeropuerto",
-   "min": 26.7,
-   "prov": "Almería"
+   "id": "B434X",
+   "nombre": "Portocolom",
+   "min": 26.3,
+   "prov": "Illes Balears"
   },
   {
-   "id": "6000A",
-   "nombre": "Melilla",
-   "min": 26.6,
-   "prov": "Melilla"
-  },
-  {
-   "id": "7007Y",
-   "nombre": "Mazarrón/las Torres",
-   "min": 26.6,
-   "prov": "Murcia"
-  },
-  {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 26.4,
+   "id": "B860X",
+   "nombre": "Ciutadella-Son Quim",
+   "min": 26.3,
    "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
-  {
-   "id": "1178Y",
-   "nombre": "Soto de Valdeón (Automatica)",
-   "min": 8.7,
-   "prov": "León"
-  },
-  {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 9.0,
-   "prov": "Ávila"
-  },
-  {
-   "id": "9453X",
-   "nombre": "Biescas Embalse de Búbal",
-   "min": 9.0,
-   "prov": "Huesca"
-  },
-  {
-   "id": "9207",
-   "nombre": "Valle de Hecho Hecho-Depósito",
-   "min": 9.4,
-   "prov": "Huesca"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 9.6,
-   "prov": "León"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 10.1,
-   "prov": "Segovia"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 10.3,
-   "prov": "Zamora"
-  },
   {
    "id": "9218A",
    "nombre": "Isaba/Izaba",
@@ -127,16 +85,58 @@
    "prov": "Navarra"
   },
   {
-   "id": "9460X",
-   "nombre": "Sabiñánigo",
-   "min": 10.4,
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 10.7,
+   "prov": "Ávila"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 10.8,
+   "prov": "León"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 10.9,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": 11.4,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9838B",
+   "nombre": "Benasque",
+   "min": 11.5,
    "prov": "Huesca"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 10.5,
-   "prov": "Lleida"
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 11.6,
+   "prov": "Soria"
+  },
+  {
+   "id": "9238X",
+   "nombre": "Navascués/Nabaskoze",
+   "min": 11.8,
+   "prov": "Navarra"
+  },
+  {
+   "id": "1276F",
+   "nombre": "Pola de Somiedo-Depuradora",
+   "min": 11.9,
+   "prov": "Asturias"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 11.9,
+   "prov": "Granada"
   }
  ]
 }

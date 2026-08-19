@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Cuánta deuda de sueño deja una noche tropical?</title>
+<meta name="description" content="Las primeras 24 noches contadas en el Observatorio del Descanso, cruzadas con AEMET: cuánta deuda de sueño deja una madrugada que no baja de 20 °C.">
+<link rel="canonical" href="https://nochetropical.es/deuda-de-sueno/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="¿Cuánta deuda de sueño deja una noche tropical?">
+<meta property="og:description" content="Las primeras 24 noches contadas en el Observatorio del Descanso, cruzadas con AEMET: cuánta deuda de sueño deja una madrugada que no baja de 20 °C.">
+<meta property="og:url" content="https://nochetropical.es/deuda-de-sueno/">
+<meta property="og:image" content="https://nochetropical.es/img/marca-luna-oscuro-1024.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://nochetropical.es/img/marca-luna-oscuro-1024.png">
+<link rel="icon" type="image/svg+xml" href="https://nochetropical.es/favicon.svg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": "https://nochetropical.es/"}, {"@type": "ListItem", "position": 2, "name": "Deuda de sueño", "item": "https://nochetropical.es/deuda-de-sueno/"}]}, {"@type": "Article", "headline": "¿Cuánta deuda de sueño deja una noche tropical?", "description": "Las primeras 24 noches contadas en el Observatorio del Descanso, cruzadas con AEMET: cuánta deuda de sueño deja una madrugada que no baja de 20 °C.", "author": {"@type": "Person", "name": "Ramón J. Lowesting"}, "publisher": {"@type": "Organization", "name": "nochetropical.es"}, "dateModified": "2026-08-19", "isBasedOn": "https://opendata.aemet.es"}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--rojo:#d9604a;--fd:"Fraunces",Georgia,serif;--fb:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.7;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:min(92vw,760px);margin:0 auto;padding:0 22px}
+ a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+ header.h{padding:46px 0 10px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:18px 0 8px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(30px,6vw,48px);line-height:1.04;letter-spacing:-.01em}
+ h1 em{font-style:italic;color:var(--teja2)}
+ .intro{color:var(--muted);font-size:clamp(15px,2.4vw,17.5px);margin:18px 0 0}
+ .intro b{color:var(--paper)}
+ /* El aviso de que esto es provisional. Va arriba, no al final, y con borde
+    teal para que se lea como una advertencia y no como una promoción. */
+ .prov{margin:20px 0 4px;background:rgba(150,182,196,.08);border:1px solid var(--teal);border-radius:13px;padding:14px 17px;font-size:14.5px;color:var(--muted)}
+ .prov b{color:var(--paper)}
+ section{padding:22px 0}
+ h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,3.6vw,27px);margin:0 0 12px;line-height:1.15}
+ h3{font-family:var(--fd);font-weight:600;font-size:clamp(17px,2.8vw,20px);margin:22px 0 8px;color:var(--paper)}
+ p{font-size:clamp(15px,2.2vw,16.5px);color:var(--muted);margin:0 0 14px}p b{color:var(--paper)}
+ figure{margin:14px 0 6px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:16px 14px;overflow:hidden}
+ /* Tope de ancho: los gráficos se dibujan en un lienzo estrecho para que el
+    texto se lea en el móvil, y estirarlos a 760 px los haría gigantes. */
+ figure svg{display:block;width:100%;max-width:420px;height:auto;margin:0 auto}
+ figcaption{font-size:13.5px;color:var(--muted);margin-top:12px;padding:0 4px;line-height:1.6}
+ .leg{display:flex;flex-wrap:wrap;gap:7px 18px;margin:12px 4px 2px;font-size:13px;color:var(--muted)}
+ .leg .it{display:inline-flex;align-items:center;gap:7px}
+ .leg .sw{width:14px;height:14px;border-radius:3px;flex:none;border:1px solid rgba(255,255,255,.14)}
+ .leg .ho{width:13px;height:13px;border-radius:50%;flex:none;border:2px solid var(--muted)}
+ .dato{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 18px}
+ .dcard{flex:1;min-width:170px;background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:15px 17px}
+ .dcard .n{font-family:var(--fd);font-weight:900;font-size:32px;line-height:1}
+ .dcard .l{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}
+ table{width:100%;border-collapse:collapse;margin:10px 0 6px;font-size:14.5px}
+ th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 8px 8px 0;border-bottom:1px solid var(--line)}
+ td{padding:11px 8px 11px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+ td b{color:var(--paper);font-weight:600;display:block}
+ td small{font-size:12.5px;color:var(--muted)}
+ th:not(:first-child),td:not(:first-child){text-align:right;white-space:nowrap}
+ .metodo{background:var(--bg2);border-left:3px solid var(--teja);border-radius:0 12px 12px 0;padding:16px 18px;font-size:14px;color:var(--muted)}
+ .metodo b{color:var(--paper)}
+ /* Las limitaciones. Mismo peso visual que un resultado: es lo que hace
+    creíble al resto de la página. */
+ .limi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 20px 4px;margin:8px 0 6px}
+ .limi li{font-size:15px;color:var(--muted);margin:14px 0;line-height:1.65;list-style:none;padding-left:26px;position:relative}
+ .limi li:before{content:"—";position:absolute;left:0;color:var(--teja)}
+ .limi li b{color:var(--paper)}
+ .cta{display:block;margin:26px 0 6px;background:var(--teja);color:#160f08;font-weight:700;font-size:17px;padding:17px 26px;border-radius:15px;text-align:center;text-decoration:none;box-shadow:0 10px 30px rgba(224,131,79,.24)}
+ .cta:hover{background:var(--teja2);text-decoration:none}
+ .ctasub{text-align:center;font-size:13.5px;color:var(--muted);margin:0}
+ .sigue{border-top:1px solid var(--line);margin-top:28px;padding-top:22px}
+ .navcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;margin-top:4px}
+ .navcard{display:block;background:var(--bg2);border:1px solid var(--line);border-radius:13px;padding:15px 16px;text-decoration:none}
+ .navcard:hover{border-color:var(--teja);background:var(--panel);text-decoration:none}
+ .navcard .ic{font-size:22px;display:block;margin-bottom:7px}
+ .navcard b{display:block;color:var(--paper);font-family:var(--fd);font-weight:600;font-size:15.5px;margin-bottom:3px}
+ .navcard span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
+ .nav-e{position:sticky;top:0;z-index:30;background:rgba(22,16,9,.88);backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid var(--line)}.nav-e .in{max-width:min(92vw,920px);margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:16px;height:54px}.nav-e .brand{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:600;font-size:16.5px;color:var(--paper);white-space:nowrap}.nav-e .brand:hover{text-decoration:none;color:var(--teja2)}.nav-e .links{margin-left:auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.nav-e .links::-webkit-scrollbar{display:none}.nav-e .links a{font-size:13.5px;color:var(--muted);padding:8px 11px;border-radius:8px;white-space:nowrap}.nav-e .links a:hover{color:var(--paper);background:rgba(217,116,78,.14);text-decoration:none}.nav-e .links a.lang{margin-left:4px;border:1px solid var(--line);color:var(--teja2);font-weight:600;letter-spacing:.04em}.nav-e .links a.lang:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}@media(max-width:560px){.nav-e .brand span{display:none}.nav-e .in{gap:8px;padding:0 14px}.nav-e .links a{padding:8px 8px}}
+ .f2{border-top:1px solid var(--line);background:var(--bg2);margin-top:30px;padding:34px 0 46px}.f2grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}.f2col h4{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--teja);margin:0 0 12px}.f2col a{display:block;color:var(--muted);font-size:13.5px;margin:0 0 8px;text-decoration:none}.f2col a:hover{color:var(--paper);text-decoration:underline}.f2bar{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;font-size:12.5px;color:#9a8a6f}.f2bar a{color:#9a8a6f}.f2brand{margin-bottom:26px;max-width:42ch}.f2brand .brand{display:inline-flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:600;font-size:16px;color:var(--paper)}.f2brand .brand:hover{text-decoration:none;color:var(--teja2)}.f2brand p{color:var(--muted);font-size:13.5px;margin:10px 0 0;line-height:1.6}@media(max-width:640px){.f2grid{grid-template-columns:1fr 1fr}}@media(max-width:420px){.f2grid{grid-template-columns:1fr}}
+.atajo{margin:18px 0}.atajo a{display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;border:1px solid var(--teal);color:var(--teal);font-weight:600;font-size:15px;background:rgba(150,182,196,.08);text-decoration:none}.atajo a:hover{background:rgba(150,182,196,.18);text-decoration:none}</style>
+</head>
+<body>
+<nav class="nav-e" aria-label="principal"><div class="in"><a class="brand" href="https://nochetropical.es/" aria-label="nochetropical.es"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--paper)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/><circle cx="73" cy="34" r="6.5" fill="var(--teja)"/></svg><span>nochetropical.es</span></a><div class="links"><a href="https://nochetropical.es/observatorio-del-descanso/">Observatorio</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios cerca de mí</a><a href="https://nochetropical.es/hoteles-refugio-climatico/">Hoteles</a><a href="https://nochetropical.es/ola-de-calor/">Ola de calor</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking</a><a href="https://nochetropical.es/en/" hreflang="en" class="lang" aria-label="English version" title="English version">EN</a></div></div></nav>
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="https://nochetropical.es/">Refugio Climático</a> · Deuda de sueño</nav>
+  <div class="kick">Estudio abierto · 24 noches · datos a 19 de agosto de 2026</div>
+  <h1>La deuda de sueño <em>que deja el calor</em></h1><p class="atajo"><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">📍 ¿Dónde puedo dormir fresco en España cerca de mí? →</a></p>
+  <p class="intro">El Observatorio del Descanso no pregunta la temperatura: pregunta <b>cómo has dormido</b> y <b>cuánta deuda de sueño arrastras</b>. Llevamos <b>24 noches</b> contadas por <b>14 personas</b> en <b>8 sitios</b>, del 3 al 17 de agosto de 2026. Esto es todo lo que dicen — y todo lo que todavía no pueden decir.</p>
+  <p class="prov"><b>Esto es un recuento provisional, no una conclusión.</b> Con 24 noches no se demuestra nada sobre España: se comprueba que la pregunta funciona y se ve qué falta. Publicamos las cifras en abierto desde el primer día porque quien cuenta su noche merece ver qué se hace con ella. <b>Se actualiza una vez al mes.</b></p>
+</div></header>
+
+<section><div class="wrap">
+  <h2>Lo que sale hasta ahora</h2>
+  <p>Partimos las noches en dos: las que <b>bajaron de 20&nbsp;°C</b> según la estación de AEMET más cercana, y las <b>noches tropicales</b>, en las que la madrugada no llegó a bajar de ahí. La deuda de sueño se pregunta de 1 (ninguna) a 5 (voy fundido).</p>
+  <div class="dato">
+    <div class="dcard"><div class="n" style="color:var(--verde)">1,4 / 5</div><div class="l">de deuda cuando la noche refresca<br><b style="color:var(--muted);font-weight:400">16 noches · mínima media 14,0&nbsp;°C</b></div></div>
+    <div class="dcard"><div class="n" style="color:var(--rojo)">3,8 / 5</div><div class="l">de deuda tras una noche tropical<br><b style="color:var(--muted);font-weight:400">8 noches · mínima media 23,7&nbsp;°C</b></div></div>
+  </div>
+  <p><b>9,7 grados</b> de diferencia en la madrugada, y <b>2,4 puntos de deuda</b> sobre cinco. Dicho de otro modo: la misma persona que en un sitio se levanta a cero, en el otro se levanta debiendo. La correlación entre la mínima de AEMET y la deuda que cuenta la gente es de <b>0,80</b> — alta, aunque con esta muestra hay que leerla como un indicio, no como una ley.</p>
+  <h3>Sitio por sitio</h3>
+  <p>Solo aparecen los que llevan <b>dos noches o más</b>: con una sola, el nombre del pueblo señalaría a una persona y el dato no diría nada.</p>
+  <table><thead><tr><th>Dónde</th><th>Mínima</th><th>Descanso</th><th>Deuda</th></tr></thead><tbody><tr><td><b>Alcalá de la Selva</b><small>10 noches · 5 personas</small></td><td>13,7&nbsp;°C</td><td style="color:#8fb07a;font-weight:700">9,5</td><td>1,4</td></tr><tr><td><b>Allepuz</b><small>2 noches · 2 personas</small></td><td>13,6&nbsp;°C</td><td style="color:#8fb07a;font-weight:700">8,5</td><td>1,0</td></tr><tr><td><b>Delicias</b><small>4 noches · 3 personas</small></td><td>24,2&nbsp;°C</td><td style="color:#d9604a;font-weight:700">1,2</td><td>4,5</td></tr></tbody></table>
+  <p>Los extremos hablan solos: entre <b>Alcalá de la Selva</b> y <b>Delicias</b> hay <b>10,5 grados</b> de diferencia en la madrugada, y con ellos <b>8,3 puntos</b> de descanso y <b>3,1</b> de deuda.</p>
+  <h3>No hay término medio</h3>
+  <figure>
+    <svg viewBox="0 0 380 200" role="img" aria-label="Reparto de las respuestas de deuda de sueño: ninguna 10, poca 8, alguna 1, bastante 2, muchísima 3 de 24 noches"><line x1="17" y1="176" x2="363" y2="176" stroke="#3a2c1c"/><rect x="17" y="58" width="62" height="118" rx="4" fill="#8fb07a"/><text x="48" y="50" text-anchor="middle" font-size="17" font-weight="700" fill="#8fb07a" font-family="sans-serif">10</text><text x="48" y="193" text-anchor="middle" font-size="13" fill="#b3a48c" font-family="sans-serif">Ninguna</text><rect x="88" y="82" width="62" height="94" rx="4" fill="#b9c47a"/><text x="119" y="74" text-anchor="middle" font-size="17" font-weight="700" fill="#b9c47a" font-family="sans-serif">8</text><text x="119" y="193" text-anchor="middle" font-size="13" fill="#b3a48c" font-family="sans-serif">Poca</text><rect x="159" y="164" width="62" height="12" rx="4" fill="#e8b45c"/><text x="190" y="156" text-anchor="middle" font-size="17" font-weight="700" fill="#e8b45c" font-family="sans-serif">1</text><text x="190" y="193" text-anchor="middle" font-size="13" fill="#b3a48c" font-family="sans-serif">Alguna</text><rect x="230" y="152" width="62" height="24" rx="4" fill="#e0834f"/><text x="261" y="144" text-anchor="middle" font-size="17" font-weight="700" fill="#e0834f" font-family="sans-serif">2</text><text x="261" y="193" text-anchor="middle" font-size="13" fill="#b3a48c" font-family="sans-serif">Bastante</text><rect x="301" y="141" width="62" height="35" rx="4" fill="#d9604a"/><text x="332" y="133" text-anchor="middle" font-size="17" font-weight="700" fill="#d9604a" font-family="sans-serif">3</text><text x="332" y="193" text-anchor="middle" font-size="13" fill="#b3a48c" font-family="sans-serif">Muchísima</text></svg>
+    <figcaption>Las 24 respuestas a «¿cuánta deuda de sueño arrastras?». Casi todo el mundo contesta en un extremo o en el otro: <b>o estás a cero, o vas fundido</b>. El centro de la escala está prácticamente vacío. Si se confirma con más noches, dice algo incómodo: en verano no se duerme «regular», se duerme bien o se acumula déficit.</figcaption>
+  </figure>
+  <h3>Nadie encendió el aire acondicionado</h3>
+  <p>Ni una sola vez en 24 noches. <b>15</b> abrieron la ventana, <b>5</b> tiraron del ventilador y <b>4</b> no hicieron nada. No es que el aire acondicionado no exista: es que quien contesta a este observatorio es justo la gente que duerme sin él. Y en las noches tropicales el ventilador no arregló nada — donde la mínima rondó los 24&nbsp;°C, el descanso medio se quedó en <b>3,1 sobre 10</b> con el ventilador puesto.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Para qué sirve esto</h2>
+  <p>Dos cosas distintas, y la segunda es la que no puede hacer nadie más.</p>
+  <h3>1. Traducir los grados a consecuencias</h3>
+  <p>Un parte meteorológico dice «mínima de 24&nbsp;°C» y no significa nada para la mayoría. <b>«Deuda de sueño 4,5 sobre 5»</b> sí. Es la misma noche contada en la unidad que de verdad le importa a quien la sufre: cómo va a estar mañana en el trabajo, cómo van a estar los niños, cuánto se recupera de un entrenamiento. Esta web lleva desde el principio demostrando <i>dónde</i> hace calor de noche; esto empieza a medir <b>qué te cuesta</b>.</p>
+  <h3>2. Detectar pueblos, barrios y zonas con ventaja — y con desventaja</h3>
+  <p>AEMET mide en unos cientos de puntos. España tiene más de <b>8.000 municipios</b>, y dentro de cada ciudad hay barrios que no se parecen entre sí. Entre una estación y tu cama caben una vaguada, una brisa marina, una manzana de asfalto o un ático bajo cubierta — y varios grados. <b>Eso no lo mide ninguna red oficial: solo lo sabe quien duerme allí.</b></p>
+  <p>Cuando alguien cuenta una noche que no cuadra con lo que predice su estación, ahí hay algo. Con 24 noches ya han aparecido los dos casos:</p>
+  <figure>
+    <svg viewBox="0 0 380 187" role="img" aria-label="Diferencia entre el descanso que predice la estación de AEMET y el que cuenta la gente que duerme allí"><line x1="104" y1="10" x2="104" y2="167" stroke="#3a2c1c"/><text x="104" y="181" text-anchor="middle" font-size="11.5" fill="#b3a48c" font-family="sans-serif">0</text><line x1="156" y1="10" x2="156" y2="167" stroke="#3a2c1c"/><text x="156" y="181" text-anchor="middle" font-size="11.5" fill="#b3a48c" font-family="sans-serif">2</text><line x1="209" y1="10" x2="209" y2="167" stroke="#3a2c1c"/><text x="209" y="181" text-anchor="middle" font-size="11.5" fill="#b3a48c" font-family="sans-serif">4</text><line x1="261" y1="10" x2="261" y2="167" stroke="#3a2c1c"/><text x="261" y="181" text-anchor="middle" font-size="11.5" fill="#b3a48c" font-family="sans-serif">6</text><line x1="314" y1="10" x2="314" y2="167" stroke="#3a2c1c"/><text x="314" y="181" text-anchor="middle" font-size="11.5" fill="#b3a48c" font-family="sans-serif">8</text><line x1="366" y1="10" x2="366" y2="167" stroke="#3a2c1c"/><text x="366" y="181" text-anchor="middle" font-size="11.5" fill="#b3a48c" font-family="sans-serif">10</text><text x="94" y="30" text-anchor="end" font-size="13.5" fill="#efe6d6" font-family="sans-serif">Ayamonte</text><line x1="193" y1="26" x2="340" y2="26" stroke="#8fb07a" stroke-width="2.5" stroke-linecap="round" opacity=".65"/><circle cx="193" cy="26" r="4.5" fill="none" stroke="#b3a48c" stroke-width="1.8"/><circle cx="340" cy="26" r="5.5" fill="#8fb07a"/><text x="351" y="30" text-anchor="start" font-size="13" font-weight="700" fill="#8fb07a" font-family="sans-serif" paint-order="stroke" stroke="#1f1810" stroke-width="3.5" stroke-linejoin="round">9,0</text><text x="94" y="61" text-anchor="end" font-size="13.5" fill="#efe6d6" font-family="sans-serif">València</text><line x1="204" y1="57" x2="300" y2="57" stroke="#8fb07a" stroke-width="2.5" stroke-linecap="round" opacity=".65"/><circle cx="204" cy="57" r="4.5" fill="none" stroke="#b3a48c" stroke-width="1.8"/><circle cx="300" cy="57" r="5.5" fill="#8fb07a"/><text x="312" y="61" text-anchor="start" font-size="13" font-weight="700" fill="#8fb07a" font-family="sans-serif" paint-order="stroke" stroke="#1f1810" stroke-width="3.5" stroke-linejoin="round">7,5</text><text x="94" y="92" text-anchor="end" font-size="13.5" fill="#efe6d6" font-family="sans-serif">Esponellà</text><line x1="227" y1="88" x2="130" y2="88" stroke="#d9604a" stroke-width="2.5" stroke-linecap="round" opacity=".65"/><circle cx="227" cy="88" r="4.5" fill="none" stroke="#b3a48c" stroke-width="1.8"/><circle cx="130" cy="88" r="5.5" fill="#d9604a"/><text x="119" y="92" text-anchor="end" font-size="13" font-weight="700" fill="#d9604a" font-family="sans-serif" paint-order="stroke" stroke="#1f1810" stroke-width="3.5" stroke-linejoin="round">1,0</text><text x="94" y="123" text-anchor="end" font-size="13.5" fill="#efe6d6" font-family="sans-serif">Delicias</text><line x1="196" y1="119" x2="104" y2="119" stroke="#d9604a" stroke-width="2.5" stroke-linecap="round" opacity=".65"/><circle cx="196" cy="119" r="4.5" fill="none" stroke="#b3a48c" stroke-width="1.8"/><circle cx="104" cy="119" r="5.5" fill="#d9604a"/><text x="115" y="123" text-anchor="start" font-size="13" font-weight="700" fill="#d9604a" font-family="sans-serif" paint-order="stroke" stroke="#1f1810" stroke-width="3.5" stroke-linejoin="round">0,0</text><text x="94" y="154" text-anchor="end" font-size="13.5" fill="#efe6d6" font-family="sans-serif">Delicias</text><line x1="198" y1="150" x2="130" y2="150" stroke="#d9604a" stroke-width="2.5" stroke-linecap="round" opacity=".65"/><circle cx="198" cy="150" r="4.5" fill="none" stroke="#b3a48c" stroke-width="1.8"/><circle cx="130" cy="150" r="5.5" fill="#d9604a"/><text x="119" y="154" text-anchor="end" font-size="13" font-weight="700" fill="#d9604a" font-family="sans-serif" paint-order="stroke" stroke="#1f1810" stroke-width="3.5" stroke-linejoin="round">1,0</text></svg>
+    <div class="leg" aria-label="Leyenda">
+      <span class="it"><span class="ho"></span>Lo que predice la estación de AEMET</span>
+      <span class="it"><span class="sw" style="background:#8fb07a"></span>Se durmió mejor de lo previsto</span>
+      <span class="it"><span class="sw" style="background:#d9604a"></span>Se durmió peor de lo previsto</span>
+    </div>
+    <figcaption>Índice de descanso de 0 a 10. El círculo hueco es lo que cabría esperar según la estación de AEMET de referencia esa noche; el punto lleno, lo que contó quien durmió allí.</figcaption>
+  </figure>
+  <p><b>Ventaja.</b> En <b>Ayamonte</b> la mínima fue de 23,5&nbsp;°C —noche tropical de manual, la estación predecía un 3,4 sobre 10— y quien la contó puso un <b>9</b>, sin ventilador y sin aire: «nada, tal cual». Ahí hay algo real: el estuario, la brisa del Atlántico, o una casa que se porta. Un solo dato no prueba nada, pero es exactamente la pista que hay que seguir.</p>
+  <p><b>Desventaja.</b> En <b>Delicias</b>, un barrio denso de Zaragoza, cuatro personas distintas han contado cuatro noches con una media de <b>1,2 sobre 10</b> y una deuda de <b>4,5 sobre 5</b>. Su estación de referencia está en el borde sur de la ciudad y predice bastante mejor. Eso tiene nombre: <b>isla de calor urbana</b>. No sale en ningún parte meteorológico, y es donde vive la mayor parte de la gente.</p>
+  <p>Un mapa así —qué pueblos y qué barrios duermen mejor o peor de lo que dice su termómetro más cercano— <b>no existe en España</b>. Es lo que se puede construir con noches contadas, y solo con noches contadas.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Lo que todavía no demuestra</h2>
+  <p>Por si alguien quiere citar estas cifras, aquí están sus grietas antes de que las encuentre:</p>
+  <ul class="limi">
+    <li><b>24 noches son pocas.</b> Cualquiera de los números de arriba puede moverse mucho con veinte noches más. Ninguno es un resultado cerrado.</li>
+    <li><b>La muestra está concentrada.</b> Quien más vota aporta el <b>25&nbsp;%</b> de las noches, y las tres personas más activas suman el <b>54&nbsp;%</b>. Buena parte del contraste que se ve arriba es, en realidad, «Teruel frente a Zaragoza», no «el frescor frente al calor».</li>
+    <li><b>La deuda y el descanso van casi de la mano</b> (correlación -0,92). Ahora mismo la pregunta de la deuda está confirmando a la primera —quien durmió mal dice que arrastra déficit—, más que aportando información nueva. Empezará a aportarla cuando haya gente contando varias noches seguidas: ahí se verá la deuda que <i>una</i> noche no explica.</li>
+    <li><b>Quien vota no es una muestra al azar.</b> Es gente que ha entrado en una web sobre calor nocturno. Nadie ha usado aire acondicionado, y eso ya dice que este grupo no representa a España entera.</li>
+    <li><b>3 noches están apartadas del mapa.</b> Cuando alguien cuenta una noche muy distinta de lo previsto, se guarda pero no entra en los rankings hasta que otras noches del mismo sitio la respalden. En este recuento sí se cuentan, y por eso se avisa.</li>
+  </ul>
+  <p class="metodo"><b>Cómo está hecho.</b> Cada noche se guarda con la estación de AEMET más cercana al pueblo que se indica —no al punto donde se vota, que puede ser otro—, y se compara con lo que esa estación registró esa madrugada. Se cuenta <b>una noche por persona y día</b>: de 27 respuestas recibidas, 3 eran la misma noche contada dos veces y se han descartado. Todo es anónimo: no se guarda ni nombre ni correo ni posición exacta, solo una celda aproximada y un identificador del navegador para no contar dos veces. Regenerable con <code>scripts/resumen_noches.py</code>. Periodo: del 3 al 17 de agosto de 2026.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Qué falta</h2>
+  <p>Gente. No más preguntas ni más algoritmo: <b>más noches y de más sitios</b>. Para que la anomalía de un pueblo deje de ser una anécdota y entre en el mapa hacen falta al menos <b>tres personas distintas</b> contando noches parecidas allí. Ahora mismo hay sitios que se quedan en dos.</p>
+  <p>Si duermes mal, cuéntalo. Si duermes de maravilla, cuéntalo también — un refugio solo aparece en el mapa si alguien dice que allí se duerme bien. Son <b>diez segundos</b>, es anónimo y no hay que registrarse.</p>
+  <a class="cta" href="https://nochetropical.es/observatorio-del-descanso/">Contar cómo he dormido esta noche</a>
+  <p class="ctasub">Y si quieres, añade las horas y la puntuación de tu pulsera: cruzamos lo que midió AEMET, lo que midió tu aparato y lo que sentiste tú.</p>
+  <div class="sigue">
+    <h2>Sigue explorando</h2>
+    <div class="navcards">
+      <a class="navcard" href="https://nochetropical.es/observatorio-del-descanso/"><span class="ic">🌙</span><b>El Observatorio</b><span>El mapa del descanso, población por población.</span></a>
+      <a class="navcard" href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/"><span class="ic">📍</span><b>Refugios cerca de ti</b><span>Dónde se duerme fresco más cerca de donde estás.</span></a>
+      <a class="navcard" href="https://nochetropical.es/dormir-con-calor/"><span class="ic">🛏️</span><b>Dormir con calor</b><span>Qué funciona de verdad sin aire acondicionado.</span></a>
+      <a class="navcard" href="https://nochetropical.es/la-espana-que-nunca-se-colorea/"><span class="ic">🗺️</span><b>La España que nunca se colorea</b><span>El estudio de los mapas de AEMET, píxel a píxel.</span></a>
+      <a class="navcard" href="https://nochetropical.es/metodologia/"><span class="ic">📐</span><b>Cómo medimos</b><span>Qué es una noche tropical y de dónde salen los datos.</span></a>
+      <a class="navcard" href="https://nochetropical.es/"><span class="ic">🏡</span><b>Tu pueblo</b><span>¿Cuántas noches tropicales tiene al año?</span></a>
+    </div>
+  </div>
+</div></section>
+
+<footer class="f2"><div class="wrap"><div class="f2brand"><a class="brand" href="https://nochetropical.es/" aria-label="nochetropical.es"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--paper)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/><circle cx="73" cy="34" r="6.5" fill="var(--teja)"/></svg><span>nochetropical.es</span></a><p>Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p></div><div class="f2grid"><div class="f2col"><h4>Explora los datos</h4><a href="https://nochetropical.es/observatorio-del-descanso/">El Observatorio del Descanso</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios climáticos cerca de mí</a><a href="https://nochetropical.es/confortometro/">El Confortómetro: vota tu zona</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa interactivo de estaciones</a><a href="https://nochetropical.es/ola-de-calor/">¿Cuándo acaba la ola de calor?</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking nacional de noches tropicales</a><a href="https://nochetropical.es/parte/">El parte de la noche</a><a href="https://nochetropical.es/certificados/">Certificados de refugio climático</a></div><div class="f2col"><h4>Guías y artículos</h4><a href="https://nochetropical.es/dormir-con-calor/">Cómo dormir con calor sin aire acondicionado</a><a href="https://nochetropical.es/vacaciones-sin-calor/">Vacaciones sin calor: dónde ir en verano</a><a href="https://nochetropical.es/hoteles-refugio-climatico/">🏨 Hoteles donde dormir con manta</a><a href="https://nochetropical.es/dormir-con-manta-en-verano/">Pueblos para dormir con manta en verano</a><a href="https://nochetropical.es/la-espana-que-nunca-se-colorea/">La España que nunca se colorea (estudio)</a><a href="https://nochetropical.es/microclimas/">Microclimas: los refugios de la naturaleza</a><a href="https://nochetropical.es/refugio-climatico-natural/">Cómo crear un refugio climático natural</a><a href="https://nochetropical.es/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://nochetropical.es/hipoteca-termica/">La hipoteca térmica</a></div><div class="f2col"><h4>Proyecto</h4><a href="https://nochetropical.es/">La calculadora de tu pueblo</a><a href="https://nochetropical.es/sobre-el-proyecto/">Sobre el proyecto</a><a href="https://nochetropical.es/metodologia/">Metodología y glosario</a><a href="https://nochetropical.es/prensa/">Sala de prensa</a><a href="https://nochetropical.es/tu-hotel/">Certifica tu hotel</a><a href="https://nochetropical.es/tu-pueblo/">¿Tu pueblo no aparece? Ayúdanos</a><a href="https://nochetropical.es/aviso-legal/">Licencia y aviso legal</a></div></div><div class="f2bar">Fuente: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · datos bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a> · © 2026 <a href="https://nochetropical.es/">nochetropical.es</a> · Ramón J. Lowesting</div></div></footer>
+</body>
+</html>

@@ -1,12 +1,12 @@
 {
  "fecha": "2026-08-19",
- "total": 845,
- "tropicales": 416,
- "ecuatoriales": 38,
+ "total": 844,
+ "tropicales": 408,
+ "ecuatoriales": 37,
  "peor": {
-  "id": "0201D",
-  "nombre": "Barcelona Port Olímpic",
-  "min": 28.4,
+  "id": "0201X",
+  "nombre": "Barcelona Drassanes",
+  "min": 27.4,
   "prov": "Barcelona"
  },
  "mejor": {
@@ -16,12 +16,6 @@
   "prov": "Navarra"
  },
  "top_calor": [
-  {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 28.4,
-   "prov": "Barcelona"
-  },
   {
    "id": "0201X",
    "nombre": "Barcelona Drassanes",
@@ -75,6 +69,12 @@
    "nombre": "Ciutadella-Son Quim",
    "min": 26.3,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 26.2,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
@@ -87,7 +87,7 @@
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 10.7,
+   "min": 10.5,
    "prov": "Ávila"
   },
   {
@@ -121,6 +121,12 @@
    "prov": "Soria"
   },
   {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 11.8,
+   "prov": "Granada"
+  },
+  {
    "id": "9238X",
    "nombre": "Navascués/Nabaskoze",
    "min": 11.8,
@@ -131,12 +137,6 @@
    "nombre": "Pola de Somiedo-Depuradora",
    "min": 11.9,
    "prov": "Asturias"
-  },
-  {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 11.9,
-   "prov": "Granada"
   }
  ]
 }

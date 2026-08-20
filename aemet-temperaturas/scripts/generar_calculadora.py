@@ -23,6 +23,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import math
 import re
 import urllib.request
@@ -46,6 +47,56 @@ def slug(texto: str) -> str:
 # ---------------------------------------------------------------------------
 # Rutas (este script vive en aemet-temperaturas/scripts/)
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# AVISOS DEL BUILD
+#
+# Todo lo que el build descarta o no encuentra pasa por aquí. Antes esas cosas
+# se caían en silencio: un hotel cuya estación de AEMET no aparece en el ranking
+# desaparecía de la página sin decir nada, en una página que además genera
+# ingresos por afiliación.
+#
+# Un print no basta: nadie abre el log de una ejecución que ha salido verde. Por
+# eso, cuando el build corre en GitHub Actions, cada aviso sale además como
+# ::warning::, que Actions pinta como un recuadro AMARILLO en la pantalla de
+# resumen —donde está el tic—, y se repiten todos juntos en el resumen final.
+#
+# Avisa, no rompe. Una errata en un hotel no puede dejar sin publicar el resto
+# del sitio.
+# ---------------------------------------------------------------------------
+AVISOS: list[tuple[str, str]] = []
+
+
+def avisar(titulo: str, mensaje: str) -> None:
+    """Registra algo que el responsable del sitio tiene que ver."""
+    AVISOS.append((titulo, mensaje))
+    print(f"   AVISO [{titulo}] {mensaje}")
+
+
+def volcar_avisos() -> None:
+    """Saca los avisos donde se vean: anotación de Actions + resumen."""
+    if not AVISOS:
+        return
+    en_actions = os.environ.get("GITHUB_ACTIONS") == "true"
+    if en_actions:
+        for titulo, mensaje in AVISOS:
+            # Los saltos de línea rompen la anotación: van escapados como %0A.
+            limpio = mensaje.replace("%", "%25").replace("\r", "").replace("\n", "%0A")
+            print(f"::warning title={titulo}::{limpio}")
+    resumen = os.environ.get("GITHUB_STEP_SUMMARY")
+    if resumen:
+        try:
+            with open(resumen, "a", encoding="utf-8") as fh:
+                fh.write(f"\n### {len(AVISOS)} aviso(s) del build\n\n")
+                for titulo, mensaje in AVISOS:
+                    fh.write(f"- **{titulo}** — {mensaje}\n")
+        except OSError:
+            pass
+    print(f"\n   {len(AVISOS)} aviso(s)"
+          + (" · míralos en el recuadro amarillo de la ejecución"
+             if en_actions else " · arriba, marcados con AVISO"))
+
+
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 AEMET_DIR = SCRIPT_DIR.parent                 # aemet-temperaturas/
 REPO_ROOT = AEMET_DIR.parent                  # raíz del repo
@@ -5308,13 +5359,6 @@ _DEUDA_ET = ["Ninguna", "Poca", "Alguna", "Bastante", "Muchísima"]
 _DEUDA_COL = ["#8fb07a", "#b9c47a", "#e8b45c", "#e0834f", "#d9604a"]
 
 
-def _esc(t: str) -> str:
-    """Los nombres de población salen de lo que escribe la gente: van escapados
-    antes de entrar en el HTML, aquí y en cualquier sitio."""
-    return (str(t).replace("&", "&amp;").replace("<", "&lt;")
-            .replace(">", "&gt;").replace('"', "&quot;"))
-
-
 def _dec(x: float, n: int = 1) -> str:
     """Número con coma decimal, que es como se escribe en español."""
     return f"{x:.{n}f}".replace(".", ",")
@@ -7398,10 +7442,14 @@ def cargar_hoteles(estaciones: list) -> list:
     if not ruta.exists():
         return []
     porid = {e["id"]: e for e in estaciones}
-    out = []
+    out, perdidos = [], []
     for fila in csv.DictReader(ruta.open(encoding="utf-8")):
         e = porid.get(fila["est_ref_indicativo"])
         if not e:
+            # Sin estación no hay dato climático, así que el hotel no puede
+            # figurar. Pero desaparecer callando de la página que monetiza es
+            # justo lo que no queremos: se avisa con nombre y código.
+            perdidos.append(f"{fila['hotel']} (estación {fila['est_ref_indicativo']})")
             continue
         out.append({
             "hotel": fila["hotel"], "municipio": fila["municipio"],
@@ -7412,6 +7460,11 @@ def cargar_hoteles(estaciones: list) -> list:
             "tmin": e["tmin"], "nt": e["nt"], "alt": e["alt"], "est": e["loc"],
             "lat": e["lat"], "lon": e["lon"],  # coords de la estación de ref. (para el buscador cercano)
         })
+    if perdidos:
+        avisar("hoteles descartados",
+               f"{len(perdidos)} hotel(es) de hoteles.csv no salen en la web porque su "
+               f"estación de referencia no está en el ranking: " + "; ".join(perdidos)
+               + ". Revisa la columna est_ref_indicativo.")
     return out
 
 
@@ -7505,6 +7558,18 @@ PAGINA_HOTELES = r"""<!DOCTYPE html>
  .b2{display:inline-block;padding:12px 18px;border-radius:11px;font-weight:700;font-size:14.5px}
  .b2.pri{background:var(--teja);color:#1a1209}.b2.pri:hover{background:var(--teja2);text-decoration:none}
  .b2.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.b2.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
+ /* Atajo flotante al directorio. Aparece a los 3 s (no de entrada: primero
+    que lea el titular) y se retira solo en cuanto la lista entra en pantalla,
+    porque a partir de ahí solo taparía hoteles. */
+ .fabh{position:fixed;left:50%;bottom:18px;transform:translate(-50%,26px);z-index:60;
+  display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:999px;
+  background:var(--teja);color:#1a1209;font-weight:700;font-size:15px;text-decoration:none;
+  white-space:nowrap;max-width:calc(100vw - 32px);
+  box-shadow:0 12px 34px rgba(0,0,0,.5);opacity:0;pointer-events:none;
+  transition:opacity .28s ease,transform .28s ease}
+ .fabh.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+ .fabh:hover{background:var(--teja2);text-decoration:none}
+ @media(prefers-reduced-motion:reduce){.fabh{transition:none}}
  .faq{margin:10px 0}.faq details{border-bottom:1px solid var(--line);padding:14px 0}
  .faq summary{font-family:var(--fd);font-weight:600;font-size:16.5px;color:var(--paper);cursor:pointer;list-style:none}
  .faq summary::-webkit-details-marker{display:none}
@@ -7614,6 +7679,7 @@ __NAV__
     <ul class="hres" id="hresh"></ul>
   </div>
 
+  <div id="hoteles" style="scroll-margin-top:70px"></div>
   <p class="dirnote">Abajo, el <b>directorio completo</b> de hoteles-refugio agrupado <b>por regiones</b> (no por distancia): esa lista es igual para todo el mundo. Para ordenarla por <b>cercanía a ti</b>, usa el buscador de aquí arriba.</p>
 
   __LISTADO__
@@ -7678,6 +7744,21 @@ function pintaProv(p){
  HOT.map(function(h){return h.p;}).filter(function(v,i,a){return a.indexOf(v)===i;})
    .forEach(function(p){var o=document.createElement("option");o.value=p;o.textContent=p;sel.appendChild(o);});
  sel.addEventListener("change",function(){ if(sel.value) pintaProv(sel.value); });
+})();
+</script>
+<a class="fabh" id="fabh" href="#hoteles">🛏️ Ver lista de hoteles ↓</a>
+<script>
+(function(){
+ var b=document.getElementById("fabh"),ancla=document.getElementById("hoteles");
+ if(!b||!ancla)return;
+ var muerto=false;
+ function fuera(){muerto=true;b.classList.remove("on");}
+ /* Si al cargar la lista ya se ve —pantalla grande, o alguien que vuelve y el
+    navegador le restaura el scroll— el botón no llega a salir. */
+ function visible(){var r=ancla.getBoundingClientRect();return r.top<window.innerHeight*0.9;}
+ setTimeout(function(){if(!muerto&&!visible())b.classList.add("on");},3000);
+ b.addEventListener("click",fuera);
+ window.addEventListener("scroll",function(){if(!muerto&&visible())fuera();},{passive:true});
 })();
 </script>
 </body></html>
@@ -7879,7 +7960,11 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
 
 
 def _esc(s: str) -> str:
-    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    """Escapa lo que escribe la gente —nombres de hotel, de pueblo— antes de
+    meterlo en el HTML. Las comillas también: alguno acabará dentro de un
+    atributo y sin escapar lo partiría."""
+    return (str(s).replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;").replace('"', "&quot;"))
 
 
 # ===========================================================================
@@ -7968,6 +8053,19 @@ def revisar_enlaces(site: str) -> str:
             lineas.append(f"      … y {len(huerfanas) - 8} más")
     if not rotos and not huerfanas:
         lineas[0] += " · sin enlaces rotos ni páginas huérfanas"
+    # Esto ya se calculaba y solo se imprimía. Un enlace roto o una página a la
+    # que nadie enlaza son trabajo tirado, y es exactamente la clase de fallo
+    # que no da la cara sola: pasa al recuadro amarillo.
+    if rotos:
+        avisar("enlaces rotos",
+               f"{len(rotos)} enlace(s) internos apuntan a páginas que no existen: "
+               + "; ".join(f"/{o} -> /{d}/" for o, d in sorted(rotos)[:6])
+               + (" …" if len(rotos) > 6 else ""))
+    if huerfanas:
+        avisar("páginas huérfanas",
+               f"{len(huerfanas)} página(s) publicadas sin ningún enlace que lleve a "
+               f"ellas: " + "; ".join(f"/{h}/" for h in huerfanas[:6])
+               + (" …" if len(huerfanas) > 6 else ""))
     return "\n".join(lineas)
 
 
@@ -10557,6 +10655,9 @@ def main() -> int:
           f"vs {c['horno']['loc']} ({c['horno']['nt']})")
     print(f"   foehn: {datos['meta']['foehn']['loc']} ({datos['meta']['foehn']['nt']})")
     print(f"   tamaño HTML: {OUT_HTML.stat().st_size/1024:.0f} KB")
+    # Lo último: los avisos van al final para que se lean sin buscar, y en
+    # Actions salen además como recuadro amarillo en la pantalla de resumen.
+    volcar_avisos()
     return 0
 
 

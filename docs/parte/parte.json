@@ -1,31 +1,25 @@
 {
  "fecha": "2026-08-20",
  "total": 846,
- "tropicales": 366,
- "ecuatoriales": 114,
+ "tropicales": 362,
+ "ecuatoriales": 113,
  "peor": {
-  "id": "8057C",
-  "nombre": "Pego",
-  "min": 33.3,
-  "prov": "Alicante"
+  "id": "8416",
+  "nombre": "Valencia Dt",
+  "min": 30.9,
+  "prov": "Valencia"
  },
  "mejor": {
   "id": "5511",
   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 7.2,
+  "min": 6.7,
   "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "8057C",
-   "nombre": "Pego",
-   "min": 33.3,
-   "prov": "Alicante"
-  },
-  {
    "id": "8416",
    "nombre": "Valencia Dt",
-   "min": 31.0,
+   "min": 30.9,
    "prov": "Valencia"
   },
   {
@@ -37,25 +31,31 @@
   {
    "id": "8058X",
    "nombre": "Oliva",
-   "min": 30.7,
+   "min": 30.6,
+   "prov": "Valencia"
+  },
+  {
+   "id": "8057C",
+   "nombre": "Pego",
+   "min": 30.4,
+   "prov": "Alicante"
+  },
+  {
+   "id": "8414A",
+   "nombre": "Valencia/Aeropuerto",
+   "min": 30.2,
    "prov": "Valencia"
   },
   {
    "id": "B087X",
    "nombre": "Banyalbufar",
-   "min": 30.7,
+   "min": 30.2,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "8414A",
-   "nombre": "Valencia/Aeropuerto",
-   "min": 30.4,
-   "prov": "Valencia"
   },
   {
    "id": "8293X",
    "nombre": "Xátiva",
-   "min": 30.3,
+   "min": 30.1,
    "prov": "Valencia"
   },
   {
@@ -81,7 +81,7 @@
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 7.2,
+   "min": 6.7,
    "prov": "Granada"
   },
   {
@@ -105,7 +105,7 @@
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 9.5,
+   "min": 8.4,
    "prov": "Granada"
   },
   {
@@ -117,8 +117,14 @@
   {
    "id": "1167G",
    "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 10.1,
+   "min": 10.0,
    "prov": "Cantabria"
+  },
+  {
+   "id": "C406G",
+   "nombre": "Cañadas Parador",
+   "min": 10.0,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "1167J",
@@ -131,12 +137,6 @@
    "nombre": "Barco de Avila",
    "min": 11.1,
    "prov": "Ávila"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 11.1,
-   "prov": "Lleida"
   }
  ]
 }

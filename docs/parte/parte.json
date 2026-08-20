@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-19",
- "total": 844,
- "tropicales": 408,
- "ecuatoriales": 37,
+ "fecha": "2026-08-20",
+ "total": 846,
+ "tropicales": 366,
+ "ecuatoriales": 114,
  "peor": {
-  "id": "0201X",
-  "nombre": "Barcelona Drassanes",
-  "min": 27.4,
-  "prov": "Barcelona"
+  "id": "8057C",
+  "nombre": "Pego",
+  "min": 33.3,
+  "prov": "Alicante"
  },
  "mejor": {
-  "id": "9218A",
-  "nombre": "Isaba/Izaba",
-  "min": 10.4,
-  "prov": "Navarra"
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": 7.2,
+  "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "0201X",
-   "nombre": "Barcelona Drassanes",
-   "min": 27.4,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 27.4,
-   "prov": "Almería"
-  },
-  {
-   "id": "8059C",
-   "nombre": "Alcoy",
-   "min": 27.4,
+   "id": "8057C",
+   "nombre": "Pego",
+   "min": 33.3,
    "prov": "Alicante"
   },
   {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 27.1,
+   "id": "8416",
+   "nombre": "Valencia Dt",
+   "min": 31.0,
+   "prov": "Valencia"
+  },
+  {
+   "id": "B051A",
+   "nombre": "Sóller",
+   "min": 30.8,
    "prov": "Illes Balears"
   },
   {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 26.5,
+   "id": "8058X",
+   "nombre": "Oliva",
+   "min": 30.7,
+   "prov": "Valencia"
+  },
+  {
+   "id": "B087X",
+   "nombre": "Banyalbufar",
+   "min": 30.7,
    "prov": "Illes Balears"
   },
   {
-   "id": "0244X",
-   "nombre": "Vilassar de Dalt",
-   "min": 26.3,
-   "prov": "Barcelona"
+   "id": "8414A",
+   "nombre": "Valencia/Aeropuerto",
+   "min": 30.4,
+   "prov": "Valencia"
   },
   {
-   "id": "B398A",
-   "nombre": "Cabrera Parque Nacional de Cabrera",
-   "min": 26.3,
-   "prov": "Illes Balears"
+   "id": "8293X",
+   "nombre": "Xátiva",
+   "min": 30.3,
+   "prov": "Valencia"
   },
   {
-   "id": "B434X",
-   "nombre": "Portocolom",
-   "min": 26.3,
-   "prov": "Illes Balears"
+   "id": "8058Y",
+   "nombre": "Miramar",
+   "min": 29.7,
+   "prov": "Valencia"
   },
   {
-   "id": "B860X",
-   "nombre": "Ciutadella-Son Quim",
-   "min": 26.3,
-   "prov": "Illes Balears"
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 29.3,
+   "prov": "Murcia"
   },
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 26.2,
-   "prov": "Illes Balears"
+   "id": "7178I",
+   "nombre": "Murcia",
+   "min": 29.3,
+   "prov": "Murcia"
   }
  ],
  "top_fresco": [
   {
-   "id": "9218A",
-   "nombre": "Isaba/Izaba",
-   "min": 10.4,
-   "prov": "Navarra"
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 7.2,
+   "prov": "Granada"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 10.5,
+   "min": 7.3,
    "prov": "Ávila"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 10.8,
-   "prov": "León"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 10.9,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": 11.4,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9838B",
-   "nombre": "Benasque",
-   "min": 11.5,
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 8.2,
    "prov": "Huesca"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 11.6,
-   "prov": "Soria"
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 8.2,
+   "prov": "Lleida"
   },
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 11.8,
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 9.5,
    "prov": "Granada"
   },
   {
-   "id": "9238X",
-   "nombre": "Navascués/Nabaskoze",
-   "min": 11.8,
-   "prov": "Navarra"
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 9.7,
+   "prov": "Asturias"
   },
   {
-   "id": "1276F",
-   "nombre": "Pola de Somiedo-Depuradora",
-   "min": 11.9,
-   "prov": "Asturias"
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 10.1,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 10.3,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2828Y",
+   "nombre": "Barco de Avila",
+   "min": 11.1,
+   "prov": "Ávila"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 11.1,
+   "prov": "Lleida"
   }
  ]
 }

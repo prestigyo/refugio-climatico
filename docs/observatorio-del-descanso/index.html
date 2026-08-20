@@ -905,15 +905,13 @@ function askLoc(cb){
    desbloquearla en el candado de la barra de direcciones—, y si simplemente ha
    tardado, no hay nada que activar. */
 function porQueSinUbicacion(codigo){
+ var salida=' <b>Da igual: escribe tu pueblo y tu noche cuenta exactamente igual.</b>';
  if(codigo===1)
-  return 'Tu navegador tiene <b>bloqueada la ubicación para esta web</b>. '
-   +'Toca el candado 🔒 que hay junto a la dirección, entra en Ubicación y '
-   +'elige Permitir. Tenerla activa en Google Maps no basta: cada web se '
-   +'autoriza por separado.';
+  return 'Tu navegador tiene <b>bloqueada la ubicación para esta web</b> '
+   +'(tenerla activa en Maps no basta: cada web se autoriza aparte).'+salida;
  if(codigo===2)
-  return 'No hemos podido situarte. Si estás bajo techo o en un sótano, '
-   +'acércate a una ventana y vuelve a tocar.';
- return 'Está tardando más de lo normal en encontrarte. Vuelve a tocar.';
+  return 'No hemos podido situarte — pasa bajo techo o en un sótano.'+salida;
+ return 'Está tardando más de lo normal en encontrarte.'+salida;
 }
 function initHero(){
   if(!isMobile){document.getElementById("cta").classList.add("hidden");document.getElementById("loc").classList.add("hidden");document.getElementById("desknote").classList.remove("hidden");return;}
@@ -932,13 +930,23 @@ function initHero(){
    botonBuscando(true);
    askLoc(function(ok,codigo){botonBuscando(false);if(!ok)pinta(porQueSinUbicacion(codigo));});
   };
+  /* OJO con el else de aquí abajo. En iOS —Safari y Chrome, los dos son
+     WebKit— esta consulta no contesta por "geolocation": o navigator.permissions
+     no existe o la promesa se rompe. Antes las dos ramas caían en pideYa(), así
+     que el iPhone pedía la ubicación NADA MÁS ENTRAR, que es exactamente lo que
+     el comentario de arriba dice que no hay que hacer. Se preguntaba antes de
+     que se supiera para qué, la respuesta era «no permitir», y ese no no se
+     puede deshacer desde la web.
+     Cuando no se sabe el estado del permiso, no se pide: se invita y se espera
+     al botón. */
+  var invita="Toca el botón y te situamos — y si no, escribes tu pueblo y ya está";
   if(navigator.permissions&&navigator.permissions.query){
    navigator.permissions.query({name:"geolocation"}).then(function(p){
     if(p.state==="granted")pideYa();
-    else if(p.state==="denied")pinta(porQueSinUbicacion(1));
-    else pinta("Toca el botón y te situamos: es lo que coloca tu noche en el mapa");
-   }).catch(pideYa);
-  }else pideYa();
+    else if(p.state==="denied"){GEODENEGADA=true;pinta(porQueSinUbicacion(1));}
+    else pinta(invita);
+   }).catch(function(){pinta(invita);});
+  }else pinta(invita);
 }
 initHero();
 
@@ -1014,15 +1022,33 @@ var OBSCONF=false;       /* ya ha confirmado que durmió donde decimos */
 var OBSQ=false;          /* la noche se guarda apartada, hasta que otras de allí la respalden */
 var OBSINT=0;            /* veces que hemos preguntado por el sitio (no insistimos más de dos) */
 var TRASCORREGIR=null;   /* qué hacer al terminar de corregir el pueblo */
+var GEODENEGADA=false;   /* el navegador ya nos ha dicho que no; no insistimos */
+var SINGPS=false;        /* votando sin ubicación: el pueblo escrito es el único ancla */
 function startFlow(){
  if(!isMobile){document.getElementById("desknote").classList.remove("hidden");return;}
+ /* Si ya sabemos que está bloqueada, no se vuelve a intentar: se pregunta el
+    pueblo directamente. Reintentar solo gasta dos segundos de espera para
+    volver al mismo sitio. */
+ if(!MY&&GEODENEGADA){pideLugarPrimero(1);return;}
  if(!MY){botonBuscando(true);
   askLoc(function(ok,codigo){
    botonBuscando(false);
    if(ok){startFlow();return;}
+   if(codigo===1)GEODENEGADA=true;
    var el=document.getElementById("loc");
    if(el)el.innerHTML='📍 <span style="color:var(--teja2)">'+porQueSinUbicacion(codigo)+'</span>';
+   /* Y NO se acaba aquí. Antes esto era el final del camino: quien tuviera el
+      permiso bloqueado no podía contar su noche de ninguna manera, con la
+      página entera montada delante. Escribir el pueblo ancla la noche igual de
+      bien —misma estación, mismo valor esperado— y es un paso más. */
+   pideLugarPrimero(codigo);
   });return;}
+ arrancaPreguntas();
+}
+/* Preparar el cuestionario y abrirlo. Estaba dentro de startFlow; se saca
+   porque ahora se entra por dos puertas: con ubicación y con el pueblo a mano. */
+function arrancaPreguntas(){
+ SINGPS=false;
  VIAJE=esNocheFuera();
  Q=VIAJE?QBASE.concat(QVIAJE):QBASE.slice();
  NPASOS=Q.length+1;
@@ -1030,6 +1056,38 @@ function startFlow(){
  WEAR={h:"",s:""};PROP="";
  OBSCONF=false;OBSQ=false;OBSINT=0;TRASCORREGIR=null;
  flow.classList.add("on");renderStep();
+}
+/* La puerta de atrás: sin ubicación, el pueblo se escribe y se sigue. */
+function pideLugarPrimero(codigo){
+ SINGPS=true;cur=0;TRASCORREGIR=function(){arrancaPreguntas();};
+ flow.classList.add("on");
+ var bar=document.getElementById("barfill");if(bar)bar.style.width="0%";
+ var sn=document.getElementById("stepn");if(sn)sn.textContent="📍";
+ var bb=document.getElementById("backbtn");if(bb)bb.textContent="‹ Salir";
+ var chip=document.getElementById("lugarchip");if(chip)chip.innerHTML="";
+ formLugar('<div class="q">¿Desde qué pueblo nos lo cuentas?</div>'
+  +'<p class="wsub2">'+(codigo===1
+    ? 'Tu navegador no nos deja situarte en esta web, y desde aquí no podemos cambiarlo.'
+    : 'No hemos conseguido situarte.')
+  +' Escríbelo tú y seguimos: la noche se guarda en ese pueblo, con su estación '
+  +'de AEMET y su valor esperado. <b>Cuenta exactamente igual que si te hubiéramos localizado.</b></p>');
+}
+function sinLista(){
+ formLugar('<div class="q">No hemos podido cargar la lista de pueblos</div>'
+  +'<p class="wsub2">Es cosa de la conexión, no de tu pueblo. Comprueba que tienes datos o wifi y vuelve a intentarlo — tu noche sigue aquí.</p>');
+}
+function reintentaLugar(){
+ formLugar('<div class="q">No damos con ese nombre</div>'
+  +'<p class="wsub2">Prueba con el <b>municipio</b> en lugar de la urbanización o el barrio '
+  +'—«Benasque» en vez de «Cerler»—, o con el pueblo grande más cercano. Sin un sitio '
+  +'reconocido no sabemos con qué estación comparar tu noche.</p>');
+}
+function formLugar(cabecera){
+ var b=document.getElementById("stepbody");if(!b)return;
+ b.innerHTML=cabecera
+  +'<div class="lc-form"><label><input id="lugarprop" type="text" maxlength="60" placeholder="Escribe el nombre" value=""></label>'
+  +'<button type="button" class="lc-ok" onclick="guardaCorrige()">Seguir</button></div>';
+ var i=document.getElementById("lugarprop");if(i)i.focus();
 }
 function closeFlow(){flow.classList.remove("on");}
 function back(){if(cur>0){cur--;renderStep();}else closeFlow();}
@@ -1099,12 +1157,24 @@ function guardaCorrige(){
    rematarCorrige('<span class="lc-txt">✅ Gracias: anotamos <b>'+PROP+'</b> y lo revisamos. Tu noche cuenta igual.</span>',false);
   }
  };
- cargaLugares(function(L){conLista(L||[]);});
+ cargaLugares(function(L){
+  /* null = la lista no se ha podido descargar, que no es lo mismo que
+     no encontrar el pueblo. Sin ubicación hay que decirlo: si no, la
+     persona reescribe su pueblo una y otra vez y siempre falla. */
+  if(!L&&SINGPS){sinLista();return;}
+  conLista(L||[]);
+ });
 }
 /* Cierra la corrección. Si veníamos de la comprobación de coherencia, seguimos
    con el envío; y si no hemos sabido anclar el pueblo, la noche no puede contar
    como una noche normal del sitio que dice el GPS: se guarda apartada. */
 function rematarCorrige(html,anclado){
+ /* Sin ubicación el pueblo escrito es lo único que ancla la noche: si no lo
+    reconocemos no hay estación de referencia ni valor esperado, y la noche
+    acabaría guardada en un sitio inventado. Se vuelve a preguntar en vez de
+    dejarla caer. Con ubicación sí se admite un nombre desconocido: el GPS ya
+    sostiene la noche y el nombre queda anotado para revisarlo. */
+ if(SINGPS&&!anclado){reintentaLugar();return;}
  var seguir=TRASCORREGIR;TRASCORREGIR=null;
  if(!seguir){
   var el=document.getElementById("lugarchip");

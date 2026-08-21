@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-20",
- "total": 846,
- "tropicales": 362,
- "ecuatoriales": 113,
+ "fecha": "2026-08-21",
+ "total": 848,
+ "tropicales": 186,
+ "ecuatoriales": 2,
  "peor": {
-  "id": "8416",
-  "nombre": "Valencia Dt",
-  "min": 30.9,
-  "prov": "Valencia"
+  "id": "B051A",
+  "nombre": "Sóller",
+  "min": 25.4,
+  "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "5511",
-  "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 6.7,
-  "prov": "Granada"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": 4.6,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "8416",
-   "nombre": "Valencia Dt",
-   "min": 30.9,
-   "prov": "Valencia"
-  },
-  {
    "id": "B051A",
    "nombre": "Sóller",
-   "min": 30.8,
+   "min": 25.4,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "8058X",
-   "nombre": "Oliva",
-   "min": 30.6,
-   "prov": "Valencia"
-  },
-  {
-   "id": "8057C",
-   "nombre": "Pego",
-   "min": 30.4,
-   "prov": "Alicante"
-  },
-  {
-   "id": "8414A",
-   "nombre": "Valencia/Aeropuerto",
-   "min": 30.2,
-   "prov": "Valencia"
-  },
-  {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 30.2,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "8293X",
-   "nombre": "Xátiva",
-   "min": 30.1,
-   "prov": "Valencia"
-  },
-  {
-   "id": "8058Y",
-   "nombre": "Miramar",
-   "min": 29.7,
-   "prov": "Valencia"
   },
   {
    "id": "7012X",
    "nombre": "Cartagena",
-   "min": 29.3,
+   "min": 25.3,
    "prov": "Murcia"
   },
   {
-   "id": "7178I",
-   "nombre": "Murcia",
-   "min": 29.3,
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 24.6,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 24.6,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "B860X",
+   "nombre": "Ciutadella-Son Quim",
+   "min": 24.5,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B760X",
+   "nombre": "Pollença-Poliesportiu",
+   "min": 24.4,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B780X",
+   "nombre": "Port Pollença-Aerodrom",
+   "min": 24.3,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 24.3,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "7002Y",
+   "nombre": "Águilas",
+   "min": 24.2,
    "prov": "Murcia"
+  },
+  {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 24.2,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 6.7,
-   "prov": "Granada"
-  },
-  {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 7.3,
-   "prov": "Ávila"
-  },
-  {
-   "id": "9839V",
-   "nombre": "Cerler Cogulla",
-   "min": 8.2,
-   "prov": "Huesca"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 4.6,
+   "prov": "Zamora"
   },
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 8.2,
+   "min": 5.3,
    "prov": "Lleida"
   },
   {
-   "id": "5516D",
-   "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 8.4,
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 5.5,
    "prov": "Granada"
   },
   {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 9.7,
-   "prov": "Asturias"
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 5.6,
+   "prov": "Lleida"
   },
   {
    "id": "1167G",
    "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 10.0,
+   "min": 5.7,
    "prov": "Cantabria"
   },
   {
-   "id": "C406G",
-   "nombre": "Cañadas Parador",
-   "min": 10.0,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 5.9,
+   "prov": "Granada"
+  },
+  {
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 6.3,
+   "prov": "Huesca"
   },
   {
    "id": "1167J",
    "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 10.3,
+   "min": 6.6,
    "prov": "Cantabria"
   },
   {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 11.1,
-   "prov": "Ávila"
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 6.6,
+   "prov": "Asturias"
+  },
+  {
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 6.6,
+   "prov": "Huesca"
   }
  ]
 }

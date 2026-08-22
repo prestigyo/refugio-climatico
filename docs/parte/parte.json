@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-21",
- "total": 846,
- "tropicales": 184,
- "ecuatoriales": 2,
+ "fecha": "2026-08-22",
+ "total": 854,
+ "tropicales": 178,
+ "ecuatoriales": 11,
  "peor": {
-  "id": "B051A",
-  "nombre": "Sóller",
-  "min": 25.4,
+  "id": "B780X",
+  "nombre": "Port Pollença-Aerodrom",
+  "min": 26.2,
   "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 4.6,
-  "prov": "Zamora"
+  "id": "9988B",
+  "nombre": "Cap de Vaqueira",
+  "min": 5.4,
+  "prov": "Lleida"
  },
  "top_calor": [
   {
-   "id": "B051A",
-   "nombre": "Sóller",
-   "min": 25.4,
+   "id": "B780X",
+   "nombre": "Port Pollença-Aerodrom",
+   "min": 26.2,
    "prov": "Illes Balears"
   },
   {
-   "id": "7012X",
-   "nombre": "Cartagena",
-   "min": 25.3,
-   "prov": "Murcia"
+   "id": "B605X",
+   "nombre": "Muro-S?albufera",
+   "min": 26.1,
+   "prov": "Illes Balears"
   },
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 24.6,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 25.9,
+   "prov": "Illes Balears"
   },
   {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 24.6,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "B410B",
+   "nombre": "Santanyí",
+   "min": 25.8,
+   "prov": "Illes Balears"
   },
   {
-   "id": "B860X",
-   "nombre": "Ciutadella-Son Quim",
-   "min": 24.5,
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 25.6,
    "prov": "Illes Balears"
   },
   {
    "id": "B760X",
    "nombre": "Pollença-Poliesportiu",
-   "min": 24.4,
+   "min": 25.6,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "B780X",
-   "nombre": "Port Pollença-Aerodrom",
-   "min": 24.3,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 24.3,
-   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "7002Y",
    "nombre": "Águilas",
-   "min": 24.2,
+   "min": 25.2,
    "prov": "Murcia"
   },
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.2,
-   "prov": "Las Palmas"
+   "id": "B087X",
+   "nombre": "Banyalbufar",
+   "min": 25.1,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B051A",
+   "nombre": "Sóller",
+   "min": 25.0,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B603X",
+   "nombre": "Colònia Sant Pere-Can Mengol",
+   "min": 25.0,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 5.4,
+   "prov": "Lleida"
+  },
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 5.5,
+   "prov": "Ourense"
+  },
+  {
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 5.9,
+   "prov": "Ourense"
+  },
+  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 4.6,
+   "min": 5.9,
    "prov": "Zamora"
   },
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 5.3,
-   "prov": "Lleida"
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 5.9,
+   "prov": "Cantabria"
   },
   {
    "id": "9677",
    "nombre": "Port Aine L?orri",
-   "min": 5.6,
+   "min": 6.4,
    "prov": "Lleida"
   },
   {
    "id": "1167G",
    "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 5.7,
+   "min": 6.6,
    "prov": "Cantabria"
-  },
-  {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": 6.2,
-   "prov": "Huesca"
   },
   {
    "id": "1167J",
    "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 6.6,
+   "min": 6.7,
    "prov": "Cantabria"
   },
   {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 6.6,
-   "prov": "Asturias"
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 7.2,
+   "prov": "Cantabria"
   },
   {
    "id": "9839V",
    "nombre": "Cerler Cogulla",
-   "min": 6.6,
+   "min": 7.2,
    "prov": "Huesca"
-  },
-  {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 6.7,
-   "prov": "Granada"
-  },
-  {
-   "id": "5516D",
-   "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 6.8,
-   "prov": "Granada"
   }
  ]
 }

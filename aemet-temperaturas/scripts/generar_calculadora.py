@@ -1364,17 +1364,56 @@ _NAV_E_RE = re.compile(r'<nav class="nav-e".*?</nav>', re.DOTALL)
 _FOOTER_VIEJO_RE = re.compile(
     r'<footer><div class="wrap">\s*<p>Pieza de divulgaci.*?</footer>', re.DOTALL)
 
-# Interlinks del bloque "Sigue explorando" (texto ancla, href). Se filtra el
-# auto-enlace según la carpeta que se procese.
-_SIGUE_LINKS = [
-    ("la calculadora de tu pueblo", "/"),
-    ("los refugios climáticos naturales más cercanos a ti", "/refugios-climaticos-naturales-cerca-de-mi/"),
-    ("los pueblos donde se duerme con manta en agosto", "/dormir-con-manta-en-verano/"),
-    ("el ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
-    ("por qué existen los microclimas", "/microclimas/"),
-    ("cómo crear un refugio climático natural", "/refugio-climatico-natural/"),
-    ("el Confortómetro", "/confortometro/"),
+# Tarjetas del bloque "Sigue explorando" (icono, nombre corto, qué hay dentro,
+# href). Antes esto era una lista de textos ancla que se pegaban unos a otros
+# en un único párrafo: siete enlaces seguidos sin jerarquía, imposible de leer
+# y sin decir qué se va a encontrar en cada uno. Con nombre y descripción, el
+# lector elige; con una retahíla, se la salta.
+_SIGUE_TARJETAS = [
+    ("🏡", "Tu pueblo", "¿Cuántas noches tropicales tiene al año? Búscalo.", "/"),
+    ("📍", "Refugios cerca de ti", "Dónde se duerme fresco más cerca de donde estás.",
+     "/refugios-climaticos-naturales-cerca-de-mi/"),
+    ("🛌", "Dormir con manta en agosto", "Los pueblos frescos, provincia a provincia.",
+     "/dormir-con-manta-en-verano/"),
+    ("🏆", "Ranking nacional", "Dónde se duerme mejor y peor de toda España.",
+     "/ranking-noches-tropicales/"),
+    ("🌙", "El Observatorio", "Cuenta cómo has dormido y mira el mapa del descanso.",
+     "/observatorio-del-descanso/"),
+    ("🌿", "Microclimas", "Por qué un valle es más fresco que la cima de al lado.",
+     "/microclimas/"),
+    ("📐", "Cómo medimos", "Qué es una noche tropical y de dónde salen los datos.",
+     "/metodologia/"),
 ]
+
+# Mismas clases que usan el estudio de los colores y la deuda de sueño, para
+# que el bloque sea idéntico en toda la web.
+CSS_SIGUE = (
+    '.sigue{border-top:1px solid var(--line);margin-top:28px;padding:22px 0}'
+    '.sigue h2{font-family:var(--fd);font-weight:700;font-size:clamp(20px,3.4vw,25px);'
+    'margin:0 0 6px;color:var(--paper)}'
+    '.sigue .lead{color:var(--muted);font-size:15px;margin:0 0 14px;max-width:62ch}'
+    '.navcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));'
+    'gap:12px;margin-top:4px}'
+    '.navcard{display:block;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:13px;padding:15px 16px;text-decoration:none}'
+    '.navcard:hover{border-color:var(--teja);background:var(--panel);text-decoration:none}'
+    '.navcard .ic{font-size:22px;display:block;margin-bottom:7px}'
+    '.navcard b{display:block;color:var(--paper);font-family:var(--fd);font-weight:600;'
+    'font-size:15.5px;margin-bottom:3px}'
+    '.navcard span{display:block;color:var(--muted);font-size:13px;line-height:1.45}'
+)
+
+
+def bloque_sigue(site: str, carpeta: str) -> str:
+    """La rejilla de tarjetas, sin la tarjeta de la página en la que estamos."""
+    tarjetas = "".join(
+        f'<a class="navcard" href="{site}{h}"><span class="ic">{ic}</span>'
+        f'<b>{nom}</b><span>{desc}</span></a>'
+        for ic, nom, desc, h in _SIGUE_TARJETAS if h.strip("/") != carpeta)
+    return ('<section class="wrap"><div class="sigue"><h2>Sigue explorando</h2>'
+            '<p class="lead">Todo sale de los mismos diez veranos de datos de '
+            'AEMET, contados de maneras distintas.</p>'
+            f'<div class="navcards">{tarjetas}</div></div></section>')
 
 
 def enlace_certificado(e: dict, site: str) -> str:
@@ -1436,22 +1475,32 @@ def inyectar_atajo(html: str, site: str, carpeta: str) -> str:
     return html.replace("</style>", CSS_ATAJO + "</style>", 1)
 
 
+# El bloque de anclas seguidas que se generaba antes, para poder sustituirlo.
+_SIGUEMAS_RE = re.compile(
+    r'<section class="wrap siguemas">.*?</section>', re.S)
+
+
 def enriquecer_estatica(html: str, site: str, carpeta: str) -> str:
     """En páginas antiguas con el pie 'Pieza de divulgación…': lo sustituye por
     el pie unificado (3 columnas con interlinks) precedido de un bloque 'Sigue
     explorando' con textos anclados. Idempotente: si no está ese pie, no toca
     nada (ya migró en un build anterior)."""
-    if not _FOOTER_VIEJO_RE.search(html):
+    sigue = bloque_sigue(site, carpeta)
+    if _FOOTER_VIEJO_RE.search(html):
+        html = _FOOTER_VIEJO_RE.sub(lambda _m: sigue + footer_escueto_html(site),
+                                    html, count=1)
+        return html.replace("</style>", CSS_FOOTER_ESCUETO + CSS_SIGUE + "</style>", 1)
+    # Las que migraron en un build anterior se quedaron con el párrafo de
+    # anclas dentro del HTML, y como ya no tienen el pie viejo esta función no
+    # volvía a mirarlas nunca. Se reparan aquí: se cambia el párrafo por las
+    # tarjetas. Idempotente — al build siguiente ya no hay .siguemas que buscar.
+    m = _SIGUEMAS_RE.search(html)
+    if not m:
         return html
-    links = [(t, h) for t, h in _SIGUE_LINKS if h.strip("/") != carpeta]
-    lista = (", ".join(f'<a href="{site}{h}">{t}</a>' for t, h in links[:-1])
-             + f' o <a href="{site}{links[-1][1]}">{links[-1][0]}</a>')
-    sigue = f'<section class="wrap siguemas"><p>Sigue explorando: {lista}.</p></section>'
-    html = _FOOTER_VIEJO_RE.sub(lambda _m: sigue + footer_escueto_html(site), html, count=1)
-    css = (CSS_FOOTER_ESCUETO
-           + '.siguemas{padding:20px 0}.siguemas p{color:var(--muted);font-size:15px;'
-             'max-width:72ch;line-height:1.75;margin:0 auto}.siguemas a{color:var(--teal);font-weight:600}')
-    return html.replace("</style>", css + "</style>", 1)
+    html = html[:m.start()] + sigue + html[m.end():]
+    if ".navcard{" not in html:
+        html = html.replace("</style>", CSS_SIGUE + "</style>", 1)
+    return html
 
 
 PAGINA_PROVINCIA = r"""<!DOCTYPE html>
@@ -7763,7 +7812,23 @@ function pintaProv(p){
     navegador le restaura el scroll— el botón no llega a salir. */
  function visible(){var r=ancla.getBoundingClientRect();return r.top<window.innerHeight*0.9;}
  setTimeout(function(){if(!muerto&&!visible())b.classList.add("on");},3000);
- b.addEventListener("click",fuera);
+ /* Bajar rodando, no saltar. Del titular al buscador hay más de 3.000 px: con
+    un salto seco aparece otra pantalla y no se entiende de dónde ha salido.
+    Rodando se ve el camino — y se ve que queda mucho sin leer, que es justo lo
+    que hay que transmitir.
+    Se usa el desplazamiento suave del navegador y no un bucle propio con
+    requestAnimationFrame: rAF no corre en pestañas que no están pintando, y
+    entonces el botón se quedaría sin hacer nada. El menos 74 es el alto del
+    menú pegajoso, para que no tape el titular al llegar. */
+ b.addEventListener("click",function(ev){
+  fuera();
+  var y=ancla.getBoundingClientRect().top+window.scrollY-74;
+  ev.preventDefault();
+  var seco=window.matchMedia("(prefers-reduced-motion:reduce)").matches
+        || !("scrollBehavior" in document.documentElement.style);
+  if(seco){window.scrollTo(0,y);return;}
+  window.scrollTo({top:y,behavior:"smooth"});
+ });
  window.addEventListener("scroll",function(){if(!muerto&&visible())fuera();},{passive:true});
 })();
 </script>

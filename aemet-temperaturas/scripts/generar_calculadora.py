@@ -1410,7 +1410,13 @@ CSS_ATAJO = ('.atajo{margin:18px 0}'
 # Observatorio estorba: quien entra ahi viene a contar su noche, y una puerta de
 # salida en la cabecera se lleva al visitante antes de que vote. Lo que hace
 # falta alli no es un enlace fuera, sino decirle para que ha llegado.
-SIN_ATAJO = {"refugios-climaticos-naturales-cerca-de-mi", "observatorio-del-descanso"}
+SIN_ATAJO = {"refugios-climaticos-naturales-cerca-de-mi",
+             "observatorio-del-descanso",
+             # Esta ya tiene su propio buscador por cercanía («¿Dónde se
+             # duerme fresco cerca de ti?»). Mandar desde aquí a otra
+             # herramienta es sacar al visitante de la página que le
+             # responde, y encima antes de que la vea.
+             "hoteles-refugio-climatico"}
 
 
 def inyectar_atajo(html: str, site: str, carpeta: str) -> str:
@@ -7669,7 +7675,7 @@ __NAV__
 </div></section>
 
 <section><div class="wrap">
-  <div class="buscar" id="cerca">
+  <div class="buscar" id="cerca" style="scroll-margin-top:74px">
     <h2>¿Dónde se duerme fresco cerca de ti?</h2>
     <p class="sub">Comparte tu ubicación y te ordenamos estos hoteles-refugio del más cercano al más lejano, con la distancia en línea recta. Todos en zonas donde la mínima de verano baja de 20&nbsp;°C, medido con 10 años de datos de AEMET.</p>
     <button class="geobtn" id="geoh">📍 Usar mi ubicación</button>
@@ -7746,10 +7752,10 @@ function pintaProv(p){
  sel.addEventListener("change",function(){ if(sel.value) pintaProv(sel.value); });
 })();
 </script>
-<a class="fabh" id="fabh" href="#hoteles">🛏️ Ver lista de hoteles ↓</a>
+<a class="fabh" id="fabh" href="#cerca">🛏️ Ver lista de hoteles ↓</a>
 <script>
 (function(){
- var b=document.getElementById("fabh"),ancla=document.getElementById("hoteles");
+ var b=document.getElementById("fabh"),ancla=document.getElementById("cerca");
  if(!b||!ancla)return;
  var muerto=false;
  function fuera(){muerto=true;b.classList.remove("on");}
@@ -10186,30 +10192,23 @@ def construir_pagina_tuhotel(site: str) -> str:
 # usabilidad revelando que hay más, sin secuestrar la lectura. Autónomo (namespace
 # propio), se inyecta antes de </body> en la portada y las páginas del menú.
 SCROLL_CUE = (
-    '<style>@keyframes _scb{0%,100%{transform:translateX(-50%) translateY(0)}'
-    '50%{transform:translateX(-50%) translateY(5px)}}'
-    '#scue{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:60;'
-    'background:rgba(217,116,78,.18);border:1px solid #d9744e;color:#e89a73;'
-    'font:600 12.5px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;'
-    'padding:9px 16px;border-radius:20px;cursor:pointer;display:none;'
-    # Sin esto, al tocarlo en Chrome de Android salta «Tocar para buscar»: el
-    # navegador toma la palabra que hay bajo el dedo y abre por abajo su panel
-    # de definiciones. No es nuestro, pero parece nuestro. Es un botón, no un
-    # texto para leer: que no se pueda seleccionar y el panel no aparece.
-    '-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;'
-    'backdrop-filter:blur(4px);animation:_scb 1.6s ease-in-out infinite}</style>'
-    '<div id="scue" aria-hidden="true">↓ sigue, hay más</div>'
-    '<script>(function(){var c=document.getElementById("scue");'
+    # Sin botón. Antes había uno («↓ sigue, hay más») fijo abajo y centrado, y
+    # en la landing de hoteles caía exactamente encima del botón flotante de la
+    # lista: mismo left, mismo bottom. Se queda solo el empujón automático, que
+    # es lo que hace el trabajo — revelar que la página sigue — sin ocupar
+    # sitio ni tapar texto.
+    #
+    # A los 2,2 s, y solo si nadie ha tocado nada, baja un 42 % de pantalla con
+    # una animación suave. Si la persona ya ha hecho scroll, no se hace nada:
+    # el empujón es para quien no sabe que hay más, no para quien ya lo sabe.
+    '<!--scrollcue--><script>(function(){'
     'function ease(to,d){var s=window.scrollY,ch=to-s,t0=null;function st(t){if(!t0)t0=t;'
     'var p=Math.min((t-t0)/d,1),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;'
     'window.scrollTo(0,s+ch*e);if(p<1)requestAnimationFrame(st);}requestAnimationFrame(st);}'
     'function able(){return document.body.scrollHeight-window.innerHeight>window.innerHeight*.5;}'
-    'if(able()){c.style.display="block";setTimeout(function(){if(window.scrollY<20&&able())'
-    'ease(Math.round(window.innerHeight*.42),900);},2200);}'
-    'c.addEventListener("click",function(){ease(Math.min(window.scrollY+Math.round(window.innerHeight*.82),'
-    'document.body.scrollHeight),700);});'
-    'window.addEventListener("scroll",function(){var b=window.innerHeight+window.scrollY>=document.body.scrollHeight-40;'
-    'c.style.display=(!b&&window.scrollY<window.innerHeight*.6&&able())?"block":"none";},{passive:true});})();</script>'
+    'if(able())setTimeout(function(){if(window.scrollY<20&&able())'
+    'ease(Math.round(window.innerHeight*.42),900);},2200);'
+    '})();</script>'
 )
 
 
@@ -10552,7 +10551,7 @@ def main() -> int:
         if not f.exists():
             continue
         h = f.read_text(encoding="utf-8")
-        if 'id="scue"' in h or "</body>" not in h:
+        if "<!--scrollcue-->" in h or "</body>" not in h:
             continue  # ya lo tiene, o la página no cierra <body> (raro)
         f.write_text(h.replace("</body>", SCROLL_CUE + "\n</body>", 1),
                      encoding="utf-8")

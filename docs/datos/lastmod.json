@@ -233,7 +233,7 @@
 },
 "hoteles-refugio-climatico": {
 "f": "2026-08-23",
-"h": "91e6cc6c74a0e33d"
+"h": "222494e4e97bfcbd"
 },
 "hoteles-refugio-climatico/albergue-inturjoven-sierra-nevada": {
 "f": "2026-08-20",
@@ -432,8 +432,8 @@
 "h": "fa1d51ea7377ddcf"
 },
 "microclimas": {
-"f": "2026-08-16",
-"h": "3bd51305baf54db3"
+"f": "2026-08-23",
+"h": "0f78f4152677dd61"
 },
 "murcia": {
 "f": "2026-08-23",
@@ -476,16 +476,16 @@
 "h": "e80ad29ad8fe602b"
 },
 "refugio-climatico-natural": {
-"f": "2026-08-16",
-"h": "b0493f7c9b54e023"
+"f": "2026-08-23",
+"h": "d5e1e07b6bf015a2"
 },
 "refugios-climaticos-naturales-cerca-de-mi": {
 "f": "2026-08-23",
 "h": "5e7b8511359c0e3c"
 },
 "refugios-y-espana-vaciada": {
-"f": "2026-08-16",
-"h": "e7ce910eacfc7185"
+"f": "2026-08-23",
+"h": "e230ac4cf010fa7b"
 },
 "salamanca": {
 "f": "2026-08-16",

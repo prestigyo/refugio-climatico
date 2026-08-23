@@ -287,7 +287,23 @@ function pintaProv(p){
     navegador le restaura el scroll— el botón no llega a salir. */
  function visible(){var r=ancla.getBoundingClientRect();return r.top<window.innerHeight*0.9;}
  setTimeout(function(){if(!muerto&&!visible())b.classList.add("on");},3000);
- b.addEventListener("click",fuera);
+ /* Bajar rodando, no saltar. Del titular al buscador hay más de 3.000 px: con
+    un salto seco aparece otra pantalla y no se entiende de dónde ha salido.
+    Rodando se ve el camino — y se ve que queda mucho sin leer, que es justo lo
+    que hay que transmitir.
+    Se usa el desplazamiento suave del navegador y no un bucle propio con
+    requestAnimationFrame: rAF no corre en pestañas que no están pintando, y
+    entonces el botón se quedaría sin hacer nada. El menos 74 es el alto del
+    menú pegajoso, para que no tape el titular al llegar. */
+ b.addEventListener("click",function(ev){
+  fuera();
+  var y=ancla.getBoundingClientRect().top+window.scrollY-74;
+  ev.preventDefault();
+  var seco=window.matchMedia("(prefers-reduced-motion:reduce)").matches
+        || !("scrollBehavior" in document.documentElement.style);
+  if(seco){window.scrollTo(0,y);return;}
+  window.scrollTo({top:y,behavior:"smooth"});
+ });
  window.addEventListener("scroll",function(){if(!muerto&&visible())fuera();},{passive:true});
 })();
 </script>

@@ -1,7 +1,7 @@
 {
  "fecha": "2026-08-23",
- "total": 854,
- "tropicales": 203,
+ "total": 852,
+ "tropicales": 200,
  "ecuatoriales": 8,
  "peor": {
   "id": "B569X",
@@ -53,12 +53,6 @@
    "prov": "Murcia"
   },
   {
-   "id": "8057C",
-   "nombre": "Pego",
-   "min": 24.9,
-   "prov": "Alicante"
-  },
-  {
    "id": "8446Y",
    "nombre": "Sagunto (Montiver Pontazgo - Semiautomatica)",
    "min": 24.9,
@@ -73,6 +67,12 @@
   {
    "id": "B051A",
    "nombre": "Sóller",
+   "min": 24.8,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B228",
+   "nombre": "Palma-Portopí",
    "min": 24.8,
    "prov": "Illes Balears"
   }
@@ -103,6 +103,12 @@
    "prov": "Granada"
   },
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 7.1,
+   "prov": "Segovia"
+  },
+  {
    "id": "2775X",
    "nombre": "Villardeciervos",
    "min": 7.6,
@@ -115,22 +121,16 @@
    "prov": "Salamanca"
   },
   {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 8.7,
+   "prov": "Madrid"
+  },
+  {
    "id": "9195C",
    "nombre": "Astún - la Raca",
    "min": 8.9,
    "prov": "Huesca"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 9.0,
-   "prov": "Segovia"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 9.1,
-   "prov": "Madrid"
   },
   {
    "id": "2828Y",

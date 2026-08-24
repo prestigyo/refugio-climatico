@@ -1,9 +1,9 @@
 {
   "periodo": {
     "ini": "2026-05-27",
-    "fin": "2026-08-23",
-    "noches": 88,
-    "dias": 88
+    "fin": "2026-08-24",
+    "noches": 89,
+    "dias": 89
   },
   "nocturno": {
     "profundo": 4.2,

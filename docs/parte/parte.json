@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-23",
- "total": 852,
- "tropicales": 200,
- "ecuatoriales": 8,
+ "fecha": "2026-08-24",
+ "total": 853,
+ "tropicales": 283,
+ "ecuatoriales": 21,
  "peor": {
-  "id": "B569X",
-  "nombre": "Capdepera-Faro",
-  "min": 26.1,
-  "prov": "Illes Balears"
+  "id": "7012X",
+  "nombre": "Cartagena",
+  "min": 26.9,
+  "prov": "Murcia"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 4.7,
-  "prov": "Ávila"
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": 7.1,
+  "prov": "Granada"
  },
  "top_calor": [
   {
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 26.9,
+   "prov": "Murcia"
+  },
+  {
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 26.2,
+   "prov": "Illes Balears"
+  },
+  {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 26.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 25.8,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B954",
-   "nombre": "Ibiza/Es Codolá",
-   "min": 25.5,
+   "min": 26.0,
    "prov": "Illes Balears"
   },
   {
    "id": "8416",
    "nombre": "Valencia Dt",
-   "min": 25.3,
+   "min": 25.8,
    "prov": "Valencia"
   },
   {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 25.2,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "7012X",
-   "nombre": "Cartagena",
-   "min": 25.1,
+   "id": "7002Y",
+   "nombre": "Águilas",
+   "min": 25.6,
    "prov": "Murcia"
   },
   {
-   "id": "8446Y",
-   "nombre": "Sagunto (Montiver Pontazgo - Semiautomatica)",
-   "min": 24.9,
-   "prov": "Valencia"
+   "id": "0002I",
+   "nombre": "Vandellós",
+   "min": 25.5,
+   "prov": "Tarragona"
   },
   {
-   "id": "8058Y",
-   "nombre": "Miramar",
-   "min": 24.8,
-   "prov": "Valencia"
+   "id": "0201X",
+   "nombre": "Barcelona Drassanes",
+   "min": 25.5,
+   "prov": "Barcelona"
   },
   {
-   "id": "B051A",
-   "nombre": "Sóller",
-   "min": 24.8,
-   "prov": "Illes Balears"
+   "id": "7012D",
+   "nombre": "Cartagena - Tentegorra",
+   "min": 25.5,
+   "prov": "Murcia"
   },
   {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 24.8,
-   "prov": "Illes Balears"
+   "id": "7178I",
+   "nombre": "Murcia",
+   "min": 25.5,
+   "prov": "Murcia"
+  },
+  {
+   "id": "8019",
+   "nombre": "Alicante-Elche/Aeropuerto",
+   "min": 25.4,
+   "prov": "Alicante"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 4.7,
-   "prov": "Ávila"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 6.3,
-   "prov": "Zamora"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 6.6,
-   "prov": "Salamanca"
-  },
-  {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 6.8,
+   "min": 7.1,
    "prov": "Granada"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 7.1,
-   "prov": "Segovia"
-  },
-  {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": 7.6,
-   "prov": "Zamora"
-  },
-  {
-   "id": "2847X",
-   "nombre": "Pedrosillo de los Aires-Castillejo",
+   "id": "2491C",
+   "nombre": "La Covatilla Estación de Esquí",
    "min": 8.2,
    "prov": "Salamanca"
   },
   {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 8.7,
+   "prov": "Soria"
+  },
+  {
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 8.8,
+   "prov": "Granada"
+  },
+  {
+   "id": "2005Y",
+   "nombre": "Vinuesa",
+   "min": 8.9,
+   "prov": "Soria"
+  },
+  {
    "id": "3104Y",
    "nombre": "El Paular- Rascafría (Automática)",
-   "min": 8.7,
+   "min": 9.0,
    "prov": "Madrid"
   },
   {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": 8.9,
-   "prov": "Huesca"
+   "id": "2302N",
+   "nombre": "Monterrubio de la Demanda",
+   "min": 9.2,
+   "prov": "Burgos"
   },
   {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
+   "id": "2462",
+   "nombre": "Navacerrada Puerto",
    "min": 9.3,
-   "prov": "Ávila"
+   "prov": "Madrid"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 9.4,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 9.8,
+   "prov": "Cantabria"
   }
  ]
 }

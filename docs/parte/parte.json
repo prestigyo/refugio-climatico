@@ -1,8 +1,8 @@
 {
  "fecha": "2026-08-25",
- "total": 853,
- "tropicales": 192,
- "ecuatoriales": 23,
+ "total": 852,
+ "tropicales": 191,
+ "ecuatoriales": 22,
  "peor": {
   "id": "B373X",
   "nombre": "Campos-Salines Levant",
@@ -47,18 +47,6 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "8337X",
-   "nombre": "Turis",
-   "min": 26.2,
-   "prov": "Valencia"
-  },
-  {
-   "id": "8057C",
-   "nombre": "Pego",
-   "min": 26.1,
-   "prov": "Alicante"
-  },
-  {
    "id": "B051A",
    "nombre": "Sóller",
    "min": 26.1,
@@ -73,6 +61,18 @@
   {
    "id": "B228",
    "nombre": "Palma-Portopí",
+   "min": 25.8,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 25.8,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B603X",
+   "nombre": "Colònia Sant Pere-Can Mengol",
    "min": 25.8,
    "prov": "Illes Balears"
   }

@@ -1,7 +1,7 @@
 {
  "fecha": "2026-08-26",
- "total": 855,
- "tropicales": 209,
+ "total": 854,
+ "tropicales": 207,
  "ecuatoriales": 14,
  "peor": {
   "id": "B051A",
@@ -29,12 +29,6 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "7012X",
-   "nombre": "Cartagena",
-   "min": 26.2,
-   "prov": "Murcia"
-  },
-  {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
    "min": 26.1,
@@ -45,6 +39,12 @@
    "nombre": "Banyalbufar",
    "min": 26.0,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 25.9,
+   "prov": "Murcia"
   },
   {
    "id": "B986",
@@ -85,12 +85,6 @@
    "prov": "Lleida"
   },
   {
-   "id": "2491C",
-   "nombre": "La Covatilla Estación de Esquí",
-   "min": 8.7,
-   "prov": "Salamanca"
-  },
-  {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
    "min": 8.7,
@@ -127,16 +121,22 @@
    "prov": "Soria"
   },
   {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 9.4,
+   "prov": "Madrid"
+  },
+  {
    "id": "9590D",
    "nombre": "Cap de Rec",
    "min": 9.6,
    "prov": "Lleida"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
+   "id": "2017Y",
+   "nombre": "Barriomartin-el Robledo",
    "min": 9.7,
-   "prov": "Zamora"
+   "prov": "Soria"
   }
  ]
 }

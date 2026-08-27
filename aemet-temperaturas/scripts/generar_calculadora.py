@@ -1191,7 +1191,8 @@ _F_EXPLORA = [("El Observatorio del Descanso", "/observatorio-del-descanso/"),
               ("Ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
               ("El parte de la noche", "/parte/"),
               ("Certificados de refugio climático", "/certificados/")]
-_F_GUIAS = [("Cómo dormir con calor sin aire acondicionado", "/dormir-con-calor/"),
+_F_GUIAS = [("Aumento de noches tropicales en España", "/aumento-noches-tropicales-espana/"),
+            ("Cómo dormir con calor sin aire acondicionado", "/dormir-con-calor/"),
             ("Vacaciones sin calor: dónde ir en verano", "/vacaciones-sin-calor/"),
             ("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
             ("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
@@ -1819,6 +1820,9 @@ def prosa_metodologia(prov: str, n: int, fecha_txt: str) -> str:
             f"menos 60 días con mínima registrada), promediando los veranos (junio–agosto) de 2017 a "
             f"2026. Limitación: el dato es de la estación, no del municipio entero — en zonas de "
             f"montaña la temperatura puede cambiar mucho en pocos kilómetros según el desnivel.</p>"
+            f"<p>El ritmo al que cada zona de España está perdiendo sus noches frescas, "
+            f'estación a estación: <a href="__SITE__/aumento-noches-tropicales-espana/">'
+            f"España pierde sus noches frescas</a>.</p>"
             f"<p class=\"note\">Última actualización de los datos: {fecha_txt}.</p>")
 
 
@@ -4018,6 +4022,7 @@ __CSS_COMUN__
     </div>
     <h2 class="sec-h" id="articulos">Artículos y estudios</h2>
     <div class="mods">
+      <a class="card2" href="__SITE__/aumento-noches-tropicales-espana/"><h3>España pierde sus noches frescas</h3><p>746 estaciones, diez veranos: 54 pueblos ya no tienen cero.</p></a>
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
       <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>25 hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
       <a class="card2 destacada" href="__SITE__/dormir-con-calor/"><h3>😴 Cómo dormir con calor sin aire acondicionado</h3><p>Lo que de verdad funciona esta noche, lo que no sirve de nada, y a partir de qué temperatura ya no hay truco que valga.</p></a>
@@ -10504,6 +10509,12 @@ def main() -> int:
     # — y un noindex la mataría en vez de traspasarla.
     escribir_redireccion(site, "refugios-cerca", site + "/" + SLUG_CERCA + "/",
                          "Esta herramienta se ha mudado.")
+    # La pieza se publicó primero en /espana-pierde-noches-frescas/ y se mudó a un
+    # slug alineado con la intención de búsqueda. Sin noindex, por lo mismo de arriba:
+    # el canonical es lo único que traspasa la señal a la URL nueva.
+    escribir_redireccion(site, "espana-pierde-noches-frescas",
+                         site + "/aumento-noches-tropicales-espana/",
+                         "Esta pieza se ha mudado.")
     # /refugio-climatico-natural/microclimas/ era un DUPLICADO de /microclimas/
     # (mismo título, H1 y contenido) heredado de la migración, con canonical al
     # dominio viejo. Se redirige a la versión buena para consolidar la señal y

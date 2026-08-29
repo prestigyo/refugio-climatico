@@ -2,7 +2,7 @@
  "fecha": "2026-08-29",
  "total": 851,
  "tropicales": 80,
- "ecuatoriales": 4,
+ "ecuatoriales": 5,
  "peor": {
   "id": "B569X",
   "nombre": "Capdepera-Faro",
@@ -25,6 +25,12 @@
   {
    "id": "B780X",
    "nombre": "Port Pollença-Aerodrom",
+   "min": 25.3,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B603X",
+   "nombre": "Colònia Sant Pere-Can Mengol",
    "min": 25.2,
    "prov": "Illes Balears"
   },
@@ -53,12 +59,6 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "B603X",
-   "nombre": "Colònia Sant Pere-Can Mengol",
-   "min": 24.6,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "B398A",
    "nombre": "Cabrera Parque Nacional de Cabrera",
    "min": 24.4,
@@ -67,7 +67,7 @@
   {
    "id": "B825B",
    "nombre": "Mercadal",
-   "min": 24.1,
+   "min": 24.3,
    "prov": "Illes Balears"
   },
   {

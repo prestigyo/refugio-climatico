@@ -19,6 +19,7 @@ Uso local sin clave:  python parte_nocturno.py --demo   (datos sintéticos)
 from __future__ import annotations
 
 import csv
+import gzip
 import json
 import os
 import random
@@ -495,9 +496,82 @@ if(nativo&&navigator.share){nativo.hidden=false;nativo.addEventListener("click",
 """
 
 
+# ---------------------------------------------------------------------------
+# ARCHIVO HORARIO
+#
+# La API de observación devuelve una lectura POR ESTACIÓN Y POR HORA, y hasta
+# ahora nos quedábamos solo con la mínima de cada estación: de ~20.000 números
+# guardábamos 850 y tirábamos el resto. Esas lecturas intermedias son el único
+# modo de responder a la pregunta que de verdad importa para el descanso —no
+# «cuánto bajó» sino «cuántas horas estuvo por debajo de 20°»— y AEMET no las
+# publica en ningún histórico: la observación se borra a las ~12 h.
+#
+# Así que hay que guardarlas según pasan. Un fichero por día, comprimido.
+#
+# Idempotente a propósito: el workflow corre dos veces (07:15 y la red de
+# seguridad de 08:50), así que si el fichero ya existe se FUSIONA por
+# (fint, idema) en vez de sobrescribir. Y va envuelto en try/except: el
+# archivo es un extra, jamás debe tumbar la publicación del parte.
+# ---------------------------------------------------------------------------
+DIR_HORARIAS = g.AEMET_DIR / "datos" / "horarias"
+CAMPOS_HORA = ("fint", "idema", "ta", "tamin", "tamax", "hr", "prec")
+
+
+def archivar_horarias(obs: list, dir_base: Path = None) -> str:
+    """Guarda las lecturas horarias en datos/horarias/AAAA/AAAA-MM-DD.csv.gz."""
+    base = dir_base or DIR_HORARIAS
+    filas = {}
+    for o in obs:
+        if not isinstance(o, dict):
+            continue
+        fint = str(o.get("fint") or "").strip()
+        idema = str(o.get("idema") or "").strip()
+        if not fint or not idema:
+            continue
+        filas[(fint, idema)] = {c: o.get(c, "") for c in CAMPOS_HORA}
+    if not filas:
+        return "sin lecturas que archivar"
+
+    # El día del fichero es el de la lectura más reciente: así la madrugada
+    # entera (que empieza a las 18:00 UTC del día anterior) cae en el fichero
+    # de la mañana que la cierra, y no queda partida en dos.
+    dia = max(f for f, _ in filas)[:10]
+    destino = base / dia[:4] / f"{dia}.csv.gz"
+    destino.parent.mkdir(parents=True, exist_ok=True)
+
+    if destino.exists():
+        try:
+            with gzip.open(destino, "rt", encoding="utf-8", newline="") as fh:
+                for r in csv.DictReader(fh):
+                    filas.setdefault((r.get("fint", ""), r.get("idema", "")), r)
+        except OSError:
+            pass  # fichero corrupto: se reescribe con lo que hay ahora
+
+    with gzip.open(destino, "wt", encoding="utf-8", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=CAMPOS_HORA, extrasaction="ignore")
+        w.writeheader()
+        for clave in sorted(filas):
+            w.writerow(filas[clave])
+    kb = destino.stat().st_size / 1024
+    try:
+        donde = destino.relative_to(g.AEMET_DIR)
+    except ValueError:
+        donde = destino
+    return (f"{len(filas)} lecturas de {len({i for _, i in filas})} estaciones "
+            f"-> {donde} ({kb:.0f} KB)")
+
+
 def main() -> int:
     demo = "--demo" in sys.argv
     obs = observaciones_demo() if demo else obtener_observaciones()
+    # Archivar ANTES de nada: aunque el parte no se pueda publicar (pocas
+    # estaciones, fuera de la ventana horaria...), las lecturas de esta noche
+    # ya no volverán a estar disponibles. Se guardan igual.
+    if not demo:
+        try:
+            print("   archivo horario:", archivar_horarias(obs))
+        except Exception as e:                      # nunca tumbar el parte
+            print(f"   AVISO: no se pudo archivar el horario ({e})", file=sys.stderr)
     minimas = minimas_de_la_noche(obs)
     if len(minimas) < MIN_ESTACIONES:
         # La API de observación solo conserva ~12 horas: por la tarde-noche la

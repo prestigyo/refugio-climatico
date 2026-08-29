@@ -1,8 +1,8 @@
 {
  "fecha": "2026-08-29",
- "total": 852,
- "tropicales": 83,
- "ecuatoriales": 4,
+ "total": 851,
+ "tropicales": 82,
+ "ecuatoriales": 3,
  "peor": {
   "id": "B569X",
   "nombre": "Capdepera-Faro",
@@ -21,12 +21,6 @@
    "nombre": "Capdepera-Faro",
    "min": 25.6,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 25.5,
-   "prov": "Barcelona"
   },
   {
    "id": "B860X",
@@ -74,6 +68,12 @@
    "id": "B434X",
    "nombre": "Portocolom",
    "min": 24.0,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B103B",
+   "nombre": "Andratx - Sant Elm",
+   "min": 23.9,
    "prov": "Illes Balears"
   }
  ],

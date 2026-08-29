@@ -1,0 +1,533 @@
+{
+  "generado": "2026-08-27",
+  "fuente": "AEMET",
+  "metodo": "noches con tmin > 20 °C contadas en una ventana estival idéntica en todos los años (1/6-20/8, 81 días); regresión lineal frente al año; ordenación por tamaño del efecto, nunca por p-valor",
+  "ventana": {
+    "inicio": "01-06",
+    "fin": "20-08",
+    "dias": 81,
+    "identica_en_todos_los_anios": true
+  },
+  "criterios": {
+    "umbral_noche_tropical_c": 20.0,
+    "nota_umbral": "criterio del proyecto: tmin ESTRICTAMENTE mayor que 20,0 (mismo que analisis_refugios_nocturnos.py y que la web)",
+    "cobertura_minima_verano": 0.9,
+    "veranos_minimos": 8,
+    "umbral_techo": 0.8,
+    "sigmas_salto_inhomogeneidad": 3.0,
+    "nota_inhomogeneidad": "AVISO SOBRE ESTA MARCA: con solo 9 diferencias interanuales el test no discrimina. Simulando 20.000 series gaussianas puras (sin ningún salto real) el criterio marca el 22,9 % de ellas; en los datos reales marca el 20,9 %, es decir POR DEBAJO de lo que produciría el azar. La marca sirve como cribado para mirar a mano la serie de esa estación, no como evidencia de que haya un traslado o un cambio de sensor. Detectar inhomogeneidades de verdad exige metadatos de la estación y series de referencia vecinas.",
+    "umbral_costa_km": 30.0,
+    "metodo_costa": "contorno costero rasterizado desde spain-provinces.geojson (~1 km), limitado a provincias con litoral. LIMITACIÓN: el geojson solo cubre España, así que el tramo de frontera con Francia y Portugal de las provincias litorales (Girona, Gipuzkoa, Pontevedra, Huelva) cuenta como si fuera costa; afecta a un puñado de estaciones pirenaicas y del Miño y no cambia las conclusiones (mueve la pendiente de interior de -0,222 a -0,231 °C/100 m)"
+  },
+  "periodo": {
+    "anio_ini": 2017,
+    "anio_fin": 2026
+  },
+  "estaciones": {
+    "validas": 746,
+    "descartadas": 144,
+    "descartes_por_motivo": {
+      "serie_corta": 75,
+      "pocos_veranos_validos": 68,
+      "sin_metadatos": 1
+    },
+    "cerca_del_techo": 5,
+    "posible_inhomogeneidad": 156
+  },
+  "global": {
+    "pendiente_media": 1.0467,
+    "pendiente_mediana": 0.8972,
+    "n_suben": 653,
+    "n_bajan": 24,
+    "n_ic95_excluye_cero": 194,
+    "nota_comparaciones_multiples": "con 746 estaciones, unas 37 darían un intervalo que excluye el cero por puro azar aunque no pasara nada. Por eso no se ordena ni se selecciona por significación."
+  },
+  "control_junio_septiembre_sin_ultimo_anio": {
+    "n_estaciones": 691,
+    "pendiente_media": 0.9958,
+    "coinciden_en_signo": 585,
+    "porcentaje_coincidencia": 84.7
+  },
+  "por_altitud": {
+    "200-500": {
+      "n_estaciones": 184,
+      "pendiente_media": 1.1963,
+      "pendiente_mediana": 1.1697,
+      "n_suben": 168,
+      "n_bajan": 6
+    },
+    "500-800": {
+      "n_estaciones": 178,
+      "pendiente_media": 0.9706,
+      "pendiente_mediana": 0.5818,
+      "n_suben": 156,
+      "n_bajan": 6
+    },
+    "800-1200": {
+      "n_estaciones": 136,
+      "pendiente_media": 0.4877,
+      "pendiente_mediana": 0.1361,
+      "n_suben": 96,
+      "n_bajan": 6
+    },
+    "<200": {
+      "n_estaciones": 219,
+      "pendiente_media": 1.4019,
+      "pendiente_mediana": 1.4303,
+      "n_suben": 210,
+      "n_bajan": 6
+    },
+    ">1200": {
+      "n_estaciones": 29,
+      "pendiente_media": 0.5039,
+      "pendiente_mediana": 0.303,
+      "n_suben": 23,
+      "n_bajan": 0
+    }
+  },
+  "por_costa": {
+    "interior": {
+      "n_estaciones": 446,
+      "pendiente_media": 0.9416,
+      "pendiente_mediana": 0.6587,
+      "n_suben": 377,
+      "n_bajan": 13
+    },
+    "litoral": {
+      "n_estaciones": 300,
+      "pendiente_media": 1.203,
+      "pendiente_mediana": 1.1697,
+      "n_suben": 276,
+      "n_bajan": 11
+    }
+  },
+  "por_altitud_x_costa": {
+    "<200": {
+      "interior": {
+        "n_estaciones": 29,
+        "pendiente_media": 1.874,
+        "pendiente_mediana": 1.9152
+      },
+      "litoral": {
+        "n_estaciones": 190,
+        "pendiente_media": 1.3299,
+        "pendiente_mediana": 1.3848
+      }
+    },
+    "200-500": {
+      "interior": {
+        "n_estaciones": 117,
+        "pendiente_media": 1.2401,
+        "pendiente_mediana": 1.1939
+      },
+      "litoral": {
+        "n_estaciones": 67,
+        "pendiente_media": 1.1197,
+        "pendiente_mediana": 0.9
+      }
+    },
+    "500-800": {
+      "interior": {
+        "n_estaciones": 160,
+        "pendiente_media": 0.9873,
+        "pendiente_mediana": 0.6848
+      },
+      "litoral": {
+        "n_estaciones": 18,
+        "pendiente_media": 0.8215,
+        "pendiente_mediana": 0.2666
+      }
+    },
+    "800-1200": {
+      "interior": {
+        "n_estaciones": 118,
+        "pendiente_media": 0.4383,
+        "pendiente_mediana": 0.1015
+      },
+      "litoral": {
+        "n_estaciones": 18,
+        "pendiente_media": 0.8113,
+        "pendiente_mediana": 0.603
+      }
+    },
+    ">1200": {
+      "interior": {
+        "n_estaciones": 22,
+        "pendiente_media": 0.4913,
+        "pendiente_mediana": 0.1159
+      },
+      "litoral": {
+        "n_estaciones": 7,
+        "pendiente_media": 0.5434,
+        "pendiente_mediana": 0.5887
+      }
+    }
+  },
+  "por_provincia": {
+    "A CORUÑA": {
+      "n_estaciones": 18,
+      "pendiente_media": 0.0517,
+      "pendiente_mediana": 0.0393,
+      "n_suben": 11,
+      "n_bajan": 3
+    },
+    "ALBACETE": {
+      "n_estaciones": 10,
+      "pendiente_media": 1.3734,
+      "pendiente_mediana": 1.4667,
+      "n_suben": 10,
+      "n_bajan": 0
+    },
+    "ALICANTE": {
+      "n_estaciones": 12,
+      "pendiente_media": 1.6436,
+      "pendiente_mediana": 1.7454,
+      "n_suben": 12,
+      "n_bajan": 0
+    },
+    "ALMERIA": {
+      "n_estaciones": 8,
+      "pendiente_media": 1.4492,
+      "pendiente_mediana": 1.4667,
+      "n_suben": 8,
+      "n_bajan": 0
+    },
+    "ARABA/ALAVA": {
+      "n_estaciones": 9,
+      "pendiente_media": 0.3616,
+      "pendiente_mediana": 0.3576,
+      "n_suben": 8,
+      "n_bajan": 0
+    },
+    "ASTURIAS": {
+      "n_estaciones": 21,
+      "pendiente_media": 0.1477,
+      "pendiente_mediana": 0.021,
+      "n_suben": 14,
+      "n_bajan": 2
+    },
+    "AVILA": {
+      "n_estaciones": 9,
+      "pendiente_media": 0.5697,
+      "pendiente_mediana": 0.4061,
+      "n_suben": 7,
+      "n_bajan": 0
+    },
+    "BADAJOZ": {
+      "n_estaciones": 22,
+      "pendiente_media": 1.3355,
+      "pendiente_mediana": 1.3303,
+      "n_suben": 20,
+      "n_bajan": 2
+    },
+    "BALEARES": {
+      "n_estaciones": 37,
+      "pendiente_media": 1.6117,
+      "pendiente_mediana": 1.4667,
+      "n_suben": 37,
+      "n_bajan": 0
+    },
+    "BARCELONA": {
+      "n_estaciones": 20,
+      "pendiente_media": 1.2329,
+      "pendiente_mediana": 1.2504,
+      "n_suben": 20,
+      "n_bajan": 0
+    },
+    "BIZKAIA": {
+      "n_estaciones": 8,
+      "pendiente_media": 0.8528,
+      "pendiente_mediana": 0.6242,
+      "n_suben": 8,
+      "n_bajan": 0
+    },
+    "BURGOS": {
+      "n_estaciones": 11,
+      "pendiente_media": 0.1507,
+      "pendiente_mediana": 0.0667,
+      "n_suben": 9,
+      "n_bajan": 1
+    },
+    "CACERES": {
+      "n_estaciones": 28,
+      "pendiente_media": 1.4829,
+      "pendiente_mediana": 1.597,
+      "n_suben": 27,
+      "n_bajan": 1
+    },
+    "CADIZ": {
+      "n_estaciones": 15,
+      "pendiente_media": 2.1925,
+      "pendiente_mediana": 2.1636,
+      "n_suben": 15,
+      "n_bajan": 0
+    },
+    "CANTABRIA": {
+      "n_estaciones": 18,
+      "pendiente_media": 0.3954,
+      "pendiente_mediana": 0.3007,
+      "n_suben": 11,
+      "n_bajan": 1
+    },
+    "CASTELLON": {
+      "n_estaciones": 9,
+      "pendiente_media": 1.1948,
+      "pendiente_mediana": 1.0608,
+      "n_suben": 9,
+      "n_bajan": 0
+    },
+    "CEUTA": {
+      "n_estaciones": 1,
+      "pendiente_media": 2.1167,
+      "pendiente_mediana": 2.1167,
+      "n_suben": 1,
+      "n_bajan": 0
+    },
+    "CIUDAD REAL": {
+      "n_estaciones": 10,
+      "pendiente_media": 1.6603,
+      "pendiente_mediana": 1.9015,
+      "n_suben": 10,
+      "n_bajan": 0
+    },
+    "CORDOBA": {
+      "n_estaciones": 15,
+      "pendiente_media": 1.7056,
+      "pendiente_mediana": 1.7583,
+      "n_suben": 15,
+      "n_bajan": 0
+    },
+    "CUENCA": {
+      "n_estaciones": 9,
+      "pendiente_media": 0.9751,
+      "pendiente_mediana": 0.5818,
+      "n_suben": 9,
+      "n_bajan": 0
+    },
+    "GIPUZKOA": {
+      "n_estaciones": 15,
+      "pendiente_media": 1.2021,
+      "pendiente_mediana": 0.8848,
+      "n_suben": 15,
+      "n_bajan": 0
+    },
+    "GIRONA": {
+      "n_estaciones": 16,
+      "pendiente_media": 1.0737,
+      "pendiente_mediana": 1.153,
+      "n_suben": 12,
+      "n_bajan": 1
+    },
+    "GRANADA": {
+      "n_estaciones": 8,
+      "pendiente_media": 1.9574,
+      "pendiente_mediana": 1.8546,
+      "n_suben": 8,
+      "n_bajan": 0
+    },
+    "GUADALAJARA": {
+      "n_estaciones": 6,
+      "pendiente_media": 0.233,
+      "pendiente_mediana": 0.0515,
+      "n_suben": 4,
+      "n_bajan": 1
+    },
+    "HUELVA": {
+      "n_estaciones": 14,
+      "pendiente_media": 1.5024,
+      "pendiente_mediana": 1.5429,
+      "n_suben": 13,
+      "n_bajan": 1
+    },
+    "HUESCA": {
+      "n_estaciones": 23,
+      "pendiente_media": 0.9533,
+      "pendiente_mediana": 0.7515,
+      "n_suben": 17,
+      "n_bajan": 0
+    },
+    "JAEN": {
+      "n_estaciones": 9,
+      "pendiente_media": 2.2089,
+      "pendiente_mediana": 2.3539,
+      "n_suben": 9,
+      "n_bajan": 0
+    },
+    "LA RIOJA": {
+      "n_estaciones": 7,
+      "pendiente_media": 0.4058,
+      "pendiente_mediana": 0.3645,
+      "n_suben": 6,
+      "n_bajan": 0
+    },
+    "LAS PALMAS": {
+      "n_estaciones": 35,
+      "pendiente_media": 1.1098,
+      "pendiente_mediana": 1.0182,
+      "n_suben": 34,
+      "n_bajan": 1
+    },
+    "LEON": {
+      "n_estaciones": 11,
+      "pendiente_media": 0.0352,
+      "pendiente_mediana": 0.0,
+      "n_suben": 3,
+      "n_bajan": 0
+    },
+    "LLEIDA": {
+      "n_estaciones": 13,
+      "pendiente_media": 0.9344,
+      "pendiente_mediana": 0.4721,
+      "n_suben": 9,
+      "n_bajan": 1
+    },
+    "LUGO": {
+      "n_estaciones": 11,
+      "pendiente_media": 0.1558,
+      "pendiente_mediana": 0.0545,
+      "n_suben": 7,
+      "n_bajan": 0
+    },
+    "MADRID": {
+      "n_estaciones": 20,
+      "pendiente_media": 0.8977,
+      "pendiente_mediana": 0.8381,
+      "n_suben": 18,
+      "n_bajan": 1
+    },
+    "MALAGA": {
+      "n_estaciones": 19,
+      "pendiente_media": 2.324,
+      "pendiente_mediana": 2.1152,
+      "n_suben": 19,
+      "n_bajan": 0
+    },
+    "MELILLA": {
+      "n_estaciones": 1,
+      "pendiente_media": 1.2848,
+      "pendiente_mediana": 1.2848,
+      "n_suben": 1,
+      "n_bajan": 0
+    },
+    "MURCIA": {
+      "n_estaciones": 27,
+      "pendiente_media": 1.7315,
+      "pendiente_mediana": 1.6121,
+      "n_suben": 27,
+      "n_bajan": 0
+    },
+    "NAVARRA": {
+      "n_estaciones": 21,
+      "pendiente_media": 0.6223,
+      "pendiente_mediana": 0.4485,
+      "n_suben": 17,
+      "n_bajan": 1
+    },
+    "OURENSE": {
+      "n_estaciones": 12,
+      "pendiente_media": 0.2728,
+      "pendiente_mediana": 0.022,
+      "n_suben": 7,
+      "n_bajan": 1
+    },
+    "PALENCIA": {
+      "n_estaciones": 8,
+      "pendiente_media": 0.0614,
+      "pendiente_mediana": 0.0273,
+      "n_suben": 5,
+      "n_bajan": 0
+    },
+    "PONTEVEDRA": {
+      "n_estaciones": 12,
+      "pendiente_media": 0.1313,
+      "pendiente_mediana": 0.1061,
+      "n_suben": 9,
+      "n_bajan": 1
+    },
+    "SALAMANCA": {
+      "n_estaciones": 13,
+      "pendiente_media": 0.0943,
+      "pendiente_mediana": 0.0014,
+      "n_suben": 7,
+      "n_bajan": 3
+    },
+    "SANTA CRUZ DE TENERIFE": {
+      "n_estaciones": 34,
+      "pendiente_media": 0.8841,
+      "pendiente_mediana": 0.6485,
+      "n_suben": 34,
+      "n_bajan": 0
+    },
+    "SEGOVIA": {
+      "n_estaciones": 6,
+      "pendiente_media": 0.548,
+      "pendiente_mediana": 0.5472,
+      "n_suben": 6,
+      "n_bajan": 0
+    },
+    "SEVILLA": {
+      "n_estaciones": 15,
+      "pendiente_media": 2.2826,
+      "pendiente_mediana": 2.6667,
+      "n_suben": 15,
+      "n_bajan": 0
+    },
+    "SORIA": {
+      "n_estaciones": 11,
+      "pendiente_media": 0.0497,
+      "pendiente_mediana": 0.0061,
+      "n_suben": 6,
+      "n_bajan": 0
+    },
+    "TARRAGONA": {
+      "n_estaciones": 11,
+      "pendiente_media": 1.3501,
+      "pendiente_mediana": 1.497,
+      "n_suben": 11,
+      "n_bajan": 0
+    },
+    "TERUEL": {
+      "n_estaciones": 17,
+      "pendiente_media": 0.9734,
+      "pendiente_mediana": 0.3576,
+      "n_suben": 15,
+      "n_bajan": 1
+    },
+    "TOLEDO": {
+      "n_estaciones": 9,
+      "pendiente_media": 1.5223,
+      "pendiente_mediana": 1.4987,
+      "n_suben": 9,
+      "n_bajan": 0
+    },
+    "VALENCIA": {
+      "n_estaciones": 18,
+      "pendiente_media": 1.0928,
+      "pendiente_mediana": 1.2591,
+      "n_suben": 18,
+      "n_bajan": 0
+    },
+    "VALLADOLID": {
+      "n_estaciones": 8,
+      "pendiente_media": 0.2213,
+      "pendiente_mediana": 0.2538,
+      "n_suben": 8,
+      "n_bajan": 0
+    },
+    "ZAMORA": {
+      "n_estaciones": 12,
+      "pendiente_media": 0.1362,
+      "pendiente_mediana": 0.0379,
+      "n_suben": 9,
+      "n_bajan": 1
+    },
+    "ZARAGOZA": {
+      "n_estaciones": 14,
+      "pendiente_media": 1.3383,
+      "pendiente_mediana": 1.3879,
+      "n_suben": 14,
+      "n_bajan": 0
+    }
+  },
+  "limitaciones": "Diez veranos son una serie corta. Estos datos describen lo que ha ocurrido en las noches de verano españolas entre 2017 y 2026 en las estaciones de AEMET, y nada más: no constituyen una tendencia climática en sentido estricto, que exigiría series de treinta años o más, ni permiten atribuir lo observado al cambio climático, algo que requiere estudios específicos de detección y atribución. Las series diarias de AEMET no están homogeneizadas, de modo que un traslado de garita o un cambio de sensor pueden producir saltos que no son climáticos; las estaciones con saltos sospechosos van marcadas. Fuente: AEMET."
+}

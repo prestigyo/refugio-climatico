@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-26",
- "total": 854,
- "tropicales": 207,
- "ecuatoriales": 14,
+ "fecha": "2026-08-29",
+ "total": 852,
+ "tropicales": 83,
+ "ecuatoriales": 4,
  "peor": {
-  "id": "B051A",
-  "nombre": "Sóller",
-  "min": 26.5,
+  "id": "B569X",
+  "nombre": "Capdepera-Faro",
+  "min": 25.6,
   "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "9677",
-  "nombre": "Port Aine L?orri",
-  "min": 8.5,
-  "prov": "Lleida"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 3.8,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "B051A",
-   "nombre": "Sóller",
-   "min": 26.5,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 26.3,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 26.1,
+   "min": 25.6,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "0201D",
+   "nombre": "Barcelona Port Olímpic",
+   "min": 25.5,
+   "prov": "Barcelona"
+  },
+  {
+   "id": "B860X",
+   "nombre": "Ciutadella-Son Quim",
+   "min": 24.8,
    "prov": "Illes Balears"
   },
   {
    "id": "B087X",
    "nombre": "Banyalbufar",
-   "min": 26.0,
+   "min": 24.7,
    "prov": "Illes Balears"
   },
   {
-   "id": "7012X",
-   "nombre": "Cartagena",
-   "min": 25.9,
-   "prov": "Murcia"
-  },
-  {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 25.7,
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 24.7,
    "prov": "Illes Balears"
   },
   {
-   "id": "0201X",
-   "nombre": "Barcelona Drassanes",
-   "min": 25.5,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "B925",
-   "nombre": "Sant Antoni de Portmany",
-   "min": 25.4,
+   "id": "B603X",
+   "nombre": "Colònia Sant Pere-Can Mengol",
+   "min": 24.6,
    "prov": "Illes Balears"
   },
   {
-   "id": "7002Y",
-   "nombre": "Águilas",
-   "min": 25.1,
-   "prov": "Murcia"
+   "id": "B398A",
+   "nombre": "Cabrera Parque Nacional de Cabrera",
+   "min": 24.4,
+   "prov": "Illes Balears"
   },
   {
-   "id": "8416",
-   "nombre": "Valencia Dt",
-   "min": 25.1,
-   "prov": "Valencia"
+   "id": "B780X",
+   "nombre": "Port Pollença-Aerodrom",
+   "min": 24.3,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B825B",
+   "nombre": "Mercadal",
+   "min": 24.1,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B434X",
+   "nombre": "Portocolom",
+   "min": 24.0,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 8.5,
-   "prov": "Lleida"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 3.8,
+   "prov": "Ávila"
   },
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 8.7,
+   "min": 4.4,
    "prov": "Lleida"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 8.8,
-   "prov": "Ávila"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 4.7,
+   "prov": "Zamora"
+  },
+  {
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 5.4,
+   "prov": "Soria"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 5.4,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 5.6,
+   "prov": "Burgos"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 5.6,
+   "prov": "Lleida"
   },
   {
    "id": "9839V",
    "nombre": "Cerler Cogulla",
-   "min": 9.0,
+   "min": 5.6,
    "prov": "Huesca"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 9.2,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 9.3,
-   "prov": "Asturias"
-  },
-  {
-   "id": "2005Y",
-   "nombre": "Vinuesa",
-   "min": 9.4,
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 5.7,
    "prov": "Soria"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 9.4,
-   "prov": "Madrid"
-  },
-  {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 9.6,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2017Y",
-   "nombre": "Barriomartin-el Robledo",
-   "min": 9.7,
-   "prov": "Soria"
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": 5.9,
+   "prov": "Cuenca"
   }
  ]
 }

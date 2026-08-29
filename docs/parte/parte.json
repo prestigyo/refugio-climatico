@@ -1,25 +1,37 @@
 {
  "fecha": "2026-08-29",
  "total": 851,
- "tropicales": 82,
- "ecuatoriales": 3,
+ "tropicales": 80,
+ "ecuatoriales": 4,
  "peor": {
   "id": "B569X",
   "nombre": "Capdepera-Faro",
-  "min": 25.6,
+  "min": 26.3,
   "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 3.8,
-  "prov": "Ávila"
+  "id": "2192C",
+  "nombre": "Cuellar",
+  "min": 3.7,
+  "prov": "Segovia"
  },
  "top_calor": [
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 25.6,
+   "min": 26.3,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B780X",
+   "nombre": "Port Pollença-Aerodrom",
+   "min": 25.2,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B103B",
+   "nombre": "Andratx - Sant Elm",
+   "min": 24.9,
    "prov": "Illes Balears"
   },
   {
@@ -53,12 +65,6 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "B780X",
-   "nombre": "Port Pollença-Aerodrom",
-   "min": 24.3,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "B825B",
    "nombre": "Mercadal",
    "min": 24.1,
@@ -69,26 +75,20 @@
    "nombre": "Portocolom",
    "min": 24.0,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "B103B",
-   "nombre": "Andratx - Sant Elm",
-   "min": 23.9,
-   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 3.7,
+   "prov": "Segovia"
+  },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
    "min": 3.8,
    "prov": "Ávila"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 4.4,
-   "prov": "Lleida"
   },
   {
    "id": "2766E",
@@ -97,16 +97,16 @@
    "prov": "Zamora"
   },
   {
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": 5.3,
+   "prov": "Cuenca"
+  },
+  {
    "id": "2048A",
    "nombre": "Moron de Almazan",
    "min": 5.4,
    "prov": "Soria"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 5.4,
-   "prov": "Segovia"
   },
   {
    "id": "2298",
@@ -133,10 +133,10 @@
    "prov": "Soria"
   },
   {
-   "id": "8245Y",
-   "nombre": "Mira",
-   "min": 5.9,
-   "prov": "Cuenca"
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 5.7,
+   "prov": "Madrid"
   }
  ]
 }

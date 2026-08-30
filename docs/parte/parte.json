@@ -109,6 +109,12 @@
    "prov": "Teruel"
   },
   {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 7.2,
+   "prov": "Soria"
+  },
+  {
    "id": "3013",
    "nombre": "Molina de Aragón",
    "min": 7.2,
@@ -125,12 +131,6 @@
    "nombre": "Sigüenza",
    "min": 7.2,
    "prov": "Guadalajara"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 7.2,
-   "prov": "Soria"
   },
   {
    "id": "9287A",

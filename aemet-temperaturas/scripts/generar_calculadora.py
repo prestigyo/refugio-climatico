@@ -101,6 +101,9 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 AEMET_DIR = SCRIPT_DIR.parent                 # aemet-temperaturas/
 REPO_ROOT = AEMET_DIR.parent                  # raíz del repo
 RANKING_CSV = AEMET_DIR / "analisis" / "refugios_nocturnos_ranking.csv"
+# Umbral AEMET de noche tropical. Se nombra una vez para no repartir el 20 por
+# el fichero: es el número que define todo el proyecto.
+UMBRAL_NOCHE_TROPICAL = 20.0
 DOCS_DIR = REPO_ROOT / "docs"                 # GitHub Pages sirve /docs en raíz
 OUT_HTML = DOCS_DIR / "index.html"
 
@@ -1191,7 +1194,8 @@ _F_EXPLORA = [("El Observatorio del Descanso", "/observatorio-del-descanso/"),
               ("Ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
               ("El parte de la noche", "/parte/"),
               ("Certificados de refugio climático", "/certificados/")]
-_F_GUIAS = [("Aumento de noches tropicales en España", "/aumento-noches-tropicales-espana/"),
+_F_GUIAS = [("Qué es una noche tropical", "/noches-tropicales/"),
+            ("Aumento de noches tropicales en España", "/aumento-noches-tropicales-espana/"),
             ("Cómo dormir con calor sin aire acondicionado", "/dormir-con-calor/"),
             ("Vacaciones sin calor: dónde ir en verano", "/vacaciones-sin-calor/"),
             ("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
@@ -1420,7 +1424,7 @@ def bloque_sigue(site: str, carpeta: str) -> str:
 def enlace_certificado(e: dict, site: str) -> str:
     """El nombre del lugar, enlazado a su certificado si lo tiene.
 
-    Un certificado existe para cada estación con menos de 1 noche tropical al
+    Un certificado existe para cada estación con menos de una noche tropical al
     año — la misma regla con la que los genera scripts/generar_certificados.py,
     y su URL sale del nombre de la ESTACIÓN, no del municipio. Sin este enlace
     los certificados eran inalcanzables: aparecían 217 pueblos en las tablas y
@@ -1724,8 +1728,48 @@ def ntfmt(nt: float) -> str:
 def nt_prosa(nt: float) -> str:
     """Como ntfmt pero para texto plano (meta description): sin entidades HTML."""
     if nt < 1:
-        return "menos de 1"
+        return "menos de una"
     return f"{nt:.1f}".replace(".", ",") if nt < 10 else f"{round(nt)}"
+
+
+# ---------------------------------------------------------------------------
+# CONCORDANCIA. El snippet de /valencia/ salía en Bing como «1 estación de
+# Valencia no llegan a 1 noche tropical», con dos fallos en la misma frase: el
+# verbo en plural con sujeto singular y el numeral en cifra donde el castellano
+# pide letra. Se corrige de raíz con un helper único en vez de parchear frase
+# a frase, porque estas plantillas se replican en 52 páginas.
+# ---------------------------------------------------------------------------
+def plural(n, singular: str, plural_: str, uno: str = "una") -> str:
+    """'una noche' / '3 noches'. Con n == 1 el numeral va en letra."""
+    if n == 1:
+        return f"{uno} {singular}"
+    return f"{n} {plural_}"
+
+
+def nt_frase(nt: float, singular: str = "noche tropical",
+             plural_: str = "noches tropicales") -> str:
+    """La cifra CON su sustantivo, concordada.
+
+    'menos de una noche tropical' · 'una noche tropical' · '2,1 noches tropicales'.
+    Con decimales el castellano pide plural ('1,2 noches'), así que el singular
+    solo salta cuando el valor redondeado a una decimal es exactamente 1,0 —
+    no basta comparar la cadena, porque ntfmt(1.0) devuelve '1,0'.
+    """
+    if nt < 1:
+        return f"menos de una {singular}"
+    if round(nt, 1) == 1.0:
+        return f"una {singular}"
+    return f"{ntfmt(nt)} {plural_}"
+
+
+def nt_frase_unas(nt: float) -> str:
+    """Como nt_frase pero absorbiendo el 'unas' aproximativo: 'unas 3,2 noches
+    tropicales' frente a 'una noche tropical' (donde 'unas una' sería absurdo)."""
+    if nt < 1:
+        return "menos de una noche tropical"
+    if round(nt, 1) == 1.0:
+        return "una noche tropical"
+    return f"unas {ntfmt(nt)} noches tropicales"
 
 
 def construir_schema_provincia(prov: str, site: str, sl: str, n: int, titulo: str,
@@ -1768,15 +1812,15 @@ def prosa_contraste(prov: str, mejor: dict, peor: dict, n: int) -> str:
         return (f"<h2>Una sola estación con datos suficientes</h2>"
                 f"<p>{prov} solo tiene una estación de AEMET con cobertura suficiente para este "
                 f"análisis: <b>{mejor['loc']}</b>, a {miles(mejor['alt'])} m de altitud, con "
-                f"{ntfmt(mejor['nt'])} noches tropicales al año de media. No hay aquí más puntos "
+                f"{nt_frase(mejor['nt'])} al año de media. No hay aquí más puntos "
                 f"de comparación dentro de la provincia.</p>")
-    ratio = (f" — unas {round(peor['nt'] / mejor['nt'], 1)} veces más"
+    ratio = (f" — unas {_n_es(peor['nt'] / mejor['nt'])} veces más"
              if mejor["nt"] >= 1 else "")
     alt_mejor = miles(mejor["alt"])
     alt_peor = miles(peor["alt"])
     return (f"<h2>El contraste en {prov}</h2>"
             f"<p>{prov} tiene {n} estaciones de AEMET con datos suficientes. En <b>{mejor['loc']}</b> "
-            f"({alt_mejor} m) se cuentan {ntfmt(mejor['nt'])} noches tropicales al año, mientras que "
+            f"({alt_mejor} m) se cuentan {nt_frase(mejor['nt'])} al año, mientras que "
             f"en <b>{peor['loc']}</b> ({alt_peor} m) suben hasta {ntfmt(peor['nt'])}{ratio}. Cuanto "
             f"más alta y más alejada de la costa está una estación, más fácil que el aire se enfríe "
             f"de noche; cuanto más próxima al mar o en una cubeta de baja altitud, más cuesta que la "
@@ -1786,30 +1830,35 @@ def prosa_contraste(prov: str, mejor: dict, peor: dict, n: int) -> str:
 def prosa_refugios(prov: str, refugios: list) -> str:
     if not refugios:
         return (f"<h2>Los refugios climáticos de {prov}</h2>"
-                f"<p>Ninguna estación de {prov} baja de 1 noche tropical al año de media, así que "
+                f"<p>Ninguna estación de {prov} baja de una noche tropical al año de media, así que "
                 f"no hay aquí un refugio en sentido estricto. La tabla de arriba está ordenada de la "
                 f"más fresca a la más calurosa: las primeras filas son las que mejor concilian el "
                 f"sueño en la provincia.</p>")
     nombres = ", ".join(f"<b>{e['loc']}</b> ({e['alt']:,} m)".replace(",", ".")
                          for e in refugios[:6])
-    plural = "estaciones" if len(refugios) > 1 else "estación"
+    cuantas = plural(len(refugios), "estación", "estaciones")
+    verbo = "llega" if len(refugios) == 1 else "llegan"
     return (f"<h2>Los refugios climáticos de {prov}</h2>"
-            f"<p>{len(refugios)} {plural} de {prov} no llegan a 1 noche tropical al año de media: "
+            f"<p>{cuantas.capitalize()} de {prov} no {verbo} a una noche tropical al año de media: "
             f"{nombres}. Son los puntos donde, incluso en pleno verano, la temperatura nocturna baja "
             f"con fiabilidad de los 20&nbsp;°C — normalmente por la altitud, la lejanía del mar o "
             f"ambas cosas a la vez.</p>")
 
 
 def prosa_peores(prov: str, peores: list, mejor: dict) -> str:
-    nombres = ", ".join(f"<b>{e['loc']}</b> ({ntfmt(e['nt'])} noches/año)" for e in peores)
+    nombres = ", ".join(
+        f"<b>{e['loc']}</b> ({nt_frase(e['nt'], 'noche/año', 'noches/año')})" for e in peores)
     return (f"<h2>Las localidades donde peor se duerme</h2>"
             f"<p>En el otro extremo, donde peor se duerme en {prov}: {nombres}. Frente a las "
-            f"{ntfmt(mejor['nt'])} noches tropicales de {mejor['loc']}, la diferencia suele "
+            f"{nt_frase(mejor['nt'])} de {mejor['loc']}, la diferencia suele "
             f"explicarse por la cercanía al mar, la baja altitud o el efecto urbano: el asfalto y el "
             f"cemento retienen el calor del día y lo devuelven por la noche.</p>")
 
 
-def prosa_metodologia(prov: str, n: int, fecha_txt: str) -> str:
+def prosa_metodologia(prov: str, n: int, fecha_txt: str, site: str = SITE_URL) -> str:
+    # OJO: el site va INTERPOLADO, no con marcador. La plantilla de provincia
+    # sustituye __PROSA__ DESPUÉS de __SITE__, así que un __SITE__ escrito aquí
+    # sobreviviría literal hasta el HTML publicado (ya pasó una vez).
     de_n_estaciones = f"de la única estación" if n == 1 else f"de las {n} estaciones"
     return (f"<h2>Metodología</h2>"
             f"<p>Una <b>noche tropical</b> es aquella en la que la temperatura mínima no baja de "
@@ -1820,8 +1869,12 @@ def prosa_metodologia(prov: str, n: int, fecha_txt: str) -> str:
             f"menos 60 días con mínima registrada), promediando los veranos (junio–agosto) de 2017 a "
             f"2026. Limitación: el dato es de la estación, no del municipio entero — en zonas de "
             f"montaña la temperatura puede cambiar mucho en pocos kilómetros según el desnivel.</p>"
+            f'<p>Si has llegado hasta aquí buscando el término, la explicación completa '
+            f'—definición de AEMET, noche ecuatorial, cuántas hay en España y por qué la '
+            f'altitud manda— está en <a href="{site}/noches-tropicales/">qué es una noche '
+            f'tropical</a>.</p>'
             f"<p>El ritmo al que cada zona de España está perdiendo sus noches frescas, "
-            f'estación a estación: <a href="__SITE__/aumento-noches-tropicales-espana/">'
+            f'estación a estación: <a href="{site}/aumento-noches-tropicales-espana/">'
             f"España pierde sus noches frescas</a>.</p>"
             f"<p class=\"note\">Última actualización de los datos: {fecha_txt}.</p>")
 
@@ -1858,20 +1911,20 @@ def ficha_datos(fecha_iso: str, fecha_txt: str, periodo: str = "veranos 2017–2
 def construir_faq_provincia(prov: str, mejor: dict, peor: dict, n: int) -> list[tuple[str, str]]:
     faq = [
         (f"¿Dónde se duerme mejor en {prov} en verano?",
-         f"En {mejor['loc']} ({miles(mejor['alt'])} m de altitud), con unas {ntfmt(mejor['nt'])} noches "
-         "tropicales al año según los datos de AEMET."),
+         f"En {mejor['loc']} ({miles(mejor['alt'])} m de altitud), con "
+         f"{nt_frase_unas(mejor['nt'])} al año según los datos de AEMET."),
         ("¿Qué es exactamente una noche tropical?",
          "Una noche en la que la temperatura mínima no baja de 20 °C. Es el indicador que mejor "
          "refleja si se descansa bien, porque no se diluye en una media como pasaría con la "
          "temperatura mínima media."),
         (f"¿Cuál es el pueblo más fresco de {prov}?",
-         f"{mejor['loc']}, a {miles(mejor['alt'])} m de altitud, con unas {ntfmt(mejor['nt'])} noches "
-         "tropicales al año de media."),
+         f"{mejor['loc']}, a {miles(mejor['alt'])} m de altitud, con "
+         f"{nt_frase_unas(mejor['nt'])} al año de media."),
     ]
     if n > 1:
         faq.append((f"¿Cuál es el pueblo donde peor se duerme en {prov}?",
-                     f"{peor['loc']}, con unas {ntfmt(peor['nt'])} noches tropicales al año — frente "
-                     f"a las {ntfmt(mejor['nt'])} de {mejor['loc']}."))
+                     f"{peor['loc']}, con {nt_frase_unas(peor['nt'])} al año — frente "
+                     f"a {ntfmt(mejor['nt'])} de {mejor['loc']}."))
     faq.append(("¿De dónde salen los datos?",
                 "De AEMET OpenData, la API pública de la Agencia Estatal de Meteorología. Se usan los "
                 "datos diarios de temperatura mínima de los veranos (junio–agosto) de 2017 a 2026."))
@@ -2049,16 +2102,40 @@ def cargar_humedad_estaciones(estaciones: list) -> dict:
     return out
 
 
-def cargar_tendencia_provincias(estaciones: list) -> dict:
+# La página pilar /noches-tropicales/ declara en su metodología que cuenta de
+# JUNIO A SEPTIEMBRE, mientras que el ranking y las landings provinciales usan
+# jun–ago. Se respeta cada uno en su sitio y la diferencia queda explicada en la
+# propia página; mezclarlos sería peor que tener dos ventanas declaradas.
+MESES_VERANO_PILAR = ("06", "07", "08", "09")
+
+
+def anio_balance(hoy: date | None = None) -> int:
+    """El último verano CERRADO. Se deriva de la fecha de ejecución: hasta que
+    no pasa el 30 de septiembre, el verano en curso no cuenta como cerrado."""
+    hoy = hoy or date.today()
+    return hoy.year if (hoy.month, hoy.day) > (9, 30) else hoy.year - 1
+
+
+def cargar_tendencia_provincias(estaciones: list, anio_bal: int | None = None) -> tuple[dict, dict]:
     """Media de noches tropicales por estación y verano (jun–ago), por provincia
     y año, leyendo los CSV diarios (2017–2026). Devuelve {provincia: {año: media}}.
+
+    En la MISMA pasada (los diarios son ~200 MB: leerlos dos veces costaría otros
+    20 s) acumula lo que necesita la página pilar, con su propia ventana jun–sep:
+    conteos por estación y año, y las fechas de noche tropical del verano del
+    balance para poder medir la racha consecutiva más larga.
     Contenido ÚNICO por provincia (rompe la similitud de plantilla ante Google) y
     a la vez noticiable. Degrada a {} si no hay CSVs diarios disponibles.
 
     Nota: lee ~200 MB una sola vez; con csv.reader (no DictReader) tarda ~20 s."""
     ind_prov = {e["id"]: e["prov"] for e in estaciones}
+    anio_bal = anio_bal if anio_bal is not None else anio_balance()
     from collections import defaultdict
     acc: dict = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: [0, 0])))
+    # Pilar: {indicativo: {año: [n_tropicales, n_dias]}} sobre jun-sep
+    pilar: dict = defaultdict(lambda: defaultdict(lambda: [0, 0]))
+    # Fechas de noche tropical del verano del balance, para la racha
+    fechas_bal: dict = defaultdict(list)
     datos_dir = AEMET_DIR / "datos"
     for path in sorted(datos_dir.glob("diarios_2*.csv")):
         with path.open(encoding="utf-8", newline="") as fh:
@@ -2077,15 +2154,28 @@ def cargar_tendencia_provincias(estaciones: list) -> dict:
                 if not prov:
                     continue
                 fecha = row[i_f]
-                if fecha[5:7] not in ("06", "07", "08"):
+                mes = fecha[5:7]
+                if mes not in MESES_VERANO_PILAR:
                     continue
                 try:
                     tmin = float(row[i_tmin])
                 except ValueError:
                     continue
-                celda = acc[prov][int(fecha[:4])][row[i_ind]]
+                anio = int(fecha[:4])
+                tropical = tmin >= UMBRAL_NOCHE_TROPICAL
+                # Ventana del pilar: junio a septiembre
+                cp = pilar[row[i_ind]][anio]
+                cp[1] += 1
+                if tropical:
+                    cp[0] += 1
+                    if anio == anio_bal:
+                        fechas_bal[row[i_ind]].append(fecha)
+                # Ventana del resto del sitio: junio a agosto
+                if mes == "09":
+                    continue
+                celda = acc[prov][anio][row[i_ind]]
                 celda[1] += 1
-                if tmin >= 20:
+                if tropical:
                     celda[0] += 1
     resultado: dict = {}
     for prov, anios in acc.items():
@@ -2097,7 +2187,78 @@ def cargar_tendencia_provincias(estaciones: list) -> dict:
                 serie[anio] = sum(vals) / len(vals)
         if serie:
             resultado[prov] = serie
-    return resultado
+    return resultado, _balance_nacional(pilar, fechas_bal, anio_bal, estaciones)
+
+
+def _racha_maxima(fechas: list) -> int:
+    """Noches tropicales consecutivas más largas de una lista de 'AAAA-MM-DD'."""
+    if not fechas:
+        return 0
+    dias = sorted({date.fromisoformat(f) for f in fechas})
+    mejor = actual = 1
+    for a, b in zip(dias, dias[1:]):
+        actual = actual + 1 if (b - a).days == 1 else 1
+        mejor = max(mejor, actual)
+    return mejor
+
+
+def _balance_nacional(pilar: dict, fechas_bal: dict, anio_bal: int, estaciones: list) -> dict:
+    """Cifras nacionales de la página pilar. Todo calculado, nada escrito a mano.
+
+    Solo cuentan los pares estación-verano con el verano bien cubierto (>=90 días
+    con mínima sobre los 122 de junio a septiembre): un verano a medias inflaría
+    o hundiría la media según qué mitad falte.
+    """
+    nombre = {e["id"]: e for e in estaciones}
+    MIN_DIAS = 90
+    por_anio: dict = {}
+    total_serie: dict = {}
+    for ind, anios in pilar.items():
+        if ind not in nombre:
+            continue
+        for anio, (nt, dias) in anios.items():
+            if dias < MIN_DIAS:
+                continue
+            por_anio.setdefault(anio, {})[ind] = nt
+            total_serie[ind] = total_serie.get(ind, 0) + nt
+
+    anios = sorted(por_anio)
+    if not anios:
+        return {}
+    bal = por_anio.get(anio_bal) or por_anio[anios[-1]]
+    anio_usado = anio_bal if anio_bal in por_anio else anios[-1]
+
+    # Media anual de cada estación sobre los veranos que tiene bien cubiertos:
+    # es la cifra que la página da como "el punto más cálido". Tiene que salir de
+    # ESTA ventana (jun-sep) y no del ranking (jun-ago), o la página se
+    # contradiría con su propio párrafo de metodología.
+    veranos_est: dict = {}
+    for anio, v in por_anio.items():
+        for ind, nt in v.items():
+            veranos_est.setdefault(ind, []).append(nt)
+    medias_est = {i: sum(v) / len(v) for i, v in veranos_est.items() if v}
+
+    medias = {a: sum(v.values()) / len(v) for a, v in por_anio.items()}
+    media_serie = sum(medias.values()) / len(medias)
+    media_bal = medias[anio_usado]
+
+    peor_id = max(bal, key=lambda i: bal[i])
+    rachas = {i: _racha_maxima(f) for i, f in fechas_bal.items() if i in nombre}
+    racha_id = max(rachas, key=lambda i: rachas[i]) if rachas else peor_id
+
+    return {
+        "anio": anio_usado,
+        "anios": anios,
+        "n_veranos": len(anios),
+        "n_estaciones_bal": len(bal),
+        "total_nt": sum(bal.values()),
+        "media_bal": media_bal,
+        "media_serie": media_serie,
+        "n_cero_serie": sum(1 for i, t in total_serie.items() if t == 0),
+        "max_nt_medio": round(max(medias_est.values())) if medias_est else 0,
+        "peor": {**nombre[peor_id], "nt_anio": bal[peor_id]},
+        "racha": {**nombre[racha_id], "dias": rachas.get(racha_id, 0)},
+    }
 
 
 def cargar_ultima_noche(estaciones: list) -> dict:
@@ -2464,10 +2625,10 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
     def _nt_frase(nt: float, con_al_anio: bool = True) -> str:
         sufijo = " al año" if con_al_anio else ""
         if nt < 1:
-            return f"menos de <b>1 noche tropical</b>{sufijo}"
+            return f"menos de <b>una noche tropical</b>{sufijo}"
         n_ = round(nt)
         if n_ == 1:
-            return f"<b>1 noche tropical</b>{sufijo}"
+            return f"<b>una noche tropical</b>{sufijo}"
         return f"<b>{n_} noches tropicales</b>{sufijo}"
 
     alt_mejor = f"{mejor['alt']:,}".replace(",", ".")
@@ -2505,14 +2666,15 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
     # que es lo que se viene a buscar. Se dice «estaciones meteorológicas»
     # entero: «estaciones» a secas se confunde con las del año o las de tren.
     if n <= 1:
-        cuenta = ("no se cuenta ni 1 noche tropical al año" if mejor["nt"] < 1
-                  else f"se cuentan {nt_prosa(mejor['nt'])} noches tropicales al año")
+        cuenta = ("no se cuenta ni una noche tropical al año" if mejor["nt"] < 1
+                  else f"se cuentan {nt_frase(mejor['nt'])} al año")
         desc = (f"La única estación meteorológica de AEMET en {prov_titulo}, con diez "
                 f"veranos de datos: {cuenta}. ¿Se duerme bien ahí?")
     else:
         hueco = max(0.0, peor["nt"] - mejor["nt"])
         if hueco >= 1:
-            tension = f"{nt_prosa(hueco)} noches tropicales separan la mejor de la peor"
+            tension = (f"{nt_frase(hueco)} separa"
+                       f"{'' if round(hueco, 1) == 1.0 else 'n'} la mejor de la peor")
         else:
             tension = "en ninguna se llega a una noche tropical al año"
         desc = (f"Las {n} estaciones meteorológicas de AEMET en {prov_titulo} ordenadas "
@@ -2540,7 +2702,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
              + prosa_refugios(prov, refugios)
              + cta_refugio
              + (prosa_peores(prov, peores, mejor) + cta_ola if peores else "")
-             + prosa_metodologia(prov, n, fecha_mod_txt))
+             + prosa_metodologia(prov, n, fecha_mod_txt, site))
 
     faq = construir_faq_provincia(prov, mejor, peor, n)
     schema = json.dumps(
@@ -3060,7 +3222,7 @@ def construir_pagina_prensa(datos: dict, estaciones: list, site: str,
         f"(a {miles(fo['alt'])}&nbsp;m) suma unas {round(fo['nt'])} noches tropicales al año.",
         "<b>Los refugios son montaña interior:</b> sierras de Teruel, Pirineos, Gredos o "
         "Sierra Nevada apenas registran noches tropicales en una década.",
-        f"<b>El contraste de manual:</b> {cr['loc']} ({ntfmt(cr['nt'])} noches/año) frente a "
+        f"<b>El contraste de manual:</b> {cr['loc']} ({nt_frase(cr['nt'], 'noche/año', 'noches/año')}) frente a "
         f"{ch['loc']} (~{round(ch['nt'])}). Mismo país, dos veranos distintos.",
     ]
     datos_html = "".join(f"<li>{x}</li>" for x in items)
@@ -3988,7 +4150,7 @@ __CSS_COMUN__
           <span><i style="background:var(--c-ref)"></i>Refugio</span><span><i style="background:var(--c-bien)"></i>Se duerme bien</span><span><i style="background:var(--c-temp)"></i>Templado</span><span><i style="background:var(--c-suda)"></i>Se suda</span><span><i style="background:var(--c-horno)"></i>Horno</span>
         </div>
       </div>
-      <p class="howto">Cómo leerlo: cuanto más <b>abajo/izquierda</b>, más fresco (un <b>refugio</b> es &lt;1 noche tropical al año); cuanto más <b>arriba/derecha</b>, más se suda. Cada pueblo cae en una de las cinco <b>zonas</b>.</p>
+      <p class="howto">Cómo leerlo: cuanto más <b>abajo/izquierda</b>, más fresco (un <b>refugio</b> es menos de una noche tropical al año); cuanto más <b>arriba/derecha</b>, más se suda. Cada pueblo cae en una de las cinco <b>zonas</b>.</p>
     </div>
     <div class="find">
       <div class="field sel"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
@@ -4022,6 +4184,7 @@ __CSS_COMUN__
     </div>
     <h2 class="sec-h" id="articulos">Artículos y estudios</h2>
     <div class="mods">
+      <a class="card2 destacada" href="__SITE__/noches-tropicales/"><h3>🌡️ Qué es una noche tropical</h3><p>La guía completa: definición de AEMET, cuántas hay en España, dónde y por qué. Con el balance del último verano.</p></a>
       <a class="card2" href="__SITE__/aumento-noches-tropicales-espana/"><h3>España pierde sus noches frescas</h3><p>746 estaciones, diez veranos: 54 pueblos ya no tienen cero.</p></a>
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
       <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>25 hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
@@ -4293,7 +4456,7 @@ function hav(la1,lo1,la2,lo2){var R=6371,r=Math.PI/180,dLa=(la2-la1)*r,dLo=(lo2-
  var x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
  return 2*R*Math.asin(Math.sqrt(x));}
 function km(d){return d<10?d.toFixed(1).replace(".",","):Math.round(d)+"";}
-function ntTxt(nt){return nt===0?"cero noches tropicales al año":(nt<1?"menos de 1 noche tropical al año":nt.toFixed(1).replace(".",",")+" al año");}
+function ntTxt(nt){return nt===0?"cero noches tropicales al año":(nt<1?"menos de una noche tropical al año":(nt.toFixed(1)==="1.0"?"una noche tropical al año":nt.toFixed(1).replace(".",",")+" noches tropicales al año"));}
 function pinta(la,lo,origen){
  var lista=REF.map(function(x){return {x:x,d:hav(la,lo,x.la,x.lo)};}).sort(function(a,b){return a.d-b.d;}).slice(0,5);
  var ol=document.getElementById("refs"); ol.innerHTML="";
@@ -6517,7 +6680,7 @@ __NAV__
 <section><div class="wrap"><div class="dcols">
   <div>
   <div class="twrap"><table>
-    <caption>Un destino fresco por provincia, ordenados por altitud. Todos con menos de 1 noche tropical al año de media.</caption>
+    <caption>Un destino fresco por provincia, ordenados por altitud. Todos con menos de una noche tropical al año de media.</caption>
     <thead><tr><th>Pueblo / zona</th><th>Provincia</th><th class="hide r">Altitud</th><th class="r">Noches trop./año</th></tr></thead>
     <tbody>__TABLA__</tbody>
   </table></div>
@@ -6576,12 +6739,12 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
             f'<td class="n">&lt;1</td></tr>')
     top = destinos[0]
     desc = (f"{len(destinos)} pueblos medidos por AEMET donde se duerme con manta en pleno "
-            f"agosto, de {top['loc']} ({miles(top['alt'])} m) para abajo: menos de 1 noche "
+            f"agosto, de {top['loc']} ({miles(top['alt'])} m) para abajo: menos de una noche "
             f"tropical al año. El mapa de los destinos frescos de España.")
     faq = [
         ("¿Dónde se puede dormir con manta en verano en España?",
          f"En las sierras del interior, entre 600 y 1.700 m: {len(destinos)} zonas medidas "
-         f"por AEMET no llegan a 1 noche tropical al año. Las más altas: "
+         f"por AEMET no llegan a una noche tropical al año. Las más altas: "
          + ", ".join(f"{e['loc']} ({e['prov']})" for e in destinos[:3]) + "."),
         ("¿Cuáles son los destinos más frescos de España para agosto?",
          "Los pueblos de montaña del interior peninsular: sierras de Teruel y Cuenca, "
@@ -6815,6 +6978,245 @@ __NAV__
 __FOOTER__
 </body></html>
 """
+
+
+# ---------------------------------------------------------------------------
+# PÁGINA PILAR /noches-tropicales/
+#
+# Search Console (cierre 27/08/2026): el sitio está en posición 2,2 para
+# «noches tropicales zaragoza» y en la 24,4 para «noches tropicales» a secas.
+# Ninguna página reclamaba el término raíz: competían la home, el ranking y las
+# 52 provinciales, y Google no elegía. Esta página lo reclama en exclusiva y
+# absorbe además el racimo definicional («qué se considera noche tropical»,
+# «a partir de qué temperatura»…), que estaba en posiciones 7-10 con CERO clics.
+#
+# Ninguna cifra va escrita a mano: todas salen de _balance_nacional() y del
+# ranking en tiempo de build, y el año del balance se deriva de la fecha.
+# ---------------------------------------------------------------------------
+PAGINA_PILAR = r"""<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noches tropicales en España: cuántas y dónde</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/noches-tropicales/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Noches tropicales en España: cuántas y dónde">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/noches-tropicales/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=Lora:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif;--fm:ui-monospace,monospace}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.7;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+ a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+ header.h{padding:46px 0 12px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:16px 0 8px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(29px,5.6vw,44px);line-height:1.05;letter-spacing:-.01em}
+ .intro{color:var(--muted);font-size:clamp(15.5px,2.5vw,18px);margin:16px 0 0;max-width:62ch}
+ .intro b{color:var(--paper)}
+ section{padding:18px 0}
+ h2{font-family:var(--fd);font-weight:600;font-size:clamp(20px,3.6vw,26px);margin:26px 0 10px}
+ p{color:#d9ccb6;font-size:16px;margin:0 0 15px;max-width:66ch}p b{color:var(--paper)}
+ .fichadatos{font-size:13px;color:var(--muted);border-left:3px solid var(--teja);padding:6px 12px;margin:14px 0}
+ .cifras{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+ .cifras .c{border:1px solid var(--line);border-radius:14px;padding:15px 13px;background:linear-gradient(180deg,var(--bg2),var(--panel));text-align:center}
+ .cifras .n{font-family:var(--fm);font-size:clamp(21px,4.6vw,30px);font-weight:700;color:var(--teja2);display:block;line-height:1.1}
+ .cifras .t{font-size:12.5px;color:var(--muted);margin-top:6px;display:block;line-height:1.4}
+ .provs{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px;margin:16px 0}
+ .provs a{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--bg2);color:var(--paper);font-size:14.5px}
+ .provs a:hover{border-color:var(--teja);text-decoration:none}
+ .provs .v{font-family:var(--fm);font-size:13px;color:var(--teja2);white-space:nowrap}
+ .faq details{border:1px solid var(--line);border-radius:12px;margin:0 0 9px;background:var(--bg2)}
+ .faq summary{cursor:pointer;padding:13px 17px;font-weight:600;color:var(--paper);list-style:none}
+ .faq summary::-webkit-details-marker{display:none}
+ .faq summary::before{content:"+";color:var(--teja);font-weight:900;margin-right:9px}
+ .faq details[open] summary::before{content:"\2013"}
+ .faq .fa{padding:0 17px 13px;font-size:15px;color:#d8ccb6}
+ .cta{margin:30px 0 8px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px;text-align:center}
+ .botones{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+ .btn{display:inline-block;padding:12px 19px;border-radius:11px;font-weight:600;font-size:15px}
+ .btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}
+ .btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
+ @media(max-width:560px){.cifras{grid-template-columns:1fr}}
+__NAVCSS__
+__FOOTERCSS__
+</style>
+</head><body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Noches tropicales</nav>
+  <div class="kick">__KICK__</div>
+  <h1>Noches tropicales en España</h1>
+  <div class="intro">
+    <p>Una noche tropical es aquella en la que la temperatura mínima no baja de los 20&nbsp;°C. No es una etiqueta turística: es el umbral a partir del cual el cuerpo tiene dificultades para recuperarse del calor acumulado durante el día, y el indicador que mejor explica por qué en algunos lugares de España el verano se soporta y en otros no.</p>
+    <p>Este proyecto analiza <b>__N_ESTACIONES__</b> estaciones meteorológicas de AEMET y <b>__N_VERANOS__</b> veranos de datos para responder a una pregunta concreta: cuántas noches al año no se puede dormir bien en cada punto de España. Los datos se actualizan a diario de forma automática y son de libre reutilización.</p>
+  </div>
+  __FICHA__
+</div></header>
+
+<section><div class="wrap">
+  <h2 id="que-es">Qué es una noche tropical</h2>
+  <p>AEMET considera noche tropical aquella en la que la temperatura mínima registrada entre dos días consecutivos se mantiene en <b>20,0&nbsp;°C</b> o por encima. El umbral no es arbitrario: por encima de esa temperatura el descanso se deteriora de forma medible.</p>
+  <p>Cuando la mínima no baja de <b>25,0&nbsp;°C</b> se habla de <b>noche ecuatorial</b>, una categoría que hasta hace poco era excepcional en la Península y que hoy se registra varias veces cada verano en el litoral mediterráneo.</p>
+  <p>El dato se toma de la mínima diaria de cada estación. No mide sensación térmica ni humedad: mide temperatura del aire en el punto exacto donde está el termómetro.</p>
+
+  <h2 id="cuantas">Cuántas noches tropicales hay en España</h2>
+  <div class="cifras">
+    <div class="c"><span class="n">__N_CERO__</span><span class="t">estaciones sin ni una noche tropical en toda la serie</span></div>
+    <div class="c"><span class="n">__MAX_NT__</span><span class="t">noches al año en el punto más cálido</span></div>
+    <div class="c"><span class="n">__N_ESTACIONES__</span><span class="t">estaciones de AEMET analizadas</span></div>
+  </div>
+  <p>La media nacional esconde diferencias enormes. En el conjunto de estaciones analizadas, la horquilla va desde <b>__N_CERO__</b> estaciones que no han registrado ni una sola noche tropical en toda la serie hasta puntos del litoral que superan las <b>__MAX_NT__</b> al año.</p>
+  <p>La variable que mejor explica esa diferencia no es la latitud, sino la <b>altitud</b> y la <b>distancia al mar</b>. El gradiente térmico vertical ronda los 0,6&nbsp;°C por cada 100 metros de desnivel: bastan 400 metros de diferencia para cruzar el umbral de los 20&nbsp;°C en una noche marginal. Por eso hay pueblos a menos de cien kilómetros de una capital mediterránea donde en agosto se duerme con manta.</p>
+  <p>El detalle completo, estación por estación y de la más fresca a la más calurosa, está en <a href="__SITE__/ranking-noches-tropicales/">el ranking nacional</a>; y sobre el mapa, en <a href="__SITE__/mapa-estaciones/">el mapa de estaciones</a>.</p>
+
+  <h2 id="balance">Balance del verano __ANIO__</h2>
+  __BALANCE__
+  <p>Los datos corresponden al periodo de junio a septiembre y proceden de las estaciones de AEMET con serie completa. <b>Fuente: AEMET.</b></p>
+
+  <h2 id="provincias">Consulta tu provincia</h2>
+  <p>Cada provincia tiene su propia página con el detalle de todas sus estaciones, ordenadas de más a menos noches tropicales, y el CSV descargable.</p>
+  <div class="provs">__PROVS__</div>
+  <p class="fichadatos">La cifra de cada provincia es la de su estación de referencia, normalmente la de la capital. Fuente: AEMET.</p>
+
+  <h2 id="metodologia">Metodología y limitaciones</h2>
+  <p>El análisis parte de los valores climatológicos diarios publicados por AEMET en su portal de datos abiertos. Se contabiliza como noche tropical cada día cuya temperatura mínima sea igual o superior a 20,0&nbsp;°C dentro del periodo de junio a septiembre.</p>
+  <p>Tres limitaciones que conviene tener presentes. La primera: <b>una estación mide su ubicación exacta, no el casco urbano del municipio al que se asocia</b>. Diferencias de altitud de pocos cientos de metros producen diferencias térmicas relevantes. La segunda: las series no tienen la misma longitud en todas las estaciones, y una serie corta es más sensible a un verano atípico. La tercera: <b>la ausencia de estación cercana no significa clima desfavorable, significa ausencia de datos</b>.</p>
+  <p>Los datos de origen son de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a>. Este análisis se publica bajo <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>: puedes reutilizarlo citando a AEMET como fuente. Los pueblos con menos noches tropicales tienen su <a href="__SITE__/certificados/">certificado descargable</a>.</p>
+
+  <h2 id="faq">Preguntas frecuentes</h2>
+  <div class="faq">__FAQ_HTML__</div>
+
+  <div class="cta">
+    <b>¿Y tu pueblo? ¿Cuántas noches tropicales tiene?</b>
+    <div class="botones">
+      <a class="btn pri" href="__HOME__">Búscalo en la calculadora →</a>
+      <a class="btn sec" href="__SITE__/ranking-noches-tropicales/">Ver el ranking nacional →</a>
+    </div>
+  </div>
+</div></section>
+__FOOTER__
+</body></html>
+"""
+
+
+def construir_pagina_pilar(estaciones: list, datos: dict, balance: dict, site: str,
+                           fecha_iso: str, fecha_txt: str) -> str:
+    """La página que reclama el término raíz «noches tropicales»."""
+    n_estaciones = len(estaciones)
+    # De la ventana del pilar (jun-sep), no del ranking (jun-ago): si no, el
+    # párrafo de metodología de esta misma página sería falso para esta cifra.
+    max_nt = balance.get("max_nt_medio") or round(max(e["nt"] for e in estaciones))
+    n_cero = balance.get("n_cero_serie") or sum(1 for e in estaciones if e["nt"] < 0.05)
+    # Sin cifras a mano: si no hay balance (diarios ausentes), los veranos salen
+    # del propio ranking, que trae los años con datos de cada estación.
+    n_veranos = balance.get("n_veranos") or round(max(e["anios"] for e in estaciones))
+    anio = balance.get("anio", date.today().year - 1)
+
+    # --- balance del verano, todo calculado
+    if balance:
+        pe, ra = balance["peor"], balance["racha"]
+        dif = balance["media_bal"] - balance["media_serie"]
+        if abs(dif) < 0.5:
+            comparacion = ("prácticamente igual que la media de la serie "
+                           f"({_n_es(balance['media_serie'])} por estación)")
+        else:
+            comparacion = (f"{_n_es(abs(dif))} noches {'por encima' if dif > 0 else 'por debajo'} "
+                           f"de la media de la serie, que está en "
+                           f"{_n_es(balance['media_serie'])} por estación")
+        bal_html = (
+            f"<p>En el verano de {anio}, las {balance['n_estaciones_bal']} estaciones de AEMET con "
+            f"el verano completo sumaron <b>{miles(balance['total_nt'])} noches tropicales</b>: una "
+            f"media de <b>{_n_es(balance['media_bal'])} por estación</b>, {comparacion}.</p>"
+            f"<p>La estación que más acumuló fue <b>{pe['loc']}</b> ({pe['prov']}, "
+            f"{miles(pe['alt'])}&nbsp;m), con {plural(pe['nt_anio'], 'noche tropical', 'noches tropicales')} "
+            f"en un solo verano. Y la racha consecutiva más larga se registró en <b>{ra['loc']}</b> "
+            f"({ra['prov']}): {plural(ra['dias'], 'noche seguida', 'noches seguidas')} sin que la "
+            f"mínima bajara de los 20&nbsp;°C.</p>")
+    else:
+        bal_html = ("<p>El balance del último verano cerrado se publicará en cuanto la serie "
+                    "diaria de AEMET esté completa.</p>")
+
+    # --- rejilla de las 52 provinciales, con la cifra de su estación de referencia
+    tarjetas = []
+    for prov, lista in datos["provincias"].items():
+        peor_p = max(lista, key=lambda x: x["nt"])
+        ref = estacion_ciudad(prov, lista, peor_p)
+        tarjetas.append(
+            f'<a href="{site}/{slug(prov)}/"><span>{prov}</span>'
+            f'<span class="v">{ntfmt(ref["nt"])}</span></a>')
+    provs_html = "".join(tarjetas)
+
+    faq = [
+        ("¿Qué se considera una noche tropical y a partir de qué temperatura?",
+         "Aquella en la que la mínima no baja de 20,0 °C entre dos días consecutivos. "
+         "Es el umbral que utiliza AEMET."),
+        ("¿Cuántas noches tropicales hay al año en España?",
+         f"Depende radicalmente del punto. {n_cero} estaciones no registran ninguna en toda "
+         f"la serie; en el litoral mediterráneo se superan las {max_nt} anuales."),
+        ("¿Qué diferencia hay entre noche tropical y noche ecuatorial?",
+         "La noche tropical parte de 20,0 °C; la ecuatorial, de 25,0 °C."),
+        ("¿Dónde hay menos noches tropicales en España?",
+         "En las zonas de montaña del interior peninsular. La altitud es la variable dominante."),
+        ("¿Por qué en la montaña no hay noches tropicales?",
+         "Por el gradiente térmico vertical: la temperatura desciende unos 0,6 °C por cada "
+         "100 metros de altitud, y en altura la irradiación nocturna es más eficiente."),
+    ]
+    faq_html = "".join(
+        f"<details><summary>{q}</summary><div class=\"fa\">{a}</div></details>" for q, a in faq)
+
+    desc = (f"Qué es una noche tropical, cuántas hay en España y dónde. "
+            f"{n_estaciones} estaciones de AEMET y {n_veranos} veranos de datos.")
+
+    url = site + "/noches-tropicales/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Noches tropicales en España",
+             "item": url}]},
+        {"@type": "Dataset",
+         "name": f"Noches tropicales en España (AEMET, {n_veranos} veranos)",
+         "description": (f"Noches tropicales al año en {n_estaciones} estaciones "
+                         f"meteorológicas de AEMET."),
+         "url": url, "isBasedOn": "https://opendata.aemet.es",
+         "spatialCoverage": {"@type": "Place", "name": "España"},
+         "variableMeasured": "Noches tropicales por estación meteorológica",
+         "license": "https://creativecommons.org/licenses/by/4.0/",
+         "creator": {"@type": "Person", "name": "Ramón J. Lowesting"}},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": q,
+             "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},
+    ]}, ensure_ascii=False)
+
+    return (PAGINA_PILAR
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__DESC__", desc)
+            .replace("__KICK__", f"{n_estaciones} estaciones · {n_veranos} veranos · AEMET")
+            .replace("__FICHA__", ficha_datos(fecha_iso, fecha_txt))
+            .replace("__BALANCE__", bal_html)
+            .replace("__PROVS__", provs_html)
+            .replace("__FAQ_HTML__", faq_html)
+            .replace("__N_ESTACIONES__", miles(n_estaciones))
+            .replace("__N_VERANOS__", str(n_veranos))
+            .replace("__N_CERO__", str(n_cero))
+            .replace("__MAX_NT__", str(max_nt))
+            .replace("__ANIO__", str(anio))
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
 
 
 def construir_pagina_sobre(site: str) -> str:
@@ -10303,8 +10705,12 @@ def main() -> int:
     # ÚNICO —clave para que Google no las trate como plantilla en serie—.
     fecha_mod = date.fromtimestamp(RANKING_CSV.stat().st_mtime)
     fecha_mod_iso, fecha_mod_txt = fecha_mod.isoformat(), fecha_es(fecha_mod)
-    tendencias = cargar_tendencia_provincias(estaciones)
+    tendencias, balance = cargar_tendencia_provincias(estaciones)
     print(f"   tendencia 10 años: {len(tendencias)} provincias con serie")
+    if balance:
+        print(f"   balance pilar: verano {balance['anio']} · "
+              f"{balance['n_estaciones_bal']} estaciones · "
+              f"{balance['total_nt']} noches tropicales")
     # Complemento de datos por estación: humedad y viento medios de agosto
     # (leídos de diarios_humedad_*.csv). Degrada a {} hasta el primer backfill
     # de humedad; entonces aparece solo en las estaciones con dato.
@@ -10466,6 +10872,12 @@ def main() -> int:
     (DOCS_DIR / "sobre-el-proyecto").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "sobre-el-proyecto" / "index.html").write_text(
         construir_pagina_sobre(site), encoding="utf-8")
+    # Página PILAR del término raíz «noches tropicales». Reutiliza
+    # datos["provincias"] para la rejilla y `balance` para el verano cerrado.
+    (DOCS_DIR / "noches-tropicales").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "noches-tropicales" / "index.html").write_text(
+        construir_pagina_pilar(estaciones, datos, balance, site, fecha_mod, fecha_mod_txt),
+        encoding="utf-8")
     # Consola interna del generador de informes (noindex, fuera del sitemap):
     # buscador de estaciones + lista de informes ya publicados. Se reconstruye
     # cada build escaneando docs/informes/.

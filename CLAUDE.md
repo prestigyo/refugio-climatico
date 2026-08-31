@@ -56,7 +56,7 @@ refugio-climatico/
 |---|---|---|
 | `main.yml` | cron 10:30 UTC | `descarga_aemet.py` (mapas PNG) + `descarga_datos.py` (OpenData) |
 | `construir-web.yml` | cron 11:00 UTC + push a los generadores + manual | Reconstruye **toda** la web: gif → estudios → calculadora → mapa |
-| `parte-nocturno.yml` | cron 07:15 UTC (+ 08:50 de red de seguridad) | `parte_nocturno.py` + `publicar_x.py` |
+| `parte-nocturno.yml` | cron 07:15 UTC (+ 08:50 de red de seguridad) | `parte_nocturno.py` (parte + **archivo horario**) + `publicar_x.py` |
 | `actualizar-gifs.yml` | cron 11:00 UTC + manual | Solo `generar_gif.py` (se solapa con construir-web) |
 | `datos-calendario.yml` | lunes 05:00 UTC | `generar_calendario_datos.py` |
 | `analisis.yml` | mensual (día 1, 06:00 UTC) | `analisis_refugios.py` + `analisis_refugios_nocturnos.py` |
@@ -79,7 +79,12 @@ Los workflows que escriben en `docs/` comparten `concurrency: group: commit-docs
 4. `descarga_normales.py` — normales 1991-2020 por estación (ejecución única)
 5. `analisis_refugios*.py` — rankings diurno y nocturno → `analisis/*.csv` + PNGs
 6. `parte_nocturno.py` — observación en tiempo real (últimas 24 h), sin el retraso de los climatológicos; los datos son **provisionales** y así se indica en la página
-7. `generar_*.py` — regeneran `docs/`
+7. `parte_nocturno.py` — además del parte, **archiva las lecturas horarias** en
+   `datos/horarias/AAAA/AAAA-MM-DD.csv.gz` (fint, idema, ta, tamin, tamax, hr, prec).
+   AEMET no publica ningún histórico horario: la observación se borra a las ~12 h, así
+   que o se guarda según pasa o ese dato no existe. ~88 KB/día → ~32 MB/año.
+   Idempotente: el workflow corre dos veces y fusiona por (fint, idema).
+8. `generar_*.py` — regeneran `docs/`
 
 Los outputs se commitean automáticamente (los workflows tienen permiso de escritura).
 
@@ -131,6 +136,12 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - `datos/lugares.csv` — poblaciones del Observatorio (GeoNames CC BY 4.0), regenerable con `generar_lugares.py`
 - `datos/hoteles.csv` — hoteles del sello "Refugio Climático"
 - `datos/spain-provinces.geojson` — contornos de las 52 provincias
+- `datos/horarias/AAAA/*.csv.gz` — lecturas horarias de ~857 estaciones, desde 2026-08-29.
+  Cubre de 20h a 07h UTC. Es lo único que permite responder «cuántas HORAS estuvo la
+  noche por debajo de 20°», frente a «cuánto bajó en el punto más frío» de los diarios
+- `datos/gradiente_nocturno.json` + `pares_estaciones.csv` — gradiente térmico nocturno
+- `datos/tendencia_estaciones.csv` + `tendencia_resumen.json` — tendencia de noches tropicales
+- `datos/estaciones_termicas.csv` + `estaciones_termicas.json` — estaciones del año térmicas
 - `analisis/refugios_nocturnos_ranking.csv` — **la fuente de verdad de la web**; todo `docs/` se construye a partir de él
 
 ## Hallazgos clave del análisis hasta ahora
@@ -139,6 +150,14 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - La **costa mediterránea** es de los PEORES sitios de España para dormir en verano: Palma, Cartagena, Capdepera con rachas de **86 noches tropicales consecutivas**.
 - El **interior de Gran Canaria** (Tejeda, San Bartolomé de Tirajana) es el peor sitio de España para dormir, peor que la costa andaluza, por efecto foehn.
 - **Alcalá de la Selva** (Teruel, sierra de Gúdar) tiene **0,5 noches tropicales/año** vs **72/año** en Valencia capital. Ratio 180:1.
+- El **gradiente térmico nocturno** real es **0,35 °C/100 m** (0,26 solo en península),
+  no los 0,6 de manual. Y con R²=0,15: la altitud sola NO predice la mínima nocturna.
+  52 de 285 pares tienen inversión pura (el pueblo alto duerme peor que el bajo).
+- Las noches tropicales suben en **653 de 746 estaciones**; ninguna baja de verdad.
+  El crecimiento es MAYOR en el llano (+14/década por debajo de 200 m) que en montaña
+  (+5 por encima de 800): la brecha se abre, no se cierra. 54 pueblos han perdido su cero.
+- **Desfase estacional**: el día más frío llega +24 días después del solsticio y el más
+  cálido +45. El mar retrasa: litoral +48,9 vs interior +42,1 (Canarias, +58,4).
 - **Empíricamente verificado**: los incendios forestales NO calientan los termómetros a >5-20 km del foco. La causalidad es calor→fuego, no al revés (caso Sierra de la Culebra 2022).
 
 ## Estado actual y próximas tareas
@@ -160,6 +179,24 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - Email pitch template
 - Plan de lanzamiento coordinado
 - Envío de los certificados a los ayuntamientos (backlinks institucionales + prensa local)
+
+**Pendiente inmediato — archivo horario (acordado el 2026-08-29):**
+- La semana del 2026-09-05, **primer ensayo** con las noches acumuladas: para cada
+  estación y noche, cuántas horas por debajo de 20/18/16 °C, a qué hora cruza cada
+  umbral y qué forma tiene la curva. Objetivo: responder si basta con que la mínima
+  baje puntualmente de 20° o hace falta llegar a 18 para asegurar horas de sueño.
+- **Rediseñar los cron para cubrir la noche, no solo duplicarla.** Los dos actuales
+  (07:15 y 08:50 UTC) están a hora y media: capturan casi la misma ventana, así que
+  son red de seguridad contra un cron saltado, no cobertura. Si GitHub se retrasa
+  —el 27 y 28 de agosto lo hizo 10-12 h y el parte no se publicó— se pierde la noche
+  entera. Plan: `parte_nocturno.py --solo-archivo` (archiva y sale, sin parte ni X) +
+  workflow aparte `archivo-horario.yml` con cron a las 23:30 y 03:30 UTC. Con el
+  07:15 del parte, la unión cubre 11:30→07:15 y un fallo suelto pierde solo un tramo.
+  La fusión por (fint, idema) ya hace que solaparse sea inofensivo.
+- **NO se puede rellenar hacia atrás**: AEMET no publica histórico horario y las
+  sinópticas de NOAA (ISD) solo cubren 28 de las 87 estaciones de cero noches
+  tropicales — ninguno de los refugios emblemáticos. Archivar desde hoy es la
+  única vía.
 
 **Ideas para más adelante:**
 - Estudio sistemático "huella térmica de incendios" cruzando EFFIS (Copernicus) con AEMET

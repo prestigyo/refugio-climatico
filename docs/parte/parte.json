@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-30",
- "total": 847,
- "tropicales": 91,
- "ecuatoriales": 1,
+ "fecha": "2026-08-31",
+ "total": 844,
+ "tropicales": 126,
+ "ecuatoriales": 0,
  "peor": {
   "id": "B569X",
   "nombre": "Capdepera-Faro",
-  "min": 24.5,
+  "min": 24.4,
   "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 4.8,
-  "prov": "Ávila"
+  "id": "9001S",
+  "nombre": "Alto Campoo",
+  "min": 0.0,
+  "prov": "Cantabria"
  },
  "top_calor": [
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 24.5,
+   "min": 24.4,
    "prov": "Illes Balears"
   },
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 23.9,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "6000A",
+   "nombre": "Melilla",
+   "min": 24.1,
+   "prov": "Melilla"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 23.7,
+   "min": 24.0,
    "prov": "Las Palmas"
   },
   {
    "id": "0201X",
    "nombre": "Barcelona Drassanes",
-   "min": 23.6,
+   "min": 23.8,
    "prov": "Barcelona"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 23.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 23.7,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B398A",
+   "nombre": "Cabrera Parque Nacional de Cabrera",
+   "min": 23.6,
+   "prov": "Illes Balears"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 23.6,
+   "min": 23.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 23.6,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
    "min": 23.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C129V",
-   "nombre": "Fuencaliente-Salinas",
-   "min": 23.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C449F",
    "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 23.4,
+   "min": 23.2,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "B398A",
-   "nombre": "Cabrera Parque Nacional de Cabrera",
-   "min": 23.3,
-   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 0.0,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 3.1,
+   "prov": "Zamora"
+  },
+  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 4.8,
+   "min": 3.5,
    "prov": "Ávila"
+  },
+  {
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 3.8,
+   "prov": "Asturias"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 6.2,
+   "min": 4.2,
    "prov": "Segovia"
   },
   {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 6.6,
-   "prov": "Cuenca"
+   "id": "1302F",
+   "nombre": "Degaña Coto Cortés",
+   "min": 4.6,
+   "prov": "Asturias"
   },
   {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 6.8,
-   "prov": "Soria"
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 4.8,
+   "prov": "Zamora"
   },
   {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": 6.8,
-   "prov": "Teruel"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 5.1,
+   "prov": "León"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 7.2,
-   "prov": "Soria"
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 5.3,
+   "prov": "Ourense"
   },
   {
-   "id": "3013",
-   "nombre": "Molina de Aragón",
-   "min": 7.2,
-   "prov": "Guadalajara"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 7.2,
-   "prov": "Madrid"
-  },
-  {
-   "id": "3130C",
-   "nombre": "Sigüenza",
-   "min": 7.2,
-   "prov": "Guadalajara"
-  },
-  {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 7.4,
-   "prov": "Soria"
+   "id": "2737E",
+   "nombre": "Lagunas de Somoza",
+   "min": 5.7,
+   "prov": "León"
   }
  ]
 }

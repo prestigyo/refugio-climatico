@@ -1,142 +1,142 @@
 {
- "fecha": "2026-08-31",
- "total": 830,
- "tropicales": 127,
- "ecuatoriales": 0,
+ "fecha": "2026-09-01",
+ "total": 843,
+ "tropicales": 238,
+ "ecuatoriales": 8,
  "peor": {
   "id": "B569X",
   "nombre": "Capdepera-Faro",
-  "min": 24.7,
+  "min": 25.7,
   "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 3.1,
-  "prov": "Zamora"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 4.7,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 24.7,
+   "min": 25.7,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "0002I",
+   "nombre": "Vandellós",
+   "min": 25.5,
+   "prov": "Tarragona"
   },
   {
    "id": "6000A",
    "nombre": "Melilla",
-   "min": 24.1,
+   "min": 25.4,
    "prov": "Melilla"
   },
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.0,
-   "prov": "Las Palmas"
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 25.4,
+   "prov": "Murcia"
+  },
+  {
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 25.1,
+   "prov": "Almería"
+  },
+  {
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
+   "min": 25.1,
+   "prov": "Murcia"
   },
   {
    "id": "0201X",
    "nombre": "Barcelona Drassanes",
-   "min": 23.8,
+   "min": 24.9,
    "prov": "Barcelona"
   },
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 23.8,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "7031X",
+   "nombre": "Murcia/San Javier",
+   "min": 24.9,
+   "prov": "Murcia"
   },
   {
    "id": "B228",
    "nombre": "Palma-Portopí",
-   "min": 23.7,
+   "min": 24.8,
    "prov": "Illes Balears"
   },
   {
-   "id": "B398A",
-   "nombre": "Cabrera Parque Nacional de Cabrera",
-   "min": 23.6,
+   "id": "B986",
+   "nombre": "Formentera",
+   "min": 24.8,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 23.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 23.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 23.2,
-   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 3.1,
-   "prov": "Zamora"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 3.5,
+   "min": 4.7,
    "prov": "Ávila"
   },
   {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 3.8,
-   "prov": "Asturias"
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 5.9,
+   "prov": "Cantabria"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 4.2,
-   "prov": "Segovia"
-  },
-  {
-   "id": "1302F",
-   "nombre": "Degaña Coto Cortés",
-   "min": 4.6,
-   "prov": "Asturias"
-  },
-  {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": 4.8,
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 6.5,
    "prov": "Zamora"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 5.1,
+   "min": 6.6,
    "prov": "León"
+  },
+  {
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 6.9,
+   "prov": "Zamora"
   },
   {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 5.3,
+   "min": 7.0,
    "prov": "Ourense"
   },
   {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 5.3,
-   "prov": "Cantabria"
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 7.0,
+   "prov": "Salamanca"
   },
   {
-   "id": "2737E",
-   "nombre": "Lagunas de Somoza",
-   "min": 5.7,
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 7.3,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2701D",
+   "nombre": "Miñera de Luna-Embalse",
+   "min": 7.4,
    "prov": "León"
+  },
+  {
+   "id": "2847X",
+   "nombre": "Pedrosillo de los Aires-Castillejo",
+   "min": 7.4,
+   "prov": "Salamanca"
   }
  ]
 }

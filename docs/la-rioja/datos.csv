@@ -1,9 +1,9 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
 "Anguiano, Valvanera",1006,0.2,0.0,42.231,-2.871,10.0
 Enciso,855,0.7,0.0,42.149,-2.273,10.0
-Nájera,500,0.9,0.0,42.414,-2.727,10.0
-Haro,465,1.7,0.1,42.575,-2.855,10.0
-Valdezcaray,1630,2.9,0.0,42.255,-2.968,10.0
-"Logroño, Aeropuerto",353,4.3,0.0,42.452,-2.331,10.0
-Cenicero,429,5.5,0.0,42.483,-2.639,10.0
-"Alfaro, la Plana",371,14.8,0.3,42.176,-1.744,6.0
+Nájera,500,1.1,0.0,42.414,-2.727,10.0
+Haro,465,2.1,0.1,42.575,-2.855,10.0
+Valdezcaray,1630,3.1,0.0,42.255,-2.968,10.0
+"Logroño, Aeropuerto",353,4.8,0.0,42.452,-2.331,10.0
+Cenicero,429,6.8,0.0,42.483,-2.639,10.0
+"Alfaro, la Plana",371,16.8,0.3,42.176,-1.744,6.0

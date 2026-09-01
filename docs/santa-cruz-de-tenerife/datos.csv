@@ -1,39 +1,39 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-Izaña,2369,0.6,0.0,28.308,-16.5,10.0
-"La Orotava, Cañadas Teide",2150,0.8,0.0,28.224,-16.626,10.0
-La Victoria de Acentejo,567,2.4,0.0,28.434,-16.454,10.0
-San Andrés y Sauces,362,2.5,0.2,28.805,-17.782,10.0
-Roque de los Muchachos,2223,3.4,0.0,28.756,-17.895,7.0
-San Juan de la Rambla,667,4.1,0.4,28.373,-16.626,7.0
-Valverde,670,4.7,0.1,27.811,-17.919,7.0
-Agulo,765,5.6,0.1,28.179,-17.213,10.0
-Tenerife Norte Aeropuerto,632,6.1,0.6,28.477,-16.329,10.0
-Tacoronte,310,6.4,0.0,28.496,-16.42,10.0
-Arico,418,8.9,0.5,28.181,-16.483,10.0
-"San Cristóbal de la Laguna,Llano de los Loros",868,9.8,0.9,28.526,-16.28,10.0
-"San Andrés, Valverde",1070,10.9,0.7,27.769,-17.96,9.0
-Lomo del Balo,403,12.0,0.9,28.207,-16.792,9.0
-Puntagorda,684,13.0,3.3,28.761,-17.986,10.0
-Tijarafe,733,14.5,4.6,28.675,-17.937,10.0
-Candelaria,463,14.7,1.9,28.359,-16.402,10.0
-"El Pinar, la Dehesa",713,18.0,7.1,27.725,-18.115,9.0
-Hermigua,252,19.5,0.0,28.164,-17.194,10.0
-"Vallehermoso, Alto Igualero",1474,20.0,2.7,28.107,-17.249,10.0
-Arure,916,20.4,5.1,28.128,-17.315,8.0
-El Paso,844,20.4,5.6,28.654,-17.853,9.0
-"Vallehermoso, Dama",190,20.8,0.5,28.054,-17.306,10.0
-"El Pinar, Depósito",948,21.8,3.9,27.719,-17.978,10.0
-Güímar,115,27.6,0.0,28.318,-16.382,10.0
-"La Gomera, Aeropuerto",219,39.9,0.9,28.032,-17.211,10.0
-Adeje,130,41.6,0.0,28.081,-16.711,10.0
-Tacoron-Lapillas-Tortuga,98,51.8,0.6,27.665,-18.019,9.0
-Tenerife Sur Aeropuerto,64,56.0,1.1,28.047,-16.561,10.0
+Izaña,2369,0.8,0.0,28.308,-16.5,10.0
+"La Orotava, Cañadas Teide",2150,1.2,0.0,28.224,-16.626,10.0
+La Victoria de Acentejo,567,2.8,0.0,28.434,-16.454,10.0
+San Andrés y Sauces,362,3.2,0.2,28.805,-17.782,10.0
+Roque de los Muchachos,2223,4.0,0.0,28.756,-17.895,7.0
+San Juan de la Rambla,667,4.9,0.4,28.373,-16.626,7.0
+Valverde,670,5.1,0.1,27.811,-17.919,7.0
+Agulo,765,5.9,0.1,28.179,-17.213,10.0
+Tenerife Norte Aeropuerto,632,6.8,0.6,28.477,-16.329,10.0
+Tacoronte,310,7.9,0.0,28.496,-16.42,10.0
+Arico,418,9.7,0.6,28.181,-16.483,10.0
+"San Cristóbal de la Laguna,Llano de los Loros",868,10.7,0.9,28.526,-16.28,10.0
+"San Andrés, Valverde",1070,11.9,0.8,27.769,-17.96,9.0
+Lomo del Balo,403,13.6,0.9,28.207,-16.792,9.0
+Puntagorda,684,14.0,3.6,28.761,-17.986,10.0
+Tijarafe,733,15.7,4.9,28.675,-17.937,10.0
+Candelaria,463,15.8,1.9,28.359,-16.402,10.0
+"El Pinar, la Dehesa",713,19.1,7.9,27.725,-18.115,9.0
+El Paso,844,19.8,5.6,28.654,-17.853,10.0
+"Vallehermoso, Alto Igualero",1474,21.1,2.7,28.107,-17.249,10.0
+Arure,916,21.8,5.9,28.128,-17.315,8.0
+Hermigua,252,21.8,0.0,28.164,-17.194,10.0
+"Vallehermoso, Dama",190,22.4,0.6,28.054,-17.306,10.0
+"El Pinar, Depósito",948,23.0,4.5,27.719,-17.978,10.0
+Güímar,115,30.1,0.0,28.318,-16.382,10.0
+"La Gomera, Aeropuerto",219,43.0,1.0,28.032,-17.211,10.0
+Adeje,130,44.5,0.0,28.081,-16.711,10.0
+Tacoron-Lapillas-Tortuga,98,55.3,0.8,27.665,-18.019,9.0
 Tazacorte,62,57.2,0.1,28.596,-17.915,9.0
+Tenerife Sur Aeropuerto,64,59.2,1.2,28.047,-16.561,10.0
 Puerto de la Cruz,25,61.3,0.1,28.418,-16.548,10.0
-La Palma Aeropuerto,33,65.9,0.1,28.633,-17.755,10.0
-Fuencaliente,19,71.4,0.2,28.455,-17.841,10.0
-"Frontera, Sabinosa",20,72.8,0.2,27.756,-18.108,10.0
-Anaga,19,73.7,2.6,28.508,-16.196,10.0
-Sta.Cruz de Tenerife,36,76.7,3.0,28.463,-16.255,10.0
-Hierro Aeropuerto,32,79.8,0.0,27.819,-17.889,10.0
-San Sebastián de la Gomera,15,80.8,2.3,28.09,-17.111,10.0
+La Palma Aeropuerto,33,69.1,0.1,28.633,-17.755,10.0
+Fuencaliente,19,74.5,0.3,28.455,-17.841,10.0
+"Frontera, Sabinosa",20,76.0,0.2,27.756,-18.108,10.0
+Anaga,19,76.7,2.9,28.508,-16.196,10.0
+Sta.Cruz de Tenerife,36,79.9,3.4,28.463,-16.255,10.0
+Hierro Aeropuerto,32,83.0,0.0,27.819,-17.889,10.0
+San Sebastián de la Gomera,15,84.0,2.5,28.09,-17.111,10.0

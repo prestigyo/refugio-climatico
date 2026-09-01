@@ -1,10 +1,10 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
 Lalastra,910,0.0,0.0,42.875,-3.232,10.0
-Foronda-Txokiza,513,0.0,0.0,42.882,-2.735,10.0
-Vitoria-Gasteiz Aeropuerto,513,0.0,0.0,42.872,-2.733,10.0
+Foronda-Txokiza,513,0.1,0.0,42.882,-2.735,10.0
+Vitoria-Gasteiz Aeropuerto,513,0.2,0.0,42.872,-2.733,10.0
 "Aramaio, Etxaguen",617,1.3,0.0,43.058,-2.59,10.0
-"Agurain/Salvatierra, Opakua",660,1.4,0.3,42.83,-2.36,10.0
-Campezo/Kanpezu,570,1.6,0.0,42.671,-2.346,10.0
-Labastida,612,2.2,0.1,42.604,-2.777,10.0
-Amurrio,240,2.7,0.0,43.05,-3.006,10.0
-Leza,575,3.7,0.4,42.567,-2.633,10.0
+"Agurain/Salvatierra, Opakua",660,1.5,0.3,42.83,-2.36,10.0
+Campezo/Kanpezu,570,1.8,0.0,42.671,-2.346,10.0
+Labastida,612,2.4,0.1,42.604,-2.777,10.0
+Amurrio,240,3.2,0.0,43.05,-3.006,10.0
+Leza,575,4.1,0.4,42.567,-2.633,10.0

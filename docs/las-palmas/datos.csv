@@ -1,38 +1,38 @@
 estacion,altitud_m,noches_tropicales_anio,noches_ecuatoriales_anio,latitud,longitud,anios_datos
-Tías,376,3.7,0.4,28.97,-13.69,10.0
-Teror,683,3.9,0.1,28.075,-15.547,10.0
-Tinajo,275,7.3,0.0,29.043,-13.681,10.0
-Antigua,252,9.0,0.9,28.417,-14.019,10.0
-Valleseco,900,12.1,1.0,28.066,-15.566,10.0
-Haría,277,12.6,0.8,29.144,-13.489,10.0
-Vega de San Mateo,1702,13.2,0.1,27.977,-15.584,10.0
-"Las Palmas de Gran Canaria, Tafira",269,14.0,0.0,28.078,-15.453,10.0
-La Oliva,217,14.9,0.3,28.613,-13.932,10.0
-Agaete - Suerte Alta,352,15.2,2.6,28.094,-15.675,9.0
-Las Palmas de G.C. (Tafira Cmt),269,16.7,0.0,28.075,-15.451,10.0
-"Tejeda, Cruz de Tejeda",1514,19.9,1.0,28.007,-15.599,10.0
-"Telde, Centro Forestal Doramas",344,20.0,4.3,27.988,-15.458,10.0
-Agüimes,306,30.1,9.2,27.902,-15.454,10.0
-"La Aldea de San Nicolás, Tasarte",318,34.9,3.2,27.909,-15.77,10.0
-"San Bartolome Tirajana, Lomo Pedro Alfonso",806,36.4,16.6,27.857,-15.645,10.0
-"San Bartolome Tirajana, las Tirajanas",960,39.0,14.9,27.92,-15.574,10.0
-Tejeda,1060,39.8,19.1,27.995,-15.616,10.0
-Maspalomas,6,42.6,0.0,27.736,-15.596,5.0
-San Bartolomé de Tirajana,1220,43.5,18.4,27.927,-15.6,10.0
-Arucas,86,52.5,0.0,28.142,-15.507,10.0
-"San Bartolome Tirajana, el Matorral",41,53.3,2.5,27.812,-15.453,10.0
-La Graciosa,19,55.7,0.0,29.23,-13.51,10.0
-Lanzarote Aeropuerto,14,58.3,0.5,28.952,-13.6,10.0
+Teror,683,4.0,0.1,28.075,-15.547,10.0
+Tías,376,4.3,0.4,28.97,-13.69,10.0
+Tinajo,275,9.6,0.0,29.043,-13.681,10.0
+Antigua,252,10.8,0.9,28.417,-14.019,10.0
+Valleseco,900,13.0,1.0,28.066,-15.566,10.0
+Vega de San Mateo,1702,14.0,0.1,27.977,-15.584,10.0
+Haría,277,15.0,0.9,29.144,-13.489,10.0
+"Las Palmas de Gran Canaria, Tafira",269,16.5,0.0,28.078,-15.453,10.0
+La Oliva,217,17.2,0.3,28.613,-13.932,10.0
+Agaete - Suerte Alta,352,18.1,3.1,28.094,-15.675,9.0
+Las Palmas de G.C. (Tafira Cmt),269,19.6,0.0,28.075,-15.451,10.0
+"Tejeda, Cruz de Tejeda",1514,20.7,1.0,28.007,-15.599,10.0
+"Telde, Centro Forestal Doramas",344,22.4,5.0,27.988,-15.458,10.0
+Agüimes,306,32.8,10.1,27.902,-15.454,10.0
+"La Aldea de San Nicolás, Tasarte",318,37.8,3.6,27.909,-15.77,10.0
+"San Bartolome Tirajana, Lomo Pedro Alfonso",806,37.9,17.7,27.857,-15.645,10.0
+"San Bartolome Tirajana, las Tirajanas",960,40.8,16.1,27.92,-15.574,10.0
+Tejeda,1060,41.4,19.9,27.995,-15.616,10.0
+San Bartolomé de Tirajana,1220,45.4,19.7,27.927,-15.6,10.0
+Maspalomas,6,49.0,0.2,27.736,-15.596,5.0
+Arucas,86,55.5,0.0,28.142,-15.507,10.0
+"San Bartolome Tirajana, el Matorral",41,56.5,3.0,27.812,-15.453,10.0
+La Graciosa,19,58.7,0.0,29.23,-13.51,10.0
 "Las Palmas de Gran Canaria, San Cristobal",55,59.9,0.1,28.09,-15.416,8.0
-"Mogán, Puerto",10,61.6,0.3,27.816,-15.764,10.0
-Yaiza Playa Blanca,6,65.0,0.1,28.859,-13.835,10.0
-La Aldea de San Nicolás,13,65.4,0.4,28.001,-15.808,10.0
-Gran Canaria Aeropuerto,24,65.5,1.6,27.918,-15.395,10.0
-"Tuineje,Puerto Gran Tarajal",1,66.1,2.7,28.209,-14.023,10.0
-Fuerteventura Aeropuerto,25,67.7,1.3,28.445,-13.863,10.0
-"Telde, Melenara",9,69.9,0.6,27.987,-15.378,10.0
-"Maspalomas, C. Insular Turismo",45,72.0,1.5,27.758,-15.576,10.0
-Agaete,5,73.1,0.8,28.101,-15.713,10.0
-Pájara,15,73.2,1.6,28.049,-14.358,10.0
-"Las Palmas de Gran Canaria, Pl. de la Feria",15,73.3,0.1,28.113,-15.421,10.0
-"Mogán, Puerto Rico",10,80.2,0.6,27.78,-15.711,10.0
+Lanzarote Aeropuerto,14,61.3,0.5,28.952,-13.6,10.0
+"Mogán, Puerto",10,64.8,0.6,27.816,-15.764,10.0
+Yaiza Playa Blanca,6,68.2,0.1,28.859,-13.835,10.0
+La Aldea de San Nicolás,13,68.6,0.5,28.001,-15.808,10.0
+Gran Canaria Aeropuerto,24,68.7,2.0,27.918,-15.395,10.0
+"Tuineje,Puerto Gran Tarajal",1,69.3,3.2,28.209,-14.023,10.0
+Fuerteventura Aeropuerto,25,70.9,1.3,28.445,-13.863,10.0
+"Telde, Melenara",9,73.1,0.7,27.987,-15.378,10.0
+"Maspalomas, C. Insular Turismo",45,75.2,1.9,27.758,-15.576,10.0
+Agaete,5,76.0,1.1,28.101,-15.713,10.0
+Pájara,15,76.4,2.0,28.049,-14.358,10.0
+"Las Palmas de Gran Canaria, Pl. de la Feria",15,76.5,0.2,28.113,-15.421,10.0
+"Mogán, Puerto Rico",10,83.4,0.8,27.78,-15.711,10.0

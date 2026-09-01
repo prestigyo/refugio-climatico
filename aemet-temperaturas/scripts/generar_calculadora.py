@@ -210,7 +210,37 @@ def cargar_estaciones() -> tuple[list[dict], int]:
             "lon": round(float(f["lon"]), 4),
             "anios": round(float(f["n_anios"]), 1),
         })
+    _asignar_slugs(estaciones)
     return estaciones, total
+
+
+def _asignar_slugs(estaciones: list) -> None:
+    """Slug ÚNICO por estación, en `cslug`.
+
+    Ocho parejas de estaciones comparten nombre exacto y por tanto slug: dos
+    «Oviedo» (1249I y 1249X), dos «Cartagena», dos «Santander»… y una
+    «Fuencaliente» en Ciudad Real y otra en Tenerife, con 5,9 y 71,4 noches
+    tropicales. Al derivar la URL del certificado del nombre, la segunda pisaba
+    a la primera: el listado mostraba dos entradas idénticas y una de ellas
+    llevaba al certificado de la otra.
+
+    La primera en aparecer (el ranking viene ordenado por puesto, así que es la
+    más fresca) conserva el slug limpio y no se rompe ninguna URL ya indexada;
+    la segunda lo lleva sufijado con su indicativo, que es único por definición.
+
+    OJO: los CERTIFICADOS son por localidad, no por estación (así lo decidió el
+    proyecto: «un certificado por localidad, Oviedo tiene 2 estaciones»), así que
+    sus enlaces siguen usando el slug base. `cslug` es para lo que sí es por
+    estación, como los informes.
+    """
+    vistos: dict[str, int] = {}
+    for e in estaciones:
+        base = slug(e["loc"])
+        if base in vistos:
+            e["cslug"] = f"{base}-{e['id'].lower()}"
+        else:
+            vistos[base] = 1
+            e["cslug"] = base
 
 
 def _slim(e: dict) -> dict:
@@ -1320,7 +1350,7 @@ def construir_consola_informes(estaciones: list, site: str) -> str:
     estaciones que da el comando, y lista de informes ya publicados en
     docs/informes/. Se reconstruye en cada build escaneando la carpeta."""
     est_js = json.dumps(
-        [[e["id"], e["loc"], e["prov"], slug(e["loc"])] for e in estaciones],
+        [[e["id"], e["loc"], e["prov"], e.get("cslug") or slug(e["loc"])] for e in estaciones],
         ensure_ascii=False, separators=(",", ":"))
     base = DOCS_DIR / "informes"
     entradas = []
@@ -2255,6 +2285,9 @@ def _balance_nacional(pilar: dict, fechas_bal: dict, anio_bal: int, estaciones: 
         "media_bal": media_bal,
         "media_serie": media_serie,
         "n_cero_serie": sum(1 for i, t in total_serie.items() if t == 0),
+        # La lista, no solo el recuento: la tabla del pilar tiene que enseñar
+        # exactamente las mismas estaciones que anuncia la cifra de arriba.
+        "ids_cero": sorted(i for i, t in total_serie.items() if t == 0),
         "max_nt_medio": round(max(medias_est.values())) if medias_est else 0,
         "peor": {**nombre[peor_id], "nt_anio": bal[peor_id]},
         "racha": {**nombre[racha_id], "dias": rachas.get(racha_id, 0)},
@@ -4187,7 +4220,7 @@ __CSS_COMUN__
       <a class="card2 destacada" href="__SITE__/noches-tropicales/"><h3>🌡️ Qué es una noche tropical</h3><p>La guía completa: definición de AEMET, cuántas hay en España, dónde y por qué. Con el balance del último verano.</p></a>
       <a class="card2" href="__SITE__/aumento-noches-tropicales-espana/"><h3>España pierde sus noches frescas</h3><p>746 estaciones, diez veranos: 54 pueblos ya no tienen cero.</p></a>
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
-      <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>25 hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
+      <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>__NHOT__ hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
       <a class="card2 destacada" href="__SITE__/dormir-con-calor/"><h3>😴 Cómo dormir con calor sin aire acondicionado</h3><p>Lo que de verdad funciona esta noche, lo que no sirve de nada, y a partir de qué temperatura ya no hay truco que valga.</p></a>
       <a class="card2" href="__SITE__/vacaciones-sin-calor/"><h3>Vacaciones sin calor</h3><p>Dónde ir en verano sin subir al norte: los refugios al sur del paralelo de Burgos.</p></a>
       <a class="card2" href="__SITE__/dormir-con-manta-en-verano/"><h3>Dormir con manta en verano</h3><p>Un destino fresco medido por provincia: el mapa del turismo climático.</p></a>
@@ -4306,7 +4339,8 @@ def construir_pagina_beta(datos: dict, site: str, es_portada: bool = False) -> s
             .replace("__ATAJO__", ATAJO_CERCA)
             .replace("__APPS_URL__", APPS_SCRIPT_URL)
             .replace("__HOME__", site + "/")
-            .replace("__SITE__", site))
+            .replace("__SITE__", site)
+            .replace("__NHOT__", str(n_hoteles())))
 
 
 # ===========================================================================
@@ -5506,7 +5540,7 @@ __NAV__
       <a class="navcard" href="__SITE__/ranking-noches-tropicales/"><span class="ic">🏆</span><b>Ranking nacional</b><span>Dónde se duerme mejor y peor de toda España.</span></a>
       <a class="navcard" href="__SITE__/ola-de-calor/"><span class="ic">🔥</span><b>Mapa de la ola de calor</b><span>Máximas y mínimas de AEMET, día a día.</span></a>
       <a class="navcard" href="__SITE__/dormir-con-manta-en-verano/"><span class="ic">🛌</span><b>Dormir con manta en agosto</b><span>Los destinos frescos, provincia a provincia.</span></a>
-      <a class="navcard" href="__SITE__/hoteles-refugio-climatico/"><span class="ic">🏨</span><b>Hoteles refugio</b><span>25 hoteles donde dormir en estas zonas frescas.</span></a>
+      <a class="navcard" href="__SITE__/hoteles-refugio-climatico/"><span class="ic">🏨</span><b>Hoteles refugio</b><span>__NHOT__ hoteles donde dormir en estas zonas frescas.</span></a>
       <a class="navcard" href="__SITE__/microclimas/"><span class="ic">🌿</span><b>Microclimas</b><span>Por qué un valle es más fresco que la cima de al lado.</span></a>
     </div>
   </div>
@@ -5559,7 +5593,8 @@ def construir_pagina_estudio(site: str, datos: dict) -> str:
             .replace("__INI__", ini)
             .replace("__FIN__", fin)
             .replace("__SITE__", site)
-            .replace("__HOME__", site + "/"))
+            .replace("__HOME__", site + "/")
+            .replace("__NHOT__", str(n_hoteles())))
 
 
 # ---------------------------------------------------------------------------
@@ -6693,8 +6728,8 @@ __NAV__
     <p>Casi todos comparten receta: <b>altitud</b> (600–1.700 m), <b>interior</b> (lejos del mar, que de noche devuelve el calor acumulado) y <b>aire seco</b> de clima continental, que deja escapar el calor del día en cuanto se pone el sol. Es el mecanismo que explican <a href="__SITE__/microclimas/">los microclimas</a>: mientras la costa mediterránea encadena hasta 86 noches tropicales seguidas — compruébalo en <a href="__SITE__/ranking-noches-tropicales/">el ranking nacional</a> —, en estas sierras la manta es obligatoria hasta en pleno agosto.</p>
     <h2>Turismo climático: elegir destino por cómo se siente</h2>
     <p>Cada verano más gente organiza las vacaciones huyendo del calor: es el <b>turismo climático</b>. No va de monumentos, va de <b>cómo se va a sentir el cuerpo</b>: dormir sin ventilador, cenar con chaqueta fina, pasear a mediodía sin sufrir mientras <a href="__SITE__/ola-de-calor/">la ola de calor</a> asa el resto del mapa. Estos datos son su mapa — y <a href="__SITE__/confortometro/">el Confortómetro</a>, nuestro estudio participativo, le está poniendo la capa que faltaba: cómo se siente cada zona, votado por quienes están allí.</p>
-    <p>¿Y si buscas <b>hoteles rurales frescos</b> — ese «hotel sin aire acondicionado pero fresco» que promete la búsqueda? Hemos seleccionado <b>25 hoteles</b> situados en estos refugios climáticos, con el dato de AEMET de cada zona (medimos el clima del entorno, no el interior del hotel: donde la noche refresca de verdad, se duerme fresco).</p>
-    <p style="margin:6px 0 4px"><a class="btn pri" href="__SITE__/hoteles-refugio-climatico/">🏨 Los 25 hoteles donde se duerme con manta →</a></p>
+    <p>¿Y si buscas <b>hoteles rurales frescos</b> — ese «hotel sin aire acondicionado pero fresco» que promete la búsqueda? Hemos seleccionado <b>__NHOT__ hoteles</b> situados en estos refugios climáticos, con el dato de AEMET de cada zona (medimos el clima del entorno, no el interior del hotel: donde la noche refresca de verdad, se duerme fresco).</p>
+    <p style="margin:6px 0 4px"><a class="btn pri" href="__SITE__/hoteles-refugio-climatico/">🏨 Los __NHOT__ hoteles donde se duerme con manta →</a></p>
     <p><a href="__SITE__/refugios-y-espana-vaciada/">Muchos de estos pueblos están en la España vaciada: el frío que los despobló es hoy su activo →</a></p>
   </div>
 
@@ -6791,7 +6826,8 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
             .replace("__TABLA__", "".join(filas))
             .replace("__FAQ__", faq_html(faq))
             .replace("__SITE__", site)
-            .replace("__HOME__", site + "/"))
+            .replace("__HOME__", site + "/")
+            .replace("__NHOT__", str(n_hoteles())))
 
 
 PAGINA_AVISO_LEGAL = r"""<!DOCTYPE html>
@@ -7047,7 +7083,17 @@ PAGINA_PILAR = r"""<!DOCTYPE html>
  .btn{display:inline-block;padding:12px 19px;border-radius:11px;font-weight:600;font-size:15px}
  .btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}
  .btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
- @media(max-width:560px){.cifras{grid-template-columns:1fr}}
+ .filtros{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0 10px}
+ .filtros select,.filtros input{background:var(--bg2);color:var(--paper);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font:inherit;font-size:14.5px}
+ .filtros input{flex:1;min-width:160px}
+ .tabla-cero{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:10px 0}
+ .tabla-cero table{width:100%;border-collapse:collapse;font-size:14.5px}
+ .tabla-cero th{text-align:left;padding:10px 12px;background:var(--bg2);color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+ .tabla-cero td{padding:9px 12px;border-top:1px solid var(--line);color:#e3d8c4}
+ .tabla-cero td.n{text-align:right;font-family:var(--fm);white-space:nowrap}
+ .tabla-cero tr.oculta{display:none}
+ .cuenta{font-size:13px;color:var(--muted);margin:8px 0 0}
+ @media(max-width:560px){.cifras{grid-template-columns:1fr}.tabla-cero .hide{display:none}}
 __NAVCSS__
 __FOOTERCSS__
 </style>
@@ -7078,6 +7124,18 @@ __NAV__
   </div>
   <p>La media nacional esconde diferencias enormes. En el conjunto de estaciones analizadas, la horquilla va desde <b>__N_CERO__</b> estaciones que no han registrado ni una sola noche tropical en toda la serie hasta puntos del litoral que superan las <b>__MAX_NT__</b> al año.</p>
   <p>La variable que mejor explica esa diferencia no es la latitud, sino la <b>altitud</b> y la <b>distancia al mar</b>. El gradiente térmico vertical ronda los 0,6&nbsp;°C por cada 100 metros de desnivel: bastan 400 metros de diferencia para cruzar el umbral de los 20&nbsp;°C en una noche marginal. Por eso hay pueblos a menos de cien kilómetros de una capital mediterránea donde en agosto se duerme con manta.</p>
+  <h3 id="las-que-nunca">Las que no registran ninguna</h3>
+  <p>Estas son las <b>__N_CERO__</b> estaciones que no han sumado ni una sola noche tropical en toda la serie. Filtra por provincia o escribe el nombre de un pueblo.</p>
+  <div class="filtros">
+    <select id="fprov" aria-label="Filtrar por provincia"><option value="">Todas las provincias</option>__OPTS__</select>
+    <input id="fbusca" type="search" placeholder="Buscar un pueblo…" aria-label="Buscar un pueblo">
+  </div>
+  <div class="tabla-cero"><table>
+    <thead><tr><th>Estación</th><th>Provincia</th><th class="n hide">Altitud</th><th class="n">Mínima media</th></tr></thead>
+    <tbody id="tcero">__FILAS_CERO__</tbody>
+  </table></div>
+  <p class="cuenta" id="fcuenta"></p>
+  <p class="fichadatos">La mínima media es la de los veranos de la serie. Todas estas estaciones tienen <b>cero</b> noches tropicales en el periodo analizado. Fuente: AEMET.</p>
   <p>El detalle completo, estación por estación y de la más fresca a la más calurosa, está en <a href="__SITE__/ranking-noches-tropicales/">el ranking nacional</a>; y sobre el mapa, en <a href="__SITE__/mapa-estaciones/">el mapa de estaciones</a>.</p>
 
   <h2 id="balance">Balance del verano __ANIO__</h2>
@@ -7106,6 +7164,24 @@ __NAV__
   </div>
 </div></section>
 __FOOTER__
+<script>
+(function(){
+ var sp=document.getElementById("fprov"), bu=document.getElementById("fbusca"),
+     tb=document.getElementById("tcero"), ct=document.getElementById("fcuenta");
+ if(!sp||!bu||!tb) return;
+ var filas=[].slice.call(tb.rows);
+ var na=function(x){return x.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();};
+ function filtra(){
+  var p=sp.value, q=na(bu.value.trim()), n=0;
+  filas.forEach(function(tr){
+   var ok=(!p||tr.getAttribute("data-p")===p)&&(!q||na(tr.getAttribute("data-n")).indexOf(q)>=0);
+   tr.className=ok?"":"oculta"; if(ok)n++;
+  });
+  ct.textContent=n+(n===1?" estación":" estaciones")+(p||q?" con este filtro":" en total");
+ }
+ sp.addEventListener("change",filtra); bu.addEventListener("input",filtra); filtra();
+})();
+</script>
 </body></html>
 """
 
@@ -7146,6 +7222,27 @@ def construir_pagina_pilar(estaciones: list, datos: dict, balance: dict, site: s
     else:
         bal_html = ("<p>El balance del último verano cerrado se publicará en cuanto la serie "
                     "diaria de AEMET esté completa.</p>")
+
+    # --- tabla de las estaciones que no registran ninguna noche tropical.
+    # Se listan EXACTAMENTE las que cuenta la cifra de arriba (ids_cero, ventana
+    # jun-sep); si se cogieran del ranking (jun-ago) la tabla tendría más filas
+    # que el número que la encabeza.
+    por_id = {e["id"]: e for e in estaciones}
+    ids = balance.get("ids_cero") or [e["id"] for e in estaciones if e["nt"] < 0.05]
+    ceros = sorted((por_id[i] for i in ids if i in por_id),
+                   key=lambda e: (clave_orden(e["prov"]), clave_orden(e["loc"])))
+    filas = []
+    for e in ceros:
+        cert = (f'<a href="{site}/certificados/{slug(e["loc"])}/">{e["loc"]}</a>'
+                if e["nt"] < 1 else e["loc"])
+        filas.append(
+            f'<tr data-p="{e["prov"]}" data-n="{e["loc"]}">'
+            f'<td>{cert}</td><td>{e["prov"]}</td>'
+            f'<td class="n hide">{miles(e["alt"])}&nbsp;m</td>'
+            f'<td class="n">{_n_es(e["tmin"])}&nbsp;°C</td></tr>')
+    filas_cero = "".join(filas)
+    opts = "".join(f'<option value="{p}">{p}</option>'
+                   for p in sorted({e["prov"] for e in ceros}, key=clave_orden))
 
     # --- rejilla de las 52 provinciales, con la cifra de su estación de referencia
     tarjetas = []
@@ -7209,6 +7306,8 @@ def construir_pagina_pilar(estaciones: list, datos: dict, balance: dict, site: s
             .replace("__FICHA__", ficha_datos(fecha_iso, fecha_txt))
             .replace("__BALANCE__", bal_html)
             .replace("__PROVS__", provs_html)
+            .replace("__FILAS_CERO__", filas_cero)
+            .replace("__OPTS__", opts)
             .replace("__FAQ_HTML__", faq_html)
             .replace("__N_ESTACIONES__", miles(n_estaciones))
             .replace("__N_VERANOS__", str(n_veranos))
@@ -7894,6 +7993,26 @@ def sello_svg(zona: str, prov: str, tmin: float, nt: float, nivel: str = "A",
         f'<text font-family="{_SELLO_FB}" font-size="8.5" letter-spacing="1.5" font-weight="600" fill="{C["sub"]}">'
         f'<textPath href="#arcBot" startOffset="50%" text-anchor="middle">BASADO EN DATOS DE AEMET · 2017–2026</textPath></text>'
         f'</svg>')
+
+
+_N_HOTELES: list = []
+
+
+def n_hoteles() -> int:
+    """Cuántos hoteles hay en datos/hoteles.csv.
+
+    El número estaba escrito a mano («25 hoteles») en cinco sitios de tres
+    plantillas distintas mientras el CSV ya tenía 33: cada alta nueva ampliaba
+    el desfase. Se lee una vez y se cachea.
+    """
+    if not _N_HOTELES:
+        ruta = AEMET_DIR / "datos" / "hoteles.csv"
+        try:
+            with ruta.open(encoding="utf-8", newline="") as fh:
+                _N_HOTELES.append(sum(1 for _ in csv.DictReader(fh)))
+        except OSError:
+            _N_HOTELES.append(0)
+    return _N_HOTELES[0]
 
 
 def cargar_hoteles(estaciones: list) -> list:
@@ -10518,7 +10637,7 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         # Sigue
         '<section><div class="wrap"><div class="panel">'
         '<h2 style="margin-top:0">Explora más refugios</h2>'
-        f'<div class="acts"><a class="btn sec" href="{site}/hoteles-refugio-climatico/">🏨 Los 25 hoteles refugio</a>'
+        f'<div class="acts"><a class="btn sec" href="{site}/hoteles-refugio-climatico/">🏨 Los {n_hoteles()} hoteles refugio</a>'
         f'<a class="btn sec" href="{site}/{slug(h["provincia"])}/">Noches tropicales en {h["provincia"]}</a>'
         f'<a class="btn sec" href="{site}/dormir-con-manta-en-verano/">Dormir con manta en verano</a></div>'
         '</div></div></section>'

@@ -403,11 +403,21 @@ def main() -> int:
     top = todos[:TOP_N]
     site = g.SITE_URL.rstrip("/")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    vistos: set[str] = set()   # un certificado por localidad (Oviedo tiene 2 estaciones)
+    # Un certificado por localidad: Oviedo tiene dos estaciones (1249I y 1249X) y
+    # las dos derivan el mismo slug. Antes se deduplicaba SOLO al escribir las
+    # páginas, pero a construir_indice() se le pasaba la lista entera: el listado
+    # pintaba «Oviedo» dos veces, con los dos enlaces al mismo sitio. Se depura
+    # aquí, una vez, y todo lo de abajo trabaja ya sobre la lista limpia.
+    vistos: set[str] = set()
+    unicos = []
     for e in todos:
         if g.slug(e["loc"]) in vistos:
             continue
         vistos.add(g.slug(e["loc"]))
+        unicos.append(e)
+    todos = unicos
+    top = [e for e in top if e in todos][:TOP_N]
+    for e in todos:
         es_top = e in top
         sl = g.slug(e["loc"])
         if es_top:   # tarjeta PNG solo para el Top 25 (campaña de ayuntamientos)

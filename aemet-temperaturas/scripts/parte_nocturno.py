@@ -15,6 +15,7 @@ Los datos de observación son PROVISIONALES (sin validar) y así se indica.
 
 Requiere: requests + variable de entorno AEMET_API_KEY.
 Uso local sin clave:  python parte_nocturno.py --demo   (datos sintéticos)
+Solo archivar:        python parte_nocturno.py --solo-archivo
 """
 from __future__ import annotations
 
@@ -563,6 +564,7 @@ def archivar_horarias(obs: list, dir_base: Path = None) -> str:
 
 def main() -> int:
     demo = "--demo" in sys.argv
+    solo_archivo = "--solo-archivo" in sys.argv
     obs = observaciones_demo() if demo else obtener_observaciones()
     # Archivar ANTES de nada: aunque el parte no se pueda publicar (pocas
     # estaciones, fuera de la ventana horaria...), las lecturas de esta noche
@@ -572,6 +574,15 @@ def main() -> int:
             print("   archivo horario:", archivar_horarias(obs))
         except Exception as e:                      # nunca tumbar el parte
             print(f"   AVISO: no se pudo archivar el horario ({e})", file=sys.stderr)
+
+    # --solo-archivo: guardar y salir. Lo usa archivo-horario.yml, que corre de
+    # madrugada para cubrir la noche entera. A esas horas NO se puede publicar
+    # el parte (la observación de AEMET aún no tiene la madrugada completa), y
+    # además publicarlo dos veces desordenaría el histórico y el hilo de X.
+    if solo_archivo:
+        print("   modo --solo-archivo: no se genera el parte ni se publica en X.")
+        return 0
+
     minimas = minimas_de_la_noche(obs)
     if len(minimas) < MIN_ESTACIONES:
         # La API de observación solo conserva ~12 horas: por la tarde-noche la

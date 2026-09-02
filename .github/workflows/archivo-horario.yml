@@ -1,0 +1,79 @@
+name: Archivo horario nocturno
+
+# Guarda las lecturas horarias de AEMET durante la NOCHE, que es lo único que
+# permite responder «cuántas HORAS estuvo por debajo de 20°» en vez de «cuánto
+# bajó en el punto más frío».
+#
+# POR QUÉ EXISTE ESTE WORKFLOW APARTE. El parte (parte-nocturno.yml) archiva de
+# paso, pero corre a las 07:15 y solo puede publicarse por la mañana. Sus dos
+# cron están a hora y media uno de otro: son red de seguridad contra un cron
+# saltado, no cobertura de la noche. Con los retrasos reales de GitHub Actions
+# —el 27 y 28 de agosto llegó 10-12 h tarde— dos de cada tres noches quedaron a
+# medias: el 31 de agosto el fichero empieza a las 03:00 UTC y falta media
+# madrugada. La observación de AEMET se borra a las ~12 h: lo que no se captura
+# esa mañana no existe nunca.
+#
+# LAS HORAS. Cada ejecución ve hacia atrás unas 12 h, así que:
+#     23:30 UTC  ->  11:30-23:30   cubre el principio de la noche
+#     02:30 UTC  ->  14:30-02:30   cubre hasta la madrugada
+#     05:30 UTC  ->  17:30-05:30   cubre la ventana de sueño ENTERA
+#   (+ 07:15 del parte -> 19:15-07:15, la ventana entera otra vez)
+# Dos pasadas independientes cubren la noche completa y otras dos la cubren a
+# trozos: hace falta que fallen las cuatro para perder una noche.
+#
+# Solaparse no cuesta nada: archivar_horarias() fusiona por (fint, idema).
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 23 * * *"
+    - cron: "30 2 * * *"
+    - cron: "30 5 * * *"
+
+permissions:
+  contents: write
+
+# Grupo PROPIO, no el de commit-docs. Este workflow es el único con ventana
+# horaria irrecuperable: si se queda encolado detrás de una reconstrucción de la
+# web se pierde la noche. El push se protege con el reintento de abajo.
+concurrency:
+  group: archivo-horario
+  cancel-in-progress: false
+
+jobs:
+  archivar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Descargar repo
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar requests
+        run: pip install requests
+
+      - name: Archivar las lecturas horarias
+        working-directory: aemet-temperaturas/scripts
+        env:
+          AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
+        run: python parte_nocturno.py --solo-archivo
+
+      - name: Commit si hay lecturas nuevas
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add aemet-temperaturas/datos/horarias
+          if git diff --staged --quiet; then
+            echo "Sin lecturas nuevas que archivar."
+          else
+            git commit -m "Archivo horario ($(date -u +%Y-%m-%dT%H:%MZ))"
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash origin main && git push && exit 0
+              echo "push rechazado (colisión con otro workflow), reintento $i…"; sleep 4
+            done
+            echo "No se pudo empujar tras 5 intentos"; exit 1
+          fi

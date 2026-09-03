@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-02",
- "total": 845,
- "tropicales": 237,
- "ecuatoriales": 3,
+ "fecha": "2026-09-03",
+ "total": 847,
+ "tropicales": 292,
+ "ecuatoriales": 21,
  "peor": {
-  "id": "B569X",
-  "nombre": "Capdepera-Faro",
-  "min": 25.6,
-  "prov": "Illes Balears"
+  "id": "5998X",
+  "nombre": "Osuna Sea",
+  "min": 27.1,
+  "prov": "Sevilla"
  },
  "mejor": {
   "id": "3319D",
   "nombre": "Puerto el Pico",
-  "min": 4.4,
+  "min": 5.0,
   "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 25.6,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "6000A",
-   "nombre": "Melilla",
-   "min": 25.4,
-   "prov": "Melilla"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 24.6,
-   "prov": "Almería"
-  },
-  {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 24.5,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "5998X",
    "nombre": "Osuna Sea",
-   "min": 24.4,
+   "min": 27.1,
    "prov": "Sevilla"
   },
   {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 24.3,
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 26.3,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "5270B",
+   "nombre": "Jaén",
+   "min": 26.2,
+   "prov": "Jaén"
+  },
+  {
+   "id": "5612X",
+   "nombre": "Lora de Estepa (Automatica)",
+   "min": 26.2,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "5279X",
+   "nombre": "Linares (Vor - Automatica)",
+   "min": 26.1,
+   "prov": "Jaén"
+  },
+  {
+   "id": "5038Y",
+   "nombre": "Cazorla (Automatica)",
+   "min": 26.0,
+   "prov": "Jaén"
+  },
+  {
+   "id": "5427X",
+   "nombre": "Doña Mencia",
+   "min": 26.0,
+   "prov": "Córdoba"
+  },
+  {
+   "id": "5996B",
+   "nombre": "Barbate Depuradora",
+   "min": 26.0,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "0429X",
+   "nombre": "Figueres Els Aspres",
+   "min": 25.9,
+   "prov": "Girona"
   },
   {
    "id": "7012X",
    "nombre": "Cartagena",
-   "min": 24.2,
+   "min": 25.7,
    "prov": "Murcia"
-  },
-  {
-   "id": "B398A",
-   "nombre": "Cabrera Parque Nacional de Cabrera",
-   "min": 24.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 24.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "0201X",
-   "nombre": "Barcelona Drassanes",
-   "min": 24.0,
-   "prov": "Barcelona"
   }
  ],
  "top_fresco": [
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 4.4,
+   "min": 5.0,
    "prov": "Ávila"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 5.6,
+   "min": 5.8,
    "prov": "Segovia"
   },
   {
-   "id": "1410X",
-   "nombre": "Sobrado dos Monxes",
-   "min": 6.1,
-   "prov": "A Coruña"
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 7.3,
+   "prov": "Ourense"
+  },
+  {
+   "id": "9218A",
+   "nombre": "Isaba/Izaba",
+   "min": 7.3,
+   "prov": "Navarra"
   },
   {
    "id": "2243A",
    "nombre": "Aguilar de Campoo",
-   "min": 6.3,
+   "min": 7.5,
    "prov": "Palencia"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 6.4,
-   "prov": "Cantabria"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 6.7,
+   "min": 7.6,
    "prov": "Zamora"
   },
   {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 6.9,
-   "prov": "Ourense"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 7.5,
-   "prov": "León"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
    "min": 7.7,
-   "prov": "Madrid"
+   "prov": "Ourense"
   },
   {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 8.0,
-   "prov": "Ourense"
+   "id": "1410X",
+   "nombre": "Sobrado dos Monxes",
+   "min": 7.9,
+   "prov": "A Coruña"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 8.2,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 8.5,
+   "prov": "Cantabria"
   }
  ]
 }

@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-03",
+ "fecha": "2026-09-04",
  "total": 847,
- "tropicales": 293,
- "ecuatoriales": 22,
+ "tropicales": 340,
+ "ecuatoriales": 23,
  "peor": {
-  "id": "5998X",
-  "nombre": "Osuna Sea",
-  "min": 27.1,
-  "prov": "Sevilla"
+  "id": "4236Y",
+  "nombre": "Puerto del Rey",
+  "min": 26.9,
+  "prov": "Cáceres"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 5.0,
-  "prov": "Ávila"
+  "id": "2192C",
+  "nombre": "Cuellar",
+  "min": 7.5,
+  "prov": "Segovia"
  },
  "top_calor": [
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 27.1,
-   "prov": "Sevilla"
+   "id": "4236Y",
+   "nombre": "Puerto del Rey",
+   "min": 26.9,
+   "prov": "Cáceres"
+  },
+  {
+   "id": "3463Y",
+   "nombre": "Trujillo",
+   "min": 26.4,
+   "prov": "Cáceres"
+  },
+  {
+   "id": "4339X",
+   "nombre": "Cañamero el Pinar",
+   "min": 26.1,
+   "prov": "Cáceres"
+  },
+  {
+   "id": "7002Y",
+   "nombre": "Águilas",
+   "min": 26.1,
+   "prov": "Murcia"
   },
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 26.3,
+   "min": 26.1,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 26.0,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "4411C",
+   "nombre": "Alcuescar",
+   "min": 25.9,
+   "prov": "Cáceres"
   },
   {
    "id": "5270B",
    "nombre": "Jaén",
-   "min": 26.2,
+   "min": 25.8,
    "prov": "Jaén"
   },
   {
-   "id": "5612X",
-   "nombre": "Lora de Estepa (Automatica)",
-   "min": 26.2,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "5279X",
-   "nombre": "Linares (Vor - Automatica)",
-   "min": 26.1,
-   "prov": "Jaén"
-  },
-  {
-   "id": "5038Y",
-   "nombre": "Cazorla (Automatica)",
-   "min": 26.0,
-   "prov": "Jaén"
-  },
-  {
-   "id": "5427X",
-   "nombre": "Doña Mencia",
-   "min": 26.0,
-   "prov": "Córdoba"
-  },
-  {
-   "id": "5996B",
-   "nombre": "Barbate Depuradora",
-   "min": 26.0,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "0429X",
-   "nombre": "Figueres Els Aspres",
-   "min": 25.9,
-   "prov": "Girona"
-  },
-  {
-   "id": "7012X",
-   "nombre": "Cartagena",
+   "id": "3455X",
+   "nombre": "Jaraicejo",
    "min": 25.7,
-   "prov": "Murcia"
+   "prov": "Cáceres"
+  },
+  {
+   "id": "0201X",
+   "nombre": "Barcelona Drassanes",
+   "min": 25.5,
+   "prov": "Barcelona"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 5.0,
-   "prov": "Ávila"
-  },
-  {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 5.8,
+   "min": 7.5,
    "prov": "Segovia"
   },
   {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 7.3,
-   "prov": "Ourense"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 8.1,
+   "prov": "Ávila"
   },
   {
-   "id": "9218A",
-   "nombre": "Isaba/Izaba",
-   "min": 7.3,
-   "prov": "Navarra"
-  },
-  {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": 7.5,
-   "prov": "Palencia"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 7.6,
-   "prov": "Zamora"
-  },
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 7.7,
-   "prov": "Ourense"
-  },
-  {
-   "id": "1410X",
-   "nombre": "Sobrado dos Monxes",
-   "min": 7.9,
-   "prov": "A Coruña"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
    "min": 8.2,
-   "prov": "Salamanca"
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 8.4,
+   "prov": "Soria"
+  },
+  {
+   "id": "3013",
+   "nombre": "Molina de Aragón",
+   "min": 8.8,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 8.9,
+   "prov": "León"
+  },
+  {
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 8.9,
+   "prov": "Soria"
+  },
+  {
+   "id": "3130C",
+   "nombre": "Sigüenza",
+   "min": 8.9,
+   "prov": "Guadalajara"
   },
   {
    "id": "9001D",
    "nombre": "Nestares",
-   "min": 8.5,
+   "min": 8.9,
    "prov": "Cantabria"
+  },
+  {
+   "id": "9218A",
+   "nombre": "Isaba/Izaba",
+   "min": 8.9,
+   "prov": "Navarra"
   }
  ]
 }

@@ -6185,7 +6185,7 @@ __NAV__
       <p>Digerir produce calor, así que una cena pesada juega en tu contra. Y el alcohol, aunque dé sueño al principio, <b>fragmenta la segunda mitad de la noche</b> y estorba a la regulación de la temperatura: es de las peores ideas en una noche tropical. Agua a temperatura ambiente, y sin miedo a beberla.</p></li>
   </ol>
   <div class="destacado">
-    <p><b>La toalla húmeda, solo si el aire es seco.</b> Colgar un paño mojado o poner un barreño de agua enfría por evaporación, y por eso funciona en el interior de Teruel o Soria y no funciona en la costa: donde el aire ya está cargado de humedad, no evapora nada y encima empeora la sensación. Es el mismo motivo por el que <a href="__SITE__/microclimas/">se duerme peor en el litoral que a la misma temperatura tierra adentro</a>. Si quieres exprimirlo, el montaje que mejor rinde es la sábana húmeda sobre una cuerda: lo explicamos en <a href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/">cómo enfriar una habitación sin aire acondicionado</a>, con el cálculo de cuántos grados puede bajar de verdad en tu zona.</p>
+    <p><b>La toalla húmeda, solo si el aire es seco.</b> Colgar un paño mojado o poner un barreño de agua enfría por evaporación, y por eso funciona en el interior de Teruel o Soria y no funciona en la costa: donde el aire ya está cargado de humedad, no evapora nada y encima empeora la sensación. Es el mismo motivo por el que <a href="__SITE__/microclimas/">se duerme peor en el litoral que a la misma temperatura tierra adentro</a>. Pero si tu aire es seco, el barreño se queda corto: tiende una cuerda de pared a pared por encima de la cama, con un extremo más alto, y cuelga de ella un paño de hilo o de muselina humedecido, <b>como el techo de una tienda canadiense</b>. Abierto por la cabecera y por los pies, el aire fresco entra por un lado y sale caliente por el otro, y tú duermes debajo del dosel. Es, literalmente, <b>dormir dentro de un botijo</b>. El montaje entero, la física y cuántos grados baja de verdad en tu zona, en <a href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/">cómo enfriar una habitación sin aire acondicionado</a>.</p>
   </div>
 </div></section>
 
@@ -6502,23 +6502,25 @@ PAGINA_EVAPORATIVO = r"""<!doctype html>
 __NAV__
 <header class="h"><div class="wrap">
   <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Enfriar sin aire acondicionado</nav>
-  <div class="kick">Truco · coste cero · con la física delante</div>
+  <div class="kick">El botijo con la cama dentro · coste cero</div>
   <h1>Enfriar una habitación <em>sin aire acondicionado</em></h1>
-  <p class="intro">La sábana húmeda sobre una cuerda funciona de verdad, pero no en todas partes. Aquí está el montaje, la física que lo explica y —esto no lo encontrarás en otro sitio— <b>cuántos grados puede bajar en tu zona</b>, calculado con la humedad que mide AEMET cada madrugada.</p>
+  <p class="intro">Una cuerda de pared a pared, un paño de muselina humedecido colgando como el techo de una tienda canadiense, y a dormir debajo: <b>un botijo con la cama dentro</b>. Funciona de verdad, pero no en todas partes. Aquí está el montaje, la física que lo explica y —esto no lo encontrarás en otro sitio— <b>cuántos grados puede bajar en tu zona</b>, calculado con la humedad que mide AEMET cada madrugada.</p>
 </div></header>
 
 <section><div class="wrap">
   __FOTO_APERTURA__
-  <h2>El truco: una tienda de campaña húmeda sobre la cama</h2>
-  <p>Necesitas una cuerda, una sábana fina de algodón y agua. Nada más. Se monta en tres minutos y no consume electricidad, así que funciona en un apagón, en una caravana o en un patio.</p>
-  <p>La idea es vieja y es la misma del <b>botijo</b>: cuando el agua se evapora, roba calor al aire que la rodea. Lo que hace la sábana es poner esa superficie de evaporación justo encima de ti, y de paso interceptar el calor que tu propio cuerpo irradia hacia el techo.</p>
+  <h2>El truco: dormir dentro de un botijo</h2>
+  <p>Un botijo enfría porque el agua rezuma por el barro y, al evaporarse, se lleva el calor consigo. Lo que sigue es exactamente eso, pero con la cama dentro.</p>
+  <p>Tiendes una cuerda de pared a pared por encima de la cama, con un extremo más alto que el otro, y cuelgas de ella un paño de hilo fino o de muselina humedecido: queda como <b>el techo de una tienda canadiense</b>, un dosel a dos aguas sobre ti. La cabecera y los pies se dejan abiertos, así que por el extremo bajo entra aire nuevo y por el alto sale el que se ha calentado. Debajo, la tela mojada evapora sin parar y te va quitando calor de encima toda la noche.</p>
+  <p>Una cuerda, un paño y agua. Se monta en tres minutos, no consume electricidad y funciona en un apagón, en una caravana o al raso.</p>
 
   <ol class="pasos">
     <li><b>Tiende la cuerda por encima de la cama, inclinada</b>
       <p>De pared a pared, o entre dos muebles altos, a unos 40-60&nbsp;cm por encima de donde va tu cara. <b>Un extremo más alto que el otro</b>, unos 20 o 30&nbsp;cm: esa inclinación es la que hace que el aire tibio corra hacia arriba y salga por el lado alto, arrastrando aire nuevo por el bajo.</p>
       <p>No esperes un vendaval: el tiro que genera un desnivel así es suave. Lo notarás como una corriente muy leve, no como un ventilador.</p></li>
-    <li><b>Echa la sábana encima, a dos aguas</b>
-      <p>Que quede como el techo de una tienda de campaña, con los bordes cayendo a los lados pero <b>sin cerrar por los extremos</b>. Si la cierras del todo, cortas la corriente y el invento deja de funcionar: pasa de refrescar a ser un saco de vapor.</p></li>
+    <li><b>Cuelga el paño a dos aguas, abierto por cabecera y pies</b>
+      <p>Como el techo de una tienda canadiense: los bordes caen a los lados y <b>los dos extremos quedan abiertos de par en par</b>. Por ahí entra el aire nuevo y sale el caliente, que es lo que hace que el invento respire.</p>
+      <p>Si lo cierras por los extremos, cortas la corriente y lo estropeas del todo: pasa de refrescar a ser un saco de vapor encima de tu cara.</p></li>
     <li><b>Humedécela, no la empapes</b>
       <p>Con un pulverizador o escurriéndola bien. Debe quedar <b>húmeda al tacto pero sin gotear</b>: si chorrea, te mojará la cama y encima evapora peor, porque el agua sobrante cae al suelo en vez de pasar a vapor.</p>
       <p>Arrancar con agua bien fría, de la nevera, da un alivio inmediato por radiación mientras la evaporación coge el relevo.</p></li>
@@ -6689,9 +6691,9 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
         pct6, pctno, mediana, medcosta, medint = 17, 24, "3,3", "2,6", "4,0"
         tejeda, reinosa, beariz = "10,0", "0,6", "0,3"
 
-    desc = ("La sábana húmeda sobre una cuerda enfría de verdad, pero solo donde el "
-            "aire es seco. Cuántos grados puede bajar en tu zona, calculado con la "
-            "humedad nocturna que mide AEMET.")
+    desc = ("Un paño húmedo colgado como una tienda canadiense sobre la cama: dormir "
+            "dentro de un botijo. Enfría de verdad, pero solo donde el aire es seco. "
+            "Cuántos grados baja en tu zona, con la humedad nocturna de AEMET.")
 
     faq = [
         ("¿Cuántos grados baja de verdad la sábana húmeda?",
@@ -6739,9 +6741,10 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
              {"@type": "HowToStep", "name": "Tender la cuerda inclinada",
               "text": "Sobre la cama, a 40-60 cm por encima de la cara, con un extremo "
                       "20-30 cm más alto que el otro."},
-             {"@type": "HowToStep", "name": "Colocar la sábana a dos aguas",
-              "text": "Como el techo de una tienda de campaña, sin cerrar los extremos, "
-                      "para que corra el aire."},
+             {"@type": "HowToStep", "name": "Colgar el paño a dos aguas",
+              "text": "Como el techo de una tienda canadiense, con la cabecera y los "
+                      "pies abiertos: por un extremo entra aire nuevo y por el otro "
+                      "sale el caliente."},
              {"@type": "HowToStep", "name": "Humedecerla sin empapar",
               "text": "Húmeda al tacto pero sin gotear. Con agua fría el alivio es inmediato."},
              {"@type": "HowToStep", "name": "Usar el tejido más fino disponible",

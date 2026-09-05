@@ -6185,7 +6185,9 @@ __NAV__
       <p>Digerir produce calor, así que una cena pesada juega en tu contra. Y el alcohol, aunque dé sueño al principio, <b>fragmenta la segunda mitad de la noche</b> y estorba a la regulación de la temperatura: es de las peores ideas en una noche tropical. Agua a temperatura ambiente, y sin miedo a beberla.</p></li>
   </ol>
   <div class="destacado">
-    <p><b>La toalla húmeda, solo si el aire es seco.</b> Colgar un paño mojado o poner un barreño de agua enfría por evaporación, y por eso funciona en el interior de Teruel o Soria y no funciona en la costa: donde el aire ya está cargado de humedad, no evapora nada y encima empeora la sensación. Es el mismo motivo por el que <a href="__SITE__/microclimas/">se duerme peor en el litoral que a la misma temperatura tierra adentro</a>. Pero si tu aire es seco, el barreño se queda corto: tiende una cuerda de pared a pared por encima de la cama, con un extremo más alto, y cuelga de ella un paño de hilo o de muselina humedecido, <b>como el techo de una tienda canadiense</b>. Abierto por la cabecera y por los pies, el aire fresco entra por un lado y sale caliente por el otro, y tú duermes debajo del dosel. Es, literalmente, <b>dormir dentro de un botijo</b>. El montaje entero, la física y cuántos grados baja de verdad en tu zona, en <a href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/">cómo enfriar una habitación sin aire acondicionado</a>.</p>
+    <p><b>El dosel húmedo: dormir dentro de un botijo.</b> Tiende una cuerda de pared a pared por encima de la cama, con un extremo dos palmos más alto que el otro, y cuelga de ella un paño de hilo fino o de muselina humedecido, cayendo a dos aguas <b>como el techo de una tienda canadiense</b>. La cabecera y los pies quedan abiertos: por el extremo bajo entra aire nuevo, por el alto se escapa el que ya se ha calentado, y la tela mojada le va robando calor a todo lo que pasa por debajo. Tú incluido.</p>
+    <p>No es un invento moderno. Heródoto ya contaba en el siglo&nbsp;V&nbsp;a.&nbsp;C. que los pescadores del delta del Nilo tendían de noche sobre la cama la misma red con la que pescaban de día; y en 1814 el botánico William Roxburgh anotó que en la India colgaban esteras de raíz de vetiver empapadas en agua —los <i>tattis</i>— para que el aire entrase en la casa mucho más fresco. El dosel junta las dos cosas: la tela sobre la cama y el agua evaporándose.</p>
+    <p>Con una condición que lo decide todo: <b>el aire tiene que estar seco</b>. En un dormitorio del litoral, con el aire ya cargado de humedad, no evapora casi nada y encima empeora la sensación —es el mismo motivo por el que <a href="__SITE__/microclimas/">se duerme peor en la costa que a la misma temperatura tierra adentro</a>. El montaje entero, la física de por qué funciona y <b>cuántos grados puede bajar de verdad en tu zona</b>, en <a href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/">cómo enfriar una habitación sin aire acondicionado</a>.</p>
   </div>
 </div></section>
 
@@ -6525,30 +6527,52 @@ __NAV__
       <p>Con un pulverizador o escurriéndola bien. Debe quedar <b>húmeda al tacto pero sin gotear</b>: si chorrea, te mojará la cama y encima evapora peor, porque el agua sobrante cae al suelo en vez de pasar a vapor.</p>
       <p>Arrancar con agua bien fría, de la nevera, da un alivio inmediato por radiación mientras la evaporación coge el relevo.</p></li>
     <li><b>Elige el tejido más fino que tengas</b>
-      <p><b>Muselina, gasa de algodón o lino fino.</b> Cuanto más abierta la trama, más superficie de agua queda expuesta al aire y más rápido evapora. Una sábana gruesa de percal hace lo contrario: retiene el agua dentro y evapora poco.</p></li>
+      <p><b>Muselina, gasa de algodón o lino fino.</b> Cuanto más abierta la trama, más superficie de agua queda expuesta al aire y más rápido evapora. Un paño grueso de percal hace lo contrario: retiene el agua dentro y evapora poco.</p></li>
     <li><b>Añade un hilo de aire</b>
-      <p>Un ventilador al mínimo apuntando <b>a la sábana, no a ti</b>, o simplemente una ventana con algo de brisa. El aire quieto se satura pegado a la tela y la evaporación se frena sola; moverlo aunque sea poco la mantiene en marcha.</p>
+      <p>Un ventilador al mínimo apuntando <b>al dosel, no a ti</b>, o simplemente una ventana con algo de brisa. El aire quieto se satura pegado a la tela y la evaporación se frena sola; moverlo aunque sea poco la mantiene en marcha.</p>
       <p>Apuntártelo a ti directamente toda la noche es lo que reseca la garganta y acaba despertándote.</p></li>
   </ol>
 </div></section>
 
 <section><div class="wrap">
-  <h2>Por qué enfría: la física en dos líneas</h2>
-  <p>Para pasar de líquido a vapor, cada gramo de agua necesita absorber unos <b>2.440 julios</b> de calor —el llamado calor latente de vaporización, a temperatura ambiente— y lo coge del aire que tiene alrededor. Evaporar medio litro a lo largo de una noche retira del orden de <b>1,2 millones de julios</b>: por eso una tela mojada enfría el aire que la atraviesa sin gastar un vatio.</p>
-  <p>Tu cuerpo, a 36&nbsp;°C, cede además calor por radiación hacia cualquier superficie más fría que tenga encima. Una sábana húmeda a 22&nbsp;°C es exactamente eso: un techo frío a medio metro de tu cara.</p>
+  <h2>De dónde viene: dos mitades que tardaron siglos en juntarse</h2>
+  <p>Ni el dosel ni la tela mojada son inventos nuestros. Lo que es reciente es unirlos.</p>
+  <p><b>La tela sobre la cama</b> es antiquísima. <b>Heródoto</b>, en el siglo&nbsp;V&nbsp;a.&nbsp;C., cuenta cómo se defendían del mosquito los egipcios del delta del Nilo: los de tierra adentro dormían en lo alto de torres, porque el viento impide al mosquito subir; y los de las marismas tendían de noche sobre la cama <b>la misma red con la que pescaban de día</b>. Es la primera descripción conocida de una mosquitera, y ya contiene media idea: una tela suspendida sobre quien duerme, y el aire moviéndose alrededor.</p>
+  <p><b>La tela mojada que enfría el aire</b> viene de otro sitio. En la India se cuelgan desde hace siglos esteras tejidas con raíz de vetiver —el <i>khus</i>— en puertas y ventanas, se empapan en agua y el viento seco del verano las cruza y entra en la casa convertido en otra cosa. Se llaman <i>tattis</i>, y el botánico escocés <b>William Roxburgh</b> las documentó en 1814 con una afirmación que suena exagerada y no lo es: bajaban la temperatura del aire <b>entre diez y quince grados</b>.</p>
+  <p>Esa cifra es la clave de todo lo que viene después, así que conviene entenderla bien. En el verano del norte de la India el aire llega a 45&nbsp;°C con un 15&nbsp;% de humedad: está tan sediento que admite una barbaridad de agua, y por eso el margen es enorme. <b>En una madrugada española ese margen es de 3,3&nbsp;°C de mediana.</b> El mismo truco, la misma física, dos resultados que no se parecen en nada — porque lo que cambia no es la tela: es el aire.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Por qué funciona: tres mecanismos a la vez</h2>
+  <p>Aquí está el ingenio. Un paño mojado colgado de cualquier manera solo hace lo primero de esta lista. El dosel inclinado hace las tres cosas a la vez, y por eso rinde tanto más que la suma de sus partes.</p>
+  <div class="nova">
+    <h3>1. Evaporación: la tela roba calor</h3>
+    <ul>
+      <li>Para pasar de líquido a vapor, cada gramo de agua necesita absorber unos <b>2.440 julios</b> —el calor latente de vaporización a temperatura ambiente— y los coge del aire que tiene al lado. Evaporar medio litro a lo largo de una noche retira del orden de <b>1,2 millones de julios</b> sin gastar un vatio.</li>
+    </ul>
+    <h3>2. Radiación: un techo frío sobre tu cara</h3>
+    <ul>
+      <li>Tu cuerpo está a 36&nbsp;°C y suelta calor por radiación hacia cualquier superficie más fría que tenga encima. El techo de tu habitación, después de un día de agosto, está caliente y te lo devuelve. <b>El paño húmedo se interpone</b>: a 22&nbsp;°C, es una pantalla fría a medio metro de tu cara que intercepta esa radiación y se la lleva.</li>
+    </ul>
+    <h3>3. Convección: la inclinación crea el tiro</h3>
+    <ul>
+      <li>El aire caliente pesa menos y sube. Al inclinar el dosel, ese aire tibio <b>corre por debajo de la tela hacia el extremo alto</b> y se escapa por ahí. Su salida deja un hueco que aspira aire nuevo por el extremo bajo. Es un tiro de chimenea en miniatura, sin motor, y lo que consigue es que la tela nunca se quede rodeada de aire saturado —que es lo que detiene la evaporación en un paño colgado sin más.</li>
+    </ul>
+  </div>
+  <p>Un barreño de agua solo evapora. Una tela colgada de cualquier manera evapora y hace algo de pantalla, pero se ahoga en su propio vapor. <b>El dosel inclinado y abierto por los dos extremos evapora, hace pantalla y se ventila solo.</b> Ese es todo el invento.</p>
   <p>Pero hay un límite, y es el que casi nadie cuenta.</p>
 </div></section>
 
 <section><div class="wrap">
   <h2>El límite que nadie te dice: el aire ya viene con agua</h2>
-  <p>El enfriamiento por evaporación no puede bajar la temperatura por debajo de un valor concreto: la <b>temperatura de bulbo húmedo</b>. Es la temperatura mínima a la que se puede llegar evaporando agua en ese aire, y depende de cuánta humedad lleve ya. Si el aire está saturado, no cabe más vapor y no hay enfriamiento posible por mucha sábana que pongas.</p>
-  <p>La diferencia entre la temperatura real y esa temperatura de bulbo húmedo es <b>el techo absoluto del truco</b>. Nadie lo alcanza —una sábana no es un evaporador perfecto—, pero por debajo de ese número no se puede bajar. Y ese techo se puede calcular, porque las estaciones de AEMET miden la humedad cada hora junto a la temperatura.</p>
+  <p>El enfriamiento por evaporación no puede bajar la temperatura por debajo de un valor concreto: la <b>temperatura de bulbo húmedo</b>. Es la temperatura mínima a la que se puede llegar evaporando agua en ese aire, y depende de cuánta humedad lleve ya. Si el aire está saturado, no cabe más vapor y no hay enfriamiento posible por mucho dosel que pongas.</p>
+  <p>La diferencia entre la temperatura real y esa temperatura de bulbo húmedo es <b>el techo absoluto del truco</b>. Nadie lo alcanza —un paño colgado no es un evaporador perfecto—, pero por debajo de ese número no se puede bajar. Y ese techo se puede calcular, porque las estaciones de AEMET miden la humedad cada hora junto a la temperatura.</p>
   <p>Lo hemos calculado para <b>__NEST__ estaciones</b>, con las lecturas de madrugada del archivo horario propio. El resultado es incómodo para el truco:</p>
 
   <div class="nova">
     <h3>El techo evaporativo de la madrugada española</h3>
     <ul>
-      <li><b>La mediana nacional es de __MEDIANA__&nbsp;°C.</b> Ese es el máximo teórico, con un evaporador perfecto. En la práctica, con una sábana, cuenta con bastante menos.</li>
+      <li><b>La mediana nacional es de __MEDIANA__&nbsp;°C.</b> Ese es el máximo teórico, con un evaporador perfecto. En la práctica, con un paño colgado, cuenta con bastante menos.</li>
       <li><b>Solo el __PCT6__&nbsp;% de las estaciones</b> llegarían a los 6&nbsp;°C que se prometen por ahí. La cifra de «4 a 6 grados» que circula en internet es, para la mayor parte de España, físicamente imposible.</li>
       <li><b>En el __PCTNO__&nbsp;% el techo no llega ni a 2&nbsp;°C.</b> Ahí el truco no compensa ni el esfuerzo de montarlo.</li>
       <li>Provincias con costa: <b>__MEDCOSTA__&nbsp;°C</b> de mediana. Provincias de interior: <b>__MEDINT__&nbsp;°C</b>. La diferencia no es una opinión: es cuánta agua lleva ya el aire.</li>
@@ -6696,10 +6720,10 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
             "Cuántos grados baja en tu zona, con la humedad nocturna de AEMET.")
 
     faq = [
-        ("¿Cuántos grados baja de verdad la sábana húmeda?",
+        ("¿Cuántos grados baja de verdad el dosel húmedo?",
          "Menos de lo que se dice por ahí. El techo físico lo marca la depresión del "
          "bulbo húmedo, y la mediana española de madrugada es de 3,3 °C. Ese es el "
-         "máximo teórico con un evaporador perfecto; una sábana rinde bastante menos. "
+         "máximo teórico con un evaporador perfecto; un paño colgado rinde bastante menos. "
          "Los «4 a 6 grados» que circulan solo serían posibles en el 17 % de las "
          "estaciones, casi todas de interior seco."),
         ("¿Funciona en la costa?",
@@ -6720,7 +6744,7 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
         ("¿Es lo mismo que un climatizador evaporativo?",
          "Es el mismo principio físico y tiene exactamente el mismo límite. Un aparato "
          "evaporativo mueve mucho más aire y por eso se acerca más al techo teórico, "
-         "pero tampoco puede bajar de la temperatura de bulbo húmedo. Donde la sábana "
+         "pero tampoco puede bajar de la temperatura de bulbo húmedo. Donde el dosel "
          "no sirve, el aparato tampoco."),
     ]
     faq_html = "".join(f"<dt>{p}</dt><dd>{r}</dd>" for p, r in faq)
@@ -6732,11 +6756,11 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
             {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
             {"@type": "ListItem", "position": 2, "name": "Enfriar sin aire acondicionado", "item": url}]},
         {"@type": "HowTo",
-         "name": "Enfriar una habitación con una sábana húmeda",
+         "name": "Enfriar una habitación con un dosel húmedo",
          "description": desc, "url": url, "inLanguage": "es-ES",
          "totalTime": "PT3M",
          "supply": [{"@type": "HowToSupply", "name": n} for n in
-                    ("Una cuerda", "Una sábana fina de algodón, muselina o lino", "Agua fría")],
+                    ("Una cuerda", "Un paño fino de hilo, muselina o lino", "Agua fría")],
          "step": [
              {"@type": "HowToStep", "name": "Tender la cuerda inclinada",
               "text": "Sobre la cama, a 40-60 cm por encima de la cara, con un extremo "
@@ -6750,7 +6774,7 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
              {"@type": "HowToStep", "name": "Usar el tejido más fino disponible",
               "text": "Muselina, gasa de algodón o lino fino: a más trama abierta, más evaporación."},
              {"@type": "HowToStep", "name": "Añadir un hilo de aire",
-              "text": "Un ventilador al mínimo apuntando a la sábana, no a la persona."}]},
+              "text": "Un ventilador al mínimo apuntando al dosel, no a la persona."}]},
         {"@type": "Article", "headline": titulo, "description": desc, "url": url,
          "inLanguage": "es-ES",
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},

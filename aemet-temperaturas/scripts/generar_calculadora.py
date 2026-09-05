@@ -4451,7 +4451,7 @@ __CSS_COMUN__
   <header class="hero"><div class="in">
     <p class="kick">Herramienta · Datos de AEMET</p>
     <h1>¿Dónde está tu refugio climático más cercano?</h1>
-    <p class="lede">En España hay <b>218 estaciones de AEMET</b> que no registran ni una noche tropical al año: sitios donde se sigue durmiendo tapado en agosto. Te decimos cuáles tienes más cerca, a qué distancia y cómo llegar.</p>
+    <p class="lede">En España hay <b>__CERO__ estaciones de AEMET</b> que no registran ni una noche tropical al año: sitios donde se sigue durmiendo tapado en agosto. Te decimos cuáles tienes más cerca, a qué distancia y cómo llegar.</p>
   </div></header>
 
   <section><div class="in">
@@ -4562,7 +4562,7 @@ est.addEventListener("change",function(){
 
 def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
                            humedad: dict | None = None) -> str:
-    """Los 218 refugios (nt<1) con coordenadas + todas las estaciones para poder
+    """Los refugios (nt<1) con coordenadas + todas las estaciones para poder
     elegir origen sin geolocalización. El cálculo (Haversine) va en el navegador.
     Cada refugio lleva, si existe, el complemento de humedad/viento de agosto."""
     hum = humedad or {}
@@ -4601,7 +4601,12 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
     share_txt = ("En España quedan 218 pueblos donde no se registra ni una noche tropical al año: "
                  "se duerme tapado en agosto y sin aire acondicionado. "
                  "Mira cuál te pilla más cerca, con los datos de AEMET de diez veranos:")
+    # La cifra de refugios se calcula, nunca se escribe a mano: estaba fijada en
+    # 218 y el dato real habia bajado, asi que la home de refugios y
+    # /dormir-con-calor/ se contradecian.
+    cero = sum(1 for e in estaciones if e["nt"] < 1)
     return (PAGINA_CERCA
+            .replace("__CERO__", str(cero))
             .replace("__NAV__", nav_html("cerca"))
             .replace("__FOOTER__", FOOTER_HTML)
             .replace("__CSS_COMUN__", " " + _CSS_COMUN)
@@ -6209,6 +6214,12 @@ __NAV__
   <p>La regla práctica, entonces, no es una hora: <b>abre cuando la calle esté más fresca
   que tu casa</b>. Y si la mínima de tu zona no baja de 22&nbsp;°C, la ventana no va a
   resolverlo — ahí mandan los otros siete puntos de la lista de arriba.</p>
+  <p>Y si tampoco bastan, queda la salida de la que menos se habla: <b>cambiar de sitio</b>.
+  En España hay <b>__CERO__ estaciones de AEMET</b> que no registran ni una sola noche
+  tropical al año, y es probable que tengas alguna más cerca de lo que crees. Puedes ver
+  <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">dónde se duerme fresco cerca
+  de ti</a>, a qué distancia y cómo llegar: el cálculo se hace en tu navegador y no
+  guardamos tu ubicación.</p>
   <h3>El aire bueno llega cuando ya estás dormido</h3>
   <p>En el <b>__H5__&nbsp;% de las estaciones</b> la temperatura mínima se alcanza <b>a
   las cinco de la mañana</b>, y en el resto entre las cuatro y las seis. Es la misma hora

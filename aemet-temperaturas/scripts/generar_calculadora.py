@@ -1227,6 +1227,8 @@ _F_EXPLORA = [("El Observatorio del Descanso", "/observatorio-del-descanso/"),
 _F_GUIAS = [("Qué es una noche tropical", "/noches-tropicales/"),
             ("Aumento de noches tropicales en España", "/aumento-noches-tropicales-espana/"),
             ("Cómo dormir con calor sin aire acondicionado", "/dormir-con-calor/"),
+            ("Enfriar una habitación sin aire acondicionado",
+             "/enfriar-habitacion-sin-aire-acondicionado/"),
             ("Vacaciones sin calor: dónde ir en verano", "/vacaciones-sin-calor/"),
             ("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
             ("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
@@ -1995,6 +1997,7 @@ def barra_compartir(url: str, texto: str) -> str:
     ir sin emojis y con el dato favorable primero."""
     from urllib.parse import quote
     import html as _html
+    import statistics
     wa = "https://wa.me/?text=" + quote(texto + " " + url)
     tw = ("https://twitter.com/intent/tweet?text=" + quote(texto)
           + "&amp;url=" + quote(url))
@@ -4222,6 +4225,7 @@ __CSS_COMUN__
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
       <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>__NHOT__ hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
       <a class="card2 destacada" href="__SITE__/dormir-con-calor/"><h3>😴 Cómo dormir con calor sin aire acondicionado</h3><p>Lo que de verdad funciona esta noche, lo que no sirve de nada, y a partir de qué temperatura ya no hay truco que valga.</p></a>
+      <a class="card2" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/"><h3>💧 Enfriar una habitación sin aire acondicionado</h3><p>La sábana húmeda sobre una cuerda funciona, pero solo donde el aire es seco. Cuántos grados puede bajar en tu zona, con la humedad que mide AEMET.</p></a>
       <a class="card2" href="__SITE__/vacaciones-sin-calor/"><h3>Vacaciones sin calor</h3><p>Dónde ir en verano sin subir al norte: los refugios al sur del paralelo de Burgos.</p></a>
       <a class="card2" href="__SITE__/dormir-con-manta-en-verano/"><h3>Dormir con manta en verano</h3><p>Un destino fresco medido por provincia: el mapa del turismo climático.</p></a>
       <a class="card2" href="__SITE__/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
@@ -4592,6 +4596,7 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
     # Texto para compartir: dato favorable primero y sin emojis.
     from urllib.parse import quote
     import html as _html
+    import statistics
     url_cerca = site + "/refugios-climaticos-naturales-cerca-de-mi/"
     share_txt = ("En España quedan 218 pueblos donde no se registra ni una noche tropical al año: "
                  "se duerme tapado en agosto y sin aire acondicionado. "
@@ -5896,6 +5901,7 @@ __NAV__
       <a class="navcard" href="__SITE__/observatorio-del-descanso/"><span class="ic">🌙</span><b>El Observatorio</b><span>El mapa del descanso, población por población.</span></a>
       <a class="navcard" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/"><span class="ic">📍</span><b>Refugios cerca de ti</b><span>Dónde se duerme fresco más cerca de donde estás.</span></a>
       <a class="navcard" href="__SITE__/dormir-con-calor/"><span class="ic">🛏️</span><b>Dormir con calor</b><span>Qué funciona de verdad sin aire acondicionado.</span></a>
+      <a class="navcard" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/"><span class="ic">💧</span><b>Enfriar sin aire acondicionado</b><span>La sábana húmeda y dónde baja grados de verdad.</span></a>
       <a class="navcard" href="__SITE__/la-espana-que-nunca-se-colorea/"><span class="ic">🗺️</span><b>La España que nunca se colorea</b><span>El estudio de los mapas de AEMET, píxel a píxel.</span></a>
       <a class="navcard" href="__SITE__/metodologia/"><span class="ic">📐</span><b>Cómo medimos</b><span>Qué es una noche tropical y de dónde salen los datos.</span></a>
       <a class="navcard" href="__SITE__/"><span class="ic">🏡</span><b>Tu pueblo</b><span>¿Cuántas noches tropicales tiene al año?</span></a>
@@ -6179,7 +6185,7 @@ __NAV__
       <p>Digerir produce calor, así que una cena pesada juega en tu contra. Y el alcohol, aunque dé sueño al principio, <b>fragmenta la segunda mitad de la noche</b> y estorba a la regulación de la temperatura: es de las peores ideas en una noche tropical. Agua a temperatura ambiente, y sin miedo a beberla.</p></li>
   </ol>
   <div class="destacado">
-    <p><b>La toalla húmeda, solo si el aire es seco.</b> Colgar un paño mojado o poner un barreño de agua enfría por evaporación, y por eso funciona en el interior de Teruel o Soria y no funciona en la costa: donde el aire ya está cargado de humedad, no evapora nada y encima empeora la sensación. Es el mismo motivo por el que <a href="__SITE__/microclimas/">se duerme peor en el litoral que a la misma temperatura tierra adentro</a>.</p>
+    <p><b>La toalla húmeda, solo si el aire es seco.</b> Colgar un paño mojado o poner un barreño de agua enfría por evaporación, y por eso funciona en el interior de Teruel o Soria y no funciona en la costa: donde el aire ya está cargado de humedad, no evapora nada y encima empeora la sensación. Es el mismo motivo por el que <a href="__SITE__/microclimas/">se duerme peor en el litoral que a la misma temperatura tierra adentro</a>. Si quieres exprimirlo, el montaje que mejor rinde es la sábana húmeda sobre una cuerda: lo explicamos en <a href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/">cómo enfriar una habitación sin aire acondicionado</a>, con el cálculo de cuántos grados puede bajar de verdad en tu zona.</p>
   </div>
 </div></section>
 
@@ -6367,6 +6373,419 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
             .replace("__M30__", str(m30))
             .replace("__M60__", str(m60))
             .replace("__CERO__", str(cero))
+            .replace("__DESC__", desc)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
+# ---------------------------------------------------------------------------
+# Página /enfriar-habitacion-sin-aire-acondicionado/: el truco de la sábana
+# húmeda, y —esto es lo nuestro— DÓNDE funciona de verdad.
+#
+# Internet está lleno de versiones de este truco, todas con la misma cifra sin
+# fuente («baja 4-6 °C»). Nosotros somos los únicos que podemos decir dónde es
+# cierto, porque el archivo horario guarda la HUMEDAD junto a la temperatura y
+# con las dos sale la depresión del bulbo húmedo: el techo físico de cualquier
+# enfriamiento por evaporación. La mediana española de madrugada es 3,3 °C, y
+# solo el 17 % de las estaciones llegarían a 6.
+#
+# Regla de la página, la misma que en /dormir-con-calor/: primero se explica el
+# truco de verdad y gratis, y solo después se dice dónde no sirve. Si se hace
+# al revés, es un cebo.
+# ---------------------------------------------------------------------------
+MARGEN_EVAP_JSON = AEMET_DIR / "datos" / "margen_evaporativo.json"
+
+# Cortes del margen evaporativo. Son convención nuestra, no una norma: por
+# debajo de 2 °C el techo teórico ya es menor que el error de una sábana mal
+# puesta, y por encima de 7 °C el método rinde como un climatizador barato.
+CORTES_EVAP = ((7.0, "muy eficaz", "ok"), (4.0, "funciona", "ok"),
+               (2.0, "marginal", "med"), (-99.0, "no sirve", "no"))
+
+
+def clase_evap(margen: float) -> tuple:
+    for corte, etiqueta, css in CORTES_EVAP:
+        if margen >= corte:
+            return etiqueta, css
+    return "no sirve", "no"
+
+
+def cargar_margen_evaporativo() -> list:
+    """Lee datos/margen_evaporativo.json. Devuelve [] si aún no se ha generado.
+
+    Lo produce analisis_curva_nocturna.py a partir del archivo horario. Si
+    falta, la página se construye igual pero sin la tabla: nunca debe romper
+    el build entero por un análisis que no se haya corrido.
+    """
+    if not MARGEN_EVAP_JSON.exists():
+        return []
+    try:
+        datos = json.loads(MARGEN_EVAP_JSON.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    return datos.get("estaciones", [])
+
+PAGINA_EVAPORATIVO = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enfriar una habitación sin aire acondicionado: la sábana húmeda</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Enfriar una habitación sin aire acondicionado: la sábana húmeda y dónde funciona">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/enfriar-habitacion-sin-aire-acondicionado/">
+<meta property="og:image" content="__OGIMG__">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="800">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__OGIMG__">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ __NAVCSS__
+ __FOOTERCSS__
+ __CSSART__
+ .pasos{list-style:none;counter-reset:p;margin:6px 0 20px}
+ .pasos li{counter-increment:p;position:relative;padding:18px 20px 18px 60px;margin-bottom:11px;
+   background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}
+ .pasos li::before{content:counter(p);position:absolute;left:20px;top:17px;font-family:var(--fm);
+   font-weight:700;font-size:20px;color:var(--teja)}
+ .pasos b{display:block;color:var(--paper);margin-bottom:5px;font-size:16.5px;font-family:var(--fd);font-weight:600}
+ .pasos p{margin:0 0 8px;font-size:15px;line-height:1.7;color:var(--muted)}
+ .pasos p:last-child{margin-bottom:0}
+ .pasos p b{display:inline;font-family:var(--fb);font-size:inherit;color:var(--paper)}
+ .nova{background:#0f0b07;border:1px dashed var(--line);border-radius:14px;padding:18px 20px;margin:20px 0}
+ .nova h3{margin-top:0;color:var(--paper)}
+ .nova ul{margin:0;padding-left:20px}
+ .nova li{color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:10px}
+ .nova li b{color:var(--paper)}
+ .fuente{font-size:13px;color:var(--muted);margin-top:22px;line-height:1.65}
+ .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+ .aviso{background:rgba(217,96,74,.10);border:1px solid #8a4436;border-radius:14px;padding:16px 18px;margin:22px 0}
+ .aviso p{font-size:14.5px;margin:0 0 10px;line-height:1.7}
+ .aviso p:last-child{margin-bottom:0}
+ .aviso b{color:#f0c9bd}
+ .buscador{margin:18px 0 6px}
+ .buscador input{width:100%;box-sizing:border-box;padding:13px 16px;font-size:16px;
+   font-family:var(--fb);color:var(--paper);background:var(--bg2);
+   border:1px solid var(--line);border-radius:12px}
+ .buscador input:focus{outline:2px solid var(--teja);outline-offset:1px}
+ .tev{width:100%;border-collapse:collapse;margin:6px 0 4px;font-size:15px}
+ .tev th{text-align:left;font-family:var(--fd);font-weight:600;color:var(--paper);
+   padding:9px 10px;border-bottom:1px solid var(--line);font-size:13.5px;
+   text-transform:uppercase;letter-spacing:.04em}
+ .tev td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--muted)}
+ .tev td.loc{color:var(--paper)}
+ .tev td.num{font-family:var(--fm);text-align:right;white-space:nowrap}
+ .tev tr[hidden]{display:none}
+ .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12.5px;
+   font-family:var(--fd);font-weight:600;white-space:nowrap}
+ .pill.ok{background:rgba(143,176,122,.18);color:#b8d3a4}
+ .pill.med{background:rgba(201,162,39,.16);color:#e0c368}
+ .pill.no{background:rgba(217,96,74,.16);color:#f0a58f}
+ .nores{color:var(--muted);font-size:15px;padding:14px 2px}
+ .escala{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;font-size:13.5px;color:var(--muted)}
+ .escala span{display:flex;align-items:center;gap:6px}
+ .tot{font-size:13.5px;color:var(--muted);margin:2px 0 0}
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Enfriar sin aire acondicionado</nav>
+  <div class="kick">Truco · coste cero · con la física delante</div>
+  <h1>Enfriar una habitación <em>sin aire acondicionado</em></h1>
+  <p class="intro">La sábana húmeda sobre una cuerda funciona de verdad, pero no en todas partes. Aquí está el montaje, la física que lo explica y —esto no lo encontrarás en otro sitio— <b>cuántos grados puede bajar en tu zona</b>, calculado con la humedad que mide AEMET cada madrugada.</p>
+</div></header>
+
+<section><div class="wrap">
+  __FOTO_APERTURA__
+  <h2>El truco: una tienda de campaña húmeda sobre la cama</h2>
+  <p>Necesitas una cuerda, una sábana fina de algodón y agua. Nada más. Se monta en tres minutos y no consume electricidad, así que funciona en un apagón, en una caravana o en un patio.</p>
+  <p>La idea es vieja y es la misma del <b>botijo</b>: cuando el agua se evapora, roba calor al aire que la rodea. Lo que hace la sábana es poner esa superficie de evaporación justo encima de ti, y de paso interceptar el calor que tu propio cuerpo irradia hacia el techo.</p>
+
+  <ol class="pasos">
+    <li><b>Tiende la cuerda por encima de la cama, inclinada</b>
+      <p>De pared a pared, o entre dos muebles altos, a unos 40-60&nbsp;cm por encima de donde va tu cara. <b>Un extremo más alto que el otro</b>, unos 20 o 30&nbsp;cm: esa inclinación es la que hace que el aire tibio corra hacia arriba y salga por el lado alto, arrastrando aire nuevo por el bajo.</p>
+      <p>No esperes un vendaval: el tiro que genera un desnivel así es suave. Lo notarás como una corriente muy leve, no como un ventilador.</p></li>
+    <li><b>Echa la sábana encima, a dos aguas</b>
+      <p>Que quede como el techo de una tienda de campaña, con los bordes cayendo a los lados pero <b>sin cerrar por los extremos</b>. Si la cierras del todo, cortas la corriente y el invento deja de funcionar: pasa de refrescar a ser un saco de vapor.</p></li>
+    <li><b>Humedécela, no la empapes</b>
+      <p>Con un pulverizador o escurriéndola bien. Debe quedar <b>húmeda al tacto pero sin gotear</b>: si chorrea, te mojará la cama y encima evapora peor, porque el agua sobrante cae al suelo en vez de pasar a vapor.</p>
+      <p>Arrancar con agua bien fría, de la nevera, da un alivio inmediato por radiación mientras la evaporación coge el relevo.</p></li>
+    <li><b>Elige el tejido más fino que tengas</b>
+      <p><b>Muselina, gasa de algodón o lino fino.</b> Cuanto más abierta la trama, más superficie de agua queda expuesta al aire y más rápido evapora. Una sábana gruesa de percal hace lo contrario: retiene el agua dentro y evapora poco.</p></li>
+    <li><b>Añade un hilo de aire</b>
+      <p>Un ventilador al mínimo apuntando <b>a la sábana, no a ti</b>, o simplemente una ventana con algo de brisa. El aire quieto se satura pegado a la tela y la evaporación se frena sola; moverlo aunque sea poco la mantiene en marcha.</p>
+      <p>Apuntártelo a ti directamente toda la noche es lo que reseca la garganta y acaba despertándote.</p></li>
+  </ol>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Por qué enfría: la física en dos líneas</h2>
+  <p>Para pasar de líquido a vapor, cada gramo de agua necesita absorber unos <b>2.440 julios</b> de calor —el llamado calor latente de vaporización, a temperatura ambiente— y lo coge del aire que tiene alrededor. Evaporar medio litro a lo largo de una noche retira del orden de <b>1,2 millones de julios</b>: por eso una tela mojada enfría el aire que la atraviesa sin gastar un vatio.</p>
+  <p>Tu cuerpo, a 36&nbsp;°C, cede además calor por radiación hacia cualquier superficie más fría que tenga encima. Una sábana húmeda a 22&nbsp;°C es exactamente eso: un techo frío a medio metro de tu cara.</p>
+  <p>Pero hay un límite, y es el que casi nadie cuenta.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>El límite que nadie te dice: el aire ya viene con agua</h2>
+  <p>El enfriamiento por evaporación no puede bajar la temperatura por debajo de un valor concreto: la <b>temperatura de bulbo húmedo</b>. Es la temperatura mínima a la que se puede llegar evaporando agua en ese aire, y depende de cuánta humedad lleve ya. Si el aire está saturado, no cabe más vapor y no hay enfriamiento posible por mucha sábana que pongas.</p>
+  <p>La diferencia entre la temperatura real y esa temperatura de bulbo húmedo es <b>el techo absoluto del truco</b>. Nadie lo alcanza —una sábana no es un evaporador perfecto—, pero por debajo de ese número no se puede bajar. Y ese techo se puede calcular, porque las estaciones de AEMET miden la humedad cada hora junto a la temperatura.</p>
+  <p>Lo hemos calculado para <b>__NEST__ estaciones</b>, con las lecturas de madrugada del archivo horario propio. El resultado es incómodo para el truco:</p>
+
+  <div class="nova">
+    <h3>El techo evaporativo de la madrugada española</h3>
+    <ul>
+      <li><b>La mediana nacional es de __MEDIANA__&nbsp;°C.</b> Ese es el máximo teórico, con un evaporador perfecto. En la práctica, con una sábana, cuenta con bastante menos.</li>
+      <li><b>Solo el __PCT6__&nbsp;% de las estaciones</b> llegarían a los 6&nbsp;°C que se prometen por ahí. La cifra de «4 a 6 grados» que circula en internet es, para la mayor parte de España, físicamente imposible.</li>
+      <li><b>En el __PCTNO__&nbsp;% el techo no llega ni a 2&nbsp;°C.</b> Ahí el truco no compensa ni el esfuerzo de montarlo.</li>
+      <li>Provincias con costa: <b>__MEDCOSTA__&nbsp;°C</b> de mediana. Provincias de interior: <b>__MEDINT__&nbsp;°C</b>. La diferencia no es una opinión: es cuánta agua lleva ya el aire.</li>
+    </ul>
+  </div>
+
+  <p>Hay una ironía en los extremos. Donde el truco rinde más es en sitios como <b>Tejeda</b>, en el interior de Gran Canaria (__TEJEDA__&nbsp;°C de margen), que resulta ser <a href="__SITE__/ranking-noches-tropicales/">de los peores lugares de España para dormir</a>. Y donde no sirve de nada es en <b>Reinosa</b> (__REINOSA__&nbsp;°C) o <b>Beariz</b> (__BEARIZ__&nbsp;°C), que están entre los mejores refugios del país: allí el aire ya está fresco y no hace falta ningún invento.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>¿Funciona donde tú vives?</h2>
+  <p>Busca tu pueblo o tu provincia. La cifra es el <b>techo físico</b> del enfriamiento evaporativo en la madrugada, medido en la estación de AEMET más cercana, junto a la humedad relativa media nocturna.</p>
+  <div class="buscador">
+    <label class="sr-only" for="qev">Buscar estación, pueblo o provincia</label>
+    <input id="qev" type="search" placeholder="Escribe tu pueblo o tu provincia…" autocomplete="off">
+  </div>
+  <div class="escala">
+    <span><i class="pill ok">funciona</i> 4&nbsp;°C o más</span>
+    <span><i class="pill med">marginal</i> entre 2 y 4&nbsp;°C</span>
+    <span><i class="pill no">no sirve</i> menos de 2&nbsp;°C</span>
+  </div>
+  <table class="tev">
+    <thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Techo</th><th style="text-align:right">Humedad</th><th></th></tr></thead>
+    <tbody id="tbev">__FILAS__</tbody>
+  </table>
+  <p class="nores" id="nores" hidden>No hay ninguna estación con ese nombre. Prueba con la provincia, o mira el <a href="__SITE__/mapa-estaciones/">mapa de estaciones</a>.</p>
+  <p class="tot" id="totev"></p>
+  <p style="margin-top:16px">La estación más cercana no es tu calle: un patio interior, una vaguada o un ático bajo cubierta se separan varios grados del dato oficial. Si quieres afinar, mira <a href="__SITE__/microclimas/">cómo funcionan los microclimas</a> y cuenta tu caso en <a href="__SITE__/observatorio-del-descanso/">el Observatorio del Descanso</a>.</p>
+</div></section>
+"""
+
+PAGINA_EVAPORATIVO_2 = r"""
+<section><div class="wrap">
+  <h2>Cuándo es mala idea montarlo</h2>
+  <p>Este truco tiene un contraindicado real, y conviene decirlo antes que las ventajas.</p>
+  <div class="aviso">
+    <p><b>Si el aire ya está húmedo, no lo hagas.</b> Añadir vapor a un dormitorio cargado no solo no refresca: <b>empeora activamente</b> tu capacidad de sudar, que es como tu cuerpo se enfría de verdad. En una noche de 26&nbsp;°C con el 90&nbsp;% de humedad, humedecer el aire va en tu contra. Es justo el caso del litoral mediterráneo y de la cornisa cantábrica en agosto.</p>
+    <p><b>El calor nocturno sostenido es un riesgo de salud</b> para bebés, personas mayores, embarazadas y quien tenga enfermedades crónicas o tome ciertos medicamentos —y la humedad alta lo agrava. Si alguien deja de sudar, se desorienta, tiene la piel muy caliente y seca o vomita, no es cuestión de dormir mejor: es una urgencia y hay que llamar al <b>112</b>.</p>
+  </div>
+  <div class="nova">
+    <h3>Otras tres cosas antes de montar nada</h3>
+    <ul>
+      <li><b>Ventila la habitación.</b> Una tienda húmeda en un cuarto cerrado satura el aire en un par de horas y a partir de ahí deja de evaporar. Necesita renovación, aunque sea una rendija.</li>
+      <li><b>Recógela por la mañana.</b> Una tela húmeda doblada y olvidada cría moho en dos días. Se tiende a secar en cuanto te levantas.</li>
+      <li><b>No la pongas rozándote.</b> Debe quedar a medio metro largo: si te toca, te moja y pierdes el efecto de techo frío.</li>
+    </ul>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Lo que este truco no puede arreglar</h2>
+  <p>Todo lo anterior, en el mejor de los casos y en el sitio adecuado, te compra <b>dos o tres grados reales</b>. Es mucho cuando la calle se queda en 21 y decisivo cuando se queda en 22. No sirve de nada cuando la calle no baja de 26.</p>
+  <p>Y esa parte no depende de ti. Depende de dónde está tu cama. Con diez veranos de datos de AEMET, hay estaciones en España que acumulan <b>más de sesenta noches tropicales al año</b> —madrugadas enteras por encima de 20&nbsp;°C— y otras que no registran <b>ni una sola</b>. Entre las dos Españas hay a veces menos de cien kilómetros.</p>
+  <div class="cta">
+    <b>¿Cuántas noches tropicales tiene tu pueblo?</b>
+    <p>Diez veranos de datos de AEMET, estación por estación.</p>
+    <a class="btn" href="__HOME__">Consultar la calculadora</a>
+  </div>
+  <p>Si quieres la guía completa —cuándo abrir la ventana, qué hacer con el ventilador, qué no funciona— está en <a href="__SITE__/dormir-con-calor/">cómo dormir con calor sin aire acondicionado</a>. Si lo que buscas es irte a otro sitio, tenemos <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">los refugios climáticos más cercanos a ti</a> y <a href="__SITE__/dormir-con-manta-en-verano/">los pueblos donde todavía se duerme con manta</a>. Y si estás en mitad de un episodio, <a href="__SITE__/ola-de-calor/">cuándo acaba la ola de calor</a> se actualiza cada día.</p>
+  <p>Cada mañana publicamos además <a href="__SITE__/parte/">el parte de la noche</a>: dónde se ha dormido fresco en España y dónde no, con los datos de la madrugada anterior.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Preguntas frecuentes</h2>
+  <dl class="faq">__FAQ__</dl>
+  <p class="fuente">Fuente: AEMET. El techo evaporativo se calcula con la temperatura de bulbo húmedo (aproximación de Stull, 2011) a partir de la temperatura y la humedad relativa horarias de la red de observación, en la ventana de madrugada. Son datos provisionales sin validar. El método está detallado en la <a href="__SITE__/metodologia/">metodología</a>.</p>
+</div></section>
+__FOOTER__
+<script>
+(function(){
+ var q=document.getElementById('qev'), tb=document.getElementById('tbev');
+ if(!q||!tb) return;
+ var filas=Array.prototype.slice.call(tb.rows), tot=document.getElementById('totev'),
+     nores=document.getElementById('nores');
+ function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+ var claves=filas.map(function(f){return norm(f.getAttribute('data-b'));});
+ function pinta(){
+  var t=norm(q.value.trim()), n=0;
+  for(var i=0;i<filas.length;i++){
+   var ok = !t || claves[i].indexOf(t)>=0;
+   filas[i].hidden=!ok; if(ok) n++;
+  }
+  nores.hidden = n>0;
+  tot.textContent = t ? (n+' estaciones coinciden con «'+q.value.trim()+'»')
+                      : (filas.length+' estaciones · Fuente: AEMET');
+ }
+ q.addEventListener('input',pinta); pinta();
+})();
+</script>
+</body>
+</html>
+"""
+
+def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
+    """/enfriar-habitacion-sin-aire-acondicionado/ — el truco, con su techo físico."""
+    import html as _html
+    import statistics
+
+    est = cargar_margen_evaporativo()
+
+    filas_html = []
+    for e in est:
+        etiqueta, css = clase_evap(e["margen"])
+        # data-b: lo que busca el filtro. Nombre + provincia, sin acentos ya en JS.
+        busca = f'{e["nombre"]} {e["provincia"]}'
+        filas_html.append(
+            f'<tr data-b="{_html.escape(busca, quote=True)}">'
+            f'<td class="loc">{_html.escape(e["nombre"].title())}</td>'
+            f'<td>{_html.escape(e["provincia"].title())}</td>'
+            f'<td class="num">{_n_es(e["margen"])} °C</td>'
+            f'<td class="num">{e["hr"]} %</td>'
+            f'<td><i class="pill {css}">{etiqueta}</i></td></tr>')
+    filas = "".join(filas_html)
+
+    n_est = len(est)
+    # Provincias con litoral. Sirve para el contraste costa/interior: lo que
+    # decide el margen evaporativo es cuánta agua trae ya el aire, y el mar es
+    # de dónde viene.
+    COSTERAS = {"ILLES BALEARS", "LAS PALMAS", "SANTA CRUZ DE TENERIFE",
+                "STA. CRUZ DE TENERIFE", "A CORUÑA", "PONTEVEDRA", "ASTURIAS",
+                "CANTABRIA", "BIZKAIA", "GIPUZKOA", "BARCELONA", "GIRONA",
+                "TARRAGONA", "CASTELLON", "VALENCIA", "ALICANTE", "MURCIA",
+                "ALMERIA", "MALAGA", "GRANADA", "CADIZ", "HUELVA"}
+    if n_est:
+        margenes = [e["margen"] for e in est]
+        pct6 = round(100 * sum(1 for m in margenes if m >= 6) / n_est)
+        pctno = round(100 * sum(1 for m in margenes if m < 2) / n_est)
+        mediana = _n_es(round(statistics.median(margenes), 1))
+        cos = [e["margen"] for e in est if e["provincia"] in COSTERAS]
+        inte = [e["margen"] for e in est if e["provincia"] not in COSTERAS]
+        medcosta = _n_es(round(statistics.median(cos), 1)) if cos else "2,6"
+        medint = _n_es(round(statistics.median(inte), 1)) if inte else "4,0"
+        # Los tres ejemplos del texto salen del propio JSON: si mañana cambia el
+        # dato, cambia la frase. Nunca una cifra escrita a mano en la prosa.
+        def _busca(pref):
+            e = next((x for x in est if x["nombre"].upper().startswith(pref)), None)
+            return _n_es(e["margen"]) if e else "—"
+        tejeda, reinosa, beariz = _busca("TEJEDA"), _busca("REINOSA"), _busca("BEARIZ")
+    else:
+        pct6, pctno, mediana, medcosta, medint = 17, 24, "3,3", "2,6", "4,0"
+        tejeda, reinosa, beariz = "10,0", "0,6", "0,3"
+
+    desc = ("La sábana húmeda sobre una cuerda enfría de verdad, pero solo donde el "
+            "aire es seco. Cuántos grados puede bajar en tu zona, calculado con la "
+            "humedad nocturna que mide AEMET.")
+
+    faq = [
+        ("¿Cuántos grados baja de verdad la sábana húmeda?",
+         "Menos de lo que se dice por ahí. El techo físico lo marca la depresión del "
+         "bulbo húmedo, y la mediana española de madrugada es de 3,3 °C. Ese es el "
+         "máximo teórico con un evaporador perfecto; una sábana rinde bastante menos. "
+         "Los «4 a 6 grados» que circulan solo serían posibles en el 17 % de las "
+         "estaciones, casi todas de interior seco."),
+        ("¿Funciona en la costa?",
+         "Mal. En las provincias con costa el techo evaporativo mediano es de 2,6 °C "
+         "frente a 4,0 °C en el interior, y en buena parte del litoral cantábrico y "
+         "del norte de Canarias no llega a 1 °C porque el aire nocturno ronda el 95 % "
+         "de humedad. Ahí añadir vapor empeora la sensación en vez de mejorarla."),
+        ("¿Por qué hay que inclinar la cuerda?",
+         "Para que el aire tibio, que sube, tenga por dónde salir. Al inclinar el techo "
+         "de tela ese aire corre hacia el extremo alto y escapa, y esa salida arrastra "
+         "aire nuevo por el extremo bajo. Es un tiro suave, no un ventilador: con 20 o "
+         "30 cm de desnivel se nota como una corriente muy leve."),
+        ("¿Es peligroso dormir bajo una tela húmeda?",
+         "En aire seco y con la habitación ventilada, no. Hay dos precauciones reales: "
+         "no hacerlo si el aire ya está húmedo, porque dificulta sudar y eso sí es un "
+         "riesgo en una ola de calor, sobre todo en bebés, personas mayores y enfermos "
+         "crónicos; y secar la tela cada mañana para que no críe moho."),
+        ("¿Es lo mismo que un climatizador evaporativo?",
+         "Es el mismo principio físico y tiene exactamente el mismo límite. Un aparato "
+         "evaporativo mueve mucho más aire y por eso se acerca más al techo teórico, "
+         "pero tampoco puede bajar de la temperatura de bulbo húmedo. Donde la sábana "
+         "no sirve, el aparato tampoco."),
+    ]
+    faq_html = "".join(f"<dt>{p}</dt><dd>{r}</dd>" for p, r in faq)
+
+    url = site + "/enfriar-habitacion-sin-aire-acondicionado/"
+    titulo = "Enfriar una habitación sin aire acondicionado: la sábana húmeda"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Enfriar sin aire acondicionado", "item": url}]},
+        {"@type": "HowTo",
+         "name": "Enfriar una habitación con una sábana húmeda",
+         "description": desc, "url": url, "inLanguage": "es-ES",
+         "totalTime": "PT3M",
+         "supply": [{"@type": "HowToSupply", "name": n} for n in
+                    ("Una cuerda", "Una sábana fina de algodón, muselina o lino", "Agua fría")],
+         "step": [
+             {"@type": "HowToStep", "name": "Tender la cuerda inclinada",
+              "text": "Sobre la cama, a 40-60 cm por encima de la cara, con un extremo "
+                      "20-30 cm más alto que el otro."},
+             {"@type": "HowToStep", "name": "Colocar la sábana a dos aguas",
+              "text": "Como el techo de una tienda de campaña, sin cerrar los extremos, "
+                      "para que corra el aire."},
+             {"@type": "HowToStep", "name": "Humedecerla sin empapar",
+              "text": "Húmeda al tacto pero sin gotear. Con agua fría el alivio es inmediato."},
+             {"@type": "HowToStep", "name": "Usar el tejido más fino disponible",
+              "text": "Muselina, gasa de algodón o lino fino: a más trama abierta, más evaporación."},
+             {"@type": "HowToStep", "name": "Añadir un hilo de aire",
+              "text": "Un ventilador al mínimo apuntando a la sábana, no a la persona."}]},
+        {"@type": "Article", "headline": titulo, "description": desc, "url": url,
+         "inLanguage": "es-ES",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es", "url": site + "/"},
+         "mainEntityOfPage": url, "image": site + "/img/cena-noche-verano.jpg"},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": p,
+             "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in faq]}]},
+        ensure_ascii=False)
+
+    foto = figura_articulo(
+        "cena-noche-verano",
+        "Cena al aire libre en el jardín de una casa de piedra, de noche, con guirnaldas "
+        "de bombillas encendidas y gente sentada a la mesa",
+        site, pie="Cuando dentro no se puede estar, la noche se pasa fuera.",
+        credito="Ilustración generada con IA", primera=True)
+
+    return ((PAGINA_EVAPORATIVO + PAGINA_EVAPORATIVO_2)
+            .replace("__FILAS__", filas)
+            .replace("__NEST__", f"{n_est:,}".replace(",", "."))
+            .replace("__PCT6__", str(pct6))
+            .replace("__PCTNO__", str(pctno))
+            .replace("__MEDIANA__", mediana)
+            .replace("__MEDCOSTA__", medcosta)
+            .replace("__MEDINT__", medint)
+            .replace("__TEJEDA__", tejeda)
+            .replace("__REINOSA__", reinosa)
+            .replace("__BEARIZ__", beariz)
+            .replace("__FOTO_APERTURA__", foto)
+            .replace("__OGIMG__", f"{site}/img/cena-noche-verano.jpg")
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__CSSART__", _CSS_ARTICULO)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__FAQ__", faq_html)
             .replace("__DESC__", desc)
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
@@ -10977,6 +11396,12 @@ def main() -> int:
     (DOCS_DIR / "dormir-con-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "dormir-con-calor" / "index.html").write_text(
         construir_pagina_dormir(estaciones, site), encoding="utf-8")
+    # El truco de la sábana húmeda + el techo evaporativo real, estación a
+    # estación. Intención distinta de /dormir-con-calor/: aquí se busca ENFRIAR
+    # la habitación, no la guía general de sueño.
+    (DOCS_DIR / "enfriar-habitacion-sin-aire-acondicionado").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "enfriar-habitacion-sin-aire-acondicionado" / "index.html").write_text(
+        construir_pagina_evaporativo(site), encoding="utf-8")
     # Landing de intención de VIAJE («dónde ir en verano que no haga calor»).
     (DOCS_DIR / "vacaciones-sin-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "vacaciones-sin-calor" / "index.html").write_text(

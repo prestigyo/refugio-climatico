@@ -1,7 +1,7 @@
 {
  "fecha": "2026-09-05",
  "total": 846,
- "tropicales": 477,
+ "tropicales": 479,
  "ecuatoriales": 54,
  "peor": {
   "id": "5998X",
@@ -10,10 +10,10 @@
   "prov": "Sevilla"
  },
  "mejor": {
-  "id": "2926B",
-  "nombre": "Bañobarez",
-  "min": 0.7,
-  "prov": "Salamanca"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 10.4,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
@@ -65,25 +65,19 @@
    "prov": "Sevilla"
   },
   {
-   "id": "5429X",
-   "nombre": "Córdoba Pragdena",
-   "min": 26.8,
-   "prov": "Córdoba"
+   "id": "6045X",
+   "nombre": "Alpandeire",
+   "min": 26.9,
+   "prov": "Málaga"
   },
   {
-   "id": "5625X",
-   "nombre": "La Rambla Privilegio",
+   "id": "5429X",
+   "nombre": "Córdoba Pragdena",
    "min": 26.8,
    "prov": "Córdoba"
   }
  ],
  "top_fresco": [
-  {
-   "id": "2926B",
-   "nombre": "Bañobarez",
-   "min": 0.7,
-   "prov": "Salamanca"
-  },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
@@ -137,6 +131,12 @@
    "nombre": "San Pedro Manrique",
    "min": 12.0,
    "prov": "Soria"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 12.1,
+   "prov": "Granada"
   }
  ]
 }

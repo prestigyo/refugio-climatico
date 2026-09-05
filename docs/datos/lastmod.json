@@ -1,75 +1,75 @@
 {
 "": {
-"f": "2026-09-01",
-"h": "511628f4f0df8a05"
+"f": "2026-09-05",
+"h": "9e701c5b66c020b6"
 },
 "a-coruna": {
-"f": "2026-09-04",
-"h": "d11018aabd1afd66"
+"f": "2026-09-05",
+"h": "1d3457ce2888c928"
 },
 "albacete": {
-"f": "2026-09-04",
-"h": "1ce443ceaf08441f"
+"f": "2026-09-05",
+"h": "923ba5731dd3adb3"
 },
 "alicante": {
-"f": "2026-09-04",
-"h": "c17327bd16788f9b"
+"f": "2026-09-05",
+"h": "c52d13cf0f187a65"
 },
 "almeria": {
-"f": "2026-09-04",
-"h": "d4cdb66023931afc"
+"f": "2026-09-05",
+"h": "793fc1250903ee04"
 },
 "araba-alava": {
-"f": "2026-09-04",
-"h": "443a567ec5f0e946"
+"f": "2026-09-05",
+"h": "bb4b667e1a0a3c46"
 },
 "asturias": {
-"f": "2026-09-04",
-"h": "aa6c10cf96db1dcc"
+"f": "2026-09-05",
+"h": "41156fc7037208cb"
 },
 "aumento-noches-tropicales-espana": {
 "f": "2026-08-27",
 "h": "bc28085f9403fdfd"
 },
 "avila": {
-"f": "2026-09-04",
-"h": "4c8894f0ef21a4c7"
+"f": "2026-09-05",
+"h": "936e9df45e9f889c"
 },
 "aviso-legal": {
-"f": "2026-08-30",
-"h": "d39701afc62c5fa3"
+"f": "2026-09-05",
+"h": "6ac500d22821bd7f"
 },
 "badajoz": {
-"f": "2026-09-04",
-"h": "6ad2aa13d73264bf"
+"f": "2026-09-05",
+"h": "6c613d5074a50e8d"
 },
 "barcelona": {
-"f": "2026-09-04",
-"h": "7060170ba2d8ecfe"
+"f": "2026-09-05",
+"h": "a9a546ff9ff97440"
 },
 "bizkaia": {
-"f": "2026-09-04",
-"h": "5b4db45271ac2793"
+"f": "2026-09-05",
+"h": "78c39027a88b7b29"
 },
 "burgos": {
-"f": "2026-09-04",
-"h": "8a8bbd6cd71ecd6f"
+"f": "2026-09-05",
+"h": "f3b60287fe57a954"
 },
 "caceres": {
-"f": "2026-09-04",
-"h": "3dbe6f20ab9d52b0"
+"f": "2026-09-05",
+"h": "0aeab5392e74de68"
 },
 "cadiz": {
-"f": "2026-09-04",
-"h": "a3e595bf61eba4ff"
+"f": "2026-09-05",
+"h": "939f924227d072f5"
 },
 "cantabria": {
-"f": "2026-09-04",
-"h": "24e5c74e8c8d5a45"
+"f": "2026-09-05",
+"h": "8b3cb11bdc2dd5dd"
 },
 "castellon": {
-"f": "2026-09-04",
-"h": "1c25cb30300acc06"
+"f": "2026-09-05",
+"h": "ee73263dfb8ee8c8"
 },
 "certificados": {
 "f": "2026-09-01",
@@ -180,36 +180,36 @@
 "h": "4c485c7caba13be9"
 },
 "ceuta": {
-"f": "2026-09-01",
-"h": "c3e84948359ea175"
+"f": "2026-09-05",
+"h": "e86b91be14aac793"
 },
 "ciudad-real": {
-"f": "2026-09-04",
-"h": "ee9f42b78ef1c0cc"
+"f": "2026-09-05",
+"h": "5f0fd74dbfc67149"
 },
 "confortometro": {
-"f": "2026-09-04",
-"h": "0ff2bd025e494999"
+"f": "2026-09-05",
+"h": "90c20b8c2e16e967"
 },
 "cordoba": {
-"f": "2026-09-04",
-"h": "5f2909f7b6571cb9"
+"f": "2026-09-05",
+"h": "4305d47fc4c05712"
 },
 "cuenca": {
-"f": "2026-09-04",
-"h": "3e4b91a57f27c9a2"
+"f": "2026-09-05",
+"h": "e9ab359da6737415"
 },
 "deuda-de-sueno": {
-"f": "2026-08-30",
-"h": "4f33aa9b8b835929"
+"f": "2026-09-05",
+"h": "5405dce48e318bde"
 },
 "dormir-con-calor": {
-"f": "2026-09-01",
-"h": "d8f6afb065af5752"
+"f": "2026-09-05",
+"h": "285cb577014a6c6d"
 },
 "dormir-con-manta-en-verano": {
-"f": "2026-09-01",
-"h": "261787f650ffd186"
+"f": "2026-09-05",
+"h": "41dc382c5a9553c7"
 },
 "en": {
 "f": "2026-09-04",
@@ -219,213 +219,217 @@
 "f": "2026-09-01",
 "h": "69b971eb6782bcac"
 },
+"enfriar-habitacion-sin-aire-acondicionado": {
+"f": "2026-09-05",
+"h": "5453c7c7e4acd9ef"
+},
 "espana-pierde-noches-frescas": {
 "f": "2026-08-27",
 "h": "689aa526a6a5c74a"
 },
 "gipuzkoa": {
-"f": "2026-09-04",
-"h": "c2c1bf7a511d353c"
+"f": "2026-09-05",
+"h": "a908b31fe1d8358a"
 },
 "girona": {
-"f": "2026-09-04",
-"h": "a69dc162d3248180"
+"f": "2026-09-05",
+"h": "4895e13d28c3fa4c"
 },
 "granada": {
-"f": "2026-09-04",
-"h": "d4c2967ef5242b0f"
+"f": "2026-09-05",
+"h": "8d98980daac0f26e"
 },
 "guadalajara": {
-"f": "2026-09-04",
-"h": "2404da45ead6db66"
+"f": "2026-09-05",
+"h": "cee4a02add3aea88"
 },
 "hipoteca-termica": {
 "f": "2026-08-16",
 "h": "66653d394e20f3d3"
 },
 "hoteles-refugio-climatico": {
-"f": "2026-09-01",
-"h": "6ed94f7604544d81"
+"f": "2026-09-05",
+"h": "b381c4b975e7c9e7"
 },
 "hoteles-refugio-climatico/albergue-inturjoven-sierra-nevada": {
-"f": "2026-09-01",
-"h": "127b7a9e4c33f938"
+"f": "2026-09-05",
+"h": "55cf3b3cfb5fa860"
 },
 "hoteles-refugio-climatico/canfranc-estacion-a-royal-hideaway": {
-"f": "2026-09-01",
-"h": "f5adb873f1ad906a"
+"f": "2026-09-05",
+"h": "8b151906dcbba78c"
 },
 "hoteles-refugio-climatico/el-lodge-ski-spa": {
-"f": "2026-09-01",
-"h": "14d8d8ce6f070bc7"
+"f": "2026-09-05",
+"h": "ee796605117f32fa"
 },
 "hoteles-refugio-climatico/hg-cerler": {
-"f": "2026-09-01",
-"h": "c75d37cd15ca08bd"
+"f": "2026-09-05",
+"h": "c1697f3adaf5c4a4"
 },
 "hoteles-refugio-climatico/hotel-albarracin": {
-"f": "2026-09-01",
-"h": "e853a6f198d01167"
+"f": "2026-09-05",
+"h": "13ee5a707e6b1cfb"
 },
 "hoteles-refugio-climatico/hotel-casa-mino": {
-"f": "2026-09-01",
-"h": "a44843689ad2e3f5"
+"f": "2026-09-05",
+"h": "c35458cf6c4ed802"
 },
 "hoteles-refugio-climatico/hotel-castillo-del-alba": {
-"f": "2026-09-01",
-"h": "a0d8ef0144e839d4"
+"f": "2026-09-05",
+"h": "141a158307b2c1ce"
 },
 "hoteles-refugio-climatico/hotel-ciria": {
-"f": "2026-09-01",
-"h": "b908c6a755a833c2"
+"f": "2026-09-05",
+"h": "a7164d7707addd25"
 },
 "hoteles-refugio-climatico/hotel-del-oso": {
-"f": "2026-09-01",
-"h": "40a830f94be5d00c"
+"f": "2026-09-05",
+"h": "908154b383be7cc0"
 },
 "hoteles-refugio-climatico/hotel-el-milano-real": {
-"f": "2026-09-01",
-"h": "1dee26d765b0dbcc"
+"f": "2026-09-05",
+"h": "6dea46cba9e5f494"
 },
 "hoteles-refugio-climatico/hotel-esther": {
-"f": "2026-09-01",
-"h": "af8c72ba48bd57af"
+"f": "2026-09-05",
+"h": "347f4f73e2879e65"
 },
 "hoteles-refugio-climatico/hotel-ghm-monachil": {
-"f": "2026-09-01",
-"h": "64132bf06fbd2ae1"
+"f": "2026-09-05",
+"h": "3017887f45d06928"
 },
 "hoteles-refugio-climatico/hotel-la-branina": {
-"f": "2026-09-01",
-"h": "376fb859c54b72dd"
+"f": "2026-09-05",
+"h": "985d051346e472a0"
 },
 "hoteles-refugio-climatico/hotel-la-corte-de-los-pinares": {
-"f": "2026-09-01",
-"h": "4c2429c56b0e6acd"
+"f": "2026-09-05",
+"h": "93ac3f1a8af107a3"
 },
 "hoteles-refugio-climatico/hotel-la-rueda-3000": {
-"f": "2026-09-01",
-"h": "507c783c60717fdf"
+"f": "2026-09-05",
+"h": "f90538f2b4bc97a2"
 },
 "hoteles-refugio-climatico/hotel-maribel": {
-"f": "2026-09-01",
-"h": "4509216d32d73357"
+"f": "2026-09-05",
+"h": "0c0539bd9d5dd7df"
 },
 "hoteles-refugio-climatico/hotel-presa": {
-"f": "2026-09-01",
-"h": "c5e5300a6d12f9d3"
+"f": "2026-09-05",
+"h": "b244eeaf28b0042e"
 },
 "hoteles-refugio-climatico/hotel-rural-los-manzanos": {
-"f": "2026-09-01",
-"h": "a6ad5dcc27087729"
+"f": "2026-09-05",
+"h": "20db22ac044a0370"
 },
 "hoteles-refugio-climatico/hotel-san-roque": {
-"f": "2026-09-01",
-"h": "9c3feea106894fbb"
+"f": "2026-09-05",
+"h": "de750e2db4cff47f"
 },
 "hoteles-refugio-climatico/hotel-sno-isaba": {
-"f": "2026-09-01",
-"h": "315cd0757c285a2b"
+"f": "2026-09-05",
+"h": "e37078ee82864142"
 },
 "hoteles-refugio-climatico/hotel-sno-la-corza-blanca": {
-"f": "2026-09-01",
-"h": "52b310fcc17f7bbb"
+"f": "2026-09-05",
+"h": "60a43953df33916d"
 },
 "hoteles-refugio-climatico/hotel-suiza": {
-"f": "2026-09-01",
-"h": "add6de313ccd8bd2"
+"f": "2026-09-05",
+"h": "c63a5df83b6a75ca"
 },
 "hoteles-refugio-climatico/hotel-villa-de-torla": {
-"f": "2026-09-01",
-"h": "4dc40c59c4330d17"
+"f": "2026-09-05",
+"h": "03be7ffd0a2a9e49"
 },
 "hoteles-refugio-climatico/melia-sierra-nevada": {
-"f": "2026-09-01",
-"h": "7269632a827dd02b"
+"f": "2026-09-05",
+"h": "ddc871e18460c946"
 },
 "hoteles-refugio-climatico/melia-sol-y-nieve": {
-"f": "2026-09-01",
-"h": "bba9b6ba225b6d7d"
+"f": "2026-09-05",
+"h": "943ec5de8ec85199"
 },
 "hoteles-refugio-climatico/parador-de-arties": {
-"f": "2026-09-01",
-"h": "65b121c9ce51eff4"
+"f": "2026-09-05",
+"h": "c86883c95ac61bf8"
 },
 "hoteles-refugio-climatico/parador-de-cervera-de-pisuerga": {
-"f": "2026-09-01",
-"h": "3ad1668c1d4f8bfa"
+"f": "2026-09-05",
+"h": "cc0dbf2a6db130f5"
 },
 "hoteles-refugio-climatico/parador-de-fuente-de": {
-"f": "2026-09-01",
-"h": "acc41ecfd84179c4"
+"f": "2026-09-05",
+"h": "140777d24508ebf1"
 },
 "hoteles-refugio-climatico/parador-de-gredos": {
-"f": "2026-09-01",
-"h": "6f38fe92fb391058"
+"f": "2026-09-05",
+"h": "b50d0ff1d886b20c"
 },
 "hoteles-refugio-climatico/parador-de-molina-de-aragon": {
-"f": "2026-09-01",
-"h": "8b9857c333aab651"
+"f": "2026-09-05",
+"h": "e2a3eb2ff238e430"
 },
 "hoteles-refugio-climatico/parador-de-puebla-de-sanabria": {
-"f": "2026-09-01",
-"h": "440735c41d3daf27"
+"f": "2026-09-05",
+"h": "334e7d894d654867"
 },
 "hoteles-refugio-climatico/parador-de-vielha": {
-"f": "2026-09-01",
-"h": "f94e3fc07a94fb5a"
+"f": "2026-09-05",
+"h": "e57fbd979cf5a31e"
 },
 "hoteles-refugio-climatico/vincci-seleccion-rumaykiyya": {
-"f": "2026-09-01",
-"h": "dda397e8a2b71805"
+"f": "2026-09-05",
+"h": "203dcd4b68d0c5ee"
 },
 "huelva": {
-"f": "2026-09-04",
-"h": "d2ce2b03a26dd0c6"
+"f": "2026-09-05",
+"h": "7c38177645ada27e"
 },
 "huesca": {
-"f": "2026-09-04",
-"h": "81e16719cf3f3f5c"
+"f": "2026-09-05",
+"h": "4b825f15c2e0dcca"
 },
 "illes-balears": {
-"f": "2026-09-04",
-"h": "965bae76fd20e22b"
+"f": "2026-09-05",
+"h": "59a48399b154f416"
 },
 "jaen": {
-"f": "2026-09-04",
-"h": "c9440ae8be9d970d"
+"f": "2026-09-05",
+"h": "b9f14a6049bda835"
 },
 "la-espana-que-nunca-se-colorea": {
-"f": "2026-09-04",
-"h": "c5859d6662c5a3d5"
+"f": "2026-09-05",
+"h": "92422bdf15c143d6"
 },
 "la-rioja": {
-"f": "2026-09-04",
-"h": "30db682123506b9f"
+"f": "2026-09-05",
+"h": "a0bd7a07672b0d34"
 },
 "las-palmas": {
-"f": "2026-09-04",
-"h": "3a4a260ab02393d5"
+"f": "2026-09-05",
+"h": "8fcf9fdba313e6ec"
 },
 "leon": {
-"f": "2026-09-04",
-"h": "faca34027f5fa863"
+"f": "2026-09-05",
+"h": "4005fa181d83a6e8"
 },
 "lleida": {
-"f": "2026-09-04",
-"h": "61833b4f1bbecb7c"
+"f": "2026-09-05",
+"h": "274cdbe6601d1b6a"
 },
 "lugo": {
-"f": "2026-09-04",
-"h": "7696edc8072322d6"
+"f": "2026-09-05",
+"h": "865ed2f90f18490e"
 },
 "madrid": {
-"f": "2026-09-04",
-"h": "5188707e1dcaf7d1"
+"f": "2026-09-05",
+"h": "e1aab4f1a3248fab"
 },
 "malaga": {
-"f": "2026-09-01",
-"h": "2e075b2b301a0222"
+"f": "2026-09-05",
+"h": "f6f7da947d607863"
 },
 "mapa-estaciones": {
 "f": "2026-09-02",
@@ -436,8 +440,8 @@
 "h": "a1709ae03621b808"
 },
 "melilla": {
-"f": "2026-09-04",
-"h": "178edc7259a83287"
+"f": "2026-09-05",
+"h": "e3e6885a1e4301f4"
 },
 "metodologia": {
 "f": "2026-09-01",
@@ -448,40 +452,40 @@
 "h": "0f78f4152677dd61"
 },
 "murcia": {
-"f": "2026-09-04",
-"h": "bc1933dbeb600abe"
+"f": "2026-09-05",
+"h": "8c34d404ec0f89c8"
 },
 "navarra": {
-"f": "2026-09-04",
-"h": "e6c148e8af1a168c"
+"f": "2026-09-05",
+"h": "4d07d170d2523177"
 },
 "noches-tropicales": {
-"f": "2026-09-01",
-"h": "00fe3400cd7526bb"
+"f": "2026-09-05",
+"h": "c380973b7aadc87a"
 },
 "observatorio-del-descanso": {
-"f": "2026-09-01",
-"h": "c973f8f2c67c2089"
+"f": "2026-09-05",
+"h": "2cb0c1d1484b203e"
 },
 "ola-de-calor": {
-"f": "2026-08-30",
-"h": "8a1f33d2a042f07f"
+"f": "2026-09-05",
+"h": "81944cc3f6247785"
 },
 "ourense": {
-"f": "2026-09-04",
-"h": "b6a16d9273efe0fc"
+"f": "2026-09-05",
+"h": "22bdf5c940a19dea"
 },
 "palencia": {
-"f": "2026-09-04",
-"h": "d09e122609c6b7ea"
+"f": "2026-09-05",
+"h": "1869705d68b6a11c"
 },
 "parte": {
 "f": "2026-09-04",
 "h": "95587c8e35baab26"
 },
 "pontevedra": {
-"f": "2026-09-04",
-"h": "c9802ca0d060bca6"
+"f": "2026-09-05",
+"h": "dd3c5c1d4f8fafc3"
 },
 "prensa": {
 "f": "2026-09-01",
@@ -496,75 +500,75 @@
 "h": "d5e1e07b6bf015a2"
 },
 "refugios-climaticos-naturales-cerca-de-mi": {
-"f": "2026-09-01",
-"h": "2d8cb00115be76bc"
+"f": "2026-09-05",
+"h": "966a7f5e42bab52d"
 },
 "refugios-y-espana-vaciada": {
-"f": "2026-09-01",
-"h": "58c3e12fdd632d8b"
+"f": "2026-09-05",
+"h": "1c0b711bfa2d4b7f"
 },
 "salamanca": {
-"f": "2026-09-01",
-"h": "06b47aff75575a98"
+"f": "2026-09-05",
+"h": "82915bb8c792d6f7"
 },
 "santa-cruz-de-tenerife": {
-"f": "2026-09-04",
-"h": "0c48b00a7c5c7ad5"
+"f": "2026-09-05",
+"h": "7a26b81bb448c16d"
 },
 "segovia": {
-"f": "2026-09-04",
-"h": "a2098b310610937a"
+"f": "2026-09-05",
+"h": "b66422f41a134327"
 },
 "sevilla": {
-"f": "2026-09-04",
-"h": "176a0bb8fe3c1bc4"
+"f": "2026-09-05",
+"h": "2c0cb5ef654d83cc"
 },
 "sobre-el-proyecto": {
-"f": "2026-08-30",
-"h": "04548c8eb45cd20a"
+"f": "2026-09-05",
+"h": "ebc38a56192be8bd"
 },
 "soria": {
-"f": "2026-09-04",
-"h": "e5a9ebe134b15e68"
+"f": "2026-09-05",
+"h": "8121cbe3e0a1a296"
 },
 "tarragona": {
-"f": "2026-09-04",
-"h": "fd4f5b5f27dbd64a"
+"f": "2026-09-05",
+"h": "f56b64dc86fc8b72"
 },
 "teruel": {
-"f": "2026-09-04",
-"h": "c652eb748f36296a"
+"f": "2026-09-05",
+"h": "c5ae59c0bef102db"
 },
 "toledo": {
-"f": "2026-09-04",
-"h": "c45d0c7b8ae01642"
+"f": "2026-09-05",
+"h": "2a6cc25dcfe77da7"
 },
 "tu-hotel": {
-"f": "2026-08-30",
-"h": "f3adfec1bc21b668"
+"f": "2026-09-05",
+"h": "814505afdb502bad"
 },
 "tu-pueblo": {
 "f": "2026-08-16",
 "h": "d7b74f99359d610c"
 },
 "vacaciones-sin-calor": {
-"f": "2026-09-01",
-"h": "7a60a7feaf11463d"
+"f": "2026-09-05",
+"h": "403f75e25fef3a0c"
 },
 "valencia": {
-"f": "2026-09-04",
-"h": "6d34a5c880752d5a"
+"f": "2026-09-05",
+"h": "20fe39054dbd9db3"
 },
 "valladolid": {
-"f": "2026-09-04",
-"h": "a88bacbdf83dfcd5"
+"f": "2026-09-05",
+"h": "9338efde5b7f3dfd"
 },
 "zamora": {
-"f": "2026-09-04",
-"h": "3676d33ffe5832ef"
+"f": "2026-09-05",
+"h": "fcf3d1ab66d486de"
 },
 "zaragoza": {
-"f": "2026-09-04",
-"h": "01b7fb2ae1381330"
+"f": "2026-09-05",
+"h": "d37b06c20b397016"
 }
 }

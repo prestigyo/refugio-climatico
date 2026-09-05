@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-04",
- "total": 847,
- "tropicales": 340,
- "ecuatoriales": 23,
+ "fecha": "2026-09-05",
+ "total": 846,
+ "tropicales": 477,
+ "ecuatoriales": 54,
  "peor": {
-  "id": "4236Y",
-  "nombre": "Puerto del Rey",
-  "min": 26.9,
-  "prov": "Cáceres"
+  "id": "5998X",
+  "nombre": "Osuna Sea",
+  "min": 30.0,
+  "prov": "Sevilla"
  },
  "mejor": {
-  "id": "2192C",
-  "nombre": "Cuellar",
-  "min": 7.5,
-  "prov": "Segovia"
+  "id": "2926B",
+  "nombre": "Bañobarez",
+  "min": 0.7,
+  "prov": "Salamanca"
  },
  "top_calor": [
   {
-   "id": "4236Y",
-   "nombre": "Puerto del Rey",
-   "min": 26.9,
-   "prov": "Cáceres"
-  },
-  {
-   "id": "3463Y",
-   "nombre": "Trujillo",
-   "min": 26.4,
-   "prov": "Cáceres"
-  },
-  {
-   "id": "4339X",
-   "nombre": "Cañamero el Pinar",
-   "min": 26.1,
-   "prov": "Cáceres"
-  },
-  {
-   "id": "7002Y",
-   "nombre": "Águilas",
-   "min": 26.1,
-   "prov": "Murcia"
-  },
-  {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 26.1,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "5998X",
    "nombre": "Osuna Sea",
-   "min": 26.0,
+   "min": 30.0,
    "prov": "Sevilla"
   },
   {
-   "id": "4411C",
-   "nombre": "Alcuescar",
-   "min": 25.9,
-   "prov": "Cáceres"
+   "id": "4325Y",
+   "nombre": "Castuera",
+   "min": 28.1,
+   "prov": "Badajoz"
   },
   {
-   "id": "5270B",
-   "nombre": "Jaén",
-   "min": 25.8,
-   "prov": "Jaén"
+   "id": "5783",
+   "nombre": "Sevilla/San Pablo",
+   "min": 27.5,
+   "prov": "Sevilla"
   },
   {
-   "id": "3455X",
-   "nombre": "Jaraicejo",
-   "min": 25.7,
-   "prov": "Cáceres"
+   "id": "5790Y",
+   "nombre": "Tablada",
+   "min": 27.3,
+   "prov": "Sevilla"
   },
   {
-   "id": "0201X",
-   "nombre": "Barcelona Drassanes",
-   "min": 25.5,
-   "prov": "Barcelona"
+   "id": "5612X",
+   "nombre": "Lora de Estepa (Automatica)",
+   "min": 27.2,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "5656",
+   "nombre": "Fuentes de Andalucia el Travieso",
+   "min": 27.1,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "5919X",
+   "nombre": "Olvera-Coop.Agrícola",
+   "min": 27.1,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "5641X",
+   "nombre": "Ecija",
+   "min": 27.0,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "5429X",
+   "nombre": "Córdoba Pragdena",
+   "min": 26.8,
+   "prov": "Córdoba"
+  },
+  {
+   "id": "5625X",
+   "nombre": "La Rambla Privilegio",
+   "min": 26.8,
+   "prov": "Córdoba"
   }
  ],
  "top_fresco": [
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 7.5,
-   "prov": "Segovia"
+   "id": "2926B",
+   "nombre": "Bañobarez",
+   "min": 0.7,
+   "prov": "Salamanca"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 8.1,
+   "min": 10.4,
    "prov": "Ávila"
   },
   {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 8.2,
-   "prov": "Cantabria"
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 10.6,
+   "prov": "Lleida"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 8.4,
-   "prov": "Soria"
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 10.6,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": 11.5,
+   "prov": "Lleida"
   },
   {
    "id": "3013",
    "nombre": "Molina de Aragón",
-   "min": 8.8,
+   "min": 11.7,
    "prov": "Guadalajara"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 8.9,
-   "prov": "León"
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 11.7,
+   "prov": "Cuenca"
   },
   {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 8.9,
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 12.0,
    "prov": "Soria"
   },
   {
-   "id": "3130C",
-   "nombre": "Sigüenza",
-   "min": 8.9,
-   "prov": "Guadalajara"
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": 12.0,
+   "prov": "Cuenca"
   },
   {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 8.9,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "9218A",
-   "nombre": "Isaba/Izaba",
-   "min": 8.9,
-   "prov": "Navarra"
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 12.0,
+   "prov": "Soria"
   }
  ]
 }

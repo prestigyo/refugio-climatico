@@ -1227,6 +1227,8 @@ _F_EXPLORA = [("El Observatorio del Descanso", "/observatorio-del-descanso/"),
 _F_GUIAS = [("Qué es una noche tropical", "/noches-tropicales/"),
             ("Aumento de noches tropicales en España", "/aumento-noches-tropicales-espana/"),
             ("Cómo dormir con calor sin aire acondicionado", "/dormir-con-calor/"),
+            ("Noches tropicales y salud: qué dice la ciencia",
+             "/noches-tropicales-y-salud/"),
             ("Enfriar una habitación sin aire acondicionado",
              "/enfriar-habitacion-sin-aire-acondicionado/"),
             ("Vacaciones sin calor: dónde ir en verano", "/vacaciones-sin-calor/"),
@@ -3396,6 +3398,7 @@ PAGINA_METODOLOGIA = r"""<!doctype html>
 <section><div class="wrap">
   <h2>El dato: la noche tropical</h2>
   <p>Una <b>noche tropical</b> es aquella en que la temperatura mínima <b>no baja de 20&nbsp;°C</b>; una <b>noche ecuatorial</b>, cuando no baja de 25&nbsp;°C. Es el indicador que mejor refleja si se descansa: por encima de esos umbrales, el cuerpo no disipa bien el calor y el sueño se fragmenta. Usamos <b>recuentos</b> de noches, nunca medias de temperatura: una media esconde noches horno compensadas por noches frescas.</p>
+  <p>Por qué ese umbral y no otro, y qué encuentra la literatura médica sobre el calor nocturno —incluido que el riesgo aparece con independencia de la máxima del día—, en <a href="__SITE__/noches-tropicales-y-salud/">noches tropicales y salud</a>, donde están los estudios y las fuentes.</p>
 
   <h2>La fuente y el periodo</h2>
   <p>Valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> (temperatura mínima por estación y día), veranos <b>2017–2026</b> (junio–agosto), en <b>__TOTAL__ estaciones</b> con cobertura suficiente. <a href="__SITE__/parte/">El parte de la noche</a> usa además la red de observación en tiempo real de AEMET (datos provisionales de las últimas horas, ventana nocturna 18:00–08:00 UTC), y se consolida después con los valores validados.</p>
@@ -5907,6 +5910,7 @@ __NAV__
       <a class="navcard" href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/"><span class="ic">📍</span><b>Refugios cerca de ti</b><span>Dónde se duerme fresco más cerca de donde estás.</span></a>
       <a class="navcard" href="__SITE__/dormir-con-calor/"><span class="ic">🛏️</span><b>Dormir con calor</b><span>Qué funciona de verdad sin aire acondicionado.</span></a>
       <a class="navcard" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/"><span class="ic">💧</span><b>Enfriar sin aire acondicionado</b><span>La sábana húmeda y dónde baja grados de verdad.</span></a>
+      <a class="navcard" href="__SITE__/noches-tropicales-y-salud/"><span class="ic">🫀</span><b>Noches tropicales y salud</b><span>Qué dice la ciencia sobre dormir con calor.</span></a>
       <a class="navcard" href="__SITE__/la-espana-que-nunca-se-colorea/"><span class="ic">🗺️</span><b>La España que nunca se colorea</b><span>El estudio de los mapas de AEMET, píxel a píxel.</span></a>
       <a class="navcard" href="__SITE__/metodologia/"><span class="ic">📐</span><b>Cómo medimos</b><span>Qué es una noche tropical y de dónde salen los datos.</span></a>
       <a class="navcard" href="__SITE__/"><span class="ic">🏡</span><b>Tu pueblo</b><span>¿Cuántas noches tropicales tiene al año?</span></a>
@@ -6275,7 +6279,7 @@ __NAV__
   </div>
   <p>Y hay un matiz que ningún dato de estación recoge: <b>tu calle no es tu estación</b>. Un patio interior, una vaguada, una zona con arbolado o una última planta bajo cubierta pueden separarse varios grados del dato oficial. Por eso montamos <a href="__SITE__/observatorio-del-descanso/">el Observatorio del Descanso</a>: para que la gente cuente cómo ha dormido de verdad y aparezcan en el mapa los sitios que los termómetros oficiales no ven. Se tarda diez segundos y es anónimo.</p>
   <div class="aviso">
-    <p><b>Una advertencia que no es de sueño, sino de salud.</b> El calor nocturno sostenido es un riesgo real para bebés, personas mayores, embarazadas y quien tenga enfermedades crónicas o tome ciertos medicamentos. Si alguien deja de sudar, se desorienta, tiene la piel muy caliente y seca o vomita, no es cuestión de dormir mejor: es una urgencia y hay que llamar al <b>112</b>. Ante dudas con la medicación y el calor, pregunta en tu centro de salud.</p>
+    <p><b>Una advertencia que no es de sueño, sino de salud.</b> El calor nocturno sostenido es un riesgo real para bebés, personas mayores, embarazadas y quien tenga enfermedades crónicas o tome ciertos medicamentos —y no es una intuición: hay <a href="__SITE__/noches-tropicales-y-salud/">estudios que lo miden</a>. Si alguien deja de sudar, se desorienta, tiene la piel muy caliente y seca o vomita, no es cuestión de dormir mejor: es una urgencia y hay que llamar al <b>112</b>. Ante dudas con la medicación y el calor, pregunta en tu centro de salud.</p>
   </div>
 </div></section>
 
@@ -6386,6 +6390,332 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
             .replace("__M30__", str(m30))
             .replace("__M60__", str(m60))
             .replace("__CERO__", str(cero))
+            .replace("__DESC__", desc)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
+# ---------------------------------------------------------------------------
+# Página /noches-tropicales-y-salud/: el PORQUÉ del proyecto entero.
+#
+# El sitio llevaba un año contando noches tropicales sin explicar nunca por qué
+# importan: "mortalidad", "cardiovascular", "CSIC" y "calidad del sueño" no
+# aparecían en ninguna de las 400 páginas. Esta pieza cubre ese hueco.
+#
+# Regla de esta página, más estricta que en el resto del sitio: aquí NO hay
+# datos propios. Todo son estudios ajenos revisados por pares, cada cifra con
+# su fuente primaria enlazada. Por eso no lleva schema Dataset. Y por eso
+# ninguna cifra que no se haya podido comprobar en la fuente entra en el texto
+# —el 9,2 % de un estudio de Barcelona de 2017 se quedó fuera por eso—.
+#
+# Tampoco se cruza con MoMo-ISCIII: su variable de defunciones atribuibles a
+# temperatura es circular para lo que queremos afirmar aquí.
+# ---------------------------------------------------------------------------
+
+# Fracción de muertes atribuible al exceso de calor nocturno, por ciudad, del
+# desglose español del estudio de Royé et al. (2025). NO es lo mismo que el
+# riesgo relativo agrupado (1,026) y no deben sumarse ni mezclarse: una mide
+# cuánto sube el riesgo una noche cálida, la otra qué porcentaje del total de
+# muertes se atribuye al calor nocturno en esa ciudad.
+FRACCION_ATRIBUIBLE = (
+    ("Granada", 3.56, "interior"),
+    ("Madrid", 3.45, "interior"),
+    ("Córdoba", 3.44, "interior"),
+    ("Barcelona", 0.56, "litoral"),
+    ("Alicante", 0.55, "litoral"),
+    ("Almería", 0.46, "litoral"),
+)
+
+PAGINA_SALUD = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noches tropicales y salud: qué dice la ciencia</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/noches-tropicales-y-salud/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Noches tropicales y salud: qué dice la ciencia">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/noches-tropicales-y-salud/">
+<meta property="og:image" content="__OGIMG__">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__OGIMG__">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ __NAVCSS__
+ __FOOTERCSS__
+ __CSSART__
+ .nova{background:#0f0b07;border:1px dashed var(--line);border-radius:14px;padding:18px 20px;margin:20px 0}
+ .nova h3{margin-top:0;color:var(--paper)}
+ .nova ul{margin:0;padding-left:20px}
+ .nova li{color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:10px}
+ .nova li b{color:var(--paper)}
+ .aviso{background:rgba(217,96,74,.10);border:1px solid #8a4436;border-radius:14px;padding:16px 18px;margin:22px 0}
+ .aviso p{font-size:14.5px;margin:0 0 10px;line-height:1.7}
+ .aviso p:last-child{margin-bottom:0}
+ .aviso b{color:#f0c9bd}
+ .fuente{font-size:13px;color:var(--muted);margin-top:22px;line-height:1.65}
+ .barras{margin:16px 0 6px}
+ .barra{display:grid;grid-template-columns:100px 1fr 60px;align-items:center;gap:10px;margin-bottom:9px;font-size:14.5px}
+ .barra .ciu{color:var(--paper);font-family:var(--fd);font-weight:600}
+ .barra .track{display:block;background:var(--bg2);border-radius:5px;height:19px;overflow:hidden}
+ .barra .fill{display:block;height:19px;border-radius:5px;min-width:3px}
+ .barra .fill.int{background:linear-gradient(90deg,#b23a2e,#d9744e)}
+ .barra .fill.lit{background:linear-gradient(90deg,#5f7a52,#8fb07a)}
+ .barra .val{font-family:var(--fm);font-size:13.5px;color:var(--muted);text-align:right}
+ .refs{list-style:none;padding:0;margin:10px 0 0}
+ .refs li{font-size:14px;line-height:1.65;color:var(--muted);padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+ .refs li:last-child{border-bottom:0}
+ .refs b{color:var(--paper)}
+ .refs .rev{font-style:italic}
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Noches tropicales y salud</nav>
+  <div class="kick">Qué dice la ciencia · con las fuentes delante</div>
+  <h1>Noches tropicales <em>y salud</em></h1>
+  <p class="intro">Llevamos un año contando cuántas noches por encima de 20&nbsp;°C registra cada estación de España. Lo que no habíamos explicado todavía es <b>por qué esa cifra importa</b> más allá de dar vueltas en la cama. La respuesta corta: el calor nocturno no es un apéndice del calor del día — es un factor de riesgo por su cuenta, y está medido.</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="aviso">
+    <p><b>Esta página no publica datos nuestros.</b> Todo lo que se afirma aquí sale de estudios ajenos revisados por pares, y cada cifra lleva su fuente enlazada al final. Nosotros medimos temperaturas; la mortalidad la miden otros, con métodos que no son los nuestros.</p>
+  </div>
+
+  <h2>La noche cuenta aparte del día</h2>
+  <p>En septiembre de 2025, un equipo internacional liderado desde el <b>CSIC</b> publicó en <i>Environment International</i> el mayor análisis hecho hasta ahora sobre calor nocturno y mortalidad: <b>178 localidades de 44 países</b>, con temperaturas horarias entre 1990 y 2018, más de <b>14 millones de defunciones</b> y 42 capitales de provincia españolas dentro de la muestra.</p>
+  <p>El resultado que cambia el enfoque es este: <b>el riesgo asociado al calor nocturno aparece con independencia de la temperatura máxima del día</b>. Da igual lo que marcara el termómetro a las cuatro de la tarde; si la madrugada no baja, el riesgo sube igual. El riesgo relativo agrupado que encuentra el estudio para las noches cálidas extremas es de <b>1,026</b> — un 2,6&nbsp;% más de mortalidad—, y la asociación aparece en todos los climas y regiones estudiados salvo en el norte de Europa, donde los propios autores la califican de solo sugerente.</p>
+  <p>El mecanismo que proponen es fácil de seguir: si el cuerpo no encuentra durante la noche una ventana lo bastante fresca, <b>no completa la recuperación del estrés térmico acumulado de día</b>. Y lo que no se recupera, se acumula — que es exactamente lo que ocurre en una racha de noches tropicales seguidas.</p>
+  <p>No era la primera señal. Ya en 2017, el mismo investigador principal había publicado en <i>International Journal of Biometeorology</i> un análisis de Barcelona con datos horarios de 2003 a 2013, construido sobre un umbral nocturno de <b>23&nbsp;°C</b>.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Qué le pasa al cuerpo, medido cuerpo a cuerpo</h2>
+  <p>El estudio anterior mide el resultado final —cuánta gente muere de más— a escala de población. Pero hay otro, mucho más reciente, que mide lo que le ocurre a una sola persona mientras eso pasa.</p>
+  <p>Un equipo de la <b>Universidad de Griffith</b> (Australia) publicó en <i>BMC Medicine</i> un seguimiento de <b>47 adultos de 65 años o más</b> en sus propias casas del sureste de Queensland, durante todo un verano austral. Cada uno llevó un dispositivo que registraba <b>frecuencia cardíaca y variabilidad cardíaca</b> (HRV, un indicador de cómo está regulando el sistema nervioso autónomo) entre las 21:00 y las 7:00, mientras un sensor medía la temperatura real del dormitorio.</p>
+  <p>El mecanismo es el mismo que el cuerpo usa de día para refrescarse, solo que aplicado a una noche que no debería exigirlo: para disipar calor, <b>manda sangre hacia la piel mediante vasodilatación periférica</b>, y eso obliga al corazón a bombear con más fuerza y de forma sostenida durante horas. Los resultados acompañan al mecanismo: a más temperatura de dormitorio, más frecuencia cardíaca durante el sueño y <b>menos variabilidad</b> — es decir, menos capacidad de regular esa respuesta.</p>
+  <p>El estudio sitúa la referencia en <b>24&nbsp;°C de temperatura de dormitorio</b>: mantenerla en ese valor o por debajo reduce la probabilidad de esas respuestas de estrés nocturno en personas mayores.</p>
+  <div class="nova">
+    <h3>La misma historia contada a dos escalas</h3>
+    <ul>
+      <li>El estudio del <b>CSIC</b> cuenta <b>cuánta gente de más muere</b> en una ciudad cuando las noches no refrescan.</li>
+      <li>El de <b>Griffith</b> cuenta <b>qué le pasa a un corazón concreto</b>, noche tras noche, mientras eso ocurre.</li>
+      <li>Ninguno de los dos mide el sueño de nadie en su casa de España. Lo que nosotros medimos —cuántas noches al año una zona se queda por encima de 20&nbsp;°C— es el <b>indicador indirecto</b> de cuántas veces al año se pierde esa ventana de recuperación.</li>
+    </ul>
+  </div>
+</div></section>
+"""
+
+PAGINA_SALUD_2 = r"""
+<section><div class="wrap">
+  <h2>El dato incómodo: donde más noches tropicales hay no es donde más pesan</h2>
+  <p>Aquí conviene ir despacio, porque el resultado es lo contrario de lo que parece.</p>
+  <p>El desglose español del estudio del CSIC calcula, ciudad a ciudad, <b>qué fracción de las muertes se atribuye al exceso de calor nocturno</b>. Y las ciudades de interior salen por delante de las del litoral mediterráneo, <b>pese a que estas últimas acumulan muchas más noches tropicales al año</b>:</p>
+  __BARRAS__
+  <p style="margin-top:14px">Seis veces más en Granada que en Almería. La explicación que apuntan los propios investigadores es la <b>aclimatación</b>: una población que convive cada verano con mínimas altas responde distinto —fisiológica y conductualmente— que otra para la que esas noches siguen siendo la excepción.</p>
+  <div class="nova">
+    <h3>Dos magnitudes que no hay que fundir</h3>
+    <ul>
+      <li><b>Riesgo relativo</b> (1,026): cuánto sube el riesgo de morir <i>una</i> noche cálida frente a una normal. Es la cifra global del estudio.</li>
+      <li><b>Fracción atribuible</b> (3,56&nbsp;% en Granada): qué porcentaje del total de muertes de esa ciudad se atribuye al calor nocturno. Depende de cuántas noches cálidas tenga y de cómo responda su población.</li>
+      <li>No son la misma cifra, no se suman y no se comparan entre sí. <b>Más noches tropicales no significa automáticamente más riesgo por cada una de ellas</b>, ni al revés.</li>
+    </ul>
+  </div>
+  <p>Esto tampoco contradice lo que vemos en nuestros propios datos de AEMET, que es otra cosa distinta: que <a href="__SITE__/aumento-noches-tropicales-espana/">la brecha entre el llano y la montaña se está abriendo</a>, con las estaciones por debajo de 200&nbsp;m ganando unas <b>14 noches tropicales por década</b> frente a las <b>5</b> de las que están por encima de 800&nbsp;m. Nosotros contamos noches; el estudio del CSIC mide riesgo por noche. Son dos preguntas diferentes con dos respuestas diferentes.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Cómo leer nuestros datos con esto delante</h2>
+  <p>Cada cifra que publicamos estación por estación —noches tropicales al año, tendencia por década, racha máxima consecutiva— es, a la luz de esta literatura, el indicador indirecto de una variable que sí importa: <b>cuántas noches al año una zona pierde su ventana de recuperación térmica</b>.</p>
+  <p>Lo que <b>no</b> hacemos, y conviene decirlo alto: no medimos mortalidad, no la atribuimos a ninguna estación y no calculamos riesgo para nadie. Eso excede con mucho lo que estos datos permiten afirmar. Lo que sí podemos decir, apoyándonos en trabajos publicados y revisados por pares, es que <b>la cifra que mostramos no es un dato de confort</b>: hay literatura médica que se la toma en serio.</p>
+  <div class="cta">
+    <b>¿Cuántas noches tropicales tiene tu pueblo?</b>
+    <p>Diez veranos de datos de AEMET, estación por estación.</p>
+    <a class="btn" href="__HOME__">Consultar la calculadora</a>
+  </div>
+  <p>Si quieres el detalle de cómo contamos —qué umbral usamos, por qué no usamos medias y de dónde sale cada dato—, está en la <a href="__SITE__/metodologia/">metodología</a>. Si lo que buscas es qué hacer esta noche, la guía práctica es <a href="__SITE__/dormir-con-calor/">cómo dormir con calor sin aire acondicionado</a>. Y si tu zona no da tregua, puedes ver <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">dónde se duerme fresco cerca de ti</a>.</p>
+  <div class="aviso">
+    <p><b>Esto no es consejo médico.</b> Los porcentajes citados son promedios de estudios poblacionales a gran escala: no son aplicables a una persona ni a un municipio concretos. Si convives con el calor nocturno y tienes una enfermedad crónica, tomas medicación, estás embarazada o cuidas de un bebé o de una persona mayor, quien te puede orientar es tu centro de salud.</p>
+    <p>Ante síntomas de golpe de calor —piel muy caliente y seca, desorientación, vómitos, dejar de sudar— <b>llama al 112</b>.</p>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Limitaciones</h2>
+  <div class="nova">
+    <ul>
+      <li>Los estudios citados miden <b>temperatura del aire en estaciones urbanas de referencia</b>, no en cada dormitorio ni en cada barrio — la misma limitación que aplicamos al resto del portal.</li>
+      <li>La relación entre calor nocturno y mortalidad <b>varía con el clima, la edad, la salud previa y la aclimatación</b> de cada población. Los propios autores lo señalan.</li>
+      <li>El estudio de Griffith es <b>observacional</b>, con 47 personas mayores de un solo verano australiano. Describe una asociación consistente con un mecanismo conocido; no demuestra causalidad ni es directamente extrapolable a otra población.</li>
+      <li>No cruzamos nada de esto con los datos de <b>MoMo-ISCIII</b>: su variable de defunciones atribuibles a temperatura es circular para lo que aquí se quiere afirmar.</li>
+      <li>Hay una cifra que circula en prensa —un aumento del 9,2&nbsp;% de mortalidad en Barcelona por encima de 23&nbsp;°C— que <b>no hemos podido comprobar en la fuente original</b>, así que no la publicamos. El estudio de Barcelona existe y está citado abajo; la cifra concreta, hasta verificarla, no.</li>
+    </ul>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Preguntas frecuentes</h2>
+  <dl class="faq">__FAQ__</dl>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Fuentes</h2>
+  <ul class="refs">__REFS__</ul>
+  <p class="fuente">Los datos climáticos de este portal proceden de <a href="https://opendata.aemet.es" rel="noopener" target="_blank">AEMET OpenData</a> y se explican en la <a href="__SITE__/metodologia/">metodología</a>. Esta página, en cambio, no publica datos propios: sintetiza literatura ya publicada, y cada afirmación se puede seguir hasta su fuente.</p>
+</div></section>
+__FOOTER__
+</body>
+</html>
+"""
+
+# Fuentes de la página. Cada una con su enlace comprobado: es el producto de
+# esta pieza, no un adorno al final.
+REFS_SALUD = (
+    ("Royé, D., Sera, F., Tobías, A. <i>et al.</i> (2025). "
+     "«Short-term association between hot nights and mortality: a multicountry "
+     "analysis in 178 locations considering hourly ambient temperature».",
+     "Environment International, 203:109719",
+     [("Nota de prensa del CSIC", "https://www.csic.es/es/actualidad-del-csic/un-estudio-internacional-liderado-por-el-csic-revela-una-relacion-directa-entre-noches-calurosas-y-mortalidad-nivel-global"),
+      ("Artículo (ScienceDirect)", "https://www.sciencedirect.com/science/article/pii/S0160412025004702"),
+      ("Nota del CSIC (Doñana)", "https://www.ebd.csic.es/en/outreach/news/international-study-led-csic-reveals-direct-link-between-hot-nights-and-global")]),
+    ("Divulgación del propio equipo investigador sobre el estudio anterior, "
+     "con el desglose por ciudades españolas.", "The Conversation",
+     [("«Noches que matan: cuando el calor no da tregua aunque caiga el sol»",
+       "https://theconversation.com/noches-que-matan-cuando-el-calor-no-da-tregua-aunque-caiga-el-sol-286452")]),
+    ("O'Connor, F. K., Bach, A. J. E., Forbes, C. <i>et al.</i> (2025). "
+     "«Effect of nighttime bedroom temperature on heart rate variability in "
+     "older adults: an observational study».", "BMC Medicine",
+     [("Artículo completo (Springer)", "https://link.springer.com/article/10.1186/s12916-025-04513-0"),
+      ("Texto completo (PMC)", "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12751657/"),
+      ("Nota de prensa, Griffith University", "https://news.griffith.edu.au/2026/01/08/cooler-bedroom-temperatures-help-the-heart-recover-during-sleep/")]),
+    ("Royé, D. (2017). «The effects of hot nights on mortality in Barcelona, "
+     "Spain». Análisis con datos horarios de 2003 a 2013 y umbral nocturno de "
+     "23&nbsp;°C.", "International Journal of Biometeorology",
+     [("Artículo (Springer)", "https://link.springer.com/article/10.1007/s00484-017-1416-z")]),
+)
+
+
+def construir_pagina_salud(site: str = SITE_URL) -> str:
+    """/noches-tropicales-y-salud/ — por qué importa lo que mide este portal."""
+    barras = []
+    tope = max(v for _, v, _ in FRACCION_ATRIBUIBLE)
+    for ciudad, valor, zona in FRACCION_ATRIBUIBLE:
+        ancho = round(100 * valor / tope, 1)
+        css = "int" if zona == "interior" else "lit"
+        barras.append(
+            f'<div class="barra"><span class="ciu">{ciudad}</span>'
+            f'<span class="track"><span class="fill {css}" style="width:{ancho}%"></span></span>'
+            f'<span class="val">{f"{valor:.2f}".replace(".", ",")} %</span></div>')
+    barras_html = ('<div class="barras">' + "".join(barras) + '</div>'
+                   '<p class="fuente">Fracción de la mortalidad atribuida al exceso '
+                   'de calor nocturno, desglose español de Royé <i>et al.</i> (2025). '
+                   'En rojo, ciudades de interior; en verde, de litoral.</p>')
+
+    refs = []
+    for texto, revista, enlaces in REFS_SALUD:
+        links = " · ".join(f'<a href="{u}" rel="noopener" target="_blank">{t}</a>'
+                           for t, u in enlaces)
+        refs.append(f'<li>{texto} <span class="rev">{revista}</span>.<br>{links}</li>')
+    refs_html = "".join(refs)
+
+    desc = ("Qué dice la ciencia sobre las noches tropicales: por qué el calor "
+            "nocturno afecta a la salud con independencia del calor del día, "
+            "con los estudios y las fuentes delante.")
+
+    faq = [
+        ("¿Por qué el calor nocturno es distinto del calor del día?",
+         "Porque el cuerpo necesita una ventana nocturna más fresca para completar "
+         "la recuperación del estrés térmico acumulado durante el día. El estudio "
+         "internacional liderado por el CSIC (Environment International, 2025) "
+         "encontró que el riesgo asociado a las noches cálidas aparece con "
+         "independencia de cuál haya sido la temperatura máxima diurna."),
+        ("¿Cuánto sube el riesgo en una noche cálida?",
+         "El riesgo relativo agrupado que encuentra ese estudio para las noches "
+         "cálidas extremas es de 1,026, es decir, alrededor de un 2,6 % más de "
+         "mortalidad. Es un promedio sobre 178 localidades de 44 países y más de "
+         "14 millones de defunciones entre 1990 y 2018; no es aplicable a una "
+         "persona ni a un municipio concretos."),
+        ("¿Qué le pasa al cuerpo cuando la noche no refresca?",
+         "Para disipar calor, el cuerpo manda sangre hacia la piel mediante "
+         "vasodilatación periférica, y eso obliga al corazón a bombear con más "
+         "fuerza durante horas. Un estudio de la Universidad de Griffith publicado "
+         "en BMC Medicine midió frecuencia cardíaca y variabilidad cardíaca en 47 "
+         "adultos de 65 años o más durante un verano completo: a más temperatura "
+         "de dormitorio, más frecuencia cardíaca y menos variabilidad. Sitúa la "
+         "referencia en mantener el dormitorio a 24 °C o por debajo."),
+        ("¿Las ciudades con más noches tropicales son las de más riesgo?",
+         "No necesariamente, y es lo más contraintuitivo del estudio. En el "
+         "desglose español, ciudades de interior como Granada (3,56 %), Madrid "
+         "(3,45 %) o Córdoba (3,44 %) presentan una fracción de mortalidad "
+         "atribuible al calor nocturno muy superior a la de ciudades del litoral "
+         "mediterráneo como Barcelona (0,56 %), Alicante (0,55 %) o Almería "
+         "(0,46 %), pese a que estas acumulan muchas más noches tropicales al año. "
+         "La explicación que apuntan los investigadores es la aclimatación."),
+        ("¿Estos datos de salud son de nochetropical.es?",
+         "No. Esta página sintetiza estudios epidemiológicos ya publicados y "
+         "revisados por pares, con enlace a cada fuente. Los datos propios del "
+         "portal —noches tropicales por estación, tendencias por década— proceden "
+         "de AEMET y se explican en nuestra metodología. No medimos mortalidad ni "
+         "la atribuimos a ninguna estación."),
+    ]
+    faq_html = "".join(f"<dt>{p}</dt><dd>{r}</dd>" for p, r in faq)
+
+    url = site + "/noches-tropicales-y-salud/"
+    titulo = "Noches tropicales y salud: qué dice la ciencia"
+    # Sin schema Dataset a propósito: esta página no publica datos propios.
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Noches tropicales y salud", "item": url}]},
+        {"@type": "Article", "headline": titulo, "description": desc, "url": url,
+         "inLanguage": "es-ES",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es", "url": site + "/"},
+         "mainEntityOfPage": url, "image": site + "/og.png",
+         "citation": [
+             {"@type": "ScholarlyArticle",
+              "name": "Short-term association between hot nights and mortality: a "
+                      "multicountry analysis in 178 locations considering hourly "
+                      "ambient temperature",
+              "isPartOf": {"@type": "Periodical", "name": "Environment International"},
+              "datePublished": "2025",
+              "url": "https://www.sciencedirect.com/science/article/pii/S0160412025004702"},
+             {"@type": "ScholarlyArticle",
+              "name": "Effect of nighttime bedroom temperature on heart rate "
+                      "variability in older adults: an observational study",
+              "isPartOf": {"@type": "Periodical", "name": "BMC Medicine"},
+              "datePublished": "2025",
+              "url": "https://link.springer.com/article/10.1186/s12916-025-04513-0"}]},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": p,
+             "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in faq]}]},
+        ensure_ascii=False)
+
+    return ((PAGINA_SALUD + PAGINA_SALUD_2)
+            .replace("__BARRAS__", barras_html)
+            .replace("__REFS__", refs_html)
+            .replace("__FAQ__", faq_html)
+            .replace("__OGIMG__", f"{site}/og.png")
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__CSSART__", _CSS_ARTICULO)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
             .replace("__DESC__", desc)
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
@@ -6578,7 +6908,7 @@ __NAV__
   <h2>El límite que nadie te dice: el aire ya viene con agua</h2>
   <p>El enfriamiento por evaporación no puede bajar la temperatura por debajo de un valor concreto: la <b>temperatura de bulbo húmedo</b>. Es la temperatura mínima a la que se puede llegar evaporando agua en ese aire, y depende de cuánta humedad lleve ya. Si el aire está saturado, no cabe más vapor y no hay enfriamiento posible por mucho dosel que pongas.</p>
   <p>La diferencia entre la temperatura real y esa temperatura de bulbo húmedo es <b>el techo absoluto del truco</b>. Nadie lo alcanza —un paño colgado no es un evaporador perfecto—, pero por debajo de ese número no se puede bajar. Y ese techo se puede calcular, porque las estaciones de AEMET miden la humedad cada hora junto a la temperatura.</p>
-  <p>Lo hemos calculado para <b>__NEST__ estaciones</b>, con las lecturas de madrugada del archivo horario propio. El resultado es incómodo para el truco:</p>
+  <p>__CALCULADO__ El resultado es incómodo para el truco:</p>
 
   <div class="nova">
     <h3>El techo evaporativo de la madrugada española</h3>
@@ -6593,7 +6923,7 @@ __NAV__
   <p>Hay una ironía en los extremos. Donde el truco rinde más es en sitios como <b>Tejeda</b>, en el interior de Gran Canaria (__TEJEDA__&nbsp;°C de margen), que resulta ser <a href="__SITE__/ranking-noches-tropicales/">de los peores lugares de España para dormir</a>. Y donde no sirve de nada es en <b>Reinosa</b> (__REINOSA__&nbsp;°C) o <b>Beariz</b> (__BEARIZ__&nbsp;°C), que están entre los mejores refugios del país: allí el aire ya está fresco y no hace falta ningún invento.</p>
 </div></section>
 
-<section><div class="wrap">
+<!--TABLA_EVAP_INI--><section><div class="wrap">
   <h2>¿Funciona donde tú vives?</h2>
   <p>Busca tu pueblo o tu provincia. La cifra es el <b>techo físico</b> del enfriamiento evaporativo en la madrugada, medido en la estación de AEMET más cercana, junto a la humedad relativa media nocturna.</p>
   <div class="buscador">
@@ -6612,7 +6942,7 @@ __NAV__
   <p class="nores" id="nores" hidden>No hay ninguna estación con ese nombre. Prueba con la provincia, o mira el <a href="__SITE__/mapa-estaciones/">mapa de estaciones</a>.</p>
   <p class="tot" id="totev"></p>
   <p style="margin-top:16px">La estación más cercana no es tu calle: un patio interior, una vaguada o un ático bajo cubierta se separan varios grados del dato oficial. Si quieres afinar, mira <a href="__SITE__/microclimas/">cómo funcionan los microclimas</a> y cuenta tu caso en <a href="__SITE__/observatorio-del-descanso/">el Observatorio del Descanso</a>.</p>
-</div></section>
+</div></section><!--TABLA_EVAP_FIN-->
 """
 
 PAGINA_EVAPORATIVO_2 = r"""
@@ -6621,7 +6951,7 @@ PAGINA_EVAPORATIVO_2 = r"""
   <p>Este truco tiene un contraindicado real, y conviene decirlo antes que las ventajas.</p>
   <div class="aviso">
     <p><b>Si el aire ya está húmedo, no lo hagas.</b> Añadir vapor a un dormitorio cargado no solo no refresca: <b>empeora activamente</b> tu capacidad de sudar, que es como tu cuerpo se enfría de verdad. En una noche de 26&nbsp;°C con el 90&nbsp;% de humedad, humedecer el aire va en tu contra. Es justo el caso del litoral mediterráneo y de la cornisa cantábrica en agosto.</p>
-    <p><b>El calor nocturno sostenido es un riesgo de salud</b> para bebés, personas mayores, embarazadas y quien tenga enfermedades crónicas o tome ciertos medicamentos —y la humedad alta lo agrava. Si alguien deja de sudar, se desorienta, tiene la piel muy caliente y seca o vomita, no es cuestión de dormir mejor: es una urgencia y hay que llamar al <b>112</b>.</p>
+    <p><b>El calor nocturno sostenido es un riesgo de salud</b> para bebés, personas mayores, embarazadas y quien tenga enfermedades crónicas o tome ciertos medicamentos —y la humedad alta lo agrava. Qué dice la literatura médica sobre esto, con las fuentes delante, en <a href="__SITE__/noches-tropicales-y-salud/">noches tropicales y salud</a>. Si alguien deja de sudar, se desorienta, tiene la piel muy caliente y seca o vomita, no es cuestión de dormir mejor: es una urgencia y hay que llamar al <b>112</b>.</p>
   </div>
   <div class="nova">
     <h3>Otras tres cosas antes de montar nada</h3>
@@ -6803,9 +7133,23 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
         site, pie="Cuando dentro no se puede estar, la noche se pasa fuera.",
         credito="Ilustración generada con IA", primera=True)
 
-    return ((PAGINA_EVAPORATIVO + PAGINA_EVAPORATIVO_2)
+    plantilla = PAGINA_EVAPORATIVO + PAGINA_EVAPORATIVO_2
+    if not est:
+        # Sin el JSON del análisis no hay tabla que enseñar. Antes se publicaba
+        # igual, con cero filas y un "lo hemos calculado para 0 estaciones":
+        # mejor quitar la sección entera y no prometer lo que no hay.
+        ini, fin = plantilla.index("<!--TABLA_EVAP_INI-->"), plantilla.index("<!--TABLA_EVAP_FIN-->")
+        plantilla = plantilla[:ini] + plantilla[fin + len("<!--TABLA_EVAP_FIN-->"):]
+        print("   AVISO: falta datos/margen_evaporativo.json; la landing del dosel "
+              "sale sin la tabla de estaciones (ejecuta analisis_curva_nocturna.py).")
+    return (plantilla
             .replace("__FILAS__", filas)
-            .replace("__NEST__", f"{n_est:,}".replace(",", "."))
+            .replace("__CALCULADO__",
+                     f"Lo hemos calculado para <b>{n_est:,} estaciones</b>, con las "
+                     "lecturas de madrugada del archivo horario propio.".replace(",", ".")
+                     if n_est else
+                     "Lo hemos calculado con las lecturas de madrugada de la red de "
+                     "AEMET.")
             .replace("__PCT6__", str(pct6))
             .replace("__PCTNO__", str(pctno))
             .replace("__MEDIANA__", mediana)
@@ -11434,6 +11778,11 @@ def main() -> int:
     (DOCS_DIR / "dormir-con-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "dormir-con-calor" / "index.html").write_text(
         construir_pagina_dormir(estaciones, site), encoding="utf-8")
+    # El porqué medico de todo el proyecto. No publica datos propios: sintetiza
+    # literatura revisada por pares, cada cifra con su fuente enlazada.
+    (DOCS_DIR / "noches-tropicales-y-salud").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "noches-tropicales-y-salud" / "index.html").write_text(
+        construir_pagina_salud(site), encoding="utf-8")
     # El truco de la sábana húmeda + el techo evaporativo real, estación a
     # estación. Intención distinta de /dormir-con-calor/: aquí se busca ENFRIAR
     # la habitación, no la guía general de sueño.

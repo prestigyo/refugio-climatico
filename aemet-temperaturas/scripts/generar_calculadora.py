@@ -1239,7 +1239,8 @@ _F_GUIAS = [("Qué es una noche tropical", "/noches-tropicales/"),
             ("Cómo crear un refugio climático natural", "/refugio-climatico-natural/"),
             ("Refugios y España vaciada", "/refugios-y-espana-vaciada/"),
             ("La hipoteca térmica", "/hipoteca-termica/")]
-_F_PROYECTO = [("La calculadora de tu pueblo", "/"),
+_F_PROYECTO = [("Buscar en la web", "/buscar/"),
+               ("La calculadora de tu pueblo", "/"),
                ("Sobre el proyecto", "/sobre-el-proyecto/"),
                ("Metodología y glosario", "/metodologia/"),
                ("Sala de prensa", "/prensa/"),
@@ -6391,6 +6392,256 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
             .replace("__M60__", str(m60))
             .replace("__CERO__", str(cero))
             .replace("__DESC__", desc)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+
+# ---------------------------------------------------------------------------
+# Buscador interno del sitio: /buscar/ + docs/buscador.json
+#
+# El sitio pasó de una calculadora a 400 páginas y no había forma de encontrar
+# nada que no estuviera en el menú. Y Search Console dice que la intención
+# dominante es «noches tropicales <pueblo>»: por eso el índice no lleva solo
+# páginas, lleva TAMBIÉN las ~860 estaciones, para que quien escriba el nombre
+# de su pueblo caiga en su provincia y no en una página genérica.
+#
+# Todo estático: un JSON que se genera en el build y una búsqueda en el
+# navegador. Sin dependencias, sin backend y sin registrar nada — si algún día
+# se quieren guardar las consultas, es una decisión aparte y con sus reglas.
+# ---------------------------------------------------------------------------
+INDICE_BUSCADOR = "buscador.json"
+
+# Páginas que no tiene sentido ofrecer en el buscador: utilidades internas,
+# páginas de compartir y la propia página de resultados.
+FUERA_DEL_BUSCADOR = {"buscar", "informes", "badges", "tu-pueblo/gracias"}
+
+
+def _texto_meta(html: str, prop: str) -> str:
+    m = re.search(rf'<meta name="{prop}" content="([^"]*)"', html)
+    return m.group(1) if m else ""
+
+
+def construir_indice_buscador(estaciones: list, site: str) -> int:
+    """Escribe docs/buscador.json recorriendo lo ya generado. Devuelve nº de entradas.
+
+    Se ejecuta al final del build, cuando docs/ ya está escrito: así el índice
+    refleja exactamente lo que se publica y no una lista mantenida a mano que
+    se desincronizaría a la primera página nueva.
+    """
+    paginas = []
+    for f in (list(DOCS_DIR.glob("index.html")) + list(DOCS_DIR.glob("*/index.html"))
+              + list(DOCS_DIR.glob("*/*/index.html"))):
+        rel = f.parent.relative_to(DOCS_DIR).as_posix()
+        rel = "" if rel == "." else rel
+        if rel in REDIRECCIONES or rel in FUERA_DEL_BUSCADOR:
+            continue
+        if rel.startswith(("certificados/", "hoteles-refugio-climatico/", "parte/")):
+            continue          # cientos de fichas; saturarían los resultados
+        try:
+            html = f.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        if 'content="noindex' in html:
+            continue
+        t = re.search(r"<title>([^<]*)</title>", html)
+        titulo = (t.group(1) if t else rel).split(" | ")[0].strip()
+        desc = _texto_meta(html, "description")
+        paginas.append([titulo, "/" + rel + ("/" if rel else ""), desc[:150]])
+
+    # Las estaciones apuntan a su landing provincial, que es donde está su fila.
+    ests = [[e["loc"], e["prov"], e["nt"], "/" + slug(e["prov"]) + "/"]
+            for e in sorted(estaciones, key=lambda x: x["loc"])]
+
+    datos = {"p": sorted(paginas, key=lambda x: x[0]), "e": ests}
+    ruta = DOCS_DIR / INDICE_BUSCADOR
+    ruta.write_text(json.dumps(datos, ensure_ascii=False, separators=(",", ":")),
+                    encoding="utf-8")
+    kb = ruta.stat().st_size // 1024
+    print(f"   buscador: {len(paginas)} páginas + {len(ests)} estaciones "
+          f"-> {INDICE_BUSCADOR} ({kb} KB)")
+    return len(paginas), len(ests)
+
+PAGINA_BUSCAR = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buscar en nochetropical.es</title>
+<meta name="description" content="Busca tu pueblo, tu provincia o cualquier página de nochetropical.es: 860 estaciones de AEMET y todas las guías del sitio.">
+<link rel="canonical" href="__SITE__/buscar/">
+<meta name="robots" content="noindex,follow">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ __NAVCSS__
+ __FOOTERCSS__
+ __CSSART__
+ .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+ .bx{margin:20px 0 6px;position:relative}
+ .bx input{width:100%;box-sizing:border-box;padding:16px 18px;font-size:17px;
+   font-family:var(--fb);color:var(--paper);background:var(--bg2);
+   border:1px solid var(--line);border-radius:13px}
+ .bx input:focus{outline:2px solid var(--teja);outline-offset:1px}
+ .cuenta{font-size:13.5px;color:var(--muted);margin:8px 0 0;min-height:20px}
+ .grp{margin:26px 0 0}
+ .grp h2{font-size:13px;letter-spacing:.09em;text-transform:uppercase;
+   color:var(--teja);font-family:var(--fb);font-weight:700;margin:0 0 10px}
+ .res{list-style:none;padding:0;margin:0}
+ .res li{border-bottom:1px solid rgba(255,255,255,.06)}
+ .res a{display:block;padding:13px 4px;color:var(--paper);text-decoration:none}
+ .res a:hover,.res a:focus{background:rgba(217,116,78,.09);text-decoration:none}
+ .res .t{font-family:var(--fd);font-weight:600;font-size:16.5px;display:block}
+ .res .d{font-size:14px;color:var(--muted);display:block;margin-top:3px;line-height:1.55}
+ .res .m{font-family:var(--fm);font-size:12.5px;color:var(--teja2);float:right;
+   margin-left:12px;white-space:nowrap}
+ .vacio{color:var(--muted);font-size:15.5px;line-height:1.75;margin:26px 0}
+ .vacio b{color:var(--paper)}
+ .sug{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+ .sug button{font:600 13.5px/1 var(--fb);padding:9px 14px;border-radius:9px;
+   border:1px solid var(--line);background:transparent;color:var(--paper);cursor:pointer}
+ .sug button:hover{border-color:var(--teja);color:var(--teja2)}
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Buscar</nav>
+  <h1>Buscar</h1>
+  <p class="intro">Tu pueblo, tu provincia o cualquier guía del sitio. <b>__NEST__ estaciones</b> de AEMET y <b>__NPAG__ páginas</b>.</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="bx">
+    <label class="sr-only" for="q">Buscar en el sitio</label>
+    <input id="q" type="search" placeholder="Escribe un pueblo, una provincia o un tema…"
+           autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+  </div>
+  <p class="cuenta" id="cuenta" role="status" aria-live="polite"></p>
+  <div class="sug" id="sug">
+    <button type="button" data-q="Teruel">Teruel</button>
+    <button type="button" data-q="dormir">dormir con calor</button>
+    <button type="button" data-q="ola de calor">ola de calor</button>
+    <button type="button" data-q="salud">salud</button>
+    <button type="button" data-q="refugio">refugios</button>
+  </div>
+  <div id="out"></div>
+  <div class="vacio" id="ini">
+    <p>El buscador recorre <b>todas las estaciones de AEMET</b> del proyecto y todas las páginas publicadas. Escribe sin preocuparte por los acentos.</p>
+    <p>Si no encuentras tu pueblo es porque <b>no tiene estación meteorológica propia</b> — busca entonces por provincia, o mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">los refugios más cercanos a ti</a>. También puedes <a href="__SITE__/tu-pueblo/">avisarnos de que falta</a>.</p>
+  </div>
+</div></section>
+__FOOTER__
+<script>
+(function(){
+ var A='<a hre'+'f="';   // partido a proposito: si no, revisar_enlaces()
+                        // lee este JS y avisa de enlaces rotos que no existen
+ var q=document.getElementById('q'), out=document.getElementById('out'),
+     cuenta=document.getElementById('cuenta'), ini=document.getElementById('ini'),
+     sug=document.getElementById('sug'), datos=null, cargando=false, pend=null;
+ function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+ function esc(s){return (s||'').replace(/[&<>"]/g,function(c){
+   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+ function cargar(cb){
+  if(datos) return cb();
+  if(cargando){ pend=cb; return; }
+  cargando=true;
+  var x=new XMLHttpRequest();
+  x.open('GET','__SITE__/buscador.json',true);
+  x.onload=function(){
+   try{ datos=JSON.parse(x.responseText); }catch(e){ datos={p:[],e:[]}; }
+   datos.pk=datos.p.map(function(r){return norm(r[0]+' '+r[2]);});
+   datos.ek=datos.e.map(function(r){return norm(r[0]+' '+r[1]);});
+   cargando=false; cb(); if(pend){var f=pend; pend=null; f();}
+  };
+  x.onerror=function(){ cargando=false; datos={p:[],e:[],pk:[],ek:[]}; cb(); };
+  x.send();
+ }
+
+ function pinta(){
+  var t=norm(q.value.trim());
+  if(!t){ out.innerHTML=''; cuenta.textContent=''; ini.hidden=false; sug.hidden=false; return; }
+  ini.hidden=true; sug.hidden=true;
+  cargar(function(){
+   var ests=[], pags=[], i;
+   for(i=0;i<datos.ek.length;i++){
+    if(datos.ek[i].indexOf(t)>=0){
+     var e=datos.e[i];
+     // Empezar por el término pesa más que contenerlo en medio.
+     ests.push([norm(e[0]).indexOf(t)===0?0:1, e]);
+     if(ests.length>400) break;
+    }
+   }
+   for(i=0;i<datos.pk.length;i++){
+    if(datos.pk[i].indexOf(t)>=0){
+     var p=datos.p[i];
+     pags.push([norm(p[0]).indexOf(t)>=0?0:1, p]);
+    }
+   }
+   ests.sort(function(a,b){return a[0]-b[0];});
+   pags.sort(function(a,b){return a[0]-b[0];});
+   var h='', n=ests.length+pags.length;
+   if(pags.length){
+    h+='<div class="grp"><h2>Páginas</h2><ul class="res">';
+    pags.slice(0,12).forEach(function(r){ var p=r[1];
+     h+='<li>'+A+esc(p[1])+'"><span class="t">'+esc(p[0])+'</span>'
+       +(p[2]?'<span class="d">'+esc(p[2])+'</span>':'')+'</a></li>'; });
+    h+='</ul></div>';
+   }
+   if(ests.length){
+    h+='<div class="grp"><h2>Estaciones de AEMET</h2><ul class="res">';
+    ests.slice(0,25).forEach(function(r){ var e=r[1];
+     // Concordancia: "1 noche", no "1 noches". El resto del sitio ya la cuida.
+     var nt=(''+e[2]).replace('.',',')+(e[2]===1?' noche':' noches');
+     h+='<li>'+A+esc(e[3])+'"><span class="m">'+nt+' trop./año</span>'
+       +'<span class="t">'+esc(e[0])+'</span>'
+       +'<span class="d">'+esc(e[1])+'</span></a></li>'; });
+    h+='</ul></div>';
+   }
+   if(!n){
+    h='<div class="vacio"><p>No hay nada con <b>«'+esc(q.value.trim())+'»</b>.</p>'
+     +'<p>Si buscabas un pueblo, puede que <b>no tenga estación meteorológica propia</b>: '
+     +'prueba con su provincia, mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">'
+     +'los refugios más cercanos</a> o <a href="__SITE__/tu-pueblo/">dinos que falta</a>.</p></div>';
+    cuenta.textContent='';
+   } else {
+    cuenta.textContent = n===1 ? '1 resultado'
+      : n+' resultados'+(ests.length>25?' (se muestran los 25 primeros de estación)':'');
+   }
+   out.innerHTML=h;
+  });
+ }
+
+ var tmr;
+ q.addEventListener('input',function(){ clearTimeout(tmr); tmr=setTimeout(pinta,110); });
+ sug.addEventListener('click',function(ev){
+  var b=ev.target.closest('button[data-q]'); if(!b) return;
+  q.value=b.getAttribute('data-q'); q.focus(); pinta();
+ });
+ // Permite llegar con /buscar/?q=teruel desde cualquier sitio.
+ var m=/[?&]q=([^&]*)/.exec(location.search);
+ if(m){ try{ q.value=decodeURIComponent(m[1].replace(/\+/g,' ')); }catch(e){} }
+ pinta();
+})();
+</script>
+</body>
+</html>
+"""
+
+
+def construir_pagina_buscar(n_est: int, n_pag: int, site: str = SITE_URL) -> str:
+    return (PAGINA_BUSCAR
+            .replace("__NEST__", f"{n_est:,}".replace(",", "."))
+            .replace("__NPAG__", str(n_pag))
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__CSSART__", _CSS_ARTICULO)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
 
@@ -12057,6 +12308,13 @@ def main() -> int:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + filas + "\n</urlset>\n", encoding="utf-8")
+    # El índice se construye al final, con docs/ ya escrito: así refleja lo que
+    # de verdad se publica. Y /buscar/ va antes de revisar_enlaces() para que el
+    # enlace del pie no salga como roto.
+    n_pag, n_est_idx = construir_indice_buscador(estaciones, site)
+    (DOCS_DIR / "buscar").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "buscar" / "index.html").write_text(
+        construir_pagina_buscar(n_est_idx, n_pag, site), encoding="utf-8")
     print("   enlaces: " + revisar_enlaces(site))
     print("   indexnow: " + avisar_indexnow(site, nuevas))
     print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"

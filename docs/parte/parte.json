@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-05",
- "total": 846,
- "tropicales": 479,
- "ecuatoriales": 54,
+ "fecha": "2026-09-06",
+ "total": 843,
+ "tropicales": 407,
+ "ecuatoriales": 31,
  "peor": {
-  "id": "5998X",
-  "nombre": "Osuna Sea",
-  "min": 30.0,
-  "prov": "Sevilla"
+  "id": "C625O",
+  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+  "min": 28.2,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 10.4,
-  "prov": "Ávila"
+  "id": "8210Y",
+  "nombre": "Salvacañete",
+  "min": 8.3,
+  "prov": "Cuenca"
  },
  "top_calor": [
   {
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 28.2,
+   "prov": "Las Palmas"
+  },
+  {
    "id": "5998X",
    "nombre": "Osuna Sea",
-   "min": 30.0,
+   "min": 28.0,
    "prov": "Sevilla"
   },
   {
-   "id": "4325Y",
-   "nombre": "Castuera",
-   "min": 28.1,
-   "prov": "Badajoz"
-  },
-  {
-   "id": "5783",
-   "nombre": "Sevilla/San Pablo",
-   "min": 27.5,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "5790Y",
-   "nombre": "Tablada",
-   "min": 27.3,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "5612X",
-   "nombre": "Lora de Estepa (Automatica)",
-   "min": 27.2,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "5656",
-   "nombre": "Fuentes de Andalucia el Travieso",
-   "min": 27.1,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "5919X",
-   "nombre": "Olvera-Coop.Agrícola",
-   "min": 27.1,
+   "id": "5950X",
+   "nombre": "San Jose del Valle-Pt Guadalcacín",
+   "min": 27.7,
    "prov": "Cádiz"
   },
   {
-   "id": "5641X",
-   "nombre": "Ecija",
-   "min": 27.0,
-   "prov": "Sevilla"
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 27.7,
+   "prov": "Las Palmas"
   },
   {
-   "id": "6045X",
-   "nombre": "Alpandeire",
+   "id": "C623I",
+   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "min": 27.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 27.4,
+   "prov": "Almería"
+  },
+  {
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+   "min": 27.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "5972Y",
+   "nombre": "San Fernando Roa",
    "min": 26.9,
-   "prov": "Málaga"
+   "prov": "Cádiz"
   },
   {
-   "id": "5429X",
-   "nombre": "Córdoba Pragdena",
-   "min": 26.8,
-   "prov": "Córdoba"
+   "id": "5972X",
+   "nombre": "San Fernando",
+   "min": 26.7,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "6332Y",
+   "nombre": "Carboneras - Faro Mesa Roldán",
+   "min": 26.7,
+   "prov": "Almería"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 10.4,
-   "prov": "Ávila"
-  },
-  {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 10.6,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 10.6,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": 11.5,
-   "prov": "Lleida"
-  },
-  {
-   "id": "3013",
-   "nombre": "Molina de Aragón",
-   "min": 11.7,
-   "prov": "Guadalajara"
-  },
-  {
    "id": "8210Y",
    "nombre": "Salvacañete",
-   "min": 11.7,
+   "min": 8.3,
    "prov": "Cuenca"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 12.0,
-   "prov": "Soria"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 8.4,
+   "prov": "Ávila"
   },
   {
    "id": "8245Y",
    "nombre": "Mira",
-   "min": 12.0,
+   "min": 9.0,
    "prov": "Cuenca"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 12.0,
-   "prov": "Soria"
+   "id": "8381X",
+   "nombre": "Ademuz",
+   "min": 9.9,
+   "prov": "Valencia"
   },
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 12.1,
+   "min": 10.9,
    "prov": "Granada"
+  },
+  {
+   "id": "9998X",
+   "nombre": "Bello",
+   "min": 11.1,
+   "prov": "Teruel"
+  },
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 11.4,
+   "prov": "Ourense"
+  },
+  {
+   "id": "8368U",
+   "nombre": "Teruel",
+   "min": 11.4,
+   "prov": "Teruel"
+  },
+  {
+   "id": "8008Y",
+   "nombre": "Villena",
+   "min": 11.5,
+   "prov": "Alicante"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 11.6,
+   "prov": "Zamora"
   }
  ]
 }

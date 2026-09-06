@@ -1154,6 +1154,9 @@ CSS_NAV_ESCUETO = (
     'border-radius:8px;white-space:nowrap}'
     '.nav-e .links a:hover{color:var(--paper);background:rgba(217,116,78,.14);'
     'text-decoration:none}'
+    '.nav-e .links a.lupa{display:inline-flex;align-items:center;padding:6px 9px;'
+    'border:1px solid var(--line);border-radius:8px;color:var(--teja2)}'
+    '.nav-e .links a.lupa:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}'
     '.nav-e .links a.lang{margin-left:4px;border:1px solid var(--line);'
     'color:var(--teja2);font-weight:600;letter-spacing:.04em}'
     '.nav-e .links a.lang:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}'
@@ -1169,12 +1172,19 @@ _LOGO_ESCUETO = ('<svg width="24" height="24" viewBox="0 0 100 100" aria-hidden=
                  '<span>nochetropical.es</span>')
 
 
+_LUPA_SVG = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" '
+             'stroke="currentColor" stroke-width="2.4" stroke-linecap="round" '
+             'aria-hidden="true"><circle cx="11" cy="11" r="7"/>'
+             '<path d="M20 20l-3.6-3.6"/></svg>')
+
+
 def nav_escueto_html(site: str) -> str:
     """Header mínimo compartido. En las landings ninguna de las 4 entradas es
     la página actual, así que no se marca aria-current."""
     enlaces = "".join(f'<a href="{site}{href}">{txt}</a>' for txt, href in MENU_ESCUETO)
     # Conmutador de idioma discreto hacia la versión inglesa (simétrico al "ES"
     # del menú inglés; refuerza el hreflang con un enlace navegable).
+    enlaces += (f'<a href="{site}/buscar/" class="lupa" aria-label="Buscar" title="Buscar en la web">{_LUPA_SVG}</a>')
     enlaces += f'<a href="{site}/en/" hreflang="en" class="lang" aria-label="English version" title="English version">EN</a>'
     return ('<nav class="nav-e" aria-label="principal"><div class="in">'
             f'<a class="brand" href="{site}/" aria-label="nochetropical.es">{_LOGO_ESCUETO}</a>'
@@ -1477,6 +1487,7 @@ def enlace_certificado(e: dict, site: str) -> str:
 # trae a la gente y hasta ahora habia que bajar a buscarla.
 ATAJO_CERCA = ('<p class="atajo"><a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">'
                '📍 ¿Dónde puedo dormir fresco en España cerca de mí? →</a></p>')
+CSS_MASBUSCA = ('.masbusca{font-size:14.5px;color:var(--muted);margin:14px 0 0;line-height:1.7}')
 CSS_ATAJO = ('.atajo{margin:18px 0}'
              '.atajo a{display:inline-flex;align-items:center;gap:9px;padding:12px 18px;'
              'border-radius:999px;border:1px solid var(--teal);color:var(--teal);'
@@ -1862,13 +1873,19 @@ def prosa_contraste(prov: str, mejor: dict, peor: dict, n: int) -> str:
             f"temperatura baje de los 20&nbsp;°C.</p>")
 
 
-def prosa_refugios(prov: str, refugios: list) -> str:
+def prosa_refugios(prov: str, refugios: list, site: str = SITE_URL) -> str:
+    from urllib.parse import quote   # para llegar a /buscar/ con la provincia puesta
+
     if not refugios:
         return (f"<h2>Los refugios climáticos de {prov}</h2>"
                 f"<p>Ninguna estación de {prov} baja de una noche tropical al año de media, así que "
                 f"no hay aquí un refugio en sentido estricto. La tabla de arriba está ordenada de la "
                 f"más fresca a la más calurosa: las primeras filas son las que mejor concilian el "
-                f"sueño en la provincia.</p>")
+                f"sueño en la provincia.</p>"
+                + f'<p class="masbusca">¿No ves tu pueblo en la tabla? Puede que no tenga '
+            f'estación propia. <a href="{site}/buscar/?q={quote(prov)}">Búscalo entre '
+            f'las estaciones de AEMET</a> o mira <a href="{site}/refugios-climaticos-naturales-cerca-de-mi/">'
+            f'los refugios más cercanos a ti</a>.</p>')
     nombres = ", ".join(f"<b>{e['loc']}</b> ({e['alt']:,} m)".replace(",", ".")
                          for e in refugios[:6])
     cuantas = plural(len(refugios), "estación", "estaciones")
@@ -1877,7 +1894,11 @@ def prosa_refugios(prov: str, refugios: list) -> str:
             f"<p>{cuantas.capitalize()} de {prov} no {verbo} a una noche tropical al año de media: "
             f"{nombres}. Son los puntos donde, incluso en pleno verano, la temperatura nocturna baja "
             f"con fiabilidad de los 20&nbsp;°C — normalmente por la altitud, la lejanía del mar o "
-            f"ambas cosas a la vez.</p>")
+            f"ambas cosas a la vez.</p>"
+            + f'<p class="masbusca">¿No ves tu pueblo en la tabla? Puede que no tenga '
+            f'estación propia. <a href="{site}/buscar/?q={quote(prov)}">Búscalo entre '
+            f'las estaciones de AEMET</a> o mira <a href="{site}/refugios-climaticos-naturales-cerca-de-mi/">'
+            f'los refugios más cercanos a ti</a>.</p>')
 
 
 def prosa_peores(prov: str, peores: list, mejor: dict) -> str:
@@ -2738,7 +2759,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
     prosa = (prosa_contraste(prov, mejor, peor, n)
              + prosa_tendencia(prov, tendencia or {})
              + bloque_escapada(prov, peor, site)
-             + prosa_refugios(prov, refugios)
+             + prosa_refugios(prov, refugios, site)
              + cta_refugio
              + (prosa_peores(prov, peores, mejor) + cta_ola if peores else "")
              + prosa_metodologia(prov, n, fecha_mod_txt, site))
@@ -2824,7 +2845,7 @@ _CSS_NAV_MOVIL = ('@media(max-width:560px){.nav .brand span{display:none}'
                   '.nav .in{gap:14px}.menu a{padding:8px 10px}}')
 
 # Reglas que quiere cualquier página con el chrome nuevo.
-_CSS_COMUN = _CSS_MU + _CSS_NAV_MOVIL
+_CSS_COMUN = _CSS_MU + _CSS_NAV_MOVIL + CSS_MASBUSCA
 
 # Colores de la escala de AEMET, para no volver a teclearlos de memoria.
 AEMET = {"verde": "#66FF66", "lima": "#CCFF00", "amarillo": "#FFFF00",
@@ -2905,6 +2926,7 @@ def nav_html(actual: str = "") -> str:
         for k, href, txt in _MENU)
     # Conmutador de idioma discreto: enlace real a la versión inglesa (refuerza
     # el hreflang y da salida al público angloparlante).
+    enlaces += ('<a href="__SITE__/buscar/" class="lupa" aria-label="Buscar" title="Buscar en la web">' + _LUPA_SVG + '</a>')
     enlaces += '<a href="__SITE__/en/" hreflang="en" class="lang" aria-label="English version" title="English version">EN</a>'
     logo = _LOGO.format(px=26, hueco="--bg")
     return ('<nav class="nav"><div class="in">\n'
@@ -4057,6 +4079,8 @@ PAGINA_BETA = r"""<!doctype html>
  .menu a{font-size:14.5px;color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;white-space:nowrap}
  .menu a:hover{color:var(--ink);background:rgba(238,151,105,.14)}
  .menu a[aria-current]{color:var(--brand);font-weight:600}
+ .menu a.lupa{display:inline-flex;align-items:center;padding:6px 9px;border:1px solid var(--line);border-radius:8px;color:var(--brand)}
+ .menu a.lupa:hover{border-color:var(--brand);background:rgba(217,116,78,.14)}
  .menu a.lang{margin-left:4px;border:1px solid var(--line);color:var(--brand);font-weight:600;letter-spacing:.04em}
  .menu a.lang:hover{border-color:var(--brand);background:rgba(238,151,105,.14)}
  .hero{padding:50px 0 6px}
@@ -4391,6 +4415,8 @@ PAGINA_CERCA = r"""<!doctype html>
  .menu a{font-size:14.5px;color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;white-space:nowrap}
  .menu a:hover{color:var(--ink);background:rgba(238,151,105,.14)}
  .menu a[aria-current]{color:var(--brand);font-weight:600}
+ .menu a.lupa{display:inline-flex;align-items:center;padding:6px 9px;border:1px solid var(--line);border-radius:8px;color:var(--brand)}
+ .menu a.lupa:hover{border-color:var(--brand);background:rgba(217,116,78,.14)}
  .menu a.lang{margin-left:4px;border:1px solid var(--line);color:var(--brand);font-weight:600;letter-spacing:.04em}
  .menu a.lang:hover{border-color:var(--brand);background:rgba(238,151,105,.14)}
  .hero{padding:50px 0 6px}

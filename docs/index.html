@@ -143,17 +143,43 @@
  .leer b{color:var(--ink)}
  @media(max-width:660px){.scale-h-wrap{display:none}.scale-v-wrap{display:block}.fgrid{grid-template-columns:1fr 1fr}}
  @media(max-width:430px){.fgrid{grid-template-columns:1fr}}
- .mu{display:inline-block;width:.78em;height:.78em;border-radius:3px;margin:0 .16em 0 .1em;position:relative;top:.04em;box-shadow:0 0 0 1px rgba(255,255,255,.3)}@media(max-width:560px){.nav .brand span{display:none}.nav .in{gap:14px}.menu a{padding:8px 10px}}.masbusca{font-size:14.5px;color:var(--muted);margin:14px 0 0;line-height:1.7}.atajo{margin:18px 0}.atajo a{display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;border:1px solid var(--teal);color:var(--teal);font-weight:600;font-size:15px;background:rgba(150,182,196,.08);text-decoration:none}.atajo a:hover{background:rgba(150,182,196,.18);text-decoration:none}
+ .mu{display:inline-block;width:.78em;height:.78em;border-radius:3px;margin:0 .16em 0 .1em;position:relative;top:.04em;box-shadow:0 0 0 1px rgba(255,255,255,.3)}@media(max-width:560px){.nav .brand span{display:none}.nav .in{gap:14px}.menu a{padding:8px 10px}}.masbusca{font-size:14.5px;color:var(--muted);margin:14px 0 0;line-height:1.7}.burger{display:none;background:none;border:1px solid var(--line);border-radius:9px;padding:9px 8px;cursor:pointer;flex-direction:column;gap:4px;align-items:center;justify-content:center;width:38px;height:36px;flex:0 0 auto;color:#efe6d6;margin-left:auto}.burger span{display:block;width:18px;height:2px;background:currentColor;border-radius:2px;transition:transform .22s ease,opacity .18s ease}.burger[aria-expanded="true"]{border-color:var(--teja)}.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}.burger[aria-expanded="true"] span:nth-child(2){opacity:0}.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}@media(prefers-reduced-motion:reduce){.burger span{transition:none}}@media(max-width:700px){.burger{display:flex}.nav .in,.nav-e .in{position:relative;flex-wrap:nowrap}.nav .menu,.nav-e .links{position:absolute;top:calc(100% + 9px);left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:0;overflow:visible;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5);z-index:60}.nav .menu a,.nav-e .links a{padding:13px 14px;border-radius:9px;font-size:16px;text-align:left;margin:0}.nav .menu a:hover,.nav-e .links a:hover{background:rgba(217,116,78,.12)}.nav .menu.abre,.nav-e .links.abre{display:flex}.nav .menu a.lupa,.nav-e .links a.lupa{gap:10px;justify-content:flex-start;border:0;padding:13px 14px;width:auto;height:auto}.nav .menu a.lupa::after,.nav-e .links a.lupa::after{content:"Buscar en la web";font-weight:400}.nav .menu a.lang,.nav-e .links a.lang{align-self:flex-start;margin:6px 0 0 14px}}.atajo{margin:18px 0}.atajo a{display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;border:1px solid var(--teal);color:var(--teal);font-weight:600;font-size:15px;background:rgba(150,182,196,.08);text-decoration:none}.atajo a:hover{background:rgba(150,182,196,.18);text-decoration:none}
 </style>
 </head>
 <body>
 <div class="pg">
   <nav class="nav"><div class="in">
     <a class="brand" href="https://nochetropical.es/" aria-label="nochetropical.es"><svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="var(--brand)"/><circle cx="60" cy="44" r="29" fill="var(--bg)"/></svg><span>nochetropical.es</span></a>
-    <div class="menu">
+    <div class="menu" id="menu-nav">
       <a href="https://nochetropical.es/observatorio-del-descanso/">Observatorio</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios cerca de mí</a><a href="https://nochetropical.es/hoteles-refugio-climatico/">Hoteles</a><a href="https://nochetropical.es/ola-de-calor/">Ola de calor</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking</a><a href="https://nochetropical.es/buscar/" class="lupa" aria-label="Buscar" title="Buscar en la web"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg></a><a href="https://nochetropical.es/en/" hreflang="en" class="lang" aria-label="English version" title="English version">EN</a>
     </div>
-  </div></nav>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="menu-nav" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+  </div><script>
+(function(){
+ var nav=document.currentScript.parentNode;
+ var b=nav.querySelector('.burger'), m=nav.querySelector('.menu,.links');
+ if(!b||!m) return;
+ m.id=m.id||'menu-nav';
+ function set(abierto){
+  b.setAttribute('aria-expanded',abierto?'true':'false');
+  b.setAttribute('aria-label',abierto?'Cerrar menú':'Abrir menú');
+  m.classList.toggle('abre',abierto);
+ }
+ b.addEventListener('click',function(e){
+  e.stopPropagation();
+  set(b.getAttribute('aria-expanded')!=='true');
+ });
+ document.addEventListener('click',function(e){
+  if(b.getAttribute('aria-expanded')==='true' && !nav.contains(e.target)) set(false);
+ });
+ document.addEventListener('keydown',function(e){
+  if(e.key==='Escape' && b.getAttribute('aria-expanded')==='true'){ set(false); b.focus(); }
+ });
+ // Si se vuelve a escritorio con el panel abierto, hay que dejarlo cerrado o
+ // el .abre se queda pegado y el menú aparece apilado donde ya cabía en fila.
+ window.addEventListener('resize',function(){ if(window.innerWidth>700) set(false); });
+})();
+</script></nav>
   <header class="hero"><div class="in">
     <p class="kick">¿Dónde se duerme fresco en España?</p>
     <h1>El termómetro de las noches tropicales</h1>

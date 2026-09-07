@@ -664,8 +664,8 @@ def main() -> int:
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": "2026-07-06",
-         "dateModified": ahora.strftime("%Y-%m-%d"),
+         "datePublished": g.iso_tz("2026-07-06"),
+         "dateModified": g.iso_tz(ahora.strftime("%Y-%m-%d")),
          "mainEntityOfPage": site + "/parte/"}]}, ensure_ascii=False)
 
     html = (PLANTILLA

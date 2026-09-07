@@ -203,6 +203,29 @@
   });
  }
 
+ // --- registro de la consulta ------------------------------------------
+ // Solo si hay backend configurado. Se manda el termino y cuantos resultados
+ // dio, nada mas: ni identificadores, ni hora, ni de donde viene el visitante.
+ // Sin esos campos no se puede saber que dos busquedas son de la misma
+ // persona, que es exactamente lo que se quiere.
+ var LOG='', ya={}, tlog;
+ function registra(t,n){
+  if(!LOG || !t || t.length<2 || t.length>80) return;
+  if(ya[t]) return;            // una vez por termino y visita: el resto es ruido
+  ya[t]=1;
+  try{
+   var cuerpo=JSON.stringify({q:t,n:n,o:'404'});
+   // sendBeacon no bloquea ni retrasa nada, y sobrevive a que el visitante
+   // pulse un resultado justo despues de escribir.
+   if(navigator.sendBeacon){ navigator.sendBeacon(LOG, new Blob([cuerpo],{type:'text/plain'})); }
+   else { var x=new XMLHttpRequest(); x.open('POST',LOG,true); x.send(cuerpo); }
+  }catch(e){}
+ }
+ function apunta(t,n){
+  // 1,4 s de espera: se registra lo que el visitante termino de escribir, no
+  // cada letra del camino.
+  clearTimeout(tlog); tlog=setTimeout(function(){ registra(t,n); },1400);
+ }
  // El buscador, el mismo motor que /buscar/ pero en corto.
  var tmr;
  q.addEventListener('input', function(){
@@ -220,6 +243,7 @@
     lista.innerHTML = h || '<li><a hre'+'f="'+SITE+'/tu-pueblo/"><span class="t">Nada con «'
       +esc(q.value.trim())+'»</span><span class="d">Si es un pueblo, puede que no tenga estación propia. Cuéntanoslo.</span></a></li>';
     rt.textContent = h ? 'Resultados' : 'Sin resultados';
+    apunta(t, n);
     rescate.style.display='block';
    });
   },140);

@@ -168,15 +168,39 @@
      +'<p>Si buscabas un pueblo, puede que <b>no tenga estación meteorológica propia</b>: '
      +'prueba con su provincia, mira <a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">'
      +'los refugios más cercanos</a> o <a href="https://nochetropical.es/tu-pueblo/">dinos que falta</a>.</p></div>';
-    cuenta.textContent='';
+    cuenta.textContent=''; apunta(t,0);
    } else {
     cuenta.textContent = n===1 ? '1 resultado'
       : n+' resultados'+(ests.length>25?' (se muestran los 25 primeros de estación)':'');
+    apunta(t,n);
    }
    out.innerHTML=h;
   });
  }
 
+ // --- registro de la consulta ------------------------------------------
+ // Solo si hay backend configurado. Se manda el termino y cuantos resultados
+ // dio, nada mas: ni identificadores, ni hora, ni de donde viene el visitante.
+ // Sin esos campos no se puede saber que dos busquedas son de la misma
+ // persona, que es exactamente lo que se quiere.
+ var LOG='', ya={}, tlog;
+ function registra(t,n){
+  if(!LOG || !t || t.length<2 || t.length>80) return;
+  if(ya[t]) return;            // una vez por termino y visita: el resto es ruido
+  ya[t]=1;
+  try{
+   var cuerpo=JSON.stringify({q:t,n:n,o:'buscar'});
+   // sendBeacon no bloquea ni retrasa nada, y sobrevive a que el visitante
+   // pulse un resultado justo despues de escribir.
+   if(navigator.sendBeacon){ navigator.sendBeacon(LOG, new Blob([cuerpo],{type:'text/plain'})); }
+   else { var x=new XMLHttpRequest(); x.open('POST',LOG,true); x.send(cuerpo); }
+  }catch(e){}
+ }
+ function apunta(t,n){
+  // 1,4 s de espera: se registra lo que el visitante termino de escribir, no
+  // cada letra del camino.
+  clearTimeout(tlog); tlog=setTimeout(function(){ registra(t,n); },1400);
+ }
  var tmr;
  q.addEventListener('input',function(){ clearTimeout(tmr); tmr=setTimeout(pinta,110); });
  sug.addEventListener('click',function(ev){

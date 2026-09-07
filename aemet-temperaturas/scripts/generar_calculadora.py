@@ -1188,7 +1188,8 @@ def nav_escueto_html(site: str) -> str:
     enlaces += f'<a href="{site}/en/" hreflang="en" class="lang" aria-label="English version" title="English version">EN</a>'
     return ('<nav class="nav-e" aria-label="principal"><div class="in">'
             f'<a class="brand" href="{site}/" aria-label="nochetropical.es">{_LOGO_ESCUETO}</a>'
-            f'<div class="links">{enlaces}</div></div></nav>')
+            f'<div class="links" id="menu-nav">{enlaces}</div>'
+            + BOTON_BURGER + '</div>' + JS_BURGER + '</nav>')
 
 
 def mininav_footer_html(site: str) -> str:
@@ -2841,11 +2842,99 @@ _CSS_MU = ('.mu{display:inline-block;width:.78em;height:.78em;border-radius:3px;
 # En móvil el nombre del dominio se comía 190 de los 375 px de la barra (el 51 %)
 # y no cabía entero ni UNO de los nueve elementos del menú. Se queda solo la luna;
 # el nombre sigue en el <title>, en el pie y en el aria-label del enlace.
+# ---------------------------------------------------------------------------
+# Menú de móvil: hamburguesa.
+#
+# El menú era una tira con scroll lateral y en un móvil de 390 px se veían DOS
+# de las ocho entradas: 704 px de enlaces en 302 px de hueco. El resto existía
+# pero no había forma de saberlo, porque un desbordamiento horizontal no se
+# anuncia solo.
+#
+# La lupa y el conmutador EN se quedan FUERA del panel, siempre visibles: son
+# acciones de un toque, no secciones donde navegar.
+# ---------------------------------------------------------------------------
+BOTON_BURGER = ('<button class="burger" type="button" aria-expanded="false" '
+                'aria-controls="menu-nav" aria-label="Abrir menú">'
+                '<span></span><span></span><span></span></button>')
+
+CSS_BURGER = (
+    # Oculto en escritorio: ahí el menú cabe entero y no hace falta nada.
+    '.burger{display:none;background:none;border:1px solid var(--line);border-radius:9px;'
+    'padding:9px 8px;cursor:pointer;flex-direction:column;gap:4px;align-items:center;'
+    'justify-content:center;width:38px;height:36px;flex:0 0 auto;color:#efe6d6;'
+    'margin-left:auto}'
+    '.burger span{display:block;width:18px;height:2px;background:currentColor;border-radius:2px;'
+    'transition:transform .22s ease,opacity .18s ease}'
+    '.burger[aria-expanded="true"]{border-color:var(--teja)}'
+    # Las tres rayas se convierten en una X. La animación la dispara el dedo del
+    # usuario, no la página: así se entiende que el botón abre y cierra.
+    '.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}'
+    '.burger[aria-expanded="true"] span:nth-child(2){opacity:0}'
+    '.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}'
+    '@media(prefers-reduced-motion:reduce){.burger span{transition:none}}'
+    # --- móvil ---
+    '@media(max-width:700px){'
+    '.burger{display:flex}'
+    # El panel cuelga de la barra, ocupa el ancho y apila las entradas: se ven
+    # todas de golpe, que era justo lo que fallaba.
+    '.nav .in,.nav-e .in{position:relative;flex-wrap:nowrap}'
+    '.nav .menu,.nav-e .links{position:absolute;top:calc(100% + 9px);left:0;right:0;'
+    'display:none;flex-direction:column;align-items:stretch;gap:0;overflow:visible;'
+    'background:var(--panel);border:1px solid var(--line);border-radius:14px;'
+    'padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5);z-index:60}'
+    '.nav .menu a,.nav-e .links a{padding:13px 14px;border-radius:9px;font-size:16px;'
+    'text-align:left;margin:0}'
+    '.nav .menu a:hover,.nav-e .links a:hover{background:rgba(217,116,78,.12)}'
+    '.nav .menu.abre,.nav-e .links.abre{display:flex}'
+    # Lupa y EN se quedan DENTRO del panel: sacarlos con position:absolute los
+    # ocultaba junto a el, que es justo lo contrario de lo que se buscaba.
+    # Un icono suelto en una lista vertical no se entiende, asi que en movil
+    # la lupa se acompana de su texto.
+    '.nav .menu a.lupa,.nav-e .links a.lupa{gap:10px;justify-content:flex-start;'
+    'border:0;padding:13px 14px;width:auto;height:auto}'
+    '.nav .menu a.lupa::after,.nav-e .links a.lupa::after{content:"Buscar en la web";'
+    'font-weight:400}'
+    '.nav .menu a.lang,.nav-e .links a.lang{align-self:flex-start;margin:6px 0 0 14px}'
+    '}')
+
+# El menu escueto de las landings usa su propio paquete de CSS, que se arma
+# mucho antes: hay que sumarle las reglas aqui, no alli.
+CSS_NAV_ESCUETO += CSS_BURGER
+
+# El script viaja DENTRO del HTML del menú: así llega a las 400 páginas sin
+# tocar una a una sus plantillas, y si el menú no está, no hay script suelto.
+JS_BURGER = """<script>
+(function(){
+ var nav=document.currentScript.parentNode;
+ var b=nav.querySelector('.burger'), m=nav.querySelector('.menu,.links');
+ if(!b||!m) return;
+ m.id=m.id||'menu-nav';
+ function set(abierto){
+  b.setAttribute('aria-expanded',abierto?'true':'false');
+  b.setAttribute('aria-label',abierto?'Cerrar menú':'Abrir menú');
+  m.classList.toggle('abre',abierto);
+ }
+ b.addEventListener('click',function(e){
+  e.stopPropagation();
+  set(b.getAttribute('aria-expanded')!=='true');
+ });
+ document.addEventListener('click',function(e){
+  if(b.getAttribute('aria-expanded')==='true' && !nav.contains(e.target)) set(false);
+ });
+ document.addEventListener('keydown',function(e){
+  if(e.key==='Escape' && b.getAttribute('aria-expanded')==='true'){ set(false); b.focus(); }
+ });
+ // Si se vuelve a escritorio con el panel abierto, hay que dejarlo cerrado o
+ // el .abre se queda pegado y el menú aparece apilado donde ya cabía en fila.
+ window.addEventListener('resize',function(){ if(window.innerWidth>700) set(false); });
+})();
+</script>"""
+
 _CSS_NAV_MOVIL = ('@media(max-width:560px){.nav .brand span{display:none}'
                   '.nav .in{gap:14px}.menu a{padding:8px 10px}}')
 
 # Reglas que quiere cualquier página con el chrome nuevo.
-_CSS_COMUN = _CSS_MU + _CSS_NAV_MOVIL + CSS_MASBUSCA
+_CSS_COMUN = _CSS_MU + _CSS_NAV_MOVIL + CSS_MASBUSCA + CSS_BURGER
 
 # Colores de la escala de AEMET, para no volver a teclearlos de memoria.
 AEMET = {"verde": "#66FF66", "lima": "#CCFF00", "amarillo": "#FFFF00",
@@ -2931,10 +3020,11 @@ def nav_html(actual: str = "") -> str:
     logo = _LOGO.format(px=26, hueco="--bg")
     return ('<nav class="nav"><div class="in">\n'
             '    <a class="brand" href="__HOME__" aria-label="nochetropical.es">' + logo + '</a>\n'
-            '    <div class="menu">\n'
+            '    <div class="menu" id="menu-nav">\n'
             '      ' + enlaces + '\n'
             '    </div>\n'
-            '  </div></nav>')
+            '    ' + BOTON_BURGER + '\n'
+            '  </div>' + JS_BURGER + '</nav>')
 
 
 def _fcol_home(titulo: str, items: list) -> str:

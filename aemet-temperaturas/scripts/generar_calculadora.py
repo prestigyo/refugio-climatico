@@ -4801,7 +4801,7 @@ APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbwjIxpPVGrwc
 # opción por defecto a propósito: mientras no haya una URL aquí, el buscador
 # funciona igual y no sale un solo byte del navegador. Se rellena con la /exec
 # que devuelve apps_script_buscador.gs al desplegarlo.
-APPS_SCRIPT_BUSCA_URL = ""
+APPS_SCRIPT_BUSCA_URL = "https://script.google.com/macros/s/AKfycbzjI_ADPr8ZvLvtDNfDoSQfwyD6wKYTRPQq8B1zexjlhRp4OfS-LtTJxD_UGefrNG5-1g/exec"
 
 APPS_SCRIPT_OBS_URL = ("https://script.google.com/macros/s/AKfycbz4bvNwAVEBDA0NId5_"
                        "uv42a_Q9oXlA2h4q25CZ8ZuDRmWilVIDbg2qAmGGHDChmVhmyg/exec")

@@ -118,8 +118,8 @@ def construir_schema(fecha_iso: str) -> str:
          "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": SITE + "/favicon.svg"}},
-         "datePublished": g.FECHA_PUBLICACION_LANDINGS,
-         "dateModified": fecha_iso,
+         "datePublished": g.iso_tz(g.FECHA_PUBLICACION_LANDINGS),
+         "dateModified": g.iso_tz(fecha_iso),
          "mainEntityOfPage": url}]}
     return json.dumps(schema, ensure_ascii=False)
 

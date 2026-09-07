@@ -6513,6 +6513,272 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# docs/404.html — el error que rescata.
+#
+# GitHub Pages sirve este fichero, con status 404 real, ante cualquier ruta que
+# no exista. Hasta ahora salía el 404 blanco de GitHub: sin marca, sin salida y
+# sin pista de que fuera nuestro.
+#
+# La idea es no desperdiciar lo único que tenemos de quien llega aquí: LA URL
+# QUE ESCRIBIÓ MAL. Se despieza en palabras, se buscan contra el índice del
+# buscador y se le ofrece lo que de verdad quería. El caso que lo motivó —las
+# URLs con __SITE__ que Google rastreó de nuestro propio fallo, del tipo
+# /las-palmas/__SITE__/aumento-noches-tropicales-espana/— se resuelve solo:
+# de esa ruta salen "las palmas" y "aumento noches tropicales españa", y las
+# dos páginas existen.
+#
+# Y de paso el 404 demuestra que el sitio está vivo, con el dato de anoche.
+# ---------------------------------------------------------------------------
+PAGINA_404 = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esta página no existe · nochetropical.es</title>
+<meta name="robots" content="noindex,follow">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ __NAVCSS__
+ __FOOTERCSS__
+ .e404{max-width:760px;margin:0 auto;padding:0 20px}
+ .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+ /* La curva de una noche que no refresca: el 404 dibujado con el dato del sitio. */
+ .curva{display:block;width:100%;max-width:420px;margin:26px 0 4px;height:104px;overflow:visible}
+ .curva .linea{fill:none;stroke:var(--teja);stroke-width:2.5;stroke-linecap:round;
+   stroke-dasharray:420;stroke-dashoffset:420;animation:trazo 1.6s ease-out .2s forwards}
+ .curva .umbral{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 5;opacity:.5}
+ .curva .et{fill:var(--muted);font:11px var(--fm)}
+ @keyframes trazo{to{stroke-dashoffset:0}}
+ @media(prefers-reduced-motion:reduce){.curva .linea{animation:none;stroke-dashoffset:0}}
+ .lede{font-size:clamp(16px,2.6vw,18.5px);color:#e7dcc8;margin:6px 0 0;line-height:1.75}
+ .ruta{font-family:var(--fm);font-size:13px;color:var(--muted);background:var(--bg2);
+   border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin:16px 0 0;
+   word-break:break-all;display:none}
+ .ruta b{color:var(--teja2);font-weight:400}
+ .rescate{margin:30px 0 0;display:none}
+ .rescate h2{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--teja);
+   font-family:var(--fb);font-weight:700;margin:0 0 12px}
+ .res{list-style:none;padding:0;margin:0}
+ .res li{border-bottom:1px solid rgba(255,255,255,.06)}
+ .res a{display:block;padding:13px 4px;color:var(--paper);text-decoration:none}
+ .res a:hover{background:rgba(217,116,78,.09);text-decoration:none}
+ .res .t{font-family:var(--fd);font-weight:600;font-size:16.5px;display:block}
+ .res .d{font-size:14px;color:var(--muted);display:block;margin-top:3px;line-height:1.55}
+ .res .m{font-family:var(--fm);font-size:12.5px;color:var(--teja2);float:right;margin-left:12px}
+ .bx{margin:30px 0 0}
+ .bx label{display:block;font-size:14.5px;color:var(--muted);margin-bottom:9px}
+ .bx input{width:100%;box-sizing:border-box;padding:15px 17px;font-size:16.5px;
+   font-family:var(--fb);color:var(--paper);background:var(--bg2);
+   border:1px solid var(--line);border-radius:12px}
+ .bx input:focus{outline:2px solid var(--teja);outline-offset:1px}
+ .salidas{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:11px;margin:26px 0 0}
+ .salidas a{display:block;padding:15px 17px;border:1px solid var(--line);border-radius:13px;
+   background:linear-gradient(180deg,var(--bg2),var(--panel));color:var(--paper);text-decoration:none}
+ .salidas a:hover{border-color:var(--teja);text-decoration:none}
+ .salidas b{display:block;font-family:var(--fd);font-size:16px;margin-bottom:3px}
+ .salidas span{font-size:13.5px;color:var(--muted);line-height:1.5}
+ .anoche{margin:30px 0 0;padding:16px 18px;border-left:3px solid var(--teja);
+   background:var(--bg2);border-radius:0 12px 12px 0;font-size:15px;line-height:1.75;
+   color:var(--muted);display:none}
+ .anoche b{color:var(--paper)}
+ .anoche .fu{display:block;font-size:12.5px;margin-top:7px;opacity:.75}
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap e404">
+  <div class="kick">Error 404</div>
+  <h1>Esta página <em>no existe</em></h1>
+  <svg class="curva" viewBox="0 0 420 104" aria-label="Una noche que no baja de 20 grados, dibujando un 404" role="img">
+    <line class="umbral" x1="0" y1="30" x2="420" y2="30"/>
+    <text class="et" x="0" y="22">20 °C</text>
+    <path class="linea" d="M4 62 L44 62 L44 20 L84 20 M104 41 a20 21 0 1 0 .1 0 M150 62 L190 62 L190 20 L230 20 M250 41 a20 21 0 1 0 .1 0 M296 62 L336 62 L336 20 L376 20"/>
+  </svg>
+  <p class="lede">Pero la noche sí. Puede que el enlace estuviera mal escrito, que la página cambiara de sitio o que fuera un enlace roto nuestro — <b>de esos hemos tenido</b>.</p>
+  <p class="ruta" id="ruta"></p>
+</div></header>
+
+<section><div class="wrap e404">
+  <div class="rescate" id="rescate">
+    <h2 id="rescate-t">Quizá buscabas esto</h2>
+    <ul class="res" id="lista"></ul>
+  </div>
+
+  <div class="bx">
+    <label for="q">O búscalo tú: <b>857 estaciones</b> de AEMET y todas las guías del sitio.</label>
+    <input id="q" type="search" placeholder="Tu pueblo, tu provincia o un tema…" autocomplete="off" autocapitalize="off" spellcheck="false">
+  </div>
+
+  <div class="salidas">
+    <a href="__SITE__/"><b>La calculadora</b><span>¿Cuántas noches tropicales tiene tu pueblo?</span></a>
+    <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/"><b>Refugios cerca de ti</b><span>Dónde se duerme fresco, a qué distancia y cómo llegar.</span></a>
+    <a href="__SITE__/parte/"><b>El parte de la noche</b><span>Dónde se ha dormido fresco en España esta madrugada.</span></a>
+    <a href="__SITE__/buscar/"><b>Buscador</b><span>Todo el sitio, estación por estación.</span></a>
+  </div>
+
+  <p class="anoche" id="anoche"></p>
+</div></section>
+__FOOTER__
+"""
+
+PAGINA_404_JS = r"""<script>
+(function(){
+ var SITE='__SITE__';
+ function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/ACENTOS/g,'');}
+ function esc(s){return (s||'').replace(/[&<>"]/g,function(c){
+   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+ // Palabras que no dicen nada de lo que el visitante buscaba: restos de ruta,
+ // artículos y —muy a propósito— el __site__ de nuestros propios enlaces rotos.
+ var RUIDO = {'':1,'index':1,'html':1,'htm':1,'php':1,'www':1,'site':1,'__site__':1,
+   'amp':1,'de':1,'del':1,'la':1,'el':1,'los':1,'las':1,'en':1,'y':1,'a':1,'es':1,
+   'com':1,'http':1,'https':1,'utm':1,'page':1,'feed':1};
+
+ function trozos(){
+  var p = decodeURIComponent(location.pathname + ' ' + location.search);
+  return norm(p).split(/[^a-z0-9ñ]+/)
+                .filter(function(t){ return t.length>2 && !RUIDO[t]; });
+ }
+
+ var q=document.getElementById('q'), lista=document.getElementById('lista'),
+     rescate=document.getElementById('rescate'), rt=document.getElementById('rescate-t'),
+     datos=null, cargando=false, cola=[];
+
+ function cargar(cb){
+  if(datos) return cb();
+  cola.push(cb); if(cargando) return; cargando=true;
+  var x=new XMLHttpRequest();
+  x.open('GET', SITE+'/buscador.json', true);
+  x.onload=function(){
+   try{ datos=JSON.parse(x.responseText); }catch(e){ datos={p:[],e:[]}; }
+   datos.pk=datos.p.map(function(r){return norm(r[0]+' '+r[1]+' '+r[2]);});
+   datos.ek=datos.e.map(function(r){return norm(r[0]+' '+r[1]);});
+   datos.en=datos.e.map(function(r){return norm(r[0]);});   // solo el nombre
+   cargando=false; cola.splice(0).forEach(function(f){f();});
+  };
+  x.onerror=function(){ datos={p:[],e:[],pk:[],ek:[]}; cargando=false; cola.splice(0).forEach(function(f){f();}); };
+  x.send();
+ }
+
+ function fila(t,d,m,href){
+  return '<li>'+'<a hre'+'f="'+esc(href)+'">'
+    +(m?'<span class="m">'+esc(m)+'</span>':'')
+    +'<span class="t">'+esc(t)+'</span>'
+    +(d?'<span class="d">'+esc(d)+'</span>':'')+'</a></li>';
+ }
+
+ // Puntúa cada entrada por cuántas palabras de la URL rota contiene. Una
+ // coincidencia dentro del propio slug vale doble: es la señal más fiable de
+ // que la página existe y solo se llegó por una ruta mal formada.
+ function puntua(claves, tks, slugs){
+  var out=[];
+  for(var i=0;i<claves.length;i++){
+   var n=0;
+   for(var j=0;j<tks.length;j++){
+    if(claves[i].indexOf(tks[j])>=0) n += (slugs && slugs[i].indexOf(tks[j])>=0) ? 2 : 1;
+   }
+   if(n) out.push([n,i]);
+  }
+  out.sort(function(a,b){return b[0]-a[0];});
+  return out;
+ }
+
+ function rescatar(){
+  var tks=trozos();
+  var ruta=document.getElementById('ruta');
+  if(tks.length){
+   ruta.innerHTML='Intentaste llegar a <b>'+esc(location.pathname)+'</b>';
+   ruta.style.display='block';
+  }
+  if(!tks.length) return;
+  cargar(function(){
+   var slugs=datos.p.map(function(r){return norm(r[1]);});
+   var pp=puntua(datos.pk,tks,slugs).slice(0,4);
+   var ee=puntua(datos.en,tks,null).slice(0,3);
+   if(!pp.length && !ee.length) return;
+   var h='';
+   pp.forEach(function(r){ var p=datos.p[r[1]];
+     h+=fila(p[0], p[2], '', SITE+p[1]); });
+   ee.forEach(function(r){ var e=datos.e[r[1]];
+     h+=fila(e[0], e[1], (''+e[2]).replace('.',',')+(e[2]===1?' noche':' noches')+' trop./año', SITE+e[3]); });
+   lista.innerHTML=h;
+   rt.textContent = (pp.length+ee.length)===1 ? 'Quizá buscabas esto' : 'Quizá buscabas alguna de estas';
+   rescate.style.display='block';
+  });
+ }
+
+ // El buscador, el mismo motor que /buscar/ pero en corto.
+ var tmr;
+ q.addEventListener('input', function(){
+  clearTimeout(tmr);
+  tmr=setTimeout(function(){
+   var t=norm(q.value.trim());
+   if(t.length<2){ rescatar(); return; }
+   cargar(function(){
+    var h='', n=0, i;
+    for(i=0;i<datos.pk.length && n<5;i++) if(datos.pk[i].indexOf(t)>=0){
+     var p=datos.p[i]; h+=fila(p[0],p[2],'',SITE+p[1]); n++; }
+    for(i=0;i<datos.ek.length && n<12;i++) if(datos.ek[i].indexOf(t)>=0){
+     var e=datos.e[i];
+     h+=fila(e[0],e[1],(''+e[2]).replace('.',',')+(e[2]===1?' noche':' noches')+' trop./año',SITE+e[3]); n++; }
+    lista.innerHTML = h || '<li><a hre'+'f="'+SITE+'/tu-pueblo/"><span class="t">Nada con «'
+      +esc(q.value.trim())+'»</span><span class="d">Si es un pueblo, puede que no tenga estación propia. Cuéntanoslo.</span></a></li>';
+    rt.textContent = h ? 'Resultados' : 'Sin resultados';
+    rescate.style.display='block';
+   });
+  },140);
+ });
+
+ // El sitio sigue vivo aunque esta página no exista: el dato de anoche.
+ (function(){
+  var x=new XMLHttpRequest();
+  x.open('GET', SITE+'/parte/parte.json', true);
+  x.onload=function(){
+   try{
+    var d=JSON.parse(x.responseText), el=document.getElementById('anoche');
+    if(!d || !d.total) return;
+    var frescas = d.total - d.tropicales;
+    var f=(d.fecha||'').split('-');
+    var MES=['','enero','febrero','marzo','abril','mayo','junio','julio','agosto',
+             'septiembre','octubre','noviembre','diciembre'];
+    var cuando = f.length===3 ? ('la noche del '+parseInt(f[2],10)+' de '+MES[parseInt(f[1],10)]) : 'la última noche medida';
+    el.innerHTML = 'Mientras tanto, '+cuando+' se durmió fresco en <b>'+frescas
+      +'</b> de las '+d.total+' estaciones de AEMET'
+      + (d.mejor ? '. La más fresca, <b>'+esc(d.mejor.nombre)+'</b>, con '
+          +(''+d.mejor.min).replace('.',',')+' °C' : '')
+      + '. <a hre'+'f="'+SITE+'/parte/">Ver el parte de la noche →</a>'
+      + '<span class="fu">Fuente: AEMET · datos provisionales</span>';
+    el.style.display='block';
+   }catch(e){}
+  };
+  x.send();
+ })();
+
+ rescatar();
+})();
+</script>
+</body>
+</html>
+"""
+
+
+def construir_404(site: str = SITE_URL) -> str:
+    """docs/404.html. GitHub Pages lo sirve con status 404 en cualquier ruta."""
+    return ((PAGINA_404 + PAGINA_404_JS)
+            .replace("/ACENTOS/g", "/[\\u0300-\\u036f]/g")
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__SITE__", site))
+
+
+# ---------------------------------------------------------------------------
 # Buscador interno del sitio: /buscar/ + docs/buscador.json
 #
 # El sitio pasó de una calculadora a 400 páginas y no había forma de encontrar
@@ -11984,6 +12250,8 @@ def main() -> int:
                         encoding="utf-8")
     # Ficheros SEO: desactivar Jekyll y robots.
     (DOCS_DIR / ".nojekyll").write_text("", encoding="utf-8")
+    # GitHub Pages sirve 404.html con status 404 en cualquier ruta inexistente.
+    (DOCS_DIR / "404.html").write_text(construir_404(site), encoding="utf-8")
     (DOCS_DIR / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {site}/sitemap.xml\n", encoding="utf-8")
     (DOCS_DIR / "favicon.svg").write_text(FAVICON_SVG, encoding="utf-8")

@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-06",
- "total": 843,
- "tropicales": 408,
- "ecuatoriales": 31,
+ "fecha": "2026-09-07",
+ "total": 842,
+ "tropicales": 313,
+ "ecuatoriales": 19,
  "peor": {
-  "id": "C635B",
-  "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-  "min": 28.5,
+  "id": "C625O",
+  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+  "min": 27.1,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "8210Y",
-  "nombre": "Salvacañete",
-  "min": 8.3,
-  "prov": "Cuenca"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": 7.4,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C635B",
-   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 28.5,
-   "prov": "Las Palmas"
-  },
-  {
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 28.2,
+   "min": 27.1,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 28.0,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "C623I",
-   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 27.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 27.7,
-   "prov": "Cádiz"
   },
   {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 27.7,
+   "min": 27.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 27.4,
-   "prov": "Almería"
+   "id": "C623I",
+   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "min": 26.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "B087X",
+   "nombre": "Banyalbufar",
+   "min": 26.5,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 26.3,
+   "prov": "Illes Balears"
   },
   {
    "id": "5972Y",
    "nombre": "San Fernando Roa",
-   "min": 26.9,
+   "min": 26.2,
    "prov": "Cádiz"
+  },
+  {
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+   "min": 26.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "5726X",
+   "nombre": "Guadalcanal Cristo",
+   "min": 26.0,
+   "prov": "Sevilla"
   },
   {
    "id": "5972X",
    "nombre": "San Fernando",
-   "min": 26.7,
+   "min": 26.0,
    "prov": "Cádiz"
   },
   {
-   "id": "6332Y",
-   "nombre": "Carboneras - Faro Mesa Roldán",
-   "min": 26.7,
-   "prov": "Almería"
+   "id": "9772X",
+   "nombre": "La Pobla de Cervoles",
+   "min": 25.9,
+   "prov": "Lleida"
   }
  ],
  "top_fresco": [
   {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 8.3,
-   "prov": "Cuenca"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 7.4,
+   "prov": "Zamora"
+  },
+  {
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 7.7,
+   "prov": "Ourense"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 7.9,
+   "prov": "Segovia"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 8.4,
+   "min": 8.2,
    "prov": "Ávila"
   },
   {
-   "id": "8245Y",
-   "nombre": "Mira",
-   "min": 9.0,
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 8.8,
    "prov": "Cuenca"
-  },
-  {
-   "id": "8381X",
-   "nombre": "Ademuz",
-   "min": 9.9,
-   "prov": "Valencia"
-  },
-  {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 10.9,
-   "prov": "Granada"
-  },
-  {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": 11.1,
-   "prov": "Teruel"
   },
   {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 11.4,
+   "min": 9.1,
    "prov": "Ourense"
   },
   {
-   "id": "8368U",
-   "nombre": "Teruel",
-   "min": 11.4,
-   "prov": "Teruel"
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": 9.2,
+   "prov": "Cuenca"
   },
   {
-   "id": "8008Y",
-   "nombre": "Villena",
-   "min": 11.5,
-   "prov": "Alicante"
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 9.6,
+   "prov": "Salamanca"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 11.6,
-   "prov": "Zamora"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 9.7,
+   "prov": "León"
+  },
+  {
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 10.1,
+   "prov": "Lleida"
   }
  ]
 }

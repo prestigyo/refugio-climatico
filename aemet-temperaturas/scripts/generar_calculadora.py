@@ -4797,6 +4797,12 @@ APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbwjIxpPVGrwc
 # scripts/apps_script_observatorio.gs. Con la URL vacía el Observatorio funciona
 # en modo demostración: deja votar, enseña el resultado y AVISA de que la noche
 # no se ha guardado. En cuanto se pegue aquí la URL /exec, empieza a guardarlas.
+# Registro de búsquedas del buscador. Vacío = no se registra nada, y esa es la
+# opción por defecto a propósito: mientras no haya una URL aquí, el buscador
+# funciona igual y no sale un solo byte del navegador. Se rellena con la /exec
+# que devuelve apps_script_buscador.gs al desplegarlo.
+APPS_SCRIPT_BUSCA_URL = ""
+
 APPS_SCRIPT_OBS_URL = ("https://script.google.com/macros/s/AKfycbz4bvNwAVEBDA0NId5_"
                        "uv42a_Q9oXlA2h4q25CZ8ZuDRmWilVIDbg2qAmGGHDChmVhmyg/exec")
 
@@ -6751,6 +6757,29 @@ PAGINA_404_JS = r"""<script>
   });
  }
 
+ // --- registro de la consulta ------------------------------------------
+ // Solo si hay backend configurado. Se manda el termino y cuantos resultados
+ // dio, nada mas: ni identificadores, ni hora, ni de donde viene el visitante.
+ // Sin esos campos no se puede saber que dos busquedas son de la misma
+ // persona, que es exactamente lo que se quiere.
+ var LOG='__BUSCA_URL__', ya={}, tlog;
+ function registra(t,n){
+  if(!LOG || !t || t.length<2 || t.length>80) return;
+  if(ya[t]) return;            // una vez por termino y visita: el resto es ruido
+  ya[t]=1;
+  try{
+   var cuerpo=JSON.stringify({q:t,n:n,o:'404'});
+   // sendBeacon no bloquea ni retrasa nada, y sobrevive a que el visitante
+   // pulse un resultado justo despues de escribir.
+   if(navigator.sendBeacon){ navigator.sendBeacon(LOG, new Blob([cuerpo],{type:'text/plain'})); }
+   else { var x=new XMLHttpRequest(); x.open('POST',LOG,true); x.send(cuerpo); }
+  }catch(e){}
+ }
+ function apunta(t,n){
+  // 1,4 s de espera: se registra lo que el visitante termino de escribir, no
+  // cada letra del camino.
+  clearTimeout(tlog); tlog=setTimeout(function(){ registra(t,n); },1400);
+ }
  // El buscador, el mismo motor que /buscar/ pero en corto.
  var tmr;
  q.addEventListener('input', function(){
@@ -6768,6 +6797,7 @@ PAGINA_404_JS = r"""<script>
     lista.innerHTML = h || '<li><a hre'+'f="'+SITE+'/tu-pueblo/"><span class="t">Nada con «'
       +esc(q.value.trim())+'»</span><span class="d">Si es un pueblo, puede que no tenga estación propia. Cuéntanoslo.</span></a></li>';
     rt.textContent = h ? 'Resultados' : 'Sin resultados';
+    apunta(t, n);
     rescate.style.display='block';
    });
   },140);
@@ -6809,6 +6839,7 @@ PAGINA_404_JS = r"""<script>
 def construir_404(site: str = SITE_URL) -> str:
     """docs/404.html. GitHub Pages lo sirve con status 404 en cualquier ruta."""
     return ((PAGINA_404 + PAGINA_404_JS)
+            .replace("__BUSCA_URL__", APPS_SCRIPT_BUSCA_URL)
             .replace("/ACENTOS/g", "/[\\u0300-\\u036f]/g")
             .replace("__CSS__", _CSS_CHROME)
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
@@ -7028,15 +7059,39 @@ __FOOTER__
      +'<p>Si buscabas un pueblo, puede que <b>no tenga estación meteorológica propia</b>: '
      +'prueba con su provincia, mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">'
      +'los refugios más cercanos</a> o <a href="__SITE__/tu-pueblo/">dinos que falta</a>.</p></div>';
-    cuenta.textContent='';
+    cuenta.textContent=''; apunta(t,0);
    } else {
     cuenta.textContent = n===1 ? '1 resultado'
       : n+' resultados'+(ests.length>25?' (se muestran los 25 primeros de estación)':'');
+    apunta(t,n);
    }
    out.innerHTML=h;
   });
  }
 
+ // --- registro de la consulta ------------------------------------------
+ // Solo si hay backend configurado. Se manda el termino y cuantos resultados
+ // dio, nada mas: ni identificadores, ni hora, ni de donde viene el visitante.
+ // Sin esos campos no se puede saber que dos busquedas son de la misma
+ // persona, que es exactamente lo que se quiere.
+ var LOG='__BUSCA_URL__', ya={}, tlog;
+ function registra(t,n){
+  if(!LOG || !t || t.length<2 || t.length>80) return;
+  if(ya[t]) return;            // una vez por termino y visita: el resto es ruido
+  ya[t]=1;
+  try{
+   var cuerpo=JSON.stringify({q:t,n:n,o:'buscar'});
+   // sendBeacon no bloquea ni retrasa nada, y sobrevive a que el visitante
+   // pulse un resultado justo despues de escribir.
+   if(navigator.sendBeacon){ navigator.sendBeacon(LOG, new Blob([cuerpo],{type:'text/plain'})); }
+   else { var x=new XMLHttpRequest(); x.open('POST',LOG,true); x.send(cuerpo); }
+  }catch(e){}
+ }
+ function apunta(t,n){
+  // 1,4 s de espera: se registra lo que el visitante termino de escribir, no
+  // cada letra del camino.
+  clearTimeout(tlog); tlog=setTimeout(function(){ registra(t,n); },1400);
+ }
  var tmr;
  q.addEventListener('input',function(){ clearTimeout(tmr); tmr=setTimeout(pinta,110); });
  sug.addEventListener('click',function(ev){
@@ -7056,6 +7111,7 @@ __FOOTER__
 
 def construir_pagina_buscar(n_est: int, n_pag: int, site: str = SITE_URL) -> str:
     return (PAGINA_BUSCAR
+            .replace("__BUSCA_URL__", APPS_SCRIPT_BUSCA_URL)
             .replace("__NEST__", f"{n_est:,}".replace(",", "."))
             .replace("__NPAG__", str(n_pag))
             .replace("__CSS__", _CSS_CHROME)

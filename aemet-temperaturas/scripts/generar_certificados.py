@@ -284,10 +284,14 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
          "headline": f"{e['loc']}, Refugio Climático de España 2026",
          "description": f"Certificado: {nt} noches tropicales al año de media (AEMET, 2017–2026).",
          "image": png,
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": "2026-07-06", "dateModified": "2026-07-06",
+         # ISO-8601 con zona horaria: g.iso_tz vive en generar_calculadora,
+         # que ya se importa como g, para no tener dos versiones de lo mismo.
+         "datePublished": g.iso_tz("2026-07-06"),
+         "dateModified": g.iso_tz("2026-07-06"),
          "mainEntityOfPage": url}]}, ensure_ascii=False)
     # Solo el Top 25 se indexa; el resto de certificados individuales son finos
     # (una página casi calcada por estación) y van a noindex para no lastrar la

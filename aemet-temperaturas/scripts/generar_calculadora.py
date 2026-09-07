@@ -1106,6 +1106,30 @@ MESES_ES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
 FECHA_PUBLICACION_LANDINGS = "2026-06-22"
 
 
+def iso_tz(fecha: str) -> str:
+    """'2026-06-22' -> '2026-06-22T12:00:00+02:00'.
+
+    schema.org quiere ISO-8601 con zona horaria; una fecha desnuda la da por
+    válida pero la Prueba de Resultados Enriquecidos avisa de que falta. Se usa
+    mediodía a propósito: en las madrugadas del cambio de hora, las 00:00 son
+    ambiguas o directamente no existen.
+
+    El desfase se calcula de verdad (España va a +01:00 en invierno y +02:00 en
+    verano), no se fija a ojo. Si el sistema no trae la base de zonas horarias
+    —un contenedor pelado, por ejemplo—, se deja la fecha como estaba: mejor un
+    aviso opcional en la herramienta de Google que una hora inventada.
+    """
+    if not fecha or "T" in fecha:
+        return fecha
+    try:
+        from zoneinfo import ZoneInfo
+        from datetime import datetime
+        return (datetime.fromisoformat(fecha + "T12:00:00")
+                .replace(tzinfo=ZoneInfo("Europe/Madrid")).isoformat())
+    except Exception:
+        return fecha
+
+
 def fecha_es(fecha: date) -> str:
     """date(2026, 6, 22) -> 'junio de 2026'."""
     return f"{MESES_ES[fecha.month - 1]} de {fecha.year}"
@@ -1831,11 +1855,12 @@ def construir_schema_provincia(prov: str, site: str, sl: str, n: int, titulo: st
          "headline": titulo,
          "description": desc,
          "image": site + "/og.png",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": FECHA_PUBLICACION_LANDINGS,
-         "dateModified": fecha_mod,
+         "datePublished": iso_tz(FECHA_PUBLICACION_LANDINGS),
+         "dateModified": iso_tz(fecha_mod),
          "mainEntityOfPage": url},
         {"@type": "Dataset",
          "name": f"Noches tropicales en {prov} (AEMET, 2017–2026)",
@@ -3441,10 +3466,11 @@ def construir_pagina_ranking(estaciones: list, site: str,
          "headline": "Dónde se duerme mejor y peor en verano en España",
          "description": "Ranking de noches tropicales en España con 10 veranos de datos de AEMET.",
          "image": site + "/og.png",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": FECHA_PUBLICACION_LANDINGS, "dateModified": fecha_iso,
+         "datePublished": iso_tz(FECHA_PUBLICACION_LANDINGS), "dateModified": iso_tz(fecha_iso),
          "mainEntityOfPage": url}]}, ensure_ascii=False)
     texto_comp = ("Buena parte de España sigue durmiendo fresco en verano, aunque el litoral "
                   "y las islas se pasan la noche sudando. El ranking nacional de noches "
@@ -3571,10 +3597,11 @@ def construir_pagina_metodologia(estaciones: list, total: int, site: str,
          "headline": "Metodología y glosario: cómo medimos dónde se duerme fresco",
          "description": "Fuente, periodo, criterio del certificado y glosario de términos del proyecto.",
          "image": site + "/og.png",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": FECHA_PUBLICACION_LANDINGS, "dateModified": fecha_iso,
+         "datePublished": iso_tz(FECHA_PUBLICACION_LANDINGS), "dateModified": iso_tz(fecha_iso),
          "mainEntityOfPage": url}]}, ensure_ascii=False)
     return (PAGINA_METODOLOGIA
             .replace("__SCHEMA__", schema)
@@ -3840,10 +3867,11 @@ def construir_pagina_vaciada(estaciones: list, site: str,
          "headline": "Refugios climáticos y España vaciada: el frío que los despobló es hoy su activo",
          "description": "Muchos de los pueblos donde mejor se duerme en verano están en la España vaciada; el frío que los despobló es hoy su mayor activo frente al calor.",
          "image": site + "/og.png",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": "2026-07-06", "dateModified": fecha_iso,
+         "datePublished": iso_tz("2026-07-06"), "dateModified": iso_tz(fecha_iso),
          "mainEntityOfPage": url}]}, ensure_ascii=False)
     return (PAGINA_VACIADA
             .replace("__SCHEMA__", schema)
@@ -4111,10 +4139,11 @@ def construir_pagina_ola(site: str, fecha_iso: str, fecha_txt: str) -> str:
          "headline": "¿Cuándo acaba la ola de calor? Mapa AEMET de hoy: máximas y mínimas",
          "description": "El mapa animado de temperaturas de AEMET (máximas de día y mínimas de noche) con la capa de refugios climáticos naturales y las claves para leerlo.",
          "image": site + "/og.png",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": FECHA_PUBLICACION_LANDINGS, "dateModified": fecha_iso,
+         "datePublished": iso_tz(FECHA_PUBLICACION_LANDINGS), "dateModified": iso_tz(fecha_iso),
          "mainEntityOfPage": url}]}, ensure_ascii=False)
     return (PAGINA_OLA
             .replace("__FICHA__", ficha_datos(fecha_iso, fecha_txt,
@@ -5707,7 +5736,8 @@ def construir_pagina_estudio(site: str, datos: dict) -> str:
              "item": site + "/la-espana-que-nunca-se-colorea/"}]},
         {"@type": "Article", "headline": title, "description": desc,
          "image": site + "/estudios/refugios-nocturnos.png",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es"},
          "isBasedOn": "https://opendata.aemet.es"}],
     }, ensure_ascii=False)
@@ -6066,9 +6096,10 @@ def construir_pagina_noches(site: str, d: dict) -> str:
             {"@type": "ListItem", "position": 2, "name": "Deuda de sueño",
              "item": site + "/deuda-de-sueno/"}]},
         {"@type": "Article", "headline": title, "description": desc,
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es"},
-         "dateModified": d["corte"],
+         "dateModified": iso_tz(d["corte"]),
          "isBasedOn": "https://opendata.aemet.es"}],
     }, ensure_ascii=False)
     rec = d["recurso"]
@@ -6478,7 +6509,8 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
         {"@type": "Article",
          "headline": "Cómo dormir con calor sin aire acondicionado",
          "description": desc, "url": url, "inLanguage": "es-ES",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es", "url": site + "/"},
          "mainEntityOfPage": url, "image": site + "/img/cena-noche-verano.jpg"},
         {"@type": "FAQPage", "mainEntity": [
@@ -7321,7 +7353,8 @@ def construir_pagina_salud(site: str = SITE_URL) -> str:
             {"@type": "ListItem", "position": 2, "name": "Noches tropicales y salud", "item": url}]},
         {"@type": "Article", "headline": titulo, "description": desc, "url": url,
          "inLanguage": "es-ES",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es", "url": site + "/"},
          "mainEntityOfPage": url, "image": site + "/og.png",
          "citation": [
@@ -7757,7 +7790,8 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
               "text": "Un ventilador al mínimo apuntando al dosel, no a la persona."}]},
         {"@type": "Article", "headline": titulo, "description": desc, "url": url,
          "inLanguage": "es-ES",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es", "url": site + "/"},
          "mainEntityOfPage": url, "image": site + "/img/cena-noche-verano.jpg"},
         {"@type": "FAQPage", "mainEntity": [
@@ -8024,7 +8058,8 @@ def construir_pagina_vacaciones(estaciones: list, site: str) -> str:
          "headline": "¿Vacaciones fresquitas fuera del norte? La ciencia de los refugios "
                      "climáticos naturales",
          "description": desc, "url": url, "inLanguage": "es-ES",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es",
                        "url": site + "/"},
          "mainEntityOfPage": url, "image": site + "/img/bosque-fresco-verano.jpg",
@@ -8243,11 +8278,12 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
          "headline": "Pueblos donde dormir con manta en verano",
          "description": desc,
          "image": site + "/og.png",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": "2026-07-18",
-         "dateModified": date.today().isoformat(),
+         "datePublished": iso_tz("2026-07-18"),
+         "dateModified": iso_tz(date.today().isoformat()),
          "mainEntityOfPage": site + "/dormir-con-manta-en-verano/"},
         {"@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
@@ -8769,7 +8805,8 @@ def construir_pagina_sobre(site: str) -> str:
          "description": ("Quién está detrás de nochetropical.es y por qué: un proyecto personal "
                          "de datos abiertos sobre noches tropicales, con método reproducible y "
                          "sin publicidad."),
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
         ensure_ascii=False)
     return (PAGINA_SOBRE
@@ -9267,11 +9304,12 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
         {"@type": "Article",
          "headline": "The coolest towns to sleep in during a Spanish summer",
          "description": desc, "image": site + "/estudios/frescor-dia.png",
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "NocheTropical.es",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "inLanguage": "en-GB", "datePublished": "2026-07-25",
-         "dateModified": date.today().isoformat(),
+         "inLanguage": "en-GB", "datePublished": iso_tz("2026-07-25"),
+         "dateModified": iso_tz(date.today().isoformat()),
          "mainEntityOfPage": site + "/en/coolest-towns-spain/"},
         {"@type": "ItemList", "name": "Coolest towns to sleep in summer in Spain",
          "numberOfItems": len(item_list), "itemListElement": item_list},
@@ -9963,10 +10001,11 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
          "headline": "Hoteles de España donde se duerme con manta en verano",
          "description": desc,
          "image": schema_image,
-         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "nochetropical.es",
                        "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
-         "datePublished": "2026-07-26", "dateModified": date.today().isoformat(),
+         "datePublished": iso_tz("2026-07-26"), "dateModified": iso_tz(date.today().isoformat()),
          "mainEntityOfPage": site + "/hoteles-refugio-climatico/"},
         {"@type": "ItemList", "name": "Hoteles en refugios climáticos naturales de España",
          "numberOfItems": total, "itemListElement": [

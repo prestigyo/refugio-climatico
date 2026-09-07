@@ -3324,6 +3324,7 @@ PAGINA_RANKING = r"""<!doctype html>
 </div></section>
 
 <section><div class="wrap">
+  <p class="note">Treinta o sesenta noches al año por encima de 20&nbsp;°C no es solo una molestia: <a href="__SITE__/noches-tropicales-y-salud/">qué dice la ciencia sobre el calor nocturno y la salud</a>.</p>
   <h2>Los refugios: donde mejor se duerme</h2>
   <p class="note"><b>__CERO__ estaciones</b> no registran ni una noche tropical al año de media. Estas son 30 de ellas, las de mayor altitud entre las de cero.</p>
   <table>
@@ -4374,6 +4375,7 @@ __CSS_COMUN__
     <h2 class="sec-h" id="articulos">Artículos y estudios</h2>
     <div class="mods">
       <a class="card2 destacada" href="__SITE__/noches-tropicales/"><h3>🌡️ Qué es una noche tropical</h3><p>La guía completa: definición de AEMET, cuántas hay en España, dónde y por qué. Con el balance del último verano.</p></a>
+      <a class="card2" href="__SITE__/noches-tropicales-y-salud/"><h3>🫀 Noches tropicales y salud</h3><p>Por qué el calor nocturno afecta a la salud con independencia del calor del día. Los estudios, con las fuentes delante.</p></a>
       <a class="card2" href="__SITE__/aumento-noches-tropicales-espana/"><h3>España pierde sus noches frescas</h3><p>746 estaciones, diez veranos: 54 pueblos ya no tienen cero.</p></a>
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
       <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>__NHOT__ hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
@@ -8588,7 +8590,7 @@ __NAV__
 
 <section><div class="wrap">
   <h2 id="que-es">Qué es una noche tropical</h2>
-  <p>AEMET considera noche tropical aquella en la que la temperatura mínima registrada entre dos días consecutivos se mantiene en <b>20,0&nbsp;°C</b> o por encima. El umbral no es arbitrario: por encima de esa temperatura el descanso se deteriora de forma medible.</p>
+  <p>AEMET considera noche tropical aquella en la que la temperatura mínima registrada entre dos días consecutivos se mantiene en <b>20,0&nbsp;°C</b> o por encima. El umbral no es arbitrario: por encima de esa temperatura el descanso se deteriora de forma medible — y no solo el descanso: <a href="__SITE__/noches-tropicales-y-salud/">hay estudios que miden lo que el calor nocturno le hace al cuerpo</a>, con independencia de lo que haya marcado el termómetro de día.</p>
   <p>Cuando la mínima no baja de <b>25,0&nbsp;°C</b> se habla de <b>noche ecuatorial</b>, una categoría que hasta hace poco era excepcional en la Península y que hoy se registra varias veces cada verano en el litoral mediterráneo.</p>
   <p>El dato se toma de la mínima diaria de cada estación. No mide sensación térmica ni humedad: mide temperatura del aire en el punto exacto donde está el termómetro.</p>
 

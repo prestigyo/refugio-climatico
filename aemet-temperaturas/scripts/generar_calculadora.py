@@ -2994,9 +2994,15 @@ _MENU = [
     ("ranking", "__SITE__/ranking-noches-tropicales/", "Ranking"),
 ]
 
+# Un solo logo para todo el sitio: la luna con su punto. Antes la portada
+# llevaba una version sin punto y en otro color, asi que la marca cambiaba
+# segun la pestana. Los colores van literales porque la portada define su
+# propia paleta (--brand, --bg) y no tiene --paper ni --teja; el hueco sigue
+# parametrizado, que es lo unico que cambia entre barras.
 _LOGO = ('<svg width="{px}" height="{px}" viewBox="0 0 100 100" aria-hidden="true">'
-         '<circle cx="45" cy="52" r="30" fill="var(--brand)"/>'
-         '<circle cx="60" cy="44" r="29" fill="var({hueco})"/></svg>'
+         '<circle cx="45" cy="52" r="30" fill="#efe6d6"/>'
+         '<circle cx="60" cy="44" r="29" fill="var({hueco})"/>'
+         '<circle cx="73" cy="34" r="6.5" fill="#d9744e"/></svg>'
          '<span>nochetropical.es</span>')
 
 

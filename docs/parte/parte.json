@@ -1,100 +1,106 @@
 {
- "fecha": "2026-09-07",
- "total": 842,
- "tropicales": 313,
- "ecuatoriales": 19,
+ "fecha": "2026-09-08",
+ "total": 849,
+ "tropicales": 341,
+ "ecuatoriales": 21,
  "peor": {
   "id": "C625O",
   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-  "min": 27.1,
+  "min": 30.6,
   "prov": "Las Palmas"
  },
  "mejor": {
   "id": "2766E",
   "nombre": "El Puente (Casa Forestal)",
-  "min": 7.4,
+  "min": 5.5,
   "prov": "Zamora"
  },
  "top_calor": [
   {
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 27.1,
+   "min": 30.6,
    "prov": "Las Palmas"
   },
   {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 27.1,
+   "min": 28.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "C623I",
-   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
+   "min": 28.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "5998X",
+   "nombre": "Osuna Sea",
+   "min": 27.4,
+   "prov": "Sevilla"
+  },
+  {
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
    "min": 26.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C635B",
+   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
+   "min": 26.5,
    "prov": "Las Palmas"
   },
   {
    "id": "B087X",
    "nombre": "Banyalbufar",
-   "min": 26.5,
+   "min": 25.9,
    "prov": "Illes Balears"
+  },
+  {
+   "id": "C623I",
+   "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
+   "min": 25.9,
+   "prov": "Las Palmas"
   },
   {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 26.3,
+   "min": 25.6,
    "prov": "Illes Balears"
   },
   {
-   "id": "5972Y",
-   "nombre": "San Fernando Roa",
-   "min": 26.2,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "C635B",
-   "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 26.1,
+   "id": "C648N",
+   "nombre": "Telde-Centro Forestal Doramas",
+   "min": 25.6,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "5726X",
-   "nombre": "Guadalcanal Cristo",
-   "min": 26.0,
-   "prov": "Sevilla"
-  },
-  {
-   "id": "5972X",
-   "nombre": "San Fernando",
-   "min": 26.0,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "9772X",
-   "nombre": "La Pobla de Cervoles",
-   "min": 25.9,
-   "prov": "Lleida"
   }
  ],
  "top_fresco": [
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 7.4,
+   "min": 5.5,
    "prov": "Zamora"
-  },
-  {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 7.7,
-   "prov": "Ourense"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 7.9,
+   "min": 6.6,
    "prov": "Segovia"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 7.1,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 7.8,
+   "prov": "Salamanca"
   },
   {
    "id": "3319D",
@@ -103,40 +109,34 @@
    "prov": "Ávila"
   },
   {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 8.8,
-   "prov": "Cuenca"
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 8.5,
+   "prov": "Soria"
   },
   {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 9.1,
-   "prov": "Ourense"
-  },
-  {
-   "id": "8245Y",
-   "nombre": "Mira",
-   "min": 9.2,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 9.6,
-   "prov": "Salamanca"
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": 8.5,
+   "prov": "Palencia"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 9.7,
+   "min": 9.1,
    "prov": "León"
   },
   {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 10.1,
-   "prov": "Lleida"
+   "id": "2828Y",
+   "nombre": "Barco de Avila",
+   "min": 9.3,
+   "prov": "Ávila"
+  },
+  {
+   "id": "2172Y",
+   "nombre": "Sardón de Duero",
+   "min": 9.5,
+   "prov": "Valladolid"
   }
  ]
 }

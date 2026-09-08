@@ -2,7 +2,7 @@
  "fecha": "2026-09-08",
  "total": 849,
  "tropicales": 341,
- "ecuatoriales": 21,
+ "ecuatoriales": 22,
  "peor": {
   "id": "C625O",
   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
@@ -25,7 +25,7 @@
   {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 28.6,
+   "min": 29.7,
    "prov": "Las Palmas"
   },
   {
@@ -43,7 +43,7 @@
   {
    "id": "C239N",
    "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 26.8,
+   "min": 27.2,
    "prov": "Las Palmas"
   },
   {
@@ -51,6 +51,12 @@
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
    "min": 26.5,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C126A",
+   "nombre": "El Paso-C.F.",
+   "min": 26.0,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "B087X",
@@ -69,12 +75,6 @@
    "nombre": "Capdepera-Faro",
    "min": 25.6,
    "prov": "Illes Balears"
-  },
-  {
-   "id": "C648N",
-   "nombre": "Telde-Centro Forestal Doramas",
-   "min": 25.6,
-   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [

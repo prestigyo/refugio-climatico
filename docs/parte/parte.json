@@ -1,8 +1,8 @@
 {
  "fecha": "2026-09-09",
- "total": 842,
- "tropicales": 270,
- "ecuatoriales": 46,
+ "total": 841,
+ "tropicales": 269,
+ "ecuatoriales": 47,
  "peor": {
   "id": "6272X",
   "nombre": "Castell del Ferro",
@@ -71,10 +71,10 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 27.0,
-   "prov": "Las Palmas"
+   "id": "7218Y",
+   "nombre": "Totana",
+   "min": 27.1,
+   "prov": "Murcia"
   }
  ],
  "top_fresco": [

@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-08",
- "total": 849,
- "tropicales": 341,
- "ecuatoriales": 22,
+ "fecha": "2026-09-09",
+ "total": 842,
+ "tropicales": 270,
+ "ecuatoriales": 46,
  "peor": {
-  "id": "C625O",
-  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-  "min": 30.6,
-  "prov": "Las Palmas"
+  "id": "6272X",
+  "nombre": "Castell del Ferro",
+  "min": 30.3,
+  "prov": "Granada"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 5.5,
-  "prov": "Zamora"
+  "id": "9195C",
+  "nombre": "Astún - la Raca",
+  "min": 2.2,
+  "prov": "Huesca"
  },
  "top_calor": [
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 30.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 29.7,
-   "prov": "Las Palmas"
+   "id": "6272X",
+   "nombre": "Castell del Ferro",
+   "min": 30.3,
+   "prov": "Granada"
   },
   {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 28.0,
+   "min": 29.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "5998X",
-   "nombre": "Osuna Sea",
-   "min": 27.4,
-   "prov": "Sevilla"
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 29.4,
+   "prov": "Las Palmas"
   },
   {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 27.2,
+   "id": "6000A",
+   "nombre": "Melilla",
+   "min": 28.6,
+   "prov": "Melilla"
+  },
+  {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 28.1,
    "prov": "Las Palmas"
   },
   {
    "id": "C635B",
    "nombre": "San Bartolome Tirajana-H.las Tirajanas",
-   "min": 26.5,
+   "min": 27.7,
    "prov": "Las Palmas"
   },
   {
-   "id": "C126A",
-   "nombre": "El Paso-C.F.",
-   "min": 26.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 25.9,
-   "prov": "Illes Balears"
+   "id": "6088X",
+   "nombre": "Torremolinos",
+   "min": 27.6,
+   "prov": "Málaga"
   },
   {
    "id": "C623I",
    "nombre": "San Bartolome Tirajana (Cuevas del Pinar)",
-   "min": 25.9,
+   "min": 27.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 25.6,
-   "prov": "Illes Balears"
+   "id": "C628B",
+   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "min": 27.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 27.0,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 5.5,
-   "prov": "Zamora"
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 2.2,
+   "prov": "Huesca"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 6.6,
-   "prov": "Segovia"
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 2.5,
+   "prov": "Lleida"
   },
   {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 7.1,
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 3.7,
    "prov": "Cantabria"
   },
   {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 7.8,
-   "prov": "Salamanca"
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 4.7,
+   "prov": "Cantabria"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 8.2,
-   "prov": "Ávila"
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 4.9,
+   "prov": "Cantabria"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 8.5,
-   "prov": "Soria"
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 5.1,
+   "prov": "Lleida"
   },
   {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": 8.5,
-   "prov": "Palencia"
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 5.3,
+   "prov": "Asturias"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 9.1,
-   "prov": "León"
+   "id": "9115X",
+   "nombre": "Valdezcaray",
+   "min": 5.4,
+   "prov": "La Rioja"
   },
   {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 9.3,
-   "prov": "Ávila"
+   "id": "1221D",
+   "nombre": "Pajares - Valgrande",
+   "min": 5.5,
+   "prov": "Asturias"
   },
   {
-   "id": "2172Y",
-   "nombre": "Sardón de Duero",
-   "min": 9.5,
-   "prov": "Valladolid"
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 5.5,
+   "prov": "Granada"
   }
  ]
 }

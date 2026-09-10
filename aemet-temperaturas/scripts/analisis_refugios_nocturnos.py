@@ -154,6 +154,134 @@ def reg_multivariada(X, y):
     return coefs, Xm @ coefs
 
 
+# ---------------------------------------------------------------------------
+# NOCHES POR AÑO — el año natural entero, sin medias y sin ventana astronómica
+# ---------------------------------------------------------------------------
+# El resto de este script mira junio-agosto y publica medias de diez veranos.
+# Las dos cosas ocultan datos:
+#
+#   1. La ventana. El 19,4 % de todas las noches tropicales del histórico cae
+#      FUERA de junio-agosto y se descartaba antes de contar. Septiembre (13,9 %
+#      del total) tiene MÁS noches tropicales que junio (12,1 %). En Canarias la
+#      ventana astronómica no captura ni la mitad: Hierro Aeropuerto sale con 83
+#      noches/año contando jun-ago y tiene 170 contando el año; en 2023 tuvo 204,
+#      del 3 de enero al 20 de diciembre. El verano TÉRMICO ya lo calcula
+#      analisis_estaciones_termicas.py y en Las Palmas va del 30 de junio al 15
+#      de noviembre: 139 días. El calendario astronómico no describe esto.
+#      (Comprobado: la ventana no se está DESPLAZANDO de forma detectable —las
+#      tendencias del reparto mensual salen con R² de 0,01 a 0,11 en nueve años,
+#      que es ruido—. El problema no es una deriva futura: es que ya está fuera.)
+#
+#   2. La media. Promediar diez veranos reparte el calor de agosto entre las
+#      noches frescas de junio y suaviza los veranos malos con los buenos. El
+#      salto entre la mínima media y el percentil 95 es de 4,3 °C: 367 estaciones
+#      tienen un P95 por encima de 20 °C publicando una media por debajo.
+#
+# Estas dos tablas son la alternativa: una fila por estación y AÑO NATURAL, y un
+# resumen por estación con peor año, racha y percentiles en vez de promedios.
+# No tocan refugios_nocturnos_ranking.csv, del que vive toda la web.
+MIN_DIAS_ANIO = 300     # un año natural "casi completo"
+
+
+def racha_maxima(fechas, tmins) -> int:
+    """Noches tropicales consecutivas más largas, exigiendo días contiguos.
+
+    Sin comprobar la fecha, un hueco en la serie se cuenta como continuidad: en
+    San Sebastián de la Gomera daba 153 noches seguidas saltando por encima de
+    los días sin dato, cuando la racha real contigua es de 148. Una racha que
+    atraviesa un hueco es una racha inventada, así que el hueco la rompe.
+    """
+    mejor = actual = 0
+    prev = None
+    for fecha, tmin in zip(fechas, tmins):
+        seguida = prev is not None and (fecha - prev).days == 1
+        actual = (actual + 1 if seguida else 1) if tmin > UMBRAL_NOCHE_TROPICAL else 0
+        mejor = max(mejor, actual)
+        prev = fecha
+    return mejor
+
+
+def noches_por_anio(diarios: pd.DataFrame, estaciones: pd.DataFrame) -> pd.DataFrame:
+    """Una fila por estación y año natural. Cuenta el año entero, no el verano."""
+    d = diarios.dropna(subset=["tmin"]).copy()
+    filas = []
+    for (ind, anio), g in d.groupby(["indicativo", "anio"]):
+        if len(g) < MIN_DIAS_ANIO:
+            continue
+        g = g.sort_values("fecha")
+        trop = g["tmin"] > UMBRAL_NOCHE_TROPICAL
+        t = g[trop]
+        i_frio, i_calido = g["tmin"].idxmin(), g["tmin"].idxmax()
+        filas.append({
+            "indicativo": ind, "anio": int(anio), "dias_con_dato": len(g),
+            "noches_trop": int(trop.sum()),
+            "noches_trop_jja": int((trop & g["mes"].isin([6, 7, 8])).sum()),
+            "noches_ecua": int((g["tmin"] > UMBRAL_NOCHE_ECUATORIAL).sum()),
+            "noches_sobre_22": int((g["tmin"] > 22).sum()),
+            "racha_max": racha_maxima(g["fecha"].tolist(), g["tmin"].tolist()),
+            "tmin_minima": round(float(g["tmin"].min()), 1),
+            "tmin_minima_fecha": g.loc[i_frio, "fecha"].date().isoformat(),
+            "tmin_maxima": round(float(g["tmin"].max()), 1),
+            "tmin_maxima_fecha": g.loc[i_calido, "fecha"].date().isoformat(),
+            "tmin_p95": round(float(g["tmin"].quantile(0.95)), 1),
+            "primera_trop": t["fecha"].min().date().isoformat() if len(t) else "",
+            "ultima_trop": t["fecha"].max().date().isoformat() if len(t) else "",
+        })
+    out = pd.DataFrame(filas)
+    if out.empty:
+        return out
+    return out.merge(estaciones[["indicativo", "nombre", "provincia", "altitud_m"]],
+                     on="indicativo", how="left")
+
+
+def racha_historica(diarios: pd.DataFrame) -> dict:
+    """Racha más larga de noches tropicales de toda la serie, por estación.
+
+    La de noches_por_anio.csv se corta el 31 de diciembre, que es una frontera
+    del calendario y no del clima: en Canarias las rachas cruzan el fin de año y
+    contarlas por año natural las parte por la mitad. Aquí se recorre la serie
+    entera. Un hueco sin dato rompe la racha (no se rellena nada).
+    """
+    d = diarios.dropna(subset=["tmin"]).sort_values(["indicativo", "fecha"])
+    return {ind: racha_maxima(g["fecha"].tolist(), g["tmin"].tolist())
+            for ind, g in d.groupby("indicativo")}
+
+
+def resumen_sin_medias(por_anio: pd.DataFrame, rachas: dict) -> pd.DataFrame:
+    """Resumen por estación con extremos y percentiles, no con promedios.
+
+    La única cifra promediada que se conserva es `noches_trop_anio_medio`, y va
+    ahí solo para poder comparar con lo que hoy publica la web (que es la media
+    de jun-ago). Todo lo demás son datos puntuales.
+    """
+    filas = []
+    for ind, g in por_anio.groupby("indicativo"):
+        if len(g) < MIN_ANIOS:
+            continue
+        peor = g.loc[g["noches_trop"].idxmax()]
+        filas.append({
+            "indicativo": ind, "nombre": peor["nombre"], "provincia": peor["provincia"],
+            "altitud_m": peor["altitud_m"], "anios": len(g),
+            "noches_trop_peor_anio": int(g["noches_trop"].max()),
+            "peor_anio": int(peor["anio"]),
+            "noches_trop_mejor_anio": int(g["noches_trop"].min()),
+            "noches_trop_ultimo_anio": int(g.sort_values("anio").iloc[-1]["noches_trop"]),
+            "noches_trop_anio_medio": round(g["noches_trop"].mean(), 1),
+            # De la serie continua, no del máximo por año natural.
+            "racha_max_historica": int(rachas.get(ind, g["racha_max"].max())),
+            "racha_max_en_un_anio": int(g["racha_max"].max()),
+            "noches_ecua_peor_anio": int(g["noches_ecua"].max()),
+            "tmin_p95": round(g["tmin_p95"].max(), 1),
+            "peor_noche": round(g["tmin_maxima"].max(), 1),
+            "peor_noche_fecha": g.loc[g["tmin_maxima"].idxmax(), "tmin_maxima_fecha"],
+            "noche_mas_fria": round(g["tmin_minima"].min(), 1),
+            # Cuánto se pierde por mirar solo jun-ago, en noches/año.
+            "noches_fuera_jja_anio": round(
+                (g["noches_trop"] - g["noches_trop_jja"]).mean(), 1),
+        })
+    return pd.DataFrame(filas)
+
+
 def analizar() -> int:
     log.info("=" * 64)
     log.info("REFUGIOS NOCTURNOS DE VERANO - ¿dónde se duerme tapadito?")
@@ -163,6 +291,27 @@ def analizar() -> int:
     log.info("Estaciones con metadatos: %d", len(estaciones))
 
     diarios = cargar_diarios()
+
+    log.info("[0/4] Noches por AÑO NATURAL (sin ventana de verano, sin medias)...")
+    por_anio = noches_por_anio(diarios, estaciones)
+    if not por_anio.empty:
+        cols_a = ["indicativo", "nombre", "provincia", "altitud_m", "anio",
+                  "dias_con_dato", "noches_trop", "noches_trop_jja", "noches_ecua",
+                  "noches_sobre_22", "racha_max", "tmin_minima", "tmin_minima_fecha",
+                  "tmin_maxima", "tmin_maxima_fecha", "tmin_p95",
+                  "primera_trop", "ultima_trop"]
+        por_anio[cols_a].sort_values(["indicativo", "anio"]).to_csv(
+            SALIDA / "noches_por_anio.csv", index=False)
+        resumen = resumen_sin_medias(por_anio, racha_historica(diarios))
+        resumen.sort_values("noches_trop_peor_anio").to_csv(
+            SALIDA / "noches_por_estacion.csv", index=False)
+        fuera = por_anio["noches_trop"].sum() - por_anio["noches_trop_jja"].sum()
+        total = max(int(por_anio["noches_trop"].sum()), 1)
+        log.info("  noches_por_anio.csv: %d pares estacion-anio", len(por_anio))
+        log.info("  noches_por_estacion.csv: %d estaciones", len(resumen))
+        log.info("  noches tropicales fuera de jun-ago: %d de %d (%.1f%%)",
+                 fuera, total, 100 * fuera / total)
+
     verano = diarios[diarios["mes"].isin([6, 7, 8])].copy()
 
     log.info("[1/4] Calculando stats nocturnas por estación-año...")

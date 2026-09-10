@@ -1,7 +1,7 @@
 {
  "fecha": "2026-09-10",
  "total": 837,
- "tropicales": 126,
+ "tropicales": 128,
  "ecuatoriales": 0,
  "peor": {
   "id": "C329Z",
@@ -97,16 +97,16 @@
    "prov": "Ávila"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": -0.1,
-   "prov": "Lleida"
-  },
-  {
    "id": "2298",
    "nombre": "Palacios de la Sierra",
    "min": 0.0,
    "prov": "Burgos"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 0.2,
+   "prov": "Lleida"
   },
   {
    "id": "2005Y",

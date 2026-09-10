@@ -183,7 +183,7 @@
  // dio, nada mas: ni identificadores, ni hora, ni de donde viene el visitante.
  // Sin esos campos no se puede saber que dos busquedas son de la misma
  // persona, que es exactamente lo que se quiere.
- var LOG='https://script.google.com/macros/s/AKfycbzjI_ADPr8ZvLvtDNfDoSQfwyD6wKYTRPQq8B1zexjlhRp4OfS-LtTJxD_UGefrNG5-1g/exec', ya={}, tlog;
+ var LOG='', ya={}, tlog;
  function registra(t,n){
   if(!LOG || !t || t.length<2 || t.length>80) return;
   if(ya[t]) return;            // una vez por termino y visita: el resto es ruido

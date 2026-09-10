@@ -2111,7 +2111,7 @@ def csv_provincia(lista: list[dict]) -> str:
 
 
 def _sensacion_nocturna(tmin, hr: int) -> str:
-    """Lectura honesta de la noche combinando la mínima media de agosto y la
+    """Lectura honesta de la noche combinando la mínima media de verano y la
     humedad relativa. El bochorno nocturno necesita calor Y humedad; en los
     refugios de altura la mínima baja tanto que no hay bochorno aunque el aire
     sea húmedo. No inventa: solo describe la combinación de dos datos reales."""
@@ -4801,7 +4801,7 @@ APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbwjIxpPVGrwc
 # opción por defecto a propósito: mientras no haya una URL aquí, el buscador
 # funciona igual y no sale un solo byte del navegador. Se rellena con la /exec
 # que devuelve apps_script_buscador.gs al desplegarlo.
-APPS_SCRIPT_BUSCA_URL = "https://script.google.com/macros/s/AKfycbzjI_ADPr8ZvLvtDNfDoSQfwyD6wKYTRPQq8B1zexjlhRp4OfS-LtTJxD_UGefrNG5-1g/exec"
+APPS_SCRIPT_BUSCA_URL = ""
 
 APPS_SCRIPT_OBS_URL = ("https://script.google.com/macros/s/AKfycbz4bvNwAVEBDA0NId5_"
                        "uv42a_Q9oXlA2h4q25CZ8ZuDRmWilVIDbg2qAmGGHDChmVhmyg/exec")
@@ -9484,7 +9484,7 @@ def sello_svg(zona: str, prov: str, tmin: float, nt: float, nivel: str = "A",
                     else (ref_desc or "Estación AEMET más cercana"))
     zona_up = (zona if len(zona) <= 18 else zona[:17] + "…").upper()
     alt = (f"Sello Refugio Climático Natural — {zona} ({prov}). Mínima media de "
-           f"agosto {_n_es(tmin)}°C, {nt_txt} noches tropicales al año. Basado en "
+           f"verano (jun-ago) {_n_es(tmin)}°C, {nt_txt} noches tropicales al año. Basado en "
            f"datos de AEMET.")
     fondo = (f'fill="{C["fondo"]}"' if C["fondo"] else 'fill="none"')
     opac = ".9" if tema == "claro" else "1"
@@ -9519,7 +9519,7 @@ def sello_svg(zona: str, prov: str, tmin: float, nt: float, nivel: str = "A",
         f'<rect x="-74" y="-9.5" width="148" height="19" rx="9.5" fill="none" stroke="{acento}" stroke-width="1"/>'
         f'<text x="0" y="3.5" font-family="{_SELLO_FB}" font-size="8.5" letter-spacing="1.1" font-weight="700" fill="{acento}" text-anchor="middle">{etiqueta}</text></g>'
         f'<text x="150" y="142" font-family="{_SELLO_FD}" font-size="44" font-weight="600" fill="{C["metric"]}" text-anchor="middle">{_n_es(tmin)}°</text>'
-        f'<text x="150" y="158" font-family="{_SELLO_FB}" font-size="10" letter-spacing=".4" fill="{C["sub"]}" text-anchor="middle">mín. media en agosto</text>'
+        f'<text x="150" y="158" font-family="{_SELLO_FB}" font-size="10" letter-spacing=".4" fill="{C["sub"]}" text-anchor="middle">mín. media jun–ago</text>'
         f'<line x1="112" y1="167" x2="188" y2="167" stroke="{C["borde_int"]}" stroke-width="1"/>'
         f'<text x="150" y="183" font-family="{_SELLO_FB}" font-size="11.5" font-weight="600" fill="{C["verde"]}" text-anchor="middle">{nt_txt} noches tropicales/año</text>'
         f'<text x="150" y="205" font-family="{_SELLO_FD}" font-size="14.5" font-weight="600" fill="{C["ink"]}" text-anchor="middle">{zona_up}</text>'
@@ -9826,7 +9826,7 @@ function fila(h,distTxt,first){
  var acc="<a class='pri' href='"+h.u+"'"+(h.rel?" target='_blank' rel='"+h.rel+"'":"")+">"+h.ut+"</a>"
    +"<a href='"+SITE+"/hoteles-refugio-climatico/"+h.s+"/'>Ficha y datos</a>";
  li.innerHTML="<div class='hr-top'><span class='hr-n'>"+h.n+"</span>"+(distTxt?"<span class='hr-km'>"+distTxt+"</span>":"")+"</div>"
-   +"<div class='hr-loc'>"+h.m+" · "+h.p+" · "+h.a+"&nbsp;m · <span class='b'>"+d1(h.t)+"° mín. agosto · "+ntTxt(h.nt)+"</span></div>"
+   +"<div class='hr-loc'>"+h.m+" · "+h.p+" · "+h.a+"&nbsp;m · <span class='b'>"+d1(h.t)+"° mín. jun–ago · "+ntTxt(h.nt)+"</span></div>"
    +"<div class='hr-acc'>"+acc+"</div>";
  return li;
 }
@@ -9924,7 +9924,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
         schema_image = [f"{site}/{feat[r]}" for r in ("1x1", "4x3", "16x9")]
         destacada_src, destacada_w, destacada_h = og_img, "1200", "1200"
         destacada_alt = ("Sello Refugio Climático Natural: el certificado que otorgamos, "
-                         "con datos de AEMET — mínima media de agosto y noches tropicales de la zona")
+                         "con datos de AEMET — mínima media de verano y noches tropicales de la zona")
     else:
         ej = next((h for h in hoteles if h["nivel"] == "A" and h["nt"] < 0.05
                    and (DOCS_DIR / "badges" / f'{h["slug"]}.png').exists()), None)
@@ -9974,7 +9974,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
             f'<h3><a href="{site}/hoteles-refugio-climatico/{h["slug"]}/">{h["hotel"]}</a></h3>'
             f'<div class="loc">{h["municipio"]} · {h["provincia"]} · {miles(h["alt"])}&nbsp;m</div>'
             f'<div class="stats"><div class="st"><span class="v">{_n_es(h["tmin"])}°</span>'
-            f'<span class="k">mín. media agosto</span></div>'
+            f'<span class="k">mín. media jun–ago</span></div>'
             f'<div class="st"><span class="v tj">{nt_txt}</span>'
             f'<span class="k">noches tropicales/año</span></div></div>'
             f'{ref}{accion}'
@@ -10001,7 +10001,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
                  f"en zonas que no pasan de {_n_es(nt_max)} noches tropicales al año")
         lead = (f'{n} {rotulo} en <b>{prov}</b> {clima}. '
                 f'{"El" if n == 1 else "El más fresco está"} en '
-                f'<b>{frio["municipio"]}</b>, con una mínima media de agosto de '
+                f'<b>{frio["municipio"]}</b>, con una mínima media de verano de '
                 f'<b>{_n_es(frio["tmin"])}&nbsp;°C</b>: ahí se duerme con manta y sin aire '
                 f'acondicionado. <a href="{site}/{slug(prov)}/">Todos los datos de '
                 f'{prov} →</a>')
@@ -12135,14 +12135,14 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         '<section><div class="wrap"><div class="hero">'
         f'<img class="sello" src="{site}/badges/{sl}.svg" width="230" height="230" '
         f'alt="Sello Refugio Climático Natural de {h["municipio"]} ({h["provincia"]}): mínima media '
-        f'de agosto {_n_es(h["tmin"])} grados, {nt_txt} noches tropicales al año, datos de AEMET">'
+        f'de verano (jun-ago) {_n_es(h["tmin"])} grados, {nt_txt} noches tropicales al año, datos de AEMET">'
         '<div>'
         f'<span class="niv">🛡️ {niv_txt}</span>'
         f'<p>En <b>{h["municipio"]}</b> la noche refresca de verdad: según {fuente_dato}, la '
         f'mínima media de verano baja a <b>{_n_es(h["tmin"])}&nbsp;°C</b> y apenas hay noches '
         f'tropicales. Aquí se duerme fresco, <b>con manta en agosto y sin aire acondicionado</b>.</p>'
         '<div class="stats">'
-        f'<div class="st"><div class="v">{_n_es(h["tmin"])}°</div><div class="k">mín. media agosto</div></div>'
+        f'<div class="st"><div class="v">{_n_es(h["tmin"])}°</div><div class="k">mín. media jun–ago</div></div>'
         f'<div class="st"><div class="v tj">{nt_txt}</div><div class="k">noches tropicales/año</div></div>'
         f'<div class="st"><div class="v">{miles(h["alt"])} m</div><div class="k">altitud</div></div>'
         f'{hum_cards}'

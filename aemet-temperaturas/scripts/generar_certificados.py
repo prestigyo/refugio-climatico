@@ -15,6 +15,7 @@ Requiere: Pillow. Uso: python scripts/generar_certificados.py
 from __future__ import annotations
 
 import json
+import unicodedata
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -26,6 +27,7 @@ PAPER, MUTED, TEJA, TEJA2, VERDE = "#efe6d6", "#b3a48c", "#d9744e", "#e89a73", "
 
 W, H = 1600, 1131
 OUT_DIR = g.DOCS_DIR / "certificados"
+BADGES = g.DOCS_DIR / "badges"
 TOP_N = 25
 
 # Serif para el nombre del pueblo, sans para el resto. Rutas de CI (Ubuntu,
@@ -177,7 +179,7 @@ _CSS_CERT = (
     '.cert svg text{-webkit-font-smoothing:antialiased}'
     '@media print{@page{size:A4 landscape;margin:8mm}'
     'body{background:#fff}'
-    'header.h,.acciones,.verifica,footer,.nav-e,.crumb,.kick,h1,.intro{display:none!important}'
+    'header.h,.acciones,.verifica,.negocio,footer,.nav-e,.crumb,.kick,h1,.intro{display:none!important}'
     '.cert{margin:0;border:none;border-radius:0}}'
     '.acciones{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 26px}'
     '.acciones a,.acciones button{border:1px solid var(--teja);color:var(--teja2);background:transparent;'
@@ -192,6 +194,30 @@ _CSS_CERT = (
     '.sigue a{font-weight:600}'
     'footer{border-top:1px solid var(--line);padding:26px 0 60px;color:#9a8a6f;font-size:12.5px}'
     'footer a{color:#9a8a6f}'
+    # Bloques de negocio: dónde dormir aquí + el sello para el alojamiento.
+    '.negocio{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);'
+    'border-radius:14px;padding:20px 22px;margin:0 0 26px}'
+    '.negocio h2{font-family:var(--fd);font-weight:700;font-size:clamp(19px,3.4vw,24px);margin:0 0 10px}'
+    '.negocio p{font-size:15px;color:#e7dcc8;margin:0 0 12px;max-width:66ch}'
+    '.negocio p.mut{color:var(--muted);font-size:13.5px}'
+    '.negocio p.mut b{color:#e7dcc8}'
+    '.emb{display:flex;gap:20px;align-items:flex-start;margin:16px 0 6px}'
+    '.emb img{width:150px;height:150px;flex:0 0 auto}'
+    '.emb .der{min-width:0;max-width:100%;width:100%;flex:1}'
+    '.negocio pre{background:#12100c;border:1px solid var(--line);border-radius:10px;'
+    'padding:12px 14px;font-family:var(--fm);font-size:11.5px;color:#cfc3ab;'
+    'overflow-x:auto;white-space:pre;margin:0 0 10px;max-width:100%}'
+    '.negocio .btn{display:inline-block;border:1px solid var(--teja);color:var(--teja2);'
+    'background:transparent;font-weight:700;font-size:14px;padding:10px 16px;border-radius:10px;'
+    'cursor:pointer;text-decoration:none;margin:0 8px 8px 0;font-family:var(--fb)}'
+    '.negocio .btn.pri{background:var(--teja);color:#1a1209}'
+    '.negocio .btn:hover{background:var(--teja);color:#1a1209;text-decoration:none}'
+    'ul.aloj{list-style:none;padding:0;margin:14px 0 4px;display:grid;gap:9px}'
+    'ul.aloj a{display:block;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:11px;padding:12px 15px;color:var(--paper);font-size:15px;font-weight:600}'
+    'ul.aloj a:hover{border-color:var(--teja);text-decoration:none}'
+    'ul.aloj span{display:block;color:var(--muted);font-size:12.5px;font-weight:400;margin-top:2px}'
+    '@media(max-width:560px){.emb{flex-direction:column}.emb img{width:130px;height:130px}}'
 )
 
 PAGINA_CERT = r"""<!doctype html>
@@ -242,6 +268,8 @@ __NAV__
     Se certifica como <b>Refugio Climático de España</b> a las estaciones de AEMET con <b>menos de una noche tropical al año</b> de media en los últimos diez veranos (2017–2026) — una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Lo consiguen <b>218 de las 848</b> estaciones analizadas; el <b>Top 25</b> reúne, de entre ellas, las de mayor altitud. El dato de __LOC__ procede de los valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> y puede contrastarse en el <a href="__SITE__/ranking-noches-tropicales/">ranking nacional</a> y en la página de <a href="__SITE__/__PROVSLUG__/">__PROV__</a>. Certificado de uso libre citando la fuente (CC&nbsp;BY&nbsp;4.0).
   </div>
 
+__NEGOCIO__
+
   <p class="sigue">Sigue explorando: mira <a href="__SITE__/__PROVSLUG__/">cómo se duerme en el resto de __PROV__</a>, <a href="__SITE__/ranking-noches-tropicales/">el ranking nacional de noches tropicales</a>, <a href="__SITE__/dormir-con-manta-en-verano/">los pueblos de España donde se duerme con manta en agosto</a> o <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">el refugio climático más cercano a ti</a>. Y vota cómo se siente tu zona en <a href="__SITE__/confortometro/">el Confortómetro</a>.</p>
 </div></section>
 
@@ -254,14 +282,108 @@ document.getElementById("imprimir").addEventListener("click",()=>window.print())
 document.getElementById("copiar").addEventListener("click",e=>{navigator.clipboard?.writeText(URL_CERT);e.target.textContent="¡Copiado!";setTimeout(()=>e.target.textContent="Copiar enlace",1500);});
 document.getElementById("wa").href="https://wa.me/?text="+encodeURIComponent(TXT);
 document.getElementById("tw").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(TXT);
+const cb=document.getElementById("copiaremb");
+cb?.addEventListener("click",()=>{navigator.clipboard?.writeText(document.getElementById("emb").textContent);cb.textContent="¡Copiado!";setTimeout(()=>cb.textContent="Copiar el código",1500);});
 </script>
 </body>
 </html>
 """
 
 
+def sin_acentos(txt: str) -> str:
+    """'Benasque (Huesca)' tal cual, pero sin tildes ni ñ.
+
+    Va al alt del <img> del snippet que el alojamiento se pega en SU web: ese
+    HTML sale de nuestro dominio y acaba en gestores ajenos, algunos de los
+    cuales siguen sirviendo en latin-1. Un alt en ASCII no se rompe en ninguno.
+    """
+    return unicodedata.normalize("NFKD", txt).encode("ascii", "ignore").decode()
+
+
+def bloque_negocio(e: dict, site: str, hoteles_est: dict) -> str:
+    """Los dos bloques comerciales de la página de certificado, en este orden:
+
+    1. «Dónde dormir aquí» — solo si hay alojamientos que declaran ESTA estación
+       como referencia climática (columna est_ref_indicativo de hoteles.csv). Se
+       enlaza a la ficha interna, no a Booking: el enlace de afiliado y su
+       divulgación viven en la ficha, que es la que está hecha para convertir.
+       Así esta página, que es la que recibe el email institucional de la
+       campaña de ayuntamientos, no se llena de enlaces patrocinados.
+    2. «¿Tienes un alojamiento aquí?» — el sello del pueblo con su snippet de
+       incrustación (enlace de vuelta) y la llamada a /tu-hotel/. Sale siempre:
+       de los 221 municipios certificados solo un puñado tiene alojamiento
+       listado, y el resto son justamente los que hay que captar.
+
+    Ambos se ocultan al imprimir (regla .negocio en el @media print): el papel
+    tiene que salir siendo un diploma, no un folleto.
+    """
+    sl = g.slug(e["loc"])
+    # Misma forma del cero que la entradilla de la página ("0,0"), para no
+    # escribir dos cifras distintas del mismo dato a dos pantallas de distancia.
+    nt_txt = "0,0" if e["nt"] == 0 else f"{e['nt']:.1f}".replace(".", ",")
+    tmin_txt = f"{e['tmin']:.1f}".replace(".", ",")
+    url_cert = f"{site}/certificados/{sl}/"
+    partes = []
+
+    # --- 1) Dónde dormir -------------------------------------------------
+    aloj = hoteles_est.get(e["id"], [])
+    if aloj:
+        filas = "".join(
+            f'<li><a href="{site}/hoteles-refugio-climatico/{h["slug"]}/">{h["hotel"]}'
+            f'<span>{h["municipio"]} · '
+            + (f'{g.miles(h["alt"])} m · Refugio Certificado' if h["nivel"] == "A"
+               else f'dato de la estación de {h["est"]} · Zona Verificada')
+            + '</span></a></li>'
+            for h in aloj)
+        partes.append(
+            '<div class="negocio">'
+            f'<h2>Dónde dormir en {e["loc"]}</h2>'
+            f'<p>Alojamientos del directorio que toman <b>esta misma estación de AEMET</b> '
+            f'como referencia climática. La ficha de cada uno lleva el dato, el sello y '
+            f'cómo reservar.</p>'
+            f'<ul class="aloj">{filas}</ul>'
+            f'<p class="mut" style="margin-top:12px">¿Falta el tuyo? '
+            f'<a href="{site}/tu-hotel/">Añádelo gratis</a>.</p>'
+            '</div>')
+
+    # --- 2) El sello para el alojamiento ---------------------------------
+    alt = sin_acentos(
+        f'{e["loc"]} ({e["prov"]}), Refugio Climatico certificado: '
+        f'{nt_txt} noches tropicales al ano segun AEMET')
+    embed = (f'<a href="{url_cert}" target="_blank" rel="noopener">\n'
+             f'  <img src="{site}/badges/pueblo-{sl}.svg" width="180" height="180"\n'
+             f'       alt="{alt}">\n'
+             f'</a>')
+    partes.append(
+        '<div class="negocio">'
+        f'<h2>¿Tienes un alojamiento en {e["loc"]}?</h2>'
+        f'<p>Si gestionas un hotel, una casa rural o un apartamento aquí, este dato es '
+        f'tuyo y lo puedes usar. <b>No tener aire acondicionado deja de ser una carencia '
+        f'que disimular en la ficha de reservas</b>: en {e["loc"]} la mínima media de '
+        f'verano baja a <b>{tmin_txt}&nbsp;°C</b> y hay <b>{nt_txt} noches tropicales al '
+        f'año</b>. No es un eslogan — lo miden {int(e["anios"])} veranos de datos de AEMET '
+        f'y cualquiera puede comprobarlo en esta misma página.</p>'
+        '<div class="emb">'
+        f'<img src="{site}/badges/pueblo-{sl}.svg" width="150" height="150" '
+        f'alt="Sello Refugio Climático Natural de {e["loc"]} ({e["prov"]})" loading="lazy">'
+        '<div class="der">'
+        '<p class="mut">Pega esto en tu web, con el enlace de vuelta al certificado para '
+        'que quien lo lea pueda verificarlo:</p>'
+        f'<pre id="emb">{g._esc(embed)}</pre>'
+        '<button class="btn" id="copiaremb" type="button">Copiar el código</button>'
+        f'<a class="btn pri" href="{site}/tu-hotel/">Quiero mi ficha en el directorio</a>'
+        '</div></div>'
+        '<p class="mut">El sello certifica el <b>clima de la zona</b> —que la noche '
+        'refresca, medido por AEMET—, no el interior del establecimiento. Es justo lo que '
+        'lo hace creíble. Entrar en el directorio es gratis.</p>'
+        '</div>')
+
+    return "\n".join(partes)
+
+
 def construir_pagina_cert(e: dict, site: str, top25: bool = False,
-                          n_total: int = 218) -> str:
+                          n_total: int = 218,
+                          hoteles_est: dict | None = None) -> str:
     sl = g.slug(e["loc"])
     url = f"{site}/certificados/{sl}/"
     # Solo el Top 25 tiene tarjeta PNG pre-generada (para la vista previa al
@@ -298,6 +420,7 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
     # calidad media del sitio ante Google.
     robots = "index,follow,max-image-preview:large" if top25 else "noindex,follow"
     return (PAGINA_CERT
+            .replace("__NEGOCIO__", bloque_negocio(e, site, hoteles_est or {}))
             .replace("__SCHEMA__", schema)
             .replace("__CSS__", _CSS_CERT)
             .replace("__NAVCSS__", g.CSS_NAV_ESCUETO)
@@ -407,6 +530,14 @@ def main() -> int:
     top = todos[:TOP_N]
     site = g.SITE_URL.rstrip("/")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    # Alojamientos indexados por la estación que declaran como referencia, no
+    # por municipio: los de nivel B están en un pueblo y miden en otro (el Hotel
+    # del Oso está en Cosgaya y su dato es el de Fuente Dé). Cruzar por estación
+    # los coloca en la página del certificado que de verdad los avala.
+    hoteles_est: dict[str, list[dict]] = {}
+    for h in g.cargar_hoteles(estaciones):
+        hoteles_est.setdefault(h["est_id"], []).append(h)
+    BADGES.mkdir(parents=True, exist_ok=True)
     # Un certificado por localidad: Oviedo tiene dos estaciones (1249I y 1249X) y
     # las dos derivan el mismo slug. Antes se deduplicaba SOLO al escribir las
     # páginas, pero a construir_indice() se le pasaba la lista entera: el listado
@@ -427,14 +558,26 @@ def main() -> int:
         if es_top:   # tarjeta PNG solo para el Top 25 (campaña de ayuntamientos)
             dibujar_certificado(e, True).save(OUT_DIR / f"certificado-{sl}.png",
                                               optimize=True)
+        # Sello circular del PUEBLO (300x300), el que el alojamiento se pega en
+        # su web. Prefijo «pueblo-» para no chocar con docs/badges/<hotel>.svg,
+        # que escribe generar_calculadora con el slug del hotel. Nivel A: aquí
+        # la estación está en la propia localidad, no es una de referencia.
+        (BADGES / f"pueblo-{sl}.svg").write_text(
+            g.sello_svg(e["loc"], e["prov"], e["tmin"], e["nt"], "A"),
+            encoding="utf-8")
         carpeta = OUT_DIR / sl
         carpeta.mkdir(exist_ok=True)
         (carpeta / "index.html").write_text(
-            construir_pagina_cert(e, site, es_top, len(todos)), encoding="utf-8")
+            construir_pagina_cert(e, site, es_top, len(todos), hoteles_est),
+            encoding="utf-8")
     (OUT_DIR / "index.html").write_text(construir_indice(top, todos, site),
                                         encoding="utf-8")
+    con_aloj = sum(1 for e in todos if hoteles_est.get(e["id"]))
     print(f"OK -> {len(todos)} certificados (PNG + página; {len(top)} Top 25) "
           f"+ índice en {OUT_DIR}")
+    print(f"   sellos de pueblo: {len(todos)} SVG en {BADGES}")
+    print(f"   con alojamiento listado: {con_aloj} de {len(todos)} "
+          f"({len(todos) - con_aloj} municipios por captar)")
     return 0
 
 

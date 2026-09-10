@@ -44,7 +44,7 @@ refugio-climatico/
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
 | `generar_gif.py` | `ola-minimas.gif`, `ola-maximas.gif`, `ola-dia-noche.gif`, `ola-canarias-minimas.gif`, `og.png` |
 | `estudio_colores.py` | `estudios/*.png` + `estudios/estudio-datos.json` |
-| `generar_certificados.py` | `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) |
+| `generar_certificados.py` | `certificados/index.html` + `certificados/<slug>/` (una página por estación certificada), `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) y `badges/pueblo-<slug>.svg` (el sello del pueblo, para que el alojamiento lo incruste en su web) |
 | `generar_calendario_datos.py` | `datos/<slug-provincia>.json` (calendario de calor que carga la calculadora bajo demanda) |
 | `parte_nocturno.py` | `parte/index.html`, `parte/parte.txt`, `parte/parte.json` |
 
@@ -143,11 +143,27 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - `datos/tendencia_estaciones.csv` + `tendencia_resumen.json` — tendencia de noches tropicales
 - `datos/estaciones_termicas.csv` + `estaciones_termicas.json` — estaciones del año térmicas
 - `analisis/refugios_nocturnos_ranking.csv` — **la fuente de verdad de la web**; todo `docs/` se construye a partir de él
+- `analisis/noches_por_anio.csv` — una fila por estación y **año natural completo** (no por
+  verano): noches tropicales del año y las que caen en jun-ago, noches >22 y >25, racha
+  máxima, mínima más baja y más alta con su fecha, P95, y primera y última noche tropical.
+  Es la tabla sin medias y sin ventana astronómica.
+- `analisis/noches_por_estacion.csv` — resumen por estación con **extremos, no promedios**:
+  peor año y cuál fue, mejor año, último año, racha máxima real de la serie, P95, peor noche
+  con fecha, y cuántas noches tropicales al año se pierden por mirar solo jun-ago
 
 ## Hallazgos clave del análisis hasta ahora
 
 - Los **refugios nocturnos garantizados** son pueblos de montaña interior 600-1500 m, climas continentales secos: Sanabria, Puerto del Pico, Rascafría, Benasque, Vall de Boí, Beariz, Reinosa, Isaba...
 - La **costa mediterránea** es de los PEORES sitios de España para dormir en verano: Palma, Cartagena, Capdepera con rachas de **86 noches tropicales consecutivas**.
+- **La ventana jun-ago descarta el 21,4 % de las noches tropicales** del histórico.
+  Septiembre (13,9 % del total) tiene MÁS que junio (12,1 %). En Canarias no captura
+  ni la mitad: Hierro Aeropuerto publica 83 noches/año y tiene **170**; en 2023 tuvo
+  204, del 3 de enero al 20 de diciembre, con una **racha real de 161 seguidas**.
+  Comprobado que la ventana NO se está desplazando de forma detectable (R² de 0,01 a
+  0,11 en nueve años): no es una deriva futura, ya está fuera. Los refugios apenas
+  cambian —solo 2 de 192 pierden el criterio de <1 noche/año contando el año entero—;
+  lo que está mal medido es el contraste, y en nuestra contra: los sitios malos son
+  mucho peores de lo que publicamos.
 - El **interior de Gran Canaria** (Tejeda, San Bartolomé de Tirajana) es el peor sitio de España para dormir, peor que la costa andaluza, por efecto foehn.
 - **Alcalá de la Selva** (Teruel, sierra de Gúdar) tiene **0,5 noches tropicales/año** vs **72/año** en Valencia capital. Ratio 180:1.
 - El **gradiente térmico nocturno** real es **0,35 °C/100 m** (0,26 solo en península),

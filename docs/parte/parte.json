@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-10",
- "total": 837,
- "tropicales": 128,
+ "fecha": "2026-09-11",
+ "total": 850,
+ "tropicales": 87,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C329Z",
-  "nombre": "San Sebastián de la Gomera",
-  "min": 24.5,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "6329X",
+  "nombre": "Cabo de Gata Faro",
+  "min": 24.1,
+  "prov": "Almería"
  },
  "mejor": {
-  "id": "9988B",
-  "nombre": "Cap de Vaqueira",
-  "min": -1.0,
-  "prov": "Lleida"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 1.5,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 24.5,
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 24.1,
+   "prov": "Almería"
+  },
+  {
+   "id": "C429I",
+   "nombre": "Tenerife/Sur",
+   "min": 24.0,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 24.5,
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 23.7,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
+   "min": 23.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 24.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.0,
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 23.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C449C",
    "nombre": "Santa Cruz de Tenerife",
-   "min": 23.9,
+   "min": 23.2,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 23.9,
+   "id": "5973",
+   "nombre": "Cádiz Observatorio",
+   "min": 23.1,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
+   "min": 23.1,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 23.9,
-   "prov": "Las Palmas"
+   "id": "C419X",
+   "nombre": "Adeje-Caldera B",
+   "min": 23.1,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 23.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C019V",
-   "nombre": "Yaiza-Playa Blanca",
-   "min": 23.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
-   "min": 23.7,
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 23.0,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": -1.0,
-   "prov": "Lleida"
-  },
-  {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": -0.5,
-   "prov": "Madrid"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": -0.4,
+   "min": 1.5,
    "prov": "Ávila"
-  },
-  {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 0.0,
-   "prov": "Burgos"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 0.2,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2005Y",
-   "nombre": "Vinuesa",
-   "min": 0.5,
-   "prov": "Soria"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 0.7,
+   "min": 2.1,
    "prov": "Segovia"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 1.2,
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 2.3,
+   "prov": "Madrid"
+  },
+  {
+   "id": "3013",
+   "nombre": "Molina de Aragón",
+   "min": 2.4,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 2.4,
    "prov": "Lleida"
   },
   {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 1.3,
-   "prov": "Cantabria"
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 2.6,
+   "prov": "Burgos"
+  },
+  {
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 2.7,
+   "prov": "Lleida"
   },
   {
    "id": "9744B",
    "nombre": "Barruera",
-   "min": 1.6,
+   "min": 2.8,
    "prov": "Lleida"
+  },
+  {
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 2.9,
+   "prov": "Soria"
+  },
+  {
+   "id": "9998X",
+   "nombre": "Bello",
+   "min": 2.9,
+   "prov": "Teruel"
   }
  ]
 }

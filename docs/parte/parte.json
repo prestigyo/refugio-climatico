@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-11",
- "total": 848,
- "tropicales": 87,
+ "fecha": "2026-09-12",
+ "total": 849,
+ "tropicales": 122,
  "ecuatoriales": 0,
  "peor": {
-  "id": "6329X",
-  "nombre": "Cabo de Gata Faro",
-  "min": 24.1,
-  "prov": "Almería"
+  "id": "C239N",
+  "nombre": "Tuineje-Puerto Gran Tarajal",
+  "min": 24.4,
+  "prov": "Las Palmas"
  },
  "mejor": {
   "id": "3319D",
   "nombre": "Puerto el Pico",
-  "min": 1.5,
+  "min": 3.8,
   "prov": "Ávila"
  },
  "top_calor": [
   {
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 24.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
+   "min": 24.3,
+   "prov": "Málaga"
+  },
+  {
    "id": "6329X",
    "nombre": "Cabo de Gata Faro",
-   "min": 24.1,
+   "min": 24.3,
    "prov": "Almería"
   },
   {
-   "id": "C429I",
-   "nombre": "Tenerife/Sur",
-   "min": 24.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 23.7,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 23.6,
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 24.3,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 23.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 23.2,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "5973",
-   "nombre": "Cádiz Observatorio",
-   "min": 23.1,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "C129V",
-   "nombre": "Fuencaliente-Salinas",
-   "min": 23.1,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C419X",
-   "nombre": "Adeje-Caldera B",
-   "min": 23.1,
-   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 23.0,
+   "min": 24.2,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "6000A",
+   "nombre": "Melilla",
+   "min": 23.9,
+   "prov": "Melilla"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 23.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C249I",
+   "nombre": "Fuerteventura/Aeropuerto",
+   "min": 23.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
+   "min": 23.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "5973",
+   "nombre": "Cádiz Observatorio",
+   "min": 23.6,
+   "prov": "Cádiz"
   }
  ],
  "top_fresco": [
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 1.5,
+   "min": 3.8,
    "prov": "Ávila"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 2.1,
-   "prov": "Segovia"
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 4.9,
+   "prov": "Soria"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 2.3,
-   "prov": "Madrid"
+   "id": "9238X",
+   "nombre": "Navascués/Nabaskoze",
+   "min": 5.2,
+   "prov": "Navarra"
   },
   {
    "id": "3013",
    "nombre": "Molina de Aragón",
-   "min": 2.4,
+   "min": 5.4,
    "prov": "Guadalajara"
-  },
-  {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 2.4,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 2.6,
-   "prov": "Burgos"
   },
   {
    "id": "9590",
    "nombre": "Martinet",
-   "min": 2.7,
+   "min": 5.4,
    "prov": "Lleida"
   },
   {
    "id": "9744B",
    "nombre": "Barruera",
-   "min": 2.8,
+   "min": 5.5,
    "prov": "Lleida"
+  },
+  {
+   "id": "9838B",
+   "nombre": "Benasque",
+   "min": 5.9,
+   "prov": "Huesca"
+  },
+  {
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 6.1,
+   "prov": "Burgos"
   },
   {
    "id": "2048A",
    "nombre": "Moron de Almazan",
-   "min": 2.9,
+   "min": 6.2,
    "prov": "Soria"
   },
   {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": 2.9,
-   "prov": "Teruel"
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 6.3,
+   "prov": "Madrid"
   }
  ]
 }

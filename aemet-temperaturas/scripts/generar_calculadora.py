@@ -1266,6 +1266,8 @@ _F_GUIAS = [("Qué es una noche tropical", "/noches-tropicales/"),
              "/noches-tropicales-y-salud/"),
             ("Enfriar una habitación sin aire acondicionado",
              "/enfriar-habitacion-sin-aire-acondicionado/"),
+            ("Alojamiento sin aire acondicionado: ¿carencia o ventaja?",
+             "/alojamiento-sin-aire-acondicionado/"),
             ("Vacaciones sin calor: dónde ir en verano", "/vacaciones-sin-calor/"),
             ("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
             ("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
@@ -1531,7 +1533,10 @@ SIN_ATAJO = {"refugios-climaticos-naturales-cerca-de-mi",
              # duerme fresco cerca de ti?»). Mandar desde aquí a otra
              # herramienta es sacar al visitante de la página que le
              # responde, y encima antes de que la vea.
-             "hoteles-refugio-climatico"}
+             "hoteles-refugio-climatico",
+             # El artículo del alojamiento sin aire acondicionado va tal cual
+             # lo aprobó el usuario: sin píldoras añadidas bajo el titular.
+             "alojamiento-sin-aire-acondicionado"}
 
 
 def inyectar_atajo(html: str, site: str, carpeta: str) -> str:
@@ -4381,6 +4386,7 @@ __CSS_COMUN__
       <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>__NHOT__ hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
       <a class="card2 destacada" href="__SITE__/dormir-con-calor/"><h3>😴 Cómo dormir con calor sin aire acondicionado</h3><p>Lo que de verdad funciona esta noche, lo que no sirve de nada, y a partir de qué temperatura ya no hay truco que valga.</p></a>
       <a class="card2" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/"><h3>💧 Enfriar una habitación sin aire acondicionado</h3><p>La sábana húmeda sobre una cuerda funciona, pero solo donde el aire es seco. Cuántos grados puede bajar en tu zona, con la humedad que mide AEMET.</p></a>
+      <a class="card2" href="__SITE__/alojamiento-sin-aire-acondicionado/"><h3>Alojamiento sin aire acondicionado</h3><p>Los portales lo leen como una carencia y la norma andaluza lo exige aunque sobre. Por qué en un refugio climático es una ventaja.</p></a>
       <a class="card2" href="__SITE__/vacaciones-sin-calor/"><h3>Vacaciones sin calor</h3><p>Dónde ir en verano sin subir al norte: los refugios al sur del paralelo de Burgos.</p></a>
       <a class="card2" href="__SITE__/dormir-con-manta-en-verano/"><h3>Dormir con manta en verano</h3><p>Un destino fresco medido por provincia: el mapa del turismo climático.</p></a>
       <a class="card2" href="__SITE__/microclimas/"><h3>Microclimas</h3><p>Por qué un valle puede ser más fresco que la cima de al lado.</p></a>
@@ -7703,6 +7709,7 @@ PAGINA_EVAPORATIVO_2 = r"""
     <a class="btn" href="__HOME__">Consultar la calculadora</a>
   </div>
   <p>Si quieres la guía completa —cuándo abrir la ventana, qué hacer con el ventilador, qué no funciona— está en <a href="__SITE__/dormir-con-calor/">cómo dormir con calor sin aire acondicionado</a>. Si lo que buscas es irte a otro sitio, tenemos <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">los refugios climáticos más cercanos a ti</a> y <a href="__SITE__/dormir-con-manta-en-verano/">los pueblos donde todavía se duerme con manta</a>. Y si estás en mitad de un episodio, <a href="__SITE__/ola-de-calor/">cuándo acaba la ola de calor</a> se actualiza cada día.</p>
+  <p>Y si tienes una casa rural o un apartamento turístico en uno de esos sitios donde este invento no hace falta, mira <a href="__SITE__/alojamiento-sin-aire-acondicionado/">por qué un alojamiento sin aire acondicionado no siempre es una carencia</a>, y qué dice la normativa.</p>
   <p>Cada mañana publicamos además <a href="__SITE__/parte/">el parte de la noche</a>: dónde se ha dormido fresco en España y dónde no, con los datos de la madrugada anterior.</p>
 </div></section>
 
@@ -7905,6 +7912,459 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Página /alojamiento-sin-aire-acondicionado/: la casilla de aire acondicionado
+# de los portales de alquiler turístico, y la norma que lo exige aunque sobre.
+#
+# EL TEXTO Y EL FORMULARIO SON LOS APROBADOS POR EL USUARIO, PALABRA POR
+# PALABRA. Esta plantilla solo les pone la imagen del sitio: no se reescribe
+# prosa, no se añaden bloques ni enlaces dentro del texto. Por lo mismo va en
+# SIN_ATAJO (el atajo metería una píldora que no está en el artículo).
+#
+# Lo jurídico está comprobado contra el texto: Decreto 28/2016 de Andalucía,
+# art. 6.1.e en la redacción del Decreto 31/2024, y la STS 148/2020, de 6 de
+# febrero. Si cambia la norma, esta página envejece: revisarla.
+#
+# El formulario va al mismo Apps Script que /tu-hotel/, con modo propio. Solo
+# da las gracias si el envío llega: el backend responde con
+# Access-Control-Allow-Origin: *, así que la respuesta se puede leer.
+# ---------------------------------------------------------------------------
+PAGINA_ALOJAMIENTO_SIN_AA = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alojamiento sin aire acondicionado: ¿carencia o ventaja?</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/alojamiento-sin-aire-acondicionado/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Un alojamiento sin aire acondicionado no siempre es una carencia">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/alojamiento-sin-aire-acondicionado/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+ __CSS__
+ __NAVCSS__
+ __FOOTERCSS__
+ __CSSART__
+ .intro{max-width:62ch}
+ .listing{margin:24px 0 4px;padding:18px 20px 16px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;max-width:520px}
+ .listing-title{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+ .amenities{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+ .amenities li{display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:baseline;font-size:15.5px;color:#d9ccb6}
+ .amenities svg{width:17px;height:17px;align-self:center;color:var(--teal)}
+ .amenities .miss{color:var(--muted)}
+ .amenities .miss .name{text-decoration:line-through;text-decoration-color:#e0785c}
+ .amenities .miss .note{color:#e0785c;font-size:13px}
+ .amenities .swap{margin-top:5px;padding-top:11px;border-top:1px dashed var(--line);color:var(--paper)}
+ .amenities .swap .name{font-weight:600}
+ .amenities .swap .note{display:block;color:var(--teja2);font-size:13px;margin-top:2px}
+ .note-rail{margin:4px 0 16px;padding:2px 0 2px 14px;border-left:2px solid var(--teal);font-size:13px;line-height:1.6;color:var(--muted)}
+ .note-rail b{color:var(--paper);font-weight:600}
+ figure.scale{margin:10px 0 22px}
+ figure.scale svg{display:block;width:100%;height:auto}
+ .s-cool{stop-color:var(--teal)}
+ .s-warm{stop-color:var(--teja)}
+ .s-tick{stroke:var(--line);stroke-width:1}
+ .s-label{font-family:var(--fb);font-size:11px;fill:var(--muted)}
+ .s-key{font-family:var(--fb);font-size:10.5px;font-weight:600;letter-spacing:.1em;fill:var(--muted)}
+ .s-mark{stroke:var(--paper);stroke-width:1.5}
+ .s-mark-label{font-family:var(--fb);font-size:12px;font-weight:700;fill:var(--paper)}
+ figure.scale figcaption{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.55}
+ .contrast{list-style:none;margin:4px 0 18px;padding:0}
+ .contrast li{padding:14px 0;border-top:1px solid var(--line)}
+ .contrast li:last-child{border-bottom:1px solid var(--line)}
+ .contrast p{margin:0}
+ .contrast p+p{margin-top:4px;color:var(--muted)}
+ .contrast .lead{font-weight:600;color:var(--paper)}
+ .contrast .lead .b{color:var(--teja2)}
+ blockquote{font-family:var(--fd);font-weight:600;font-style:italic;font-size:clamp(20px,3.6vw,26px);line-height:1.3;color:var(--paper);border-left:3px solid var(--teja);padding:4px 0 4px 18px;margin:26px 0}
+ blockquote span{font-style:normal;color:var(--teja2)}
+ .statute{margin:20px 0;padding:16px 20px;border-left:3px solid var(--teja);background:var(--bg2);border-radius:0 14px 14px 0}
+ .statute-src{font:600 11px/1.5 var(--fb);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+ .statute-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+ .statute-list li{display:grid;grid-template-columns:7.5em 1fr;gap:14px;align-items:baseline;font-size:15.5px;line-height:1.6;color:#d9ccb6}
+ .statute-list .k{font:600 12px/1.6 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+ .statute-list li.void,.statute-list li.void .k{color:#e0785c}
+ @media(max-width:520px){.statute-list li{grid-template-columns:1fr;gap:1px}}
+ ol.steps{list-style:none;counter-reset:p;margin:6px 0 20px;padding:0}
+ ol.steps li{counter-increment:p;position:relative;padding:16px 20px 16px 58px;margin-bottom:10px;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px}
+ ol.steps li::before{content:counter(p);position:absolute;left:20px;top:15px;font-family:var(--fm);font-weight:700;font-size:20px;color:var(--teja)}
+ ol.steps h3{margin:0 0 4px;font-size:16.5px;color:var(--paper)}
+ ol.steps p{margin:0;font-size:15px;line-height:1.7;color:var(--muted)}
+ .caveat{background:rgba(217,96,74,.10);border:1px solid #8a4436;border-radius:14px;padding:16px 18px;margin:22px 0;font-size:15.5px;line-height:1.7}
+ .apply{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-top:3px solid var(--teja);border-radius:16px;padding:24px;margin:30px 0 10px;scroll-margin-top:74px}
+ .apply h2{margin:0 0 10px}
+ .apply .intro{color:#d9ccb6;font-size:15.5px;margin:0 0 12px;max-width:none}
+ .apply .criteria{font-size:13.5px;color:var(--teal);margin:0 0 18px;line-height:1.7}
+ .apply-form{display:grid;gap:12px}
+ .apply-form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+ @media(max-width:560px){.apply-form .row{grid-template-columns:1fr}}
+ .apply-form .field{display:grid;gap:6px}
+ .apply-form label{font:600 11px/1.2 var(--fb);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+ .apply-form .opt{text-transform:none;letter-spacing:0;font-weight:400}
+ .apply-form input,.apply-form select{width:100%;background:#0c0906;border:1px solid var(--line);color:var(--paper);padding:12px 14px;border-radius:10px;font-size:15px;font-family:var(--fb)}
+ .apply-form input:focus,.apply-form select:focus{outline:2px solid var(--teja);outline-offset:1px}
+ .apply-form label.consent{display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start;font:400 13px/1.5 var(--fb);letter-spacing:0;text-transform:none;color:var(--muted)}
+ .apply-form .consent input{width:17px;height:17px;margin:2px 0 0;padding:0;accent-color:var(--teja)}
+ .apply-form button.send{justify-self:start;background:var(--teja);color:#1a1209;border:0;font-weight:700;font-size:15px;padding:13px 20px;border-radius:11px;cursor:pointer;font-family:var(--fb)}
+ .apply-form button.send:hover{background:var(--teja2)}
+ .apply-form button.send:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+ .apply-form button.send[disabled]{opacity:.6;cursor:default}
+ .apply-form .status{font-size:15px;line-height:1.6;margin:2px 0 0;padding:12px 14px;border-radius:10px;background:#0c0906;border:1px solid var(--line);color:var(--muted)}
+ .apply-form .status[hidden]{display:none}
+ .apply-form .status[data-kind="ok"]{color:#b8d3a4;border-color:#5d7a4b}
+ .apply-form .status[data-kind="error"]{color:#f0a58f;border-color:#8a4436}
+ .fuente{font-size:13px;color:var(--muted);margin-top:18px;line-height:1.65}
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Alojamiento sin aire acondicionado</nav>
+  <div class="kick">Alquiler turístico · Refugios climáticos naturales</div>
+  <h1>Un alojamiento <em>sin aire acondicionado</em> no siempre es una carencia</h1>
+  <p class="intro">En los portales de alquiler turístico el aire acondicionado es una casilla: se marca o no se marca. En una parte considerable de España lo que falta no es el aparato, es el problema que ese aparato resuelve.</p>
+  <div class="listing">
+    <p class="listing-title">Lo que ofrece este alojamiento</p>
+    <ul class="amenities">
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="name">Wifi</span></li>
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="name">Cocina equipada</span></li>
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="name">Lavadora</span></li>
+      <li class="miss"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="#e0785c" stroke-width="2" stroke-linecap="round"/></svg><span><span class="name">Aire acondicionado</span> <span class="note">— leído como defecto</span></span></li>
+      <li class="swap"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="var(--teja2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span><span class="name">Refugio climático natural</span><span class="note">Mínima media de verano por debajo de 20&nbsp;°C · serie AEMET 10 años</span></span></li>
+    </ul>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <h2>La casilla convierte una ausencia en un defecto</h2>
+  <p>El sistema de equipamientos de Airbnb, Booking o cualquier portal de alquiler vacacional funciona por presencia o ausencia. Wifi, lavavajillas, parking, aire acondicionado. Es una lista razonable para casi todo: una casa con lavavajillas es objetivamente más cómoda que una sin él, esté donde esté.</p>
+  <p>El aire acondicionado no se comporta así. No es una comodidad que sume en cualquier contexto; es un corrector. Sirve para arreglar algo que pasa fuera de la casa. Si fuera no pasa, el aparato no añade nada, y su ausencia tampoco resta.</p>
+  <p>La casilla no distingue entre las dos situaciones. Trata igual a un ático en el centro de una ciudad del sur en agosto y a una casa de piedra a 1.100 metros donde en julio se duerme con manta. Al primero le falta algo importante. Al segundo le sobra el debate.</p>
+
+  <h2>Lo que mide de verdad esa casilla</h2>
+  <p>Conviene invertir la lectura habitual. Cuando un alojamiento anuncia aire acondicionado no está informando sobre su calidad: está informando sobre su clima. Está diciendo que el sitio donde está lo necesita.</p>
+  <p>Un anuncio con aire acondicionado en un destino cálido no promete descanso. Promete un aparato que intentará conseguirlo, con su factura, su ruido, su goteo en la fachada y su discusión nocturna sobre a cuántos grados se pone. El descanso sigue siendo una posibilidad, no un hecho.</p>
+  <p>Un alojamiento sin aire acondicionado en un sitio donde la noche baja de verdad no promete nada. Simplemente ocurre.</p>
+
+  <h2>El dato que decide si hace falta: la noche tropical</h2>
+  <p class="note-rail"><b>Noche tropical</b><br>T mín ≥ 20&nbsp;°C<br>Fuente: AEMET, ~848 estaciones</p>
+  <p>Hay una medida que separa un caso del otro sin necesidad de opinar, y es la que usa la meteorología: la noche tropical, aquella en la que la temperatura mínima no baja de 20&nbsp;°C. Cuando la mínima se queda por encima de ese umbral, el cuerpo no consigue soltar calor durante la noche y el sueño se fragmenta. Cuando baja de 20&nbsp;°C —y no digamos si baja de 17&nbsp;°C—, se duerme.</p>
+  <figure class="scale">
+    <svg viewBox="0 0 640 108" role="img" aria-label="Escala de temperatura mínima nocturna de 12 a 26 grados, con el umbral de noche tropical marcado en 20 grados">
+      <defs>
+        <linearGradient id="grad-noche" x1="0" y1="0" x2="1" y2="0">
+          <stop class="s-cool" offset="0"/>
+          <stop class="s-cool" offset="0.42"/>
+          <stop class="s-warm" offset="1"/>
+        </linearGradient>
+      </defs>
+      <text class="s-key" x="40" y="14">SE DUERME</text>
+      <text class="s-key" x="600" y="14" text-anchor="end">NO SE DUERME</text>
+      <rect x="40" y="26" width="560" height="18" rx="3" fill="url(#grad-noche)"/>
+      <line class="s-tick" x1="40" y1="44" x2="40" y2="52"/>
+      <line class="s-tick" x1="120" y1="44" x2="120" y2="52"/>
+      <line class="s-tick" x1="200" y1="44" x2="200" y2="52"/>
+      <line class="s-tick" x1="280" y1="44" x2="280" y2="52"/>
+      <line class="s-tick" x1="440" y1="44" x2="440" y2="52"/>
+      <line class="s-tick" x1="520" y1="44" x2="520" y2="52"/>
+      <line class="s-tick" x1="600" y1="44" x2="600" y2="52"/>
+      <text class="s-label" x="40" y="66" text-anchor="middle">12°</text>
+      <text class="s-label" x="120" y="66" text-anchor="middle">14°</text>
+      <text class="s-label" x="200" y="66" text-anchor="middle">16°</text>
+      <text class="s-label" x="280" y="66" text-anchor="middle">18°</text>
+      <text class="s-label" x="440" y="66" text-anchor="middle">22°</text>
+      <text class="s-label" x="520" y="66" text-anchor="middle">24°</text>
+      <text class="s-label" x="600" y="66" text-anchor="middle">26°</text>
+      <line class="s-mark" x1="360" y1="20" x2="360" y2="72"/>
+      <text class="s-mark-label" x="360" y="88" text-anchor="middle">20 °C</text>
+      <text class="s-label" x="360" y="102" text-anchor="middle">umbral de noche tropical</text>
+    </svg>
+    <figcaption>Temperatura mínima de la noche. El umbral no es una opinión: es el corte que usa la meteorología.</figcaption>
+  </figure>
+  <p>Esa cifra no es una impresión del propietario ni una reseña de un huésped satisfecho. Está en las series históricas de AEMET, estación por estación, y se puede consultar. Un municipio que acumula sesenta noches tropicales cada verano necesita aire acondicionado. Uno que acumula dos, no.</p>
+  <p>La consecuencia práctica es incómoda para los portales: la casilla del aire acondicionado es información sobre el municipio disfrazada de información sobre la vivienda.</p>
+
+  <h2>Un sello de refugio climático natural, en lugar de la casilla vacía</h2>
+  <p>Si el problema es que una ausencia no se puede demostrar, la solución es sustituirla por una afirmación que sí se pueda verificar. Eso es un sello de refugio climático natural: un distintivo que no dice «esta casa no tiene aire acondicionado», sino «en este municipio las noches de verano bajan de 20&nbsp;°C según los datos de AEMET de los últimos diez años».</p>
+  <p>Ya existe aplicado a alojamientos: hay un <a href="__SITE__/hoteles-refugio-climatico/">directorio de hoteles y casas con sello de refugio climático natural</a> que se apoya en la estación meteorológica del municipio o, cuando no la hay, en la más cercana fiable. La certificación es gratuita y el criterio es público, que es lo que separa un sello de un adorno. Si tu casa está en uno de esos municipios, puedes <a href="#certificado">solicitar el certificado al final de este artículo</a>.</p>
+  <p>La diferencia con la casilla del portal es de naturaleza, no de grado:</p>
+  <ul class="contrast">
+    <li><p class="lead">La casilla describe el equipamiento; <span class="b">el sello describe el resultado</span>.</p><p>Al huésped no le importa el aparato, le importa dormir.</p></li>
+    <li><p class="lead">La casilla es autodeclarada; <span class="b">el sello es verificable</span>.</p><p>Cualquiera puede marcar «aire acondicionado» y tener un split de 2008 que no enfría el dormitorio. Nadie puede inventarse diez años de mínimas.</p></li>
+    <li><p class="lead">La casilla promete corregir; <span class="b">el sello certifica que no hay nada que corregir</span>.</p><p>Sin ruido de compresor, sin sequedad de garganta, sin despertarse a las cuatro para apagarlo, sin factura.</p></li>
+  </ul>
+  <blockquote>Un alojamiento sin aire acondicionado situado en un refugio climático natural no está un escalón por debajo de uno climatizado. <span>Está uno por encima.</span></blockquote>
+
+  <h2>Lo que hoy penaliza al anfitrión</h2>
+  <p>Conviene decir también lo que no funciona. Mientras los portales no incorporen esta distinción, el sistema castiga al alojamiento fresco por partida doble.</p>
+  <p>Primero, en el filtro. El viajero que ha pasado un mal verano marca «aire acondicionado» como filtro obligatorio, no porque quiera el aparato, sino porque es la única garantía que el buscador le ofrece. La casa donde se duerme con manta desaparece de sus resultados antes de que llegue a verla.</p>
+  <p>Segundo, en la reseña. El huésped que reserva sin conocer el destino llega con la duda puesta, y si coincide una ola de calor excepcional, la ausencia de aire acondicionado se convierte en el titular de su valoración. El anfitrión paga por un episodio que el aparato tampoco habría resuelto del todo.</p>
+  <p>Ninguna de las dos cosas se arregla instalando una máquina. Se arreglan dando la información antes.</p>
+
+  <h2>No es solo el portal: la norma también lo da por hecho</h2>
+  <p class="note-rail"><b>Decreto 28/2016</b><br>art. 6.1.e, red. Decreto 31/2024<br>Andalucía</p>
+  <p>Conviene ir un paso más allá, porque esto no se queda en cómo diseñan los buscadores su formulario. En Andalucía, una vivienda de uso turístico que opere en mayo, junio, julio o agosto está obligada a disponer de refrigeración en habitaciones y salones. Puede ser centralizada o no, fija o portátil, pero tiene que estar. La única excepción prevista son las construcciones tipo cueva.</p>
+  <div class="statute">
+    <p class="statute-src">Decreto 28/2016 · artículo 6.1.e · redacción del Decreto 31/2024</p>
+    <ul class="statute-list">
+      <li><span class="k">Obliga</span><span>Refrigeración en habitaciones y salones si se opera en mayo, junio, julio o agosto</span></li>
+      <li><span class="k">Admite</span><span>Centralizada o no centralizada, fija o portátil</span></li>
+      <li><span class="k">Exime</span><span>Construcciones tipo cueva</span></li>
+      <li class="void"><span class="k">No exime</span><span>Ninguna altitud, ninguna zona climática, ningún dato de temperatura</span></li>
+    </ul>
+  </div>
+  <p>Merece la pena detenerse en esa excepción, porque es reveladora. La norma sí admite que un edificio pueda mantenerse fresco por sí mismo; lo que ocurre es que solo lo reconoce en forma de piedra, nunca en forma de clima. Un apartamento turístico en Pradollano, en Sierra Nevada, cuya estación de referencia de AEMET __PRADOLLANO__, necesita un aparato para poder alquilarse en agosto. Una cueva de Guadix, no.</p>
+  <p>Y no es una interpretación forzada, porque ya lo dijo el Tribunal Supremo. La redacción anterior —refrigeración por elementos fijos, de mayo a septiembre— fue anulada por la Sala Tercera en la sentencia 148/2020, de 6 de febrero, por desproporcionada, con un argumento que es exactamente el de este artículo: la obligación se imponía «sin distinguir las distintas zonas geográficas y climáticas existentes en la Comunidad Autónoma» y sin prever ningún mecanismo de exoneración.</p>
+  <p>El decreto de 2024 rebajó el listón —cuatro meses en lugar de cinco, y sirve un aparato portátil— pero mantuvo el fondo intacto: el criterio sigue siendo el calendario, no el termómetro. La administración pregunta en qué meses abres, no a cuántos grados amanece tu municipio.</p>
+  <p>Ahí es donde un sello con datos de AEMET deja de ser solo un argumento comercial. Sería, literalmente, el mecanismo de exoneración que el Supremo echó en falta: una forma objetiva y verificable de acreditar que en ese municipio la refrigeración no cumple ninguna función.</p>
+  <p>La normativa es autonómica y cambia de una comunidad a otra, así que hay que comprobar la propia antes de decidir nada. El caso andaluz es el mejor documentado porque llegó hasta el Supremo, pero la lógica que lo sostiene —una regla de calendario aplicada a un territorio con veinte climas dentro— no es exclusiva de Andalucía.</p>
+
+  <h2>Cómo presentar un alojamiento sin aire acondicionado</h2>
+  <p class="note-rail">Cinco decisiones, ordenadas <b>por impacto</b> sobre la reserva</p>
+  <ol class="steps">
+    <li><h3>Da el dato, no la sensación</h3><p>Sustituye «por la noche refresca» por «la mínima media de julio en el municipio es de 16&nbsp;°C». Lo primero lo dice todo el mundo; lo segundo se puede comprobar.</p></li>
+    <li><h3>Anticipa la objeción en el título</h3><p>Si el viajero llega a la casilla vacía sin explicación previa, ya está perdido. Si antes ha leído «no necesita aire acondicionado: se duerme con manta», esa casilla vacía se lee como coherencia.</p></li>
+    <li><h3>Enséñalo en las fotos</h3><p>Una manta doblada a los pies de la cama en una foto de verano comunica más que un párrafo. Añade el edredón, la chimenea si la hay, la ventana abierta de noche.</p></li>
+    <li><h3>Sustituye la casilla por evidencia externa</h3><p>Un sello, un certificado con datos de AEMET o la propia serie histórica de mínimas del municipio hacen el trabajo que el portal no hace.</p></li>
+    <li><h3>Cuenta la arquitectura, no solo el clima</h3><p>Ventilación cruzada, muros gruesos, orientación, persianas, patio. Es lo que convierte una noche fresca fuera en una casa fresca dentro.</p></li>
+  </ol>
+  <p class="caveat">Cumplir la norma y cumplir la casilla no son lo mismo. Si la normativa autonómica te obliga a tener el aparato, tenlo —en Andalucía basta un portátil—, pero eso no te obliga a vender la casa como una casa que lo necesita. El anuncio puede decir las dos cosas a la vez: hay refrigeración disponible, y en diez años de datos no ha hecho falta usarla.</p>
+
+  <h2>Preguntas frecuentes</h2>
+  <dl class="faq">__FAQ__</dl>
+
+  <h2>Conclusión</h2>
+  <p>Los portales llevan años preguntando lo que no es. Un alojamiento sin aire acondicionado puede ser sencillamente una casa que no lo necesita, y en ese caso la casilla vacía está describiendo una ventaja como si fuera un defecto. Mientras el formulario no cambie, el trabajo del anfitrión es fácil de enunciar: dejar de justificar una ausencia y empezar a certificar un clima.</p>
+
+  <section class="apply" id="certificado">
+    <h2>¿Tu casa no necesita aire acondicionado? Pídenos el certificado</h2>
+    <p class="intro">Si tienes una casa rural, una vivienda de uso turístico o un hotel pequeño en un sitio donde las noches de verano refrescan de verdad, lo comprobamos con los datos de AEMET del municipio y, si cumple, te concedemos el certificado. Es gratuito. Y si los datos no lo respaldan, te lo diremos: un sello que se concede siempre no certifica nada.</p>
+    <p class="criteria">Criterio · mínima media de verano por debajo de 20&nbsp;°C<br>Fuente · estación de AEMET del municipio o la más cercana fiable<br>Serie · últimas diez temporadas</p>
+    <form class="apply-form" id="certForm" novalidate>
+      <div class="row">
+        <div class="field">
+          <label for="f-alojamiento">Nombre del alojamiento</label>
+          <input id="f-alojamiento" name="alojamiento" type="text" required autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="f-tipo">Tipo</label>
+          <select id="f-tipo" name="tipo" required>
+            <option value="">Elige…</option>
+            <option>Casa rural</option>
+            <option>Vivienda de uso turístico</option>
+            <option>Apartamento turístico</option>
+            <option>Hotel, hostal o pensión</option>
+            <option>Camping o alojamiento singular</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="f-municipio">Municipio</label>
+          <input id="f-municipio" name="municipio" type="text" required>
+        </div>
+        <div class="field">
+          <label for="f-provincia">Provincia</label>
+          <input id="f-provincia" name="provincia" type="text" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-anuncio">Enlace al anuncio o a la web <span class="opt">(opcional)</span></label>
+        <input id="f-anuncio" name="anuncio" type="url" inputmode="url" placeholder="https://">
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="f-nombre">Tu nombre</label>
+          <input id="f-nombre" name="nombre" type="text" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" required autocomplete="email">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-aa">¿Tiene aire acondicionado instalado?</label>
+        <select id="f-aa" name="aire">
+          <option value="">Elige…</option>
+          <option>No, y no hace falta</option>
+          <option>Sí, instalado por obligación normativa</option>
+          <option>Sí, y se usa alguna noche</option>
+        </select>
+      </div>
+      <label class="consent">
+        <input type="checkbox" name="consent" required>
+        <span>Autorizo a que se usen estos datos para estudiar la solicitud y responderme. No se ceden a terceros y puedes pedir que se borren cuando quieras.</span>
+      </label>
+      <button class="send" type="submit">Solicitar el certificado</button>
+      <p class="status" id="certStatus" role="status" hidden></p>
+    </form>
+  </section>
+
+  <p class="fuente">Datos de temperatura mínima nocturna: AEMET, series de las últimas diez temporadas de verano.<br>Sello y directorio de alojamientos: <a href="__HOME__">nochetropical.es</a></p>
+</div></section>
+__FOOTER__
+<script>
+(function(){
+ /* URL /exec del Apps Script (la misma que /tu-hotel/). Vacía = no se envía
+    nada, y el formulario lo dice en vez de fingir que sí. */
+ var ENDPOINT = "__APPS_URL__";
+ var form = document.getElementById("certForm");
+ var statusEl = document.getElementById("certStatus");
+ if (!form || !statusEl) return;
+ var button = form.querySelector("button.send");
+
+ function show(kind, text) {
+  statusEl.dataset.kind = kind;
+  statusEl.textContent = text;
+  statusEl.hidden = false;
+ }
+
+ form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  if (!form.reportValidity()) return;
+
+  var d = {};
+  new FormData(form).forEach(function (v, k) { d[k] = String(v).trim(); });
+
+  if (!ENDPOINT) {
+   show("info", "El formulario todavía no está conectado a ningún servidor, así que esta solicitud no se ha enviado a ninguna parte.");
+   return;
+  }
+
+  /* Mismas columnas que /tu-hotel/ en la hoja: se distinguen por modo y source. */
+  var lead = {
+   timestamp: new Date().toISOString(), email: d.email || "", modo: "alojamiento-sin-aa",
+   hotel: d.alojamiento || "", zona_interes: (d.municipio || "") + ", " + (d.provincia || ""),
+   web: d.anuncio || "", telefono: "",
+   peticion: "Tipo: " + (d.tipo || "") + " · Aire acondicionado: " + (d.aire || "sin indicar") + " · Contacto: " + (d.nombre || ""),
+   estacion: "", provincia: d.provincia || "", noches_trop: "", veredicto: "",
+   rgpd: form.querySelector('input[name="consent"]').checked ? "si" : "",
+   source: "alojamiento-sin-aire-acondicionado", user_agent: navigator.userAgent
+  };
+
+  var label = button.textContent;
+  button.disabled = true;
+  button.textContent = "Enviando…";
+  statusEl.hidden = true;
+
+  /* text/plain evita el preflight CORS; el Apps Script responde con origen
+     abierto, así que se comprueba la respuesta. Nunca mode:"no-cors". */
+  fetch(ENDPOINT, {
+   method: "POST",
+   headers: { "Content-Type": "text/plain;charset=utf-8" },
+   body: JSON.stringify(lead)
+  })
+   .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.text(); })
+   .then(function () {
+    show("ok", "Recibido. Miramos la estación de AEMET de " + (d.municipio || "tu municipio") + " y te respondemos por email.");
+    form.reset();
+   })
+   .catch(function (err) {
+    show("error", "No hemos podido registrar la solicitud (" + err.message + "). Inténtalo otra vez en un momento; si sigue fallando, escríbenos y la tramitamos a mano.");
+   })
+   .then(function () {
+    button.disabled = false;
+    button.textContent = label;
+   });
+ });
+})();
+</script>
+</body>
+</html>
+"""
+
+
+def _frase_pradollano() -> str:
+    """Lo que dice la estación de referencia de Pradollano (Sierra Nevada,
+    Radiotelescopio, 5516D), leído del ranking. Con el dato actual (0 noches
+    tropicales) produce exactamente la frase del artículo aprobado; si el dato
+    cambia, la frase cambia con él en vez de quedarse mintiendo."""
+    try:
+        with RANKING_CSV.open(encoding="utf-8", newline="") as fh:
+            fila = next((r for r in csv.DictReader(fh) if r["indicativo"] == "5516D"), None)
+        nt = float(fila["noches_trop_anio"]) if fila else None
+    except (OSError, KeyError, ValueError):
+        nt = None
+    if nt is None:
+        return "apenas conoce noches tropicales"
+    if nt < 0.05:
+        return "no ha registrado ni una sola noche tropical en los veranos medidos"
+    return f"no llega a {math.ceil(nt)} noches tropicales al año"
+
+
+def construir_pagina_alojamiento_sin_aa(site: str = SITE_URL) -> str:
+    """/alojamiento-sin-aire-acondicionado/ — artículo aprobado, con formulario."""
+    url = site + "/alojamiento-sin-aire-acondicionado/"
+    titulo = "Alojamiento sin aire acondicionado: ¿carencia o ventaja?"
+    desc = ("Los portales tratan un alojamiento sin aire acondicionado como una casilla "
+            "sin marcar. En media España no es una carencia: es que no hace falta. "
+            "Cómo demostrarlo con datos.")
+    # Las preguntas del artículo aprobado, en su orden y con su texto.
+    faq = [
+        ("¿Es peor un alojamiento sin aire acondicionado?",
+         "Depende exclusivamente del municipio. En un destino con muchas noches tropicales, "
+         "la falta de aire acondicionado es una carencia real. En un refugio climático "
+         "natural, donde la mínima nocturna baja de 20 °C, el aparato no aporta nada."),
+        ("¿Qué es una noche tropical?",
+         "Una noche en la que la temperatura mínima no desciende de 20 °C. Es el umbral que "
+         "usa la meteorología para señalar las noches en las que el cuerpo no logra "
+         "enfriarse y el sueño se deteriora."),
+        ("¿Cómo sé si el destino de mi alojamiento necesita aire acondicionado?",
+         "Consultando las mínimas de verano de la estación de AEMET del municipio, o de la "
+         "más próxima, y contando cuántas noches por verano superan los 20 °C."),
+        ("¿Es obligatorio el aire acondicionado en un alquiler turístico?",
+         "Depende de la comunidad autónoma, y la obligación va por calendario, no por clima. "
+         "En Andalucía, una vivienda de uso turístico que opere en mayo, junio, julio o agosto "
+         "debe disponer de refrigeración en habitaciones y salones —fija o portátil—, con la "
+         "única excepción de las construcciones tipo cueva. La versión anterior de ese "
+         "requisito fue anulada por el Tribunal Supremo por no distinguir entre zonas climáticas."),
+        ("¿Un sello de refugio climático natural sustituye al aire acondicionado?",
+         "No lo sustituye: certifica que no hacía falta. Son dos cosas distintas, y para el "
+         "descanso la segunda es mejor que la primera."),
+    ]
+    faq_html = "".join(f"<dt>{p}</dt><dd>{r.replace(' °C', '&nbsp;°C')}</dd>" for p, r in faq)
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Alojamiento sin aire acondicionado",
+             "item": url}]},
+        {"@type": "Article", "headline": titulo, "description": desc, "url": url,
+         "inLanguage": "es-ES",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es", "url": site + "/"},
+         "mainEntityOfPage": url, "image": site + "/og.png"},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": p,
+             "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in faq]}]},
+        ensure_ascii=False)
+    return (PAGINA_ALOJAMIENTO_SIN_AA
+            .replace("__SCHEMA__", schema)
+            .replace("__PRADOLLANO__", _frase_pradollano())
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__CSSART__", _CSS_ARTICULO)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__FAQ__", faq_html)
+            .replace("__DESC__", desc)
+            .replace("__APPS_URL__", APPS_SCRIPT_URL)
+            .replace("__HOME__", site + "/")
+            .replace("__SITE__", site))
+
+# ---------------------------------------------------------------------------
 # Página /vacaciones-sin-calor/: la que va a por la búsqueda de VIAJE («dónde ir
 # en verano que no haga calor», «vacaciones sin calor», «coolcation»), que es
 # otra intención distinta de las que ya cubrimos: /dormir-con-manta-en-verano/
@@ -8010,7 +8470,7 @@ __NAV__
   <h3>Y el apartamento pequeño empeora la noche</h3>
   <p>Hay una parte de esto que no aparece en ningún dato de temperatura y que reconoce cualquiera que haya veraneado en la costa. El alojamiento de playa suele ser <b>un apartamento</b>, y en agosto se llena: cuatro personas en una habitación doble, la puerta cerrada, y de madrugada el aire acondicionado o el ventilador encendidos porque no hay otra manera. Cada cuerpo en esa habitación es una fuente de calor más.</p>
   <p>Ahí empieza un círculo del que cuesta salir. Los <b>niños pequeños son los que peor lo llevan</b>, y además son los únicos que no pueden hacer nada: no se destapan, no abren la ventana, no dicen «tengo calor» — se despiertan y lloran. Al día siguiente están irritables, duermen peor la siesta y llegan a la noche siguiente más cansados. Los padres tampoco descansan. Y las vacaciones acaban dando lo contrario de lo que se fue a buscar.</p>
-  <p class="note">Lo del apartamento es observación, no medición. Lo que sí está medido es el bochorno del que se huye: la estación de referencia de Dénia y Jávea acumula <b>__NT_DENIA__ noches tropicales al año</b> de media, con una mínima de verano de <b>22,2&nbsp;°C</b>. A dos horas hacia el interior, en la sierra de Gúdar, esa misma madrugada se queda en <b>11,7&nbsp;°C</b> y no hay <b>ni una sola</b> noche tropical al año. Diez grados y medio: la distancia entre necesitar aire acondicionado y necesitar una manta.</p>
+  <p class="note">Lo del apartamento es observación, no medición. Lo que sí está medido es el bochorno del que se huye: la estación de referencia de Dénia y Jávea acumula <b>__NT_DENIA__ noches tropicales al año</b> de media, con una mínima de verano de <b>22,2&nbsp;°C</b>. A dos horas hacia el interior, en la sierra de Gúdar, esa misma madrugada se queda en <b>11,7&nbsp;°C</b> y no hay <b>ni una sola</b> noche tropical al año. Diez grados y medio: <a href="__SITE__/alojamiento-sin-aire-acondicionado/">la distancia entre necesitar aire acondicionado y necesitar una manta</a>.</p>
 </div></section>
 
 <section><div class="wrap">
@@ -8261,7 +8721,7 @@ __NAV__
     <p>Casi todos comparten receta: <b>altitud</b> (600–1.700 m), <b>interior</b> (lejos del mar, que de noche devuelve el calor acumulado) y <b>aire seco</b> de clima continental, que deja escapar el calor del día en cuanto se pone el sol. Es el mecanismo que explican <a href="__SITE__/microclimas/">los microclimas</a>: mientras la costa mediterránea encadena hasta 86 noches tropicales seguidas — compruébalo en <a href="__SITE__/ranking-noches-tropicales/">el ranking nacional</a> —, en estas sierras la manta es obligatoria hasta en pleno agosto.</p>
     <h2>Turismo climático: elegir destino por cómo se siente</h2>
     <p>Cada verano más gente organiza las vacaciones huyendo del calor: es el <b>turismo climático</b>. No va de monumentos, va de <b>cómo se va a sentir el cuerpo</b>: dormir sin ventilador, cenar con chaqueta fina, pasear a mediodía sin sufrir mientras <a href="__SITE__/ola-de-calor/">la ola de calor</a> asa el resto del mapa. Estos datos son su mapa — y <a href="__SITE__/confortometro/">el Confortómetro</a>, nuestro estudio participativo, le está poniendo la capa que faltaba: cómo se siente cada zona, votado por quienes están allí.</p>
-    <p>¿Y si buscas <b>hoteles rurales frescos</b> — ese «hotel sin aire acondicionado pero fresco» que promete la búsqueda? Hemos seleccionado <b>__NHOT__ hoteles</b> situados en estos refugios climáticos, con el dato de AEMET de cada zona (medimos el clima del entorno, no el interior del hotel: donde la noche refresca de verdad, se duerme fresco).</p>
+    <p>¿Y si buscas <b>hoteles rurales frescos</b> — ese «hotel sin aire acondicionado pero fresco» que promete la búsqueda? Hemos seleccionado <b>__NHOT__ hoteles</b> situados en estos refugios climáticos, con el dato de AEMET de cada zona (medimos el clima del entorno, no el interior del hotel: donde la noche refresca de verdad, se duerme fresco). Y si el alojamiento es tuyo, te contamos <a href="__SITE__/alojamiento-sin-aire-acondicionado/">por qué no tener aire acondicionado ahí no es una carencia</a>.</p>
     <p style="margin:6px 0 4px"><a class="btn pri" href="__SITE__/hoteles-refugio-climatico/">🏨 Los __NHOT__ hoteles donde se duerme con manta →</a></p>
     <p><a href="__SITE__/refugios-y-espana-vaciada/">Muchos de estos pueblos están en la España vaciada: el frío que los despobló es hoy su activo →</a></p>
   </div>
@@ -9764,7 +10224,7 @@ __NAV__
   <div class="kick">Turismo climático · Datos AEMET 2017–2026</div>
   __EJEMPLO__
   <h1>Hoteles donde se duerme con <em>manta</em> en verano</h1>
-  <p class="intro">Mientras la ola de calor asa el país y las noches tropicales impiden dormir en la costa, hay una <b>España que no arde</b>: valles y sierras donde la mínima nocturna baja sistemáticamente de los 20&nbsp;°C. Hemos cruzado 10 veranos de <b>datos de AEMET</b> con la oferta hotelera para reunir hoteles en <b>refugios climáticos naturales</b>, de __FRIO__ para arriba. Se duerme fresco, sin depender del aire acondicionado.</p>
+  <p class="intro">Mientras la ola de calor asa el país y las noches tropicales impiden dormir en la costa, hay una <b>España que no arde</b>: valles y sierras donde la mínima nocturna baja sistemáticamente de los 20&nbsp;°C. Hemos cruzado 10 veranos de <b>datos de AEMET</b> con la oferta hotelera para reunir hoteles en <b>refugios climáticos naturales</b>, de __FRIO__ para arriba. Se duerme fresco, <a href="__SITE__/alojamiento-sin-aire-acondicionado/">sin depender del aire acondicionado</a>.</p>
   <p class="disc"><b>Divulgación:</b> esta página contiene enlaces de afiliado de Booking.com. Si reservas a través de ellos, podemos recibir una comisión <b>sin coste adicional para ti</b>. La certificación climática se basa en datos oficiales de AEMET y es independiente de la relación de afiliación: certifica el clima de la zona, no el interior del establecimiento.</p>
 </div></header>
 
@@ -12250,6 +12710,7 @@ __NAV__
     <li><b>Un argumento con aval</b>: «aquí se duerme fresco, avalado por 10 años de datos de AEMET».</li>
     <li><b>Gratis.</b> Si aún no tienes web ni reservas online, también entras — eres de los primeros.</li>
   </ul>
+  <p>¿Tu casa no tiene aire acondicionado y te preocupa que los portales lo lean como un defecto? Lo explicamos en <a href="__SITE__/alojamiento-sin-aire-acondicionado/">alojamiento sin aire acondicionado: carencia o ventaja</a>, con lo que dice la normativa.</p>
 
   <div class="capture">
     <h2>Solicita tu auditoría meteorológica</h2>
@@ -12527,6 +12988,11 @@ def main() -> int:
     (DOCS_DIR / "enfriar-habitacion-sin-aire-acondicionado").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "enfriar-habitacion-sin-aire-acondicionado" / "index.html").write_text(
         construir_pagina_evaporativo(site), encoding="utf-8")
+    # La casilla de aire acondicionado de los portales, la norma andaluza que lo
+    # exige aunque sobre, y el formulario de certificado (backend de /tu-hotel/).
+    (DOCS_DIR / "alojamiento-sin-aire-acondicionado").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "alojamiento-sin-aire-acondicionado" / "index.html").write_text(
+        construir_pagina_alojamiento_sin_aa(site), encoding="utf-8")
     # Landing de intención de VIAJE («dónde ir en verano que no haga calor»).
     (DOCS_DIR / "vacaciones-sin-calor").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "vacaciones-sin-calor" / "index.html").write_text(

@@ -1,12 +1,12 @@
 {
  "fecha": "2026-09-12",
  "total": 849,
- "tropicales": 122,
+ "tropicales": 123,
  "ecuatoriales": 0,
  "peor": {
   "id": "C239N",
   "nombre": "Tuineje-Puerto Gran Tarajal",
-  "min": 24.4,
+  "min": 24.5,
   "prov": "Las Palmas"
  },
  "mejor": {
@@ -19,7 +19,7 @@
   {
    "id": "C239N",
    "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 24.4,
+   "min": 24.5,
    "prov": "Las Palmas"
   },
   {

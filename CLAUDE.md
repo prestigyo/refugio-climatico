@@ -44,7 +44,7 @@ refugio-climatico/
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
 | `generar_gif.py` | `ola-minimas.gif`, `ola-maximas.gif`, `ola-dia-noche.gif`, `ola-canarias-minimas.gif`, `og.png` |
 | `estudio_colores.py` | `estudios/*.png` + `estudios/estudio-datos.json` |
-| `generar_certificados.py` | `certificados/index.html` + `certificados/<slug>/` (una página por estación certificada), `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) y `badges/pueblo-<slug>.svg` (el sello del pueblo, para que el alojamiento lo incruste en su web) |
+| `generar_certificados.py` | `certificados/index.html` + `certificados/<slug>/` (una página por estación certificada, todas indexables; si una estación deja de cumplir el criterio, su página se sustituye por una redirección noindex a su provincia), `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) y `badges/pueblo-<slug>.svg` (el sello del pueblo, para que el alojamiento lo incruste en su web) |
 | `generar_calendario_datos.py` | `datos/<slug-provincia>.json` (calendario de calor que carga la calculadora bajo demanda) |
 | `parte_nocturno.py` | `parte/index.html`, `parte/parte.txt`, `parte/parte.json` |
 

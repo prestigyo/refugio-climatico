@@ -226,12 +226,12 @@ PAGINA_CERT = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__LOC__, Refugio Climático de España 2026 (certificado) | Noche Tropical</title>
-<meta name="description" content="Certificado digital: la estación de AEMET de __LOC__ (__PROV__) está entre las 25 de España con menos noches tropicales — __NT__ al año de media (2017–2026). Verificable y descargable.">
+<meta name="description" content="__DESC__">
 <link rel="canonical" href="__URL__">
 <meta name="robots" content="__ROBOTS__">
 <meta property="og:type" content="article">
 <meta property="og:title" content="__LOC__, Refugio Climático de España 2026">
-<meta property="og:description" content="__NT__ noches tropicales al año de media (AEMET, 2017–2026). Entre los 25 mejores refugios climáticos de España.">
+<meta property="og:description" content="__OGDESC__">
 <meta property="og:url" content="__URL__">
 <meta property="og:image" content="__PNG__">
 <meta property="og:locale" content="es_ES">
@@ -415,10 +415,25 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
          "datePublished": g.iso_tz("2026-07-06"),
          "dateModified": g.iso_tz("2026-07-06"),
          "mainEntityOfPage": url}]}, ensure_ascii=False)
-    # Solo el Top 25 se indexa; el resto de certificados individuales son finos
-    # (una página casi calcada por estación) y van a noindex para no lastrar la
-    # calidad media del sitio ante Google.
-    robots = "index,follow,max-image-preview:large" if top25 else "noindex,follow"
+    # Todos los certificados se indexan y decide Google. Del 21 jul al 13 sep 2026
+    # solo se indexaba el Top 25 por miedo a páginas finas, pero Search Console
+    # mostró que los certificados en noindex eran justo los que traían clics
+    # (Oviedo, Vitoria, Teruel, Lugo…): 19 clics y 364 impresiones frente a 2 y
+    # 61 del Top 25. Con la página indexable, la descripción NO puede decir «entre
+    # las 25» salvo que lo sea: sale en los resultados de búsqueda.
+    robots = "index,follow,max-image-preview:large"
+    if top25:
+        desc = ("Certificado digital: la estación de AEMET de __LOC__ (__PROV__) está "
+                "entre las 25 de España con menos noches tropicales — __NT__ al año de "
+                "media (2017–2026). Verificable y descargable.")
+        ogdesc = ("__NT__ noches tropicales al año de media (AEMET, 2017–2026). "
+                  "Entre los 25 mejores refugios climáticos de España.")
+    else:
+        desc = ("Certificado digital: la estación de AEMET de __LOC__ (__PROV__) es un "
+                "refugio climático acreditado — __NT__ noches tropicales al año de media "
+                "(2017–2026). Verificable y descargable.")
+        ogdesc = ("__NT__ noches tropicales al año de media (AEMET, 2017–2026). "
+                  "Refugio climático acreditado de España.")
     return (PAGINA_CERT
             .replace("__NEGOCIO__", bloque_negocio(e, site, hoteles_est or {}))
             .replace("__SCHEMA__", schema)
@@ -428,6 +443,8 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
             .replace("__NAV__", g.nav_escueto_html(site))
             .replace("__FOOTER__", g.footer_escueto_html(site))
             .replace("__ROBOTS__", robots)
+            .replace("__DESC__", desc)
+            .replace("__OGDESC__", ogdesc)
             .replace("__URL__", url)
             .replace("__SLUG__", sl)
             .replace("__NIVEL__", nivel)
@@ -572,6 +589,32 @@ def main() -> int:
             encoding="utf-8")
     (OUT_DIR / "index.html").write_text(construir_indice(top, todos, site),
                                         encoding="utf-8")
+    # Certificados que ya no están vigentes: la estación ha pasado a tener una
+    # noche tropical o más al año. Este script nunca borraba sus páginas, así que
+    # seguían en línea diciendo «Refugio Climático de España 2026» (en sep 2026
+    # eran 23, ninguna del Top 25). Se sustituyen por una redirección noindex a
+    # su provincia que avisa de que el certificado no está vigente. No se borran:
+    # puede haber enlaces compartidos, y un 404 no explica nada a quien llega.
+    vigentes = {g.slug(e["loc"]) for e in todos}
+    provincia_de = {g.slug(e["loc"]): e["prov"] for e in estaciones}
+    retirados = []
+    for carpeta in sorted(p for p in OUT_DIR.iterdir() if p.is_dir()):
+        pagina = carpeta / "index.html"
+        if carpeta.name in vigentes or not pagina.exists():
+            continue
+        if 'http-equiv="refresh"' in pagina.read_text(encoding="utf-8"):
+            continue  # ya retirado en una ejecución anterior
+        prov = provincia_de.get(carpeta.name)
+        destino = f"{site}/{g.slug(prov)}/" if prov else f"{site}/certificados/"
+        g.escribir_redireccion(
+            site, f"certificados/{carpeta.name}", destino,
+            "Este certificado ya no está vigente: la estación ha dejado de cumplir "
+            "el criterio de refugio climático (menos de una noche tropical al año).",
+            noindex=True)
+        retirados.append(carpeta.name)
+    if retirados:
+        print(f"   certificados retirados (ya no cumplen el criterio): {len(retirados)}"
+              " → redirección noindex a su provincia")
     con_aloj = sum(1 for e in todos if hoteles_est.get(e["id"]))
     print(f"OK -> {len(todos)} certificados (PNG + página; {len(top)} Top 25) "
           f"+ índice en {OUT_DIR}")

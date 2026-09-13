@@ -13115,26 +13115,11 @@ def main() -> int:
             nuevo = inyectar_atajo(nuevo, site, carpeta)
         if nuevo != html_est:
             f.write_text(nuevo, encoding="utf-8")
-    # Certificados: las ~218 páginas individuales (una por estación) son finas y
-    # casi calcadas. Ante Google, tanta página en serie lastra la calidad media
-    # del sitio y frena la indexación de lo que importa (las provincias). Se
-    # dejan en NOINDEX todas salvo el Top 25 (la vitrina, con tarjeta PNG). El
-    # índice /certificados/ sigue indexable. Post-proceso in situ para que el
-    # cambio se publique regenerando solo este script; al quedar noindex, el
-    # sitemap las excluye automáticamente (abajo).
-    cert_noindex = 0
-    cert_dir = DOCS_DIR / "certificados"
-    if cert_dir.exists():
-        for f in cert_dir.glob("*/index.html"):
-            h = f.read_text(encoding="utf-8")
-            if "· Top 25 ·" in h or 'content="noindex' in h:
-                continue  # el Top 25 se indexa; lo ya-noindex no se re-toca
-            nuevo = h.replace(
-                '<meta name="robots" content="index,follow,max-image-preview:large">',
-                '<meta name="robots" content="noindex,follow">')
-            if nuevo != h:
-                f.write_text(nuevo, encoding="utf-8")
-                cert_noindex += 1
+    # Certificados: ya NO se fuerzan a noindex. Aquí había un post-proceso que
+    # dejaba en noindex todas las páginas salvo el Top 25; se quitó el 13 sep 2026
+    # porque los certificados que traían clics eran justo los excluidos. Ahora
+    # los escribe indexables generar_certificados.py y decide Google; al ser
+    # indexables, el sitemap las recoge solo.
     # El parte de la noche: la portada /parte/ se indexa, pero los archivos
     # diarios /parte/AAAA-MM-DD/ son efímeros (uno por noche, cientos al año) y
     # solo existen para el permalink del tuit → noindex. Mismo post-proceso in
@@ -13275,7 +13260,6 @@ def main() -> int:
           + (f" · {migradas} páginas estáticas migradas de dominio" if migradas else "")
           + (f" · menú escueto inyectado en {con_menu} páginas estáticas" if con_menu else "")
           + (f" · pie unificado en {con_footer} páginas estáticas" if con_footer else "")
-          + (f" · {cert_noindex} certificados a noindex" if cert_noindex else "")
           + (f" · {parte_noindex} partes diarios a noindex" if parte_noindex else ""))
     c = datos["meta"]["contraste"]
     print(f"OK -> {OUT_HTML}")

@@ -4954,6 +4954,13 @@ __CSS_CERCA__
  ol.guia li b{color:var(--ink)}
  .pg .hint a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
  .tool .guia-link{margin:14px 0 0}
+ .umbral-tabla{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:0 0 12px;padding:12px 16px;border:1.5px solid #5f5138;border-radius:12px;background:rgba(238,151,105,.07)}
+ .umbral-tabla>label[for]{font-size:14.5px;color:var(--muted)}
+ .umbral-tabla .field{flex:0 0 150px;min-width:0}
+ .umbral-tabla .om{font-size:14.5px;color:var(--muted)}
+ .umbral-tabla .solo{display:inline-flex;align-items:center;gap:8px;margin-left:auto;padding:8px 12px;border-left:1.5px solid #5f5138;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer}
+ .umbral-tabla .solo input{width:17px;height:17px;accent-color:var(--brand)}
+ @media(max-width:620px){.umbral-tabla .solo{margin-left:0;border-left:0;border-top:1px dashed #5f5138;padding:10px 0 0;width:100%}}
 __CSS_COMUN__
 </style>
 </head>
@@ -5000,7 +5007,7 @@ __CSS_COMUN__
     <p class="p">Lo que esto no mide: el gasto de calefacción depende también de la temperatura durante el día y de la vivienda —aislamiento, orientación, altura—. Las noches frías de la estación son un primer filtro para comparar municipios, no una estimación de la factura.</p>
 
     <h2 class="sec" id="tabla">Todos los municipios</h2>
-    <p class="p">__NMUN__ municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. La columna de noches es la media por invierno de noches con la mínima a <span class="ut">0&nbsp;°C</span> o menos en la estación de referencia, en los inviernos con datos completos; la siguiente cuenta en cuántos de esos inviernos no hubo ninguna. <b>Cambia los grados en la calculadora y la tabla se recalcula y se ordena con ese umbral.</b> Pulsa un municipio para ver su serie.</p>
+    <p class="p">__NMUN__ municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. La columna de noches es la media por invierno de noches con la mínima a <span class="ut">0&nbsp;°C</span> o menos en la estación de referencia, en los inviernos con datos completos; la siguiente cuenta en cuántos de esos inviernos no hubo ninguna. <b>Cambia los grados aquí abajo o en la calculadora: la tabla se recalcula y se ordena con ese umbral.</b> Pulsa un municipio para ver su serie.</p>
     <div class="filtros">
       <div class="field"><select id="fprov" aria-label="Filtrar por provincia"><option value="">Todas las provincias</option></select></div>
       <div class="field"><select id="fpob" aria-label="Población mínima">
@@ -5015,7 +5022,12 @@ __CSS_COMUN__
       <label><input type="checkbox" class="fconf" value="a" checked> Confianza alta</label>
       <label><input type="checkbox" class="fconf" value="m" checked> Confianza media</label>
       <label><input type="checkbox" class="fconf" value="o" checked> Orientativa</label>
-      <label><input type="checkbox" id="fsin"> Solo sin noches a <span class="ut">0&nbsp;°C</span> o menos en __ULTIMO__</label>
+    </div>
+    <div class="umbral-tabla" role="group" aria-label="Umbral de la tabla">
+      <label for="umbral2">Noches con la mínima a</label>
+      <div class="field"><select id="umbral2" aria-label="Grados para la tabla">__OPCIONES__</select></div>
+      <span class="om">o menos</span>
+      <label class="solo"><input type="checkbox" id="fsin"> Solo municipios sin ninguna en __ULTIMO__</label>
     </div>
     <div class="tsup" id="tsup" aria-hidden="true"><div></div></div>
     <div class="twrap" id="twrap">
@@ -5119,7 +5131,16 @@ function ficha(i,origen,cercanos){
    +"<table class='tserie'><thead><tr><th>Invierno (nov–mar)</th><th class='n'>Noches a "+gtxt(t)+" o menos</th></tr></thead><tbody>"+filas+"</tbody></table>";
  });
 }
-sel.addEventListener("change",function(){ if(actual) ficha(actual.i,actual.origen,actual.cercanos); umbralTabla(); });
+/* Dos selectores de grados, el de la calculadora y el de la tabla: siempre
+   iguales, y cualquiera de los dos actualiza la ficha y la tabla. */
+var sel2=document.getElementById("umbral2");
+function cambioUmbral(desde){
+ sel.value=desde.value; if(sel2) sel2.value=desde.value;
+ if(actual) ficha(actual.i,actual.origen,actual.cercanos);
+ umbralTabla();
+}
+sel.addEventListener("change",function(){cambioUmbral(sel);});
+if(sel2) sel2.addEventListener("change",function(){cambioUmbral(sel2);});
 
 var gb=document.getElementById("geo"), gh=document.getElementById("geohint");
 gb.addEventListener("click",function(){

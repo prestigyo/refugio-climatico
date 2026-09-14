@@ -4761,7 +4761,8 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
     import html as _html
     import statistics
     url_cerca = site + "/refugios-climaticos-naturales-cerca-de-mi/"
-    share_txt = ("En España quedan 218 pueblos donde no se registra ni una noche tropical al año: "
+    cero = sum(1 for e in estaciones if e["nt"] < 1)
+    share_txt = (f"En España quedan {cero} pueblos donde no se registra ni una noche tropical al año: "
                  "se duerme tapado en agosto y sin aire acondicionado. "
                  "Mira cuál te pilla más cerca, con los datos de AEMET de diez veranos:")
     # La cifra de refugios se calcula, nunca se escribe a mano: estaba fijada en
@@ -10004,11 +10005,33 @@ def n_hoteles() -> int:
     if not _N_HOTELES:
         ruta = AEMET_DIR / "datos" / "hoteles.csv"
         try:
+            # Mismo criterio que cargar_hoteles(): solo cuenta el hotel cuya
+            # estación de referencia está en el ranking y es refugio (<1 noche
+            # tropical al año, redondeado a un decimal como en toda la web).
+            nt = {}
+            with RANKING_CSV.open(encoding="utf-8", newline="") as fh:
+                for f in csv.DictReader(fh):
+                    nt[f["indicativo"]] = round(float(f["noches_trop_anio"]), 1)
             with ruta.open(encoding="utf-8", newline="") as fh:
-                _N_HOTELES.append(sum(1 for _ in csv.DictReader(fh)))
-        except OSError:
+                _N_HOTELES.append(sum(1 for f in csv.DictReader(fh)
+                                      if nt.get(f["est_ref_indicativo"], 99) < 1))
+        except (OSError, KeyError, ValueError):
             _N_HOTELES.append(0)
     return _N_HOTELES[0]
+
+
+# Hoteles de hoteles.csv que no salen porque su estación ha dejado de ser refugio.
+# Lo rellena cargar_hoteles(); main() los usa para retirar ficha y sello.
+HOTELES_RETIRADOS: list[dict] = []
+
+SELLO_NO_VIGENTE = (
+    '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" '
+    'viewBox="0 0 300 300" role="img" aria-label="Sello no vigente">'
+    '<circle cx="150" cy="150" r="140" fill="#f4efe6" stroke="#9a8a6f" stroke-width="4"/>'
+    '<text x="150" y="140" text-anchor="middle" font-family="Georgia,serif" '
+    'font-size="27" fill="#5c5040">Sello no vigente</text>'
+    '<text x="150" y="174" text-anchor="middle" font-family="Arial,sans-serif" '
+    'font-size="15" fill="#7a6d58">nochetropical.es</text></svg>')
 
 
 def cargar_hoteles(estaciones: list) -> list:
@@ -10028,6 +10051,15 @@ def cargar_hoteles(estaciones: list) -> list:
             # justo lo que no queremos: se avisa con nombre y código.
             perdidos.append(f"{fila['hotel']} (estación {fila['est_ref_indicativo']})")
             continue
+        if e["nt"] >= 1:
+            # El directorio es de hoteles en REFUGIOS: la misma regla que el
+            # certificado (<1 noche tropical al año). Si la estación deja de
+            # cumplirla, el hotel sale de la lista; si vuelve a cumplirla, vuelve.
+            # main() convierte su ficha en una redirección y retira su sello.
+            if not any(h["hotel"] == fila["hotel"] for h in HOTELES_RETIRADOS):
+                HOTELES_RETIRADOS.append({"hotel": fila["hotel"], "slug": slug(fila["hotel"]),
+                                          "nt": e["nt"], "est": e["loc"]})
+            continue
         out.append({
             "hotel": fila["hotel"], "municipio": fila["municipio"],
             "provincia": fila["provincia"], "nivel": fila["nivel"].strip().upper(),
@@ -10037,6 +10069,12 @@ def cargar_hoteles(estaciones: list) -> list:
             "tmin": e["tmin"], "nt": e["nt"], "alt": e["alt"], "est": e["loc"],
             "lat": e["lat"], "lon": e["lon"],  # coords de la estación de ref. (para el buscador cercano)
         })
+    if HOTELES_RETIRADOS:
+        avisar("hoteles fuera del directorio",
+               "Su estación de referencia ya no es refugio (1 noche tropical al año o más): "
+               + "; ".join(f"{h['hotel']} ({h['est']}, {_n_es(h['nt'])})"
+                           for h in HOTELES_RETIRADOS)
+               + ". Su ficha redirige al directorio y su sello queda como no vigente.")
     if perdidos:
         avisar("hoteles descartados",
                f"{len(perdidos)} hotel(es) de hoteles.csv no salen en la web porque su "
@@ -12957,6 +12995,24 @@ def main() -> int:
         (DOCS_DIR / "tu-hotel" / "index.html").write_text(
             construir_pagina_tuhotel(site), encoding="utf-8")
         print(f"   hoteles-refugio-climatico: {len(hoteles)} fichas + sellos + /tu-hotel/")
+    # Hoteles que han salido del directorio (su estación ya no es refugio): la
+    # ficha pasa a redirección noindex al directorio y el sello, que el hotel
+    # puede tener incrustado en su web, deja de certificar nada. No se borran.
+    for h in HOTELES_RETIRADOS:
+        ficha = DOCS_DIR / "hoteles-refugio-climatico" / h["slug"] / "index.html"
+        if ficha.exists() and 'http-equiv="refresh"' not in ficha.read_text(encoding="utf-8"):
+            escribir_redireccion(
+                site, f"hoteles-refugio-climatico/{h['slug']}",
+                site + "/hoteles-refugio-climatico/",
+                "Este alojamiento ya no figura en el directorio: la estación de AEMET de "
+                "su zona ha dejado de cumplir el criterio de refugio climático (menos de "
+                "una noche tropical al año).", noindex=True)
+        sello = DOCS_DIR / "badges" / f"{h['slug']}.svg"
+        if sello.exists():
+            sello.write_text(SELLO_NO_VIGENTE, encoding="utf-8")
+    if HOTELES_RETIRADOS:
+        print(f"   hoteles retirados del directorio: {len(HOTELES_RETIRADOS)} "
+              f"({', '.join(h['hotel'] for h in HOTELES_RETIRADOS)})")
     # El Observatorio del Descanso ("¿cómo has dormido esta noche?"): ciencia
     # ciudadana. Se siembra con la expectativa real de AEMET (nunca vacío).
     (DOCS_DIR / "observatorio-del-descanso").mkdir(parents=True, exist_ok=True)

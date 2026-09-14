@@ -29,6 +29,10 @@ W, H = 1600, 1131
 OUT_DIR = g.DOCS_DIR / "certificados"
 BADGES = g.DOCS_DIR / "badges"
 TOP_N = 25
+# Recuentos del ranking, con la misma definición que /metodologia/: estaciones
+# con menos de una noche tropical al año y estaciones analizadas. Los fija
+# main(); antes estaban escritos a mano (218 y 848) y se quedaron viejos.
+CONTEO = {"nref": 0, "total": 0}
 
 # Serif para el nombre del pueblo, sans para el resto. Rutas de CI (Ubuntu,
 # DejaVu) y de Windows (pruebas locales), en orden de preferencia.
@@ -103,12 +107,12 @@ def dibujar_certificado(e: dict, top25: bool = False) -> Image.Image:
     if top25:
         centrado(d, 850, "Una de las 25 estaciones de España donde mejor se duerme en verano,",
                  fuente(_SANS_R, 29), PAPER)
-        centrado(d, 894, "según el análisis de 848 estaciones y diez veranos de datos abiertos.",
+        centrado(d, 894, f"según el análisis de {CONTEO['total']} estaciones y diez veranos de datos abiertos.",
                  fuente(_SANS_R, 29), PAPER)
     else:
         centrado(d, 850, "Refugio climático acreditado: aquí la noche fresca la fabrica la geografía,",
                  fuente(_SANS_R, 29), PAPER)
-        centrado(d, 894, "según el análisis de 848 estaciones y diez veranos de datos abiertos.",
+        centrado(d, 894, f"según el análisis de {CONTEO['total']} estaciones y diez veranos de datos abiertos.",
                  fuente(_SANS_R, 29), PAPER)
 
     d.line([(120, 985), (W - 120, 985)], fill=LINE, width=2)
@@ -155,7 +159,7 @@ def svg_certificado(e: dict, top25: bool) -> str:
 <text x="800" y="712" text-anchor="middle" font-family="{fs}" font-weight="700" font-size="56" fill="{P_VERDE}">{nt} noches tropicales al año</text>
 <text x="800" y="768" text-anchor="middle" font-family="{fs}" font-size="26" fill="{P_SUAVE}">media de los veranos 2017–2026, medida en su estación de AEMET</text>
 <text x="800" y="866" text-anchor="middle" font-family="{fs}" font-size="29" fill="{P_TINTA}">{linea}</text>
-<text x="800" y="908" text-anchor="middle" font-family="{fs}" font-size="29" fill="{P_TINTA}">según el análisis de 848 estaciones y diez veranos de datos abiertos.</text>
+<text x="800" y="908" text-anchor="middle" font-family="{fs}" font-size="29" fill="{P_TINTA}">según el análisis de {CONTEO['total']} estaciones y diez veranos de datos abiertos.</text>
 <line x1="120" y1="985" x2="1480" y2="985" stroke="{P_MARCO}" stroke-width="2"/>
 <text x="800" y="1030" text-anchor="middle" font-family="{fs}" font-size="24" fill="{P_SUAVE}">nochetropical.es   ·   Datos: AEMET OpenData   ·   CC BY 4.0</text>
 </svg>'''
@@ -265,7 +269,7 @@ __NAV__
 
   <div class="verifica">
     <div class="t">Por qué se otorga este certificado</div>
-    Se certifica como <b>Refugio Climático de España</b> a las estaciones de AEMET con <b>menos de una noche tropical al año</b> de media en los últimos diez veranos (2017–2026) — una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Lo consiguen <b>218 de las 848</b> estaciones analizadas; el <b>Top 25</b> reúne, de entre ellas, las de mayor altitud. El dato de __LOC__ procede de los valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> y puede contrastarse en el <a href="__SITE__/ranking-noches-tropicales/">ranking nacional</a> y en la página de <a href="__SITE__/__PROVSLUG__/">__PROV__</a>. Certificado de uso libre citando la fuente (CC&nbsp;BY&nbsp;4.0).
+    Se certifica como <b>Refugio Climático de España</b> a las estaciones de AEMET con <b>menos de una noche tropical al año</b> de media en los últimos diez veranos (2017–2026) — una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Lo consiguen <b>__NREF__ de las __NTOTAL__</b> estaciones analizadas; el <b>Top 25</b> reúne, de entre ellas, las de mayor altitud. El dato de __LOC__ procede de los valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> y puede contrastarse en el <a href="__SITE__/ranking-noches-tropicales/">ranking nacional</a> y en la página de <a href="__SITE__/__PROVSLUG__/">__PROV__</a>. Certificado de uso libre citando la fuente (CC&nbsp;BY&nbsp;4.0).
   </div>
 
 __NEGOCIO__
@@ -394,8 +398,8 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
     nt = "0,0" if e["nt"] == 0 else f"{e['nt']:.1f}".replace(".", ",")
     nivel = "Top 25" if top25 else "Refugio acreditado"
     claim = ("está entre las <b>25 de España donde mejor se duerme en verano</b>, "
-             "de las 848 analizadas" if top25 else
-             f"un <b>refugio climático acreditado</b> — solo {n_total} de las 848 "
+             f"de las {CONTEO['total']} analizadas" if top25 else
+             f"un <b>refugio climático acreditado</b> — solo {CONTEO['nref']} de las {CONTEO['total']} "
              "estaciones analizadas lo consiguen")
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
@@ -457,6 +461,8 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
             .replace("__PROV__", e["prov"])
             .replace("__ALT__", g.miles(e["alt"]))
             .replace("__NT__", nt)
+            .replace("__NREF__", str(CONTEO["nref"]))
+            .replace("__NTOTAL__", str(CONTEO["total"]))
             .replace("__SITE__", site))
 
 
@@ -522,7 +528,7 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
   <nav class="crumb" aria-label="breadcrumb"><a href="{site}/">Refugio Climático</a> · Certificados</nav>
   <div class="kick">Certificados digitales · Top 25 · 2026</div>
   <h1>Los 25 Refugios Climáticos de España</h1>
-  <p class="intro">Las 25 estaciones de AEMET con menos noches tropicales del país (veranos 2017–2026, 848 estaciones analizadas). Cada certificado es verificable, descargable y de uso libre citando la fuente.</p>
+  <p class="intro">Las 25 estaciones de AEMET con menos noches tropicales del país (veranos 2017–2026, {CONTEO['total']} estaciones analizadas). Cada certificado es verificable, descargable y de uso libre citando la fuente.</p>
 </div></header>
 <section><div class="wrap">
   <ul class="lista">{filas}</ul>
@@ -530,7 +536,7 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
   <p class="intro" style="font-size:15px;margin:4px 0 14px">Cada uno de estos lugares registra <b>menos de una noche tropical al año</b> de media (2017–2026) y tiene su certificado digital, verificable y descargable.</p>
   {grupos}
   <div class="verifica"><div class="t">Cómo se otorga</div>
-  Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Se certifica a las estaciones con <b>menos de una noche tropical al año</b> de media (2017–2026): lo logran <b>218 de las 848</b> analizadas. Este Top 25 reúne, de entre ellas, las de mayor altitud. Solo podemos certificar donde hay estación de AEMET con datos suficientes: que un pueblo no aparezca no significa que no sea un refugio — significa que aún no podemos medirlo. Datos: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · <a href="{site}/ranking-noches-tropicales/">ranking completo</a>.</div>
+  Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Se certifica a las estaciones con <b>menos de una noche tropical al año</b> de media (2017–2026): lo logran <b>{CONTEO['nref']} de las {CONTEO['total']}</b> analizadas. Este Top 25 reúne, de entre ellas, las de mayor altitud. Solo podemos certificar donde hay estación de AEMET con datos suficientes: que un pueblo no aparezca no significa que no sea un refugio — significa que aún no podemos medirlo. Datos: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · <a href="{site}/ranking-noches-tropicales/">ranking completo</a>.</div>
 </div></section>
 {g.footer_escueto_html(site)}
 </body>
@@ -540,6 +546,8 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
 
 def main() -> int:
     estaciones, _ = g.cargar_estaciones()
+    CONTEO["nref"] = sum(1 for e in estaciones if e["nt"] < 1)
+    CONTEO["total"] = len(estaciones)
     # Se certifica a TODAS las estaciones con <1 noche tropical/año de media;
     # las 25 de mayor altitud llevan además el distintivo "Top 25".
     todos = sorted([e for e in estaciones if e["nt"] < 1],

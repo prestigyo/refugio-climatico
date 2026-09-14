@@ -159,6 +159,13 @@
  ol.guia li b{color:var(--ink)}
  .pg .hint a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
  .tool .guia-link{margin:14px 0 0}
+ .umbral-tabla{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:0 0 12px;padding:12px 16px;border:1.5px solid #5f5138;border-radius:12px;background:rgba(238,151,105,.07)}
+ .umbral-tabla>label[for]{font-size:14.5px;color:var(--muted)}
+ .umbral-tabla .field{flex:0 0 150px;min-width:0}
+ .umbral-tabla .om{font-size:14.5px;color:var(--muted)}
+ .umbral-tabla .solo{display:inline-flex;align-items:center;gap:8px;margin-left:auto;padding:8px 12px;border-left:1.5px solid #5f5138;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer}
+ .umbral-tabla .solo input{width:17px;height:17px;accent-color:var(--brand)}
+ @media(max-width:620px){.umbral-tabla .solo{margin-left:0;border-left:0;border-top:1px dashed #5f5138;padding:10px 0 0;width:100%}}
  .mu{display:inline-block;width:.78em;height:.78em;border-radius:3px;margin:0 .16em 0 .1em;position:relative;top:.04em;box-shadow:0 0 0 1px rgba(255,255,255,.3)}@media(max-width:560px){.nav .brand span{display:none}.nav .in{gap:14px}.menu a{padding:8px 10px}}.masbusca{font-size:14.5px;color:var(--muted);margin:14px 0 0;line-height:1.7}.burger{display:none;background:none;border:1px solid var(--line);border-radius:9px;padding:9px 8px;cursor:pointer;flex-direction:column;gap:4px;align-items:center;justify-content:center;width:38px;height:36px;flex:0 0 auto;color:#efe6d6;margin-left:auto}.burger span{display:block;width:18px;height:2px;background:currentColor;border-radius:2px;transition:transform .22s ease,opacity .18s ease}.burger[aria-expanded="true"]{border-color:var(--teja)}.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}.burger[aria-expanded="true"] span:nth-child(2){opacity:0}.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}@media(prefers-reduced-motion:reduce){.burger span{transition:none}}@media(max-width:700px){.burger{display:flex}.nav .in,.nav-e .in{position:relative;flex-wrap:nowrap}.nav .menu,.nav-e .links{position:absolute;top:calc(100% + 9px);left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:0;overflow:visible;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5);z-index:60}.nav .menu a,.nav-e .links a{padding:13px 14px;border-radius:9px;font-size:16px;text-align:left;margin:0}.nav .menu a:hover,.nav-e .links a:hover{background:rgba(217,116,78,.12)}.nav .menu.abre,.nav-e .links.abre{display:flex}.nav .menu a.lupa,.nav-e .links a.lupa{gap:10px;justify-content:flex-start;border:0;padding:13px 14px;width:auto;height:auto}.nav .menu a.lupa::after,.nav-e .links a.lupa::after{content:"Buscar en la web";font-weight:400}.nav .menu a.lang,.nav-e .links a.lang{align-self:flex-start;margin:6px 0 0 14px}}
 </style>
 </head>
@@ -236,7 +243,7 @@
     <p class="p">Lo que esto no mide: el gasto de calefacción depende también de la temperatura durante el día y de la vivienda —aislamiento, orientación, altura—. Las noches frías de la estación son un primer filtro para comparar municipios, no una estimación de la factura.</p>
 
     <h2 class="sec" id="tabla">Todos los municipios</h2>
-    <p class="p">4.113 municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. La columna de noches es la media por invierno de noches con la mínima a <span class="ut">0&nbsp;°C</span> o menos en la estación de referencia, en los inviernos con datos completos; la siguiente cuenta en cuántos de esos inviernos no hubo ninguna. <b>Cambia los grados en la calculadora y la tabla se recalcula y se ordena con ese umbral.</b> Pulsa un municipio para ver su serie.</p>
+    <p class="p">4.113 municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. La columna de noches es la media por invierno de noches con la mínima a <span class="ut">0&nbsp;°C</span> o menos en la estación de referencia, en los inviernos con datos completos; la siguiente cuenta en cuántos de esos inviernos no hubo ninguna. <b>Cambia los grados aquí abajo o en la calculadora: la tabla se recalcula y se ordena con ese umbral.</b> Pulsa un municipio para ver su serie.</p>
     <div class="filtros">
       <div class="field"><select id="fprov" aria-label="Filtrar por provincia"><option value="">Todas las provincias</option></select></div>
       <div class="field"><select id="fpob" aria-label="Población mínima">
@@ -251,7 +258,12 @@
       <label><input type="checkbox" class="fconf" value="a" checked> Confianza alta</label>
       <label><input type="checkbox" class="fconf" value="m" checked> Confianza media</label>
       <label><input type="checkbox" class="fconf" value="o" checked> Orientativa</label>
-      <label><input type="checkbox" id="fsin"> Solo sin noches a <span class="ut">0&nbsp;°C</span> o menos en 2025/26</label>
+    </div>
+    <div class="umbral-tabla" role="group" aria-label="Umbral de la tabla">
+      <label for="umbral2">Noches con la mínima a</label>
+      <div class="field"><select id="umbral2" aria-label="Grados para la tabla"><option value="20">20&nbsp;°C</option><option value="19">19&nbsp;°C</option><option value="18">18&nbsp;°C</option><option value="17">17&nbsp;°C</option><option value="16">16&nbsp;°C</option><option value="15">15&nbsp;°C</option><option value="14">14&nbsp;°C</option><option value="13">13&nbsp;°C</option><option value="12">12&nbsp;°C</option><option value="11">11&nbsp;°C</option><option value="10">10&nbsp;°C</option><option value="9">9&nbsp;°C</option><option value="8">8&nbsp;°C</option><option value="7">7&nbsp;°C</option><option value="6">6&nbsp;°C</option><option value="5">5&nbsp;°C</option><option value="4">4&nbsp;°C</option><option value="3">3&nbsp;°C</option><option value="2">2&nbsp;°C</option><option value="1">1&nbsp;°C</option><option value="0" selected>0&nbsp;°C (helada)</option><option value="-1">−1&nbsp;°C</option><option value="-2">−2&nbsp;°C</option><option value="-3">−3&nbsp;°C</option><option value="-4">−4&nbsp;°C</option></select></div>
+      <span class="om">o menos</span>
+      <label class="solo"><input type="checkbox" id="fsin"> Solo municipios sin ninguna en 2025/26</label>
     </div>
     <div class="tsup" id="tsup" aria-hidden="true"><div></div></div>
     <div class="twrap" id="twrap">
@@ -366,7 +378,16 @@ function ficha(i,origen,cercanos){
    +"<table class='tserie'><thead><tr><th>Invierno (nov–mar)</th><th class='n'>Noches a "+gtxt(t)+" o menos</th></tr></thead><tbody>"+filas+"</tbody></table>";
  });
 }
-sel.addEventListener("change",function(){ if(actual) ficha(actual.i,actual.origen,actual.cercanos); umbralTabla(); });
+/* Dos selectores de grados, el de la calculadora y el de la tabla: siempre
+   iguales, y cualquiera de los dos actualiza la ficha y la tabla. */
+var sel2=document.getElementById("umbral2");
+function cambioUmbral(desde){
+ sel.value=desde.value; if(sel2) sel2.value=desde.value;
+ if(actual) ficha(actual.i,actual.origen,actual.cercanos);
+ umbralTabla();
+}
+sel.addEventListener("change",function(){cambioUmbral(sel);});
+if(sel2) sel2.addEventListener("change",function(){cambioUmbral(sel2);});
 
 var gb=document.getElementById("geo"), gh=document.getElementById("geohint");
 gb.addEventListener("click",function(){

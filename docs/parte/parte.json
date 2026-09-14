@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-13",
- "total": 844,
- "tropicales": 151,
- "ecuatoriales": 4,
+ "fecha": "2026-09-14",
+ "total": 845,
+ "tropicales": 130,
+ "ecuatoriales": 3,
  "peor": {
   "id": "8025",
   "nombre": "Alicante",
-  "min": 29.0,
+  "min": 26.6,
   "prov": "Alicante"
  },
  "mejor": {
-  "id": "9001D",
-  "nombre": "Nestares",
-  "min": 3.5,
-  "prov": "Cantabria"
+  "id": "2192C",
+  "nombre": "Cuellar",
+  "min": 4.1,
+  "prov": "Segovia"
  },
  "top_calor": [
   {
    "id": "8025",
    "nombre": "Alicante",
-   "min": 29.0,
+   "min": 26.6,
    "prov": "Alicante"
   },
   {
-   "id": "C249I",
-   "nombre": "Fuerteventura/Aeropuerto",
-   "min": 25.3,
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 25.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C839X",
+   "nombre": "Teguise la Graciosa-Helipuerto",
+   "min": 25.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C029O",
+   "nombre": "Lanzarote/Aeropuerto",
+   "min": 24.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C019V",
+   "nombre": "Yaiza-Playa Blanca",
+   "min": 24.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
+   "min": 24.3,
    "prov": "Las Palmas"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 25.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 25.1,
+   "min": 24.2,
    "prov": "Las Palmas"
   },
   {
    "id": "5950X",
    "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 24.9,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 24.9,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 24.8,
-   "prov": "Almería"
-  },
-  {
-   "id": "7019X",
-   "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 24.8,
-   "prov": "Murcia"
-  },
-  {
-   "id": "5973",
-   "nombre": "Cádiz Observatorio",
-   "min": 24.5,
+   "min": 24.0,
    "prov": "Cádiz"
   },
   {
    "id": "6083X",
    "nombre": "Marbella Cabopino",
-   "min": 24.5,
+   "min": 24.0,
    "prov": "Málaga"
+  },
+  {
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 23.9,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 3.5,
-   "prov": "Cantabria"
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 4.1,
+   "prov": "Segovia"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 3.9,
-   "prov": "Ávila"
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": 5.0,
+   "prov": "Lleida"
   },
   {
    "id": "2243A",
    "nombre": "Aguilar de Campoo",
-   "min": 4.1,
+   "min": 5.1,
    "prov": "Palencia"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 4.4,
-   "prov": "Segovia"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 5.1,
+   "prov": "Ávila"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 5.1,
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 5.4,
    "prov": "Lleida"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 5.5,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 5.7,
+   "prov": "Cuenca"
   },
   {
    "id": "9287A",
    "nombre": "San Pedro Manrique",
-   "min": 5.4,
-   "prov": "Soria"
-  },
-  {
-   "id": "2624C",
-   "nombre": "Riaño-Ermita Quintanilla",
-   "min": 5.6,
-   "prov": "León"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
    "min": 5.7,
-   "prov": "Zamora"
+   "prov": "Soria"
   },
   {
    "id": "9590",
    "nombre": "Martinet",
-   "min": 5.9,
+   "min": 6.0,
    "prov": "Lleida"
   },
   {
-   "id": "1135C",
-   "nombre": "Bárcena Mayor-Toriz",
-   "min": 6.0,
-   "prov": "Cantabria"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 6.1,
+   "prov": "Zamora"
   }
  ]
 }

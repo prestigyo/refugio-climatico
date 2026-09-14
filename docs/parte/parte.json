@@ -1,8 +1,8 @@
 {
  "fecha": "2026-09-14",
- "total": 845,
- "tropicales": 130,
- "ecuatoriales": 3,
+ "total": 841,
+ "tropicales": 129,
+ "ecuatoriales": 6,
  "peor": {
   "id": "8025",
   "nombre": "Alicante",
@@ -23,6 +23,18 @@
    "prov": "Alicante"
   },
   {
+   "id": "C038N",
+   "nombre": "Haría-Cementerio",
+   "min": 26.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C018J",
+   "nombre": "Tias-las Vegas",
+   "min": 25.5,
+   "prov": "Las Palmas"
+  },
+  {
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
    "min": 25.4,
@@ -35,14 +47,26 @@
    "prov": "Las Palmas"
   },
   {
+   "id": "C019V",
+   "nombre": "Yaiza-Playa Blanca",
+   "min": 24.9,
+   "prov": "Las Palmas"
+  },
+  {
    "id": "C029O",
    "nombre": "Lanzarote/Aeropuerto",
+   "min": 24.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C048W",
+   "nombre": "Tinajo-los Dolores",
    "min": 24.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "C019V",
-   "nombre": "Yaiza-Playa Blanca",
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
    "min": 24.5,
    "prov": "Las Palmas"
   },
@@ -50,30 +74,6 @@
    "id": "C614H",
    "nombre": "Tejeda Casco",
    "min": 24.3,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 24.0,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
-   "min": 24.0,
-   "prov": "Málaga"
-  },
-  {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 23.9,
    "prov": "Las Palmas"
   }
  ],

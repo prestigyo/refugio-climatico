@@ -905,15 +905,19 @@
 },
 "en": {
 "f": "2026-09-14",
-"h": "bc7e1e14f901f555"
+"h": "6bb9464437cac89b"
 },
 "en/coolest-towns-spain": {
 "f": "2026-09-14",
-"h": "596eb0e08a6f9542"
+"h": "9c12041000d01428"
 },
 "en/frost-free-towns-spain": {
 "f": "2026-09-14",
-"h": "760c22c4b89e5840"
+"h": "d53a237cb56376e9"
+},
+"en/spains-mildest-winters": {
+"f": "2026-09-14",
+"h": "e7ed6fc435bffa91"
 },
 "enfriar-habitacion-sin-aire-acondicionado": {
 "f": "2026-09-14",
@@ -949,19 +953,19 @@
 },
 "hoteles-refugio-climatico/albergue-inturjoven-sierra-nevada": {
 "f": "2026-09-14",
-"h": "f87e85cf046318af"
+"h": "bd8aa648c73fa982"
 },
 "hoteles-refugio-climatico/canfranc-estacion-a-royal-hideaway": {
 "f": "2026-09-14",
-"h": "5717686867387ae7"
+"h": "32069f56570c317c"
 },
 "hoteles-refugio-climatico/el-lodge-ski-spa": {
 "f": "2026-09-14",
-"h": "d23857b90c4a3da6"
+"h": "e9cc087f98ad916a"
 },
 "hoteles-refugio-climatico/hg-cerler": {
 "f": "2026-09-14",
-"h": "c66b3db2df542836"
+"h": "8017582a69dd9da8"
 },
 "hoteles-refugio-climatico/hotel-albarracin": {
 "f": "2026-09-12",
@@ -969,115 +973,115 @@
 },
 "hoteles-refugio-climatico/hotel-casa-mino": {
 "f": "2026-09-14",
-"h": "f778b5c0f04e4ee2"
+"h": "f150f5799594316c"
 },
 "hoteles-refugio-climatico/hotel-castillo-del-alba": {
 "f": "2026-09-14",
-"h": "b1b1cdc4efca59ad"
+"h": "222d84775cbd9c4d"
 },
 "hoteles-refugio-climatico/hotel-ciria": {
 "f": "2026-09-14",
-"h": "e6e04456ee514997"
+"h": "0951b64120ed82ed"
 },
 "hoteles-refugio-climatico/hotel-del-oso": {
 "f": "2026-09-14",
-"h": "1dc3ceaccea5a72e"
+"h": "f4d9622e9173b329"
 },
 "hoteles-refugio-climatico/hotel-el-milano-real": {
 "f": "2026-09-14",
-"h": "bc5c65ebcb10ca96"
+"h": "572266799fbb964c"
 },
 "hoteles-refugio-climatico/hotel-esther": {
 "f": "2026-09-14",
-"h": "d0d15caf5578ba33"
+"h": "f10fc54e6a87f6f9"
 },
 "hoteles-refugio-climatico/hotel-ghm-monachil": {
 "f": "2026-09-14",
-"h": "e93b22d2d9eacb5a"
+"h": "3cc313247dec12c4"
 },
 "hoteles-refugio-climatico/hotel-la-branina": {
 "f": "2026-09-14",
-"h": "521cec4cb88c1f93"
+"h": "fbfec33102c4d137"
 },
 "hoteles-refugio-climatico/hotel-la-corte-de-los-pinares": {
 "f": "2026-09-14",
-"h": "49dfb2fcaa468a7f"
+"h": "28d1a4551ea02af3"
 },
 "hoteles-refugio-climatico/hotel-la-rueda-3000": {
 "f": "2026-09-14",
-"h": "759a35cf043b6cf0"
+"h": "0cffc30382e957e8"
 },
 "hoteles-refugio-climatico/hotel-maribel": {
 "f": "2026-09-14",
-"h": "f696ae92a0120937"
+"h": "4861af251b68654d"
 },
 "hoteles-refugio-climatico/hotel-presa": {
 "f": "2026-09-14",
-"h": "b03dcd33760980b3"
+"h": "8d19d3de4489788f"
 },
 "hoteles-refugio-climatico/hotel-rural-los-manzanos": {
 "f": "2026-09-14",
-"h": "10aad33da6884937"
+"h": "e7490833c218cdee"
 },
 "hoteles-refugio-climatico/hotel-san-roque": {
 "f": "2026-09-14",
-"h": "c0e5d3154238edc6"
+"h": "26d18bf62ccab8f6"
 },
 "hoteles-refugio-climatico/hotel-sno-isaba": {
 "f": "2026-09-14",
-"h": "0710f21c9374bff0"
+"h": "bdfb6ceddd1c45c0"
 },
 "hoteles-refugio-climatico/hotel-sno-la-corza-blanca": {
 "f": "2026-09-14",
-"h": "129d4c48a6c72d2c"
+"h": "f2197e1b80422199"
 },
 "hoteles-refugio-climatico/hotel-suiza": {
 "f": "2026-09-14",
-"h": "831b90eae08fb791"
+"h": "85c56bb6d9a51af8"
 },
 "hoteles-refugio-climatico/hotel-villa-de-torla": {
 "f": "2026-09-14",
-"h": "a2fa405678f0d58c"
+"h": "fbdd06ddd34a3fd1"
 },
 "hoteles-refugio-climatico/melia-sierra-nevada": {
 "f": "2026-09-14",
-"h": "ccbd8a41a419a4d0"
+"h": "7c9e0d098948b915"
 },
 "hoteles-refugio-climatico/melia-sol-y-nieve": {
 "f": "2026-09-14",
-"h": "c9af43468cf48aab"
+"h": "8d9640a57c50d801"
 },
 "hoteles-refugio-climatico/parador-de-arties": {
 "f": "2026-09-14",
-"h": "3a0c56f05e64d9fd"
+"h": "6c075103486ecc1d"
 },
 "hoteles-refugio-climatico/parador-de-cervera-de-pisuerga": {
 "f": "2026-09-14",
-"h": "b55a152dc174598a"
+"h": "b58b363d0cd25b18"
 },
 "hoteles-refugio-climatico/parador-de-fuente-de": {
 "f": "2026-09-14",
-"h": "e948dc4a1e35565e"
+"h": "1cd24a96a0f89cc8"
 },
 "hoteles-refugio-climatico/parador-de-gredos": {
 "f": "2026-09-14",
-"h": "e8b4528e928dcd42"
+"h": "55090b5986b85ce8"
 },
 "hoteles-refugio-climatico/parador-de-molina-de-aragon": {
 "f": "2026-09-14",
-"h": "263a904e096c25b1"
+"h": "22023a4375946ac1"
 },
 "hoteles-refugio-climatico/parador-de-puebla-de-sanabria": {
 "f": "2026-09-14",
-"h": "02080fd80938e226"
+"h": "889a91fa6adef8db"
 },
 "hoteles-refugio-climatico/parador-de-vielha": {
 "f": "2026-09-14",
-"h": "0c43a0faff9752a6"
+"h": "b5891dcd09099f0a"
 },
 "hoteles-refugio-climatico/vincci-seleccion-rumaykiyya": {
 "f": "2026-09-14",
-"h": "a05cab363c9bb5c1"
+"h": "4b4a003da6aa015a"
 },
 "huelva": {
 "f": "2026-09-14",

@@ -4961,6 +4961,7 @@ __CSS_CERCA__
  .umbral-tabla .solo{display:inline-flex;align-items:center;gap:8px;margin-left:auto;padding:8px 12px;border-left:1.5px solid #5f5138;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer}
  .umbral-tabla .solo input{width:17px;height:17px;accent-color:var(--brand)}
  @media(max-width:620px){.umbral-tabla .solo{margin-left:0;border-left:0;border-top:1px dashed #5f5138;padding:10px 0 0;width:100%}}
+ .kick a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 __CSS_COMUN__
 </style>
 </head>
@@ -4969,7 +4970,7 @@ __CSS_COMUN__
   __NAV__
 
   <header class="hero"><div class="in">
-    <p class="kick">Herramienta · Datos de AEMET e IGN</p>
+    <p class="kick">Herramienta · Datos de AEMET e IGN · <a href="__SITE__/en/frost-free-towns-spain/" hreflang="en" lang="en">In English</a></p>
     <h1>Pueblos sin heladas en España</h1>
     <p class="lede">Una <b>helada</b> es una noche en la que la temperatura mínima baja a 0&nbsp;°C o menos. Esta página cuenta, invierno a invierno —del 1 de noviembre al 31 de marzo—, cuántas noches llegó a ese punto la <b>estación de AEMET de referencia</b> de __NMUN__ municipios de más de 500 habitantes, desde el invierno __PRIMERO__. Sirve para buscar <b>refugios climáticos naturales para pasar el invierno</b>, y también para quien pone el límite en otra temperatura: el umbral se puede mover entre −4 y 20&nbsp;°C.</p>
     <p class="lede">El dato pertenece a la estación, no al núcleo urbano. Cada municipio toma la estación más representativa en un radio de 35&nbsp;km, y se indica a qué distancia está y con qué desnivel: el desnivel es la principal fuente de diferencia, porque la temperatura baja alrededor de 0,6&nbsp;°C por cada 100&nbsp;m.</p>
@@ -5072,14 +5073,16 @@ __CSS_COMUN__
 <script>
 (function(){
 var SITE="__SITE__", U=__UMBRALES__, INV=__INVIERNOS__, EST=__EST__, PROV=__PROV__;
+var T=__T__;
+function fmt(s,o){return s.replace(/\{(\w+)\}/g,function(_,k){return o[k];});}
 var M=JSON.parse(document.getElementById("d-mun").textContent);
 /* fila: 0 nombre · 1 provincia (slug) · 2 habitantes · 3 altitud · 4 estación · 5 km ·
    6 desnivel · 7 confianza (a/m/o) · 8 inviernos · 9 heladas/invierno ·
    10 inviernos sin heladas · 11 sin heladas el último invierno · 12 lat · 13 lon */
-var CONF={a:"alta",m:"media",o:"orientativa"}, ORDC={a:0,m:1,o:2};
+var CONF=T.conf, ORDC={a:0,m:1,o:2};
 var PN={}; PROV.forEach(function(p){PN[p[0]]=p[1];});
-function n1(x){return (Math.round(x*10)/10).toFixed(1).replace(".",",");}
-function miles(x){return String(x).replace(/\B(?=(\d{3})+(?!\d))/g,".");}
+function n1(x){return (Math.round(x*10)/10).toFixed(1).replace(".",T.dec);}
+function miles(x){return String(x).replace(/\B(?=(\d{3})+(?!\d))/g,T.mil);}
 function gtxt(t){return (t<0?"−"+(-t):t)+"\u00a0°C";}
 function itxt(i){return i+"/"+String(i+1).slice(2);}
 function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
@@ -5105,12 +5108,12 @@ function ficha(i,origen,cercanos){
  var dz=(m[6]>0?"+":"")+m[6];
  var h="<div class='ref first'><div class='rtop'><span class='rn'>"+esc(m[0])+"</span>"
   +(origen?"<span class='rkm'>"+esc(origen)+"</span>":"")+"</div>"
-  +"<div class='rp'>"+esc(PN[m[1]]||"")+" · "+miles(m[2])+" habitantes"+(m[3]!==null?" · "+m[3]+" m":"")+"</div>"
-  +"<div class='rp'>Estación de referencia: <b>"+esc(e.n)+"</b> ("+e.a+" m) · a "+n1(m[5])+" km · desnivel "+dz+" m · "
-  +"<span class='conf c-"+m[7]+"'>confianza "+CONF[m[7]]+"</span></div>"
-  +"<div id='serie'><p class='res'>Cargando la serie de la estación…</p></div></div>";
+  +"<div class='rp'>"+esc(PN[m[1]]||"")+" · "+miles(m[2])+T.hab+(m[3]!==null?" · "+m[3]+" m":"")+"</div>"
+  +"<div class='rp'>"+T.estRef+"<b>"+esc(e.n)+"</b> ("+e.a+" m)"+fmt(T.dist,{km:n1(m[5])})+fmt(T.desn,{dz:dz})
+  +"<span class='conf c-"+m[7]+"'>"+fmt(T.confTxt,{c:CONF[m[7]]})+"</span></div>"
+  +"<div id='serie'><p class='res'>"+T.cargando+"</p></div></div>";
  if(cercanos&&cercanos.length){
-  h+="<p class='msg'>Municipios más cercanos cuya estación no registró heladas en el invierno "+itxt(INV[INV.length-1])+":</p><div class='cercanos'>"
+  h+="<p class='msg'>"+fmt(T.cercanos,{inv:itxt(INV[INV.length-1])})+"</p><div class='cercanos'>"
    +cercanos.map(function(o){return "<button type='button' data-i='"+o.i+"'>"+esc(M[o.i][0])+" · "+(o.d<10?n1(o.d):Math.round(o.d))+" km</button>";}).join("")+"</div>";
  }
  box.innerHTML=h;
@@ -5118,17 +5121,17 @@ function ficha(i,origen,cercanos){
  series(m[1],function(d){
   var el=document.getElementById("serie"); if(!el||actual.i!==i) return;
   var s=d&&d[m[4]];
-  if(!s||k<0){el.innerHTML="<p class='res'>No se ha podido cargar la serie de esta estación. Inténtalo de nuevo en un momento.</p>";return;}
+  if(!s||k<0){el.innerHTML="<p class='res'>"+T.errSerie+"</p>";return;}
   var filas="", tot=0, n=0, cero=0;
   INV.forEach(function(inv){
    var v=s[inv];
-   if(!v){filas+="<tr><td>"+itxt(inv)+"</td><td class='n'>sin datos suficientes</td></tr>";return;}
+   if(!v){filas+="<tr><td>"+itxt(inv)+"</td><td class='n'>"+T.sinDatos+"</td></tr>";return;}
    var c=v[k]; tot+=c; n++; if(c===0) cero++;
    filas+="<tr"+(c===0?" class='cero'":"")+"><td>"+itxt(inv)+"</td><td class='n'>"+c+"</td></tr>";
   });
-  el.innerHTML="<p class='res'>La estación registró de media <b>"+n1(tot/n)+" noches por invierno</b> con la mínima a "+gtxt(t)+" o menos. "
-   +"Inviernos sin ninguna: <b>"+cero+" de "+n+"</b>.</p>"
-   +"<table class='tserie'><thead><tr><th>Invierno (nov–mar)</th><th class='n'>Noches a "+gtxt(t)+" o menos</th></tr></thead><tbody>"+filas+"</tbody></table>";
+  el.innerHTML="<p class='res'>"+fmt(T.res,{n:n1(tot/n),t:gtxt(t),c:cero,tot:n})+"</p>"
+   
+   +"<table class='tserie'><thead><tr><th>"+T.thInv+"</th><th class='n'>"+fmt(T.thNoches,{t:gtxt(t)})+"</th></tr></thead><tbody>"+filas+"</tbody></table>";
  });
 }
 /* Dos selectores de grados, el de la calculadora y el de la tabla: siempre
@@ -5144,10 +5147,10 @@ if(sel2) sel2.addEventListener("change",function(){cambioUmbral(sel2);});
 
 var gb=document.getElementById("geo"), gh=document.getElementById("geohint");
 gb.addEventListener("click",function(){
- if(!navigator.geolocation){gh.textContent="Tu navegador no permite la geolocalización. Elige provincia y municipio aquí abajo.";return;}
- gb.disabled=true; gb.textContent="Buscando tu ubicación…";
+ if(!navigator.geolocation){gh.textContent=T.noGeo;return;}
+ gb.disabled=true; gb.textContent=T.buscando;
  navigator.geolocation.getCurrentPosition(function(p){
-  gb.disabled=false; gb.textContent="Usar mi ubicación";
+  gb.disabled=false; gb.textContent=T.usar;
   var la=p.coords.latitude, lo=p.coords.longitude, mejor=-1, dmin=1e9, sin=[];
   for(var i=0;i<M.length;i++){
    var d=hav(la,lo,M[i][12],M[i][13]);
@@ -5155,11 +5158,11 @@ gb.addEventListener("click",function(){
    if(M[i][11]) sin.push({i:i,d:d});
   }
   sin.sort(function(a,b){return a.d-b.d;});
-  ficha(mejor,"el más cercano a ti · "+(dmin<10?n1(dmin):Math.round(dmin))+" km",sin.slice(0,5));
+  ficha(mejor,fmt(T.cercano,{km:(dmin<10?n1(dmin):Math.round(dmin))}),sin.slice(0,5));
   box.scrollIntoView({behavior:"smooth",block:"start"});
  },function(){
-  gb.disabled=false; gb.textContent="Usar mi ubicación";
-  gh.textContent="No se pudo obtener tu ubicación (¿permiso denegado?). Elige provincia y municipio aquí abajo.";
+  gb.disabled=false; gb.textContent=T.usar;
+  gh.textContent=T.falloGeo;
  },{timeout:9000});
 });
 
@@ -5168,9 +5171,9 @@ PROV.forEach(function(p){
  [prov,fprov].forEach(function(s){var o=document.createElement("option");o.value=p[0];o.textContent=p[1];s.appendChild(o);});
 });
 prov.addEventListener("change",function(){
- mun.innerHTML='<option value="">…y el municipio</option>';
+ mun.innerHTML='<option value="">'+T.munOpt+'</option>';
  M.map(function(m,i){return i;}).filter(function(i){return M[i][1]===prov.value;})
-  .sort(function(a,b){return M[a][0].localeCompare(M[b][0],"es");})
+  .sort(function(a,b){return M[a][0].localeCompare(M[b][0],T.loc);})
   .forEach(function(i){var o=document.createElement("option");o.value=i;o.textContent=M[i][0];mun.appendChild(o);});
 });
 mun.addEventListener("change",function(){ if(mun.value!=="") ficha(+mun.value); });
@@ -5195,8 +5198,8 @@ function st(i){
 function rotulos(){
  var t=+sel.value, g=gtxt(t);
  document.querySelectorAll(".ut").forEach(function(x){x.textContent=g;});
- document.getElementById("th-noches").textContent=t===0?"Heladas/invierno":"Noches a "+g+"/invierno";
- document.getElementById("th-sin").textContent=t===0?"Sin heladas":"Sin ninguna";
+ document.getElementById("th-noches").textContent=t===0?T.th0:fmt(T.thT,{t:g});
+ document.getElementById("th-sin").textContent=t===0?T.sin0:T.sinT;
 }
 function umbralTabla(){
  var t=+sel.value;
@@ -5208,14 +5211,14 @@ function umbralTabla(){
  }
  if(t===0||TODAS) return ordenar();
  if(cargandoTodas) return;
- cargandoTodas=true; tcuenta.textContent="Calculando la tabla con "+gtxt(t)+"…";
+ cargandoTodas=true; tcuenta.textContent=fmt(T.calc,{t:gtxt(t)});
  fetch("/datos/invierno/todas.json").then(function(r){if(!r.ok) throw new Error(r.status); return r.json();})
   .then(function(d){
    Object.keys(d).forEach(function(id){Object.keys(d[id]).forEach(function(inv){
     var a=d[id][inv], s=0; for(var k=0;k<a.length;k++){s+=a[k]; a[k]=s;}});});
    TODAS=d; cargandoTodas=false; ordenar();
   }).catch(function(){ cargandoTodas=false;
-   tcuenta.textContent="No se han podido cargar los datos para "+gtxt(t)+". La tabla sigue con 0 °C."; });
+   tcuenta.textContent=fmt(T.errTabla,{t:gtxt(t)}); });
 }
 function clave(i,c){
  var m=M[i];
@@ -5241,7 +5244,7 @@ function filtra(){
  }
  filas.sort(function(a,b){
   var x=clave(a,orden.c), y=clave(b,orden.c);
-  if(typeof x==="string") return orden.dir*x.localeCompare(y,"es");
+  if(typeof x==="string") return orden.dir*x.localeCompare(y,T.loc);
   if(x===null) return 1; if(y===null) return -1;
   return orden.dir*(x-y);
  });
@@ -5255,10 +5258,10 @@ function pinta(){
    +"<td class='n'>"+(m[3]!==null?m[3]+" m":"—")+"</td><td>"+esc(e.n)+"</td>"
    +"<td class='n'>"+n1(m[5])+" km</td><td class='n'>"+(m[6]>0?"+":"")+m[6]+" m</td>"
    +"<td class='n'>"+st(i)[2]+"</td><td class='n'>"+n1(st(i)[0])+"</td>"
-   +"<td class='n'>"+st(i)[1]+" de "+st(i)[2]+"</td>"
+   +"<td class='n'>"+st(i)[1]+T.de+st(i)[2]+"</td>"
    +"<td><span class='conf c-"+m[7]+"'>"+CONF[m[7]]+"</span></td></tr>";
  }).join("");
- tcuenta.textContent=miles(filas.length)+" municipios"+(filas.length>lim?" · mostrando "+miles(lim):"");
+ tcuenta.textContent=miles(filas.length)+T.municipios+(filas.length>lim?T.mostrando+miles(lim):"");
  tmas.hidden=filas.length<=lim;
  ajustaSup();
 }
@@ -5301,15 +5304,217 @@ else filtra();
 """
 
 
-def construir_pagina_sin_heladas(site: str) -> tuple[str, dict] | None:
-    """Devuelve (html, {ruta relativa en docs/: contenido}) o None si no hay datos."""
+# Textos de la interfaz (JavaScript) por idioma. El CSS y el JS de la calculadora
+# son los mismos en español e inglés: solo cambian estas cadenas y el cuerpo.
+T_SIN_HELADAS = {
+    "es": {"dec": ",", "mil": ".", "loc": "es",
+           "conf": {"a": "alta", "m": "media", "o": "orientativa"},
+           "hab": " habitantes", "estRef": "Estación de referencia: ",
+           "dist": " · a {km} km", "desn": " · desnivel {dz} m · ", "confTxt": "confianza {c}",
+           "cargando": "Cargando la serie de la estación…",
+           "cercanos": "Municipios más cercanos cuya estación no registró heladas en el invierno {inv}:",
+           "errSerie": "No se ha podido cargar la serie de esta estación. Inténtalo de nuevo en un momento.",
+           "sinDatos": "sin datos suficientes",
+           "res": ("La estación registró de media <b>{n} noches por invierno</b> con la mínima a {t} "
+                   "o menos. Inviernos sin ninguna: <b>{c} de {tot}</b>."),
+           "thInv": "Invierno (nov–mar)", "thNoches": "Noches a {t} o menos",
+           "noGeo": "Tu navegador no permite la geolocalización. Elige provincia y municipio aquí abajo.",
+           "buscando": "Buscando tu ubicación…", "usar": "Usar mi ubicación",
+           "falloGeo": ("No se pudo obtener tu ubicación (¿permiso denegado?). Elige provincia y "
+                        "municipio aquí abajo."),
+           "cercano": "el más cercano a ti · {km} km", "munOpt": "…y el municipio",
+           "municipios": " municipios", "mostrando": " · mostrando ",
+           "th0": "Heladas/invierno", "thT": "Noches a {t}/invierno",
+           "sin0": "Sin heladas", "sinT": "Sin ninguna",
+           "calc": "Calculando la tabla con {t}…",
+           "errTabla": "No se han podido cargar los datos para {t}. La tabla sigue con 0 °C.",
+           "de": " de "},
+    "en": {"dec": ".", "mil": ",", "loc": "en-GB",
+           "conf": {"a": "high", "m": "medium", "o": "indicative"},
+           "hab": " residents", "estRef": "Reference station: ",
+           "dist": " · {km} km away", "desn": " · altitude difference {dz} m · ",
+           "confTxt": "{c} confidence",
+           "cargando": "Loading the station's series…",
+           "cercanos": "Nearest towns whose station recorded no frost in winter {inv}:",
+           "errSerie": "Couldn't load this station's series. Please try again in a moment.",
+           "sinDatos": "not enough data",
+           "res": ("On average the station recorded <b>{n} nights per winter</b> with a low of {t} "
+                   "or below. Winters with none: <b>{c} of {tot}</b>."),
+           "thInv": "Winter (Nov–Mar)", "thNoches": "Nights at {t} or below",
+           "noGeo": "Your browser doesn't support geolocation. Choose a province and town below.",
+           "buscando": "Finding your location…", "usar": "Use my location",
+           "falloGeo": "Couldn't get your location (permission denied?). Choose a province and town below.",
+           "cercano": "nearest to you · {km} km", "munOpt": "…and the town",
+           "municipios": " towns", "mostrando": " · showing ",
+           "th0": "Frost nights/winter", "thT": "Nights at {t}/winter",
+           "sin0": "Frost-free", "sinT": "None",
+           "calc": "Recalculating the table at {t}…",
+           "errTabla": "Couldn't load the data for {t}. The table still shows 0 °C.",
+           "de": " of "},
+}
+
+# Cabecera y cuerpo en inglés. El <style> y los <script> se toman de
+# PAGINA_SIN_HELADAS en _plantilla_sin_heladas_en(), así que un arreglo de CSS o JS
+# en la española llega también a la inglesa.
+PAGINA_SIN_HELADAS_EN = r"""<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frost-Free Towns in Spain: Where to Spend Winter</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/en/frost-free-towns-spain/">
+__HREFLANG__
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Frost-Free Towns in Spain, winter by winter">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/en/frost-free-towns-spain/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<style>__ESTILO__
+ :root{--paper:#f2eae0;--teja:#d9744e;--teja2:#e89a73;--bg2:#16120c;--teal:#96b6c4;--fd:var(--font-d);--fb:var(--font-b)}
+ .f2 .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+ __NAVCSS__
+ __FOOTERCSS__
+</style>
+</head>
+<body>
+<div class="pg">
+  __NAV__
+
+  <header class="hero"><div class="in">
+    <p class="kick">Tool · AEMET &amp; IGN data · <a href="__SITE__/municipios-sin-heladas/" hreflang="es" lang="es">En español</a></p>
+    <h1>Frost-Free Towns in Spain</h1>
+    <p class="lede">A <b>frost</b> is a night when the minimum temperature drops to 0&nbsp;°C or below. This page counts, winter by winter — from 1 November to 31 March — how many of those nights the <b>reference AEMET weather station</b> of __NMUN__ Spanish towns with more than 500 residents recorded, since winter __PRIMERO__. It is a way to find <b>natural climate refuges to spend the winter in</b>, and to compare towns at whatever temperature matters to you: the threshold goes from −4 to 20&nbsp;°C.</p>
+    <p class="lede">The figures belong to the weather station, not to the town centre. Each town is matched to the most representative station within 35&nbsp;km, and we show how far away it is and the difference in altitude — that difference is the main source of divergence, because temperature falls by roughly 0.6&nbsp;°C every 100&nbsp;m.</p>
+    <p class="lede">“Frost-free” is judged <b>one winter at a time</b>: a winter counts if the station recorded no night at 0&nbsp;°C or below, and the next winter is measured afresh. In winter __ULTIMO__, the reference station of <b>__NSIN__ towns</b> recorded no frost at all. We only use minimum temperature; we don't calculate wind chill or “feels like” temperatures.</p>
+  </div></header>
+
+  <section><div class="in">
+    <div class="tool">
+      <p class="tooltit">Cold-nights calculator</p>
+      <div class="umbral">
+        <label for="umbral">Count nights with a low of</label>
+        <div class="field"><select id="umbral" aria-label="Temperature threshold">__OPCIONES__</select></div>
+        <label for="umbral">or below</label>
+      </div>
+      <button class="geobtn" id="geo" type="button">Use my location</button>
+      <p class="hint" id="geohint">It's all calculated in your browser: we don't store or send your location.</p>
+      <div class="orsep">or choose a town</div>
+      <div class="picks">
+        <div class="field"><select id="prov" aria-label="Province"><option value="">Choose a province…</option></select></div>
+        <div class="field"><select id="mun" aria-label="Town"><option value="">…and the town</option></select></div>
+      </div>
+      <p class="hint guia-link"><a href="#como-elegir">How to use it to choose where to spend the winter →</a></p>
+      <div id="ficha" aria-live="polite"></div>
+    </div>
+
+    <h2 class="sec" id="como-elegir">How to choose where to spend the winter</h2>
+    <p class="p">If you're looking for a natural climate refuge to spend the winter in, with mild nights and fewer hours of heating, these are the steps:</p>
+    <ol class="guia">
+      <li><b>Decide the outdoor temperature at which you'd want the heating on at night</b> and choose it above, in the calculator. For example, 5&nbsp;°C.</li>
+      <li><b>Look at the table.</b> When you change the degrees it recalculates for every town — how many nights per winter the low reached that value or below at its reference station — and sorts them from fewest to most. Filter by province or population if you already have an area in mind.</li>
+      <li><b>Prefer high confidence.</b> It means the station is close to the town and at a similar altitude. With the “indicative” label, conditions in the town can differ more from the figure.</li>
+      <li><b>Open the series for your shortlist.</b> Click a town's name and check it winter by winter: few cold nights every year is more predictable than a good average propped up by one mild winter.</li>
+      <li><b>Use a reference you know.</b> Look up a Spanish city you're familiar with — Madrid, for instance — at the same threshold: the difference is a first comparison of how many cold nights you'd avoid.</li>
+    </ol>
+    <p class="p">What this doesn't measure: heating costs also depend on daytime temperatures and on the home itself — insulation, orientation, which floor it's on. If you're renting, ask how the home is heated: in a mild climate not every home has central heating. Cold nights at the station are a first filter to compare towns, not an estimate of your bill.</p>
+
+    <h2 class="sec" id="tabla">All towns</h2>
+    <p class="p">__NMUN__ towns with more than 500 residents and an AEMET weather station within the distance and altitude limits. The nights column is the average number of nights per winter with a low of <span class="ut">0&nbsp;°C</span> or below at the reference station, over winters with complete data; the next column counts in how many of those winters there were none. <b>Change the degrees here or in the calculator: the table recalculates and re-sorts at that threshold.</b> Click a town to see its series.</p>
+    <div class="filtros">
+      <div class="field"><select id="fprov" aria-label="Filter by province"><option value="">All provinces</option></select></div>
+      <div class="field"><select id="fpob" aria-label="Minimum population">
+        <option value="500">500+ residents</option>
+        <option value="1000">1,000+ residents</option>
+        <option value="5000">5,000+ residents</option>
+        <option value="20000">20,000+ residents</option>
+      </select></div>
+      <input type="search" id="fq" placeholder="Search for a town…" aria-label="Search for a town">
+    </div>
+    <div class="filtros chk">
+      <label><input type="checkbox" class="fconf" value="a" checked> High confidence</label>
+      <label><input type="checkbox" class="fconf" value="m" checked> Medium confidence</label>
+      <label><input type="checkbox" class="fconf" value="o" checked> Indicative</label>
+    </div>
+    <div class="umbral-tabla" role="group" aria-label="Table threshold">
+      <label for="umbral2">Nights with a low of</label>
+      <div class="field"><select id="umbral2" aria-label="Degrees for the table">__OPCIONES__</select></div>
+      <span class="om">or below</span>
+      <label class="solo"><input type="checkbox" id="fsin"> Only towns with none in __ULTIMO__</label>
+    </div>
+    <div class="tsup" id="tsup" aria-hidden="true"><div></div></div>
+    <div class="twrap" id="twrap">
+      <table class="mun">
+        <thead><tr>
+          <th data-c="0">Town</th><th data-c="1">Province</th><th data-c="2">Residents</th>
+          <th data-c="3">Altitude</th><th data-c="4">Station</th><th data-c="5">Distance</th>
+          <th data-c="6">Altitude diff.</th><th data-c="8">Winters</th><th data-c="9" id="th-noches">Frost nights/winter</th>
+          <th data-c="10" id="th-sin">Frost-free</th><th data-c="7">Confidence</th>
+        </tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+    </div>
+    <div class="tpie"><span id="tcuenta"></span><button id="tmas" type="button" hidden>Show 100 more</button></div>
+    <p class="fuente">Source: AEMET (temperatures) · IGN (CNIG), National Gazetteer of Municipalities and Population Entities (towns).</p>
+
+    <h2 class="sec">Towns with no frost in winter __ULTIMO__, by province</h2>
+    <p class="p">Towns whose reference station recorded no night at 0&nbsp;°C or below between 1 November and 31 March. Each province link opens the filtered table.</p>
+    __GRUPOS__
+
+    <h2 class="sec">Limitations</h2>
+    <ul class="lim">
+      <li><b>The station measures its own location, not the town centre.</b> A town can have neighbourhoods that are colder or milder than its reference station, especially where there's a difference in altitude.</li>
+      <li><b>No station nearby doesn't mean an unfavourable climate</b>: it means there's no data. Towns without a station within the limits don't appear.</li>
+      <li><b>Urban heat island:</b> in larger towns, the centre is usually milder at night than a station on the outskirts or at an airport. This isn't corrected for.</li>
+      <li><b>Humidity isn't used as a criterion,</b> and neither is wind. Without that data we can't talk about how the cold feels, so the page sticks to minimum temperature.</li>
+      <li><b>Series vary in length:</b> each station counts winters with data on at least 90&nbsp;% of days, and needs at least five.</li>
+    </ul>
+
+    <h2 class="sec">Frequently asked questions</h2>
+    <dl class="faq">__FAQ__</dl>
+
+    <p class="notas">
+      <b>In summer:</b> the natural climate refuges where you still sleep cool in August are in <a href="__SITE__/en/coolest-towns-spain/">the coolest towns to sleep in summer</a>. How we measure: <a href="__SITE__/metodologia/" hreflang="es">methodology</a> (in Spanish).<br>
+      <b>Open data, for media and research:</b> the full table, with nights per winter for every degree from −4 to 20&nbsp;°C, can be downloaded in <a href="__SITE__/datos/municipios_sin_heladas.json" download>JSON format</a> (licence <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC&nbsp;BY&nbsp;4.0</a>, crediting AEMET and IGN).
+    </p>
+  </div></section>
+
+  __FOOTER__
+</div>
+"""
+
+
+def _plantilla_sin_heladas_en() -> str:
+    """Cabecera y cuerpo ingleses + el <style> y los <script> de la española."""
+    estilo = PAGINA_SIN_HELADAS.split("<style>", 1)[1].split("</style>", 1)[0]
+    marca = '<script type="application/json" id="d-mun">'
+    scripts = marca + PAGINA_SIN_HELADAS.split(marca, 1)[1]
+    return PAGINA_SIN_HELADAS_EN.replace("__ESTILO__", estilo) + scripts
+
+
+def construir_pagina_sin_heladas(site: str, lang: str = "es") -> tuple[str, dict] | None:
+    """Devuelve (html, {ruta relativa en docs/: contenido}) o None si no hay datos.
+    lang="es" → /municipios-sin-heladas/ · lang="en" → /en/frost-free-towns-spain/."""
     import html as _html
     d = cargar_sin_heladas()
     if not d or not d.get("municipios"):
         return None
+    en = lang == "en"
     umbrales, inviernos = d["umbrales"], d["inviernos"]
     ultimo = inviernos[-1]
-    url = site + "/municipios-sin-heladas/"
+    ruta = "/en/frost-free-towns-spain/" if en else "/municipios-sin-heladas/"
+    url = site + ruta
+
+    def num(n: int) -> str:
+        return f"{n:,}" if en else f"{n:,}".replace(",", ".")
 
     filas, por_prov_series, faltan = [], {}, set()
     for m in d["municipios"]:
@@ -5322,7 +5527,7 @@ def construir_pagina_sin_heladas(site: str) -> tuple[str, dict] | None:
                       m["heladas_por_año"], m["inviernos_sin_heladas"], 1 if m["sin_heladas"] else 0,
                       m["lat"], m["lon"]])
         por_prov_series.setdefault(sp, set()).add(m["estacion"])
-    if faltan:
+    if faltan and not en:
         avisar("municipios sin provincia del sitio",
                "Provincias del NGMEP que no casan con ninguna del sitio: " + ", ".join(sorted(faltan)))
 
@@ -5360,73 +5565,124 @@ def construir_pagina_sin_heladas(site: str) -> tuple[str, dict] | None:
         nombres = sorted((f[0] for f in sin_ult if f[1] == sp), key=clave_orden)
         if nombres:
             grupos.append(
-                f'<div class="grupo"><b><a href="{site}/municipios-sin-heladas/?provincia={sp}#tabla">'
+                f'<div class="grupo"><b><a href="{site}{ruta}?provincia={sp}#tabla">'
                 f'{_html.escape(nombres_prov[sp])}</a></b> ({len(nombres)}) '
                 + " · ".join(_html.escape(n) for n in nombres) + "</div>")
+    etiqueta_cero = " (frost)" if en else " (helada)"
     opciones = "".join(
         f'<option value="{u}"{" selected" if u == 0 else ""}>'
-        + (f"−{-u}" if u < 0 else str(u)) + "&nbsp;°C" + (" (helada)" if u == 0 else "") + "</option>"
+        + (f"−{-u}" if u < 0 else str(u)) + "&nbsp;°C" + (etiqueta_cero if u == 0 else "") + "</option>"
         for u in reversed(umbrales))
 
-    desc = ("Municipios cuya estación de AEMET no registró heladas, invierno a invierno "
-            "(noviembre–marzo). Calculadora por grados y población. Datos AEMET e IGN.")
-    faq = [
-        ("¿Qué es una helada?",
-         "Una noche en la que la temperatura mínima baja a 0,0 °C o menos. Aquí se cuenta en la "
-         "estación de AEMET de referencia de cada municipio, entre el 1 de noviembre y el 31 de marzo."),
-        ("¿Qué significa que un municipio figure sin heladas?",
-         f"Que su estación de referencia no registró ninguna helada ese invierno. Se evalúa cada "
-         f"invierno por separado: en el invierno {_inv_txt(ultimo)} fue el caso de {len(sin_ult)} "
-         f"municipios, y el invierno siguiente se vuelve a medir."),
-        ("¿Por qué el dato es de la estación y no del pueblo?",
-         "Porque AEMET mide en puntos concretos. Cada municipio toma la estación más representativa en "
-         "35 km y se indican la distancia y el desnivel; con más de 100 m de desnivel la temperatura "
-         "puede cambiar más de medio grado."),
-        ("¿Puedo contar noches por debajo de otra temperatura?",
-         "Sí. El selector permite cualquier grado entero entre −4 y 20 °C, y la serie de cada municipio "
-         "muestra cuántas noches por invierno bajó la mínima a ese valor o menos."),
-        ("¿Tiene en cuenta la sensación térmica?",
-         "No. Solo se usa la temperatura mínima registrada por la estación. La humedad y el viento "
-         "cambian cómo se siente el frío, pero sin esos datos no se puede calcular con rigor."),
-    ]
+    if en:
+        desc = ("Winter by winter, which Spanish towns' AEMET weather station recorded no frost. "
+                "Compare nights below any temperature, town by town.")
+        faq = [
+            ("What counts as a frost?",
+             "A night when the minimum temperature drops to 0.0 °C or below. We count it at each "
+             "town's reference AEMET weather station, between 1 November and 31 March."),
+            ("What does it mean when a town is listed as frost-free?",
+             f"That its reference weather station recorded no frost that winter. Each winter is judged "
+             f"on its own: in winter {_inv_txt(ultimo)} that was the case for {num(len(sin_ult))} "
+             f"towns, and the next winter is measured again."),
+            ("Why is the figure for the station and not the town?",
+             "Because AEMET measures at specific points. Each town is matched to the most "
+             "representative station within 35 km, and we show the distance and the altitude "
+             "difference; with more than 100 m of difference, the temperature can shift by more than "
+             "half a degree."),
+            ("Can I count nights below a different temperature?",
+             "Yes. The selector accepts any whole degree from −4 to 20 °C, and each town's series shows "
+             "how many nights per winter the low reached that value or below."),
+            ("Does it take wind chill or “feels like” temperature into account?",
+             "No. We only use the minimum temperature recorded by the station. Humidity and wind change "
+             "how cold feels, but without that data it can't be calculated rigorously."),
+        ]
+        migas = [("NocheTropical.es", site + "/"), ("Climate refuges in Spain", site + "/en/"),
+                 ("Frost-free towns in Spain", url)]
+        dataset = ("Spanish towns and frost nights by winter",
+                   "Spanish towns with more than 500 residents, their reference AEMET weather station "
+                   "(distance, altitude difference and confidence level) and the number of nights per "
+                   "winter, November to March, with a minimum temperature at or below each degree from "
+                   "−4 to 20 °C.",
+                   "en-GB", "Spain", "Nights with a minimum temperature at or below a threshold")
+    else:
+        desc = ("Municipios cuya estación de AEMET no registró heladas, invierno a invierno "
+                "(noviembre–marzo). Calculadora por grados y población. Datos AEMET e IGN.")
+        faq = [
+            ("¿Qué es una helada?",
+             "Una noche en la que la temperatura mínima baja a 0,0 °C o menos. Aquí se cuenta en la "
+             "estación de AEMET de referencia de cada municipio, entre el 1 de noviembre y el 31 de marzo."),
+            ("¿Qué significa que un municipio figure sin heladas?",
+             f"Que su estación de referencia no registró ninguna helada ese invierno. Se evalúa cada "
+             f"invierno por separado: en el invierno {_inv_txt(ultimo)} fue el caso de {len(sin_ult)} "
+             f"municipios, y el invierno siguiente se vuelve a medir."),
+            ("¿Por qué el dato es de la estación y no del pueblo?",
+             "Porque AEMET mide en puntos concretos. Cada municipio toma la estación más representativa en "
+             "35 km y se indican la distancia y el desnivel; con más de 100 m de desnivel la temperatura "
+             "puede cambiar más de medio grado."),
+            ("¿Puedo contar noches por debajo de otra temperatura?",
+             "Sí. El selector permite cualquier grado entero entre −4 y 20 °C, y la serie de cada municipio "
+             "muestra cuántas noches por invierno bajó la mínima a ese valor o menos."),
+            ("¿Tiene en cuenta la sensación térmica?",
+             "No. Solo se usa la temperatura mínima registrada por la estación. La humedad y el viento "
+             "cambian cómo se siente el frío, pero sin esos datos no se puede calcular con rigor."),
+        ]
+        migas = [("nochetropical.es", site + "/"), ("Pueblos sin heladas", url)]
+        dataset = ("Municipios de España y heladas por invierno",
+                   "Municipios de más de 500 habitantes con su estación de AEMET de referencia "
+                   "(distancia, desnivel y nivel de confianza) y el número de noches por invierno, "
+                   "de noviembre a marzo, con la temperatura mínima en cada grado entre −4 y 20 °C.",
+                   "es-ES", "España", "Noches con temperatura mínima igual o inferior a un umbral")
+
     faq_html = "".join(f"<dt>{_html.escape(p)}</dt><dd>{_html.escape(r)}</dd>" for p, r in faq)
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
-            {"@type": "ListItem", "position": 2, "name": "Pueblos sin heladas", "item": url}]},
-        {"@type": "Dataset", "name": "Municipios de España y heladas por invierno",
-         "description": ("Municipios de más de 500 habitantes con su estación de AEMET de referencia "
-                         "(distancia, desnivel y nivel de confianza) y el número de noches por invierno, "
-                         "de noviembre a marzo, con la temperatura mínima en cada grado entre −4 y 20 °C."),
-         "url": url, "inLanguage": "es-ES",
+            {"@type": "ListItem", "position": n + 1, "name": nombre, "item": destino}
+            for n, (nombre, destino) in enumerate(migas)]},
+        {"@type": "Dataset", "name": dataset[0], "description": dataset[1],
+         "url": url, "inLanguage": dataset[2],
          "license": "https://creativecommons.org/licenses/by/4.0/",
          "creator": {"@type": "Person", "name": "Ramón J. Lowesting", "url": site + "/sobre-el-proyecto/"},
          "isBasedOn": ["https://opendata.aemet.es", "https://centrodedescargas.cnig.es"],
          "temporalCoverage": f"{inviernos[0]}-11-01/{ultimo + 1}-03-31",
-         "spatialCoverage": {"@type": "Place", "name": "España"},
-         "variableMeasured": "Noches con temperatura mínima igual o inferior a un umbral",
+         "spatialCoverage": {"@type": "Place", "name": dataset[3]},
+         "variableMeasured": dataset[4],
          "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json",
                            "contentUrl": site + "/datos/municipios_sin_heladas.json"}]},
         {"@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": p, "acceptedAnswer": {"@type": "Answer", "text": r}}
             for p, r in faq]}]}, ensure_ascii=False)
 
+    hreflang = hreflang_block("/municipios-sin-heladas/", "/en/frost-free-towns-spain/")
+    if en:
+        plantilla = _plantilla_sin_heladas_en()
+        nav, pie = nav_en_html(site), footer_en_html(site)
+    else:
+        canon = '<link rel="canonical" href="__SITE__/municipios-sin-heladas/">'
+        plantilla = PAGINA_SIN_HELADAS.replace(canon, canon + "\n" + hreflang)
+        nav, pie = nav_html(""), FOOTER_HTML
+
     css_cerca = PAGINA_CERCA.split("<style>", 1)[1].split("__CSS_COMUN__", 1)[0]
     mun_json = json.dumps(filas, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-    html_out = (PAGINA_SIN_HELADAS
+    t_json = json.dumps(T_SIN_HELADAS[lang], ensure_ascii=False).replace("</", "<\\/")
+    html_out = (plantilla
+                .replace("__HREFLANG__", hreflang)
                 .replace("__CSS_CERCA__", css_cerca)
                 .replace("__CSS_COMUN__", " " + _CSS_COMUN)
-                .replace("__NAV__", nav_html(""))
-                .replace("__FOOTER__", FOOTER_HTML)
+                .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+                .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+                .replace("__NAV__", nav)
+                .replace("__FOOTER__", pie)
                 .replace("__SCHEMA__", schema)
                 .replace("__DESC__", desc)
-                .replace("__NMUN__", f"{n_mun:,}".replace(",", "."))
-                .replace("__NSIN__", f"{len(sin_ult):,}".replace(",", "."))
+                .replace("__NMUN__", num(n_mun))
+                .replace("__NSIN__", num(len(sin_ult)))
                 .replace("__PRIMERO__", _inv_txt(inviernos[0]))
                 .replace("__ULTIMO__", _inv_txt(ultimo))
                 .replace("__OPCIONES__", opciones)
                 .replace("__GRUPOS__", "".join(grupos))
                 .replace("__FAQ__", faq_html)
+                .replace("__T__", t_json)
                 .replace("__UMBRALES__", json.dumps(umbrales))
                 .replace("__INVIERNOS__", json.dumps(inviernos))
                 .replace("__EST__", json.dumps(est, ensure_ascii=False, separators=(",", ":")))
@@ -10037,6 +10293,7 @@ def hreflang_block(es_path: str, en_path: str) -> str:
 # entrada es el conmutador de idioma hacia la web en español.
 MENU_EN = [
     ("Coolest towns", "/en/coolest-towns-spain/"),
+    ("Frost-free towns", "/en/frost-free-towns-spain/"),
     ("Live heatwave map", "/ola-de-calor/"),
     ("Interactive map", "/mapa-estaciones/"),
 ]
@@ -10052,6 +10309,7 @@ def nav_en_html(site: str) -> str:
 
 def footer_en_html(site: str) -> str:
     c1 = [("Coolest towns to sleep in summer", "/en/coolest-towns-spain/"),
+          ("Frost-free towns to spend winter", "/en/frost-free-towns-spain/"),
           ("Live heatwave map (animated)", "/ola-de-calor/"),
           ("Interactive station map", "/mapa-estaciones/"),
           ("National tropical-nights ranking", "/ranking-noches-tropicales/")]
@@ -10235,6 +10493,9 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
         ("pri", "🌙", "The coolest towns to sleep in", False,
          "Region by region, the Spanish mountain towns with almost zero tropical nights — "
          "backed by AEMET data.", "/en/coolest-towns-spain/"),
+        ("", "❄️", "Frost-free towns: where to spend winter", False,
+         "Winter by winter, the Spanish towns whose weather station recorded no frost — and how "
+         "many cold nights each one gets at the temperature you choose.", "/en/frost-free-towns-spain/"),
         ("", "🔥", "Live heatwave map (animated)", True,
          "Watch the heat spread across Spain day by day — highs by day, lows by night, "
          "straight from AEMET maps.", "/ola-de-calor/"),
@@ -10532,6 +10793,7 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
         'real time.</p>'
         '<div class="botones">'
         f'<a class="btn pri" href="{site}/" hreflang="es">Search any town →</a>'
+        f'<a class="btn sec" href="{site}/en/frost-free-towns-spain/">Winter: frost-free towns →</a>'
         f'<a class="btn sec" href="{site}/ola-de-calor/" hreflang="es">Live heatwave map →</a>'
         '</div></div>'
         '<h2>Frequently asked questions</h2>'
@@ -13637,7 +13899,14 @@ def main() -> int:
     (DOCS_DIR / "en" / "coolest-towns-spain").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "en" / "coolest-towns-spain" / "index.html").write_text(
         construir_pagina_en_pueblos(estaciones, site), encoding="utf-8")
-    print("   versión EN (fase 1): /en/ + /en/coolest-towns-spain/ generadas")
+    # Pueblos sin heladas en inglés: comparte datos, CSS y JS con la española.
+    sin_heladas_en = construir_pagina_sin_heladas(site, "en")
+    if sin_heladas_en:
+        (DOCS_DIR / "en" / "frost-free-towns-spain").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "en" / "frost-free-towns-spain" / "index.html").write_text(
+            sin_heladas_en[0], encoding="utf-8")
+    print("   versión EN: /en/ + /en/coolest-towns-spain/"
+          + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "") + " generadas")
     # Hoteles en refugios climáticos (afiliación Booking) + sello por hotel.
     hoteles = cargar_hoteles(estaciones)
     for h in hoteles:  # complemento de datos: humedad/viento de su estación ref

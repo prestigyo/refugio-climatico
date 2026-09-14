@@ -5423,7 +5423,7 @@ __HREFLANG__
       <li><b>Look at the table.</b> When you change the degrees it recalculates for every town — how many nights per winter the low reached that value or below at its reference station — and sorts them from fewest to most. Filter by province or population if you already have an area in mind.</li>
       <li><b>Prefer high confidence.</b> It means the station is close to the town and at a similar altitude. With the “indicative” label, conditions in the town can differ more from the figure.</li>
       <li><b>Open the series for your shortlist.</b> Click a town's name and check it winter by winter: few cold nights every year is more predictable than a good average propped up by one mild winter.</li>
-      <li><b>Use a reference you know.</b> Look up a Spanish city you're familiar with — Madrid, for instance — at the same threshold: the difference is a first comparison of how many cold nights you'd avoid.</li>
+      <li><b>Use a reference you know.</b> Look up a Spanish city you're familiar with — Madrid, for instance — at the same threshold: the difference is a first comparison of how many cold nights you'd avoid. Our <a href="__SITE__/en/spains-mildest-winters/">comparison of Spain's mildest winters</a> does it for eight cities.</li>
     </ol>
     <p class="p">What this doesn't measure: heating costs also depend on daytime temperatures and on the home itself — insulation, orientation, which floor it's on. If you're renting, ask how the home is heated: in a mild climate not every home has central heating. Cold nights at the station are a first filter to compare towns, not an estimate of your bill.</p>
 
@@ -10310,6 +10310,7 @@ def nav_en_html(site: str) -> str:
 def footer_en_html(site: str) -> str:
     c1 = [("Coolest towns to sleep in summer", "/en/coolest-towns-spain/"),
           ("Frost-free towns to spend winter", "/en/frost-free-towns-spain/"),
+          ("Spain's mildest winters, city by city", "/en/spains-mildest-winters/"),
           ("Live heatwave map (animated)", "/ola-de-calor/"),
           ("Interactive station map", "/mapa-estaciones/"),
           ("National tropical-nights ranking", "/ranking-noches-tropicales/")]
@@ -10496,6 +10497,9 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
         ("", "❄️", "Frost-free towns: where to spend winter", False,
          "Winter by winter, the Spanish towns whose weather station recorded no frost — and how "
          "many cold nights each one gets at the temperature you choose.", "/en/frost-free-towns-spain/"),
+        ("", "☀️", "Spain's mildest winters", False,
+         "City by city, the frost nights and nights at 5&nbsp;°C recorded in Málaga, Valencia, "
+         "Alicante, Murcia, Madrid and the Canary Islands, winter by winter.", "/en/spains-mildest-winters/"),
         ("", "🔥", "Live heatwave map (animated)", True,
          "Watch the heat spread across Spain day by day — highs by day, lows by night, "
          "straight from AEMET maps.", "/ola-de-calor/"),
@@ -10803,6 +10807,354 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
     return _cabeza_en(site, titulo, desc, "/en/coolest-towns-spain/",
                       "/dormir-con-manta-en-verano/", "/estudios/frescor-dia.png",
                       schema) + cuerpo + "</body></html>\n"
+
+
+# «Spain's Mildest Winters»: comparación de ciudades con los MISMOS datos que la
+# calculadora de invierno (municipios_sin_heladas.json, nov–mar, invierno a
+# invierno). Ninguna cifra va tecleada: todas salen de la serie de la estación, y
+# las frases que comparan ciudades solo se escriben si el dato las sostiene.
+# Las ciudades con municipio usan SU estación de referencia de la calculadora;
+# Madrid va por estación porque Retiro no está en la serie de invierno.
+INVIERNOS_SUAVES_EN = [
+    # (clave, rótulo, municipio IGN o None, estación si no hay municipio)
+    ("tf", "Santa Cruz de Tenerife", "Santa Cruz de Tenerife", None),
+    ("lp", "Las Palmas de Gran Canaria", "Las Palmas de Gran Canaria", None),
+    ("al", "Almería", "Almería", None),
+    ("ma", "Málaga", "Málaga", None),
+    ("va", "Valencia", "València", None),
+    ("ali", "Alicante", "Alacant/Alicante", None),
+    ("mu", "Murcia", "Murcia", None),
+    ("m4", "Madrid · Cuatro Vientos", None, "3196"),
+    ("mb", "Madrid · Airport (Barajas)", None, "3129"),
+]
+_COSTA_EN = ["tf", "lp", "al", "ma", "va", "ali"]
+
+
+def construir_pagina_en_inviernos_suaves(site: str) -> str | None:
+    """/en/spains-mildest-winters/. None si faltan los datos de invierno o alguna
+    de las estaciones del artículo (la página se omite y se avisa)."""
+    import math
+    d = cargar_sin_heladas()
+    if not d:
+        return None
+    U = d["umbrales"]
+    k0, k5, k10 = U.index(0), U.index(5), U.index(10)
+    mun = {m["nombre"]: m for m in d["municipios"]}
+
+    def est(eid: str) -> dict | None:
+        st = d["estaciones"].get(eid)
+        if not st or not st.get("serie"):
+            return None
+        s = st["serie"]
+        n = len(s)
+        return {"id": eid, "nombre": st["nombre"], "alt": st["altitud"],
+                "lat": st["lat"], "lon": st["lon"], "n": n,
+                "hel": sum(v[k0] for v in s.values()) / n,
+                "sin": sum(1 for v in s.values() if v[k0] == 0),
+                "le5": sum(v[k5] for v in s.values()) / n,
+                "le10": sum(v[k10] for v in s.values()) / n}
+
+    c: dict = {}
+    for clave, rotulo, municipio, eid in INVIERNOS_SUAVES_EN:
+        m = mun.get(municipio) if municipio else None
+        e = est(m["estacion"] if m else eid)
+        if not e:
+            print(f"   spains-mildest-winters: sin datos de {rotulo}; se omite la página")
+            return None
+        e.update(rotulo=rotulo, mun=m)
+        c[clave] = e
+    vaero = est("8414A")
+    madrid = mun.get("Madrid")
+    mad_ref = est(madrid["estacion"]) if madrid else None
+
+    def f1(x: float) -> str:
+        return "0" if x < 0.05 else f"{x:.1f}"
+
+    def inv(w: int) -> str:
+        return f"{w}/{str(w + 1)[2:]}"
+
+    def km(a: dict, b: dict) -> float:
+        p1, p2 = math.radians(a["lat"]), math.radians(b["lat"])
+        h = (math.sin((p2 - p1) / 2) ** 2 + math.cos(p1) * math.cos(p2)
+             * math.sin(math.radians(b["lon"] - a["lon"]) / 2) ** 2)
+        return 2 * 6371 * math.asin(math.sqrt(h))
+
+    n_inv = len(d["inviernos"])
+    prim, ult = inv(d["inviernos"][0]), inv(d["inviernos"][-1])
+    ruta = "/en/spains-mildest-winters/"
+    calc = f"{site}/en/frost-free-towns-spain/"
+    ma, va, ali, mu, al = c["ma"], c["va"], c["ali"], c["mu"], c["al"]
+    m4, mb = c["m4"], c["mb"]
+
+    # Premisas del relato: si un invierno futuro las rompe, el texto se adapta
+    # (no afirma lo que ya no es cierto) y el build lo avisa para revisarlo.
+    limpias = [k for k in _COSTA_EN if c[k]["sin"] == c[k]["n"]]
+    mu_excepcion = mu["sin"] < mu["n"]
+    if len(limpias) < len(_COSTA_EN) or not mu_excepcion:
+        print("   AVISO spains-mildest-winters: cambió el reparto de heladas "
+              f"(costeras limpias {len(limpias)}/{len(_COSTA_EN)}, Murcia con helada: "
+              f"{mu_excepcion}); revisa el texto")
+
+    titulo = "Spain's Mildest Winters (And Where to Escape the Cold)"
+    desc = ("Winter by winter, AEMET data on how many frost nights and nights at 5 °C "
+            "Málaga, Valencia, Alicante, Murcia, Madrid and the Canaries get.")
+
+    orden = sorted(_COSTA_EN + ["mu"], key=lambda k: (c[k]["hel"], c[k]["le5"])) + ["m4", "mb"]
+    filas = ""
+    for k in orden:
+        e = c[k]
+        cls = ' class="ref"' if k in ("m4", "mb") else ""
+        fr = ' class="fr"' if e["sin"] < e["n"] else ""
+        filas += (f'<tr{cls}><td>{e["rotulo"]}<span class="est">{e["nombre"]} · '
+                  f'{e["alt"]:,}&nbsp;m</span></td>'
+                  f'<td{fr}>{f1(e["hel"])}</td><td>{e["sin"]} of {e["n"]}</td>'
+                  f'<td>{f1(e["le5"])}</td><td>{f1(e["le10"])}</td></tr>')
+    tabla = (
+        '<div class="tabwrap"><table class="rk"><thead><tr>'
+        '<th scope="col">City · AEMET station</th><th scope="col">Frost nights per winter</th>'
+        '<th scope="col">Winters with no frost</th><th scope="col">Nights ≤&nbsp;5&nbsp;°C per winter</th>'
+        '<th scope="col">Nights ≤&nbsp;10&nbsp;°C per winter</th></tr></thead>'
+        f'<tbody>{filas}</tbody></table></div>'
+        f'<p class="cap">Source: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET '
+        f'OpenData</a>, daily minimum temperatures, winters {prim} to {ult} (1&nbsp;November – 31&nbsp;March). '
+        'A frost night is one with a minimum of 0.0&nbsp;°C or below. A winter only counts if the station '
+        'has data for at least 90% of its nights. Town–station matching: IGN (CNIG). · nochetropical.es</p>')
+
+    # --- Ciudad por ciudad -------------------------------------------------
+    otras_le10 = all(c[k]["le10"] >= 1 for k in ("al", "ma", "va", "ali", "mu"))
+    if c["tf"]["le10"] < 0.05 and c["lp"]["le10"] < 0.05:
+        p_can = ("<p>Santa Cruz de Tenerife and Las Palmas de Gran Canaria are not “mild for Spain”: "
+                 "they are a different climate. At their stations, <b>no night's low fell to 10&nbsp;°C "
+                 "or below</b> in any winter measured, let alone to freezing."
+                 + (" If the aim is not to think about winter at all, this is the group in the table "
+                    "where the data supports it." if otras_le10 else "") + "</p>")
+    else:
+        p_can = (f"<p>The stations of Santa Cruz de Tenerife and Las Palmas de Gran Canaria recorded "
+                 f"{f1(c['tf']['le10'])} and {f1(c['lp']['le10'])} nights a winter at 10&nbsp;°C or below, "
+                 f"and {f1(c['tf']['hel'])} and {f1(c['lp']['hel'])} frost nights.</p>")
+    al_menos = al["le5"] < min(ma["le5"], va["le5"], ali["le5"], mu["le5"])
+    p_al = (f"<p>Almería Airport recorded no frost in {al['sin']} of {al['n']} winters and "
+            f"<b>{f1(al['le5'])} nights a winter at 5&nbsp;°C or below</b>"
+            + (f", fewer than Málaga ({f1(ma['le5'])}), Valencia ({f1(va['le5'])}) or Alicante "
+               f"({f1(ali['le5'])}). Among the mainland cities in this table, it has the lowest count."
+               if al_menos else ".") + "</p>")
+    p_ma = (f"<p>Málaga Airport recorded no frost in {ma['sin']} of {ma['n']} winters, "
+            f"<b>{f1(ma['le5'])} nights a winter at 5&nbsp;°C or below</b> and {f1(ma['le10'])} at "
+            "10&nbsp;°C or below."
+            + (" The Costa del Sol's reputation as a winter destination is consistent with the data."
+               if ma["sin"] == ma["n"] else "") + "</p>")
+    nt_va = (va["mun"] or {}).get("noches_tropicales_año")
+    p_va = ("<p>On this site, Valencia usually appears for its summer"
+            + (f": its city-centre station, Viveros, averages about {nt_va:.0f} tropical nights a summer"
+               if nt_va else "")
+            + f". In winter the same station recorded no frost in {va['sin']} of {va['n']} winters and "
+            f"<b>{f1(va['le5'])} nights a winter at 5&nbsp;°C or below</b>. The city that needs an escape "
+            "from the heat in August needs much less of one in January.</p>")
+    if vaero:
+        p_va += (f"<p>Valencia also shows why the station matters. At Valencia Airport, in Manises, "
+                 f"{km(va, vaero):.0f}&nbsp;km inland, the figures are <b>{f1(vaero['hel'])} frost nights</b> "
+                 f"and {f1(vaero['le5'])} nights at 5&nbsp;°C or below per winter. Same city name, "
+                 "different station, different winter.</p>")
+    ali_max = ali["le5"] > max(c[k]["le5"] for k in _COSTA_EN if k != "ali")
+    p_ali = (f"<p>Alicante-Elche Airport recorded no frost in {ali['sin']} of {ali['n']} winters, but "
+             f"<b>{f1(ali['le5'])} nights a winter at 5&nbsp;°C or below</b>"
+             + (". The Costa Blanca is mild in winter, but among the coastal cities in this table, "
+                "Alicante's nights are the ones that get closest to cold." if ali_max else ".") + "</p>")
+    if mu_excepcion:
+        razon = (f", {mu['le5'] / ali['le5']:.1f} times Alicante Airport's count" if ali["le5"] else "")
+        p_mu = (f"<p>Murcia sits in the same “warm south-east” as Alicante and Almería, but its station "
+                f"recorded <b>frost in {mu['n'] - mu['sin']} of {mu['n']} winters</b>, {f1(mu['hel'])} "
+                f"frost nights a winter on average, and {f1(mu['le5'])} nights at 5&nbsp;°C or below{razon}. "
+                "Murcia lies inland, away from the moderating effect of the sea, which is the likely "
+                "reason. “In the south” and “on the coast” are not the same claim.</p>")
+        h_mu = "Murcia: the exception"
+    else:
+        p_mu = (f"<p>Murcia's station recorded no frost in {mu['sin']} of {mu['n']} winters and "
+                f"{f1(mu['le5'])} nights at 5&nbsp;°C or below per winter.</p>")
+        h_mu = "Murcia"
+    p_mad = ("<p>Madrid's Retiro station is not among the stations in our winter series, so the table "
+             "shows two AEMET stations in the Madrid area: <b>Cuatro Vientos</b>, with "
+             f"{f1(m4['hel'])} frost nights and {f1(m4['le5'])} nights at 5&nbsp;°C or below per winter, "
+             f"and <b>Madrid Airport</b>, with {f1(mb['hel'])} and {f1(mb['le5'])}. "
+             + (f"In the calculator, the municipality of Madrid is matched to the {mad_ref['nombre']} "
+                f"station, {madrid['distancia_km']:.1f}&nbsp;km away, which gives {f1(mad_ref['hel'])} "
+                "frost nights a winter. " if mad_ref else "")
+             + "This isn't a criticism of Madrid: it's the reference that gives the rest of the list its "
+             f"meaning. Between Madrid Airport's {f1(mb['le5'])} nights at 5&nbsp;°C or below and "
+             f"Málaga's {f1(ma['le5'])}"
+             + (", the difference is whether the heating goes on most winter nights or on a few.</p>"
+                if mb["le5"] > 75 and ma["le5"] < 20 else
+                ", the difference is a first measure of how much heating each winter asks for.</p>"))
+
+    humedad = (
+        "<p>It is fair to object that 6&nbsp;°C in Madrid and 6&nbsp;°C in Valencia don't feel like the "
+        "same cold. The first explanation that comes to mind is humidity, but relative humidity is a poor "
+        "guide here. It measures how close the air is to saturation <i>at its current temperature</i>, not "
+        "how much water it holds. Cold, calm inland air reaches a high relative humidity with very little "
+        "moisture in it, which is why Madrid gets winter fog and hoarfrost despite being dry; milder coastal "
+        "air can hold more water and still show a lower percentage. A higher humidity figure does not mean "
+        "a damper cold.</p>"
+        "<p>What more likely makes coastal and inland cold feel different is wind and dew point, and we "
+        "don't have a daily historical series of either for these stations. So this page, like the "
+        "calculator, counts only minimum temperature: nights at or below a threshold. We would rather say "
+        "that plainly than publish a “feels like” figure the data can't back.</p>")
+
+    faltan = [f"{c[k]['rotulo']}: {c[k]['n']}" for k in orden if c[k]["n"] < n_inv]
+    limites = (
+        '<ul class="lim">'
+        "<li><b>The figures belong to the weather station, not to the whole city.</b> A station at an "
+        "airport or a few kilometres inland can differ from a particular neighbourhood; Valencia's two "
+        "stations show how much.</li>"
+        f"<li><b>Up to {n_inv} winters, from {prim} to {ult}.</b> A winter only counts if the station has "
+        "data for at least 90% of its nights"
+        + (f", so some stations have fewer ({'; '.join(faltan)})" if faltan else "")
+        + ". With series this short, one cold spell weighs a lot, which is why we show winters with no "
+        "frost as well as the average.</li>"
+        "<li><b>Only minimum temperature.</b> Humidity, wind, sunshine and daytime temperatures are not "
+        "in these figures.</li>"
+        "<li><b>Madrid's Retiro station is not in the winter series</b>; the Madrid figures come from "
+        "Cuatro Vientos and Barajas.</li>"
+        f"<li><b>Eight cities are not a complete study.</b> The <a href=\"{calc}\">frost-free towns "
+        f"calculator</a> covers {len(d['municipios']):,} Spanish towns with more than 500 residents, "
+        "each matched to its reference station.</li></ul>")
+
+    faq = [
+        ("What does “frost-free” mean here?",
+         "A winter in which the reference AEMET weather station recorded no night with a minimum "
+         "temperature of 0.0 °C or below between 1 November and 31 March. It is judged one winter at a "
+         "time, not as an average."),
+        ("Is this the same data as the frost-free towns calculator?",
+         f"Yes. The figures come from the same AEMET daily records, winters {prim} to {ult}. Choose a town "
+         "and a temperature in the calculator and you get the same numbers."),
+        ("Does coastal humidity make the cold feel worse?",
+         "Relative humidity doesn't answer that: it depends on temperature, so cold inland air can show a "
+         "higher percentage than milder coastal air while holding less water. Wind and dew point are the "
+         "more likely explanation, and there is no daily historical series of them for these stations, so "
+         "we count minimum temperature only."),
+        ("Why isn't my city on this list?",
+         f"This comparison covers eight cities. Any other Spanish town with more than 500 residents, "
+         f"{len(d['municipios']):,} in total, is in the frost-free towns calculator, with its "
+         "reference station, distance and difference in altitude."),
+        ("Where does the data come from?",
+         "From AEMET OpenData, the open-data service of Spain's State Meteorological Agency: daily minimum "
+         "temperatures at each station. Town data come from IGN (CNIG). The results are published under "
+         "CC BY 4.0."),
+    ]
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "NocheTropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Climate refuges in Spain", "item": site + "/en/"},
+            {"@type": "ListItem", "position": 3, "name": "Spain's mildest winters", "item": site + ruta}]},
+        {"@type": "Article", "headline": titulo, "description": desc, "image": site + "/og.png",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting", "url": site + "/sobre-el-proyecto/"},
+         "publisher": {"@type": "Organization", "name": "NocheTropical.es",
+                       "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
+         "inLanguage": "en-GB", "datePublished": iso_tz("2026-09-14"),
+         "dateModified": iso_tz(date.today().isoformat()), "mainEntityOfPage": site + ruta},
+        {"@type": "Dataset",
+         "name": "Frost nights and cold nights per winter at AEMET stations in Spanish cities",
+         "description": ("Nights per winter (1 November – 31 March) with a minimum temperature at or "
+                         "below 0, 5 and 10 °C, and winters with no frost, at the reference AEMET "
+                         "stations of eight Spanish cities."),
+         "url": site + ruta, "inLanguage": "en-GB",
+         "license": "https://creativecommons.org/licenses/by/4.0/",
+         "creator": {"@type": "Organization", "name": "NocheTropical.es", "url": site + "/"},
+         "isBasedOn": "https://opendata.aemet.es",
+         "temporalCoverage": f"{d['inviernos'][0]}-11-01/{d['inviernos'][-1] + 1}-03-31",
+         "spatialCoverage": {"@type": "Place", "name": "Spain"},
+         "variableMeasured": ["Frost nights per winter (minimum ≤ 0 °C)",
+                              "Nights per winter with a minimum ≤ 5 °C",
+                              "Nights per winter with a minimum ≤ 10 °C", "Winters with no frost"]},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+            for q, a in faq]},
+    ]}, ensure_ascii=False)
+
+    extra_css = (
+        '.tabwrap{overflow-x:auto;margin:14px 0 6px;border:1px solid var(--line);border-radius:12px}'
+        'table.rk{border-collapse:collapse;width:100%;min-width:620px;font-size:14.5px}'
+        'table.rk th,table.rk td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);'
+        'vertical-align:top}'
+        'table.rk th:first-child,table.rk td:first-child{text-align:left}'
+        'table.rk th{font:600 11.5px/1.35 var(--fb);color:var(--muted);text-transform:uppercase;'
+        'letter-spacing:.04em;background:var(--bg2)}'
+        'table.rk td{font-family:var(--fm);color:var(--paper)}'
+        'table.rk td:first-child{font-family:var(--fb);font-weight:600}'
+        'table.rk tbody tr:last-child td{border-bottom:0}'
+        '.rk .est{display:block;font-weight:400;font-size:12px;color:var(--muted)}'
+        'table.rk tr.ref td{color:var(--muted)}table.rk td.fr{color:var(--teja2)}'
+        '.city{margin:22px 0 0}.city h3{margin-bottom:6px}'
+        '.lim{margin:6px 0 15px 20px;color:#d9ccb6;max-width:68ch}.lim li{margin:0 0 9px}'
+        '.lim b{color:var(--paper)}')
+
+    def ciudad(h: str, p: str) -> str:
+        return f'<div class="city"><h3>{h}</h3>{p}</div>'
+
+    cuerpo = (
+        nav_en_html(site)
+        + '<header class="h"><div class="wrap">'
+        '<nav class="crumb" aria-label="breadcrumb">'
+        f'<a href="{site}/en/">NocheTropical.es</a> · <a href="{calc}">Frost-free towns</a>'
+        ' · Mildest winters</nav>'
+        f'<div class="kick">Winter in Spain · {n_inv} winters of AEMET data</div>'
+        "<h1>Spain's Mildest Winters <em>and Where to Escape the Cold</em></h1>"
+        '<p class="intro">A grey winter back home has its own kind of fatigue: short days, the heating '
+        'on, weeks without proper sun. “Go south” is the usual answer, but it isn\'t a precise one. The '
+        'question here is simpler: <b>on a winter night, how often does it drop to freezing, and how '
+        'often to 5&nbsp;°C</b>, the kind of cold at which most people want the heating on?</p>'
+        '<div class="contrast">'
+        f'<div class="cc cool"><div class="v">{f1(ma["le5"])}</div>'
+        '<div class="k">nights a winter at 5&nbsp;°C or below at Málaga Airport</div></div>'
+        f'<div class="cc hot"><div class="v">{f1(mb["le5"])}</div>'
+        '<div class="k">at Madrid Airport, over the same winters</div></div></div>'
+        '</div></header>'
+        '<section><div class="wrap">'
+        '<p>We used the same AEMET daily records that power the rest of nochetropical.es: every night '
+        f'from 1&nbsp;November to 31&nbsp;March, winter by winter, from {prim} to {ult}, at the reference '
+        'weather station of each city. They are the same figures you can look up town by town in the '
+        f'<a href="{calc}">frost-free towns calculator</a>.</p>'
+        '<h2>The ranking</h2>' + tabla
+        + '<p>We judge <b>frost-free one winter at a time</b>, as the calculator does: a winter is '
+        'frost-free if the station recorded no night at 0&nbsp;°C or below. '
+        + (f"At the stations of all {len(_COSTA_EN)} coastal cities in the table, every winter measured "
+           "was frost-free." if len(limpias) == len(_COSTA_EN) else
+           f"At {len(limpias)} of the {len(_COSTA_EN)} coastal cities in the table, every winter measured "
+           "was frost-free.")
+        + (" Murcia is the exception." if mu_excepcion else "")
+        + ' Frost is only the extreme, though: the nights at 5&nbsp;°C or below are what separate one '
+        'mild winter from another.</p>'
+        '<h2>City by city</h2>'
+        + ciudad("The Canary Islands: a different climate", p_can)
+        + ciudad("Almería", p_al)
+        + ciudad("Málaga", p_ma)
+        + ciudad("Valencia: the same city, the other half of the year", p_va)
+        + ciudad("Alicante", p_ali)
+        + ciudad(h_mu, p_mu)
+        + ciudad("Madrid, for reference", p_mad)
+        + '<h2>Same degrees, different cold</h2>' + humedad
+        + '<h2>The winter half of the same story</h2>'
+        '<p>In summer, nochetropical.es looks for the places where the night cools down enough to sleep, '
+        'counting tropical nights: those that never drop below 20&nbsp;°C. This page runs the same logic '
+        'the other way round: the same AEMET stations and the same daily minimums, at the other end of '
+        f'the thermometer. The <a href="{site}/en/coolest-towns-spain/">coolest towns to sleep in summer</a> '
+        f'and the <a href="{calc}">frost-free towns to spend winter</a> are the two halves of one idea: '
+        'natural climate refuges, season by season.</p>'
+        '<div class="cta"><b>Find your own winter refuge</b>'
+        '<p>Choose any Spanish town and the temperature at which you would want the heating on at night.</p>'
+        '<div class="botones">'
+        f'<a class="btn pri" href="{calc}">Frost-free towns calculator →</a>'
+        f'<a class="btn sec" href="{site}/en/coolest-towns-spain/">Summer: coolest towns →</a>'
+        '</div></div>'
+        '<h2>Limitations</h2>' + limites
+        + '<h2>Frequently asked questions</h2>'
+        + _faq_en_html(faq).replace('class="faq"', 'class="faq grid2"')
+        + '</div></section>'
+        + footer_en_html(site))
+    cabeza = _cabeza_en(site, titulo, desc, ruta, "/", "/og.png", schema, extra_css)
+    # Sin equivalente en español: nada de hreflang ni de locale alternativo.
+    cabeza = re.sub(r'<link rel="alternate" hreflang="[^"]*" href="[^"]*">\n', "", cabeza)
+    cabeza = cabeza.replace('<meta property="og:locale:alternate" content="es_ES">\n', "")
+    return cabeza + cuerpo + "</body></html>\n"
 
 
 # ===========================================================================
@@ -13408,6 +13760,136 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
             .replace("__HOME__", site + "/"))
 
 
+# --- Código para poner el sello en otra web --------------------------------
+# Lo pega gente que no programa (hoteles, casas rurales, ayuntamientos) en
+# WordPress, Wix o Squarespace. Por eso todo va con estilos en línea: no depende
+# del CSS de su web, sale centrado y se adapta al móvil. Lleva una línea de texto
+# debajo porque, a tamaño de web, la letra pequeña del sello no se lee.
+SELLO_TAMANOS = (("Pequeño", 160), ("Mediano", 220), ("Grande", 300))
+SELLO_POSICIONES = (("Centrado", "center"), ("Izquierda", "left"), ("Derecha", "right"))
+
+
+def codigo_insercion_sello(url: str, img: str, alt: str, pie: str, tam: int = 220,
+                           alin: str = "center", con_pie: bool = True) -> str:
+    lineas = [
+        "<!-- Sello Refugio Climatico Natural - nochetropical.es -->",
+        f'<div style="text-align:{alin};margin:24px 0;max-width:100%">',
+        f'  <a href="{url}" target="_blank" rel="noopener" style="display:inline-block;border:0">',
+        f'    <img src="{img}" width="{tam}" height="{tam}" alt="{_esc(alt)}"',
+        f'         style="display:block;width:{tam}px;max-width:100%;height:auto;border:0">',
+        "  </a>",
+    ]
+    if con_pie:
+        lineas.append(f'  <p style="margin:8px 0 0;font-size:14px;line-height:1.4">{_esc(pie)} · '
+                      f'<a href="{url}" target="_blank" rel="noopener">ver certificado</a></p>')
+    lineas.append("</div>")
+    # Solo ASCII: algunos gestores ajenos aún sirven en latin-1 y romperían las
+    # tildes. Como entidad numérica se ven bien en cualquier codificación.
+    return "".join(ch if ord(ch) < 128 else f"&#{ord(ch)};" for ch in "\n".join(lineas))
+
+
+CSS_INSERCION_SELLO = (
+    '.sub{font-family:var(--fd);font-weight:600;font-size:18px;margin:22px 0 6px;color:var(--paper)}'
+    '.ins{display:grid;gap:16px;margin:14px 0 12px}'
+    '@media(min-width:760px){.ins{grid-template-columns:1fr 1.25fr;align-items:start}}'
+    '.og{margin:0 0 12px}'
+    '.ol{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}'
+    '.pill{display:inline-block;margin:0 6px 6px 0;cursor:pointer;position:relative}'
+    '.pill input{position:absolute;opacity:0;width:1px;height:1px}'
+    '.pill span{display:inline-block;font-size:13.5px;border:1px solid var(--line);border-radius:20px;'
+    'padding:6px 12px;color:var(--paper);background:#0c0906}'
+    '.pill input:checked+span{border-color:var(--teja);background:rgba(217,116,78,.16);color:var(--teja2)}'
+    '.pill input:focus-visible+span{outline:2px solid var(--teal);outline-offset:2px}'
+    '.chk{font-size:14px;color:var(--paper);display:flex;gap:8px;align-items:center;cursor:pointer}'
+    '.prev{background:#fff;color:#333;border-radius:12px;padding:12px 16px 16px;font-family:Arial,sans-serif;'
+    'min-height:140px;overflow:hidden}'
+    '.prev .prev-t{font:600 11px/1 Arial,sans-serif;color:#8a7757;text-transform:uppercase;letter-spacing:.06em;margin:2px 0 0}'
+    '.prev p{color:#333;max-width:none}.prev a{color:#1a5fb4}'
+    '#st-code{width:100%;background:#0c0906;border:1px solid var(--line);border-radius:10px;padding:12px;'
+    'font-family:var(--fm);font-size:12.5px;color:#cbb89a;line-height:1.5;resize:vertical}'
+    'button.btn{cursor:pointer;font-family:inherit}button.btn.pri{border:0}'
+    '.como{margin:14px 0 0;border-top:1px solid var(--line);padding-top:12px}'
+    '.como summary{cursor:pointer;color:var(--teal);font-size:14.5px}'
+    '.como ul{margin:10px 0 12px 20px;color:#d9ccb6;font-size:14.5px}.como li{margin:0 0 6px}'
+    '.urls{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}'
+    '.urls label{flex:1;min-width:220px;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}'
+    '.urls input{flex:1;min-width:0;background:#0c0906;border:1px solid var(--line);border-radius:8px;'
+    'padding:8px;color:var(--paper);font-family:var(--fm);font-size:12px}'
+    '.urls .btn{padding:8px 14px;font-size:13px}'
+)
+
+_INSERCION_SELLO_JS = r"""<script>
+(function(){
+ var V=JSON.parse(document.getElementById("st-var").textContent);
+ var code=document.getElementById("st-code"),prev=document.getElementById("st-prev"),pie=document.getElementById("st-pie");
+ function val(n){var r=document.querySelector('input[name="'+n+'"]:checked');return r?r.value:"";}
+ function pinta(){var c=V[val("st-tam")+"-"+val("st-pos")+"-"+(pie.checked?1:0)];if(!c)return;code.value=c;prev.innerHTML=c;}
+ var ins=document.querySelectorAll('input[name="st-tam"],input[name="st-pos"],#st-pie');
+ for(var i=0;i<ins.length;i++)ins[i].addEventListener("change",pinta);
+ function copia(t,b,txt,campo){
+  function ok(){b.textContent="Copiado ✓";setTimeout(function(){b.textContent=txt;},1600);}
+  function aMano(){if(campo){campo.focus();campo.select();}try{if(document.execCommand("copy")){ok();return;}}catch(e){}b.textContent="Selecciónalo y copia (Ctrl+C)";}
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(ok,aMano);else aMano();
+ }
+ document.getElementById("st-copy").addEventListener("click",function(){copia(code.value,this,"Copiar el código",code);});
+ var bs=document.querySelectorAll("[data-copy]");
+ for(var j=0;j<bs.length;j++)(function(b){b.addEventListener("click",function(){
+  copia(b.getAttribute("data-copy"),b,"Copiar",document.getElementById(b.getAttribute("data-campo")));});})(bs[j]);
+})();
+</script>"""
+
+
+def panel_insercion_sello(url: str, img: str, alt: str, pie: str) -> str:
+    """Bloque «Ponlo en tu web»: opciones, vista previa sobre fondo blanco (como
+    la mayoría de webs), el código listo para copiar y dónde pegarlo. Las 18
+    variantes salen de codigo_insercion_sello, así el JS no repite la plantilla."""
+    variantes = {f"{t}-{a}-{p}": codigo_insercion_sello(url, img, alt, pie, t, a, p == 1)
+                 for _, t in SELLO_TAMANOS for _, a in SELLO_POSICIONES for p in (1, 0)}
+    defecto = variantes["220-center-1"]
+    var_json = json.dumps(variantes, ensure_ascii=False).replace("</", "<\\/")
+
+    def pills(nombre: str, opciones: list, marcado) -> str:
+        return "".join(
+            f'<label class="pill"><input type="radio" name="{nombre}" value="{v}"'
+            f'{" checked" if v == marcado else ""}><span>{t}</span></label>'
+            for t, v in opciones)
+
+    return (
+        '<h3 class="sub">Ponlo en tu web</h3>'
+        '<p class="muted">Elige cómo quieres verlo, copia el código y pégalo en tu web. No hace falta '
+        'saber programar: el código ya lleva el tamaño, la posición y el enlace al certificado, para '
+        'que quien lo vea pueda comprobar el dato.</p>'
+        '<div class="ins"><div class="opts">'
+        '<div class="og"><span class="ol">Tamaño</span>'
+        + pills("st-tam", [(f"{n} · {t}&nbsp;px", str(t)) for n, t in SELLO_TAMANOS], "220")
+        + '</div><div class="og"><span class="ol">Posición</span>'
+        + pills("st-pos", list(SELLO_POSICIONES), "center")
+        + '</div><label class="chk"><input type="checkbox" id="st-pie" checked> '
+        'Con una línea de texto y enlace debajo</label></div>'
+        '<div class="prev" aria-label="Vista previa sobre una web de fondo blanco">'
+        '<p class="prev-t">Así se verá en tu web</p>'
+        f'<div id="st-prev">{defecto}</div></div></div>'
+        f'<textarea id="st-code" readonly rows="9" aria-label="Código para pegar en tu web">{_esc(defecto)}</textarea>'
+        '<div class="acts"><button class="btn pri" id="st-copy" type="button">Copiar el código</button></div>'
+        '<details class="como"><summary>Dónde pegarlo: WordPress, Wix, Squarespace y otras webs</summary>'
+        '<ul>'
+        '<li><b>WordPress:</b> edita la página, añade un bloque <b>«HTML personalizado»</b> y pega el código.</li>'
+        '<li><b>Wix:</b> añade el elemento <b>«Insertar código» › HTML</b>, pega el código y ajusta el '
+        'recuadro al tamaño del sello.</li>'
+        '<li><b>Squarespace:</b> añade un bloque <b>«Código»</b> y pega el código.</li>'
+        '<li><b>Otras webs:</b> busca en el editor la opción «HTML», «Código» o «&lt;/&gt;» y pégalo ahí.</li>'
+        '</ul>'
+        '<p class="muted">¿Tu web no deja pegar código? Añade una imagen normal con esta dirección y '
+        'ponle como enlace la del certificado:</p>'
+        f'<div class="urls"><label for="st-img">Imagen <input id="st-img" readonly value="{_esc(img)}"></label>'
+        f'<button class="btn sec" type="button" data-copy="{_esc(img)}" data-campo="st-img">Copiar</button></div>'
+        f'<div class="urls"><label for="st-url">Enlace <input id="st-url" readonly value="{_esc(url)}"></label>'
+        f'<button class="btn sec" type="button" data-copy="{_esc(url)}" data-campo="st-url">Copiar</button></div>'
+        '</details>'
+        f'<script type="application/json" id="st-var">{var_json}</script>'
+        + _INSERCION_SELLO_JS)
+
+
 def construir_pagina_hotel(h: dict, site: str) -> str:
     """Ficha individual de un hotel: su certificado (verlo + descargarlo +
     código para embeber), el dato AEMET de la zona, cómo llegar y reservar.
@@ -13460,10 +13942,10 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
     maps = "https://www.google.com/maps/search/?api=1&query=" + quote_plus(
         f'{h["hotel"]} {h["municipio"]} {h["provincia"]}')
     embed_img = f'{site}/badges/{sl}.png' if png_ok else f'{site}/badges/{sl}.svg'
-    embed = (f'<a href="{ficha_url}" target="_blank" rel="noopener">\n'
-             f'  <img src="{embed_img}" width="180" height="180"\n'
-             f'       alt="Refugio Climatico Natural certificado - {h["municipio"]} ({h["provincia"]}) - datos AEMET">\n'
-             f'</a>')
+    insercion = panel_insercion_sello(
+        ficha_url, embed_img,
+        f"Sello Refugio Climático Natural de {h['municipio']} ({h['provincia']}), datos de AEMET",
+        f"Refugio Climático Natural en {h['municipio']} ({h['provincia']})")
     desc = (f"{h['hotel']} ({h['municipio']}, {h['provincia']}) es un refugio climático natural: "
             f"en verano la mínima media baja a {_n_es(h['tmin'])} °C y apenas hay noches "
             f"tropicales, según datos de AEMET. Se duerme fresco, con manta y sin aire "
@@ -13516,6 +13998,7 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         'pre{background:#0c0906;border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto;'
         'font-family:var(--fm);font-size:12.5px;color:#cbb89a;line-height:1.5;margin:10px 0}'
         '.muted{color:var(--muted);font-size:13px}'
+        + CSS_INSERCION_SELLO
     )
     return (
         '<!doctype html>\n<html lang="es"><head>\n<meta charset="utf-8">\n'
@@ -13571,9 +14054,7 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         f'{dl_png}'
         f'<a href="{site}/badges/{sl}.svg" download>⬇ SVG (vectorial)</a>'
         '</div>'
-        '<p class="muted" style="margin-top:14px">Para incrustarlo en tu web con enlace de vuelta '
-        '(recomendado):</p>'
-        f'<pre>{_esc(embed)}</pre>'
+        + insercion +
         '</div></div></section>'
         # Reservar / cómo llegar
         '<section><div class="wrap">'
@@ -13905,8 +14386,15 @@ def main() -> int:
         (DOCS_DIR / "en" / "frost-free-towns-spain").mkdir(parents=True, exist_ok=True)
         (DOCS_DIR / "en" / "frost-free-towns-spain" / "index.html").write_text(
             sin_heladas_en[0], encoding="utf-8")
+    # Artículo de invierno en inglés, con los mismos datos que la calculadora.
+    inviernos_en = construir_pagina_en_inviernos_suaves(site)
+    if inviernos_en:
+        (DOCS_DIR / "en" / "spains-mildest-winters").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "en" / "spains-mildest-winters" / "index.html").write_text(
+            inviernos_en, encoding="utf-8")
     print("   versión EN: /en/ + /en/coolest-towns-spain/"
-          + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "") + " generadas")
+          + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "")
+          + (" + /en/spains-mildest-winters/" if inviernos_en else "") + " generadas")
     # Hoteles en refugios climáticos (afiliación Booking) + sello por hotel.
     hoteles = cargar_hoteles(estaciones)
     for h in hoteles:  # complemento de datos: humedad/viento de su estación ref

@@ -354,10 +354,8 @@ def bloque_negocio(e: dict, site: str, hoteles_est: dict) -> str:
     alt = sin_acentos(
         f'{e["loc"]} ({e["prov"]}), Refugio Climatico certificado: '
         f'{nt_txt} noches tropicales al ano segun AEMET')
-    embed = (f'<a href="{url_cert}" target="_blank" rel="noopener">\n'
-             f'  <img src="{site}/badges/pueblo-{sl}.svg" width="180" height="180"\n'
-             f'       alt="{alt}">\n'
-             f'</a>')
+    embed = g.codigo_insercion_sello(url_cert, f"{site}/badges/pueblo-{sl}.svg", alt,
+                                     f"Refugio Climático Natural en {e['loc']} ({e['prov']})")
     partes.append(
         '<div class="negocio">'
         f'<h2>¿Tienes un alojamiento en {e["loc"]}?</h2>'

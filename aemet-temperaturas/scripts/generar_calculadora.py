@@ -4903,7 +4903,7 @@ __CSS_CERCA__
  .cercanos{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
  .cercanos button{font:600 13.5px/1.2 var(--font-b);padding:9px 12px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
  .cercanos button:hover{border-color:var(--brand);color:var(--brand)}
- h2.sec{font-family:var(--font-d);font-weight:700;font-size:clamp(22px,3.2vw,30px);margin:46px 0 10px;line-height:1.15}
+ h2.sec{font-family:var(--font-d);font-weight:700;font-size:clamp(22px,3.2vw,30px);margin:46px 0 10px;line-height:1.15;scroll-margin-top:76px}
  .p{font-size:15.5px;color:var(--muted);max-width:70ch;margin:0 0 12px}
  .p b{color:var(--ink)}
  .filtros{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0}
@@ -4949,6 +4949,11 @@ __CSS_CERCA__
  .tsup[hidden]{display:none}
  table.mun td:first-child,table.mun th:first-child{position:sticky;left:0;background:var(--surface);z-index:1;box-shadow:1px 0 0 var(--line)}
  table.mun th:first-child{z-index:3}
+ ol.guia{margin:10px 0 14px;padding-left:22px;max-width:72ch}
+ ol.guia li{font-size:15.5px;color:var(--muted);margin:0 0 10px;padding-left:4px}
+ ol.guia li b{color:var(--ink)}
+ .pg .hint a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
+ .tool .guia-link{margin:14px 0 0}
 __CSS_COMUN__
 </style>
 </head>
@@ -4979,11 +4984,23 @@ __CSS_COMUN__
         <div class="field"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
         <div class="field"><select id="mun" aria-label="Municipio"><option value="">…y el municipio</option></select></div>
       </div>
+      <p class="hint guia-link"><a href="#como-elegir">Cómo usarla para elegir dónde pasar el invierno →</a></p>
       <div id="ficha" aria-live="polite"></div>
     </div>
 
+    <h2 class="sec" id="como-elegir">Cómo elegir dónde pasar el invierno</h2>
+    <p class="p">Si buscas un refugio climático natural para pasar el invierno, con noches templadas y menos horas de calefacción, estos son los pasos:</p>
+    <ol class="guia">
+      <li><b>Decide a partir de qué temperatura encenderías la calefacción por la noche</b> y elige ese grado arriba, en la calculadora. Por ejemplo, 5&nbsp;°C.</li>
+      <li><b>Mira la tabla.</b> Al cambiar los grados se recalcula para todos los municipios —cuántas noches por invierno bajó la mínima a ese valor o menos en su estación de referencia— y se ordena de menos a más. Filtra por provincia o por habitantes si ya sabes por dónde buscar.</li>
+      <li><b>Prioriza la confianza alta.</b> Quiere decir que la estación está cerca y a una altitud parecida a la del municipio. Con la etiqueta «orientativa», lo que ocurre en el pueblo puede separarse más del dato.</li>
+      <li><b>Abre la serie de tus candidatos.</b> Pulsa el nombre y mira invierno a invierno: pocas noches frías todos los años es más previsible que una buena media sostenida por un invierno suave.</li>
+      <li><b>Compáralo con donde vives.</b> Busca tu municipio con los mismos grados: la diferencia es una primera comparación de cuántas noches frías te ahorrarías.</li>
+    </ol>
+    <p class="p">Lo que esto no mide: el gasto de calefacción depende también de la temperatura durante el día y de la vivienda —aislamiento, orientación, altura—. Las noches frías de la estación son un primer filtro para comparar municipios, no una estimación de la factura.</p>
+
     <h2 class="sec" id="tabla">Todos los municipios</h2>
-    <p class="p">__NMUN__ municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. «Heladas/invierno» es la media de noches a 0&nbsp;°C o menos en los inviernos con datos completos; «Sin heladas» cuenta en cuántos de esos inviernos la estación no registró ninguna. Pulsa un municipio para ver su serie con el umbral que hayas elegido.</p>
+    <p class="p">__NMUN__ municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. La columna de noches es la media por invierno de noches con la mínima a <span class="ut">0&nbsp;°C</span> o menos en la estación de referencia, en los inviernos con datos completos; la siguiente cuenta en cuántos de esos inviernos no hubo ninguna. <b>Cambia los grados en la calculadora y la tabla se recalcula y se ordena con ese umbral.</b> Pulsa un municipio para ver su serie.</p>
     <div class="filtros">
       <div class="field"><select id="fprov" aria-label="Filtrar por provincia"><option value="">Todas las provincias</option></select></div>
       <div class="field"><select id="fpob" aria-label="Población mínima">
@@ -4998,7 +5015,7 @@ __CSS_COMUN__
       <label><input type="checkbox" class="fconf" value="a" checked> Confianza alta</label>
       <label><input type="checkbox" class="fconf" value="m" checked> Confianza media</label>
       <label><input type="checkbox" class="fconf" value="o" checked> Orientativa</label>
-      <label><input type="checkbox" id="fsin"> Solo sin heladas en __ULTIMO__</label>
+      <label><input type="checkbox" id="fsin"> Solo sin noches a <span class="ut">0&nbsp;°C</span> o menos en __ULTIMO__</label>
     </div>
     <div class="tsup" id="tsup" aria-hidden="true"><div></div></div>
     <div class="twrap" id="twrap">
@@ -5006,8 +5023,8 @@ __CSS_COMUN__
         <thead><tr>
           <th data-c="0">Municipio</th><th data-c="1">Provincia</th><th data-c="2">Habitantes</th>
           <th data-c="3">Altitud</th><th data-c="4">Estación</th><th data-c="5">Distancia</th>
-          <th data-c="6">Desnivel</th><th data-c="8">Inviernos</th><th data-c="9">Heladas/invierno</th>
-          <th data-c="10">Sin heladas</th><th data-c="7">Confianza</th>
+          <th data-c="6">Desnivel</th><th data-c="8">Inviernos</th><th data-c="9" id="th-noches">Heladas/invierno</th>
+          <th data-c="10" id="th-sin">Sin heladas</th><th data-c="7">Confianza</th>
         </tr></thead>
         <tbody id="tb"></tbody>
       </table>
@@ -5061,6 +5078,7 @@ function hav(la1,lo1,la2,lo2){var R=6371,r=Math.PI/180,dLa=(la2-la1)*r,dLo=(lo2-
 var sel=document.getElementById("umbral"), box=document.getElementById("ficha");
 var cache={}, actual=null;
 function series(p,cb){
+ if(TODAS) return cb(TODAS);
  if(cache[p]) return cb(cache[p]);
  fetch("/datos/invierno/"+p+".json").then(function(r){if(!r.ok) throw new Error(r.status); return r.json();})
   .then(function(d){
@@ -5101,7 +5119,7 @@ function ficha(i,origen,cercanos){
    +"<table class='tserie'><thead><tr><th>Invierno (nov–mar)</th><th class='n'>Noches a "+gtxt(t)+" o menos</th></tr></thead><tbody>"+filas+"</tbody></table>";
  });
 }
-sel.addEventListener("change",function(){ if(actual) ficha(actual.i,actual.origen,actual.cercanos); });
+sel.addEventListener("change",function(){ if(actual) ficha(actual.i,actual.origen,actual.cercanos); umbralTabla(); });
 
 var gb=document.getElementById("geo"), gh=document.getElementById("geohint");
 gb.addEventListener("click",function(){
@@ -5139,8 +5157,49 @@ mun.addEventListener("change",function(){ if(mun.value!=="") ficha(+mun.value); 
 var tb=document.getElementById("tb"), fpob=document.getElementById("fpob"), fq=document.getElementById("fq"),
     fsin=document.getElementById("fsin"), tmas=document.getElementById("tmas"), tcuenta=document.getElementById("tcuenta");
 var orden={c:0,dir:1}, lim=100, filas=[];
+/* La tabla sigue el umbral de la calculadora. Con 0 °C usa los datos de la
+   página; con otro grado baja una vez todas las series y las recalcula. */
+var TODAS=null, STATS={}, cargandoTodas=false;
+function st(i){
+ var m=M[i], t=+sel.value;
+ if(t===0||!TODAS) return [m[9],m[10],m[8],!!m[11]];
+ var S=STATS[t]||(STATS[t]={}), id=m[4];
+ if(!S[id]){
+  var s=TODAS[id], k=U.indexOf(t), tot=0, n=0, cero=0, ult=-1, ultc=0;
+  if(s){Object.keys(s).forEach(function(inv){var c=s[inv][k]; tot+=c; n++; if(c===0) cero++; if(+inv>ult){ult=+inv; ultc=c;}});}
+  S[id]=[n?Math.round(tot/n*10)/10:0, cero, n, n>0&&ult===INV[INV.length-1]&&ultc===0];
+ }
+ return S[id];
+}
+function rotulos(){
+ var t=+sel.value, g=gtxt(t);
+ document.querySelectorAll(".ut").forEach(function(x){x.textContent=g;});
+ document.getElementById("th-noches").textContent=t===0?"Heladas/invierno":"Noches a "+g+"/invierno";
+ document.getElementById("th-sin").textContent=t===0?"Sin heladas":"Sin ninguna";
+}
+function umbralTabla(){
+ var t=+sel.value;
+ function ordenar(){
+  orden.c=9; orden.dir=1; rotulos();
+  document.querySelectorAll("table.mun th").forEach(function(x){x.removeAttribute("aria-sort");});
+  document.getElementById("th-noches").setAttribute("aria-sort","ascending");
+  filtra();
+ }
+ if(t===0||TODAS) return ordenar();
+ if(cargandoTodas) return;
+ cargandoTodas=true; tcuenta.textContent="Calculando la tabla con "+gtxt(t)+"…";
+ fetch("/datos/invierno/todas.json").then(function(r){if(!r.ok) throw new Error(r.status); return r.json();})
+  .then(function(d){
+   Object.keys(d).forEach(function(id){Object.keys(d[id]).forEach(function(inv){
+    var a=d[id][inv], s=0; for(var k=0;k<a.length;k++){s+=a[k]; a[k]=s;}});});
+   TODAS=d; cargandoTodas=false; ordenar();
+  }).catch(function(){ cargandoTodas=false;
+   tcuenta.textContent="No se han podido cargar los datos para "+gtxt(t)+". La tabla sigue con 0 °C."; });
+}
 function clave(i,c){
  var m=M[i];
+ if(c===9) return st(i)[0];
+ if(c===10) return st(i)[1];
  if(c===1) return PN[m[1]]||"";
  if(c===4) return (EST[m[4]]||{n:""}).n;
  if(c===6) return Math.abs(m[6]);
@@ -5155,7 +5214,7 @@ function filtra(){
   var m=M[i];
   if(p&&m[1]!==p) continue;
   if(m[2]<pm||!cs[m[7]]) continue;
-  if(fsin.checked&&!m[11]) continue;
+  if(fsin.checked&&!st(i)[3]) continue;
   if(q&&norm(m[0]).indexOf(q)<0) continue;
   filas.push(i);
  }
@@ -5174,8 +5233,8 @@ function pinta(){
    +"<td>"+esc(PN[m[1]]||"")+"</td><td class='n'>"+miles(m[2])+"</td>"
    +"<td class='n'>"+(m[3]!==null?m[3]+" m":"—")+"</td><td>"+esc(e.n)+"</td>"
    +"<td class='n'>"+n1(m[5])+" km</td><td class='n'>"+(m[6]>0?"+":"")+m[6]+" m</td>"
-   +"<td class='n'>"+m[8]+"</td><td class='n'>"+n1(m[9])+"</td>"
-   +"<td class='n'>"+m[10]+" de "+m[8]+"</td>"
+   +"<td class='n'>"+st(i)[2]+"</td><td class='n'>"+n1(st(i)[0])+"</td>"
+   +"<td class='n'>"+st(i)[1]+" de "+st(i)[2]+"</td>"
    +"<td><span class='conf c-"+m[7]+"'>"+CONF[m[7]]+"</span></td></tr>";
  }).join("");
  tcuenta.textContent=miles(filas.length)+" municipios"+(filas.length>lim?" · mostrando "+miles(lim):"");
@@ -5261,6 +5320,16 @@ def construir_pagina_sin_heladas(site: str) -> tuple[str, dict] | None:
             bloque[i] = {inv: [v[0]] + [v[k] - v[k - 1] for k in range(1, len(v))]
                          for inv, v in serie.items()}
         ficheros[f"datos/invierno/{sp}.json"] = json.dumps(bloque, separators=(",", ":"))
+    # Todas las series juntas, para que la tabla pueda recalcularse con cualquier
+    # grado sin pedir 52 ficheros. Solo se descarga si se cambia el umbral.
+    todas = {}
+    for ids in por_prov_series.values():
+        for i in ids:
+            serie = d["estaciones"][i]["serie"]
+            todas[i] = {inv: [v[0]] + [v[k] - v[k - 1] for k in range(1, len(v))]
+                        for inv, v in serie.items()}
+    ficheros["datos/invierno/todas.json"] = json.dumps(dict(sorted(todas.items())),
+                                                       separators=(",", ":"))
     ficheros["datos/municipios_sin_heladas.json"] = SIN_HELADAS_JSON.read_text(encoding="utf-8")
 
     n_mun = len(filas)

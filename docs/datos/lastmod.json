@@ -4,20 +4,20 @@
 "h": "92c967b2bc63c2c0"
 },
 "a-coruna": {
-"f": "2026-09-13",
-"h": "9b44bd06a29da9b4"
+"f": "2026-09-14",
+"h": "ec122817558b272f"
 },
 "albacete": {
 "f": "2026-09-13",
 "h": "edba12b36106a336"
 },
 "alicante": {
-"f": "2026-09-12",
-"h": "2607c3c6ab4de801"
+"f": "2026-09-14",
+"h": "3fafe23aff354035"
 },
 "almeria": {
-"f": "2026-09-13",
-"h": "cc90d233e3b2bbc3"
+"f": "2026-09-14",
+"h": "2e9cfcc3e32e73e9"
 },
 "alojamiento-sin-aire-acondicionado": {
 "f": "2026-09-12",
@@ -28,8 +28,8 @@
 "h": "1c44899b89d03d49"
 },
 "asturias": {
-"f": "2026-09-13",
-"h": "329e5eb473f1988c"
+"f": "2026-09-14",
+"h": "cde228a35190ac4b"
 },
 "aumento-noches-tropicales-espana": {
 "f": "2026-09-07",
@@ -48,12 +48,12 @@
 "h": "40ab702d75bc692a"
 },
 "barcelona": {
-"f": "2026-09-13",
-"h": "78ee4368f9482496"
+"f": "2026-09-14",
+"h": "1f68611b72abe8d3"
 },
 "bizkaia": {
-"f": "2026-09-12",
-"h": "5b764b3ad6037245"
+"f": "2026-09-14",
+"h": "6d9d6f5c32f0ae4c"
 },
 "burgos": {
 "f": "2026-09-13",
@@ -64,816 +64,816 @@
 "h": "6dd9e661e0e4fbf8"
 },
 "cadiz": {
-"f": "2026-09-13",
-"h": "9ea5f85c36d6b7ba"
+"f": "2026-09-14",
+"h": "90bcd01c1442a490"
 },
 "cantabria": {
-"f": "2026-09-13",
-"h": "521addf396f03893"
+"f": "2026-09-14",
+"h": "e9a7f2463b5f184f"
 },
 "castellon": {
-"f": "2026-09-13",
-"h": "0075bd384fee45b7"
+"f": "2026-09-14",
+"h": "01c4a2a7251ee236"
 },
 "certificados": {
-"f": "2026-09-13",
-"h": "86405bdb9a84faa2"
+"f": "2026-09-14",
+"h": "6d45b844139db373"
 },
 "certificados/a-coruna-aeropuerto": {
-"f": "2026-09-13",
-"h": "54390656d1956e29"
+"f": "2026-09-14",
+"h": "bbad1013e817c8c6"
 },
 "certificados/a-estrada": {
-"f": "2026-09-13",
-"h": "e9ee39cbda222acb"
+"f": "2026-09-14",
+"h": "b5eba87fa805edc8"
 },
 "certificados/a-pobra-de-trives": {
-"f": "2026-09-13",
-"h": "11d65b86c869b487"
+"f": "2026-09-14",
+"h": "9345875076c77826"
 },
 "certificados/abadino-urkiola": {
-"f": "2026-09-13",
-"h": "d3e6d8ded7345f31"
+"f": "2026-09-14",
+"h": "afca16bd9f284299"
 },
 "certificados/aguilar-de-campoo": {
-"f": "2026-09-13",
-"h": "9f353d578311f4b1"
+"f": "2026-09-14",
+"h": "3c9453d663799ff1"
 },
 "certificados/alcanices": {
-"f": "2026-09-13",
-"h": "157a3ecaee8b0c74"
+"f": "2026-09-14",
+"h": "34503070f263f3dc"
 },
 "certificados/allariz": {
-"f": "2026-09-13",
-"h": "d0b740093127e2bb"
+"f": "2026-09-14",
+"h": "40d90759d5492c2e"
 },
 "certificados/aller-felechosa": {
-"f": "2026-09-13",
-"h": "93c121fed779bae6"
+"f": "2026-09-14",
+"h": "fefccba0dc0cbbc3"
 },
 "certificados/almazul": {
-"f": "2026-09-13",
-"h": "55058291d9735e3c"
+"f": "2026-09-14",
+"h": "28601aece2503e40"
 },
 "certificados/alto-campoo": {
-"f": "2026-09-13",
-"h": "fa8ed32cb431624d"
+"f": "2026-09-14",
+"h": "31c99bcc43aac3c3"
 },
 "certificados/amieva-panizales": {
-"f": "2026-09-13",
-"h": "0301f4048b0470fc"
+"f": "2026-09-14",
+"h": "8bfe28e4a3298734"
 },
 "certificados/anguiano-valvanera": {
-"f": "2026-09-13",
-"h": "8b69ab22145dfe89"
+"f": "2026-09-14",
+"h": "7f938d64b9df9d96"
 },
 "certificados/aranda-de-duero": {
-"f": "2026-09-13",
-"h": "d6c0768b97e579e8"
+"f": "2026-09-14",
+"h": "a9dc420ea4c5c2ef"
 },
 "certificados/areso": {
-"f": "2026-09-13",
-"h": "62869b2e23d39d37"
+"f": "2026-09-14",
+"h": "771ba2fcf1b48663"
 },
 "certificados/articutza-automatica": {
-"f": "2026-09-13",
-"h": "225ec617c85be641"
+"f": "2026-09-14",
+"h": "bd3348182edfdade"
 },
 "certificados/as-pontes": {
-"f": "2026-09-13",
-"h": "044462f3e53a372f"
+"f": "2026-09-14",
+"h": "1c62445090c1e8ab"
 },
 "certificados/astorga": {
-"f": "2026-09-13",
-"h": "3212ea493cd968da"
+"f": "2026-09-14",
+"h": "e8af666bf338567b"
 },
 "certificados/astun-la-raca": {
-"f": "2026-09-13",
-"h": "fcf4146c11396df9"
+"f": "2026-09-14",
+"h": "137793eefb906cb9"
 },
 "certificados/asturias-aeropuerto": {
-"f": "2026-09-13",
-"h": "def9c443b2905569"
+"f": "2026-09-14",
+"h": "b205c114a9fe23cc"
 },
 "certificados/banobarez": {
-"f": "2026-09-13",
-"h": "b0715e9dbf984ec5"
+"f": "2026-09-14",
+"h": "080853dd62f00084"
 },
 "certificados/barbadillo": {
-"f": "2026-09-13",
-"h": "af25ae2619b5a5e5"
+"f": "2026-09-14",
+"h": "7f27533e20c67e95"
 },
 "certificados/barco-de-avila": {
-"f": "2026-09-13",
-"h": "50b217ec2c496f88"
+"f": "2026-09-14",
+"h": "7a814154981e1c5e"
 },
 "certificados/barrios-de-luna-minera": {
-"f": "2026-09-13",
-"h": "479f1f4a86eeaf70"
+"f": "2026-09-14",
+"h": "02309266952b9cfc"
 },
 "certificados/beariz": {
-"f": "2026-09-13",
-"h": "678f4b4d9d80b7cd"
+"f": "2026-09-14",
+"h": "199fe1d294cf49df"
 },
 "certificados/bello": {
-"f": "2026-09-13",
-"h": "1661d1ccd836e97f"
+"f": "2026-09-14",
+"h": "c9b231dcc2090afb"
 },
 "certificados/belorado": {
-"f": "2026-09-13",
-"h": "218fea7f44c0e3ac"
+"f": "2026-09-14",
+"h": "6a9e6b70ca94b351"
 },
 "certificados/benasque": {
-"f": "2026-09-13",
-"h": "057fad8d9cec324a"
+"f": "2026-09-14",
+"h": "21c49e4c6d16cba1"
 },
 "certificados/beteta": {
-"f": "2026-09-13",
-"h": "0ffb9a9930d2a7e4"
+"f": "2026-09-14",
+"h": "f3045aedbbae67bd"
 },
 "certificados/bielsa": {
-"f": "2026-09-13",
-"h": "989b8fdcd09f3f2e"
+"f": "2026-09-14",
+"h": "8a4d8ca6bc4ed00d"
 },
 "certificados/biescas-embalse-de-bubal": {
-"f": "2026-09-13",
-"h": "b7815faaf29f3f74"
+"f": "2026-09-14",
+"h": "36cf27bb3faee446"
 },
 "certificados/boadilla-fuente-san-esteban": {
-"f": "2026-09-13",
-"h": "aa761819ff455458"
+"f": "2026-09-14",
+"h": "0ccf2f6d7a592ce4"
 },
 "certificados/bossost": {
-"f": "2026-09-13",
-"h": "e3a2eccb40d35855"
+"f": "2026-09-14",
+"h": "76ae7a748f26b2b2"
 },
 "certificados/brihuega": {
-"f": "2026-09-13",
-"h": "ecca2009cd97fa8d"
+"f": "2026-09-14",
+"h": "548b8409859fde1f"
 },
 "certificados/briviesca": {
-"f": "2026-09-13",
-"h": "00098e87c2b95ef8"
+"f": "2026-09-14",
+"h": "f642989d91e5ea9c"
 },
 "certificados/buitrago-del-lozoya": {
-"f": "2026-09-13",
-"h": "8b34b73f0ef28b20"
+"f": "2026-09-14",
+"h": "18a6d17818455a6b"
 },
 "certificados/burgo-de-osma": {
-"f": "2026-09-13",
-"h": "8fc6160656e0883f"
+"f": "2026-09-14",
+"h": "44edc2f32c3fd1b1"
 },
 "certificados/burgos-aeropuerto": {
-"f": "2026-09-13",
-"h": "b0d192ce4bf2d8e5"
+"f": "2026-09-14",
+"h": "4d6222858b79dca0"
 },
 "certificados/bustillo-del-paramo": {
-"f": "2026-09-13",
-"h": "dfd2e1be35aaa67d"
+"f": "2026-09-14",
+"h": "9e4d6067d2a8b8d5"
 },
 "certificados/cabo-busto": {
-"f": "2026-09-13",
-"h": "25b074a953d65c12"
+"f": "2026-09-14",
+"h": "f15b631f0f50178d"
 },
 "certificados/cabo-vilan": {
-"f": "2026-09-13",
-"h": "2f0b7947d14b5fba"
+"f": "2026-09-14",
+"h": "f37b08f1f060406a"
 },
 "certificados/cabrales": {
-"f": "2026-09-13",
-"h": "cb1cbd962b0b5b21"
+"f": "2026-09-14",
+"h": "7ec5622d2d4d1c9a"
 },
 "certificados/calamocha": {
-"f": "2026-09-13",
-"h": "548deef6bf5b9d87"
+"f": "2026-09-14",
+"h": "bfd3efd4ef502c06"
 },
 "certificados/camaleno-fuente-de": {
-"f": "2026-09-13",
-"h": "2c54e9c174bbed8e"
+"f": "2026-09-14",
+"h": "b8a1d860f31d50bb"
 },
 "certificados/campdevanol": {
-"f": "2026-09-13",
-"h": "1708bb325e8d912f"
+"f": "2026-09-14",
+"h": "b26c306a5ffebc5c"
 },
 "certificados/canfranc": {
-"f": "2026-09-13",
-"h": "40c51e54f0d2b576"
+"f": "2026-09-14",
+"h": "926c0dbf1c8db508"
 },
 "certificados/canizares": {
-"f": "2026-09-13",
-"h": "d972261b3c26aa57"
+"f": "2026-09-14",
+"h": "5f9c8f2d9fe9a250"
 },
 "certificados/cap-de-rec": {
-"f": "2026-09-13",
-"h": "6ac1c592eb662c68"
+"f": "2026-09-14",
+"h": "8047e0c6eee17885"
 },
 "certificados/cap-de-vaqueira": {
-"f": "2026-09-13",
-"h": "a95906677c29a635"
+"f": "2026-09-14",
+"h": "386ca5c8ee72244a"
 },
 "certificados/carballo-depuradora": {
-"f": "2026-09-13",
-"h": "5e05071560b72511"
+"f": "2026-09-14",
+"h": "adacbc2e5e2fd59a"
 },
 "certificados/carrion-de-los-condes": {
-"f": "2026-09-13",
-"h": "41db2eb1e83d6f43"
+"f": "2026-09-14",
+"h": "36526ac0da275c28"
 },
 "certificados/castropol": {
-"f": "2026-09-13",
-"h": "5202a90a7c653bbe"
+"f": "2026-09-14",
+"h": "658858983843a92f"
 },
 "certificados/cedrillas": {
-"f": "2026-09-13",
-"h": "45a95b02d280ca0b"
+"f": "2026-09-14",
+"h": "988e1342ee2989ea"
 },
 "certificados/cerler-cogulla": {
-"f": "2026-09-13",
-"h": "a14ccfb8f8bc6023"
+"f": "2026-09-14",
+"h": "86e404c6056159dd"
 },
 "certificados/cervera-de-pisuerga": {
-"f": "2026-09-13",
-"h": "84425dbdb02c2c22"
+"f": "2026-09-14",
+"h": "36056f3bd92e507a"
 },
 "certificados/chandrexa-de-queixa": {
-"f": "2026-09-13",
-"h": "ef807129fa6a18a0"
+"f": "2026-09-14",
+"h": "06b3aedae782b19c"
 },
 "certificados/cillorigo-de-liebana-tama": {
-"f": "2026-09-13",
-"h": "0d4f1d52354eaf2a"
+"f": "2026-09-14",
+"h": "e5f1353462db58ef"
 },
 "certificados/coll-de-nargo": {
-"f": "2026-09-13",
-"h": "4928367076b7d400"
+"f": "2026-09-14",
+"h": "11a1f5ceaeb5c6c8"
 },
 "certificados/coriscao-parque-nacional-picos-de-europa": {
-"f": "2026-09-13",
-"h": "c05439a9b3b67034"
+"f": "2026-09-14",
+"h": "4f514839482210e4"
 },
 "certificados/cubillas-de-rueda": {
-"f": "2026-09-13",
-"h": "0dea64126267be3c"
+"f": "2026-09-14",
+"h": "441263e3c62d4620"
 },
 "certificados/cuellar": {
-"f": "2026-09-13",
-"h": "865a762185f38487"
+"f": "2026-09-14",
+"h": "83c807e4b33617c6"
 },
 "certificados/degana": {
-"f": "2026-09-13",
-"h": "3197be85ca1c6614"
+"f": "2026-09-14",
+"h": "7c0c55c6acf21d54"
 },
 "certificados/el-bodon-base-aerea": {
-"f": "2026-09-13",
-"h": "d36c6122bdb6e43f"
+"f": "2026-09-14",
+"h": "7941cb86b51d0eef"
 },
 "certificados/el-pedregal": {
-"f": "2026-09-13",
-"h": "0b8e9dc65cbb2a22"
+"f": "2026-09-14",
+"h": "3e55f11b51f01b9a"
 },
 "certificados/elgeta": {
-"f": "2026-09-13",
-"h": "d61ef21f514c37eb"
+"f": "2026-09-14",
+"h": "950823d0eec7d6ad"
 },
 "certificados/enciso": {
-"f": "2026-09-13",
-"h": "f79fb39832728baa"
+"f": "2026-09-14",
+"h": "531f0502ff626570"
 },
 "certificados/escorca-son-torrella": {
-"f": "2026-09-13",
-"h": "ccf7ae645165363f"
+"f": "2026-09-14",
+"h": "5311e73fff52379d"
 },
 "certificados/estaca-de-bares": {
-"f": "2026-09-13",
-"h": "2ce5640d24cb8cbd"
+"f": "2026-09-14",
+"h": "c6f04dce291125d5"
 },
 "certificados/esteribar-embalse-de-eugi": {
-"f": "2026-09-13",
-"h": "e5a03f694083c49c"
+"f": "2026-09-14",
+"h": "a69e988f27aa9da1"
 },
 "certificados/esterri-d-aneu": {
-"f": "2026-09-13",
-"h": "834c1ca9cffcf9ed"
+"f": "2026-09-14",
+"h": "063eb738b14e6dec"
 },
 "certificados/folgoso-do-courel": {
-"f": "2026-09-13",
-"h": "4e7a12e121425d5d"
+"f": "2026-09-14",
+"h": "cc4d68e2153f1843"
 },
 "certificados/formigal-sarrios": {
-"f": "2026-09-13",
-"h": "c73553c10c13fbee"
+"f": "2026-09-14",
+"h": "5a9d86f947d3553f"
 },
 "certificados/foronda-txokiza": {
-"f": "2026-09-13",
-"h": "141baac33259b55f"
+"f": "2026-09-14",
+"h": "d77d264424fc62f8"
 },
 "certificados/fresno-de-cantespino": {
-"f": "2026-09-13",
-"h": "e68d360c11d8af12"
+"f": "2026-09-14",
+"h": "ecfd946812992490"
 },
 "certificados/fresno-de-sayago": {
-"f": "2026-09-13",
-"h": "99839abad64f6e57"
+"f": "2026-09-14",
+"h": "2429b28b41d3bdb7"
 },
 "certificados/ibias-san-antolin": {
-"f": "2026-09-13",
-"h": "dcf70f6230cfe93d"
+"f": "2026-09-14",
+"h": "834d11e5fc9ec956"
 },
 "certificados/isaba-izaba": {
-"f": "2026-09-13",
-"h": "c267d65cce126800"
+"f": "2026-09-14",
+"h": "437137b11358108c"
 },
 "certificados/izana": {
-"f": "2026-09-13",
-"h": "35fe564ac85e068d"
+"f": "2026-09-14",
+"h": "fff09726c3943bae"
 },
 "certificados/la-covatilla-estacion-de-esqui": {
-"f": "2026-09-13",
-"h": "7e8c8d6fae9ae1e2"
+"f": "2026-09-14",
+"h": "5f9f4763700da560"
 },
 "certificados/la-molina": {
-"f": "2026-09-13",
-"h": "79372024acdf7908"
+"f": "2026-09-14",
+"h": "6f729ba207a4be3d"
 },
 "certificados/la-poveda-de-soria-barriomartin": {
-"f": "2026-09-13",
-"h": "fabf552c73c7ef12"
+"f": "2026-09-14",
+"h": "98a51328accf956d"
 },
 "certificados/la-seu-d-urgell": {
-"f": "2026-09-13",
-"h": "ab6e42442dcb96cd"
+"f": "2026-09-14",
+"h": "f00b9af24b41726c"
 },
 "certificados/lagunas-de-somoza": {
-"f": "2026-09-13",
-"h": "d273af310b24b5b4"
+"f": "2026-09-14",
+"h": "a6fcb3e62e48591a"
 },
 "certificados/lalastra": {
-"f": "2026-09-13",
-"h": "5be79344507c4f32"
+"f": "2026-09-14",
+"h": "2bb4ea190cc017eb"
 },
 "certificados/lalin-cristimil": {
-"f": "2026-09-13",
-"h": "61c7d8a60e81f1e4"
+"f": "2026-09-14",
+"h": "c79446784c5b9810"
 },
 "certificados/lena-ronzon": {
-"f": "2026-09-13",
-"h": "7b5e24a3483757c4"
+"f": "2026-09-14",
+"h": "07a550f5bb7e2d1d"
 },
 "certificados/leon-virgen-del-camino": {
-"f": "2026-09-13",
-"h": "ae3bef7ce6f3d5a2"
+"f": "2026-09-14",
+"h": "513254a9d7324eec"
 },
 "certificados/les-planes-d-hostoles": {
-"f": "2026-09-13",
-"h": "43fa4afcb31c154a"
+"f": "2026-09-14",
+"h": "03f35701a5507160"
 },
 "certificados/llorac": {
-"f": "2026-09-13",
-"h": "cf4731af0ed9184d"
+"f": "2026-09-14",
+"h": "d8cf3bd228d70958"
 },
 "certificados/los-tojos-barcena-mayor": {
-"f": "2026-09-13",
-"h": "fdac9e5ad05d92c4"
+"f": "2026-09-14",
+"h": "dfe6e733d8357b54"
 },
 "certificados/lubia": {
-"f": "2026-09-13",
-"h": "8939b692264ec016"
+"f": "2026-09-14",
+"h": "1422a882d850b7f0"
 },
 "certificados/lugo": {
-"f": "2026-09-13",
-"h": "1db960203d9eff1c"
+"f": "2026-09-14",
+"h": "6d58cb48ae746214"
 },
 "certificados/lugo-aeropuerto": {
-"f": "2026-09-13",
-"h": "6b5126c07342a8f3"
+"f": "2026-09-14",
+"h": "c7e50528846a5e27"
 },
 "certificados/martinet": {
-"f": "2026-09-13",
-"h": "6dce34639cf8a9f3"
+"f": "2026-09-14",
+"h": "036ba81a5846d96a"
 },
 "certificados/mazaricos": {
-"f": "2026-09-13",
-"h": "cdeb73b9014315d2"
+"f": "2026-09-14",
+"h": "27589aaea4e1f17f"
 },
 "certificados/medina-de-pomar": {
-"f": "2026-09-13",
-"h": "5ffac554067ab7a8"
+"f": "2026-09-14",
+"h": "1e5ecf4ee3c5d0c4"
 },
 "certificados/medina-de-rioseco": {
-"f": "2026-09-13",
-"h": "5f9d35fed3612edc"
+"f": "2026-09-14",
+"h": "36b1c1ab85757957"
 },
 "certificados/mira": {
-"f": "2026-09-13",
-"h": "8456659f357850dd"
+"f": "2026-09-14",
+"h": "b1ce363a5a3d75ba"
 },
 "certificados/mirador-del-cable-parque-nacional-picos-de-europa": {
-"f": "2026-09-13",
-"h": "f3ff588d574ae3bf"
+"f": "2026-09-14",
+"h": "f71966e94a4c7c8e"
 },
 "certificados/miranda-de-ebro": {
-"f": "2026-09-13",
-"h": "a5415dad98eee251"
+"f": "2026-09-14",
+"h": "3aa948b33686000f"
 },
 "certificados/molina-de-aragon": {
-"f": "2026-09-13",
-"h": "272186dd039ac46a"
+"f": "2026-09-14",
+"h": "1cf4f031a7bb6703"
 },
 "certificados/mondonedo": {
-"f": "2026-09-13",
-"h": "3284beaf4a51f6b2"
+"f": "2026-09-14",
+"h": "f896c5864fcf93d7"
 },
 "certificados/monforte-de-lemos": {
-"f": "2026-09-13",
-"h": "5631c82c6fe38f83"
+"f": "2026-09-14",
+"h": "139a655f36885f84"
 },
 "certificados/monterrubio-de-la-demanda": {
-"f": "2026-09-13",
-"h": "5e334568645b6b53"
+"f": "2026-09-14",
+"h": "ed2e88d54ba45dae"
 },
 "certificados/moron-de-almazan": {
-"f": "2026-09-13",
-"h": "cf1cea9faeb14462"
+"f": "2026-09-14",
+"h": "53955d7a7ef5f764"
 },
 "certificados/muinos": {
-"f": "2026-09-13",
-"h": "44814d55b917fa00"
+"f": "2026-09-14",
+"h": "7b6751671e7ced20"
 },
 "certificados/naut-aran-arties": {
-"f": "2026-09-13",
-"h": "412a58abb5844456"
+"f": "2026-09-14",
+"h": "792b3fc278570f21"
 },
 "certificados/navascues-nabaskoze": {
-"f": "2026-09-13",
-"h": "16d6f381fa96ad17"
+"f": "2026-09-14",
+"h": "5184400166592c11"
 },
 "certificados/navasfrias": {
-"f": "2026-09-13",
-"h": "b59cca681fdb2346"
+"f": "2026-09-14",
+"h": "5cb3168725f047d0"
 },
 "certificados/nerpio": {
-"f": "2026-09-13",
-"h": "e5beaa44c7add4f4"
+"f": "2026-09-14",
+"h": "4697f1c496304479"
 },
 "certificados/noia": {
-"f": "2026-09-13",
-"h": "1418fbf6c0e3d140"
+"f": "2026-09-14",
+"h": "a3a7b0f5ef04d994"
 },
 "certificados/o-carballino": {
-"f": "2026-09-13",
-"h": "d9dfbcc5898d493a"
+"f": "2026-09-14",
+"h": "0c169ce8081bae66"
 },
 "certificados/o-paramo": {
-"f": "2026-09-13",
-"h": "6ed28f95734bb283"
+"f": "2026-09-14",
+"h": "0da2c6c1a8df13c0"
 },
 "certificados/olvega": {
-"f": "2026-09-13",
-"h": "0eaaada2bf3c4a89"
+"f": "2026-09-14",
+"h": "d9ed53093ece3296"
 },
 "certificados/oroz-betelu-orotz-betelu": {
-"f": "2026-09-13",
-"h": "c6346228ac5076fd"
+"f": "2026-09-14",
+"h": "1928202deeb98efe"
 },
 "certificados/orozko-ibarra": {
-"f": "2026-09-13",
-"h": "dfc460d426a65f63"
+"f": "2026-09-14",
+"h": "7d203fec2205535a"
 },
 "certificados/oviedo": {
-"f": "2026-09-13",
-"h": "1fe0634324dc84fa"
+"f": "2026-09-14",
+"h": "5a3f8d04267f3238"
 },
 "certificados/padron": {
-"f": "2026-09-13",
-"h": "cf44a8d96a3ae03a"
+"f": "2026-09-14",
+"h": "6c41c54fb189f48d"
 },
 "certificados/pajares-valgrande": {
-"f": "2026-09-13",
-"h": "744bce98bc238113"
+"f": "2026-09-14",
+"h": "6ea37f5aaee7cd38"
 },
 "certificados/palacios-de-la-sierra": {
-"f": "2026-09-13",
-"h": "dffcdbdea9f447c0"
+"f": "2026-09-14",
+"h": "f6bfd675c7eb791b"
 },
 "certificados/palencia": {
-"f": "2026-09-13",
-"h": "dd7cb003c6df69e9"
+"f": "2026-09-14",
+"h": "d948e39be0383427"
 },
 "certificados/pantano-el-vado": {
-"f": "2026-09-13",
-"h": "095ce356db967de3"
+"f": "2026-09-14",
+"h": "da35e658dae88767"
 },
 "certificados/panticosa-petrosos": {
-"f": "2026-09-13",
-"h": "8115285d087e88ed"
+"f": "2026-09-14",
+"h": "3aa1c777a9ae0ec6"
 },
 "certificados/pedraza-de-alba": {
-"f": "2026-09-13",
-"h": "ae50c1ef106a1d12"
+"f": "2026-09-14",
+"h": "f6dfcf34d157758c"
 },
 "certificados/pedrosillo-de-los-aires": {
-"f": "2026-09-13",
-"h": "ccd552fcd83c0db4"
+"f": "2026-09-14",
+"h": "a356df8eeecd66c3"
 },
 "certificados/penafiel": {
-"f": "2026-09-13",
-"h": "2e60252e970de70b"
+"f": "2026-09-14",
+"h": "5ca09940f8ba8340"
 },
 "certificados/pilona-bargaeu": {
-"f": "2026-09-13",
-"h": "f9be33343f37ef29"
+"f": "2026-09-14",
+"h": "1ca5b5b77dda2267"
 },
 "certificados/planoles": {
-"f": "2026-09-13",
-"h": "9dd44f63db558175"
+"f": "2026-09-14",
+"h": "aa6c0bf8d9fa1de7"
 },
 "certificados/pola-de-somiedo": {
-"f": "2026-09-13",
-"h": "4b8838c34097d5ef"
+"f": "2026-09-14",
+"h": "40a0cf59d813cd68"
 },
 "certificados/ponteareas-canedo": {
-"f": "2026-09-13",
-"h": "c75ecec7e1372b52"
+"f": "2026-09-14",
+"h": "7e189d99ef8fb058"
 },
 "certificados/port-aine": {
-"f": "2026-09-13",
-"h": "959a5986137d6696"
+"f": "2026-09-14",
+"h": "b09aee317b48a69c"
 },
 "certificados/posada-de-valdeon-soto": {
-"f": "2026-09-13",
-"h": "cb7d4acdbd8917ef"
+"f": "2026-09-14",
+"h": "d4f775adabaff2b4"
 },
 "certificados/pozuelo-de-tabara": {
-"f": "2026-09-13",
-"h": "2db54dbc5e0a809c"
+"f": "2026-09-14",
+"h": "d302456637653317"
 },
 "certificados/puerto-de-leitariegos": {
-"f": "2026-09-13",
-"h": "294a503ade9b9871"
+"f": "2026-09-14",
+"h": "a5f5a8a1899262f0"
 },
 "certificados/puerto-de-san-isidro": {
-"f": "2026-09-13",
-"h": "900ebebe603d68de"
+"f": "2026-09-14",
+"h": "9d4a8b0482c11759"
 },
 "certificados/puerto-del-pico": {
-"f": "2026-09-13",
-"h": "c10feda806632709"
+"f": "2026-09-14",
+"h": "4c20f8b4a2b7f73e"
 },
 "certificados/quintana-del-castillo-villameca": {
-"f": "2026-09-13",
-"h": "59e0f7efc8ceb3f6"
+"f": "2026-09-14",
+"h": "646b1155ff589728"
 },
 "certificados/rascafria": {
-"f": "2026-09-13",
-"h": "bb08dba561191c0c"
+"f": "2026-09-14",
+"h": "743757b74bd2c700"
 },
 "certificados/reinosa": {
-"f": "2026-09-13",
-"h": "c415418859d9ef5a"
+"f": "2026-09-14",
+"h": "ace20b094f082780"
 },
 "certificados/riano": {
-"f": "2026-09-13",
-"h": "391a1d5416795bc8"
+"f": "2026-09-14",
+"h": "a10c52f6d8a86671"
 },
 "certificados/ripoll": {
-"f": "2026-09-13",
-"h": "603ac680818a1dee"
+"f": "2026-09-14",
+"h": "2cb7a32a92aa2d72"
 },
 "certificados/rodeiro-vilamaior": {
-"f": "2026-09-13",
-"h": "86847723790af3a6"
+"f": "2026-09-14",
+"h": "658b44dccb52bba9"
 },
 "certificados/rois-casas-do-porto": {
-"f": "2026-09-13",
-"h": "ee8fa0f0d72eae87"
+"f": "2026-09-14",
+"h": "1ca00216547c944c"
 },
 "certificados/roncesvalles-orreaga": {
-"f": "2026-09-13",
-"h": "aa70f3fb4137a169"
+"f": "2026-09-14",
+"h": "99e7247804e403c5"
 },
 "certificados/sabinanigo": {
-"f": "2026-09-13",
-"h": "87aff139ac97aa79"
+"f": "2026-09-14",
+"h": "92236babb3f09a51"
 },
 "certificados/salamanca-aeropuerto": {
-"f": "2026-09-13",
-"h": "88bae0e4ec31d408"
+"f": "2026-09-14",
+"h": "c13012e92c62c20f"
 },
 "certificados/salas-camuno": {
-"f": "2026-09-13",
-"h": "c726ee8ed1c102f3"
+"f": "2026-09-14",
+"h": "d4903fdc621ed724"
 },
 "certificados/salvacanete": {
-"f": "2026-09-13",
-"h": "a7a2fd6166b0d64d"
+"f": "2026-09-14",
+"h": "32c4f610fabded9b"
 },
 "certificados/san-pedro-manrique": {
-"f": "2026-09-13",
-"h": "5ea9397fc456ac41"
+"f": "2026-09-14",
+"h": "f60a1a8cae67f463"
 },
 "certificados/sanabria-robleda-cervantes": {
-"f": "2026-09-13",
-"h": "64f58e2d7843d2da"
+"f": "2026-09-14",
+"h": "b0532f16218e2cb0"
 },
 "certificados/sant-hilari": {
-"f": "2026-09-13",
-"h": "9de852843a7790a7"
+"f": "2026-09-14",
+"h": "6fc78a112f3fbc7f"
 },
 "certificados/sant-julia-de-vilatorta": {
-"f": "2026-09-13",
-"h": "7f51b31a2f7870b7"
+"f": "2026-09-14",
+"h": "7d7918ccc540f44a"
 },
 "certificados/sant-maurici-llac": {
-"f": "2026-09-13",
-"h": "159ae8c00f34ab9a"
+"f": "2026-09-14",
+"h": "3ee0e9d015e22971"
 },
 "certificados/sant-pau-de-seguries": {
-"f": "2026-09-13",
-"h": "e0d2f46f058a1d5c"
+"f": "2026-09-14",
+"h": "304a0e421f973b7b"
 },
 "certificados/santa-eulalia-del-campo": {
-"f": "2026-09-13",
-"h": "0ef382b7f56d513b"
+"f": "2026-09-14",
+"h": "2ef67ba6013403fd"
 },
 "certificados/santa-gadea-de-alfoz": {
-"f": "2026-09-13",
-"h": "16aea4870cd01b8a"
+"f": "2026-09-14",
+"h": "9199adc089122dea"
 },
 "certificados/santervas-de-la-vega-villapun": {
-"f": "2026-09-13",
-"h": "affb60dbe06ae293"
+"f": "2026-09-14",
+"h": "2df69a0a3bbdde4a"
 },
 "certificados/santiago-de-compostela": {
-"f": "2026-09-13",
-"h": "cea9ecf100779228"
+"f": "2026-09-14",
+"h": "2d0411fe585494f5"
 },
 "certificados/santiago-de-compostela-aeropuerto": {
-"f": "2026-09-13",
-"h": "fe879228e7353337"
+"f": "2026-09-14",
+"h": "0baa2811b42a3d0e"
 },
 "certificados/santibanez-de-vidriales": {
-"f": "2026-09-13",
-"h": "70d7f4f0e428c4d5"
+"f": "2026-09-14",
+"h": "734e7009f66b2fec"
 },
 "certificados/sardon-de-duero": {
-"f": "2026-09-13",
-"h": "f9f1a5daf6d162bc"
+"f": "2026-09-14",
+"h": "6feae9d8849520c5"
 },
 "certificados/sargentes-de-la-lora": {
-"f": "2026-09-13",
-"h": "dcedf2650c72c72d"
+"f": "2026-09-14",
+"h": "2488fa7463a7e04e"
 },
 "certificados/seira": {
-"f": "2026-09-13",
-"h": "2428963c6bdd8652"
+"f": "2026-09-14",
+"h": "d92cf533a576e8d0"
 },
 "certificados/sierra-nevada-radiotelescopio": {
-"f": "2026-09-13",
-"h": "3da9b72637ff7906"
+"f": "2026-09-14",
+"h": "ac9f6692f73faa4d"
 },
 "certificados/siguenza": {
-"f": "2026-09-13",
-"h": "81aa6aa21d7f910e"
+"f": "2026-09-14",
+"h": "c3fabbf01495a989"
 },
 "certificados/sobrado": {
-"f": "2026-09-13",
-"h": "061a94ba054a88eb"
+"f": "2026-09-14",
+"h": "be5192625a6b0e58"
 },
 "certificados/somosierra": {
-"f": "2026-09-13",
-"h": "e736948f440f7499"
+"f": "2026-09-14",
+"h": "cc6f059ada3b1c0b"
 },
 "certificados/sopuerta": {
-"f": "2026-09-13",
-"h": "0436e21ea4ff44c1"
+"f": "2026-09-14",
+"h": "15e5af1a229f7e90"
 },
 "certificados/soria": {
-"f": "2026-09-13",
-"h": "be0d5ba85c7a9a41"
+"f": "2026-09-14",
+"h": "710ef9dde1a27af9"
 },
 "certificados/taramundi-ouria": {
-"f": "2026-09-13",
-"h": "2f2ea1fd9be3bb58"
+"f": "2026-09-14",
+"h": "8c4b0e04d5263bc7"
 },
 "certificados/teruel": {
-"f": "2026-09-13",
-"h": "6d09e37175119a15"
+"f": "2026-09-14",
+"h": "c88abd9607e2eef5"
 },
 "certificados/tineo-soutu": {
-"f": "2026-09-13",
-"h": "f864138031d6bac2"
+"f": "2026-09-14",
+"h": "8b1386b3d980da55"
 },
 "certificados/tona-escola": {
-"f": "2026-09-13",
-"h": "e59b216006ac1f14"
+"f": "2026-09-14",
+"h": "1620a81744601651"
 },
 "certificados/torla-ordesa": {
-"f": "2026-09-13",
-"h": "19710f30490fb2b3"
+"f": "2026-09-14",
+"h": "71715e816b3bfa74"
 },
 "certificados/torla-ordesa-el-cebollar": {
-"f": "2026-09-13",
-"h": "2f5952084d7d5def"
+"f": "2026-09-14",
+"h": "ecaf177690f93ed2"
 },
 "certificados/torre-de-cabdella": {
-"f": "2026-09-13",
-"h": "a133e5df08a4a82b"
+"f": "2026-09-14",
+"h": "41a33f394b8c5db9"
 },
 "certificados/tuixent": {
-"f": "2026-09-13",
-"h": "e05665f3947cf8dc"
+"f": "2026-09-14",
+"h": "d6bd1ba4ab64df43"
 },
 "certificados/ucero": {
-"f": "2026-09-13",
-"h": "34e82621117e93ee"
+"f": "2026-09-14",
+"h": "f396c666292162bf"
 },
 "certificados/valderredible-cubillo-de-ebro": {
-"f": "2026-09-13",
-"h": "26165d870223b16b"
+"f": "2026-09-14",
+"h": "4de129a2930e82d7"
 },
 "certificados/valderredible-polientes": {
-"f": "2026-09-13",
-"h": "361c6779b086f7a1"
+"f": "2026-09-14",
+"h": "f9b3a10399cbc693"
 },
 "certificados/valencia-de-don-juan": {
-"f": "2026-09-13",
-"h": "4f59cde9220a4549"
+"f": "2026-09-14",
+"h": "cf21289ab7f4b281"
 },
 "certificados/vall-de-boi": {
-"f": "2026-09-13",
-"h": "d39d173cbe6399e9"
+"f": "2026-09-14",
+"h": "fca21af256708460"
 },
 "certificados/valladolid-aeropuerto": {
-"f": "2026-09-13",
-"h": "e21fef103eb54d4e"
+"f": "2026-09-14",
+"h": "af34f0dbdf757aac"
 },
 "certificados/valle-de-hecho-hecho": {
-"f": "2026-09-13",
-"h": "b500693692a1eebe"
+"f": "2026-09-14",
+"h": "6cf9624fcc0c23c2"
 },
 "certificados/vega-de-espinareda": {
-"f": "2026-09-13",
-"h": "ac443f38aba6bf62"
+"f": "2026-09-14",
+"h": "394ae566e55e211b"
 },
 "certificados/velilla-del-rio-carrion-camporredondo-de-alba": {
-"f": "2026-09-13",
-"h": "81588e15b965251b"
+"f": "2026-09-14",
+"h": "21902c887d63afbc"
 },
 "certificados/verin": {
-"f": "2026-09-13",
-"h": "6380c0b6230113ab"
+"f": "2026-09-14",
+"h": "bea09ad2bab9276b"
 },
 "certificados/villablino": {
-"f": "2026-09-13",
-"h": "0f139ae1315b58ed"
+"f": "2026-09-14",
+"h": "5e4ba5bf339b5420"
 },
 "certificados/villacarriedo": {
-"f": "2026-09-13",
-"h": "c3618df1731ee8c7"
+"f": "2026-09-14",
+"h": "701a4d092a149036"
 },
 "certificados/villaeles-de-valdavia": {
-"f": "2026-09-13",
-"h": "2bb78d3a8a04be16"
+"f": "2026-09-14",
+"h": "1fcb07ba7396f731"
 },
 "certificados/villafafila": {
-"f": "2026-09-13",
-"h": "ff1d0d121cb214f5"
+"f": "2026-09-14",
+"h": "4a58e5722b74f1d1"
 },
 "certificados/villafranca-del-cid-vilafranca": {
-"f": "2026-09-13",
-"h": "a5799ba51d4f9f41"
+"f": "2026-09-14",
+"h": "966808f96c1d8903"
 },
 "certificados/villalon-de-campos": {
-"f": "2026-09-13",
-"h": "e050c1c8cd2944e8"
+"f": "2026-09-14",
+"h": "a676917f506586bf"
 },
 "certificados/villardeciervos": {
-"f": "2026-09-13",
-"h": "b7d2f86952547de6"
+"f": "2026-09-14",
+"h": "7e81dc8e5e9b607f"
 },
 "certificados/villayon-oneta": {
-"f": "2026-09-13",
-"h": "b6407c11255a6b4a"
+"f": "2026-09-14",
+"h": "62df39fad2288a9c"
 },
 "certificados/vimianzo": {
-"f": "2026-09-13",
-"h": "bf761199aa67a9a5"
+"f": "2026-09-14",
+"h": "54dfb309d5d26cec"
 },
 "certificados/vinuesa-quintanarejo": {
-"f": "2026-09-13",
-"h": "b4541e5e1aabef40"
+"f": "2026-09-14",
+"h": "456c3922694d8997"
 },
 "certificados/vitoria-gasteiz-aeropuerto": {
-"f": "2026-09-13",
-"h": "42ffbce05326c6d4"
+"f": "2026-09-14",
+"h": "02e93658315dbc90"
 },
 "certificados/xinzo-de-limia": {
-"f": "2026-09-13",
-"h": "fbc0d372364cea90"
+"f": "2026-09-14",
+"h": "d4c28673224ff228"
 },
 "ceuta": {
-"f": "2026-09-12",
-"h": "7a18e083593e5bb7"
+"f": "2026-09-14",
+"h": "05c9818864e5a7a3"
 },
 "ciudad-real": {
 "f": "2026-09-13",
@@ -884,8 +884,8 @@
 "h": "5be7425fe904da98"
 },
 "cordoba": {
-"f": "2026-09-13",
-"h": "68a10a7881fd925b"
+"f": "2026-09-14",
+"h": "216df537137da979"
 },
 "cuenca": {
 "f": "2026-09-13",
@@ -924,12 +924,12 @@
 "h": "24195dcf072370e2"
 },
 "girona": {
-"f": "2026-09-13",
-"h": "a36e5c82cd25004d"
+"f": "2026-09-14",
+"h": "f748d5ba40de4926"
 },
 "granada": {
-"f": "2026-09-13",
-"h": "3c47ef016aff66be"
+"f": "2026-09-14",
+"h": "8b80664101c33de4"
 },
 "guadalajara": {
 "f": "2026-09-12",
@@ -1076,20 +1076,20 @@
 "h": "bb9c5720cf31ada7"
 },
 "huelva": {
-"f": "2026-09-13",
-"h": "5d22e4a731e2651b"
+"f": "2026-09-14",
+"h": "f4c5a0e9fef2160b"
 },
 "huesca": {
 "f": "2026-09-13",
 "h": "40315bb865409522"
 },
 "illes-balears": {
-"f": "2026-09-13",
-"h": "ae7f08a0e998e6b3"
+"f": "2026-09-14",
+"h": "1b90fabaff5d989a"
 },
 "jaen": {
-"f": "2026-09-13",
-"h": "7e1b598aeee5602d"
+"f": "2026-09-14",
+"h": "c7a053ca6271e95f"
 },
 "la-espana-que-nunca-se-colorea": {
 "f": "2026-09-14",
@@ -1100,8 +1100,8 @@
 "h": "fff7d93fbaa8ecae"
 },
 "las-palmas": {
-"f": "2026-09-13",
-"h": "37c6fd547034124c"
+"f": "2026-09-14",
+"h": "2cd5c6dca8d2bc24"
 },
 "leon": {
 "f": "2026-09-13",
@@ -1112,16 +1112,16 @@
 "h": "f9a41bf25cd72b13"
 },
 "lugo": {
-"f": "2026-09-13",
-"h": "55c6977fb4f12e5d"
+"f": "2026-09-14",
+"h": "6f3ef8201c39310c"
 },
 "madrid": {
 "f": "2026-09-13",
 "h": "cb96880341b55351"
 },
 "malaga": {
-"f": "2026-09-12",
-"h": "29efb28fad8278ca"
+"f": "2026-09-14",
+"h": "4aa62c9bdb31e753"
 },
 "mapa-estaciones": {
 "f": "2026-09-13",
@@ -1132,8 +1132,8 @@
 "h": "91eb95de3b549676"
 },
 "melilla": {
-"f": "2026-09-13",
-"h": "8daee9ba8edfc6d7"
+"f": "2026-09-14",
+"h": "1b8fb01c36e45a39"
 },
 "metodologia": {
 "f": "2026-09-07",
@@ -1143,9 +1143,13 @@
 "f": "2026-09-07",
 "h": "86ee6fee528ca246"
 },
+"municipios-sin-heladas": {
+"f": "2026-09-14",
+"h": "80bbd9438057234f"
+},
 "murcia": {
-"f": "2026-09-13",
-"h": "2d8163a75edd2643"
+"f": "2026-09-14",
+"h": "72541526f9b008e8"
 },
 "navarra": {
 "f": "2026-09-13",
@@ -1176,12 +1180,12 @@
 "h": "89bb44b0717291d7"
 },
 "parte": {
-"f": "2026-09-13",
-"h": "70a0762f6bcb3076"
+"f": "2026-09-14",
+"h": "cc5c7bf66216c51d"
 },
 "pontevedra": {
-"f": "2026-09-13",
-"h": "e9e8d522563912e6"
+"f": "2026-09-14",
+"h": "e769cb3fb4146533"
 },
 "prensa": {
 "f": "2026-09-07",
@@ -1208,16 +1212,16 @@
 "h": "f327d0ac2a7af6a5"
 },
 "santa-cruz-de-tenerife": {
-"f": "2026-09-13",
-"h": "42a3b462f89743b4"
+"f": "2026-09-14",
+"h": "9164e47674077a85"
 },
 "segovia": {
 "f": "2026-09-13",
 "h": "bd3dbb3ec5cd5b83"
 },
 "sevilla": {
-"f": "2026-09-13",
-"h": "d68cbde1710e727c"
+"f": "2026-09-14",
+"h": "42fc26ea73e8d52d"
 },
 "sobre-el-proyecto": {
 "f": "2026-09-12",
@@ -1228,8 +1232,8 @@
 "h": "bc01535e5e8d0f5a"
 },
 "tarragona": {
-"f": "2026-09-13",
-"h": "ccb61b9bdd3367ea"
+"f": "2026-09-14",
+"h": "5b71df4eea6a1359"
 },
 "teruel": {
 "f": "2026-09-13",
@@ -1252,8 +1256,8 @@
 "h": "3412c377351d4371"
 },
 "valencia": {
-"f": "2026-09-13",
-"h": "0935d3eb292ec579"
+"f": "2026-09-14",
+"h": "31927ceefd6c3804"
 },
 "valladolid": {
 "f": "2026-09-13",

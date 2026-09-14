@@ -4952,7 +4952,7 @@ __CSS_CERCA__
  ol.guia{margin:10px 0 14px;padding-left:22px;max-width:72ch}
  ol.guia li{font-size:15.5px;color:var(--muted);margin:0 0 10px;padding-left:4px}
  ol.guia li b{color:var(--ink)}
- .pg .hint a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
+ .pg .hint a,ol.guia a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
  .tool .guia-link{margin:14px 0 0}
  .umbral-tabla{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:0 0 12px;padding:12px 16px;border:1.5px solid #5f5138;border-radius:12px;background:rgba(238,151,105,.07)}
  .umbral-tabla>label[for]{font-size:14.5px;color:var(--muted)}
@@ -10291,29 +10291,34 @@ def hreflang_block(es_path: str, en_path: str) -> str:
 
 # Menú escueto en inglés: reaprovecha las clases de CSS_NAV_ESCUETO. La última
 # entrada es el conmutador de idioma hacia la web en español.
+# Solo páginas en inglés: el menú de la versión inglesa no manda a páginas en
+# español sin avisar; esas van en el pie, marcadas «(ES)».
 MENU_EN = [
     ("Coolest towns", "/en/coolest-towns-spain/"),
     ("Frost-free towns", "/en/frost-free-towns-spain/"),
-    ("Live heatwave map", "/ola-de-calor/"),
-    ("Interactive map", "/mapa-estaciones/"),
+    ("Mildest winters", "/en/spains-mildest-winters/"),
 ]
 
 
 def nav_en_html(site: str) -> str:
     enlaces = "".join(f'<a href="{site}{href}">{txt}</a>' for txt, href in MENU_EN)
     enlaces += f'<a href="{site}/" hreflang="es" class="lang">ES · Español</a>'
+    # Mismo botón y script de hamburguesa que el menú español: sin ellos, el CSS
+    # móvil de CSS_NAV_ESCUETO oculta los enlaces y no queda forma de abrirlos.
+    boton = BOTON_BURGER.replace("Abrir menú", "Open menu")
+    js = JS_BURGER.replace("Cerrar menú", "Close menu").replace("Abrir menú", "Open menu")
     return ('<nav class="nav-e" aria-label="main"><div class="in">'
             f'<a class="brand" href="{site}/en/" aria-label="nochetropical.es">{_LOGO_ESCUETO}</a>'
-            f'<div class="links">{enlaces}</div></div></nav>')
+            f'<div class="links" id="menu-nav">{enlaces}</div>' + boton + '</div>' + js + '</nav>')
 
 
 def footer_en_html(site: str) -> str:
     c1 = [("Coolest towns to sleep in summer", "/en/coolest-towns-spain/"),
           ("Frost-free towns to spend winter", "/en/frost-free-towns-spain/"),
           ("Spain's mildest winters, city by city", "/en/spains-mildest-winters/"),
-          ("Live heatwave map (animated)", "/ola-de-calor/"),
-          ("Interactive station map", "/mapa-estaciones/"),
-          ("National tropical-nights ranking", "/ranking-noches-tropicales/")]
+          ("Live heatwave map, animated (ES)", "/ola-de-calor/"),
+          ("Interactive station map (ES)", "/mapa-estaciones/"),
+          ("National tropical-nights ranking (ES)", "/ranking-noches-tropicales/")]
     c2 = [("Search any Spanish town (calculator)", "/"),
           ("Methodology & data sources", "/metodologia/"),
           ("About the project", "/sobre-el-proyecto/"),

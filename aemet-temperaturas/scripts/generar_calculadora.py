@@ -1536,7 +1536,9 @@ SIN_ATAJO = {"refugios-climaticos-naturales-cerca-de-mi",
              "hoteles-refugio-climatico",
              # El artículo del alojamiento sin aire acondicionado va tal cual
              # lo aprobó el usuario: sin píldoras añadidas bajo el titular.
-             "alojamiento-sin-aire-acondicionado"}
+             "alojamiento-sin-aire-acondicionado",
+             # Página de invierno: la píldora «dormir fresco cerca de mí» es de verano.
+             "municipios-sin-heladas"}
 
 
 def inyectar_atajo(html: str, site: str, carpeta: str) -> str:
@@ -2043,6 +2045,14 @@ def vecinas_html(prov: str, site: str) -> str:
                f'acondicionado</a>. Si prefieres irte: '
                f'<a href="{site}/vacaciones-sin-calor/">dónde pasar unas vacaciones '
                f'sin calor</a>.</p>')
+    # Invierno: solo si algún municipio de la provincia no tuvo heladas en el
+    # último invierno evaluado (según su estación de referencia).
+    n_sin = sin_heladas_por_provincia().get(slug(prov), 0)
+    if n_sin:
+        bloque += (f'<p class="vecinas">En invierno: '
+                   f'<a href="{site}/municipios-sin-heladas/?provincia={slug(prov)}#tabla">'
+                   f'{n_sin} municipio{"s" if n_sin != 1 else ""} de {prov} cuya estación '
+                   f'no registró heladas el último invierno</a>.</p>')
     return bloque
 
 
@@ -4784,6 +4794,532 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
             .replace("__HOME__", site + "/")
             .replace("__SITE__", site))
 
+
+# ===========================================================================
+# PUEBLOS SIN HELADAS (/municipios-sin-heladas/): el espejo de invierno.
+#
+# Municipios de más de 500 habitantes (NGMEP del IGN/CNIG) con su estación de
+# AEMET de referencia y, por invierno (1 nov – 31 mar), cuántas noches bajó la
+# mínima a cada grado entero entre −4 y 20 °C. Los datos NO se calculan en el
+# build: los prepara a mano, una vez al año, preparar_municipios.py
+# (datos/municipios_sin_heladas.json). Sin ese JSON la página no se publica.
+#
+# Reglas (del encargo, no negociables):
+#   - El dato es de la ESTACIÓN. Ningún texto afirma que un municipio no tenga
+#     heladas: dice que su estación de referencia no las registró, con distancia
+#     y desnivel.
+#   - «Sin heladas» se evalúa invierno a invierno (decisión del usuario, igual
+#     que los certificados anuales), no con una media.
+#   - Solo temperatura mínima. Nada de sensación térmica ni índices de frío.
+#   - Sin precios ni lenguaje inmobiliario. Fuente AEMET e IGN (CNIG), visibles.
+#
+# La tabla y el listado de estaciones van inline; las series por grados se
+# cargan por provincia (datos/invierno/<provincia>.json) cuando se piden, como
+# el calendario de calor de la calculadora.
+# ===========================================================================
+SIN_HELADAS_JSON = AEMET_DIR / "datos" / "municipios_sin_heladas.json"
+_SIN_HELADAS: list = []
+
+
+def cargar_sin_heladas() -> dict | None:
+    """El JSON de invierno, leído una sola vez. None si no existe o no se lee."""
+    if not _SIN_HELADAS:
+        try:
+            _SIN_HELADAS.append(json.loads(SIN_HELADAS_JSON.read_text(encoding="utf-8")))
+        except (OSError, ValueError):
+            _SIN_HELADAS.append(None)
+    return _SIN_HELADAS[0]
+
+
+def _slug_provincia_ign(nombre: str) -> str | None:
+    """«Alacant/Alicante» → «alicante»: prueba el nombre entero y cada mitad
+    contra los slugs de provincia del sitio."""
+    del_sitio = {slug(v) for v in PROVINCIAS.values()}
+    for cand in [nombre] + nombre.replace(",", "/").split("/"):
+        s = slug(cand.strip())
+        if s in del_sitio:
+            return s
+    return None
+
+
+def sin_heladas_por_provincia() -> dict:
+    """{slug de provincia: nº de municipios cuya estación no registró heladas en
+    el último invierno evaluado}. Vacío si no hay datos."""
+    d = cargar_sin_heladas()
+    out: dict = {}
+    if not d:
+        return out
+    for m in d["municipios"]:
+        if m.get("sin_heladas"):
+            s = _slug_provincia_ign(m["provincia"])
+            if s:
+                out[s] = out.get(s, 0) + 1
+    return out
+
+
+def _inv_txt(inv: int) -> str:
+    return f"{inv}/{str(inv + 1)[2:]}"
+
+
+PAGINA_SIN_HELADAS = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pueblos sin heladas en España</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/municipios-sin-heladas/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pueblos sin heladas en España, invierno a invierno">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/municipios-sin-heladas/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<style>
+__CSS_CERCA__
+ .lede+.lede{margin-top:12px}
+ .lede b{color:var(--ink)}
+ .umbral{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 18px}
+ .umbral label{font-size:14.5px;color:var(--muted)}
+ .umbral .field{flex:0 0 190px;min-width:0}
+ .conf{display:inline-block;font:600 11.5px/1 var(--font-b);padding:4px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+ .conf.c-a{color:#8fd7bd;border-color:#3f7f6c}
+ .conf.c-m{color:var(--muted);border-color:#6b5c44}
+ .conf.c-o{color:#f0c070;border-color:#9a7430;background:rgba(240,192,112,.10)}
+ .res{font-size:15px;color:var(--ink);margin:14px 0 10px}
+ .tserie{width:100%;max-width:420px;border-collapse:collapse;font-size:14.5px}
+ .tserie th,.tserie td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left}
+ .tserie th{font:600 11px/1.3 var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+ .tserie td.n,.tserie th.n{text-align:right;font-variant-numeric:tabular-nums}
+ .tserie tr.cero td.n{color:#8fd7bd;font-weight:700}
+ .cercanos{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+ .cercanos button{font:600 13.5px/1.2 var(--font-b);padding:9px 12px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+ .cercanos button:hover{border-color:var(--brand);color:var(--brand)}
+ h2.sec{font-family:var(--font-d);font-weight:700;font-size:clamp(22px,3.2vw,30px);margin:46px 0 10px;line-height:1.15}
+ .p{font-size:15.5px;color:var(--muted);max-width:70ch;margin:0 0 12px}
+ .p b{color:var(--ink)}
+ .filtros{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0}
+ .filtros .field{flex:1;min-width:170px}
+ .filtros input[type=search]{flex:2;min-width:200px;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;color:var(--ink);font-size:15px;padding:12px 14px;font-family:var(--font-b)}
+ .filtros input[type=search]:focus{outline:2px solid var(--brand);outline-offset:1px}
+ .chk{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--muted)}
+ .chk label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+ .chk input{accent-color:var(--brand)}
+ .twrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+ table.mun{width:100%;border-collapse:collapse;font-size:14px;min-width:980px}
+ table.mun th,table.mun td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+ table.mun th{font:600 11px/1.3 var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--surface)}
+ table.mun th:hover{color:var(--ink)}
+ table.mun th[aria-sort=ascending]::after{content:" ↑";color:var(--brand)}
+ table.mun th[aria-sort=descending]::after{content:" ↓";color:var(--brand)}
+ table.mun td.n{text-align:right;font-variant-numeric:tabular-nums}
+ table.mun td button{background:none;border:0;padding:0;color:var(--ink);font:600 14px/1.3 var(--font-b);cursor:pointer;text-align:left}
+ table.mun td button:hover{color:var(--brand);text-decoration:underline}
+ .tpie{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 0;font-size:13.5px;color:var(--muted)}
+ .tpie button{font:600 14px/1 var(--font-b);padding:11px 16px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+ .tpie button:hover{border-color:var(--brand);color:var(--brand)}
+ .grupo{font-size:14px;color:var(--muted);padding:10px 0;border-bottom:1px solid var(--line);line-height:1.8}
+ .grupo b{color:var(--ink);margin-right:6px}
+ .grupo a{color:var(--muted)}
+ .grupo a:hover{color:var(--brand)}
+ ul.lim{margin:8px 0 0;padding-left:20px;max-width:72ch}
+ ul.lim li{font-size:15px;color:var(--muted);margin:0 0 9px}
+ ul.lim li b{color:var(--ink)}
+ dl.faq{margin:10px 0 0;max-width:74ch}
+ dl.faq dt{font-family:var(--font-d);font-weight:700;font-size:17px;color:var(--ink);margin:18px 0 6px}
+ dl.faq dd{margin:0;font-size:15px;color:var(--muted)}
+ .fuente{font-size:13px;color:var(--muted2);margin:12px 0 0}
+ .fuente a{color:var(--muted)}
+__CSS_COMUN__
+</style>
+</head>
+<body>
+<div class="pg">
+  __NAV__
+
+  <header class="hero"><div class="in">
+    <p class="kick">Herramienta · Datos de AEMET e IGN</p>
+    <h1>Pueblos sin heladas en España</h1>
+    <p class="lede">Una <b>helada</b> es una noche en la que la temperatura mínima baja a 0&nbsp;°C o menos. Esta página cuenta, invierno a invierno —del 1 de noviembre al 31 de marzo—, cuántas noches llegó a ese punto la <b>estación de AEMET de referencia</b> de __NMUN__ municipios de más de 500 habitantes, desde el invierno __PRIMERO__. Sirve para buscar <b>refugios climáticos naturales para pasar el invierno</b>, y también para quien pone el límite en otra temperatura: el umbral se puede mover entre −4 y 20&nbsp;°C.</p>
+    <p class="lede">El dato pertenece a la estación, no al núcleo urbano. Cada municipio toma la estación más representativa en un radio de 35&nbsp;km, y se indica a qué distancia está y con qué desnivel: el desnivel es la principal fuente de diferencia, porque la temperatura baja alrededor de 0,6&nbsp;°C por cada 100&nbsp;m.</p>
+    <p class="lede">«Sin heladas» se evalúa <b>cada invierno por separado</b>: un invierno cuenta si la estación no registró ninguna noche a 0&nbsp;°C o menos, y el siguiente se vuelve a medir. En el invierno __ULTIMO__, la estación de referencia de <b>__NSIN__ municipios</b> no registró ninguna helada. Solo usamos la temperatura mínima; no calculamos sensación térmica.</p>
+  </div></header>
+
+  <section><div class="in">
+    <div class="tool">
+      <div class="umbral">
+        <label for="umbral">Contar noches con la mínima a</label>
+        <div class="field"><select id="umbral" aria-label="Umbral de temperatura">__OPCIONES__</select></div>
+        <label for="umbral">o menos</label>
+      </div>
+      <button class="geobtn" id="geo" type="button">Usar mi ubicación</button>
+      <p class="hint" id="geohint">El cálculo se hace en tu navegador: no guardamos ni enviamos tu ubicación.</p>
+      <div class="orsep">o elige un municipio</div>
+      <div class="picks">
+        <div class="field"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
+        <div class="field"><select id="mun" aria-label="Municipio"><option value="">…y el municipio</option></select></div>
+      </div>
+    </div>
+    <div id="ficha" aria-live="polite"></div>
+
+    <h2 class="sec" id="tabla">Todos los municipios</h2>
+    <p class="p">__NMUN__ municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. «Heladas/invierno» es la media de noches a 0&nbsp;°C o menos en los inviernos con datos completos; «Sin heladas» cuenta en cuántos de esos inviernos la estación no registró ninguna. Pulsa un municipio para ver su serie con el umbral que hayas elegido.</p>
+    <div class="filtros">
+      <div class="field"><select id="fprov" aria-label="Filtrar por provincia"><option value="">Todas las provincias</option></select></div>
+      <div class="field"><select id="fpob" aria-label="Población mínima">
+        <option value="500">Desde 500 habitantes</option>
+        <option value="1000">Desde 1.000 habitantes</option>
+        <option value="5000">Desde 5.000 habitantes</option>
+        <option value="20000">Desde 20.000 habitantes</option>
+      </select></div>
+      <input type="search" id="fq" placeholder="Buscar municipio…" aria-label="Buscar municipio">
+    </div>
+    <div class="filtros chk">
+      <label><input type="checkbox" class="fconf" value="a" checked> Confianza alta</label>
+      <label><input type="checkbox" class="fconf" value="m" checked> Confianza media</label>
+      <label><input type="checkbox" class="fconf" value="o" checked> Orientativa</label>
+      <label><input type="checkbox" id="fsin"> Solo sin heladas en __ULTIMO__</label>
+    </div>
+    <div class="twrap">
+      <table class="mun">
+        <thead><tr>
+          <th data-c="0">Municipio</th><th data-c="1">Provincia</th><th data-c="2">Habitantes</th>
+          <th data-c="3">Altitud</th><th data-c="4">Estación</th><th data-c="5">Distancia</th>
+          <th data-c="6">Desnivel</th><th data-c="8">Inviernos</th><th data-c="9">Heladas/invierno</th>
+          <th data-c="10">Sin heladas</th><th data-c="7">Confianza</th>
+        </tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+    </div>
+    <div class="tpie"><span id="tcuenta"></span><button id="tmas" type="button" hidden>Mostrar 100 más</button></div>
+    <p class="fuente">Fuente: AEMET (temperaturas) · IGN (CNIG), Nomenclátor Geográfico de Municipios y Entidades de Población (municipios).</p>
+
+    <h2 class="sec">Municipios sin heladas en el invierno __ULTIMO__, por provincia</h2>
+    <p class="p">Municipios cuya estación de referencia no registró ninguna noche a 0&nbsp;°C o menos entre el 1 de noviembre y el 31 de marzo. El enlace de cada provincia abre la tabla filtrada.</p>
+    __GRUPOS__
+
+    <h2 class="sec">Limitaciones</h2>
+    <ul class="lim">
+      <li><b>La estación mide su ubicación, no el núcleo urbano.</b> Un municipio puede tener barrios más fríos o más templados que su estación de referencia, sobre todo si hay desnivel.</li>
+      <li><b>Que no haya estación cerca no significa que el clima sea desfavorable</b>: significa que no hay datos. Los municipios sin estación dentro de los márgenes no aparecen.</li>
+      <li><b>Efecto isla de calor:</b> en los municipios mayores, el casco urbano suele ser más templado de noche que una estación situada en las afueras o en un aeropuerto. No está corregido.</li>
+      <li><b>La humedad no se usa como criterio.</b> Tampoco el viento. Sin esos datos no se puede hablar de sensación térmica, así que la página se limita a la temperatura mínima.</li>
+      <li><b>Las series tienen longitud desigual:</b> cada estación cuenta los inviernos con al menos el 90&nbsp;% de los días con dato, y hace falta un mínimo de cinco.</li>
+    </ul>
+
+    <h2 class="sec">Descarga los datos</h2>
+    <p class="p"><a href="__SITE__/datos/municipios_sin_heladas.json" download>municipios_sin_heladas.json</a> — municipios, estación de referencia, distancia, desnivel, nivel de confianza y noches por invierno para cada grado entre −4 y 20&nbsp;°C. Licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>: puedes reutilizarlos citando como fuentes a AEMET y al IGN (CNIG).</p>
+
+    <h2 class="sec">Preguntas frecuentes</h2>
+    <dl class="faq">__FAQ__</dl>
+
+    <p class="notas">
+      <b>Y en verano:</b> los refugios climáticos nocturnos, donde se sigue durmiendo fresco en agosto, están en <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">refugios climáticos cerca de ti</a> y en el <a href="__SITE__/ranking-noches-tropicales/">ranking de noches tropicales</a>. Cómo medimos: <a href="__SITE__/metodologia/">metodología</a>.
+    </p>
+  </div></section>
+
+  __FOOTER__
+</div>
+<script type="application/json" id="d-mun">__MUN__</script>
+<script>
+(function(){
+var SITE="__SITE__", U=__UMBRALES__, INV=__INVIERNOS__, EST=__EST__, PROV=__PROV__;
+var M=JSON.parse(document.getElementById("d-mun").textContent);
+/* fila: 0 nombre · 1 provincia (slug) · 2 habitantes · 3 altitud · 4 estación · 5 km ·
+   6 desnivel · 7 confianza (a/m/o) · 8 inviernos · 9 heladas/invierno ·
+   10 inviernos sin heladas · 11 sin heladas el último invierno · 12 lat · 13 lon */
+var CONF={a:"alta",m:"media",o:"orientativa"}, ORDC={a:0,m:1,o:2};
+var PN={}; PROV.forEach(function(p){PN[p[0]]=p[1];});
+function n1(x){return (Math.round(x*10)/10).toFixed(1).replace(".",",");}
+function miles(x){return String(x).replace(/\B(?=(\d{3})+(?!\d))/g,".");}
+function gtxt(t){return (t<0?"−"+(-t):t)+"\u00a0°C";}
+function itxt(i){return i+"/"+String(i+1).slice(2);}
+function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function hav(la1,lo1,la2,lo2){var R=6371,r=Math.PI/180,dLa=(la2-la1)*r,dLo=(lo2-lo1)*r;
+ var x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
+ return 2*R*Math.asin(Math.sqrt(x));}
+var sel=document.getElementById("umbral"), box=document.getElementById("ficha");
+var cache={}, actual=null;
+function series(p,cb){
+ if(cache[p]) return cb(cache[p]);
+ fetch("/datos/invierno/"+p+".json").then(function(r){if(!r.ok) throw new Error(r.status); return r.json();})
+  .then(function(d){
+   Object.keys(d).forEach(function(id){Object.keys(d[id]).forEach(function(inv){
+    var a=d[id][inv], s=0; for(var k=0;k<a.length;k++){s+=a[k]; a[k]=s;}});});
+   cache[p]=d; cb(d);
+  }).catch(function(){cb(null);});
+}
+function ficha(i,origen,cercanos){
+ actual={i:i,origen:origen,cercanos:cercanos};
+ var m=M[i], e=EST[m[4]]||{n:m[4],a:""}, t=+sel.value, k=U.indexOf(t);
+ var dz=(m[6]>0?"+":"")+m[6];
+ var h="<div class='ref first'><div class='rtop'><span class='rn'>"+esc(m[0])+"</span>"
+  +(origen?"<span class='rkm'>"+esc(origen)+"</span>":"")+"</div>"
+  +"<div class='rp'>"+esc(PN[m[1]]||"")+" · "+miles(m[2])+" habitantes"+(m[3]!==null?" · "+m[3]+" m":"")+"</div>"
+  +"<div class='rp'>Estación de referencia: <b>"+esc(e.n)+"</b> ("+e.a+" m) · a "+n1(m[5])+" km · desnivel "+dz+" m · "
+  +"<span class='conf c-"+m[7]+"'>confianza "+CONF[m[7]]+"</span></div>"
+  +"<div id='serie'><p class='res'>Cargando la serie de la estación…</p></div></div>";
+ if(cercanos&&cercanos.length){
+  h+="<p class='msg'>Municipios más cercanos cuya estación no registró heladas en el invierno "+itxt(INV[INV.length-1])+":</p><div class='cercanos'>"
+   +cercanos.map(function(o){return "<button type='button' data-i='"+o.i+"'>"+esc(M[o.i][0])+" · "+(o.d<10?n1(o.d):Math.round(o.d))+" km</button>";}).join("")+"</div>";
+ }
+ box.innerHTML=h;
+ box.querySelectorAll(".cercanos button").forEach(function(b){b.addEventListener("click",function(){ficha(+b.getAttribute("data-i"));box.scrollIntoView({behavior:"smooth",block:"start"});});});
+ series(m[1],function(d){
+  var el=document.getElementById("serie"); if(!el||actual.i!==i) return;
+  var s=d&&d[m[4]];
+  if(!s||k<0){el.innerHTML="<p class='res'>No se ha podido cargar la serie de esta estación. Inténtalo de nuevo en un momento.</p>";return;}
+  var filas="", tot=0, n=0, cero=0;
+  INV.forEach(function(inv){
+   var v=s[inv];
+   if(!v){filas+="<tr><td>"+itxt(inv)+"</td><td class='n'>sin datos suficientes</td></tr>";return;}
+   var c=v[k]; tot+=c; n++; if(c===0) cero++;
+   filas+="<tr"+(c===0?" class='cero'":"")+"><td>"+itxt(inv)+"</td><td class='n'>"+c+"</td></tr>";
+  });
+  el.innerHTML="<p class='res'>La estación registró de media <b>"+n1(tot/n)+" noches por invierno</b> con la mínima a "+gtxt(t)+" o menos. "
+   +"Inviernos sin ninguna: <b>"+cero+" de "+n+"</b>.</p>"
+   +"<table class='tserie'><thead><tr><th>Invierno (nov–mar)</th><th class='n'>Noches a "+gtxt(t)+" o menos</th></tr></thead><tbody>"+filas+"</tbody></table>";
+ });
+}
+sel.addEventListener("change",function(){ if(actual) ficha(actual.i,actual.origen,actual.cercanos); });
+
+var gb=document.getElementById("geo"), gh=document.getElementById("geohint");
+gb.addEventListener("click",function(){
+ if(!navigator.geolocation){gh.textContent="Tu navegador no permite la geolocalización. Elige provincia y municipio aquí abajo.";return;}
+ gb.disabled=true; gb.textContent="Buscando tu ubicación…";
+ navigator.geolocation.getCurrentPosition(function(p){
+  gb.disabled=false; gb.textContent="Usar mi ubicación";
+  var la=p.coords.latitude, lo=p.coords.longitude, mejor=-1, dmin=1e9, sin=[];
+  for(var i=0;i<M.length;i++){
+   var d=hav(la,lo,M[i][12],M[i][13]);
+   if(d<dmin){dmin=d;mejor=i;}
+   if(M[i][11]) sin.push({i:i,d:d});
+  }
+  sin.sort(function(a,b){return a.d-b.d;});
+  ficha(mejor,"el más cercano a ti · "+(dmin<10?n1(dmin):Math.round(dmin))+" km",sin.slice(0,5));
+  box.scrollIntoView({behavior:"smooth",block:"start"});
+ },function(){
+  gb.disabled=false; gb.textContent="Usar mi ubicación";
+  gh.textContent="No se pudo obtener tu ubicación (¿permiso denegado?). Elige provincia y municipio aquí abajo.";
+ },{timeout:9000});
+});
+
+var prov=document.getElementById("prov"), mun=document.getElementById("mun"), fprov=document.getElementById("fprov");
+PROV.forEach(function(p){
+ [prov,fprov].forEach(function(s){var o=document.createElement("option");o.value=p[0];o.textContent=p[1];s.appendChild(o);});
+});
+prov.addEventListener("change",function(){
+ mun.innerHTML='<option value="">…y el municipio</option>';
+ M.map(function(m,i){return i;}).filter(function(i){return M[i][1]===prov.value;})
+  .sort(function(a,b){return M[a][0].localeCompare(M[b][0],"es");})
+  .forEach(function(i){var o=document.createElement("option");o.value=i;o.textContent=M[i][0];mun.appendChild(o);});
+});
+mun.addEventListener("change",function(){ if(mun.value!=="") ficha(+mun.value); });
+
+var tb=document.getElementById("tb"), fpob=document.getElementById("fpob"), fq=document.getElementById("fq"),
+    fsin=document.getElementById("fsin"), tmas=document.getElementById("tmas"), tcuenta=document.getElementById("tcuenta");
+var orden={c:0,dir:1}, lim=100, filas=[];
+function clave(i,c){
+ var m=M[i];
+ if(c===1) return PN[m[1]]||"";
+ if(c===4) return (EST[m[4]]||{n:""}).n;
+ if(c===6) return Math.abs(m[6]);
+ if(c===7) return ORDC[m[7]];
+ return m[c];
+}
+function filtra(){
+ var p=fprov.value, pm=+fpob.value, q=norm(fq.value.trim()), cs={};
+ document.querySelectorAll(".fconf").forEach(function(c){cs[c.value]=c.checked;});
+ filas=[];
+ for(var i=0;i<M.length;i++){
+  var m=M[i];
+  if(p&&m[1]!==p) continue;
+  if(m[2]<pm||!cs[m[7]]) continue;
+  if(fsin.checked&&!m[11]) continue;
+  if(q&&norm(m[0]).indexOf(q)<0) continue;
+  filas.push(i);
+ }
+ filas.sort(function(a,b){
+  var x=clave(a,orden.c), y=clave(b,orden.c);
+  if(typeof x==="string") return orden.dir*x.localeCompare(y,"es");
+  if(x===null) return 1; if(y===null) return -1;
+  return orden.dir*(x-y);
+ });
+ lim=100; pinta();
+}
+function pinta(){
+ tb.innerHTML=filas.slice(0,lim).map(function(i){
+  var m=M[i], e=EST[m[4]]||{n:m[4]};
+  return "<tr><td><button type='button' data-i='"+i+"'>"+esc(m[0])+"</button></td>"
+   +"<td>"+esc(PN[m[1]]||"")+"</td><td class='n'>"+miles(m[2])+"</td>"
+   +"<td class='n'>"+(m[3]!==null?m[3]+" m":"—")+"</td><td>"+esc(e.n)+"</td>"
+   +"<td class='n'>"+n1(m[5])+" km</td><td class='n'>"+(m[6]>0?"+":"")+m[6]+" m</td>"
+   +"<td class='n'>"+m[8]+"</td><td class='n'>"+n1(m[9])+"</td>"
+   +"<td class='n'>"+m[10]+" de "+m[8]+"</td>"
+   +"<td><span class='conf c-"+m[7]+"'>"+CONF[m[7]]+"</span></td></tr>";
+ }).join("");
+ tcuenta.textContent=miles(filas.length)+" municipios"+(filas.length>lim?" · mostrando "+miles(lim):"");
+ tmas.hidden=filas.length<=lim;
+}
+tb.addEventListener("click",function(ev){
+ var b=ev.target.closest("button[data-i]"); if(!b) return;
+ ficha(+b.getAttribute("data-i")); box.scrollIntoView({behavior:"smooth",block:"start"});
+});
+tmas.addEventListener("click",function(){lim+=100;pinta();});
+[fprov,fpob,fsin].forEach(function(x){x.addEventListener("change",filtra);});
+document.querySelectorAll(".fconf").forEach(function(x){x.addEventListener("change",filtra);});
+fq.addEventListener("input",filtra);
+document.querySelectorAll("table.mun th").forEach(function(th){
+ th.addEventListener("click",function(){
+  var c=+th.getAttribute("data-c");
+  orden.dir=(orden.c===c)?-orden.dir:1; orden.c=c;
+  document.querySelectorAll("table.mun th").forEach(function(x){x.removeAttribute("aria-sort");});
+  th.setAttribute("aria-sort",orden.dir===1?"ascending":"descending");
+  filtra();
+ });
+});
+var qp=new URLSearchParams(location.search).get("provincia");
+if(qp&&PN[qp]){ fprov.value=qp; prov.value=qp; prov.dispatchEvent(new Event("change"));
+ filtra(); document.getElementById("tabla").scrollIntoView({block:"start"}); }
+else filtra();
+})();
+</script>
+</body>
+</html>
+"""
+
+
+def construir_pagina_sin_heladas(site: str) -> tuple[str, dict] | None:
+    """Devuelve (html, {ruta relativa en docs/: contenido}) o None si no hay datos."""
+    import html as _html
+    d = cargar_sin_heladas()
+    if not d or not d.get("municipios"):
+        return None
+    umbrales, inviernos = d["umbrales"], d["inviernos"]
+    ultimo = inviernos[-1]
+    url = site + "/municipios-sin-heladas/"
+
+    filas, por_prov_series, faltan = [], {}, set()
+    for m in d["municipios"]:
+        sp = _slug_provincia_ign(m["provincia"])
+        if not sp:
+            faltan.add(m["provincia"])
+            continue
+        filas.append([m["nombre"], sp, m["poblacion"], m["altitud"], m["estacion"],
+                      m["distancia_km"], m["delta_altitud"], m["confianza"][0], m["inviernos"],
+                      m["heladas_por_año"], m["inviernos_sin_heladas"], 1 if m["sin_heladas"] else 0,
+                      m["lat"], m["lon"]])
+        por_prov_series.setdefault(sp, set()).add(m["estacion"])
+    if faltan:
+        avisar("municipios sin provincia del sitio",
+               "Provincias del NGMEP que no casan con ninguna del sitio: " + ", ".join(sorted(faltan)))
+
+    nombres_prov = {slug(v): v for v in PROVINCIAS.values()}
+    prov = sorted(({*por_prov_series}), key=lambda s: clave_orden(nombres_prov[s]))
+    prov_js = [[s, nombres_prov[s]] for s in prov]
+    est = {i: {"n": s["nombre"], "a": s["altitud"]} for i, s in d["estaciones"].items()}
+
+    # Series por provincia, en diferencias (cuántas noches caen en cada grado) para
+    # que el fichero pese poco; el navegador las acumula al leerlas.
+    ficheros = {}
+    for sp, ids in por_prov_series.items():
+        bloque = {}
+        for i in sorted(ids):
+            serie = d["estaciones"][i]["serie"]
+            bloque[i] = {inv: [v[0]] + [v[k] - v[k - 1] for k in range(1, len(v))]
+                         for inv, v in serie.items()}
+        ficheros[f"datos/invierno/{sp}.json"] = json.dumps(bloque, separators=(",", ":"))
+    ficheros["datos/municipios_sin_heladas.json"] = SIN_HELADAS_JSON.read_text(encoding="utf-8")
+
+    n_mun = len(filas)
+    sin_ult = [f for f in filas if f[11]]
+    grupos = []
+    for sp in prov:
+        nombres = sorted((f[0] for f in sin_ult if f[1] == sp), key=clave_orden)
+        if nombres:
+            grupos.append(
+                f'<div class="grupo"><b><a href="{site}/municipios-sin-heladas/?provincia={sp}#tabla">'
+                f'{_html.escape(nombres_prov[sp])}</a></b> ({len(nombres)}) '
+                + " · ".join(_html.escape(n) for n in nombres) + "</div>")
+    opciones = "".join(
+        f'<option value="{u}"{" selected" if u == 0 else ""}>'
+        + (f"−{-u}" if u < 0 else str(u)) + "&nbsp;°C" + (" (helada)" if u == 0 else "") + "</option>"
+        for u in reversed(umbrales))
+
+    desc = ("Municipios cuya estación de AEMET no registró heladas, invierno a invierno "
+            "(noviembre–marzo). Calculadora por grados y población. Datos AEMET e IGN.")
+    faq = [
+        ("¿Qué es una helada?",
+         "Una noche en la que la temperatura mínima baja a 0,0 °C o menos. Aquí se cuenta en la "
+         "estación de AEMET de referencia de cada municipio, entre el 1 de noviembre y el 31 de marzo."),
+        ("¿Qué significa que un municipio figure sin heladas?",
+         f"Que su estación de referencia no registró ninguna helada ese invierno. Se evalúa cada "
+         f"invierno por separado: en el invierno {_inv_txt(ultimo)} fue el caso de {len(sin_ult)} "
+         f"municipios, y el invierno siguiente se vuelve a medir."),
+        ("¿Por qué el dato es de la estación y no del pueblo?",
+         "Porque AEMET mide en puntos concretos. Cada municipio toma la estación más representativa en "
+         "35 km y se indican la distancia y el desnivel; con más de 100 m de desnivel la temperatura "
+         "puede cambiar más de medio grado."),
+        ("¿Puedo contar noches por debajo de otra temperatura?",
+         "Sí. El selector permite cualquier grado entero entre −4 y 20 °C, y la serie de cada municipio "
+         "muestra cuántas noches por invierno bajó la mínima a ese valor o menos."),
+        ("¿Tiene en cuenta la sensación térmica?",
+         "No. Solo se usa la temperatura mínima registrada por la estación. La humedad y el viento "
+         "cambian cómo se siente el frío, pero sin esos datos no se puede calcular con rigor."),
+    ]
+    faq_html = "".join(f"<dt>{_html.escape(p)}</dt><dd>{_html.escape(r)}</dd>" for p, r in faq)
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "nochetropical.es", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Pueblos sin heladas", "item": url}]},
+        {"@type": "Dataset", "name": "Municipios de España y heladas por invierno",
+         "description": ("Municipios de más de 500 habitantes con su estación de AEMET de referencia "
+                         "(distancia, desnivel y nivel de confianza) y el número de noches por invierno, "
+                         "de noviembre a marzo, con la temperatura mínima en cada grado entre −4 y 20 °C."),
+         "url": url, "inLanguage": "es-ES",
+         "license": "https://creativecommons.org/licenses/by/4.0/",
+         "creator": {"@type": "Person", "name": "Ramón J. Lowesting", "url": site + "/sobre-el-proyecto/"},
+         "isBasedOn": ["https://opendata.aemet.es", "https://centrodedescargas.cnig.es"],
+         "temporalCoverage": f"{inviernos[0]}-11-01/{ultimo + 1}-03-31",
+         "spatialCoverage": {"@type": "Place", "name": "España"},
+         "variableMeasured": "Noches con temperatura mínima igual o inferior a un umbral",
+         "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json",
+                           "contentUrl": site + "/datos/municipios_sin_heladas.json"}]},
+        {"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": p, "acceptedAnswer": {"@type": "Answer", "text": r}}
+            for p, r in faq]}]}, ensure_ascii=False)
+
+    css_cerca = PAGINA_CERCA.split("<style>", 1)[1].split("__CSS_COMUN__", 1)[0]
+    mun_json = json.dumps(filas, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    html_out = (PAGINA_SIN_HELADAS
+                .replace("__CSS_CERCA__", css_cerca)
+                .replace("__CSS_COMUN__", " " + _CSS_COMUN)
+                .replace("__NAV__", nav_html(""))
+                .replace("__FOOTER__", FOOTER_HTML)
+                .replace("__SCHEMA__", schema)
+                .replace("__DESC__", desc)
+                .replace("__NMUN__", f"{n_mun:,}".replace(",", "."))
+                .replace("__NSIN__", f"{len(sin_ult):,}".replace(",", "."))
+                .replace("__PRIMERO__", _inv_txt(inviernos[0]))
+                .replace("__ULTIMO__", _inv_txt(ultimo))
+                .replace("__OPCIONES__", opciones)
+                .replace("__GRUPOS__", "".join(grupos))
+                .replace("__FAQ__", faq_html)
+                .replace("__UMBRALES__", json.dumps(umbrales))
+                .replace("__INVIERNOS__", json.dumps(inviernos))
+                .replace("__EST__", json.dumps(est, ensure_ascii=False, separators=(",", ":")))
+                .replace("__PROV__", json.dumps(prov_js, ensure_ascii=False, separators=(",", ":")))
+                .replace("__MUN__", mun_json)
+                .replace("__HOME__", site + "/")
+                .replace("__SITE__", site))
+    return html_out, ficheros
 
 # ===========================================================================
 # EL CONFORTÓMETRO: termómetro colectivo de sensación nocturna.
@@ -12928,6 +13464,22 @@ def main() -> int:
     (DOCS_DIR / "refugios-climaticos-naturales-cerca-de-mi").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "refugios-climaticos-naturales-cerca-de-mi" / "index.html").write_text(
         construir_pagina_cerca(estaciones, datos, site, humedad), encoding="utf-8")
+    # Pueblos sin heladas (invierno): municipios del NGMEP con su estación de
+    # referencia y las noches frías por invierno. Sale del JSON que prepara a
+    # mano preparar_municipios.py; sin ese JSON no hay página.
+    sin_heladas = construir_pagina_sin_heladas(site)
+    if sin_heladas:
+        html_sh, ficheros_sh = sin_heladas
+        (DOCS_DIR / "municipios-sin-heladas").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "municipios-sin-heladas" / "index.html").write_text(
+            html_sh, encoding="utf-8")
+        for rel, contenido in ficheros_sh.items():
+            destino = DOCS_DIR / rel
+            destino.parent.mkdir(parents=True, exist_ok=True)
+            destino.write_text(contenido, encoding="utf-8")
+        print(f"   municipios-sin-heladas: página + {len(ficheros_sh)} ficheros de datos")
+    else:
+        print("   municipios-sin-heladas: sin datos (ejecuta preparar_municipios.py); se omite")
     # El confortómetro (ciencia ciudadana) + tmin-zonas.json: la última mínima
     # por estación, que es la referencia con la que el backend (Apps Script)
     # contrasta la coherencia de los votos.

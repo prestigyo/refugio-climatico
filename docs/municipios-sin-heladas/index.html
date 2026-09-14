@@ -118,10 +118,10 @@
  .chk{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--muted)}
  .chk label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
  .chk input{accent-color:var(--brand)}
- .twrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+ .twrap{overflow:auto;max-height:min(72vh,720px);border:1px solid var(--line);border-radius:14px;background:var(--surface);scrollbar-color:#5f5138 transparent}
  table.mun{width:100%;border-collapse:collapse;font-size:14px;min-width:980px}
  table.mun th,table.mun td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
- table.mun th{font:600 11px/1.3 var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--surface)}
+ table.mun th{font:600 11px/1.3 var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--surface);z-index:2}
  table.mun th:hover{color:var(--ink)}
  table.mun th[aria-sort=ascending]::after{content:" ↑";color:var(--brand)}
  table.mun th[aria-sort=descending]::after{content:" ↓";color:var(--brand)}
@@ -143,6 +143,17 @@
  dl.faq dd{margin:0;font-size:15px;color:var(--muted)}
  .fuente{font-size:13px;color:var(--muted2);margin:12px 0 0}
  .fuente a{color:var(--muted)}
+ .pg .p a,.pg .notas a,.pg dd a,.pg .lede a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
+ .pg .p a:visited,.pg .notas a:visited,.pg dd a:visited,.pg .lede a:visited{color:var(--brand)}
+ .pg .p a:hover,.pg .notas a:hover,.pg dd a:hover{color:var(--ink)}
+ .tooltit{font:600 12px/1 var(--font-b);letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin:0 0 18px}
+ .tool #ficha:not(:empty){margin-top:24px;padding-top:22px;border-top:1px dashed var(--line)}
+ .tool #ficha .ref,.tool #ficha .ref.first{background:transparent;border:0;padding:0;box-shadow:none}
+ .tsup{overflow-x:auto;overflow-y:hidden;height:16px;margin:0 0 6px;scrollbar-color:#5f5138 transparent}
+ .tsup>div{height:1px}
+ .tsup[hidden]{display:none}
+ table.mun td:first-child,table.mun th:first-child{position:sticky;left:0;background:var(--surface);z-index:1;box-shadow:1px 0 0 var(--line)}
+ table.mun th:first-child{z-index:3}
  .mu{display:inline-block;width:.78em;height:.78em;border-radius:3px;margin:0 .16em 0 .1em;position:relative;top:.04em;box-shadow:0 0 0 1px rgba(255,255,255,.3)}@media(max-width:560px){.nav .brand span{display:none}.nav .in{gap:14px}.menu a{padding:8px 10px}}.masbusca{font-size:14.5px;color:var(--muted);margin:14px 0 0;line-height:1.7}.burger{display:none;background:none;border:1px solid var(--line);border-radius:9px;padding:9px 8px;cursor:pointer;flex-direction:column;gap:4px;align-items:center;justify-content:center;width:38px;height:36px;flex:0 0 auto;color:#efe6d6;margin-left:auto}.burger span{display:block;width:18px;height:2px;background:currentColor;border-radius:2px;transition:transform .22s ease,opacity .18s ease}.burger[aria-expanded="true"]{border-color:var(--teja)}.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}.burger[aria-expanded="true"] span:nth-child(2){opacity:0}.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}@media(prefers-reduced-motion:reduce){.burger span{transition:none}}@media(max-width:700px){.burger{display:flex}.nav .in,.nav-e .in{position:relative;flex-wrap:nowrap}.nav .menu,.nav-e .links{position:absolute;top:calc(100% + 9px);left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:0;overflow:visible;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5);z-index:60}.nav .menu a,.nav-e .links a{padding:13px 14px;border-radius:9px;font-size:16px;text-align:left;margin:0}.nav .menu a:hover,.nav-e .links a:hover{background:rgba(217,116,78,.12)}.nav .menu.abre,.nav-e .links.abre{display:flex}.nav .menu a.lupa,.nav-e .links a.lupa{gap:10px;justify-content:flex-start;border:0;padding:13px 14px;width:auto;height:auto}.nav .menu a.lupa::after,.nav-e .links a.lupa::after{content:"Buscar en la web";font-weight:400}.nav .menu a.lang,.nav-e .links a.lang{align-self:flex-start;margin:6px 0 0 14px}}
 </style>
 </head>
@@ -191,6 +202,7 @@
 
   <section><div class="in">
     <div class="tool">
+      <p class="tooltit">Calculadora de noches frías</p>
       <div class="umbral">
         <label for="umbral">Contar noches con la mínima a</label>
         <div class="field"><select id="umbral" aria-label="Umbral de temperatura"><option value="20">20&nbsp;°C</option><option value="19">19&nbsp;°C</option><option value="18">18&nbsp;°C</option><option value="17">17&nbsp;°C</option><option value="16">16&nbsp;°C</option><option value="15">15&nbsp;°C</option><option value="14">14&nbsp;°C</option><option value="13">13&nbsp;°C</option><option value="12">12&nbsp;°C</option><option value="11">11&nbsp;°C</option><option value="10">10&nbsp;°C</option><option value="9">9&nbsp;°C</option><option value="8">8&nbsp;°C</option><option value="7">7&nbsp;°C</option><option value="6">6&nbsp;°C</option><option value="5">5&nbsp;°C</option><option value="4">4&nbsp;°C</option><option value="3">3&nbsp;°C</option><option value="2">2&nbsp;°C</option><option value="1">1&nbsp;°C</option><option value="0" selected>0&nbsp;°C (helada)</option><option value="-1">−1&nbsp;°C</option><option value="-2">−2&nbsp;°C</option><option value="-3">−3&nbsp;°C</option><option value="-4">−4&nbsp;°C</option></select></div>
@@ -203,8 +215,8 @@
         <div class="field"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
         <div class="field"><select id="mun" aria-label="Municipio"><option value="">…y el municipio</option></select></div>
       </div>
+      <div id="ficha" aria-live="polite"></div>
     </div>
-    <div id="ficha" aria-live="polite"></div>
 
     <h2 class="sec" id="tabla">Todos los municipios</h2>
     <p class="p">4.113 municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. «Heladas/invierno» es la media de noches a 0&nbsp;°C o menos en los inviernos con datos completos; «Sin heladas» cuenta en cuántos de esos inviernos la estación no registró ninguna. Pulsa un municipio para ver su serie con el umbral que hayas elegido.</p>
@@ -224,7 +236,8 @@
       <label><input type="checkbox" class="fconf" value="o" checked> Orientativa</label>
       <label><input type="checkbox" id="fsin"> Solo sin heladas en 2025/26</label>
     </div>
-    <div class="twrap">
+    <div class="tsup" id="tsup" aria-hidden="true"><div></div></div>
+    <div class="twrap" id="twrap">
       <table class="mun">
         <thead><tr>
           <th data-c="0">Municipio</th><th data-c="1">Provincia</th><th data-c="2">Habitantes</th>
@@ -251,14 +264,12 @@
       <li><b>Las series tienen longitud desigual:</b> cada estación cuenta los inviernos con al menos el 90&nbsp;% de los días con dato, y hace falta un mínimo de cinco.</li>
     </ul>
 
-    <h2 class="sec">Descarga los datos</h2>
-    <p class="p"><a href="https://nochetropical.es/datos/municipios_sin_heladas.json" download>municipios_sin_heladas.json</a> — municipios, estación de referencia, distancia, desnivel, nivel de confianza y noches por invierno para cada grado entre −4 y 20&nbsp;°C. Licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>: puedes reutilizarlos citando como fuentes a AEMET y al IGN (CNIG).</p>
-
     <h2 class="sec">Preguntas frecuentes</h2>
     <dl class="faq"><dt>¿Qué es una helada?</dt><dd>Una noche en la que la temperatura mínima baja a 0,0 °C o menos. Aquí se cuenta en la estación de AEMET de referencia de cada municipio, entre el 1 de noviembre y el 31 de marzo.</dd><dt>¿Qué significa que un municipio figure sin heladas?</dt><dd>Que su estación de referencia no registró ninguna helada ese invierno. Se evalúa cada invierno por separado: en el invierno 2025/26 fue el caso de 845 municipios, y el invierno siguiente se vuelve a medir.</dd><dt>¿Por qué el dato es de la estación y no del pueblo?</dt><dd>Porque AEMET mide en puntos concretos. Cada municipio toma la estación más representativa en 35 km y se indican la distancia y el desnivel; con más de 100 m de desnivel la temperatura puede cambiar más de medio grado.</dd><dt>¿Puedo contar noches por debajo de otra temperatura?</dt><dd>Sí. El selector permite cualquier grado entero entre −4 y 20 °C, y la serie de cada municipio muestra cuántas noches por invierno bajó la mínima a ese valor o menos.</dd><dt>¿Tiene en cuenta la sensación térmica?</dt><dd>No. Solo se usa la temperatura mínima registrada por la estación. La humedad y el viento cambian cómo se siente el frío, pero sin esos datos no se puede calcular con rigor.</dd></dl>
 
     <p class="notas">
-      <b>Y en verano:</b> los refugios climáticos nocturnos, donde se sigue durmiendo fresco en agosto, están en <a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">refugios climáticos cerca de ti</a> y en el <a href="https://nochetropical.es/ranking-noches-tropicales/">ranking de noches tropicales</a>. Cómo medimos: <a href="https://nochetropical.es/metodologia/">metodología</a>.
+      <b>Y en verano:</b> los refugios climáticos nocturnos, donde se sigue durmiendo fresco en agosto, están en <a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">refugios climáticos cerca de ti</a> y en el <a href="https://nochetropical.es/ranking-noches-tropicales/">ranking de noches tropicales</a>. Cómo medimos: <a href="https://nochetropical.es/metodologia/">metodología</a>.<br>
+      <b>Datos abiertos, para medios e investigación:</b> la tabla completa, con las noches por invierno para cada grado entre −4 y 20&nbsp;°C, se puede descargar en <a href="https://nochetropical.es/datos/municipios_sin_heladas.json" download>formato JSON</a> (licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>, citando a AEMET y al IGN).
     </p>
   </div></section>
 
@@ -268,7 +279,7 @@
         <a class="brand" href="https://nochetropical.es/" style="margin-bottom:12px"><svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><circle cx="45" cy="52" r="30" fill="#efe6d6"/><circle cx="60" cy="44" r="29" fill="var(--surface)"/><circle cx="73" cy="34" r="6.5" fill="#d9744e"/></svg><span>nochetropical.es</span></a>
         <p class="fabout">Diez veranos de datos de AEMET para responder una pregunta: ¿dónde se duerme fresco en España?</p>
       </div>
-      <div class="fcol"><h4>Explora los datos</h4><a href="https://nochetropical.es/observatorio-del-descanso/">El Observatorio del Descanso</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios climáticos cerca de mí</a><a href="https://nochetropical.es/confortometro/">El Confortómetro: vota tu zona</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa interactivo de estaciones</a><a href="https://nochetropical.es/ola-de-calor/">¿Cuándo acaba la ola de calor?</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking nacional de noches tropicales</a><a href="https://nochetropical.es/parte/">El parte de la noche</a><a href="https://nochetropical.es/certificados/">Certificados de refugio climático</a></div>
+      <div class="fcol"><h4>Explora los datos</h4><a href="https://nochetropical.es/observatorio-del-descanso/">El Observatorio del Descanso</a><a href="https://nochetropical.es/refugios-climaticos-naturales-cerca-de-mi/">Refugios climáticos cerca de mí</a><a href="https://nochetropical.es/confortometro/">El Confortómetro: vota tu zona</a><a href="https://nochetropical.es/mapa-estaciones/">Mapa interactivo de estaciones</a><a href="https://nochetropical.es/ola-de-calor/">¿Cuándo acaba la ola de calor?</a><a href="https://nochetropical.es/ranking-noches-tropicales/">Ranking nacional de noches tropicales</a><a href="https://nochetropical.es/parte/">El parte de la noche</a><a href="https://nochetropical.es/certificados/">Certificados de refugio climático</a><a href="https://nochetropical.es/municipios-sin-heladas/">Pueblos sin heladas en invierno</a></div>
       <div class="fcol"><h4>Guías y artículos</h4><a href="https://nochetropical.es/noches-tropicales/">Qué es una noche tropical</a><a href="https://nochetropical.es/aumento-noches-tropicales-espana/">Aumento de noches tropicales en España</a><a href="https://nochetropical.es/dormir-con-calor/">Cómo dormir con calor sin aire acondicionado</a><a href="https://nochetropical.es/noches-tropicales-y-salud/">Noches tropicales y salud: qué dice la ciencia</a><a href="https://nochetropical.es/enfriar-habitacion-sin-aire-acondicionado/">Enfriar una habitación sin aire acondicionado</a><a href="https://nochetropical.es/alojamiento-sin-aire-acondicionado/">Alojamiento sin aire acondicionado: ¿carencia o ventaja?</a><a href="https://nochetropical.es/vacaciones-sin-calor/">Vacaciones sin calor: dónde ir en verano</a><a href="https://nochetropical.es/hoteles-refugio-climatico/">🏨 Hoteles donde dormir con manta</a><a href="https://nochetropical.es/dormir-con-manta-en-verano/">Pueblos para dormir con manta en verano</a><a href="https://nochetropical.es/la-espana-que-nunca-se-colorea/">La España que nunca se colorea (estudio)</a><a href="https://nochetropical.es/microclimas/">Microclimas: los refugios de la naturaleza</a><a href="https://nochetropical.es/refugio-climatico-natural/">Cómo crear un refugio climático natural</a><a href="https://nochetropical.es/refugios-y-espana-vaciada/">Refugios y España vaciada</a><a href="https://nochetropical.es/hipoteca-termica/">La hipoteca térmica</a></div>
       <div class="fcol"><h4>Proyecto</h4><a href="https://nochetropical.es/buscar/">Buscar en la web</a><a href="https://nochetropical.es/">La calculadora de tu pueblo</a><a href="https://nochetropical.es/sobre-el-proyecto/">Sobre el proyecto</a><a href="https://nochetropical.es/metodologia/">Metodología y glosario</a><a href="https://nochetropical.es/prensa/">Sala de prensa</a><a href="https://nochetropical.es/tu-hotel/">Certifica tu hotel</a><a href="https://nochetropical.es/tu-pueblo/">¿Tu pueblo no aparece? Ayúdanos</a><a href="https://nochetropical.es/aviso-legal/">Licencia y aviso legal</a></div>
     </div>
@@ -416,7 +427,19 @@ function pinta(){
  }).join("");
  tcuenta.textContent=miles(filas.length)+" municipios"+(filas.length>lim?" · mostrando "+miles(lim):"");
  tmas.hidden=filas.length<=lim;
+ ajustaSup();
 }
+/* Barra de scroll horizontal también arriba: con una lista larga, la de abajo
+   no se ve hasta el final. Las dos se mueven a la vez. */
+var twrap=document.getElementById("twrap"), tsup=document.getElementById("tsup");
+function ajustaSup(){
+ var t=twrap.querySelector("table");
+ tsup.firstChild.style.width=t.scrollWidth+"px";
+ tsup.hidden=t.scrollWidth<=twrap.clientWidth+1;
+}
+tsup.addEventListener("scroll",function(){ if(twrap.scrollLeft!==tsup.scrollLeft) twrap.scrollLeft=tsup.scrollLeft; });
+twrap.addEventListener("scroll",function(){ if(tsup.scrollLeft!==twrap.scrollLeft) tsup.scrollLeft=twrap.scrollLeft; });
+window.addEventListener("resize",ajustaSup);
 tb.addEventListener("click",function(ev){
  var b=ev.target.closest("button[data-i]"); if(!b) return;
  ficha(+b.getAttribute("data-i")); box.scrollIntoView({behavior:"smooth",block:"start"});

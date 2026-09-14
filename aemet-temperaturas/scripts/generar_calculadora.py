@@ -1258,7 +1258,8 @@ _F_EXPLORA = [("El Observatorio del Descanso", "/observatorio-del-descanso/"),
               ("¿Cuándo acaba la ola de calor?", "/ola-de-calor/"),
               ("Ranking nacional de noches tropicales", "/ranking-noches-tropicales/"),
               ("El parte de la noche", "/parte/"),
-              ("Certificados de refugio climático", "/certificados/")]
+              ("Certificados de refugio climático", "/certificados/"),
+              ("Pueblos sin heladas en invierno", "/municipios-sin-heladas/")]
 _F_GUIAS = [("Qué es una noche tropical", "/noches-tropicales/"),
             ("Aumento de noches tropicales en España", "/aumento-noches-tropicales-espana/"),
             ("Cómo dormir con calor sin aire acondicionado", "/dormir-con-calor/"),
@@ -4386,6 +4387,7 @@ __CSS_COMUN__
       <a class="card2" href="__SITE__/ranking-noches-tropicales/"><h3>Ranking nacional</h3><p>Dónde se duerme mejor y peor de toda España.</p></a>
       <a class="card2" href="__SITE__/parte/"><h3>El parte de la noche</h3><p>Quién durmió fresco anoche. Cada mañana.</p></a>
       <a class="card2" href="__SITE__/certificados/"><h3>Certificados</h3><p>Los pueblos acreditados como refugio climático.</p></a>
+      <a class="card2" href="__SITE__/municipios-sin-heladas/"><h3>Pueblos sin heladas</h3><p>Refugios climáticos naturales para pasar el invierno: noches frías por municipio, invierno a invierno.</p></a>
     </div>
     <h2 class="sec-h" id="articulos">Artículos y estudios</h2>
     <div class="mods">
@@ -4911,10 +4913,10 @@ __CSS_CERCA__
  .chk{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--muted)}
  .chk label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
  .chk input{accent-color:var(--brand)}
- .twrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+ .twrap{overflow:auto;max-height:min(72vh,720px);border:1px solid var(--line);border-radius:14px;background:var(--surface);scrollbar-color:#5f5138 transparent}
  table.mun{width:100%;border-collapse:collapse;font-size:14px;min-width:980px}
  table.mun th,table.mun td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
- table.mun th{font:600 11px/1.3 var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--surface)}
+ table.mun th{font:600 11px/1.3 var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;user-select:none;position:sticky;top:0;background:var(--surface);z-index:2}
  table.mun th:hover{color:var(--ink)}
  table.mun th[aria-sort=ascending]::after{content:" ↑";color:var(--brand)}
  table.mun th[aria-sort=descending]::after{content:" ↓";color:var(--brand)}
@@ -4936,6 +4938,17 @@ __CSS_CERCA__
  dl.faq dd{margin:0;font-size:15px;color:var(--muted)}
  .fuente{font-size:13px;color:var(--muted2);margin:12px 0 0}
  .fuente a{color:var(--muted)}
+ .pg .p a,.pg .notas a,.pg dd a,.pg .lede a{color:var(--brand);text-decoration:underline;text-underline-offset:2px}
+ .pg .p a:visited,.pg .notas a:visited,.pg dd a:visited,.pg .lede a:visited{color:var(--brand)}
+ .pg .p a:hover,.pg .notas a:hover,.pg dd a:hover{color:var(--ink)}
+ .tooltit{font:600 12px/1 var(--font-b);letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin:0 0 18px}
+ .tool #ficha:not(:empty){margin-top:24px;padding-top:22px;border-top:1px dashed var(--line)}
+ .tool #ficha .ref,.tool #ficha .ref.first{background:transparent;border:0;padding:0;box-shadow:none}
+ .tsup{overflow-x:auto;overflow-y:hidden;height:16px;margin:0 0 6px;scrollbar-color:#5f5138 transparent}
+ .tsup>div{height:1px}
+ .tsup[hidden]{display:none}
+ table.mun td:first-child,table.mun th:first-child{position:sticky;left:0;background:var(--surface);z-index:1;box-shadow:1px 0 0 var(--line)}
+ table.mun th:first-child{z-index:3}
 __CSS_COMUN__
 </style>
 </head>
@@ -4953,6 +4966,7 @@ __CSS_COMUN__
 
   <section><div class="in">
     <div class="tool">
+      <p class="tooltit">Calculadora de noches frías</p>
       <div class="umbral">
         <label for="umbral">Contar noches con la mínima a</label>
         <div class="field"><select id="umbral" aria-label="Umbral de temperatura">__OPCIONES__</select></div>
@@ -4965,8 +4979,8 @@ __CSS_COMUN__
         <div class="field"><select id="prov" aria-label="Provincia"><option value="">Elige provincia…</option></select></div>
         <div class="field"><select id="mun" aria-label="Municipio"><option value="">…y el municipio</option></select></div>
       </div>
+      <div id="ficha" aria-live="polite"></div>
     </div>
-    <div id="ficha" aria-live="polite"></div>
 
     <h2 class="sec" id="tabla">Todos los municipios</h2>
     <p class="p">__NMUN__ municipios de más de 500 habitantes con una estación de AEMET dentro de los márgenes de distancia y desnivel. «Heladas/invierno» es la media de noches a 0&nbsp;°C o menos en los inviernos con datos completos; «Sin heladas» cuenta en cuántos de esos inviernos la estación no registró ninguna. Pulsa un municipio para ver su serie con el umbral que hayas elegido.</p>
@@ -4986,7 +5000,8 @@ __CSS_COMUN__
       <label><input type="checkbox" class="fconf" value="o" checked> Orientativa</label>
       <label><input type="checkbox" id="fsin"> Solo sin heladas en __ULTIMO__</label>
     </div>
-    <div class="twrap">
+    <div class="tsup" id="tsup" aria-hidden="true"><div></div></div>
+    <div class="twrap" id="twrap">
       <table class="mun">
         <thead><tr>
           <th data-c="0">Municipio</th><th data-c="1">Provincia</th><th data-c="2">Habitantes</th>
@@ -5013,14 +5028,12 @@ __CSS_COMUN__
       <li><b>Las series tienen longitud desigual:</b> cada estación cuenta los inviernos con al menos el 90&nbsp;% de los días con dato, y hace falta un mínimo de cinco.</li>
     </ul>
 
-    <h2 class="sec">Descarga los datos</h2>
-    <p class="p"><a href="__SITE__/datos/municipios_sin_heladas.json" download>municipios_sin_heladas.json</a> — municipios, estación de referencia, distancia, desnivel, nivel de confianza y noches por invierno para cada grado entre −4 y 20&nbsp;°C. Licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>: puedes reutilizarlos citando como fuentes a AEMET y al IGN (CNIG).</p>
-
     <h2 class="sec">Preguntas frecuentes</h2>
     <dl class="faq">__FAQ__</dl>
 
     <p class="notas">
-      <b>Y en verano:</b> los refugios climáticos nocturnos, donde se sigue durmiendo fresco en agosto, están en <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">refugios climáticos cerca de ti</a> y en el <a href="__SITE__/ranking-noches-tropicales/">ranking de noches tropicales</a>. Cómo medimos: <a href="__SITE__/metodologia/">metodología</a>.
+      <b>Y en verano:</b> los refugios climáticos nocturnos, donde se sigue durmiendo fresco en agosto, están en <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">refugios climáticos cerca de ti</a> y en el <a href="__SITE__/ranking-noches-tropicales/">ranking de noches tropicales</a>. Cómo medimos: <a href="__SITE__/metodologia/">metodología</a>.<br>
+      <b>Datos abiertos, para medios e investigación:</b> la tabla completa, con las noches por invierno para cada grado entre −4 y 20&nbsp;°C, se puede descargar en <a href="__SITE__/datos/municipios_sin_heladas.json" download>formato JSON</a> (licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="license">CC&nbsp;BY&nbsp;4.0</a>, citando a AEMET y al IGN).
     </p>
   </div></section>
 
@@ -5167,7 +5180,19 @@ function pinta(){
  }).join("");
  tcuenta.textContent=miles(filas.length)+" municipios"+(filas.length>lim?" · mostrando "+miles(lim):"");
  tmas.hidden=filas.length<=lim;
+ ajustaSup();
 }
+/* Barra de scroll horizontal también arriba: con una lista larga, la de abajo
+   no se ve hasta el final. Las dos se mueven a la vez. */
+var twrap=document.getElementById("twrap"), tsup=document.getElementById("tsup");
+function ajustaSup(){
+ var t=twrap.querySelector("table");
+ tsup.firstChild.style.width=t.scrollWidth+"px";
+ tsup.hidden=t.scrollWidth<=twrap.clientWidth+1;
+}
+tsup.addEventListener("scroll",function(){ if(twrap.scrollLeft!==tsup.scrollLeft) twrap.scrollLeft=tsup.scrollLeft; });
+twrap.addEventListener("scroll",function(){ if(tsup.scrollLeft!==twrap.scrollLeft) tsup.scrollLeft=twrap.scrollLeft; });
+window.addEventListener("resize",ajustaSup);
 tb.addEventListener("click",function(ev){
  var b=ev.target.closest("button[data-i]"); if(!b) return;
  ficha(+b.getAttribute("data-i")); box.scrollIntoView({behavior:"smooth",block:"start"});

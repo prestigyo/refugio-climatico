@@ -13819,21 +13819,36 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
 # debajo porque, a tamaño de web, la letra pequeña del sello no se lee.
 SELLO_TAMANOS = (("Pequeño", 160), ("Mediano", 220), ("Grande", 300))
 SELLO_POSICIONES = (("Centrado", "center"), ("Izquierda", "left"), ("Derecha", "right"))
+# El sello trae su propio fondo; la línea de texto de debajo NO. Un <p> sin
+# color declarado hereda el de la web donde se pega: sobre fondo oscuro salía
+# texto negro sobre negro, y el enlace en el azul por defecto del navegador,
+# que además se sale de la paleta. Así que el color va escrito en el código, y
+# el fondo elegido decide también qué variante del sello se enlaza: la oscura
+# es un disco opaco y sobre fondo claro deja una mancha.
+SELLO_FONDOS = (("Claro", "claro"), ("Oscuro", "oscuro"))
+SELLO_TINTA = {"claro": ("#2a1d10", "#b8542e"), "oscuro": ("#efe6d6", "#e89a73")}
 
 
 def codigo_insercion_sello(url: str, img: str, alt: str, pie: str, tam: int = 220,
-                           alin: str = "center", con_pie: bool = True) -> str:
+                           alin: str = "center", con_pie: bool = True,
+                           fondo: str = "claro", img_claro: str = "") -> str:
+    texto, tinta = SELLO_TINTA.get(fondo, SELLO_TINTA["claro"])
+    src = img if fondo == "oscuro" else (img_claro or img)
     lineas = [
         "<!-- Sello Refugio Climatico Natural - nochetropical.es -->",
         f'<div style="text-align:{alin};margin:24px 0;max-width:100%">',
         f'  <a href="{url}" target="_blank" rel="noopener" style="display:inline-block;border:0">',
-        f'    <img src="{img}" width="{tam}" height="{tam}" alt="{_esc(alt)}"',
+        f'    <img src="{src}" width="{tam}" height="{tam}" alt="{_esc(alt)}"',
         f'         style="display:block;width:{tam}px;max-width:100%;height:auto;border:0">',
         "  </a>",
     ]
     if con_pie:
-        lineas.append(f'  <p style="margin:8px 0 0;font-size:14px;line-height:1.4">{_esc(pie)} · '
-                      f'<a href="{url}" target="_blank" rel="noopener">ver certificado</a></p>')
+        lineas.insert(1, f"<!-- Colores para web de fondo {fondo}. Si el texto no se lee "
+                         "en la tuya, cambia los dos color:# de abajo. -->")
+        lineas.append(f'  <p style="margin:8px 0 0;font-size:14px;line-height:1.4;'
+                      f'color:{texto}">{_esc(pie)} · '
+                      f'<a href="{url}" target="_blank" rel="noopener" '
+                      f'style="color:{tinta}">ver certificado</a></p>')
     lineas.append("</div>")
     # Solo ASCII: algunos gestores ajenos aún sirven en latin-1 y romperían las
     # tildes. Como entidad numérica se ven bien en cualquier codificación.
@@ -13857,6 +13872,8 @@ CSS_INSERCION_SELLO = (
     'min-height:140px;overflow:hidden}'
     '.prev .prev-t{font:600 11px/1 Arial,sans-serif;color:#8a7757;text-transform:uppercase;letter-spacing:.06em;margin:2px 0 0}'
     '.prev p{color:#333;max-width:none}.prev a{color:#1a5fb4}'
+    '.prev.oscuro{background:#141414;color:#e6e6e6}'
+    '.prev.oscuro p{color:#e6e6e6}.prev.oscuro .prev-t{color:#9a8a6f}'
     '#st-code{width:100%;background:#0c0906;border:1px solid var(--line);border-radius:10px;padding:12px;'
     'font-family:var(--fm);font-size:12.5px;color:#cbb89a;line-height:1.5;resize:vertical}'
     'button.btn{cursor:pointer;font-family:inherit}button.btn.pri{border:0}'
@@ -13875,8 +13892,14 @@ _INSERCION_SELLO_JS = r"""<script>
  var V=JSON.parse(document.getElementById("st-var").textContent);
  var code=document.getElementById("st-code"),prev=document.getElementById("st-prev"),pie=document.getElementById("st-pie");
  function val(n){var r=document.querySelector('input[name="'+n+'"]:checked');return r?r.value:"";}
- function pinta(){var c=V[val("st-tam")+"-"+val("st-pos")+"-"+(pie.checked?1:0)];if(!c)return;code.value=c;prev.innerHTML=c;}
- var ins=document.querySelectorAll('input[name="st-tam"],input[name="st-pos"],#st-pie');
+ var marco=document.getElementById("st-marco");
+ function pinta(){var f=val("st-fon")||"claro";
+  var c=V[val("st-tam")+"-"+val("st-pos")+"-"+(pie.checked?1:0)+"-"+f];if(!c)return;
+  code.value=c;prev.innerHTML=c;
+  // La vista previa se pinta del fondo elegido: si siempre fuera blanca, el
+  // problema que esta opcion arregla no se veria justo donde hay que verlo.
+  if(marco)marco.className="prev"+(f==="oscuro"?" oscuro":"");}
+ var ins=document.querySelectorAll('input[name="st-tam"],input[name="st-pos"],input[name="st-fon"],#st-pie');
  for(var i=0;i<ins.length;i++)ins[i].addEventListener("change",pinta);
  function copia(t,b,txt,campo){
   function ok(){b.textContent="Copiado ✓";setTimeout(function(){b.textContent=txt;},1600);}
@@ -13891,13 +13914,16 @@ _INSERCION_SELLO_JS = r"""<script>
 </script>"""
 
 
-def panel_insercion_sello(url: str, img: str, alt: str, pie: str) -> str:
+def panel_insercion_sello(url: str, img: str, alt: str, pie: str,
+                          img_claro: str = "") -> str:
     """Bloque «Ponlo en tu web»: opciones, vista previa sobre fondo blanco (como
     la mayoría de webs), el código listo para copiar y dónde pegarlo. Las 18
     variantes salen de codigo_insercion_sello, así el JS no repite la plantilla."""
-    variantes = {f"{t}-{a}-{p}": codigo_insercion_sello(url, img, alt, pie, t, a, p == 1)
-                 for _, t in SELLO_TAMANOS for _, a in SELLO_POSICIONES for p in (1, 0)}
-    defecto = variantes["220-center-1"]
+    variantes = {f"{t}-{a}-{p}-{f}": codigo_insercion_sello(url, img, alt, pie, t, a,
+                                                            p == 1, f, img_claro)
+                 for _, t in SELLO_TAMANOS for _, a in SELLO_POSICIONES for p in (1, 0)
+                 for _, f in SELLO_FONDOS}
+    defecto = variantes["220-center-1-claro"]
     var_json = json.dumps(variantes, ensure_ascii=False).replace("</", "<\\/")
 
     def pills(nombre: str, opciones: list, marcado) -> str:
@@ -13916,13 +13942,19 @@ def panel_insercion_sello(url: str, img: str, alt: str, pie: str) -> str:
         + pills("st-tam", [(f"{n} · {t}&nbsp;px", str(t)) for n, t in SELLO_TAMANOS], "220")
         + '</div><div class="og"><span class="ol">Posición</span>'
         + pills("st-pos", list(SELLO_POSICIONES), "center")
+        + '</div><div class="og"><span class="ol">El fondo de tu web es</span>'
+        + pills("st-fon", list(SELLO_FONDOS), "claro")
         + '</div><label class="chk"><input type="checkbox" id="st-pie" checked> '
         'Con una línea de texto y enlace debajo</label></div>'
-        '<div class="prev" aria-label="Vista previa sobre una web de fondo blanco">'
+        '<div class="prev" id="st-marco" aria-label="Vista previa sobre el fondo elegido">'
         '<p class="prev-t">Así se verá en tu web</p>'
         f'<div id="st-prev">{defecto}</div></div></div>'
         f'<textarea id="st-code" readonly rows="9" aria-label="Código para pegar en tu web">{_esc(defecto)}</textarea>'
         '<div class="acts"><button class="btn pri" id="st-copy" type="button">Copiar el código</button></div>'
+        '<p class="muted" style="margin:2px 0 0;font-size:13.5px">El sello trae su propio fondo, '
+        'pero la línea de texto no: si no se le dice nada hereda el color de tu web y sobre fondo '
+        'oscuro no se lee. Por eso el código ya lleva los colores puestos. Si tu web no es ni blanca '
+        'ni negra, cambia los dos <code>color:#</code> del código por los tuyos.</p>'
         '<details class="como"><summary>Dónde pegarlo: WordPress, Wix, Squarespace y otras webs</summary>'
         '<ul>'
         '<li><b>WordPress:</b> edita la página, añade un bloque <b>«HTML personalizado»</b> y pega el código.</li>'
@@ -13994,10 +14026,14 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
     maps = "https://www.google.com/maps/search/?api=1&query=" + quote_plus(
         f'{h["hotel"]} {h["municipio"]} {h["provincia"]}')
     embed_img = f'{site}/badges/{sl}.png' if png_ok else f'{site}/badges/{sl}.svg'
+    # La variante clara va siempre en SVG: el PNG claro (-imprimir.png) se
+    # pre-renderiza aparte y puede no existir, mientras que el SVG lo escribe
+    # este mismo script en cada build, así que nunca falta.
     insercion = panel_insercion_sello(
         ficha_url, embed_img,
         f"Sello Refugio Climático Natural de {h['municipio']} ({h['provincia']}), datos de AEMET",
-        f"Refugio Climático Natural en {h['municipio']} ({h['provincia']})")
+        f"Refugio Climático Natural en {h['municipio']} ({h['provincia']})",
+        img_claro=f"{site}/badges/{sl}-claro.svg")
     desc = (f"{h['hotel']} ({h['municipio']}, {h['provincia']}) es un refugio climático natural: "
             f"en verano la mínima media baja a {_n_es(h['tmin'])} °C y apenas hay noches "
             f"tropicales, según datos de AEMET. Se duerme fresco, con manta y sin aire "
@@ -14458,9 +14494,13 @@ def main() -> int:
         badges = DOCS_DIR / "badges"
         badges.mkdir(parents=True, exist_ok=True)
         for h in hoteles:
-            (badges / f"{h['slug']}.svg").write_text(
-                sello_svg(h["municipio"], h["provincia"], h["tmin"], h["nt"],
-                          h["nivel"], h["ref_desc"]), encoding="utf-8")
+            # Dos variantes: la oscura es un disco opaco y la clara va sin
+            # fondo, para que el sello no deje una mancha negra en una web
+            # blanca. El configurador de la ficha enlaza una u otra.
+            for suf, tema in (("", "oscuro"), ("-claro", "claro")):
+                (badges / f"{h['slug']}{suf}.svg").write_text(
+                    sello_svg(h["municipio"], h["provincia"], h["tmin"], h["nt"],
+                              h["nivel"], h["ref_desc"], tema=tema), encoding="utf-8")
             # Ficha individual por hotel (la página que el hotel querrá enlazar).
             carpeta = DOCS_DIR / "hoteles-refugio-climatico" / h["slug"]
             carpeta.mkdir(parents=True, exist_ok=True)

@@ -2956,6 +2956,15 @@ JS_BURGER = """<script>
  var b=nav.querySelector('.burger'), m=nav.querySelector('.menu,.links');
  if(!b||!m) return;
  m.id=m.id||'menu-nav';
+ // Página activa: la marca el propio menú, así sale igual en todas las
+ // plantillas (antes solo la marcaban las que pasaban `actual` a nav_html).
+ var aqui=location.pathname;
+ [].forEach.call(m.querySelectorAll('a'),function(a){
+  if(a.classList.contains('lupa')||a.classList.contains('lang')) return;
+  var p=a.pathname||'';
+  if(p && p!=='/' && p!=='/en/' && aqui.indexOf(p)===0) a.setAttribute('aria-current','page');
+  else a.removeAttribute('aria-current');
+ });
  function set(abierto){
   b.setAttribute('aria-expanded',abierto?'true':'false');
   b.setAttribute('aria-label',abierto?'Cerrar menú':'Abrir menú');
@@ -2976,6 +2985,38 @@ JS_BURGER = """<script>
  window.addEventListener('resize',function(){ if(window.innerWidth>960) set(false); });
 })();
 </script>"""
+
+# Estilo ÚNICO del menú. Viaja dentro del <nav> junto a JS_BURGER, así llega a
+# todas las plantillas y va después de su CSS, con selectores más específicos:
+# manda sobre las copias antiguas que aún traen algunas. Antes la lupa y «EN»
+# salían con o sin recuadro, en tres naranjas y con alturas de 39 a 43 px
+# según la página. Si se cambia el menú, se cambia aquí.
+CSS_MENU_UNICO = (
+    'nav.nav .menu a,nav.nav-e .links a{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;'
+    'font-weight:400;color:#c3b6a2;text-decoration:none;white-space:nowrap}'
+    'nav.nav .menu a:hover,nav.nav-e .links a:hover{color:#f2eae0;background:rgba(238,151,105,.14);'
+    'text-decoration:none}'
+    'nav.nav .menu a[aria-current],nav.nav-e .links a[aria-current]{color:#ee9769;font-weight:600}'
+    'nav.nav .menu a.lupa,nav.nav-e .links a.lupa,nav.nav .menu a.lang,nav.nav-e .links a.lang{color:#ee9769}'
+    'nav.nav .menu a.lang,nav.nav-e .links a.lang{font-weight:600;letter-spacing:.04em}'
+    '@media(min-width:961px){'
+    'nav.nav .menu,nav.nav-e .links{align-items:center;gap:2px}'
+    'nav.nav .menu a,nav.nav-e .links a{display:inline-flex;align-items:center;box-sizing:border-box;'
+    'height:40px;padding:0 12px;font-size:14.5px;line-height:1;border:1px solid transparent;'
+    'border-radius:8px;margin:0}'
+    'nav.nav .menu a.lupa,nav.nav-e .links a.lupa{padding:0 11px;margin-left:6px;border-color:#3a3122}'
+    'nav.nav .menu a.lang,nav.nav-e .links a.lang{margin-left:4px;border-color:#3a3122}'
+    'nav.nav .menu a.lupa:hover,nav.nav-e .links a.lupa:hover,nav.nav .menu a.lang:hover,'
+    'nav.nav-e .links a.lang:hover{border-color:#ee9769;background:rgba(238,151,105,.14)}'
+    '}'
+    '@media(max-width:960px){'
+    'nav.nav .menu a,nav.nav-e .links a{display:flex;align-items:center;height:auto;padding:13px 14px;'
+    'font-size:16px;line-height:1.3;border:0;border-radius:9px;margin:0}'
+    'nav.nav .menu a.lupa,nav.nav-e .links a.lupa{gap:10px;justify-content:flex-start}'
+    'nav.nav .menu a.lang,nav.nav-e .links a.lang{align-self:flex-start;margin:6px 0 0 14px;'
+    'padding:8px 12px;border:1px solid #3a3122}'
+    '}')
+JS_BURGER = "<style>" + CSS_MENU_UNICO + "</style>" + JS_BURGER
 
 _CSS_NAV_MOVIL = ('@media(max-width:560px){.nav .brand span{display:none}'
                   '.nav .in{gap:14px}.menu a{padding:8px 10px}}')

@@ -1,6 +1,6 @@
 {
  "fecha": "2026-09-15",
- "total": 846,
+ "total": 845,
  "tropicales": 162,
  "ecuatoriales": 22,
  "peor": {
@@ -71,10 +71,10 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C917E",
-   "nombre": "Dehesa-Refugio",
-   "min": 26.0,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "C628B",
+   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "min": 26.1,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [

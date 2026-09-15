@@ -29,10 +29,6 @@ W, H = 1600, 1131
 OUT_DIR = g.DOCS_DIR / "certificados"
 BADGES = g.DOCS_DIR / "badges"
 TOP_N = 25
-# Recuentos del ranking, con la misma definición que /metodologia/: estaciones
-# con menos de una noche tropical al año y estaciones analizadas. Los fija
-# main(); antes estaban escritos a mano (218 y 848) y se quedaron viejos.
-CONTEO = {"nref": 0, "total": 0}
 
 # Serif para el nombre del pueblo, sans para el resto. Rutas de CI (Ubuntu,
 # DejaVu) y de Windows (pruebas locales), en orden de preferencia.
@@ -107,12 +103,12 @@ def dibujar_certificado(e: dict, top25: bool = False) -> Image.Image:
     if top25:
         centrado(d, 850, "Una de las 25 estaciones de España donde mejor se duerme en verano,",
                  fuente(_SANS_R, 29), PAPER)
-        centrado(d, 894, f"según el análisis de {CONTEO['total']} estaciones y diez veranos de datos abiertos.",
+        centrado(d, 894, "según el análisis de 848 estaciones y diez veranos de datos abiertos.",
                  fuente(_SANS_R, 29), PAPER)
     else:
         centrado(d, 850, "Refugio climático acreditado: aquí la noche fresca la fabrica la geografía,",
                  fuente(_SANS_R, 29), PAPER)
-        centrado(d, 894, f"según el análisis de {CONTEO['total']} estaciones y diez veranos de datos abiertos.",
+        centrado(d, 894, "según el análisis de 848 estaciones y diez veranos de datos abiertos.",
                  fuente(_SANS_R, 29), PAPER)
 
     d.line([(120, 985), (W - 120, 985)], fill=LINE, width=2)
@@ -159,7 +155,7 @@ def svg_certificado(e: dict, top25: bool) -> str:
 <text x="800" y="712" text-anchor="middle" font-family="{fs}" font-weight="700" font-size="56" fill="{P_VERDE}">{nt} noches tropicales al año</text>
 <text x="800" y="768" text-anchor="middle" font-family="{fs}" font-size="26" fill="{P_SUAVE}">media de los veranos 2017–2026, medida en su estación de AEMET</text>
 <text x="800" y="866" text-anchor="middle" font-family="{fs}" font-size="29" fill="{P_TINTA}">{linea}</text>
-<text x="800" y="908" text-anchor="middle" font-family="{fs}" font-size="29" fill="{P_TINTA}">según el análisis de {CONTEO['total']} estaciones y diez veranos de datos abiertos.</text>
+<text x="800" y="908" text-anchor="middle" font-family="{fs}" font-size="29" fill="{P_TINTA}">según el análisis de 848 estaciones y diez veranos de datos abiertos.</text>
 <line x1="120" y1="985" x2="1480" y2="985" stroke="{P_MARCO}" stroke-width="2"/>
 <text x="800" y="1030" text-anchor="middle" font-family="{fs}" font-size="24" fill="{P_SUAVE}">nochetropical.es   ·   Datos: AEMET OpenData   ·   CC BY 4.0</text>
 </svg>'''
@@ -221,6 +217,15 @@ _CSS_CERT = (
     'border-radius:11px;padding:12px 15px;color:var(--paper);font-size:15px;font-weight:600}'
     'ul.aloj a:hover{border-color:var(--teja);text-decoration:none}'
     'ul.aloj span{display:block;color:var(--muted);font-size:12.5px;font-weight:400;margin-top:2px}'
+    '.temas{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:0 0 9px}'
+    '.temas .et{font-size:13px;color:var(--muted)}'
+    '.tb{border:1px solid var(--line);background:var(--bg2);color:var(--muted);'
+    'font:600 13px/1 var(--fb);padding:7px 12px;border-radius:999px;cursor:pointer}'
+    '.tb:hover{border-color:var(--teja);color:var(--teja2)}'
+    '.tb.on{background:var(--teja);border-color:var(--teja);color:#1a1209}'
+    '.negocio code{font-family:var(--fm);font-size:12.5px;color:var(--teja2)}'
+    '#prev{background:#efe6d6;border-radius:50%}'
+    '#prev.oscuro{background:none}'
     '@media(max-width:560px){.emb{flex-direction:column}.emb img{width:130px;height:130px}}'
 )
 
@@ -230,12 +235,12 @@ PAGINA_CERT = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__LOC__, Refugio Climático de España 2026 (certificado) | Noche Tropical</title>
-<meta name="description" content="__DESC__">
+<meta name="description" content="Certificado digital: la estación de AEMET de __LOC__ (__PROV__) está entre las 25 de España con menos noches tropicales — __NT__ al año de media (2017–2026). Verificable y descargable.">
 <link rel="canonical" href="__URL__">
 <meta name="robots" content="__ROBOTS__">
 <meta property="og:type" content="article">
 <meta property="og:title" content="__LOC__, Refugio Climático de España 2026">
-<meta property="og:description" content="__OGDESC__">
+<meta property="og:description" content="__NT__ noches tropicales al año de media (AEMET, 2017–2026). Entre los 25 mejores refugios climáticos de España.">
 <meta property="og:url" content="__URL__">
 <meta property="og:image" content="__PNG__">
 <meta property="og:locale" content="es_ES">
@@ -269,7 +274,7 @@ __NAV__
 
   <div class="verifica">
     <div class="t">Por qué se otorga este certificado</div>
-    Se certifica como <b>Refugio Climático de España</b> a las estaciones de AEMET con <b>menos de una noche tropical al año</b> de media en los últimos diez veranos (2017–2026) — una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Lo consiguen <b>__NREF__ de las __NTOTAL__</b> estaciones analizadas; el <b>Top 25</b> reúne, de entre ellas, las de mayor altitud. El dato de __LOC__ procede de los valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> y puede contrastarse en el <a href="__SITE__/ranking-noches-tropicales/">ranking nacional</a> y en la página de <a href="__SITE__/__PROVSLUG__/">__PROV__</a>. Certificado de uso libre citando la fuente (CC&nbsp;BY&nbsp;4.0).
+    Se certifica como <b>Refugio Climático de España</b> a las estaciones de AEMET con <b>menos de una noche tropical al año</b> de media en los últimos diez veranos (2017–2026) — una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Lo consiguen <b>218 de las 848</b> estaciones analizadas; el <b>Top 25</b> reúne, de entre ellas, las de mayor altitud. El dato de __LOC__ procede de los valores climatológicos diarios de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> y puede contrastarse en el <a href="__SITE__/ranking-noches-tropicales/">ranking nacional</a> y en la página de <a href="__SITE__/__PROVSLUG__/">__PROV__</a>. Certificado de uso libre citando la fuente (CC&nbsp;BY&nbsp;4.0).
   </div>
 
 __NEGOCIO__
@@ -287,11 +292,35 @@ document.getElementById("copiar").addEventListener("click",e=>{navigator.clipboa
 document.getElementById("wa").href="https://wa.me/?text="+encodeURIComponent(TXT);
 document.getElementById("tw").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(TXT);
 const cb=document.getElementById("copiaremb");
-cb?.addEventListener("click",()=>{navigator.clipboard?.writeText(document.getElementById("emb").textContent);cb.textContent="¡Copiado!";setTimeout(()=>cb.textContent="Copiar el código",1500);});
+const visible=()=>document.querySelector("#emb-claro:not([hidden]),#emb-oscuro:not([hidden])");
+document.querySelectorAll(".tb").forEach(b=>b.addEventListener("click",()=>{
+  const osc=b.dataset.tema==="oscuro";
+  document.querySelectorAll(".tb").forEach(o=>{const a=o===b;
+    o.classList.toggle("on",a);o.setAttribute("aria-pressed",a);});
+  document.getElementById("emb-claro").hidden=osc;
+  document.getElementById("emb-oscuro").hidden=!osc;
+  const p=document.getElementById("prev");
+  p.src=p.src.replace(/pueblo-(.+?)(-claro)?\.svg$/,(m,sl)=>"pueblo-"+sl+(osc?"":"-claro")+".svg");
+  p.classList.toggle("oscuro",osc);
+}));
+cb?.addEventListener("click",()=>{navigator.clipboard?.writeText(visible().textContent);cb.textContent="¡Copiado!";setTimeout(()=>cb.textContent="Copiar el código",1500);});
 </script>
 </body>
 </html>
 """
+
+
+def a_entidades(txt: str) -> str:
+    """'Rascafría' -> 'Rascafr&#237;a'. ASCII puro que se ve con su tilde.
+
+    El snippet sale de nuestro dominio y acaba pegado en gestores ajenos, parte
+    de los cuales siguen sirviendo en latin-1: una 'í' en UTF-8 se vería ahí como
+    'Ã­'. Quitar las tildes lo evitaba, pero el pie es texto VISIBLE en su web y
+    además es el texto ancla que lee Google — «Refugio Climatico» sin tilde es
+    una errata publicada en la web de otro. Las entidades numéricas no tienen ese
+    problema: son bytes ASCII y el navegador pinta la tilde en cualquier charset.
+    """
+    return txt.encode("ascii", "xmlcharrefreplace").decode("ascii")
 
 
 def sin_acentos(txt: str) -> str:
@@ -351,11 +380,40 @@ def bloque_negocio(e: dict, site: str, hoteles_est: dict) -> str:
             '</div>')
 
     # --- 2) El sello para el alojamiento ---------------------------------
-    alt = sin_acentos(
-        f'{e["loc"]} ({e["prov"]}), Refugio Climatico certificado: '
-        f'{nt_txt} noches tropicales al ano segun AEMET')
-    embed = g.codigo_insercion_sello(url_cert, f"{site}/badges/pueblo-{sl}.svg", alt,
-                                     f"Refugio Climático Natural en {e['loc']} ({e['prov']})")
+    alt = a_entidades(
+        f'{e["loc"]} ({e["prov"]}), Refugio Climático certificado: '
+        f'{nt_txt} noches tropicales al año según AEMET')
+    # Dos variantes del mismo snippet. El sello lleva su propio fondo, pero el
+    # PIE no: un <figcaption> sin color hereda el de la web del alojamiento, y
+    # sobre fondo negro sale texto negro sobre negro. Así que los colores van
+    # escritos en el propio código, con un comentario que dice dónde cambiarlos,
+    # y el tema claro usa además el sello de fondo transparente (el oscuro es un
+    # disco opaco y sobre fondo claro deja una mancha).
+    # El pie no es decoración: convierte un enlace solo-imagen en un enlace con
+    # texto ancla real, que es lo único que Google puede leer de ahí.
+    def _snippet(tema: str) -> str:
+        oscuro = tema == "oscuro"
+        arch = f"pueblo-{sl}.svg" if oscuro else f"pueblo-{sl}-claro.svg"
+        texto = "#efe6d6" if oscuro else "#2a1d10"
+        enlace = "#e89a73" if oscuro else "#b8542e"
+        return (
+            f'<!-- Sello Refugio Climatico Natural - nochetropical.es -->\n'
+            f'<!-- Version para web de fondo {tema}. Si el texto no se lee en la\n'
+            f'     tuya, cambia los dos color:# de abajo y ya esta. -->\n'
+            f'<figure style="margin:0;max-width:200px;text-align:center">\n'
+            f'  <a href="{url_cert}" target="_blank" rel="noopener">\n'
+            f'    <img src="{site}/badges/{arch}" width="180" height="180"\n'
+            f'         alt="{alt}">\n'
+            f'  </a>\n'
+            f'  <figcaption style="margin-top:8px;'
+            f'font:400 13px/1.45 system-ui,sans-serif;color:{texto}">\n'
+            f'    {a_entidades(e["loc"])} ({a_entidades(e["prov"])}) es un\n'
+            f'    <a href="{url_cert}" style="color:{enlace}">Refugio Clim&#225;tico Natural</a>\n'
+            f'    seg&#250;n datos de AEMET\n'
+            f'  </figcaption>\n'
+            f'</figure>')
+
+    emb_claro, emb_oscuro = _snippet("claro"), _snippet("oscuro")
     partes.append(
         '<div class="negocio">'
         f'<h2>¿Tienes un alojamiento en {e["loc"]}?</h2>'
@@ -366,14 +424,25 @@ def bloque_negocio(e: dict, site: str, hoteles_est: dict) -> str:
         f'año</b>. No es un eslogan — lo miden {int(e["anios"])} veranos de datos de AEMET '
         f'y cualquiera puede comprobarlo en esta misma página.</p>'
         '<div class="emb">'
-        f'<img src="{site}/badges/pueblo-{sl}.svg" width="150" height="150" '
+        f'<img id="prev" src="{site}/badges/pueblo-{sl}-claro.svg" width="150" height="150" '
         f'alt="Sello Refugio Climático Natural de {e["loc"]} ({e["prov"]})" loading="lazy">'
         '<div class="der">'
-        '<p class="mut">Pega esto en tu web, con el enlace de vuelta al certificado para '
-        'que quien lo lea pueda verificarlo:</p>'
-        f'<pre id="emb">{g._esc(embed)}</pre>'
+        '<p class="mut">Pega esto en tu web. Lleva el enlace de vuelta al certificado, '
+        'para que quien lo lea pueda comprobarlo.</p>'
+        '<div class="temas" role="group" aria-label="Fondo de tu web">'
+        '<span class="et">El fondo de tu web es</span>'
+        '<button type="button" class="tb on" data-tema="claro" aria-pressed="true">claro</button>'
+        '<button type="button" class="tb" data-tema="oscuro" aria-pressed="false">oscuro</button>'
+        '</div>'
+        f'<pre id="emb-claro">{g._esc(emb_claro)}</pre>'
+        f'<pre id="emb-oscuro" hidden>{g._esc(emb_oscuro)}</pre>'
         '<button class="btn" id="copiaremb" type="button">Copiar el código</button>'
         f'<a class="btn pri" href="{site}/tu-hotel/">Quiero mi ficha en el directorio</a>'
+        '<p class="mut" style="margin:10px 0 0">El sello trae su propio fondo, pero el '
+        '<b>texto de debajo no</b>: si no se le dice nada hereda el color de tu web, y '
+        'sobre fondo negro sale texto negro sobre negro. Por eso el código lleva los '
+        'colores puestos. Si tu web no es ni blanca ni negra, cambia los dos '
+        '<code>color:#</code> del código por los tuyos — no hace falta tocar nada más.</p>'
         '</div></div>'
         '<p class="mut">El sello certifica el <b>clima de la zona</b> —que la noche '
         'refresca, medido por AEMET—, no el interior del establecimiento. Es justo lo que '
@@ -396,8 +465,8 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
     nt = "0,0" if e["nt"] == 0 else f"{e['nt']:.1f}".replace(".", ",")
     nivel = "Top 25" if top25 else "Refugio acreditado"
     claim = ("está entre las <b>25 de España donde mejor se duerme en verano</b>, "
-             f"de las {CONTEO['total']} analizadas" if top25 else
-             f"un <b>refugio climático acreditado</b> — solo {CONTEO['nref']} de las {CONTEO['total']} "
+             "de las 848 analizadas" if top25 else
+             f"un <b>refugio climático acreditado</b> — solo {n_total} de las 848 "
              "estaciones analizadas lo consiguen")
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
@@ -417,25 +486,10 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
          "datePublished": g.iso_tz("2026-07-06"),
          "dateModified": g.iso_tz("2026-07-06"),
          "mainEntityOfPage": url}]}, ensure_ascii=False)
-    # Todos los certificados se indexan y decide Google. Del 21 jul al 13 sep 2026
-    # solo se indexaba el Top 25 por miedo a páginas finas, pero Search Console
-    # mostró que los certificados en noindex eran justo los que traían clics
-    # (Oviedo, Vitoria, Teruel, Lugo…): 19 clics y 364 impresiones frente a 2 y
-    # 61 del Top 25. Con la página indexable, la descripción NO puede decir «entre
-    # las 25» salvo que lo sea: sale en los resultados de búsqueda.
-    robots = "index,follow,max-image-preview:large"
-    if top25:
-        desc = ("Certificado digital: la estación de AEMET de __LOC__ (__PROV__) está "
-                "entre las 25 de España con menos noches tropicales — __NT__ al año de "
-                "media (2017–2026). Verificable y descargable.")
-        ogdesc = ("__NT__ noches tropicales al año de media (AEMET, 2017–2026). "
-                  "Entre los 25 mejores refugios climáticos de España.")
-    else:
-        desc = ("Certificado digital: la estación de AEMET de __LOC__ (__PROV__) es un "
-                "refugio climático acreditado — __NT__ noches tropicales al año de media "
-                "(2017–2026). Verificable y descargable.")
-        ogdesc = ("__NT__ noches tropicales al año de media (AEMET, 2017–2026). "
-                  "Refugio climático acreditado de España.")
+    # Solo el Top 25 se indexa; el resto de certificados individuales son finos
+    # (una página casi calcada por estación) y van a noindex para no lastrar la
+    # calidad media del sitio ante Google.
+    robots = "index,follow,max-image-preview:large" if top25 else "noindex,follow"
     return (PAGINA_CERT
             .replace("__NEGOCIO__", bloque_negocio(e, site, hoteles_est or {}))
             .replace("__SCHEMA__", schema)
@@ -445,8 +499,6 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
             .replace("__NAV__", g.nav_escueto_html(site))
             .replace("__FOOTER__", g.footer_escueto_html(site))
             .replace("__ROBOTS__", robots)
-            .replace("__DESC__", desc)
-            .replace("__OGDESC__", ogdesc)
             .replace("__URL__", url)
             .replace("__SLUG__", sl)
             .replace("__NIVEL__", nivel)
@@ -459,8 +511,6 @@ def construir_pagina_cert(e: dict, site: str, top25: bool = False,
             .replace("__PROV__", e["prov"])
             .replace("__ALT__", g.miles(e["alt"]))
             .replace("__NT__", nt)
-            .replace("__NREF__", str(CONTEO["nref"]))
-            .replace("__NTOTAL__", str(CONTEO["total"]))
             .replace("__SITE__", site))
 
 
@@ -526,7 +576,7 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
   <nav class="crumb" aria-label="breadcrumb"><a href="{site}/">Refugio Climático</a> · Certificados</nav>
   <div class="kick">Certificados digitales · Top 25 · 2026</div>
   <h1>Los 25 Refugios Climáticos de España</h1>
-  <p class="intro">Las 25 estaciones de AEMET con menos noches tropicales del país (veranos 2017–2026, {CONTEO['total']} estaciones analizadas). Cada certificado es verificable, descargable y de uso libre citando la fuente.</p>
+  <p class="intro">Las 25 estaciones de AEMET con menos noches tropicales del país (veranos 2017–2026, 848 estaciones analizadas). Cada certificado es verificable, descargable y de uso libre citando la fuente.</p>
 </div></header>
 <section><div class="wrap">
   <ul class="lista">{filas}</ul>
@@ -534,7 +584,7 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
   <p class="intro" style="font-size:15px;margin:4px 0 14px">Cada uno de estos lugares registra <b>menos de una noche tropical al año</b> de media (2017–2026) y tiene su certificado digital, verificable y descargable.</p>
   {grupos}
   <div class="verifica"><div class="t">Cómo se otorga</div>
-  Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Se certifica a las estaciones con <b>menos de una noche tropical al año</b> de media (2017–2026): lo logran <b>{CONTEO['nref']} de las {CONTEO['total']}</b> analizadas. Este Top 25 reúne, de entre ellas, las de mayor altitud. Solo podemos certificar donde hay estación de AEMET con datos suficientes: que un pueblo no aparezca no significa que no sea un refugio — significa que aún no podemos medirlo. Datos: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · <a href="{site}/ranking-noches-tropicales/">ranking completo</a>.</div>
+  Una <b>noche tropical</b> es aquella en que la mínima no baja de 20&nbsp;°C. Se certifica a las estaciones con <b>menos de una noche tropical al año</b> de media (2017–2026): lo logran <b>218 de las 848</b> analizadas. Este Top 25 reúne, de entre ellas, las de mayor altitud. Solo podemos certificar donde hay estación de AEMET con datos suficientes: que un pueblo no aparezca no significa que no sea un refugio — significa que aún no podemos medirlo. Datos: <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a> · <a href="{site}/ranking-noches-tropicales/">ranking completo</a>.</div>
 </div></section>
 {g.footer_escueto_html(site)}
 </body>
@@ -544,8 +594,6 @@ def construir_indice(top: list[dict], todos: list[dict], site: str) -> str:
 
 def main() -> int:
     estaciones, _ = g.cargar_estaciones()
-    CONTEO["nref"] = sum(1 for e in estaciones if e["nt"] < 1)
-    CONTEO["total"] = len(estaciones)
     # Se certifica a TODAS las estaciones con <1 noche tropical/año de media;
     # las 25 de mayor altitud llevan además el distintivo "Top 25".
     todos = sorted([e for e in estaciones if e["nt"] < 1],
@@ -585,9 +633,13 @@ def main() -> int:
         # su web. Prefijo «pueblo-» para no chocar con docs/badges/<hotel>.svg,
         # que escribe generar_calculadora con el slug del hotel. Nivel A: aquí
         # la estación está en la propia localidad, no es una de referencia.
-        (BADGES / f"pueblo-{sl}.svg").write_text(
-            g.sello_svg(e["loc"], e["prov"], e["tmin"], e["nt"], "A"),
-            encoding="utf-8")
+        # Dos variantes: la oscura es un disco opaco (para webs de fondo
+        # oscuro y para el propio sitio) y la clara va sin fondo, para que no
+        # deje una mancha negra en una web blanca.
+        for suf, tema in (("", "oscuro"), ("-claro", "claro")):
+            (BADGES / f"pueblo-{sl}{suf}.svg").write_text(
+                g.sello_svg(e["loc"], e["prov"], e["tmin"], e["nt"], "A", tema=tema),
+                encoding="utf-8")
         carpeta = OUT_DIR / sl
         carpeta.mkdir(exist_ok=True)
         (carpeta / "index.html").write_text(
@@ -595,36 +647,10 @@ def main() -> int:
             encoding="utf-8")
     (OUT_DIR / "index.html").write_text(construir_indice(top, todos, site),
                                         encoding="utf-8")
-    # Certificados que ya no están vigentes: la estación ha pasado a tener una
-    # noche tropical o más al año. Este script nunca borraba sus páginas, así que
-    # seguían en línea diciendo «Refugio Climático de España 2026» (en sep 2026
-    # eran 23, ninguna del Top 25). Se sustituyen por una redirección noindex a
-    # su provincia que avisa de que el certificado no está vigente. No se borran:
-    # puede haber enlaces compartidos, y un 404 no explica nada a quien llega.
-    vigentes = {g.slug(e["loc"]) for e in todos}
-    provincia_de = {g.slug(e["loc"]): e["prov"] for e in estaciones}
-    retirados = []
-    for carpeta in sorted(p for p in OUT_DIR.iterdir() if p.is_dir()):
-        pagina = carpeta / "index.html"
-        if carpeta.name in vigentes or not pagina.exists():
-            continue
-        if 'http-equiv="refresh"' in pagina.read_text(encoding="utf-8"):
-            continue  # ya retirado en una ejecución anterior
-        prov = provincia_de.get(carpeta.name)
-        destino = f"{site}/{g.slug(prov)}/" if prov else f"{site}/certificados/"
-        g.escribir_redireccion(
-            site, f"certificados/{carpeta.name}", destino,
-            "Este certificado ya no está vigente: la estación ha dejado de cumplir "
-            "el criterio de refugio climático (menos de una noche tropical al año).",
-            noindex=True)
-        retirados.append(carpeta.name)
-    if retirados:
-        print(f"   certificados retirados (ya no cumplen el criterio): {len(retirados)}"
-              " → redirección noindex a su provincia")
     con_aloj = sum(1 for e in todos if hoteles_est.get(e["id"]))
     print(f"OK -> {len(todos)} certificados (PNG + página; {len(top)} Top 25) "
           f"+ índice en {OUT_DIR}")
-    print(f"   sellos de pueblo: {len(todos)} SVG en {BADGES}")
+    print(f"   sellos de pueblo: {2 * len(todos)} SVG en {BADGES} (claro + oscuro)")
     print(f"   con alojamiento listado: {con_aloj} de {len(todos)} "
           f"({len(todos) - con_aloj} municipios por captar)")
     return 0

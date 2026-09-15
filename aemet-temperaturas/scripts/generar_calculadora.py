@@ -13825,15 +13825,22 @@ SELLO_POSICIONES = (("Centrado", "center"), ("Izquierda", "left"), ("Derecha", "
 # que además se sale de la paleta. Así que el color va escrito en el código, y
 # el fondo elegido decide también qué variante del sello se enlaza: la oscura
 # es un disco opaco y sobre fondo claro deja una mancha.
-SELLO_FONDOS = (("Claro", "claro"), ("Oscuro", "oscuro"))
-SELLO_TINTA = {"claro": ("#2a1d10", "#b8542e"), "oscuro": ("#efe6d6", "#e89a73")}
+# El sello va SIEMPRE oscuro: es la marca, y es de noche. Un disco oscuro sobre
+# una web clara se lee perfectamente; el que no se lee nunca es el TEXTO de
+# debajo, porque ese <p> hereda el color de la web donde se pega —sobre fondo
+# negro salía negro sobre negro, y el enlace en el azul del navegador—. Así que
+# lo único que se elige aquí es la tinta de esa línea. (Se probó ofrecer también
+# un sello claro sin fondo para webs oscuras: sobre el gris de Google Sites
+# desaparecía entero. La variante clara del SVG queda para impresión.)
+SELLO_TINTAS = (("Oscuro · webs claras", "oscuro"), ("Claro · webs oscuras", "claro"))
+SELLO_TINTA = {"oscuro": ("#2a1d10", "#b8542e"), "claro": ("#efe6d6", "#e89a73")}
 
 
 def codigo_insercion_sello(url: str, img: str, alt: str, pie: str, tam: int = 220,
                            alin: str = "center", con_pie: bool = True,
-                           fondo: str = "claro", img_claro: str = "") -> str:
-    texto, tinta = SELLO_TINTA.get(fondo, SELLO_TINTA["claro"])
-    src = img if fondo == "oscuro" else (img_claro or img)
+                           tinta_txt: str = "oscuro") -> str:
+    texto, tinta = SELLO_TINTA.get(tinta_txt, SELLO_TINTA["oscuro"])
+    src = img
     lineas = [
         "<!-- Sello Refugio Climatico Natural - nochetropical.es -->",
         f'<div style="text-align:{alin};margin:24px 0;max-width:100%">',
@@ -13843,8 +13850,10 @@ def codigo_insercion_sello(url: str, img: str, alt: str, pie: str, tam: int = 22
         "  </a>",
     ]
     if con_pie:
-        lineas.insert(1, f"<!-- Colores para web de fondo {fondo}. Si el texto no se lee "
-                         "en la tuya, cambia los dos color:# de abajo. -->")
+        claro = tinta_txt == "claro"
+        lineas.insert(1, "<!-- Texto en tinta " + ("clara, para webs de fondo oscuro"
+                         if claro else "oscura, para webs de fondo claro")
+                         + ". Si no se lee\n     en la tuya, cambia los dos color:# de abajo. -->")
         lineas.append(f'  <p style="margin:8px 0 0;font-size:14px;line-height:1.4;'
                       f'color:{texto}">{_esc(pie)} · '
                       f'<a href="{url}" target="_blank" rel="noopener" '
@@ -13893,12 +13902,14 @@ _INSERCION_SELLO_JS = r"""<script>
  var code=document.getElementById("st-code"),prev=document.getElementById("st-prev"),pie=document.getElementById("st-pie");
  function val(n){var r=document.querySelector('input[name="'+n+'"]:checked');return r?r.value:"";}
  var marco=document.getElementById("st-marco");
- function pinta(){var f=val("st-fon")||"claro";
+ function pinta(){var f=val("st-fon")||"oscuro";
   var c=V[val("st-tam")+"-"+val("st-pos")+"-"+(pie.checked?1:0)+"-"+f];if(!c)return;
   code.value=c;prev.innerHTML=c;
   // La vista previa se pinta del fondo elegido: si siempre fuera blanca, el
   // problema que esta opcion arregla no se veria justo donde hay que verlo.
-  if(marco)marco.className="prev"+(f==="oscuro"?" oscuro":"");}
+  // La vista previa se pinta del fondo en el que ese texto tiene sentido:
+  // tinta clara -> web oscura. El sello no cambia, solo el texto.
+  if(marco)marco.className="prev"+(f==="claro"?" oscuro":"");}
  var ins=document.querySelectorAll('input[name="st-tam"],input[name="st-pos"],input[name="st-fon"],#st-pie');
  for(var i=0;i<ins.length;i++)ins[i].addEventListener("change",pinta);
  function copia(t,b,txt,campo){
@@ -13914,16 +13925,15 @@ _INSERCION_SELLO_JS = r"""<script>
 </script>"""
 
 
-def panel_insercion_sello(url: str, img: str, alt: str, pie: str,
-                          img_claro: str = "") -> str:
+def panel_insercion_sello(url: str, img: str, alt: str, pie: str) -> str:
     """Bloque «Ponlo en tu web»: opciones, vista previa sobre fondo blanco (como
     la mayoría de webs), el código listo para copiar y dónde pegarlo. Las 18
     variantes salen de codigo_insercion_sello, así el JS no repite la plantilla."""
-    variantes = {f"{t}-{a}-{p}-{f}": codigo_insercion_sello(url, img, alt, pie, t, a,
-                                                            p == 1, f, img_claro)
+    variantes = {f"{t}-{a}-{p}-{k}": codigo_insercion_sello(url, img, alt, pie, t, a,
+                                                            p == 1, k)
                  for _, t in SELLO_TAMANOS for _, a in SELLO_POSICIONES for p in (1, 0)
-                 for _, f in SELLO_FONDOS}
-    defecto = variantes["220-center-1-claro"]
+                 for _, k in SELLO_TINTAS}
+    defecto = variantes["220-center-1-oscuro"]
     var_json = json.dumps(variantes, ensure_ascii=False).replace("</", "<\\/")
 
     def pills(nombre: str, opciones: list, marcado) -> str:
@@ -13942,8 +13952,8 @@ def panel_insercion_sello(url: str, img: str, alt: str, pie: str,
         + pills("st-tam", [(f"{n} · {t}&nbsp;px", str(t)) for n, t in SELLO_TAMANOS], "220")
         + '</div><div class="og"><span class="ol">Posición</span>'
         + pills("st-pos", list(SELLO_POSICIONES), "center")
-        + '</div><div class="og"><span class="ol">El fondo de tu web es</span>'
-        + pills("st-fon", list(SELLO_FONDOS), "claro")
+        + '</div><div class="og"><span class="ol">Color del texto de debajo</span>'
+        + pills("st-fon", list(SELLO_TINTAS), "oscuro")
         + '</div><label class="chk"><input type="checkbox" id="st-pie" checked> '
         'Con una línea de texto y enlace debajo</label></div>'
         '<div class="prev" id="st-marco" aria-label="Vista previa sobre el fondo elegido">'
@@ -13951,10 +13961,11 @@ def panel_insercion_sello(url: str, img: str, alt: str, pie: str,
         f'<div id="st-prev">{defecto}</div></div></div>'
         f'<textarea id="st-code" readonly rows="9" aria-label="Código para pegar en tu web">{_esc(defecto)}</textarea>'
         '<div class="acts"><button class="btn pri" id="st-copy" type="button">Copiar el código</button></div>'
-        '<p class="muted" style="margin:2px 0 0;font-size:13.5px">El sello trae su propio fondo, '
-        'pero la línea de texto no: si no se le dice nada hereda el color de tu web y sobre fondo '
-        'oscuro no se lee. Por eso el código ya lleva los colores puestos. Si tu web no es ni blanca '
-        'ni negra, cambia los dos <code>color:#</code> del código por los tuyos.</p>'
+        '<p class="muted" style="margin:2px 0 0;font-size:13.5px">El sello es oscuro siempre '
+        '—es de noche— y se lee bien sobre cualquier fondo. La línea de texto de debajo no: si no '
+        'se le dice nada hereda el color de tu web, y sobre fondo oscuro no se ve. Por eso el código '
+        'ya lleva la tinta puesta. Si tu web no es ni blanca ni negra, cambia los dos '
+        '<code>color:#</code> del código por los tuyos.</p>'
         '<details class="como"><summary>Dónde pegarlo: WordPress, Wix, Squarespace y otras webs</summary>'
         '<ul>'
         '<li><b>WordPress:</b> edita la página, añade un bloque <b>«HTML personalizado»</b> y pega el código.</li>'
@@ -14026,14 +14037,10 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
     maps = "https://www.google.com/maps/search/?api=1&query=" + quote_plus(
         f'{h["hotel"]} {h["municipio"]} {h["provincia"]}')
     embed_img = f'{site}/badges/{sl}.png' if png_ok else f'{site}/badges/{sl}.svg'
-    # La variante clara va siempre en SVG: el PNG claro (-imprimir.png) se
-    # pre-renderiza aparte y puede no existir, mientras que el SVG lo escribe
-    # este mismo script en cada build, así que nunca falta.
     insercion = panel_insercion_sello(
         ficha_url, embed_img,
         f"Sello Refugio Climático Natural de {h['municipio']} ({h['provincia']}), datos de AEMET",
-        f"Refugio Climático Natural en {h['municipio']} ({h['provincia']})",
-        img_claro=f"{site}/badges/{sl}-claro.svg")
+        f"Refugio Climático Natural en {h['municipio']} ({h['provincia']})")
     desc = (f"{h['hotel']} ({h['municipio']}, {h['provincia']}) es un refugio climático natural: "
             f"en verano la mínima media baja a {_n_es(h['tmin'])} °C y apenas hay noches "
             f"tropicales, según datos de AEMET. Se duerme fresco, con manta y sin aire "
@@ -14494,13 +14501,14 @@ def main() -> int:
         badges = DOCS_DIR / "badges"
         badges.mkdir(parents=True, exist_ok=True)
         for h in hoteles:
-            # Dos variantes: la oscura es un disco opaco y la clara va sin
-            # fondo, para que el sello no deje una mancha negra en una web
-            # blanca. El configurador de la ficha enlaza una u otra.
-            for suf, tema in (("", "oscuro"), ("-claro", "claro")):
-                (badges / f"{h['slug']}{suf}.svg").write_text(
-                    sello_svg(h["municipio"], h["provincia"], h["tmin"], h["nt"],
-                              h["nivel"], h["ref_desc"], tema=tema), encoding="utf-8")
+            (badges / f"{h['slug']}.svg").write_text(
+                sello_svg(h["municipio"], h["provincia"], h["tmin"], h["nt"],
+                          h["nivel"], h["ref_desc"]), encoding="utf-8")
+            # Hubo un momento en que se emitía también <slug>-claro.svg para
+            # webs de fondo oscuro. Fue un error —el sello va siempre oscuro— y
+            # esos ficheros llegaron a publicarse, así que se borran: el
+            # workflow hace `git add docs/badges`, que también registra bajas.
+            (badges / f"{h['slug']}-claro.svg").unlink(missing_ok=True)
             # Ficha individual por hotel (la página que el hotel querrá enlazar).
             carpeta = DOCS_DIR / "hoteles-refugio-climatico" / h["slug"]
             carpeta.mkdir(parents=True, exist_ok=True)

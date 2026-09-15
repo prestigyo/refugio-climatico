@@ -391,14 +391,16 @@ def bloque_negocio(e: dict, site: str, hoteles_est: dict) -> str:
     # disco opaco y sobre fondo claro deja una mancha).
     # El pie no es decoración: convierte un enlace solo-imagen en un enlace con
     # texto ancla real, que es lo único que Google puede leer de ahí.
-    def _snippet(tema: str) -> str:
-        oscuro = tema == "oscuro"
-        arch = f"pueblo-{sl}.svg" if oscuro else f"pueblo-{sl}-claro.svg"
-        texto = "#efe6d6" if oscuro else "#2a1d10"
-        enlace = "#e89a73" if oscuro else "#b8542e"
+    def _snippet(tinta: str) -> str:
+        claro = tinta == "claro"
+        arch = f"pueblo-{sl}.svg"      # el sello va SIEMPRE oscuro
+        texto = "#efe6d6" if claro else "#2a1d10"
+        enlace = "#e89a73" if claro else "#b8542e"
+        cual = ("clara, para webs de fondo oscuro" if claro
+                else "oscura, para webs de fondo claro")
         return (
             f'<!-- Sello Refugio Climatico Natural - nochetropical.es -->\n'
-            f'<!-- Version para web de fondo {tema}. Si el texto no se lee en la\n'
+            f'<!-- Texto en tinta {cual}. Si no se lee en la\n'
             f'     tuya, cambia los dos color:# de abajo y ya esta. -->\n'
             f'<figure style="margin:0;max-width:200px;text-align:center">\n'
             f'  <a href="{url_cert}" target="_blank" rel="noopener">\n'
@@ -413,7 +415,8 @@ def bloque_negocio(e: dict, site: str, hoteles_est: dict) -> str:
             f'  </figcaption>\n'
             f'</figure>')
 
-    emb_claro, emb_oscuro = _snippet("claro"), _snippet("oscuro")
+    # emb_claro / emb_oscuro = color de la TINTA del texto, no del sello.
+    emb_claro, emb_oscuro = _snippet("oscuro"), _snippet("claro")
     partes.append(
         '<div class="negocio">'
         f'<h2>¿Tienes un alojamiento en {e["loc"]}?</h2>'
@@ -424,25 +427,26 @@ def bloque_negocio(e: dict, site: str, hoteles_est: dict) -> str:
         f'año</b>. No es un eslogan — lo miden {int(e["anios"])} veranos de datos de AEMET '
         f'y cualquiera puede comprobarlo en esta misma página.</p>'
         '<div class="emb">'
-        f'<img id="prev" src="{site}/badges/pueblo-{sl}-claro.svg" width="150" height="150" '
+        f'<img id="prev" src="{site}/badges/pueblo-{sl}.svg" width="150" height="150" '
         f'alt="Sello Refugio Climático Natural de {e["loc"]} ({e["prov"]})" loading="lazy">'
         '<div class="der">'
         '<p class="mut">Pega esto en tu web. Lleva el enlace de vuelta al certificado, '
         'para que quien lo lea pueda comprobarlo.</p>'
-        '<div class="temas" role="group" aria-label="Fondo de tu web">'
+        '<div class="temas" role="group" aria-label="Color del texto">'
         '<span class="et">El fondo de tu web es</span>'
         '<button type="button" class="tb on" data-tema="claro" aria-pressed="true">claro</button>'
         '<button type="button" class="tb" data-tema="oscuro" aria-pressed="false">oscuro</button>'
+        '<span class="et">→ el texto se pone en la tinta que se lea</span>'
         '</div>'
         f'<pre id="emb-claro">{g._esc(emb_claro)}</pre>'
         f'<pre id="emb-oscuro" hidden>{g._esc(emb_oscuro)}</pre>'
         '<button class="btn" id="copiaremb" type="button">Copiar el código</button>'
         f'<a class="btn pri" href="{site}/tu-hotel/">Quiero mi ficha en el directorio</a>'
-        '<p class="mut" style="margin:10px 0 0">El sello trae su propio fondo, pero el '
-        '<b>texto de debajo no</b>: si no se le dice nada hereda el color de tu web, y '
-        'sobre fondo negro sale texto negro sobre negro. Por eso el código lleva los '
-        'colores puestos. Si tu web no es ni blanca ni negra, cambia los dos '
-        '<code>color:#</code> del código por los tuyos — no hace falta tocar nada más.</p>'
+        '<p class="mut" style="margin:10px 0 0">El sello es <b>oscuro siempre</b> —es de '
+        'noche— y se lee bien sobre cualquier fondo. El <b>texto de debajo no</b>: si no se le '
+        'dice nada hereda el color de tu web, y sobre fondo negro sale negro sobre negro. Por '
+        'eso el código ya lleva la tinta puesta. Si tu web no es ni blanca ni negra, cambia '
+        'los dos <code>color:#</code> del código por los tuyos.</p>'
         '</div></div>'
         '<p class="mut">El sello certifica el <b>clima de la zona</b> —que la noche '
         'refresca, medido por AEMET—, no el interior del establecimiento. Es justo lo que '
@@ -633,13 +637,14 @@ def main() -> int:
         # su web. Prefijo «pueblo-» para no chocar con docs/badges/<hotel>.svg,
         # que escribe generar_calculadora con el slug del hotel. Nivel A: aquí
         # la estación está en la propia localidad, no es una de referencia.
-        # Dos variantes: la oscura es un disco opaco (para webs de fondo
-        # oscuro y para el propio sitio) y la clara va sin fondo, para que no
-        # deje una mancha negra en una web blanca.
-        for suf, tema in (("", "oscuro"), ("-claro", "claro")):
-            (BADGES / f"pueblo-{sl}{suf}.svg").write_text(
-                g.sello_svg(e["loc"], e["prov"], e["tmin"], e["nt"], "A", tema=tema),
-                encoding="utf-8")
+        # Una sola variante, la oscura: el sello es de noche y se lee sobre
+        # cualquier fondo. La clara (sin fondo) llegó a publicarse y sobre el
+        # gris de Google Sites desaparecía entera, así que se borra; el workflow
+        # hace `git add docs/badges`, que también registra las bajas.
+        (BADGES / f"pueblo-{sl}.svg").write_text(
+            g.sello_svg(e["loc"], e["prov"], e["tmin"], e["nt"], "A"),
+            encoding="utf-8")
+        (BADGES / f"pueblo-{sl}-claro.svg").unlink(missing_ok=True)
         carpeta = OUT_DIR / sl
         carpeta.mkdir(exist_ok=True)
         (carpeta / "index.html").write_text(
@@ -650,7 +655,7 @@ def main() -> int:
     con_aloj = sum(1 for e in todos if hoteles_est.get(e["id"]))
     print(f"OK -> {len(todos)} certificados (PNG + página; {len(top)} Top 25) "
           f"+ índice en {OUT_DIR}")
-    print(f"   sellos de pueblo: {2 * len(todos)} SVG en {BADGES} (claro + oscuro)")
+    print(f"   sellos de pueblo: {len(todos)} SVG en {BADGES}")
     print(f"   con alojamiento listado: {con_aloj} de {len(todos)} "
           f"({len(todos) - con_aloj} municipios por captar)")
     return 0

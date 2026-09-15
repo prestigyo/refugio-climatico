@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-14",
- "total": 841,
- "tropicales": 129,
- "ecuatoriales": 6,
+ "fecha": "2026-09-15",
+ "total": 846,
+ "tropicales": 162,
+ "ecuatoriales": 22,
  "peor": {
-  "id": "8025",
-  "nombre": "Alicante",
-  "min": 26.6,
-  "prov": "Alicante"
+  "id": "C239N",
+  "nombre": "Tuineje-Puerto Gran Tarajal",
+  "min": 28.1,
+  "prov": "Las Palmas"
  },
  "mejor": {
   "id": "2192C",
   "nombre": "Cuellar",
-  "min": 4.1,
+  "min": 5.0,
   "prov": "Segovia"
  },
  "top_calor": [
   {
-   "id": "8025",
-   "nombre": "Alicante",
-   "min": 26.6,
-   "prov": "Alicante"
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 28.1,
+   "prov": "Las Palmas"
   },
   {
-   "id": "C038N",
-   "nombre": "Haría-Cementerio",
-   "min": 26.6,
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 27.7,
    "prov": "Las Palmas"
   },
   {
    "id": "C018J",
    "nombre": "Tias-las Vegas",
-   "min": 25.5,
+   "min": 27.4,
    "prov": "Las Palmas"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 25.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C839X",
-   "nombre": "Teguise la Graciosa-Helipuerto",
-   "min": 25.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C019V",
-   "nombre": "Yaiza-Playa Blanca",
-   "min": 24.9,
+   "id": "C249I",
+   "nombre": "Fuerteventura/Aeropuerto",
+   "min": 27.2,
    "prov": "Las Palmas"
   },
   {
    "id": "C029O",
    "nombre": "Lanzarote/Aeropuerto",
-   "min": 24.9,
+   "min": 27.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "C048W",
-   "nombre": "Tinajo-los Dolores",
-   "min": 24.6,
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
+   "min": 27.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.5,
+   "id": "C258K",
+   "nombre": "La Oliva (Carretera del Cotillo)",
+   "min": 26.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 24.3,
+   "min": 26.3,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 26.3,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 26.0,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 4.1,
-   "prov": "Segovia"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
    "min": 5.0,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": 5.1,
-   "prov": "Palencia"
+   "prov": "Segovia"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 5.1,
+   "min": 5.9,
    "prov": "Ávila"
-  },
-  {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 5.4,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 5.5,
-   "prov": "Cantabria"
   },
   {
    "id": "8210Y",
    "nombre": "Salvacañete",
-   "min": 5.7,
+   "min": 6.2,
    "prov": "Cuenca"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 5.7,
-   "prov": "Soria"
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 6.4,
+   "prov": "Granada"
   },
   {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 6.0,
-   "prov": "Lleida"
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": 6.8,
+   "prov": "Cuenca"
+  },
+  {
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 7.1,
+   "prov": "Soria"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 6.1,
+   "min": 7.2,
    "prov": "Zamora"
+  },
+  {
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 7.2,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 7.3,
+   "prov": "Soria"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 7.3,
+   "prov": "Lleida"
   }
  ]
 }

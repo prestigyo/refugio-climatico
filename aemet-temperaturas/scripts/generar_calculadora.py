@@ -1158,25 +1158,31 @@ MENU_ESCUETO = [
     ("Refugios cerca de mí", "/refugios-climaticos-naturales-cerca-de-mi/"),
     ("Hoteles", "/hoteles-refugio-climatico/"),
     ("Ola de calor", "/ola-de-calor/"),
+    ("Mapa", "/mapa-estaciones/"),
     ("Ranking", "/ranking-noches-tropicales/"),
 ]
 
 # Estilos del menú escueto, en la paleta de las landings (--bg/--line/--paper/
 # --muted/--teja). Sticky y translúcido: es soporte, no protagonista.
 CSS_NAV_ESCUETO = (
-    '.nav-e{position:sticky;top:0;z-index:30;background:rgba(22,16,9,.88);'
-    'backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid var(--line)}'
-    '.nav-e .in{max-width:min(92vw,920px);margin:0 auto;padding:0 22px;display:flex;'
-    'align-items:center;gap:16px;height:54px}'
-    '.nav-e .brand{display:flex;align-items:center;gap:9px;font-family:var(--fd);'
-    'font-weight:600;font-size:16.5px;color:var(--paper);white-space:nowrap}'
+    # Mismo aspecto que el menú principal (.nav de CSS_CHROME2): antes cada
+    # página cambiaba de alto, fondo, ancho y letra según qué menú llevara.
+    '.nav-e{position:sticky;top:0;z-index:30;background:rgba(8,7,5,.85);'
+    'backdrop-filter:saturate(1.3) blur(9px);border-bottom:1px solid #3a3122}'
+    '.nav-e .in{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;'
+    'align-items:center;gap:20px;height:60px}'
+    '.nav-e .brand{display:flex;align-items:center;gap:10px;font-family:Georgia,"Times New Roman",serif;'
+    'font-weight:700;font-size:18px;color:#f2eae0;white-space:nowrap}'
+    '.nav-e .brand svg{width:26px;height:26px}'
+    '.nav-e .brand svg circle:nth-child(2){fill:#0a0806}'
     '.nav-e .brand:hover{text-decoration:none;color:var(--teja2)}'
     '.nav-e .links{margin-left:auto;display:flex;gap:2px;overflow-x:auto;'
     'scrollbar-width:none;-webkit-overflow-scrolling:touch}'
     '.nav-e .links::-webkit-scrollbar{display:none}'
-    '.nav-e .links a{font-size:13.5px;color:var(--muted);padding:8px 11px;'
+    '.nav-e .links a{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;'
+    'font-size:14.5px;color:#c3b6a2;padding:8px 12px;'
     'border-radius:8px;white-space:nowrap}'
-    '.nav-e .links a:hover{color:var(--paper);background:rgba(217,116,78,.14);'
+    '.nav-e .links a:hover{color:#f2eae0;background:rgba(238,151,105,.14);'
     'text-decoration:none}'
     '.nav-e .links a.lupa{display:inline-flex;align-items:center;padding:6px 9px;'
     'border:1px solid var(--line);border-radius:8px;color:var(--teja2)}'
@@ -2914,7 +2920,7 @@ CSS_BURGER = (
     '.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}'
     '@media(prefers-reduced-motion:reduce){.burger span{transition:none}}'
     # --- móvil ---
-    '@media(max-width:700px){'
+    '@media(max-width:960px){'
     '.burger{display:flex}'
     # El panel cuelga de la barra, ocupa el ancho y apila las entradas: se ven
     # todas de golpe, que era justo lo que fallaba.
@@ -2967,7 +2973,7 @@ JS_BURGER = """<script>
  });
  // Si se vuelve a escritorio con el panel abierto, hay que dejarlo cerrado o
  // el .abre se queda pegado y el menú aparece apilado donde ya cabía en fila.
- window.addEventListener('resize',function(){ if(window.innerWidth>700) set(false); });
+ window.addEventListener('resize',function(){ if(window.innerWidth>960) set(false); });
 })();
 </script>"""
 

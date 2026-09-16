@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-15",
- "total": 845,
- "tropicales": 162,
- "ecuatoriales": 22,
+ "fecha": "2026-09-16",
+ "total": 841,
+ "tropicales": 140,
+ "ecuatoriales": 25,
  "peor": {
-  "id": "C239N",
-  "nombre": "Tuineje-Puerto Gran Tarajal",
-  "min": 28.1,
-  "prov": "Las Palmas"
+  "id": "C917E",
+  "nombre": "Dehesa-Refugio",
+  "min": 29.0,
+  "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
-  "id": "2192C",
-  "nombre": "Cuellar",
-  "min": 5.0,
-  "prov": "Segovia"
+  "id": "1167G",
+  "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+  "min": 3.6,
+  "prov": "Cantabria"
  },
  "top_calor": [
   {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 28.1,
-   "prov": "Las Palmas"
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 29.0,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 27.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C018J",
-   "nombre": "Tias-las Vegas",
-   "min": 27.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C249I",
-   "nombre": "Fuerteventura/Aeropuerto",
-   "min": 27.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C029O",
-   "nombre": "Lanzarote/Aeropuerto",
-   "min": 27.1,
+   "min": 28.1,
    "prov": "Las Palmas"
   },
   {
    "id": "C639U",
    "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 27.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C258K",
-   "nombre": "La Oliva (Carretera del Cotillo)",
-   "min": 26.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 26.3,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 26.3,
+   "min": 28.0,
    "prov": "Las Palmas"
   },
   {
    "id": "C628B",
    "nombre": "San Nicolas T.-Tasarte/Coparlita",
-   "min": 26.1,
+   "min": 27.6,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 27.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 26.7,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C316I",
+   "nombre": "Arure Cementerio",
+   "min": 26.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 26.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
+   "min": 26.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 25.9,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 5.0,
-   "prov": "Segovia"
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 3.6,
+   "prov": "Cantabria"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 5.9,
-   "prov": "Ávila"
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 4.7,
+   "prov": "Cantabria"
   },
   {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 6.2,
-   "prov": "Cuenca"
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 5.4,
+   "prov": "Asturias"
+  },
+  {
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 5.6,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 5.6,
+   "prov": "Huesca"
+  },
+  {
+   "id": "1221D",
+   "nombre": "Pajares - Valgrande",
+   "min": 6.3,
+   "prov": "Asturias"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 6.3,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9115X",
+   "nombre": "Valdezcaray",
+   "min": 6.7,
+   "prov": "La Rioja"
   },
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 6.4,
+   "min": 7.0,
    "prov": "Granada"
   },
   {
-   "id": "8245Y",
-   "nombre": "Mira",
-   "min": 6.8,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 7.1,
-   "prov": "Soria"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
    "min": 7.2,
-   "prov": "Zamora"
-  },
-  {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 7.2,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 7.3,
-   "prov": "Soria"
-  },
-  {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 7.3,
-   "prov": "Lleida"
+   "prov": "Ávila"
   }
  ]
 }

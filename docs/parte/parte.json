@@ -2,7 +2,7 @@
  "fecha": "2026-09-16",
  "total": 841,
  "tropicales": 140,
- "ecuatoriales": 25,
+ "ecuatoriales": 26,
  "peor": {
   "id": "C917E",
   "nombre": "Dehesa-Refugio",
@@ -71,10 +71,10 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 25.9,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 26.0,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [

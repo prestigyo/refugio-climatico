@@ -1,7 +1,7 @@
 {
  "fecha": "2026-09-17",
  "total": 832,
- "tropicales": 94,
+ "tropicales": 95,
  "ecuatoriales": 0,
  "peor": {
   "id": "C449C",
@@ -85,16 +85,16 @@
    "prov": "Zamora"
   },
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 1.5,
-   "prov": "Lleida"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
    "min": 1.6,
    "prov": "Ávila"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 1.6,
+   "prov": "Lleida"
   },
   {
    "id": "1167G",
@@ -115,12 +115,6 @@
    "prov": "León"
   },
   {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": 2.7,
-   "prov": "Huesca"
-  },
-  {
    "id": "2626Y",
    "nombre": "Sahechores-Helipuerto",
    "min": 3.1,
@@ -131,6 +125,12 @@
    "nombre": "Ucero",
    "min": 3.2,
    "prov": "Soria"
+  },
+  {
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 3.2,
+   "prov": "Huesca"
   },
   {
    "id": "2135A",

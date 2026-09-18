@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-17",
- "total": 832,
- "tropicales": 95,
+ "fecha": "2026-09-18",
+ "total": 846,
+ "tropicales": 72,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C449C",
-  "nombre": "Santa Cruz de Tenerife",
-  "min": 24.8,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "C689E",
+  "nombre": "Maspalomas",
+  "min": 23.8,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 1.0,
-  "prov": "Zamora"
+  "id": "2192C",
+  "nombre": "Cuellar",
+  "min": 1.2,
+  "prov": "Segovia"
  },
  "top_calor": [
   {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 24.8,
+   "id": "C689E",
+   "nombre": "Maspalomas",
+   "min": 23.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
+   "min": 23.5,
+   "prov": "Málaga"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 23.3,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 23.2,
+   "prov": "Almería"
+  },
+  {
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 23.2,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 24.5,
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 23.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
+   "min": 23.0,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 24.4,
+   "id": "6277C",
+   "nombre": "Adra Faro",
+   "min": 22.8,
+   "prov": "Almería"
+  },
+  {
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 22.8,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 24.3,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "7019X",
-   "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 24.1,
-   "prov": "Murcia"
-  },
-  {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
-   "min": 24.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 24.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C139E",
-   "nombre": "La Palma/Aeropuerto",
-   "min": 24.0,
-   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C449F",
    "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 23.9,
+   "min": 22.7,
    "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 1.0,
-   "prov": "Zamora"
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 1.2,
+   "prov": "Segovia"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 1.6,
+   "min": 1.3,
    "prov": "Ávila"
   },
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 1.6,
-   "prov": "Lleida"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 1.9,
+   "prov": "Zamora"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 2.2,
-   "prov": "Cantabria"
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 2.1,
+   "prov": "Granada"
   },
   {
    "id": "2298",
    "nombre": "Palacios de la Sierra",
-   "min": 2.3,
+   "min": 2.2,
    "prov": "Burgos"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 2.6,
-   "prov": "León"
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 2.5,
+   "prov": "Lleida"
   },
   {
-   "id": "2626Y",
-   "nombre": "Sahechores-Helipuerto",
-   "min": 3.1,
+   "id": "2737E",
+   "nombre": "Lagunas de Somoza",
+   "min": 3.2,
    "prov": "León"
   },
   {
    "id": "2084Y",
    "nombre": "Ucero",
-   "min": 3.2,
+   "min": 3.3,
    "prov": "Soria"
   },
   {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": 3.2,
+   "min": 3.3,
    "prov": "Huesca"
   },
   {
-   "id": "2135A",
-   "nombre": "Fresno de Cantiespino",
-   "min": 3.3,
-   "prov": "Segovia"
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 3.5,
+   "prov": "Salamanca"
   }
  ]
 }

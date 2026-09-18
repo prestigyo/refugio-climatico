@@ -59,6 +59,12 @@
    "prov": "Santa Cruz de Tenerife"
   },
   {
+   "id": "C139E",
+   "nombre": "La Palma/Aeropuerto",
+   "min": 23.0,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
    "id": "6277C",
    "nombre": "Adra Faro",
    "min": 22.8,
@@ -69,12 +75,6 @@
    "nombre": "Tuineje-Puerto Gran Tarajal",
    "min": 22.8,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 22.7,
-   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [

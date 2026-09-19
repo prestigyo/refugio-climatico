@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-18",
- "total": 846,
- "tropicales": 72,
+ "fecha": "2026-09-19",
+ "total": 844,
+ "tropicales": 90,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C689E",
-  "nombre": "Maspalomas",
-  "min": 23.8,
-  "prov": "Las Palmas"
+  "id": "6083X",
+  "nombre": "Marbella Cabopino",
+  "min": 24.6,
+  "prov": "Málaga"
  },
  "mejor": {
-  "id": "2192C",
-  "nombre": "Cuellar",
-  "min": 1.2,
-  "prov": "Segovia"
+  "id": "9001D",
+  "nombre": "Nestares",
+  "min": 0.9,
+  "prov": "Cantabria"
  },
  "top_calor": [
   {
-   "id": "C689E",
-   "nombre": "Maspalomas",
-   "min": 23.8,
-   "prov": "Las Palmas"
-  },
-  {
    "id": "6083X",
    "nombre": "Marbella Cabopino",
-   "min": 23.5,
+   "min": 24.6,
    "prov": "Málaga"
   },
   {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 23.3,
-   "prov": "Las Palmas"
+   "id": "6155A",
+   "nombre": "Málaga/Aeropuerto",
+   "min": 24.0,
+   "prov": "Málaga"
+  },
+  {
+   "id": "6000A",
+   "nombre": "Melilla",
+   "min": 23.7,
+   "prov": "Melilla"
+  },
+  {
+   "id": "B986",
+   "nombre": "Formentera",
+   "min": 23.6,
+   "prov": "Illes Balears"
   },
   {
    "id": "6329X",
    "nombre": "Cabo de Gata Faro",
-   "min": 23.2,
+   "min": 23.4,
    "prov": "Almería"
   },
   {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 23.2,
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 23.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 23.1,
-   "prov": "Las Palmas"
+   "id": "6076X",
+   "nombre": "Marbella (Puerto Banus - Automatica)",
+   "min": 23.3,
+   "prov": "Málaga"
   },
   {
    "id": "C129V",
    "nombre": "Fuencaliente-Salinas",
-   "min": 23.0,
+   "min": 23.3,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C139E",
-   "nombre": "La Palma/Aeropuerto",
-   "min": 23.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "6277C",
-   "nombre": "Adra Faro",
-   "min": 22.8,
-   "prov": "Almería"
-  },
-  {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 22.8,
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 23.3,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 23.3,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 1.2,
-   "prov": "Segovia"
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 0.9,
+   "prov": "Cantabria"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 1.3,
+   "min": 2.3,
    "prov": "Ávila"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 1.9,
-   "prov": "Zamora"
   },
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 2.1,
+   "min": 2.9,
    "prov": "Granada"
-  },
-  {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 2.2,
-   "prov": "Burgos"
   },
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 2.5,
+   "min": 3.0,
    "prov": "Lleida"
   },
   {
-   "id": "2737E",
-   "nombre": "Lagunas de Somoza",
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
    "min": 3.2,
-   "prov": "León"
+   "prov": "Zamora"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 3.3,
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 3.2,
    "prov": "Soria"
   },
   {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": 3.3,
-   "prov": "Huesca"
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 4.4,
+   "prov": "Lleida"
   },
   {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 3.5,
-   "prov": "Salamanca"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 4.6,
+   "prov": "León"
+  },
+  {
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 4.6,
+   "prov": "Ourense"
+  },
+  {
+   "id": "9998X",
+   "nombre": "Bello",
+   "min": 4.6,
+   "prov": "Teruel"
   }
  ]
 }

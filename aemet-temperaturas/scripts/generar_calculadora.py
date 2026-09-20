@@ -4265,7 +4265,7 @@ PAGINA_BETA = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>¿Dónde se duerme fresco en España? Noches tropicales</title>
-<meta name="description" content="Diez veranos de AEMET, pueblo a pueblo. Busca el tuyo en el termómetro y mira dónde la madrugada todavía refresca de verdad.">
+<meta name="description" content="Descubre dónde refresca de noche en España con 10 veranos de datos AEMET. Mapa, noches tropicales y refugios climáticos, pueblo a pueblo.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="__SITE__/">
 <meta property="og:type" content="website">
@@ -5793,11 +5793,16 @@ APPS_SCRIPT_CONFORT_URL = ("https://script.google.com/macros/s/AKfycbwjIxpPVGrwc
 # scripts/apps_script_observatorio.gs. Con la URL vacía el Observatorio funciona
 # en modo demostración: deja votar, enseña el resultado y AVISA de que la noche
 # no se ha guardado. En cuanto se pegue aquí la URL /exec, empieza a guardarlas.
-# Registro de búsquedas del buscador. Vacío = no se registra nada, y esa es la
-# opción por defecto a propósito: mientras no haya una URL aquí, el buscador
-# funciona igual y no sale un solo byte del navegador. Se rellena con la /exec
-# que devuelve apps_script_buscador.gs al desplegarlo.
-APPS_SCRIPT_BUSCA_URL = ""
+
+# Registro de búsquedas del buscador (scripts/apps_script_buscador.gs, otro
+# despliegue y otra hoja). Si se vacía esta constante el buscador sigue
+# funcionando y no sale un solo byte del navegador: el JS comprueba `if(!LOG)`
+# y no envía nada. Lo que se guarda es (día, consulta, nº de resultados,
+# origen) agregado por veces; nunca IP, cookie, hora exacta, user-agent ni
+# referrer, para que dos búsquedas del mismo visitante no se puedan enlazar.
+APPS_SCRIPT_BUSCA_URL = ("https://script.google.com/macros/s/"
+                         "AKfycbzjI_ADPr8ZvLvtDNfDoSQfwyD6wKYTRPQq8B1zexjlhRp4OfS"
+                         "-LtTJxD_UGefrNG5-1g/exec")
 
 APPS_SCRIPT_OBS_URL = ("https://script.google.com/macros/s/AKfycbz4bvNwAVEBDA0NId5_"
                        "uv42a_Q9oXlA2h4q25CZ8ZuDRmWilVIDbg2qAmGGHDChmVhmyg/exec")

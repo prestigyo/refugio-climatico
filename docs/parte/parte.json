@@ -1,7 +1,7 @@
 {
  "fecha": "2026-09-20",
  "total": 838,
- "tropicales": 95,
+ "tropicales": 96,
  "ecuatoriales": 0,
  "peor": {
   "id": "6291B",
@@ -109,12 +109,6 @@
    "prov": "Palencia"
   },
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 4.7,
-   "prov": "Granada"
-  },
-  {
    "id": "9001D",
    "nombre": "Nestares",
    "min": 4.7,
@@ -137,6 +131,12 @@
    "nombre": "El Puente (Casa Forestal)",
    "min": 5.0,
    "prov": "Zamora"
+  },
+  {
+   "id": "9091R",
+   "nombre": "Vitoria-Gasteiz Aeropuerto",
+   "min": 5.1,
+   "prov": "Araba/Álava"
   }
  ]
 }

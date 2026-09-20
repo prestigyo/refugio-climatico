@@ -766,7 +766,12 @@ function colorNT(nt){
 // ---------- Rellenar textos del reportaje ----------
 $("#h-total").textContent = T; $("#f-total").textContent = T;
 const anios = Math.max(...TODAS.map(e=>e.anios));
-$("#anios").textContent = anios>=9 ? "diez veranos" : anios.toFixed(0)+" veranos";
+// Escribe el número que hay, no el que quisiéramos. Antes ponía "diez veranos"
+// con cualquier valor >=9, así que mientras la tendencia contaba nueve veranos
+// (le faltaba el rolling) la portada decía diez y /noches-tropicales/ decía 9.
+const NUM_VERANOS=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez"];
+const _a=Math.round(anios);
+$("#anios").textContent = (NUM_VERANOS[_a] || _a) + " veranos";
 
 function ntTxt(nt){ return nt<1 ? "<1" : (nt<10 ? nt.toFixed(1) : Math.round(nt)); }
 function ntBig(nt){ return nt<1 ? '&lt;1<span class="lt-note">menos de 1</span>' : String(ntTxt(nt)); }
@@ -2221,6 +2226,26 @@ def anio_balance(hoy: date | None = None) -> int:
     return hoy.year if (hoy.month, hoy.day) > (9, 30) else hoy.year - 1
 
 
+def rutas_diarios() -> list:
+    """Los CSV de valores diarios, con el ROLLING PRIMERO.
+
+    diarios_AAAA.csv solo se rellena con el backfill; el día a día entra en
+    diarios_estaciones.csv. Ahora mismo diarios_2026.csv se queda en el 26 de
+    mayo y el verano de 2026 entero —92 de 92 días, ~840 estaciones— vive solo
+    en el rolling. Quien leyera únicamente el glob anual se perdía ese verano y
+    contaba nueve veranos donde hay diez: de ahí salía el «9 veranos» que la
+    web publicaba junto al «diez veranos» del resto de páginas.
+
+    El rolling va primero a propósito: es la fuente fresca, así que si una
+    fecha aparece en los dos manda ésta, igual que el keep="last" de
+    analisis_refugios_nocturnos.py. Quien recorra esta lista debe saltarse las
+    claves (indicativo, fecha) ya vistas en el rolling.
+    """
+    datos = AEMET_DIR / "datos"
+    rolling = datos / "diarios_estaciones.csv"
+    return ([rolling] if rolling.exists() else []) + sorted(datos.glob("diarios_2*.csv"))
+
+
 def cargar_tendencia_provincias(estaciones: list, anio_bal: int | None = None) -> tuple[dict, dict]:
     """Media de noches tropicales por estación y verano (jun–ago), por provincia
     y año, leyendo los CSV diarios (2017–2026). Devuelve {provincia: {año: media}}.
@@ -2242,7 +2267,12 @@ def cargar_tendencia_provincias(estaciones: list, anio_bal: int | None = None) -
     # Fechas de noche tropical del verano del balance, para la racha
     fechas_bal: dict = defaultdict(list)
     datos_dir = AEMET_DIR / "datos"
-    for path in sorted(datos_dir.glob("diarios_2*.csv")):
+    # Claves (indicativo, fecha) ya contadas desde el rolling. Solo se guardan
+    # las suyas —no las de los diez años— para no inflar la memoria: es el
+    # único fichero que puede solapar con los anuales.
+    vistos: set = set()
+    for path in rutas_diarios():
+        es_rolling = path.name == "diarios_estaciones.csv"
         with path.open(encoding="utf-8", newline="") as fh:
             rd = csv.reader(fh)
             cab = next(rd, None)
@@ -2261,6 +2291,11 @@ def cargar_tendencia_provincias(estaciones: list, anio_bal: int | None = None) -
                 fecha = row[i_f]
                 mes = fecha[5:7]
                 if mes not in MESES_VERANO_PILAR:
+                    continue
+                clave = (row[i_ind], fecha)
+                if es_rolling:
+                    vistos.add(clave)
+                elif clave in vistos:
                     continue
                 try:
                     tmin = float(row[i_tmin])
@@ -5838,7 +5873,9 @@ def cargar_climatologia_mes(mes: int) -> dict[str, tuple[float, float | None]]:
     n_min: dict[str, int] = {}
     s_max: dict[str, float] = {}
     n_max: dict[str, int] = {}
-    for ruta in sorted((AEMET_DIR / "datos").glob("diarios_2*.csv")):
+    vistos: set = set()
+    for ruta in rutas_diarios():
+        es_rolling = ruta.name == "diarios_estaciones.csv"
         with ruta.open(newline="", encoding="utf-8") as f:
             lector = csv.reader(f)
             cab = next(lector, None)
@@ -5853,6 +5890,11 @@ def cargar_climatologia_mes(mes: int) -> dict[str, tuple[float, float | None]]:
                 if len(row) <= itn or row[ifch][5:7] != mm:  # solo el mes pedido
                     continue
                 ind = row[ii]
+                clave = (ind, row[ifch])
+                if es_rolling:
+                    vistos.add(clave)
+                elif clave in vistos:
+                    continue
                 try:
                     s_min[ind] = s_min.get(ind, 0.0) + float(row[itn])
                     n_min[ind] = n_min.get(ind, 0) + 1

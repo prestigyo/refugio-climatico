@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-19",
- "total": 843,
- "tropicales": 89,
+ "fecha": "2026-09-20",
+ "total": 838,
+ "tropicales": 95,
  "ecuatoriales": 0,
  "peor": {
-  "id": "6083X",
-  "nombre": "Marbella Cabopino",
-  "min": 24.6,
-  "prov": "Málaga"
+  "id": "6291B",
+  "nombre": "El Ejido (Ayuntamiento - Automatica)",
+  "min": 24.7,
+  "prov": "Almería"
  },
  "mejor": {
-  "id": "9001D",
-  "nombre": "Nestares",
-  "min": 0.9,
-  "prov": "Cantabria"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": 3.6,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
+   "id": "6291B",
+   "nombre": "El Ejido (Ayuntamiento - Automatica)",
+   "min": 24.7,
+   "prov": "Almería"
+  },
+  {
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
    "min": 24.6,
-   "prov": "Málaga"
-  },
-  {
-   "id": "6000A",
-   "nombre": "Melilla",
-   "min": 23.7,
-   "prov": "Melilla"
-  },
-  {
-   "id": "B986",
-   "nombre": "Formentera",
-   "min": 23.6,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "6076X",
-   "nombre": "Marbella (Puerto Banus - Automatica)",
-   "min": 23.4,
-   "prov": "Málaga"
+   "prov": "Murcia"
   },
   {
    "id": "6329X",
    "nombre": "Cabo de Gata Faro",
-   "min": 23.4,
+   "min": 24.2,
    "prov": "Almería"
   },
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 23.4,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "5950X",
+   "nombre": "San Jose del Valle-Pt Guadalcacín",
+   "min": 24.0,
+   "prov": "Cádiz"
   },
   {
-   "id": "C129V",
-   "nombre": "Fuencaliente-Salinas",
-   "min": 23.3,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "5973",
+   "nombre": "Cádiz Observatorio",
+   "min": 24.0,
+   "prov": "Cádiz"
   },
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 23.3,
-   "prov": "Las Palmas"
+   "id": "6293X",
+   "nombre": "Roquetas de Mar-Faro Sabinar",
+   "min": 23.9,
+   "prov": "Almería"
+  },
+  {
+   "id": "6000A",
+   "nombre": "Melilla",
+   "min": 23.8,
+   "prov": "Melilla"
+  },
+  {
+   "id": "5972Y",
+   "nombre": "San Fernando Roa",
+   "min": 23.6,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "5996B",
+   "nombre": "Barbate Depuradora",
+   "min": 23.6,
+   "prov": "Cádiz"
   },
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 23.3,
+   "min": 23.4,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "7002Y",
-   "nombre": "Águilas",
-   "min": 23.2,
-   "prov": "Murcia"
   }
  ],
  "top_fresco": [
   {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 0.9,
-   "prov": "Cantabria"
-  },
-  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 2.3,
+   "min": 3.6,
    "prov": "Ávila"
-  },
-  {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 3.0,
-   "prov": "Granada"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 3.0,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 3.2,
-   "prov": "Zamora"
   },
   {
    "id": "9287A",
    "nombre": "San Pedro Manrique",
-   "min": 3.2,
+   "min": 3.7,
    "prov": "Soria"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
+   "id": "2192C",
+   "nombre": "Cuellar",
    "min": 4.4,
-   "prov": "Lleida"
+   "prov": "Segovia"
+  },
+  {
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 4.4,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": 4.7,
+   "prov": "Palencia"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 4.7,
+   "prov": "Granada"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 4.7,
+   "prov": "Cantabria"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 4.6,
+   "min": 4.8,
    "prov": "León"
   },
   {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 4.6,
-   "prov": "Ourense"
+   "id": "2624C",
+   "nombre": "Riaño-Ermita Quintanilla",
+   "min": 5.0,
+   "prov": "León"
   },
   {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": 4.6,
-   "prov": "Teruel"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 5.0,
+   "prov": "Zamora"
   }
  ]
 }

@@ -7874,7 +7874,7 @@ INDICE_BUSCADOR = "buscador.json"
 
 # Páginas que no tiene sentido ofrecer en el buscador: utilidades internas,
 # páginas de compartir y la propia página de resultados.
-FUERA_DEL_BUSCADOR = {"buscar", "informes", "badges", "tu-pueblo/gracias"}
+FUERA_DEL_BUSCADOR = {"buscar", "en/search", "informes", "badges", "tu-pueblo/gracias"}
 
 
 def _texto_meta(html: str, prop: str) -> str:
@@ -7923,13 +7923,13 @@ def construir_indice_buscador(estaciones: list, site: str) -> int:
     return len(paginas), len(ests)
 
 PAGINA_BUSCAR = r"""<!doctype html>
-<html lang="es">
+<html lang="__T_LANG__">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Buscar en nochetropical.es</title>
-<meta name="description" content="Busca tu pueblo, tu provincia o cualquier página de nochetropical.es: 860 estaciones de AEMET y todas las guías del sitio.">
-<link rel="canonical" href="__SITE__/buscar/">
+<title>__T_TITULO__</title>
+<meta name="description" content="__T_DESC__">
+<link rel="canonical" href="__SITE____T_RUTA__">
 <meta name="robots" content="noindex,follow">
 <link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -7969,29 +7969,24 @@ PAGINA_BUSCAR = r"""<!doctype html>
 <body>
 __NAV__
 <header class="h"><div class="wrap">
-  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · Buscar</nav>
-  <h1>Buscar</h1>
-  <p class="intro">Tu pueblo, tu provincia o cualquier guía del sitio. <b>__NEST__ estaciones</b> de AEMET y <b>__NPAG__ páginas</b>.</p>
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">nochetropical.es</a> · __T_CRUMB__</nav>
+  <h1>__T_H1__</h1>
+  <p class="intro">__T_INTRO__</p>
 </div></header>
 
 <section><div class="wrap">
   <div class="bx">
-    <label class="sr-only" for="q">Buscar en el sitio</label>
-    <input id="q" type="search" placeholder="Escribe un pueblo, una provincia o un tema…"
+    <label class="sr-only" for="q">__T_LABEL__</label>
+    <input id="q" type="search" placeholder="__T_PH__"
            autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
   </div>
   <p class="cuenta" id="cuenta" role="status" aria-live="polite"></p>
   <div class="sug" id="sug">
-    <button type="button" data-q="Teruel">Teruel</button>
-    <button type="button" data-q="dormir">dormir con calor</button>
-    <button type="button" data-q="ola de calor">ola de calor</button>
-    <button type="button" data-q="salud">salud</button>
-    <button type="button" data-q="refugio">refugios</button>
+__T_SUG__
   </div>
   <div id="out"></div>
   <div class="vacio" id="ini">
-    <p>El buscador recorre <b>todas las estaciones de AEMET</b> del proyecto y todas las páginas publicadas. Escribe sin preocuparte por los acentos.</p>
-    <p>Si no encuentras tu pueblo es porque <b>no tiene estación meteorológica propia</b> — busca entonces por provincia, o mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">los refugios más cercanos a ti</a>. También puedes <a href="__SITE__/tu-pueblo/">avisarnos de que falta</a>.</p>
+__T_INI__
   </div>
 </div></section>
 __FOOTER__
@@ -8046,31 +8041,29 @@ __FOOTER__
    pags.sort(function(a,b){return a[0]-b[0];});
    var h='', n=ests.length+pags.length;
    if(pags.length){
-    h+='<div class="grp"><h2>Páginas</h2><ul class="res">';
+    h+='<div class="grp"><h2>__T_PAGS__</h2><ul class="res">';
     pags.slice(0,12).forEach(function(r){ var p=r[1];
      h+='<li>'+A+esc(p[1])+'"><span class="t">'+esc(p[0])+'</span>'
        +(p[2]?'<span class="d">'+esc(p[2])+'</span>':'')+'</a></li>'; });
     h+='</ul></div>';
    }
    if(ests.length){
-    h+='<div class="grp"><h2>Estaciones de AEMET</h2><ul class="res">';
+    h+='<div class="grp"><h2>__T_ESTS__</h2><ul class="res">';
     ests.slice(0,25).forEach(function(r){ var e=r[1];
      // Concordancia: "1 noche", no "1 noches". El resto del sitio ya la cuida.
-     var nt=(''+e[2]).replace('.',',')+(e[2]===1?' noche':' noches');
-     h+='<li>'+A+esc(e[3])+'"><span class="m">'+nt+' trop./año</span>'
+     var nt=__T_NUM__+(e[2]===1?' __T_NOCHE__':' __T_NOCHES__');
+     h+='<li>'+A+esc(e[3])+'"><span class="m">'+nt+' __T_UNIT__</span>'
        +'<span class="t">'+esc(e[0])+'</span>'
        +'<span class="d">'+esc(e[1])+'</span></a></li>'; });
     h+='</ul></div>';
    }
    if(!n){
-    h='<div class="vacio"><p>No hay nada con <b>«'+esc(q.value.trim())+'»</b>.</p>'
-     +'<p>Si buscabas un pueblo, puede que <b>no tenga estación meteorológica propia</b>: '
-     +'prueba con su provincia, mira <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">'
-     +'los refugios más cercanos</a> o <a href="__SITE__/tu-pueblo/">dinos que falta</a>.</p></div>';
+    h='<div class="vacio"><p>__T_NADA1__<b>'+esc(q.value.trim())+'</b>__T_NADA2__</p>'
+     +'__T_NADA3__</div>';
     cuenta.textContent=''; apunta(t,0);
    } else {
-    cuenta.textContent = n===1 ? '1 resultado'
-      : n+' resultados'+(ests.length>25?' (se muestran los 25 primeros de estación)':'');
+    cuenta.textContent = n===1 ? '__T_RES1__'
+      : n+' __T_RESN__'+(ests.length>25?' __T_TOP25__':'');
     apunta(t,n);
    }
    out.innerHTML=h;
@@ -8088,7 +8081,7 @@ __FOOTER__
   if(ya[t]) return;            // una vez por termino y visita: el resto es ruido
   ya[t]=1;
   try{
-   var cuerpo=JSON.stringify({q:t,n:n,o:'buscar'});
+   var cuerpo=JSON.stringify({q:t,n:n,o:'__T_ORIGEN__'});
    // sendBeacon no bloquea ni retrasa nada, y sobrevive a que el visitante
    // pulse un resultado justo despues de escribir.
    if(navigator.sendBeacon){ navigator.sendBeacon(LOG, new Blob([cuerpo],{type:'text/plain'})); }
@@ -8117,18 +8110,127 @@ __FOOTER__
 """
 
 
-def construir_pagina_buscar(n_est: int, n_pag: int, site: str = SITE_URL) -> str:
+# Textos del buscador, uno por idioma. La plantilla es la MISMA: duplicarla
+# habría garantizado que el día que se toque una, la otra se quede atrás.
+# El inglés no es una traducción literal: lo que de verdad sirve a un lector
+# inglés son los NOMBRES DE PUEBLO, que no necesitan idioma, así que la página
+# lo dice y avisa de que las fichas de provincia están en español.
+TEXTOS_BUSCAR = {
+    "es": dict(
+        lang="es", ruta="/buscar/", origen="buscar",
+        titulo="Buscar en nochetropical.es",
+        desc="Busca tu pueblo, tu provincia o cualquier página de nochetropical.es: "
+             "las estaciones de AEMET y todas las guías del sitio.",
+        crumb="Buscar", h1="Buscar",
+        intro="Tu pueblo, tu provincia o cualquier guía del sitio. "
+              "<b>__NEST__ estaciones</b> de AEMET y <b>__NPAG__ páginas</b>.",
+        label="Buscar en el sitio",
+        ph="Escribe un pueblo, una provincia o un tema…",
+        sug=[("Teruel", "Teruel"), ("dormir", "dormir con calor"),
+             ("ola de calor", "ola de calor"), ("salud", "salud"),
+             ("refugio", "refugios")],
+        ini='<p>El buscador recorre <b>todas las estaciones de AEMET</b> del proyecto y '
+            'todas las páginas publicadas. Escribe sin preocuparte por los acentos.</p>'
+            '<p>Si no encuentras tu pueblo es porque <b>no tiene estación meteorológica '
+            'propia</b> — busca entonces por provincia, o mira '
+            '<a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">los refugios más '
+            'cercanos a ti</a>. También puedes <a href="__SITE__/tu-pueblo/">avisarnos de '
+            'que falta</a>.</p>',
+        pags="Páginas", ests="Estaciones de AEMET",
+        num="(''+e[2]).replace('.',',')", noche="noche", noches="noches",
+        unit="trop./año",
+        res1="1 resultado", resn="resultados",
+        top25="(se muestran los 25 primeros de estación)",
+        nada1="No hay nada con «", nada2="».",
+        nada3='<p>Si buscabas un pueblo, puede que <b>no tenga estación meteorológica '
+              'propia</b>: prueba con su provincia, mira '
+              '<a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">los refugios '
+              'más cercanos</a> o <a href="__SITE__/tu-pueblo/">dinos que falta</a>.</p>',
+    ),
+    "en": dict(
+        lang="en-GB", ruta="/en/search/", origen="en",
+        titulo="Search nochetropical.es — Spanish towns and AEMET data",
+        desc="Search any Spanish town or province across AEMET weather stations: "
+             "tropical nights per year, and every guide on the site.",
+        crumb="Search", h1="Search",
+        intro="Any Spanish town or province, plus the guides on this site. "
+              "<b>__NEST__ AEMET weather stations</b> and <b>__NPAG__ pages</b>.",
+        label="Search the site",
+        ph="Type a Spanish town, a province or a topic…",
+        # Comprobadas contra buscador.json: «Pyrenees» y «frost-free» no
+        # devolvían NADA (el índice guarda título y descripción, y los topónimos
+        # van en español). Una sugerencia que no encuentra nada es la peor
+        # primera impresión posible, así que aquí solo van términos verificados.
+        sug=[("Teruel", "Teruel"), ("Granada", "Granada"),
+             ("Sierra Nevada", "Sierra Nevada"), ("sleep", "sleep"),
+             ("heatwave", "heatwave")],
+        ini='<p>Town and province names work the same in any language, so this searches '
+            '<b>every AEMET weather station</b> in the project. Accents are optional: type '
+            '<i>Avila</i> or <i>Ávila</i>.</p>'
+            '<p>Heads-up: the English section has a handful of pages, but the per-province '
+            'data sheets a station links to are <b>in Spanish</b> — they are mostly tables '
+            'and numbers, so they read fine either way. Start from '
+            '<a href="__SITE__/en/coolest-towns-spain/">the coolest towns in Spain</a> if '
+            'you would rather stay in English.</p>',
+        pags="Pages", ests="AEMET weather stations",
+        num="(''+e[2])", noche="tropical night", noches="tropical nights",
+        unit="a year",
+        res1="1 result", resn="results",
+        top25="(showing the first 25 stations)",
+        nada1="Nothing matches “", nada2="”.",
+        nada3='<p>If you were after a town, it may simply <b>have no weather station of its '
+              'own</b>: try the province instead, or browse '
+              '<a href="__SITE__/en/coolest-towns-spain/">the coolest towns in Spain</a>.</p>',
+    ),
+}
+
+
+def construir_pagina_buscar(n_est: int, n_pag: int, site: str = SITE_URL,
+                            lang: str = "es") -> str:
+    """La página del buscador, en español o en inglés (misma plantilla)."""
+    t = TEXTOS_BUSCAR[lang]
+    sep = "." if lang == "es" else ","
+    n_est_txt = f"{n_est:,}".replace(",", sep)
+    sug = "".join(f'<button type="button" data-q="{q}">{txt}</button>'
+                  for q, txt in t["sug"])
+    nav = nav_escueto_html(site) if lang == "es" else nav_en_html(site)
+    pie = footer_escueto_html(site) if lang == "es" else footer_en_html(site)
+    home = site + ("/" if lang == "es" else "/en/")
     return (PAGINA_BUSCAR
             .replace("__BUSCA_URL__", APPS_SCRIPT_BUSCA_URL)
-            .replace("__NEST__", f"{n_est:,}".replace(",", "."))
+            .replace("__T_LANG__", t["lang"])
+            .replace("__T_RUTA__", t["ruta"])
+            .replace("__T_ORIGEN__", t["origen"])
+            .replace("__T_TITULO__", t["titulo"])
+            .replace("__T_DESC__", t["desc"])
+            .replace("__T_CRUMB__", t["crumb"])
+            .replace("__T_H1__", t["h1"])
+            .replace("__T_INTRO__", t["intro"])
+            .replace("__T_LABEL__", t["label"])
+            .replace("__T_PH__", t["ph"])
+            .replace("__T_SUG__", sug)
+            .replace("__T_INI__", t["ini"])
+            .replace("__T_PAGS__", t["pags"])
+            .replace("__T_ESTS__", t["ests"])
+            .replace("__T_NUM__", t["num"])
+            .replace("__T_NOCHE__", t["noche"])
+            .replace("__T_NOCHES__", t["noches"])
+            .replace("__T_UNIT__", t["unit"])
+            .replace("__T_RES1__", t["res1"])
+            .replace("__T_RESN__", t["resn"])
+            .replace("__T_TOP25__", t["top25"])
+            .replace("__T_NADA1__", t["nada1"])
+            .replace("__T_NADA2__", t["nada2"])
+            .replace("__T_NADA3__", t["nada3"])
+            .replace("__NEST__", n_est_txt)
             .replace("__NPAG__", str(n_pag))
             .replace("__CSS__", _CSS_CHROME)
             .replace("__CSSART__", _CSS_ARTICULO)
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
             .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
-            .replace("__NAV__", nav_escueto_html(site))
-            .replace("__FOOTER__", footer_escueto_html(site))
-            .replace("__HOME__", site + "/")
+            .replace("__NAV__", nav)
+            .replace("__FOOTER__", pie)
+            .replace("__HOME__", home)
             .replace("__SITE__", site))
 
 
@@ -10396,6 +10498,11 @@ MENU_EN = [
 
 def nav_en_html(site: str) -> str:
     enlaces = "".join(f'<a href="{site}{href}">{txt}</a>' for txt, href in MENU_EN)
+    # Misma lupa que el menú español, pero a /en/search/: el buscador vale sobre
+    # todo por los NOMBRES DE PUEBLO, que no dependen del idioma, y sin este
+    # enlace no había forma de llegar a él desde la sección inglesa.
+    enlaces += (f'<a href="{site}/en/search/" class="lupa" aria-label="Search"'
+                f' title="Search the site">{_LUPA_SVG}</a>')
     enlaces += f'<a href="{site}/" hreflang="es" class="lang">ES · Español</a>'
     # Mismo botón y script de hamburguesa que el menú español: sin ellos, el CSS
     # móvil de CSS_NAV_ESCUETO oculta los enlaces y no queda forma de abrirlos.
@@ -14880,6 +14987,12 @@ def main() -> int:
     (DOCS_DIR / "buscar").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "buscar" / "index.html").write_text(
         construir_pagina_buscar(n_est_idx, n_pag, site), encoding="utf-8")
+    # Gemela inglesa: mismo índice (los nombres de pueblo no tienen idioma),
+    # interfaz en inglés y origen "en" en el registro, para poder separar
+    # después qué busca cada público.
+    (DOCS_DIR / "en" / "search").mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / "en" / "search" / "index.html").write_text(
+        construir_pagina_buscar(n_est_idx, n_pag, site, "en"), encoding="utf-8")
     print("   enlaces: " + revisar_enlaces(site))
     print("   indexnow: " + avisar_indexnow(site, nuevas))
     print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"

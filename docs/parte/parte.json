@@ -1,94 +1,94 @@
 {
- "fecha": "2026-09-20",
- "total": 838,
+ "fecha": "2026-09-21",
+ "total": 836,
  "tropicales": 96,
- "ecuatoriales": 0,
+ "ecuatoriales": 1,
  "peor": {
-  "id": "6291B",
-  "nombre": "El Ejido (Ayuntamiento - Automatica)",
-  "min": 24.7,
-  "prov": "Almería"
+  "id": "1400",
+  "nombre": "Fisterra",
+  "min": 26.7,
+  "prov": "A Coruña"
  },
  "mejor": {
   "id": "3319D",
   "nombre": "Puerto el Pico",
-  "min": 3.6,
+  "min": 3.3,
   "prov": "Ávila"
  },
  "top_calor": [
   {
-   "id": "6291B",
-   "nombre": "El Ejido (Ayuntamiento - Automatica)",
-   "min": 24.7,
-   "prov": "Almería"
+   "id": "1400",
+   "nombre": "Fisterra",
+   "min": 26.7,
+   "prov": "A Coruña"
   },
   {
-   "id": "7019X",
-   "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 24.6,
-   "prov": "Murcia"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 24.2,
-   "prov": "Almería"
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
+   "min": 24.4,
+   "prov": "Málaga"
   },
   {
    "id": "5950X",
    "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 24.0,
+   "min": 23.7,
    "prov": "Cádiz"
   },
   {
    "id": "5973",
    "nombre": "Cádiz Observatorio",
-   "min": 24.0,
+   "min": 23.7,
    "prov": "Cádiz"
   },
   {
-   "id": "6293X",
-   "nombre": "Roquetas de Mar-Faro Sabinar",
-   "min": 23.9,
-   "prov": "Almería"
-  },
-  {
-   "id": "6000A",
-   "nombre": "Melilla",
-   "min": 23.8,
-   "prov": "Melilla"
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 23.5,
+   "prov": "Las Palmas"
   },
   {
    "id": "5972Y",
    "nombre": "San Fernando Roa",
-   "min": 23.6,
+   "min": 23.4,
    "prov": "Cádiz"
   },
   {
    "id": "5996B",
    "nombre": "Barbate Depuradora",
-   "min": 23.6,
+   "min": 23.4,
    "prov": "Cádiz"
   },
   {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 23.4,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 23.3,
+   "prov": "Almería"
+  },
+  {
+   "id": "6076X",
+   "nombre": "Marbella (Puerto Banus - Automatica)",
+   "min": 23.2,
+   "prov": "Málaga"
+  },
+  {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 23.2,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 3.6,
+   "min": 3.3,
    "prov": "Ávila"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 3.7,
-   "prov": "Soria"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 4.1,
+   "prov": "Zamora"
   },
   {
    "id": "2192C",
@@ -97,46 +97,46 @@
    "prov": "Segovia"
   },
   {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
+   "id": "7067Y",
+   "nombre": "Cañadas del Nerpio",
    "min": 4.4,
-   "prov": "Cantabria"
+   "prov": "Albacete"
   },
   {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": 4.7,
-   "prov": "Palencia"
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 4.8,
+   "prov": "Cantabria"
   },
   {
    "id": "9001D",
    "nombre": "Nestares",
-   "min": 4.7,
+   "min": 5.1,
    "prov": "Cantabria"
+  },
+  {
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 5.1,
+   "prov": "Soria"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 4.8,
+   "min": 5.4,
    "prov": "León"
   },
   {
-   "id": "2624C",
-   "nombre": "Riaño-Ermita Quintanilla",
-   "min": 5.0,
-   "prov": "León"
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 5.5,
+   "prov": "Ourense"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 5.0,
-   "prov": "Zamora"
-  },
-  {
-   "id": "9091R",
-   "nombre": "Vitoria-Gasteiz Aeropuerto",
-   "min": 5.1,
-   "prov": "Araba/Álava"
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 5.6,
+   "prov": "Soria"
   }
  ]
 }

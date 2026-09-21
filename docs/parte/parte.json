@@ -1,7 +1,7 @@
 {
  "fecha": "2026-09-21",
- "total": 836,
- "tropicales": 96,
+ "total": 834,
+ "tropicales": 95,
  "ecuatoriales": 1,
  "peor": {
   "id": "1400",
@@ -109,12 +109,6 @@
    "prov": "Cantabria"
   },
   {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 5.1,
-   "prov": "Cantabria"
-  },
-  {
    "id": "9287A",
    "nombre": "San Pedro Manrique",
    "min": 5.1,
@@ -137,6 +131,12 @@
    "nombre": "Moron de Almazan",
    "min": 5.6,
    "prov": "Soria"
+  },
+  {
+   "id": "6299I",
+   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
+   "min": 5.6,
+   "prov": "Granada"
   }
  ]
 }

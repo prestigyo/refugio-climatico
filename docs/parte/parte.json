@@ -85,12 +85,6 @@
    "prov": "Segovia"
   },
   {
-   "id": "2926B",
-   "nombre": "Bañobarez",
-   "min": 3.5,
-   "prov": "Salamanca"
-  },
-  {
    "id": "2298",
    "nombre": "Palacios de la Sierra",
    "min": 3.9,
@@ -137,6 +131,12 @@
    "nombre": "Cubillo de Ebro",
    "min": 4.4,
    "prov": "Cantabria"
+  },
+  {
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 4.6,
+   "prov": "Soria"
   }
  ]
 }

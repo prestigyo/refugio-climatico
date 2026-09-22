@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-21",
- "total": 834,
- "tropicales": 95,
- "ecuatoriales": 1,
+ "fecha": "2026-09-22",
+ "total": 846,
+ "tropicales": 102,
+ "ecuatoriales": 0,
  "peor": {
-  "id": "1400",
-  "nombre": "Fisterra",
-  "min": 26.7,
-  "prov": "A Coruña"
+  "id": "C229J",
+  "nombre": "Pájara-Puerto Morro Jable",
+  "min": 24.0,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 3.3,
-  "prov": "Ávila"
+  "id": "2192C",
+  "nombre": "Cuellar",
+  "min": -0.3,
+  "prov": "Segovia"
  },
  "top_calor": [
   {
-   "id": "1400",
-   "nombre": "Fisterra",
-   "min": 26.7,
-   "prov": "A Coruña"
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 24.0,
+   "prov": "Las Palmas"
   },
   {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
-   "min": 24.4,
-   "prov": "Málaga"
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 23.8,
+   "prov": "Illes Balears"
   },
   {
-   "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 23.7,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "5973",
-   "nombre": "Cádiz Observatorio",
-   "min": 23.7,
-   "prov": "Cádiz"
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 23.8,
+   "prov": "Las Palmas"
   },
   {
    "id": "C619X",
    "nombre": "Agaete-Casco",
+   "min": 23.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C029O",
+   "nombre": "Lanzarote/Aeropuerto",
+   "min": 23.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 23.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
    "min": 23.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "5972Y",
-   "nombre": "San Fernando Roa",
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 23.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C689E",
+   "nombre": "Maspalomas",
+   "min": 23.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
    "min": 23.4,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "5996B",
-   "nombre": "Barbate Depuradora",
-   "min": 23.4,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 23.3,
-   "prov": "Almería"
-  },
-  {
-   "id": "6076X",
-   "nombre": "Marbella (Puerto Banus - Automatica)",
-   "min": 23.2,
-   "prov": "Málaga"
-  },
-  {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 23.2,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 3.3,
-   "prov": "Ávila"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 4.1,
-   "prov": "Zamora"
-  },
-  {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 4.4,
+   "min": -0.3,
    "prov": "Segovia"
   },
   {
-   "id": "7067Y",
-   "nombre": "Cañadas del Nerpio",
-   "min": 4.4,
-   "prov": "Albacete"
+   "id": "2926B",
+   "nombre": "Bañobarez",
+   "min": 3.5,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 3.9,
+   "prov": "Burgos"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 3.9,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "9998X",
+   "nombre": "Bello",
+   "min": 3.9,
+   "prov": "Teruel"
+  },
+  {
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 4.0,
+   "prov": "Ávila"
+  },
+  {
+   "id": "3130C",
+   "nombre": "Sigüenza",
+   "min": 4.1,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 4.3,
+   "prov": "Soria"
+  },
+  {
+   "id": "3013",
+   "nombre": "Molina de Aragón",
+   "min": 4.3,
+   "prov": "Guadalajara"
   },
   {
    "id": "9016X",
    "nombre": "Cubillo de Ebro",
-   "min": 4.8,
+   "min": 4.4,
    "prov": "Cantabria"
-  },
-  {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 5.1,
-   "prov": "Soria"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 5.4,
-   "prov": "León"
-  },
-  {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 5.5,
-   "prov": "Ourense"
-  },
-  {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 5.6,
-   "prov": "Soria"
-  },
-  {
-   "id": "6299I",
-   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
-   "min": 5.6,
-   "prov": "Granada"
   }
  ]
 }

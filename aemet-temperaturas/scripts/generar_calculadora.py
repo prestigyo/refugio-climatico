@@ -1284,6 +1284,8 @@ _F_GUIAS = [("Qué es una noche tropical", "/noches-tropicales/"),
             ("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
             ("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
             ("La España que nunca se colorea (estudio)", "/la-espana-que-nunca-se-colorea/"),
+            ("Cuántas horas se duerme en verano (estudio)",
+             "/cuantas-horas-se-duerme-en-verano/"),
             ("Microclimas: los refugios de la naturaleza", "/microclimas/"),
             ("Cómo crear un refugio climático natural", "/refugio-climatico-natural/"),
             ("Refugios y España vaciada", "/refugios-y-espana-vaciada/"),
@@ -4479,6 +4481,7 @@ __CSS_COMUN__
       <a class="card2" href="__SITE__/noches-tropicales-y-salud/"><h3>🫀 Noches tropicales y salud</h3><p>Por qué el calor nocturno afecta a la salud con independencia del calor del día. Los estudios, con las fuentes delante.</p></a>
       <a class="card2" href="__SITE__/aumento-noches-tropicales-espana/"><h3>España pierde sus noches frescas</h3><p>746 estaciones, diez veranos: 54 pueblos ya no tienen cero.</p></a>
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
+      <a class="card2 destacada" href="__SITE__/cuantas-horas-se-duerme-en-verano/"><h3>⏱️ ¿Cuántas horas se duerme de verdad?</h3><p>Con la misma mínima de 19°, hay noches de una hora de alivio y de nueve. La mínima no lo dice: lo hemos medido hora a hora.</p></a>
       <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>__NHOT__ hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
       <a class="card2 destacada" href="__SITE__/dormir-con-calor/"><h3>😴 Cómo dormir con calor sin aire acondicionado</h3><p>Lo que de verdad funciona esta noche, lo que no sirve de nada, y a partir de qué temperatura ya no hay truco que valga.</p></a>
       <a class="card2" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/"><h3>💧 Enfriar una habitación sin aire acondicionado</h3><p>La sábana húmeda sobre una cuerda funciona, pero solo donde el aire es seco. Cuántos grados puede bajar en tu zona, con la humedad que mide AEMET.</p></a>
@@ -6848,6 +6851,300 @@ def bloque_parpadeo(estaciones: list, site: str) -> str:
         'por encima para ver cuál es. Fuente: AEMET.</p>'
         '</div>')
 
+# ---------------------------------------------------------------------------
+# /cuantas-horas-se-duerme-en-verano/ — el estudio del archivo horario.
+#
+# Sale de docs/estudios/horas-datos.json, que escribe analisis_curva_nocturna.py
+# leyendo datos/horarias/. Si el JSON no está, la página no se genera: mismo
+# trato que el estudio de los colores.
+#
+# La tesis: el dato que publica todo el mundo —la mínima de la noche— no dice
+# cuánto se pudo dormir. Dos noches con la misma mínima pueden haber tenido 1
+# hora de alivio o 9. Es la primera vez que se puede enseñar, porque hace falta
+# el dato HORARIO y AEMET no lo archiva: lo borra a las ~12 h.
+#
+# Todo el dibujo es CSS: barras con height en %, sin una línea de JS.
+CSS_HORAS = (
+    # Tarjetas de cifra y caja de método: propias, no heredadas.
+    '.dato{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0}'
+    '.dcard{flex:1;min-width:170px;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:13px;padding:15px 17px}'
+    '.dcard .n{font-family:var(--fd);font-weight:900;font-size:31px;line-height:1;'
+    'color:var(--teja2)}'
+    '.dcard .l{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}'
+    '.verifica{background:var(--bg2);border:1px solid var(--line);border-radius:14px;'
+    'padding:20px 22px;margin:26px 0 0}'
+    '.verifica .t{font-family:var(--fd);font-weight:700;font-size:18px;'
+    'margin:0 0 10px}'
+    '.verifica p{font-size:15px;line-height:1.7;margin:0 0 11px}'
+    '.verifica p:last-child{margin-bottom:0}'
+    '.sigue{border-top:1px solid var(--line);margin-top:28px;padding-top:22px;'
+    'font-size:15px}'
+    '.hz-tabla{margin:22px 0 10px;display:grid;gap:7px}'
+    '.hz-f{display:grid;grid-template-columns:52px 1fr 64px;align-items:center;gap:12px}'
+    '.hz-f .et{font-family:var(--fm);font-size:13px;color:var(--muted);text-align:right}'
+    '.hz-b{position:relative;height:22px;background:#12100c;border-radius:5px;overflow:hidden}'
+    # El rango P10-P90 como barra, y la mediana como una marca dentro.
+    '.hz-r{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,'
+    'rgba(201,74,46,.85),rgba(201,162,74,.85),rgba(143,176,122,.85))}'
+    '.hz-m{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--paper);'
+    'border-radius:2px}'
+    '.hz-f .n{font-family:var(--fm);font-size:12.5px;color:var(--muted)}'
+    '.hz-ley{font-size:13px;color:var(--muted);margin:4px 0 0}'
+    # Tiras de noches
+    '.hz-e{background:linear-gradient(180deg,var(--bg2),var(--panel));'
+    'border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 13px}'
+    '.hz-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;'
+    'flex-wrap:wrap}'
+    '.hz-cab b{font-family:var(--fd);font-weight:700;font-size:17.5px}'
+    '.hz-cab span{color:var(--muted);font-size:13px}'
+    '.hz-big{display:flex;align-items:center;gap:13px;margin:11px 0 13px}'
+    '.hz-big .v{font-family:var(--fd);font-weight:700;font-size:44px;line-height:1;'
+    'color:var(--teal)}'
+    '.hz-big .u{color:var(--muted);font-size:13.5px;line-height:1.35}'
+    '.hz-tira{display:flex;gap:3px;align-items:flex-end;height:48px}'
+    '.hz-n{flex:1;min-width:3px;border-radius:2px 2px 0 0}'
+    '.hz-pie{color:var(--muted);font-size:12.5px;margin:9px 0 0;line-height:1.5}'
+    '.hz-pie b{color:var(--teja2)}'
+    # Horas del cruce
+    '.hz-cr{display:flex;gap:4px;align-items:flex-end;margin:20px 0 6px}'
+    '.hz-cc{flex:1;display:flex;flex-direction:column;justify-content:flex-end;'
+    'align-items:center;gap:5px}'
+    '.hz-cb{width:100%;border-radius:3px 3px 0 0;min-height:2px}'
+    '.hz-cl{font-family:var(--fm);font-size:11px;color:var(--muted)}'
+    '@media(max-width:560px){.hz-f{grid-template-columns:42px 1fr 52px;gap:8px}'
+    '.hz-cl{font-size:9.5px}.hz-big .v{font-size:38px}}'
+)
+
+
+def _hz_color(h: float) -> str:
+    """Verde si se duerme, rojo si no. Mismo criterio en toda la página."""
+    return ("#8fb07a" if h >= 7 else "#c9a24a" if h >= 4
+            else "#d9744e" if h >= 1 else "#c94a2e")
+
+
+def bloque_horas(d: dict, site: str) -> str:
+    """Las tres piezas visuales del estudio, en CSS puro."""
+    vent = d["ventana"]["horas"]
+    # --- 1) misma mínima, horas distintas -------------------------------
+    filas = []
+    for m in d["minimas"]:
+        if not 12 <= m["min"] <= 24:
+            continue
+        izq, der = 100 * m["p10"] / vent, 100 * m["p90"] / vent
+        med = 100 * m["mediana"] / vent
+        filas.append(
+            f'<div class="hz-f"><span class="et">{m["min"]}&nbsp;°C</span>'
+            f'<span class="hz-b"><span class="hz-r" style="left:{izq:.1f}%;'
+            f'width:{max(der - izq, 1.2):.1f}%"></span>'
+            f'<span class="hz-m" style="left:calc({med:.1f}% - 1.5px)"></span></span>'
+            f'<span class="n">{m["peor"]}–{m["mejor"]} h</span></div>')
+    tabla = "".join(filas)
+    # --- 2) las tiras de noches -----------------------------------------
+    tiras = []
+    for e in d["ejemplos"]:
+        barras = "".join(
+            f'<span class="hz-n" style="height:{6 + n["h"] * (42 / vent):.0f}px;'
+            f'background:{_hz_color(n["h"])}" title="{n["noche"]} · mínima '
+            f'{_n_es(n["tmin"])}° · {n["h"]} h bajo 20°"></span>'
+            for n in e["tira"])
+        cr = e["cruce_20_tipico"]
+        cruce = (f"refresca sobre las {int(cr):02d}:00" if cr not in ("", None)
+                 else "no refresca")
+        sin = (f' · <b>{e["noches_sin_alivio"]} noches sin un solo respiro</b>'
+               if e["noches_sin_alivio"] else "")
+        tiras.append(
+            f'<div class="hz-e"><div class="hz-cab"><b>{titular(e["nombre"])}</b>'
+            f'<span>{titular(e["provincia"])} · {miles(e["altitud"])} m</span></div>'
+            f'<div class="hz-big"><span class="v">{_n_es(e["h20_mediana"])}</span>'
+            f'<span class="u">de {vent} horas<br>por debajo de 20&nbsp;°C</span></div>'
+            f'<div class="hz-tira">{barras}</div>'
+            f'<p class="hz-pie">{e["noches"]} noches medidas · peor {e["h20_peor"]} h · '
+            f'mejor {e["h20_mejor"]} h · {cruce}{sin}</p></div>')
+    # --- 3) la hora del alivio ------------------------------------------
+    tot = sum(c["n"] for c in d["cruces"]) or 1
+    mx = max(c["n"] for c in d["cruces"])
+    cols = []
+    # En orden de NOCHE, no de reloj: las 23:00 abren la ventana y van primero.
+    # Ordenado por el reloj, el grupo más numeroso caería al final y el gráfico
+    # contaría la noche al revés.
+    orden = sorted(d["cruces"], key=lambda c: (
+        99 if c["hora"] == "nunca" else -1 if c["hora"] == 23 else c["hora"]))
+    for c in orden:
+        h = c["hora"]
+        etq = "nunca" if h == "nunca" else f"{int(h):02d}"
+        col = ("#c94a2e" if h == "nunca" else "#8fb07a" if int(h) in (23, 0, 1)
+               else "#c9a24a" if int(h) <= 4 else "#d9744e")
+        cols.append(
+            f'<div class="hz-cc"><span class="hz-cl">{100 * c["n"] / tot:.0f}%</span>'
+            f'<span class="hz-cb" style="height:{4 + 82 * c["n"] / mx:.0f}px;'
+            f'background:{col}"></span><span class="hz-cl">{etq}</span></div>')
+    return tabla, "".join(tiras), f'<div class="hz-cr">{"".join(cols)}</div>'
+
+PAGINA_HORAS = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/cuantas-horas-se-duerme-en-verano/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__TITLE__">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/cuantas-horas-se-duerme-en-verano/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=Lora:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>__CSS__ __CSSART__ __NAVCSS__ __FOOTERCSS__ __CSSATAJO__ __CSSHZ__</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Cuántas horas se duerme</nav>
+  <div class="kick">Estudio · Archivo horario propio · Datos AEMET</div>
+  <h1>La mínima no dice <em>cuánto se duerme</em></h1>
+  <p class="intro">Toda España mide la noche con un solo número: la <b>temperatura mínima</b>. Hemos medido <b>__NOCHES__ noches hora a hora</b> en __EST__ estaciones de AEMET, y el resultado es incómodo: <b>dos noches con la misma mínima pueden haber tenido una hora de alivio o nueve</b>. El dato que se publica no distingue una de otra.</p>
+  __ATAJO__
+</div></header>
+
+<section><div class="wrap">
+  <h2>La prueba: misma mínima, noches opuestas</h2>
+  <p>Cada fila es un grupo de noches con la <b>misma mínima</b>, redondeada. La barra abarca del percentil 10 al 90 de <b>horas por debajo de 20&nbsp;°C</b> entre las 23:00 y las 07:00; la marca clara es la mediana, y a la derecha va el rango completo observado.</p>
+  <div class="hz-tabla">__HZ_TABLA__</div>
+  <p class="hz-ley">De __PARES__ noches-estación. Si la mínima bastara, cada fila sería una raya fina. No lo es.</p>
+  <div class="dato">
+    <div class="dcard"><div class="n">__M19_MED__ h</div><div class="l">mediana con mínima de 19&nbsp;°C — pero va de __M19_PEOR__ a __M19_MEJOR__</div></div>
+    <div class="dcard"><div class="n">__MED20__ h</div><div class="l">mediana nacional bajo 20&nbsp;°C, de __VENT__</div></div>
+    <div class="dcard"><div class="n">__MED18__ h</div><div class="l">bajo 18&nbsp;°C, el umbral del sueño profundo</div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Cómo se ve una noche, noche a noche</h2>
+  <p>Cada barra es <b>una noche real</b>: la altura son las horas que estuvo por debajo de 20&nbsp;°C. Verde si se pudo dormir, rojo si no bajó ni una hora. Pasa el cursor por encima para ver la fecha y la mínima.</p>
+  __HZ_TIRAS__
+  <p>Fíjate en la de en medio. Su mediana es baja, pero tuvo noches de nueve horas y noches de cero: <b>la media de las dos habría inventado una noche templada que no existió</b>. Por eso aquí no publicamos medias.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Lo que de verdad decide la noche: a qué hora refresca</h2>
+  <p>No es cuánto baja, es <b>cuándo</b>. Reparto de la hora local en que se cruzan los 20&nbsp;°C:</p>
+  __HZ_CRUCES__
+  <p class="hz-ley">Hora local del cruce · «nunca» = la noche entera por encima de 20&nbsp;°C.</p>
+  <p><b>El __PCT23__&nbsp;% de las noches ya empieza por debajo de 20&nbsp;°C a las 23:00</b> — y es el único grupo con la noche entera fresca. En el otro extremo, el __PCTN__&nbsp;% no cruza nunca. Y entre medias hay una trampa: <b>cruzar a las cinco de la mañana equivale a no cruzar</b>. El alivio llega cuando ya no sirve.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>El mapa del insomnio: donde no hubo ni un respiro</h2>
+  <p>De las __RESUM__ estaciones con al menos diez noches medidas, <b>__NIUNA__ no bajaron de 20&nbsp;°C ni una sola hora</b> en una noche típica. Y __SINRESP__ no lo hicieron <b>en ninguna de las noches del periodo</b>:</p>
+  <p class="hz-ley">__LISTA_SIN__</p>
+  <div class="dato">__TRAMOS__</div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="verifica">
+    <div class="t">Cómo está hecho, y qué no dice</div>
+    <p>Ventana local de <b>23:00 a 07:00</b> (__VENT__ horas), del __INI__ al __FIN__: <b>__NOCHES__ noches completas</b> y __PARES__ pares noche-estación. Las horas se cuentan sobre lecturas horarias reales de la red de observación de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET</a>, no sobre interpolaciones.</p>
+    <p><b>AEMET no publica histórico horario</b>: la observación se borra a las ~12 horas. Este archivo existe porque lo guardamos cada día desde el 29 de agosto de 2026. Por eso el periodo es corto — y por eso no hay forma de rellenarlo hacia atrás.</p>
+    <p><b>Lo que esto NO dice:</b> son __NOCHES__ noches de final de verano, no un año. La tabla describe <i>estas</i> noches, no el clima de cada pueblo. Para eso hacen falta veranos enteros, y los estamos guardando. El <a href="__SITE__/ranking-noches-tropicales/">ranking de noches tropicales</a> sí cubre diez veranos, con el dato diario.</p>
+  </div>
+  <p class="sigue">Sigue: <a href="__SITE__/noches-tropicales/">qué es una noche tropical</a> · <a href="__SITE__/noches-tropicales-y-salud/">por qué importa para la salud</a> · <a href="__SITE__/la-espana-que-nunca-se-colorea/">la España que nunca se colorea</a> · <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">el refugio más cercano a ti</a>.</p>
+</div></section>
+__FOOTER__
+</body>
+</html>
+"""
+
+
+def construir_pagina_horas(d: dict, site: str) -> str:
+    """La landing del estudio horario. Devuelve None si faltan datos."""
+    tabla, tiras, cruces = bloque_horas(d, site)
+    p = d["periodo"]
+    vent = d["ventana"]["horas"]
+    m19 = next((m for m in d["minimas"] if m["min"] == 19), None)
+    tot_cruces = sum(c["n"] for c in d["cruces"]) or 1
+    c23 = next((c["n"] for c in d["cruces"] if c["hora"] == 23), 0)
+    cn = next((c["n"] for c in d["cruces"] if c["hora"] == "nunca"), 0)
+    niuna = next((t["n"] for t in d["tramos"] if t["etq"] == "ni una hora"), 0)
+    tramos = "".join(
+        f'<div class="dcard"><div class="n">{t["n"]}</div>'
+        f'<div class="l">estaciones con {t["etq"]} de alivio</div></div>'
+        for t in d["tramos"])
+    lista = " · ".join(f'{titular(x["nombre"])} ({titular(x["provincia"])})'
+                       for x in d["sin_respiro"]["lista"])
+    if d["sin_respiro"]["n"] > len(d["sin_respiro"]["lista"]):
+        lista += f' · y {d["sin_respiro"]["n"] - len(d["sin_respiro"]["lista"])} más'
+    title = "¿Cuántas horas se duerme de verdad en verano? | Noche Tropical"
+    desc = (f"La mínima no dice cuánto se duerme: con la misma mínima de 19 °C hay noches "
+            f"de una hora de alivio y de nueve. {p['noches']} noches medidas hora a hora "
+            f"en {p['estaciones']} estaciones de AEMET.")
+    url = site + "/cuantas-horas-se-duerme-en-verano/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Cuántas horas se duerme", "item": url}]},
+        {"@type": "Article", "headline": "La mínima no dice cuánto se duerme",
+         "description": desc, "mainEntityOfPage": url, "image": site + "/og.png",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es"},
+         "datePublished": iso_tz(p["fin"]), "dateModified": iso_tz(p["fin"]),
+         "isBasedOn": "https://opendata.aemet.es"},
+        {"@type": "Dataset",
+         "name": f"Horas dormibles por estación (AEMET, {p['noches']} noches)",
+         "description": ("Horas por debajo de 20 °C entre las 23:00 y las 07:00, por "
+                         "estación y noche, a partir del archivo horario propio de "
+                         "observación de AEMET."),
+         "temporalCoverage": f"{p['ini']}/{p['fin']}",
+         "spatialCoverage": {"@type": "Place", "name": "España"},
+         "creator": {"@type": "Organization", "name": "nochetropical.es"},
+         "isBasedOn": "https://opendata.aemet.es",
+         "license": "https://creativecommons.org/licenses/by/4.0/"}]}, ensure_ascii=False)
+    return (PAGINA_HORAS
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__CSSART__", _CSS_ARTICULO)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__CSSATAJO__", CSS_ATAJO)
+            .replace("__CSSHZ__", CSS_HORAS)
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__ATAJO__", ATAJO_CERCA)
+            .replace("__HZ_TABLA__", tabla)
+            .replace("__HZ_TIRAS__", tiras)
+            .replace("__HZ_CRUCES__", cruces)
+            .replace("__TRAMOS__", tramos)
+            .replace("__LISTA_SIN__", lista)
+            .replace("__TITLE__", title)
+            .replace("__DESC__", desc)
+            .replace("__NOCHES__", str(p["noches"]))
+            .replace("__PARES__", f"{p['pares']:,}".replace(",", "."))
+            .replace("__EST__", str(p["estaciones"]))
+            .replace("__RESUM__", str(d["estaciones_resumidas"]))
+            .replace("__NIUNA__", str(niuna))
+            .replace("__SINRESP__", str(d["sin_respiro"]["n"]))
+            .replace("__M19_MED__", _n_es(m19["mediana"]) if m19 else "?")
+            .replace("__M19_PEOR__", str(m19["peor"]) if m19 else "?")
+            .replace("__M19_MEJOR__", str(m19["mejor"]) if m19 else "?")
+            .replace("__MED20__", _n_es(d["mediana_h20"]))
+            .replace("__MED18__", _n_es(d["mediana_h18"]))
+            .replace("__PCT23__", f"{100 * c23 / tot_cruces:.0f}")
+            .replace("__PCTN__", f"{100 * cn / tot_cruces:.0f}")
+            .replace("__VENT__", str(vent))
+            .replace("__INI__", fecha_es_dia(date.fromisoformat(p["ini"])))
+            .replace("__FIN__", fecha_es_dia(date.fromisoformat(p["fin"])))
+            .replace("__SITE__", site)
+            .replace("__HOME__", site + "/"))
+
 def construir_pagina_estudio(site: str, datos: dict, estaciones: list) -> str:
     per = datos["periodo"]; noc = datos["nocturno"]; dia = datos["dia"]
     ini = fecha_es(date.fromisoformat(per["ini"]))
@@ -7198,6 +7495,7 @@ __NAV__
       <a class="navcard" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/"><span class="ic">💧</span><b>Enfriar sin aire acondicionado</b><span>La sábana húmeda y dónde baja grados de verdad.</span></a>
       <a class="navcard" href="__SITE__/noches-tropicales-y-salud/"><span class="ic">🫀</span><b>Noches tropicales y salud</b><span>Qué dice la ciencia sobre dormir con calor.</span></a>
       <a class="navcard" href="__SITE__/la-espana-que-nunca-se-colorea/"><span class="ic">🗺️</span><b>La España que nunca se colorea</b><span>El estudio de los mapas de AEMET, píxel a píxel.</span></a>
+      <a class="navcard" href="__SITE__/cuantas-horas-se-duerme-en-verano/"><span class="ic">⏱️</span><b>Cuántas horas se duerme</b><span>La mínima no dice cuánto se duerme. Lo medimos hora a hora.</span></a>
       <a class="navcard" href="__SITE__/metodologia/"><span class="ic">📐</span><b>Cómo medimos</b><span>Qué es una noche tropical y de dónde salen los datos.</span></a>
       <a class="navcard" href="__SITE__/"><span class="ic">🏡</span><b>Tu pueblo</b><span>¿Cuántas noches tropicales tiene al año?</span></a>
     </div>
@@ -14723,6 +15021,19 @@ def main() -> int:
         print("   estudio 'nunca se colorea': landing generada")
     else:
         print("   estudio 'nunca se colorea': sin datos (ejecuta estudio_colores.py); se omite")
+    # Estudio horario "cuántas horas se duerme": mismo trato, sale del JSON que
+    # escribe analisis_curva_nocturna.py sobre el archivo horario propio. Sin
+    # JSON no hay página: el archivo empezó el 29-08-2026 y no se puede rellenar
+    # hacia atrás, así que la landing solo existe donde hay noches medidas.
+    horas_json = DOCS_DIR / "estudios" / "horas-datos.json"
+    if horas_json.exists():
+        datos_horas = json.loads(horas_json.read_text(encoding="utf-8"))
+        (DOCS_DIR / "cuantas-horas-se-duerme-en-verano").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "cuantas-horas-se-duerme-en-verano" / "index.html").write_text(
+            construir_pagina_horas(datos_horas, site), encoding="utf-8")
+        print(f"   estudio horario: landing generada ({datos_horas['periodo']['noches']} noches)")
+    else:
+        print("   estudio horario: sin datos (ejecuta analisis_curva_nocturna.py); se omite")
     # Estudio abierto de la deuda de sueño: las cifras del Observatorio, en
     # abierto y con sus limitaciones delante. Mismo trato que el de arriba: sale
     # de un JSON que escribe otro script, y sin JSON no hay página. Se refresca

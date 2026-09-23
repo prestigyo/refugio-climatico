@@ -1,0 +1,9 @@
+# Bytecode de Python. Se regenera solo en cada ejecución, así que estaba
+# ensuciando el árbol cada vez que se corría un script (y llegó a commitearse:
+# 4 .pyc versionados que no servían para nada).
+__pycache__/
+*.pyc
+
+# Restos del sistema de ficheros, nunca del proyecto.
+.DS_Store
+Thumbs.db

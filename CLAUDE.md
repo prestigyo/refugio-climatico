@@ -16,7 +16,8 @@ Objetivo a corto plazo: **lanzamiento mediático**. La audiencia son periodistas
 
 ```
 refugio-climatico/
-├── .github/workflows/        # 10 workflows (ver tabla abajo)
+├── .gitignore                # solo bytecode (__pycache__/, *.pyc) y restos del SO
+├── .github/workflows/        # 12 workflows (ver tabla abajo)
 ├── aemet-temperaturas/       # TODO el pipeline vive aquí (no en raíz)
 │   ├── scripts/              # Scripts Python (+ apps_script_observatorio.gs)
 │   ├── datos/                # CSVs de AEMET y auxiliares (~217 MB, versionados)
@@ -46,6 +47,7 @@ refugio-climatico/
 | `estudio_colores.py` | `estudios/*.png` + `estudios/estudio-datos.json` |
 | `generar_certificados.py` | `certificados/index.html` + `certificados/<slug>/` (una página por estación certificada), `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) y `badges/pueblo-<slug>.svg` y `badges/pueblo-<slug>-claro.svg` (el sello del pueblo en sus dos temas, para que el alojamiento incruste en su web el que le pegue al fondo) |
 | `generar_calendario_datos.py` | `datos/<slug-provincia>.json` (calendario de calor que carga la calculadora bajo demanda) |
+| `analisis_curva_nocturna.py` | `estudios/horas-datos.json` (las cifras de la landing `/cuantas-horas-se-duerme-en-verano/`, que arma `generar_calculadora.py`) |
 | `parte_nocturno.py` | `parte/index.html`, `parte/parte.txt`, `parte/parte.json` |
 
 **`generar_calculadora.py` es además un módulo compartido**: varios scripts hacen `import generar_calculadora as g` para reutilizar `PROVINCIAS`, `slug()`, `RANKING_CSV`, `DOCS_DIR` (lo hacen `generar_certificados.py`, `generar_calendario_datos.py`, `generar_informe_lead.py`, `publicar_x.py`). Si tocas esos nombres, rompes a los demás.
@@ -60,6 +62,7 @@ refugio-climatico/
 | `actualizar-gifs.yml` | cron 11:00 UTC + manual | Solo `generar_gif.py` (se solapa con construir-web) |
 | `datos-calendario.yml` | lunes 05:00 UTC | `generar_calendario_datos.py` |
 | `analisis.yml` | mensual (día 1, 06:00 UTC) | `analisis_refugios.py` + `analisis_refugios_nocturnos.py` |
+| `estudio-horario.yml` | lunes 04:00 UTC + manual | `analisis_curva_nocturna.py` (rehace `docs/estudios/horas-datos.json`; la landing la construye el build de las 11:00) |
 | `certificados.yml` | manual | `generar_certificados.py` |
 | `evolucion.yml` | manual (input `buscar`) | `evolucion_estacion.py` para una estación |
 | `backfill.yml` | manual | `backfill_historico.py` |
@@ -136,9 +139,13 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - `datos/lugares.csv` — poblaciones del Observatorio (GeoNames CC BY 4.0), regenerable con `generar_lugares.py`
 - `datos/hoteles.csv` — hoteles del sello "Refugio Climático"
 - `datos/spain-provinces.geojson` — contornos de las 52 provincias
-- `datos/horarias/AAAA/*.csv.gz` — lecturas horarias de ~857 estaciones, desde 2026-08-29.
-  Cubre de 20h a 07h UTC. Es lo único que permite responder «cuántas HORAS estuvo la
-  noche por debajo de 20°», frente a «cuánto bajó en el punto más frío» de los diarios
+- `datos/horarias/AAAA/*.csv.gz` — lecturas horarias de ~856 estaciones, desde 2026-08-29.
+  **Desde el 2026-09-02 cubre las 24 HORAS**, no solo la noche: al entrar el segundo cron
+  el fichero diario pasó de ~100 KB a ~185 KB. 733 de 856 estaciones traen el día completo
+  y la cobertura por campo es del 97-99 %. Es lo único que permite responder «cuántas
+  HORAS estuvo la noche por debajo de 20°», frente a «cuánto bajó en el punto más frío»
+  de los diarios — y ahora también la mitad diurna (isla de calor, amplitud real).
+  Ojo: el 2026-09-04 le faltan las horas 01-12 UTC (ejecución perdida, irrecuperable).
 - `datos/gradiente_nocturno.json` + `pares_estaciones.csv` — gradiente térmico nocturno
 - `datos/tendencia_estaciones.csv` + `tendencia_resumen.json` — tendencia de noches tropicales
 - `datos/estaciones_termicas.csv` + `estaciones_termicas.json` — estaciones del año térmicas
@@ -147,6 +154,12 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   verano): noches tropicales del año y las que caen en jun-ago, noches >22 y >25, racha
   máxima, mínima más baja y más alta con su fecha, P95, y primera y última noche tropical.
   Es la tabla sin medias y sin ventana astronómica.
+- `analisis/curva_nocturna.csv` — una fila por **noche y estación** (ventana local 23:00-07:00):
+  tipo de noche, forma de la curva, horas bajo 20/18/16 °C, hora del cruce de cada umbral y
+  la serie hora a hora. Lo escribe `analisis_curva_nocturna.py` desde `datos/horarias/`.
+- `analisis/horas_dormibles.csv` — el anterior colapsado **por estación**: mediana, peor y
+  mejor de horas bajo 20°, noches sin un solo respiro y hora típica del cruce. Mediana y
+  peor valor, nunca media: promediar una noche infernal con una buena inventa una templada.
 - `analisis/noches_por_estacion.csv` — resumen por estación con **extremos, no promedios**:
   peor año y cuál fue, mejor año, último año, racha máxima real de la serie, P95, peor noche
   con fecha, y cuántas noches tropicales al año se pierden por mirar solo jun-ago
@@ -166,6 +179,15 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   mucho peores de lo que publicamos.
 - El **interior de Gran Canaria** (Tejeda, San Bartolomé de Tirajana) es el peor sitio de España para dormir, peor que la costa andaluza, por efecto foehn.
 - **Alcalá de la Selva** (Teruel, sierra de Gúdar) tiene **0,5 noches tropicales/año** vs **72/año** en Valencia capital. Ratio 180:1.
+- **La mínima no dice cuánto se duerme.** Con 22 noches horarias y 16.733 noches-estación:
+  entre las noches cuya mínima fue de 19 °C, las horas por debajo de 20° van **de 1 a 9**
+  (mediana 3; el 64 % se queda en 1-3 h). Con mínima de 18°, de 1 a 9 (mediana 5). Es decir:
+  dos pueblos con la misma mínima publicada pueden haber tenido noches opuestas. Lo que
+  decide es **a qué hora se cruza**: el 42 % de las noches ya empieza por debajo de 20° a
+  las 23:00 —el único grupo con la noche entera fresca— y el 24,5 % no cruza nunca. Cruzar
+  a las 05:00 equivale a no cruzar. Mediana nacional: 7,5 h de 9 bajo 20°, pero solo 4,5 h
+  bajo 18°. **31 estaciones no bajaron de 20° ni una hora en ninguna de las 22 noches**
+  (Cabo de Gata, Capdepera, Cádiz, y media Canarias).
 - El **gradiente térmico nocturno** real es **0,35 °C/100 m** (0,26 solo en península),
   no los 0,6 de manual. Y con R²=0,15: la altitud sola NO predice la mínima nocturna.
   52 de 285 pares tienen inversión pura (el pueblo alto duerme peor que el bajo).
@@ -197,11 +219,18 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - Envío de los certificados a los ayuntamientos (backlinks institucionales + prensa local)
 
 **Pendiente inmediato — archivo horario (acordado el 2026-08-29):**
-- La semana del 2026-09-05, **primer ensayo** con las noches acumuladas: para cada
-  estación y noche, cuántas horas por debajo de 20/18/16 °C, a qué hora cruza cada
-  umbral y qué forma tiene la curva. Objetivo: responder si basta con que la mínima
-  baje puntualmente de 20° o hace falta llegar a 18 para asegurar horas de sueño.
-- **Rediseñar los cron para cubrir la noche, no solo duplicarla.** Los dos actuales
+- ~~Primer ensayo con las noches acumuladas~~ **HECHO (2026-09-23)**: `analisis_curva_nocturna.py`
+  sobre 22 noches completas de 26 archivadas. Ver el hallazgo «la mínima no dice cuánto se
+  duerme» más arriba.
+- ~~Llevarlo a la web~~ **HECHO (2026-09-23)**: landing `/cuantas-horas-se-duerme-en-verano/`,
+  con `estudio-horario.yml` semanal refrescando las cifras. **Cuidado con el encuadre**: son
+  22 noches de final de verano, no un año. La página lo dice; cualquier cifra que se saque de
+  ahí a otra página tiene que decirlo también. Las tarjetas por provincia esperan a tener un
+  verano entero: hoy dirían «así fueron estas 22 noches», no «así es este pueblo».
+- ~~**Rediseñar los cron para cubrir la noche**~~ **HECHO**: `archivo-horario.yml` con
+  cron a 23:30, 02:30 y 05:30 UTC, más el 07:15 del parte. Cuatro pasadas: dos cubren la
+  ventana de sueño entera y dos a trozos. Contexto original de la decisión:
+- ~~**Rediseñar los cron para cubrir la noche, no solo duplicarla.**~~ Los dos actuales
   (07:15 y 08:50 UTC) están a hora y media: capturan casi la misma ventana, así que
   son red de seguridad contra un cron saltado, no cobertura. Si GitHub se retrasa
   —el 27 y 28 de agosto lo hizo 10-12 h y el parte no se publicó— se pierde la noche

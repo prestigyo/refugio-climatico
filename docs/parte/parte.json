@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-22",
- "total": 846,
- "tropicales": 102,
- "ecuatoriales": 0,
+ "fecha": "2026-09-23",
+ "total": 824,
+ "tropicales": 94,
+ "ecuatoriales": 1,
  "peor": {
-  "id": "C229J",
-  "nombre": "Pájara-Puerto Morro Jable",
-  "min": 24.0,
+  "id": "C648C",
+  "nombre": "Agüimes-el Milano",
+  "min": 26.6,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "2192C",
-  "nombre": "Cuellar",
-  "min": -0.3,
-  "prov": "Segovia"
+  "id": "9016X",
+  "nombre": "Cubillo de Ebro",
+  "min": 3.5,
+  "prov": "Cantabria"
  },
  "top_calor": [
   {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 26.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
+   "min": 24.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C018J",
+   "nombre": "Tias-las Vegas",
+   "min": 24.5,
+   "prov": "Las Palmas"
+  },
+  {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 23.8,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 23.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 23.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C029O",
-   "nombre": "Lanzarote/Aeropuerto",
-   "min": 23.6,
+   "min": 24.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C239N",
    "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 23.6,
+   "min": 24.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 24.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 24.4,
    "prov": "Las Palmas"
   },
   {
    "id": "C629X",
    "nombre": "Puerto de Mogán",
-   "min": 23.5,
+   "min": 24.2,
    "prov": "Las Palmas"
   },
   {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 23.5,
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
+   "min": 24.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "C689E",
-   "nombre": "Maspalomas",
-   "min": 23.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 23.4,
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 24.1,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": -0.3,
-   "prov": "Segovia"
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 3.5,
+   "prov": "Cantabria"
   },
   {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 3.9,
-   "prov": "Burgos"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 3.7,
+   "prov": "León"
+  },
+  {
+   "id": "2926B",
+   "nombre": "Bañobarez",
+   "min": 3.8,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 4.2,
+   "prov": "Segovia"
   },
   {
    "id": "9001D",
    "nombre": "Nestares",
-   "min": 3.9,
+   "min": 4.2,
    "prov": "Cantabria"
   },
   {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": 3.9,
-   "prov": "Teruel"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 4.4,
+   "prov": "Zamora"
+  },
+  {
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": 4.9,
+   "prov": "Palencia"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 4.0,
+   "min": 5.0,
    "prov": "Ávila"
   },
   {
-   "id": "3130C",
-   "nombre": "Sigüenza",
-   "min": 4.1,
-   "prov": "Guadalajara"
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 5.7,
+   "prov": "Ourense"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 4.3,
-   "prov": "Soria"
-  },
-  {
-   "id": "3013",
-   "nombre": "Molina de Aragón",
-   "min": 4.3,
-   "prov": "Guadalajara"
-  },
-  {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 4.4,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 4.6,
-   "prov": "Soria"
+   "id": "9091R",
+   "nombre": "Vitoria-Gasteiz Aeropuerto",
+   "min": 5.8,
+   "prov": "Araba/Álava"
   }
  ]
 }

@@ -25,6 +25,7 @@ import json
 import os
 import random
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -59,20 +60,58 @@ def cargar_provincias() -> dict[str, str]:
     return prov
 
 
-def obtener_observaciones() -> list[dict]:
+def _pedir(url: str, intentos: int = 4, **kw):
+    """GET a AEMET con reintentos y espera creciente.
+
+    AEMET se cae a ratos y no avisa de forma limpia. En producción se han visto
+    las dos maneras: la conexión cortada en seco (RemoteDisconnected, sin
+    respuesta) y un 200 cuyo cuerpo es {"descripcion": "Error al obtener los
+    datos", "estado": 404}. Antes cualquiera de las dos tiraba la ejecución
+    entera al primer intento.
+
+    Importa sobre todo en el archivo horario: AEMET borra la observación a las
+    ~12 h, así que la noche que no se guarda NO EXISTE en ningún sitio. Una
+    ejecución perdida no se puede recuperar al día siguiente.
+    """
     import requests
+    ultimo = None
+    for i in range(intentos):
+        try:
+            r = requests.get(url, **kw)
+            r.raise_for_status()
+            return r
+        except Exception as e:          # red, timeout, 5xx, 429…
+            ultimo = e
+            if i == intentos - 1:
+                break
+            espera = 5 * 3 ** i          # 5, 15, 45 s
+            print(f"AEMET falló ({type(e).__name__}: {e}); reintento "
+                  f"{i + 1}/{intentos - 1} en {espera}s", file=sys.stderr)
+            time.sleep(espera)
+    raise ultimo
+
+
+def obtener_observaciones() -> list[dict]:
     api_key = os.environ.get("AEMET_API_KEY")
     if not api_key:
         print("ERROR: falta AEMET_API_KEY (o usa --demo)", file=sys.stderr)
         sys.exit(1)
-    r = requests.get(URL_OBS, params={"api_key": api_key}, timeout=60)
-    r.raise_for_status()
-    datos_url = r.json().get("datos")
+    # La primera llamada devuelve 200 pero a veces sin 'datos', con un cuerpo de
+    # error dentro. Eso NO lo caza raise_for_status, así que se reintenta aparte.
+    datos_url = None
+    for i in range(3):
+        r = _pedir(URL_OBS, params={"api_key": api_key}, timeout=60)
+        datos_url = r.json().get("datos")
+        if datos_url:
+            break
+        print(f"AEMET respondió sin 'datos' ({i + 1}/3):", r.text[:200],
+              file=sys.stderr)
+        if i < 2:
+            time.sleep(20)
     if not datos_url:
-        print("ERROR: la API no devolvió 'datos':", r.text[:200], file=sys.stderr)
+        print("ERROR: la API no devolvió 'datos' en 3 intentos", file=sys.stderr)
         sys.exit(1)
-    r2 = requests.get(datos_url, timeout=120)
-    r2.raise_for_status()
+    r2 = _pedir(datos_url, timeout=120)
     # AEMET sirve este JSON en codificación latina a veces: probar utf-8 y caer a latin-1
     try:
         return json.loads(r2.content.decode("utf-8"))

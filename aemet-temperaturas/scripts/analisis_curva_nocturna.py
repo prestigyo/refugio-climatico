@@ -52,6 +52,8 @@ HORA_INICIO_LOCAL = 23
 HORAS_VENTANA = 9          # 23, 00, 01, 02, 03, 04, 05, 06, 07
 
 UMBRALES = (20.0, 18.0, 16.0)
+# Con menos noches que esto, la mediana por estación no dice nada.
+MIN_NOCHES_RESUMEN = 10
 
 # Husos en horario de verano. Canarias va una hora por detrás de la península.
 PROV_CANARIAS = {"LAS PALMAS", "SANTA CRUZ DE TENERIFE", "STA. CRUZ DE TENERIFE"}
@@ -479,7 +481,12 @@ def imprimir_pares(pares: list) -> None:
 
 def guardar_csv(filas: list, ruta: Path) -> None:
     campos = ["noche", "idema", "nombre", "provincia", "altitud", "lat", "lon",
-              "tipo", "forma", "t_23h", "t_min", "t_07h", "hora_min", "caida",
+              # OJO: aquí había un "t_23h" que chocaba con el t_23h de la serie
+              # horaria de abajo. Dos columnas con el mismo nombre: DictReader se
+              # queda con la última y pandas renombra, así que el resumen quedaba
+              # inservible por nombre. Es el mismo valor, así que se quita y se
+              # lee de la serie.
+              "tipo", "forma", "t_min", "t_07h", "hora_min", "caida",
               "horas_bajo_20", "horas_bajo_18", "horas_bajo_16",
               "cruce_20", "cruce_18", "cruce_16"]
     horas = [f"t_{(HORA_INICIO_LOCAL + i) % 24:02d}h" for i in range(HORAS_VENTANA)]
@@ -491,6 +498,150 @@ def guardar_csv(filas: list, ruta: Path) -> None:
             w.writerow([f.get(c, "") for c in campos] + f["curva"])
     print(f"\n-> {ruta.relative_to(AEMET_DIR)}  ({len(filas)} filas)  Fuente: AEMET")
 
+
+def horas_dormibles(filas: list, ruta: Path) -> list:
+    """Resumen POR ESTACIÓN: cuántas horas de sueño da cada sitio.
+
+    curva_nocturna.csv tiene una fila por noche y estación — sirve para
+    analizar, no para publicar. Esto lo colapsa a una fila por estación, que
+    es la respuesta a la pregunta que da nombre al proyecto: no «cuánto bajó»
+    sino «cuántas horas se pudo dormir».
+
+    Se publica la MEDIANA y el PEOR valor, nunca la media: la media de una
+    noche infernal y una buena da una noche templada que no existió.
+    """
+    from statistics import median
+    por_est: dict = {}
+    for f in filas:
+        por_est.setdefault(f["idema"], []).append(f)
+    out = []
+    for idema, ns in por_est.items():
+        if len(ns) < MIN_NOCHES_RESUMEN:
+            continue
+        h20 = sorted(n["horas_bajo_20"] for n in ns)
+        h18 = sorted(n["horas_bajo_18"] for n in ns)
+        cruces = [n["cruce_20"] for n in ns if n["cruce_20"] not in (None, "")]
+        p = ns[0]
+        out.append({
+            "idema": idema, "nombre": p["nombre"], "provincia": p["provincia"],
+            "altitud": p["altitud"], "lat": p["lat"], "lon": p["lon"],
+            "noches": len(ns),
+            "h20_mediana": median(h20), "h20_peor": min(h20), "h20_mejor": max(h20),
+            "h18_mediana": median(h18), "h18_peor": min(h18),
+            # Noches en que NO se bajó de 20 ni una hora: las invivibles.
+            "noches_sin_alivio": sum(1 for v in h20 if v == 0),
+            # Hora típica a la que llega el alivio (mediana de los cruces).
+            "cruce_20_tipico": (int(median(cruces)) if cruces else ""),
+            "nunca_cruza": len(ns) - len(cruces),
+        })
+    out.sort(key=lambda r: (-r["h20_mediana"], r["h20_peor"] * -1))
+    campos = list(out[0]) if out else []
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    with open(ruta, "w", encoding="utf-8", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=campos)
+        w.writeheader()
+        w.writerows(out)
+    print(f"-> {ruta.relative_to(AEMET_DIR)}  ({len(out)} estaciones)  Fuente: AEMET")
+    return out
+
+
+def informe_dormibles(res: list) -> None:
+    """Lo que dice el resumen, en titulares."""
+    from statistics import median
+    if not res:
+        return
+    print(f"\n{'='*68}\nHORAS DORMIBLES POR ESTACIÓN ({len(res)} estaciones"
+          f", mín. {MIN_NOCHES_RESUMEN} noches)\n{'='*68}")
+    print("  Horas de la ventana 23:00-07:00 con la temperatura por debajo de 20 °C.")
+    tot = len(res)
+    for lo, hi, etq in ((0, 1, "ni una hora"), (1, 4, "menos de 4 h"),
+                        (4, 7, "de 4 a 7 h"), (7, 10, "7 h o más")):
+        c = sum(1 for r in res if lo <= r["h20_mediana"] < hi)
+        print(f"  {etq:<14} {c:>4}  {c/tot:5.1%}  " + "#" * int(round(46 * c / tot)))
+    peor = sorted(res, key=lambda r: (r["h20_mediana"], -r["noches_sin_alivio"]))[:6]
+    print(f"\n  Donde menos se duerme (mediana de horas bajo 20°):")
+    for r in peor:
+        print(f"    {r['nombre'][:30]:<30} {r['provincia'][:14]:<14} "
+              f"{r['h20_mediana']:>4.1f} h  ·  {r['noches_sin_alivio']}/{r['noches']} "
+              f"noches sin bajar de 20° ni una hora")
+    print(f"\n  Mediana nacional: {median([r['h20_mediana'] for r in res]):.1f} h de "
+          f"{HORAS_VENTANA} · por debajo de 18°: "
+          f"{median([r['h18_mediana'] for r in res]):.1f} h")
+
+# Estaciones que se dibujan como "tira de noches" en la landing. Elegidas para
+# que el contraste se vea sin explicarlo: un refugio de montaña, la capital y
+# un sitio donde no refresca nunca.
+EJEMPLOS_WEB = ["RASCAFRÍA", "MADRID, RETIRO", "CAPDEPERA"]
+
+
+def guardar_json_web(filas: list, res: list, ruta: Path) -> None:
+    """Todo lo que la landing necesita, en un JSON.
+
+    Mismo trato que estudios/estudio-datos.json: si el fichero no está, la
+    página sencillamente no se genera. Así el estudio y la web van por
+    caminos separados y ninguna ejecución a medias publica cifras a medias.
+    """
+    from statistics import median
+    noches = sorted({f["noche"] for f in filas})
+    # a) La tabla que lo demuestra todo: misma mínima, horas distintas.
+    por_min: dict = defaultdict(list)
+    for f in filas:
+        por_min[round(f["t_min"])].append(f["horas_bajo_20"])
+    minimas = []
+    for m in sorted(por_min):
+        v = sorted(por_min[m])
+        if len(v) < 100:
+            continue
+        minimas.append({"min": m, "n": len(v), "peor": v[0], "mejor": v[-1],
+                        "mediana": median(v), "p10": v[len(v) // 10],
+                        "p90": v[9 * len(v) // 10]})
+    # b) A qué hora llega el alivio.
+    cruces: dict = defaultdict(int)
+    for f in filas:
+        cruces[f["cruce_20"] if f["cruce_20"] is not None else "nunca"] += 1
+    # c) El reparto por estación.
+    tramos = []
+    for lo, hi, etq in ((0, 1, "ni una hora"), (1, 4, "menos de 4 h"),
+                        (4, 7, "de 4 a 7 h"), (7, 10, "7 h o más")):
+        tramos.append({"etq": etq,
+                       "n": sum(1 for r in res if lo <= r["h20_mediana"] < hi)})
+    sin_respiro = [r for r in res if r["noches_sin_alivio"] == r["noches"]]
+    # d) Las tiras de noches de los ejemplos.
+    ejem = []
+    for nom in EJEMPLOS_WEB:
+        r = next((x for x in res if x["nombre"].upper().startswith(nom)), None)
+        if not r:
+            continue
+        ns = sorted((f for f in filas if f["idema"] == r["idema"]),
+                    key=lambda x: x["noche"])
+        ejem.append({**{k: r[k] for k in ("nombre", "provincia", "altitud",
+                                          "h20_mediana", "h20_peor", "h20_mejor",
+                                          "noches", "noches_sin_alivio",
+                                          "cruce_20_tipico")},
+                     "tira": [{"noche": x["noche"], "tmin": round(x["t_min"], 1),
+                               "h": x["horas_bajo_20"]} for x in ns]})
+    datos = {
+        "periodo": {"ini": noches[0], "fin": noches[-1], "noches": len(noches),
+                    "pares": len(filas),
+                    "estaciones": len({f["idema"] for f in filas})},
+        "ventana": {"inicio": HORA_INICIO_LOCAL, "horas": HORAS_VENTANA},
+        "minimas": minimas,
+        "cruces": [{"hora": k, "n": v} for k, v in sorted(
+            cruces.items(), key=lambda kv: (kv[0] == "nunca", kv[0]))],
+        "tramos": tramos,
+        "estaciones_resumidas": len(res),
+        "mediana_h20": median([r["h20_mediana"] for r in res]),
+        "mediana_h18": median([r["h18_mediana"] for r in res]),
+        "sin_respiro": {"n": len(sin_respiro),
+                        "lista": [{"nombre": r["nombre"], "provincia": r["provincia"]}
+                                  for r in sorted(sin_respiro,
+                                                  key=lambda x: x["provincia"])[:12]]},
+        "ejemplos": ejem,
+        "fuente": "AEMET",
+    }
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    ruta.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"-> {ruta}  (datos para la landing)")
 
 def grafico(filas: list, ruta: Path) -> None:
     """Tres paneles. Ninguno dibuja la media por tipo: eso sería circular.
@@ -700,6 +851,10 @@ def main() -> int:
           f"({len(evap['estaciones'])} estaciones)  Fuente: AEMET")
     imprimir_pares(pares_reveladores(filas))
     guardar_csv(filas, DIR_ANALISIS / "curva_nocturna.csv")
+    res = horas_dormibles(filas, DIR_ANALISIS / "horas_dormibles.csv")
+    informe_dormibles(res)
+    guardar_json_web(filas, res,
+                     AEMET_DIR.parent / "docs" / "estudios" / "horas-datos.json")
     if "--sin-grafico" not in args:
         grafico(filas, DIR_ANALISIS / "curva_nocturna.png")
         grafico_formas(filas, DIR_ANALISIS / "curva_nocturna_formas.png")

@@ -1528,6 +1528,7 @@ ATAJO_CERCA = ('<p class="atajo"><a href="__SITE__/refugios-climaticos-naturales
                '📍 ¿Dónde puedo dormir fresco en España cerca de mí? →</a></p>')
 CSS_MASBUSCA = ('.masbusca{font-size:14.5px;color:var(--muted);margin:14px 0 0;line-height:1.7}')
 CSS_ATAJO = ('.atajo{margin:18px 0}'
+             '.atajo + .atajo{margin-top:-6px}'
              '.atajo a{display:inline-flex;align-items:center;gap:9px;padding:12px 18px;'
              'border-radius:999px;border:1px solid var(--teal);color:var(--teal);'
              'font-weight:600;font-size:15px;background:rgba(150,182,196,.08);'
@@ -4413,6 +4414,7 @@ __CSS_COMUN__
     <h1>El termómetro de las noches tropicales</h1>
     <p class="lede"><b>Esta web no mide el calor: mide dónde se puede dormir.</b> Diez veranos de datos de AEMET (2017–2026) para encontrar los sitios de España donde la noche todavía refresca — y llevarte a ellos. La medida es la <b>noche tropical</b>: cuántas veces al año la mínima no baja de 20&nbsp;°C. Cuantas más, peor se duerme.</p>
     __ATAJO__
+    <p class="atajo"><a href="__SITE__/noches-tropicales/">❓ ¿Qué es una noche tropical y por qué importa para dormir? →</a></p>
   </div></header>
   <section><div class="in">
     <div class="scale-card">
@@ -6650,6 +6652,7 @@ PAGINA_ESTUDIO = r"""<!DOCTYPE html>
  .navcard span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
  __NAVCSS__
  __FOOTERCSS__
+ __CSSPAR__
 </style>
 </head>
 <body>
@@ -6679,6 +6682,7 @@ __NAV__
     </div>
   </figure>
   <p>Los refugios profundos son <b>montaña interior seca</b>: la Cordillera Cantábrica, el Sistema Central, el Ibérico, el Pirineo. Y fíjate en el <b>halo ámbar</b> que los rodea: al bajar de la sierra hacia el valle, primero se cruza esa franja dudosa. Por eso, para valorar un pueblo, <a href="__SITE__/">no vale la media — hay que mirar su peor noche</a>.</p>
+__PARPADEO__
 </div></section>
 
 <section><div class="wrap">
@@ -6733,7 +6737,118 @@ __FOOTER__
 """
 
 
-def construir_pagina_estudio(site: str, datos: dict) -> str:
+# ---------------------------------------------------------------------------
+# COMPARADOR DE PARPADEO para /la-espana-que-nunca-se-colorea/
+#
+# La técnica es vieja y buenísima: un blink comparator, lo que usó Tombaugh
+# para encontrar Plutón. Se alternan dos imágenes del mismo encuadre y el ojo,
+# que es malísimo comparando en paralelo pero excelente detectando cambios,
+# fija solo lo que NO cambia. Aquí alternamos «España en verano» con «lo que
+# nunca se colorea»: los refugios se quedan quietos mientras el resto late.
+#
+# Los puntos NO salen de medir píxeles sobre un mapa: son las estaciones de
+# AEMET del ranking con cero noches tropicales, con sus coordenadas exactas.
+# Se proyectan con la MISMA fórmula que generó SILUETA_ES (ver proj() en el
+# Observatorio) o el país saldría ensanchado y los puntos, desplazados.
+#
+# Todo CSS: la animación va sola, y una casilla la para. Sin JS, así que
+# funciona con el script bloqueado y no hay nada que pueda fallar al cargar.
+CSS_PARPADEO = (
+    '.par{margin:26px 0 8px;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:14px;padding:16px 16px 12px}'
+    '.par h3{font-family:var(--fd);font-weight:700;font-size:clamp(17px,3vw,21px);margin:0 0 6px}'
+    '.par p.sub{font-size:14.5px;color:var(--muted);margin:0 0 14px;max-width:62ch}'
+    '.par figure{margin:0}'
+    '.par svg{width:100%;height:auto;display:block;max-width:560px;margin:0 auto;'
+    'background:#120d07;border-radius:12px}'
+    # Las dos capas laten en contrafase: 2,4 s de ciclo, con una meseta en cada
+    # extremo para que dé tiempo a leer cada estado (un cruce continuo mareaba).
+    '@keyframes par-calor{0%,38%{opacity:1}50%,88%{opacity:.06}100%{opacity:1}}'
+    '@keyframes par-frio{0%,38%{opacity:.10}50%,88%{opacity:1}100%{opacity:.10}}'
+    '@keyframes par-pt{0%,38%{opacity:0;r:0}50%,88%{opacity:1;r:2.3}100%{opacity:0;r:0}}'
+    '.par .capa-calor{animation:par-calor 2.4s ease-in-out infinite}'
+    '.par .capa-frio{animation:par-frio 2.4s ease-in-out infinite}'
+    '.par .pt{animation:par-pt 2.4s ease-in-out infinite;'
+    'animation-delay:calc(var(--i)*9ms);transform-box:fill-box}'
+    # La casilla es el interruptor. Oculta pero enfocable: el <label> la acciona
+    # con ratón y con teclado, y el foco se ve.
+    '.par input{position:absolute;opacity:0;width:1px;height:1px}'
+    # Se QUITA la animación, no se pausa: una animación pausada sigue
+    # imponiendo el valor del fotograma en que se quedó, y gana al CSS
+    # normal. Pausándola, el botón paraba el parpadeo pero podía dejar el
+    # mapa en rojo, que es justo el estado que no informa.
+    '.par input:checked ~ figure .capa-calor,'
+    '.par input:checked ~ figure .capa-frio,'
+    '.par input:checked ~ figure .pt{animation:none}'
+    # Parado se queda en el estado útil: los refugios encendidos.
+    '.par input:checked ~ figure .capa-calor{opacity:.06}'
+    '.par input:checked ~ figure .capa-frio{opacity:1}'
+    '.par input:checked ~ figure .pt{opacity:1;r:2.3}'
+    '.par label{display:inline-flex;align-items:center;gap:8px;margin:12px 0 0;'
+    'cursor:pointer;border:1px solid var(--teja);color:var(--teja2);background:transparent;'
+    'font-weight:700;font-size:14px;padding:9px 16px;border-radius:999px}'
+    '.par label:hover{background:var(--teja);color:#1a1209}'
+    '.par input:focus-visible ~ label{outline:2px solid var(--teal);outline-offset:2px}'
+    '.par input:checked ~ label .on{display:none}'
+    '.par label .off{display:none}'
+    '.par input:checked ~ label .off{display:inline}'
+    '.par .pie{font-size:13px;color:var(--muted);margin:10px 0 0;line-height:1.55}'
+    # Quien pide menos movimiento no ve ninguno: arranca parado y en el estado
+    # que informa. Una animación de 2,4 s en bucle es justo lo que molesta.
+    '@media(prefers-reduced-motion:reduce){'
+    '.par .capa-calor,.par .capa-frio,.par .pt{animation:none}'
+    '.par .capa-calor{opacity:.06}.par .capa-frio{opacity:1}'
+    '.par .pt{opacity:1;r:2.3}}'
+)
+
+
+def bloque_parpadeo(estaciones: list, site: str) -> str:
+    """El comparador: silueta caliente vs. los refugios que nunca se colorean."""
+    # Misma proyección con la que se generó SILUETA_ES.
+    import math
+    k = math.cos(math.radians(40)); esc = 190 / 7.9
+    dx = (300 - 12.8 * k * esc) / 2
+    ceros = [e for e in estaciones if e["nt"] == 0]
+    ceros.sort(key=lambda e: -e["alt"])          # de cumbre a valle: la ola sube
+    pts = []
+    for i, e in enumerate(ceros):
+        x = dx + (e["lon"] + 9.4) * k * esc
+        y = (43.9 - e["lat"]) * esc
+        pts.append(f'<circle class="pt" style="--i:{i}" cx="{x:.1f}" cy="{y:.1f}" r="2.3">'
+                   f'<title>{_esc(e["loc"])} ({_esc(e["prov"])}, {miles(e["alt"])} m) — '
+                   f'cero noches tropicales al año</title></circle>')
+    return (
+        '<div class="par">'
+        '<h3>El interruptor del verano</h3>'
+        '<p class="sub">Mira fijo al mapa y no lo sigas con los ojos. Cuando el calor se '
+        'apaga, lo que queda encendido son las <b>' + str(len(ceros)) + ' estaciones de '
+        'AEMET que no registran ni una noche tropical al año</b>. Es el mismo truco con el '
+        'que se encontró Plutón: el ojo compara mal, pero detecta el cambio como nadie.</p>'
+        '<input type="checkbox" id="par-stop">'
+        '<figure>'
+        '<svg viewBox="0 0 300 190" role="img" '
+        'aria-label="Mapa de España que alterna entre el calor del verano y las '
+        + str(len(ceros)) + ' estaciones de AEMET sin ninguna noche tropical al año.">'
+        '<defs><linearGradient id="par-g" x1="0" y1="0" x2="0" y2="1">'
+        '<stop offset="0" stop-color="#e7318f"/><stop offset="1" stop-color="#b8344f"/>'
+        '</linearGradient></defs>'
+        f'<path class="capa-frio" d="{SILUETA_ES}" fill="#241b11" stroke="#3a2c1c" stroke-width=".6"/>'
+        f'<path class="capa-calor" d="{SILUETA_ES}" fill="url(#par-g)"/>'
+        f'<g fill="#a9c6d4">{"".join(pts)}</g>'
+        '</svg>'
+        '</figure>'
+                # ■ y ▶ son del mismo bloque Unicode (Geometric Shapes) y están en
+        # cualquier fuente del sistema. ⏸ (U+23F8) necesita fuente de emoji
+        # y salía como un cuadrado vacío.
+        '<label for="par-stop"><span class="on">■ Parar el parpadeo</span>'
+        '<span class="off">▶ Volver a alternar</span></label>'
+        '<p class="pie">Cada punto es una estación medida, no una interpolación: las '
+        f'<b>{len(ceros)}</b> del <a href="{site}/ranking-noches-tropicales/">ranking</a> '
+        'con <b>cero noches tropicales al año</b> en los veranos 2017–2026. Pasa el cursor '
+        'por encima para ver cuál es. Fuente: AEMET.</p>'
+        '</div>')
+
+def construir_pagina_estudio(site: str, datos: dict, estaciones: list) -> str:
     per = datos["periodo"]; noc = datos["nocturno"]; dia = datos["dia"]
     ini = fecha_es(date.fromisoformat(per["ini"]))
     fin = fecha_es(date.fromisoformat(per["fin"]))
@@ -6765,6 +6880,8 @@ def construir_pagina_estudio(site: str, datos: dict) -> str:
             .replace("__SCHEMA__", schema)
             .replace("__TITLE__", title)
             .replace("__DESC__", desc)
+            .replace("__CSSPAR__", CSS_PARPADEO)
+            .replace("__PARPADEO__", bloque_parpadeo(estaciones, site))
             .replace("__PROFUNDO__", f"{noc['profundo']:.0f}")
             .replace("__MARGEN__", f"{noc['margen']:.0f}")
             .replace("__TROPICAL__", f"{noc['tropical']:.0f}")
@@ -14602,7 +14719,7 @@ def main() -> int:
         datos_estudio = json.loads(estudio_json.read_text(encoding="utf-8"))
         (DOCS_DIR / "la-espana-que-nunca-se-colorea").mkdir(parents=True, exist_ok=True)
         (DOCS_DIR / "la-espana-que-nunca-se-colorea" / "index.html").write_text(
-            construir_pagina_estudio(site, datos_estudio), encoding="utf-8")
+            construir_pagina_estudio(site, datos_estudio, estaciones), encoding="utf-8")
         print("   estudio 'nunca se colorea': landing generada")
     else:
         print("   estudio 'nunca se colorea': sin datos (ejecuta estudio_colores.py); se omite")

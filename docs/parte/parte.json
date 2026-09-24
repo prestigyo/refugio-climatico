@@ -1,12 +1,12 @@
 {
  "fecha": "2026-09-24",
- "total": 846,
- "tropicales": 136,
+ "total": 847,
+ "tropicales": 138,
  "ecuatoriales": 25,
  "peor": {
   "id": "C668V",
   "nombre": "Agaete - Suerte Alta",
-  "min": 27.8,
+  "min": 28.4,
   "prov": "Las Palmas"
  },
  "mejor": {
@@ -19,7 +19,7 @@
   {
    "id": "C668V",
    "nombre": "Agaete - Suerte Alta",
-   "min": 27.8,
+   "min": 28.4,
    "prov": "Las Palmas"
   },
   {
@@ -53,6 +53,12 @@
    "prov": "Las Palmas"
   },
   {
+   "id": "C117Z",
+   "nombre": "Tijarafe-Mirador Time",
+   "min": 26.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
    "id": "C648N",
    "nombre": "Telde-Centro Forestal Doramas",
    "min": 26.4,
@@ -63,12 +69,6 @@
    "nombre": "Agüimes-el Milano",
    "min": 26.2,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C117Z",
-   "nombre": "Tijarafe-Mirador Time",
-   "min": 26.1,
-   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C614H",

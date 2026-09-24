@@ -887,6 +887,10 @@
 "f": "2026-09-23",
 "h": "aa4b9c97cf9bba8c"
 },
+"cuantas-horas-se-duerme-en-verano": {
+"f": "2026-09-24",
+"h": "603c26eba0cedaf5"
+},
 "cuenca": {
 "f": "2026-09-23",
 "h": "3c9a30b7c3113b52"
@@ -1132,8 +1136,8 @@
 "h": "dd5d0510050e573a"
 },
 "mapa-estaciones": {
-"f": "2026-09-23",
-"h": "f363521246b2c6bb"
+"f": "2026-09-24",
+"h": "a25ba9d59273d1e1"
 },
 "margen-refugios-climaticos": {
 "f": "2026-09-15",

@@ -1,12 +1,12 @@
 {
- "fecha": "2026-09-23",
- "total": 824,
- "tropicales": 94,
- "ecuatoriales": 1,
+ "fecha": "2026-09-24",
+ "total": 846,
+ "tropicales": 136,
+ "ecuatoriales": 25,
  "peor": {
-  "id": "C648C",
-  "nombre": "Agüimes-el Milano",
-  "min": 26.6,
+  "id": "C668V",
+  "nombre": "Agaete - Suerte Alta",
+  "min": 27.8,
   "prov": "Las Palmas"
  },
  "mejor": {
@@ -17,63 +17,63 @@
  },
  "top_calor": [
   {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 26.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C639U",
-   "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 24.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C018J",
-   "nombre": "Tias-las Vegas",
-   "min": 24.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.5,
+   "id": "C668V",
+   "nombre": "Agaete - Suerte Alta",
+   "min": 27.8,
    "prov": "Las Palmas"
   },
   {
    "id": "C239N",
    "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 24.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 24.4,
+   "min": 27.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C625O",
    "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 24.4,
+   "min": 27.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 24.2,
+   "id": "C628B",
+   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "min": 26.7,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 26.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C018J",
+   "nombre": "Tias-las Vegas",
+   "min": 26.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C648N",
+   "nombre": "Telde-Centro Forestal Doramas",
+   "min": 26.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 26.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C117Z",
+   "nombre": "Tijarafe-Mirador Time",
+   "min": 26.1,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 24.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 24.1,
+   "min": 26.0,
    "prov": "Las Palmas"
   }
  ],
@@ -85,40 +85,34 @@
    "prov": "Cantabria"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 3.7,
-   "prov": "León"
-  },
-  {
-   "id": "2926B",
-   "nombre": "Bañobarez",
-   "min": 3.8,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 4.2,
-   "prov": "Segovia"
-  },
-  {
    "id": "9001D",
    "nombre": "Nestares",
-   "min": 4.2,
+   "min": 3.6,
    "prov": "Cantabria"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 4.4,
+   "min": 4.1,
    "prov": "Zamora"
   },
   {
    "id": "2243A",
    "nombre": "Aguilar de Campoo",
-   "min": 4.9,
+   "min": 4.3,
    "prov": "Palencia"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 4.7,
+   "prov": "León"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 5.0,
+   "prov": "Segovia"
   },
   {
    "id": "3319D",
@@ -127,16 +121,22 @@
    "prov": "Ávila"
   },
   {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 5.7,
-   "prov": "Ourense"
+   "id": "9051",
+   "nombre": "Medina de Pomar",
+   "min": 6.0,
+   "prov": "Burgos"
   },
   {
-   "id": "9091R",
-   "nombre": "Vitoria-Gasteiz Aeropuerto",
-   "min": 5.8,
-   "prov": "Araba/Álava"
+   "id": "2624C",
+   "nombre": "Riaño-Ermita Quintanilla",
+   "min": 6.3,
+   "prov": "León"
+  },
+  {
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 6.4,
+   "prov": "Lleida"
   }
  ]
 }

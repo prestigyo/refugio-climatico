@@ -41,12 +41,13 @@ refugio-climatico/
 
 | Script | Qué escribe en `docs/` |
 |---|---|
-| `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
+| `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa, con `en/best-climate-in-spain-year-round/`), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
 | `generar_gif.py` | `ola-minimas.gif`, `ola-maximas.gif`, `ola-dia-noche.gif`, `ola-canarias-minimas.gif`, `og.png` |
 | `estudio_colores.py` | `estudios/*.png` + `estudios/estudio-datos.json` |
 | `generar_certificados.py` | `certificados/index.html` + `certificados/<slug>/` (una página por estación certificada), `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) y `badges/pueblo-<slug>.svg` y `badges/pueblo-<slug>-claro.svg` (el sello del pueblo en sus dos temas, para que el alojamiento incruste en su web el que le pegue al fondo) |
 | `generar_calendario_datos.py` | `datos/<slug-provincia>.json` (calendario de calor que carga la calculadora bajo demanda) |
+| `analisis_invierno.py` | `estudios/invierno-datos.json` (las cifras de `/en/best-climate-in-spain-year-round/`, que arma `generar_calculadora.py`) |
 | `analisis_curva_nocturna.py` | `estudios/horas-datos.json` (las cifras de la landing `/cuantas-horas-se-duerme-en-verano/`, que arma `generar_calculadora.py`) |
 | `parte_nocturno.py` | `parte/index.html`, `parte/parte.txt`, `parte/parte.json` |
 
@@ -63,6 +64,7 @@ refugio-climatico/
 | `datos-calendario.yml` | lunes 05:00 UTC | `generar_calendario_datos.py` |
 | `analisis.yml` | mensual (día 1, 06:00 UTC) | `analisis_refugios.py` + `analisis_refugios_nocturnos.py` |
 | `estudio-horario.yml` | lunes 04:00 UTC + manual | `analisis_curva_nocturna.py` (rehace `docs/estudios/horas-datos.json`; la landing la construye el build de las 11:00) |
+| `estudio-invierno.yml` | día 1 de cada mes, 08:00 UTC + manual | `analisis_invierno.py` (rehace `docs/estudios/invierno-datos.json`; corre tras `analisis.yml`, que rehace `noches_por_anio.csv`) |
 | `certificados.yml` | manual | `generar_certificados.py` |
 | `evolucion.yml` | manual (input `buscar`) | `evolucion_estacion.py` para una estación |
 | `backfill.yml` | manual | `backfill_historico.py` |

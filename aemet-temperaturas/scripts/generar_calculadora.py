@@ -6865,7 +6865,35 @@ def bloque_parpadeo(estaciones: list, site: str) -> str:
 #
 # Todo el dibujo es CSS: barras con height en %, sin una línea de JS.
 CSS_HORAS = (
-    # Tarjetas de cifra y caja de método: propias, no heredadas.
+    # --- 1) misma mínima, horas distintas -------------------------------
+    # La barra NO se lee sola: sin eje, un rectángulo de color no dice
+    # cuántas horas son. De ahí las líneas de hora en el fondo de la pista
+    # y la fila de números debajo.
+    '.hz-tabla{margin:20px 0 4px;display:grid;gap:6px}'
+    '.hz-f{display:grid;grid-template-columns:52px 1fr 62px;align-items:center;gap:12px}'
+    '.hz-f .et{font-family:var(--fm);font-size:13px;color:var(--muted);text-align:right}'
+    '.hz-b{position:relative;height:22px;background:#12100c;border-radius:5px;'
+    'background-image:repeating-linear-gradient(90deg,rgba(239,230,214,.10) 0 1px,'
+    'transparent 1px calc(100%/__DIV__));overflow:hidden}'
+    '.hz-r{position:absolute;top:3px;bottom:3px;border-radius:3px}'
+    '.hz-m{position:absolute;top:0;bottom:0;width:2px;background:var(--paper);'
+    'opacity:.92}'
+    '.hz-f .n{font-family:var(--fm);font-size:12.5px;color:var(--muted)}'
+    # Eje de horas: los números van centrados bajo su línea, por eso se
+    # posicionan en absoluto y no con un flex repartido.
+    '.hz-eje{position:relative;height:16px}'
+    '.hz-eje span{position:absolute;transform:translateX(-50%);font-family:var(--fm);'
+    'font-size:11px;color:var(--muted)}'
+    '.hz-cabf{font-size:12px;color:var(--muted);text-transform:uppercase;'
+    'letter-spacing:.06em}'
+    '.hz-ley{font-size:13px;color:var(--muted);margin:4px 0 0;line-height:1.6}'
+    # Leyenda de color, común a toda la página: el color significa lo mismo
+    # en las barras de arriba y en las noches de abajo.
+    '.hz-leg{display:flex;flex-wrap:wrap;gap:7px 16px;margin:16px 0 14px;'
+    'font-size:12.5px;color:var(--muted)}'
+    '.hz-leg i{display:inline-block;width:11px;height:11px;border-radius:3px;'
+    'margin-right:6px;vertical-align:-1px}'
+    # Tarjetas de dato y caja de método: propias, no heredadas.
     '.dato{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0}'
     '.dcard{flex:1;min-width:170px;background:var(--bg2);border:1px solid var(--line);'
     'border-radius:13px;padding:15px 17px}'
@@ -6874,93 +6902,171 @@ CSS_HORAS = (
     '.dcard .l{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}'
     '.verifica{background:var(--bg2);border:1px solid var(--line);border-radius:14px;'
     'padding:20px 22px;margin:26px 0 0}'
-    '.verifica .t{font-family:var(--fd);font-weight:700;font-size:18px;'
-    'margin:0 0 10px}'
+    '.verifica .t{font-family:var(--fd);font-weight:700;font-size:18px;margin:0 0 10px}'
     '.verifica p{font-size:15px;line-height:1.7;margin:0 0 11px}'
     '.verifica p:last-child{margin-bottom:0}'
     '.sigue{border-top:1px solid var(--line);margin-top:28px;padding-top:22px;'
     'font-size:15px}'
-    '.hz-tabla{margin:22px 0 10px;display:grid;gap:7px}'
-    '.hz-f{display:grid;grid-template-columns:52px 1fr 64px;align-items:center;gap:12px}'
-    '.hz-f .et{font-family:var(--fm);font-size:13px;color:var(--muted);text-align:right}'
-    '.hz-b{position:relative;height:22px;background:#12100c;border-radius:5px;overflow:hidden}'
-    # El rango P10-P90 como barra, y la mediana como una marca dentro.
-    '.hz-r{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,'
-    'rgba(201,74,46,.85),rgba(201,162,74,.85),rgba(143,176,122,.85))}'
-    '.hz-m{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--paper);'
-    'border-radius:2px}'
-    '.hz-f .n{font-family:var(--fm);font-size:12.5px;color:var(--muted)}'
-    '.hz-ley{font-size:13px;color:var(--muted);margin:4px 0 0}'
-    # Tiras de noches
+    # --- 2) las tiras de noches -----------------------------------------
     '.hz-e{background:linear-gradient(180deg,var(--bg2),var(--panel));'
     'border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 13px}'
     '.hz-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;'
     'flex-wrap:wrap}'
     '.hz-cab b{font-family:var(--fd);font-weight:700;font-size:17.5px}'
     '.hz-cab span{color:var(--muted);font-size:13px}'
-    '.hz-big{display:flex;align-items:center;gap:13px;margin:11px 0 13px}'
-    '.hz-big .v{font-family:var(--fd);font-weight:700;font-size:44px;line-height:1;'
+    '.hz-big{display:flex;align-items:baseline;gap:11px;margin:10px 0 14px;'
+    'flex-wrap:wrap}'
+    '.hz-big .v{font-family:var(--fd);font-weight:700;font-size:40px;line-height:1;'
     'color:var(--teal)}'
-    '.hz-big .u{color:var(--muted);font-size:13.5px;line-height:1.35}'
-    '.hz-tira{display:flex;gap:3px;align-items:flex-end;height:48px}'
-    '.hz-n{flex:1;min-width:3px;border-radius:2px 2px 0 0}'
-    '.hz-pie{color:var(--muted);font-size:12.5px;margin:9px 0 0;line-height:1.5}'
-    '.hz-pie b{color:var(--teja2)}'
-    # Horas del cruce
+    '.hz-big .u{color:var(--muted);font-size:13.5px}'
+    '.hz-big .r{font-family:var(--fm);font-size:12px;color:var(--paper);'
+    'border:1px solid var(--line);border-radius:999px;padding:4px 10px}'
+    # La tira, con su eje vertical al lado: sin el "9 h / 0" no se sabe
+    # contra qué se compara la altura de cada barra.
+    '.hz-graf{display:flex;gap:9px;align-items:stretch}'
+    '.hz-ejey{display:flex;flex-direction:column;justify-content:space-between;'
+    'font-family:var(--fm);font-size:10.5px;color:var(--muted);text-align:right;'
+    'width:26px;flex:none;padding:1px 0}'
+    '.hz-tira{flex:1;display:flex;gap:3px;align-items:flex-end;height:52px;'
+    'border-top:1px dashed rgba(239,230,214,.16);'
+    'border-bottom:1px solid rgba(239,230,214,.22)}'
+    '.hz-n{flex:1;min-width:3px;border-radius:2px 2px 0 0;cursor:default;'
+    'transition:filter .12s}'
+    '.hz-n:hover{filter:brightness(1.45)}'
+    '.hz-fechas{display:flex;justify-content:space-between;margin:5px 0 0 35px;'
+    'font-family:var(--fm);font-size:10.5px;color:var(--muted)}'
+    '.hz-det{display:block;color:var(--muted);font-size:12.5px;margin:9px 0 0;'
+    'line-height:1.5;min-height:1.5em}'
+    '.hz-det b{color:var(--teja2)}'
+    '.hz-det.on{color:var(--paper)}'
+    # --- 3) horas del cruce ---------------------------------------------
     '.hz-cr{display:flex;gap:4px;align-items:flex-end;margin:20px 0 6px}'
     '.hz-cc{flex:1;display:flex;flex-direction:column;justify-content:flex-end;'
     'align-items:center;gap:5px}'
     '.hz-cb{width:100%;border-radius:3px 3px 0 0;min-height:2px}'
     '.hz-cl{font-family:var(--fm);font-size:11px;color:var(--muted)}'
     '@media(max-width:560px){.hz-f{grid-template-columns:42px 1fr 52px;gap:8px}'
-    '.hz-cl{font-size:9.5px}.hz-big .v{font-size:38px}}'
+    '.hz-cl{font-size:9.5px}.hz-big .v{font-size:34px}.hz-eje span{font-size:9.5px}}'
 )
+
+# Pequeño JS (vanilla, como el resto del sitio) para que al pasar el cursor
+# —o al tocar en el móvil, donde no hay cursor— la noche se cuente con
+# palabras debajo de la tira. El atributo title se queda como respaldo.
+JS_HORAS = """<script>
+(function(){
+  var tarj = document.querySelectorAll('.hz-e');
+  for (var i = 0; i < tarj.length; i++) (function(c){
+    var det = c.querySelector('.hz-det');
+    if (!det) return;
+    var base = det.innerHTML;
+    var barras = c.querySelectorAll('.hz-n');
+    for (var j = 0; j < barras.length; j++) (function(b){
+      function ver(){ det.innerHTML = b.getAttribute('data-d'); det.className = 'hz-det on'; }
+      b.addEventListener('mouseenter', ver);
+      b.addEventListener('click', ver);
+    })(barras[j]);
+    c.addEventListener('mouseleave', function(){
+      det.innerHTML = base; det.className = 'hz-det';
+    });
+  })(tarj[i]);
+})();
+</script>"""
+
+LEYENDA_HORAS = (
+    '<p class="hz-leg">'
+    '<span><i style="background:#8fb07a"></i>7 h o más: se duerme</span>'
+    '<span><i style="background:#c9a24a"></i>de 4 a 6 h</span>'
+    '<span><i style="background:#d9744e"></i>de 1 a 3 h: un respiro corto</span>'
+    '<span><i style="background:#c94a2e"></i>ni una hora por debajo de 20&nbsp;°C</span>'
+    '</p>')
 
 
 def _hz_color(h: float) -> str:
-    """Verde si se duerme, rojo si no. Mismo criterio en toda la página."""
+    """Verde si se duerme, rojo si no. Mismo criterio en TODA la página: el
+    color significa lo mismo en las barras de rango y en cada noche."""
     return ("#8fb07a" if h >= 7 else "#c9a24a" if h >= 4
             else "#d9744e" if h >= 1 else "#c94a2e")
 
 
+def _hz_fecha(iso: str) -> str:
+    """'2026-08-29' -> '29 ago'."""
+    f = date.fromisoformat(iso)
+    return f"{f.day} {MESES_ES[f.month - 1][:3]}"
+
+
 def bloque_horas(d: dict, site: str) -> str:
-    """Las tres piezas visuales del estudio, en CSS puro."""
+    """Las tres piezas visuales del estudio. Devuelve (tabla, tiras, cruces)."""
     vent = d["ventana"]["horas"]
     # --- 1) misma mínima, horas distintas -------------------------------
+    # El color de la barra es el de SU MEDIANA, no un degradado decorativo:
+    # así una fila verde y una roja significan lo mismo que una noche verde
+    # y una roja más abajo.
     filas = []
     for m in d["minimas"]:
         if not 12 <= m["min"] <= 24:
             continue
         izq, der = 100 * m["p10"] / vent, 100 * m["p90"] / vent
         med = 100 * m["mediana"] / vent
+        ayuda = (f'Noches con mínima de {m["min"]} °C: {m["n"]:,} medidas. '
+                 f'Mediana {_n_es(m["mediana"])} h bajo 20 °C; '
+                 f'el 80 % de ellas va de {m["p10"]} a {m["p90"]} h; el rango completo, '
+                 f'de {m["peor"]} a {m["mejor"]}.').replace(",", ".")
         filas.append(
-            f'<div class="hz-f"><span class="et">{m["min"]}&nbsp;°C</span>'
+            f'<div class="hz-f" title="{ayuda}">'
+            f'<span class="et">{m["min"]}&nbsp;°C</span>'
             f'<span class="hz-b"><span class="hz-r" style="left:{izq:.1f}%;'
-            f'width:{max(der - izq, 1.2):.1f}%"></span>'
-            f'<span class="hz-m" style="left:calc({med:.1f}% - 1.5px)"></span></span>'
+            f'width:{max(der - izq, 1.4):.1f}%;'
+            f'background:{_hz_color(m["mediana"])}"></span>'
+            f'<span class="hz-m" style="left:calc(clamp(0.7%, {med:.1f}%, 99.3%) - 1px)"></span></span>'
             f'<span class="n">{m["peor"]}–{m["mejor"]} h</span></div>')
-    tabla = "".join(filas)
+    eje = "".join(f'<span style="left:{100 * h / vent:.1f}%">{h}</span>'
+                  for h in range(vent + 1))
+    tabla = (f'<div class="hz-f hz-cabf"><span class="et">mínima</span>'
+             f'<span>horas por debajo de 20&nbsp;°C</span>'
+             f'<span>rango</span></div>'
+             f'<div class="hz-tabla">{"".join(filas)}</div>'
+             f'<div class="hz-f"><span></span><span class="hz-eje">{eje}</span>'
+             f'<span></span></div>')
     # --- 2) las tiras de noches -----------------------------------------
-    tiras = []
+    tiras = [LEYENDA_HORAS]
     for e in d["ejemplos"]:
+        alto = 46 / vent
         barras = "".join(
-            f'<span class="hz-n" style="height:{6 + n["h"] * (42 / vent):.0f}px;'
-            f'background:{_hz_color(n["h"])}" title="{n["noche"]} · mínima '
-            f'{_n_es(n["tmin"])}° · {n["h"]} h bajo 20°"></span>'
+            f'<span class="hz-n" style="height:{5 + n["h"] * alto:.0f}px;'
+            f'background:{_hz_color(n["h"])}" '
+            f'title="{_hz_fecha(n["noche"])}: mínima {_n_es(n["tmin"])}°, '
+            f'{n["h"]} h bajo 20°" '
+            f'data-d="Noche del <b>{_hz_fecha(n["noche"])}</b> · mínima '
+            f'{_n_es(n["tmin"])}&nbsp;°C · <b>{n["h"]} de {vent} horas</b> '
+            f'por debajo de 20&nbsp;°C"></span>'
             for n in e["tira"])
         cr = e["cruce_20_tipico"]
-        cruce = (f"refresca sobre las {int(cr):02d}:00" if cr not in ("", None)
-                 else "no refresca")
-        sin = (f' · <b>{e["noches_sin_alivio"]} noches sin un solo respiro</b>'
-               if e["noches_sin_alivio"] else "")
+        cruce = (f"suele refrescar sobre las {int(cr):02d}:00" if cr not in ("", None)
+                 else "no llega a refrescar")
+        # "Todas iguales" no dice nada por sí solo: iguales a nueve horas y
+        # iguales a cero son la noticia contraria.
+        if e["h20_peor"] != e["h20_mejor"]:
+            rango = f'de {e["h20_peor"]} a {e["h20_mejor"]} h según la noche'
+        elif e["h20_peor"] == 0:
+            rango = "ninguna noche bajó de 20 °C"
+        else:
+            rango = f'{e["h20_peor"]} h todas las noches, sin excepción'
+        sin = (f' · <b>{e["noches_sin_alivio"]} de {e["noches"]} sin un solo '
+               f'respiro</b>' if e["noches_sin_alivio"] else "")
         tiras.append(
             f'<div class="hz-e"><div class="hz-cab"><b>{titular(e["nombre"])}</b>'
             f'<span>{titular(e["provincia"])} · {miles(e["altitud"])} m</span></div>'
             f'<div class="hz-big"><span class="v">{_n_es(e["h20_mediana"])}</span>'
-            f'<span class="u">de {vent} horas<br>por debajo de 20&nbsp;°C</span></div>'
-            f'<div class="hz-tira">{barras}</div>'
-            f'<p class="hz-pie">{e["noches"]} noches medidas · peor {e["h20_peor"]} h · '
-            f'mejor {e["h20_mejor"]} h · {cruce}{sin}</p></div>')
+            f'<span class="u">h de {vent} en una noche normal</span>'
+            f'<span class="r">{rango}</span></div>'
+            f'<div class="hz-graf"><div class="hz-ejey"><span>{vent} h</span>'
+            f'<span>0</span></div><div class="hz-tira">{barras}</div></div>'
+            f'<div class="hz-fechas"><span>{_hz_fecha(e["tira"][0]["noche"])}</span>'
+            f'<span>{e["noches"]} noches</span>'
+            f'<span>{_hz_fecha(e["tira"][-1]["noche"])}</span></div>'
+            f'<span class="hz-det">Cada barra es una noche; la altura, sus horas '
+            f'por debajo de 20&nbsp;°C. {cruce.capitalize()}{sin}. '
+            f'<b>Pasa el cursor o toca una barra.</b></span></div>')
     # --- 3) la hora del alivio ------------------------------------------
     tot = sum(c["n"] for c in d["cruces"]) or 1
     mx = max(c["n"] for c in d["cruces"])
@@ -6975,11 +7081,17 @@ def bloque_horas(d: dict, site: str) -> str:
         etq = "nunca" if h == "nunca" else f"{int(h):02d}"
         col = ("#c94a2e" if h == "nunca" else "#8fb07a" if int(h) in (23, 0, 1)
                else "#c9a24a" if int(h) <= 4 else "#d9744e")
+        pct = 100 * c["n"] / tot
+        ayuda = (f'{c["n"]:,} noches'.replace(",", ".") +
+                 (" no bajaron de 20 °C en toda la ventana"
+                  if h == "nunca" else f" cruzaron los 20 °C a las {etq}:00"))
         cols.append(
-            f'<div class="hz-cc"><span class="hz-cl">{100 * c["n"] / tot:.0f}%</span>'
+            f'<div class="hz-cc" title="{ayuda}">'
+            f'<span class="hz-cl">{pct:.0f}%</span>'
             f'<span class="hz-cb" style="height:{4 + 82 * c["n"] / mx:.0f}px;'
             f'background:{col}"></span><span class="hz-cl">{etq}</span></div>')
     return tabla, "".join(tiras), f'<div class="hz-cr">{"".join(cols)}</div>'
+
 
 PAGINA_HORAS = r"""<!doctype html>
 <html lang="es">
@@ -7017,7 +7129,7 @@ __NAV__
 
 <section><div class="wrap">
   <h2>La prueba: misma mínima, noches opuestas</h2>
-  <p>Cada fila es un grupo de noches con la <b>misma mínima</b>, redondeada. La barra abarca del percentil 10 al 90 de <b>horas por debajo de 20&nbsp;°C</b> entre las 23:00 y las 07:00; la marca clara es la mediana, y a la derecha va el rango completo observado.</p>
+  <p>Agrupamos todas las noches medidas por su <b>mínima</b>, redondeada al grado, y miramos cuántas horas estuvo cada una por debajo de 20&nbsp;°C entre las 23:00 y las 07:00. <b>Una fila = todas las noches con esa mínima.</b> La barra cubre al 80&nbsp;% de ellas (del percentil 10 al 90), la marca clara es la mediana, y a la derecha va el rango completo: la peor noche de ese grupo y la mejor. La escala de horas está debajo, y el color de cada barra es el de su mediana.</p>
   <div class="hz-tabla">__HZ_TABLA__</div>
   <p class="hz-ley">De __PARES__ noches-estación. Si la mínima bastara, cada fila sería una raya fina. No lo es.</p>
   <div class="dato">
@@ -7029,9 +7141,9 @@ __NAV__
 
 <section><div class="wrap">
   <h2>Cómo se ve una noche, noche a noche</h2>
-  <p>Cada barra es <b>una noche real</b>: la altura son las horas que estuvo por debajo de 20&nbsp;°C. Verde si se pudo dormir, rojo si no bajó ni una hora. Pasa el cursor por encima para ver la fecha y la mínima.</p>
+  <p>Las barras de arriba resumen miles de noches. Estas son <b>noches concretas de tres estaciones</b>, una al lado de otra, en el mismo orden en que ocurrieron. <b>Cada barra es una noche</b>; su altura, las horas que pasó por debajo de 20&nbsp;°C: la barra llega arriba del todo si lo estuvo la ventana entera, y se queda en un tope rojo si no bajó ni una hora. Pasa el cursor por encima de cualquiera —o tócala en el móvil— y debajo te dice qué noche fue.</p>
   __HZ_TIRAS__
-  <p>Fíjate en la de en medio. Su mediana es baja, pero tuvo noches de nueve horas y noches de cero: <b>la media de las dos habría inventado una noche templada que no existió</b>. Por eso aquí no publicamos medias.</p>
+  <p>Las tres tienen la misma escala, y ahí está el asunto. La primera es una raya verde continua: <b>siempre</b> se duerme. La última, una raya roja continua: <b>nunca</b>. La de en medio es la misma ciudad, el mismo termómetro, y sus noches saltan de cero a nueve horas sin previo aviso. <b>Promediar esas noches inventaría una templada que no existió jamás</b>, y por eso aquí publicamos la mediana y los extremos, nunca la media.</p>
 </div></section>
 
 <section><div class="wrap">
@@ -7059,6 +7171,7 @@ __NAV__
   <p class="sigue">Sigue: <a href="__SITE__/noches-tropicales/">qué es una noche tropical</a> · <a href="__SITE__/noches-tropicales-y-salud/">por qué importa para la salud</a> · <a href="__SITE__/la-espana-que-nunca-se-colorea/">la España que nunca se colorea</a> · <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">el refugio más cercano a ti</a>.</p>
 </div></section>
 __FOOTER__
+__JS__
 </body>
 </html>
 """
@@ -7115,10 +7228,11 @@ def construir_pagina_horas(d: dict, site: str) -> str:
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
             .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
             .replace("__CSSATAJO__", CSS_ATAJO)
-            .replace("__CSSHZ__", CSS_HORAS)
+            .replace("__CSSHZ__", CSS_HORAS.replace("__DIV__", str(vent)))
             .replace("__NAV__", nav_escueto_html(site))
             .replace("__FOOTER__", footer_escueto_html(site))
             .replace("__ATAJO__", ATAJO_CERCA)
+            .replace("__JS__", JS_HORAS)
             .replace("__HZ_TABLA__", tabla)
             .replace("__HZ_TIRAS__", tiras)
             .replace("__HZ_CRUCES__", cruces)

@@ -1,0 +1,702 @@
+{
+ "periodo": {
+  "ini": "2026-08-29",
+  "fin": "2026-09-23",
+  "noches": 23,
+  "pares": 17495,
+  "estaciones": 814
+ },
+ "ventana": {
+  "inicio": 23,
+  "horas": 9
+ },
+ "minimas": [
+  {
+   "min": 6,
+   "n": 194,
+   "peor": 8,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 9,
+   "p90": 9
+  },
+  {
+   "min": 7,
+   "n": 231,
+   "peor": 8,
+   "mejor": 9,
+   "mediana": 9,
+   "p10": 9,
+   "p90": 9
+  },
+  {
+   "min": 8,
+   "n": 409,
+   "peor": 7,
+   "mejor": 9,
+   "mediana": 9,
+   "p10": 9,
+   "p90": 9
+  },
+  {
+   "min": 9,
+   "n": 459,
+   "peor": 7,
+   "mejor": 9,
+   "mediana": 9,
+   "p10": 9,
+   "p90": 9
+  },
+  {
+   "min": 10,
+   "n": 680,
+   "peor": 7,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 9,
+   "p90": 9
+  },
+  {
+   "min": 11,
+   "n": 701,
+   "peor": 6,
+   "mejor": 9,
+   "mediana": 9,
+   "p10": 8,
+   "p90": 9
+  },
+  {
+   "min": 12,
+   "n": 1041,
+   "peor": 5,
+   "mejor": 9,
+   "mediana": 9,
+   "p10": 8,
+   "p90": 9
+  },
+  {
+   "min": 13,
+   "n": 924,
+   "peor": 4,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 8,
+   "p90": 9
+  },
+  {
+   "min": 14,
+   "n": 1336,
+   "peor": 2,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 7,
+   "p90": 9
+  },
+  {
+   "min": 15,
+   "n": 1142,
+   "peor": 3,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 6,
+   "p90": 9
+  },
+  {
+   "min": 16,
+   "n": 1505,
+   "peor": 2,
+   "mejor": 9,
+   "mediana": 8,
+   "p10": 5,
+   "p90": 9
+  },
+  {
+   "min": 17,
+   "n": 1119,
+   "peor": 1,
+   "mejor": 9,
+   "mediana": 6,
+   "p10": 4,
+   "p90": 9
+  },
+  {
+   "min": 18,
+   "n": 1415,
+   "peor": 1,
+   "mejor": 9,
+   "mediana": 5,
+   "p10": 3,
+   "p90": 9
+  },
+  {
+   "min": 19,
+   "n": 1110,
+   "peor": 1,
+   "mejor": 9,
+   "mediana": 3.0,
+   "p10": 1,
+   "p90": 6
+  },
+  {
+   "min": 20,
+   "n": 1287,
+   "peor": 0,
+   "mejor": 9,
+   "mediana": 0,
+   "p10": 0,
+   "p90": 2
+  },
+  {
+   "min": 21,
+   "n": 867,
+   "peor": 0,
+   "mejor": 0,
+   "mediana": 0,
+   "p10": 0,
+   "p90": 0
+  },
+  {
+   "min": 22,
+   "n": 940,
+   "peor": 0,
+   "mejor": 0,
+   "mediana": 0.0,
+   "p10": 0,
+   "p90": 0
+  },
+  {
+   "min": 23,
+   "n": 760,
+   "peor": 0,
+   "mejor": 0,
+   "mediana": 0.0,
+   "p10": 0,
+   "p90": 0
+  },
+  {
+   "min": 24,
+   "n": 669,
+   "peor": 0,
+   "mejor": 0,
+   "mediana": 0,
+   "p10": 0,
+   "p90": 0
+  },
+  {
+   "min": 25,
+   "n": 253,
+   "peor": 0,
+   "mejor": 0,
+   "mediana": 0,
+   "p10": 0,
+   "p90": 0
+  },
+  {
+   "min": 26,
+   "n": 161,
+   "peor": 0,
+   "mejor": 0,
+   "mediana": 0,
+   "p10": 0,
+   "p90": 0
+  }
+ ],
+ "cruces": [
+  {
+   "hora": 0,
+   "n": 1188
+  },
+  {
+   "hora": 1,
+   "n": 996
+  },
+  {
+   "hora": 2,
+   "n": 830
+  },
+  {
+   "hora": 3,
+   "n": 699
+  },
+  {
+   "hora": 4,
+   "n": 681
+  },
+  {
+   "hora": 5,
+   "n": 606
+  },
+  {
+   "hora": 6,
+   "n": 495
+  },
+  {
+   "hora": 7,
+   "n": 455
+  },
+  {
+   "hora": 23,
+   "n": 7115
+  },
+  {
+   "hora": "nunca",
+   "n": 4430
+  }
+ ],
+ "tramos": [
+  {
+   "etq": "ni una hora",
+   "n": 153
+  },
+  {
+   "etq": "menos de 4 h",
+   "n": 99
+  },
+  {
+   "etq": "de 4 a 7 h",
+   "n": 118
+  },
+  {
+   "etq": "7 h o más",
+   "n": 439
+  }
+ ],
+ "estaciones_resumidas": 809,
+ "mediana_h20": 7,
+ "mediana_h18": 4,
+ "sin_respiro": {
+  "n": 31,
+  "lista": [
+   {
+    "nombre": "CABO DE GATA",
+    "provincia": "ALMERIA"
+   },
+   {
+    "nombre": "CARBONERAS",
+    "provincia": "ALMERIA"
+   },
+   {
+    "nombre": "CABRERA, PARQUE NACIONAL DE CABRERA",
+    "provincia": "BALEARES"
+   },
+   {
+    "nombre": "CAPDEPERA",
+    "provincia": "BALEARES"
+   },
+   {
+    "nombre": "CÁDIZ",
+    "provincia": "CADIZ"
+   },
+   {
+    "nombre": "YAIZA PLAYA BLANCA",
+    "provincia": "LAS PALMAS"
+   },
+   {
+    "nombre": "LANZAROTE AEROPUERTO",
+    "provincia": "LAS PALMAS"
+   },
+   {
+    "nombre": "PÁJARA",
+    "provincia": "LAS PALMAS"
+   },
+   {
+    "nombre": "TUINEJE,PUERTO GRAN TARAJAL",
+    "provincia": "LAS PALMAS"
+   },
+   {
+    "nombre": "FUERTEVENTURA AEROPUERTO",
+    "provincia": "LAS PALMAS"
+   },
+   {
+    "nombre": "AGAETE",
+    "provincia": "LAS PALMAS"
+   },
+   {
+    "nombre": "MOGÁN, PUERTO RICO",
+    "provincia": "LAS PALMAS"
+   }
+  ]
+ },
+ "ejemplos": [
+  {
+   "nombre": "RASCAFRÍA",
+   "provincia": "MADRID",
+   "altitud": 1159,
+   "h20_mediana": 9.0,
+   "h20_peor": 9,
+   "h20_mejor": 9,
+   "noches": 22,
+   "noches_sin_alivio": 0,
+   "cruce_20_tipico": 23,
+   "tira": [
+    {
+     "noche": "2026-08-29",
+     "tmin": 6.0,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-02",
+     "tmin": 7.9,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-03",
+     "tmin": 9.2,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-04",
+     "tmin": 10.3,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-05",
+     "tmin": 13.1,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-06",
+     "tmin": 13.7,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-07",
+     "tmin": 11.2,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-08",
+     "tmin": 12.6,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-09",
+     "tmin": 14.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-10",
+     "tmin": 0.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-11",
+     "tmin": 2.6,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-12",
+     "tmin": 6.7,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-13",
+     "tmin": 7.8,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-14",
+     "tmin": 7.8,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-15",
+     "tmin": 10.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-16",
+     "tmin": 11.9,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-18",
+     "tmin": 5.8,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-19",
+     "tmin": 5.9,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-20",
+     "tmin": 6.4,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-21",
+     "tmin": 6.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-22",
+     "tmin": 7.6,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-23",
+     "tmin": 9.8,
+     "h": 9
+    }
+   ]
+  },
+  {
+   "nombre": "MADRID, RETIRO",
+   "provincia": "MADRID",
+   "altitud": 667,
+   "h20_mediana": 0,
+   "h20_peor": 0,
+   "h20_mejor": 9,
+   "noches": 23,
+   "noches_sin_alivio": 12,
+   "cruce_20_tipico": 4,
+   "tira": [
+    {
+     "noche": "2026-08-29",
+     "tmin": 15.7,
+     "h": 7
+    },
+    {
+     "noche": "2026-09-02",
+     "tmin": 20.5,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-03",
+     "tmin": 22.5,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-04",
+     "tmin": 21.6,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-05",
+     "tmin": 24.8,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-06",
+     "tmin": 24.5,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-07",
+     "tmin": 23.2,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-08",
+     "tmin": 22.7,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-09",
+     "tmin": 20.1,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-10",
+     "tmin": 13.6,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-11",
+     "tmin": 16.1,
+     "h": 8
+    },
+    {
+     "noche": "2026-09-12",
+     "tmin": 18.2,
+     "h": 3
+    },
+    {
+     "noche": "2026-09-13",
+     "tmin": 19.3,
+     "h": 2
+    },
+    {
+     "noche": "2026-09-14",
+     "tmin": 20.3,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-15",
+     "tmin": 20.4,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-16",
+     "tmin": 21.1,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-17",
+     "tmin": 15.1,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-18",
+     "tmin": 16.0,
+     "h": 6
+    },
+    {
+     "noche": "2026-09-19",
+     "tmin": 17.4,
+     "h": 5
+    },
+    {
+     "noche": "2026-09-20",
+     "tmin": 18.3,
+     "h": 4
+    },
+    {
+     "noche": "2026-09-21",
+     "tmin": 17.8,
+     "h": 4
+    },
+    {
+     "noche": "2026-09-22",
+     "tmin": 18.9,
+     "h": 4
+    },
+    {
+     "noche": "2026-09-23",
+     "tmin": 20.4,
+     "h": 0
+    }
+   ]
+  },
+  {
+   "nombre": "CAPDEPERA",
+   "provincia": "BALEARES",
+   "altitud": 57,
+   "h20_mediana": 0,
+   "h20_peor": 0,
+   "h20_mejor": 0,
+   "noches": 23,
+   "noches_sin_alivio": 23,
+   "cruce_20_tipico": "",
+   "tira": [
+    {
+     "noche": "2026-08-29",
+     "tmin": 26.1,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-02",
+     "tmin": 25.6,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-03",
+     "tmin": 26.3,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-04",
+     "tmin": 26.2,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-05",
+     "tmin": 25.8,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-06",
+     "tmin": 25.7,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-07",
+     "tmin": 27.0,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-08",
+     "tmin": 25.7,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-09",
+     "tmin": 25.7,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-10",
+     "tmin": 21.9,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-11",
+     "tmin": 21.9,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-12",
+     "tmin": 23.2,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-13",
+     "tmin": 23.5,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-14",
+     "tmin": 22.7,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-15",
+     "tmin": 24.8,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-16",
+     "tmin": 24.3,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-17",
+     "tmin": 22.3,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-18",
+     "tmin": 22.7,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-19",
+     "tmin": 22.8,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-20",
+     "tmin": 23.2,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-21",
+     "tmin": 22.2,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-22",
+     "tmin": 24.0,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-23",
+     "tmin": 22.5,
+     "h": 0
+    }
+   ]
+  }
+ ],
+ "fuente": "AEMET"
+}

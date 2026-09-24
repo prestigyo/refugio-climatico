@@ -160,6 +160,12 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - `analisis/horas_dormibles.csv` — el anterior colapsado **por estación**: mediana, peor y
   mejor de horas bajo 20°, noches sin un solo respiro y hora típica del cruce. Mediana y
   peor valor, nunca media: promediar una noche infernal con una buena inventa una templada.
+- `analisis/invierno_por_temporada.csv` — una fila por estación y **temporada de
+  invierno** (1 nov – 31 mar, etiquetada por el año de inicio): noches de calefacción
+  (<10°), noches frías (<5°), heladas, días de terraza (tmax ≥18°), días de lluvia,
+  rachas consecutivas, P05 de tmin y extremos con fecha. Lo escribe `analisis_invierno.py`.
+- `analisis/invierno_por_estacion.csv` — el anterior por estación: mediana, peor y mejor
+  temporada con su año, racha máxima sin terraza, temporadas sin una sola helada.
 - `analisis/noches_por_estacion.csv` — resumen por estación con **extremos, no promedios**:
   peor año y cuál fue, mejor año, último año, racha máxima real de la serie, P95, peor noche
   con fecha, y cuántas noches tropicales al año se pierden por mirar solo jun-ago
@@ -188,6 +194,23 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   a las 05:00 equivale a no cruzar. Mediana nacional: 7,5 h de 9 bajo 20°, pero solo 4,5 h
   bajo 18°. **31 estaciones no bajaron de 20° ni una hora en ninguna de las 22 noches**
   (Cabo de Gata, Capdepera, Cádiz, y media Canarias).
+- **El invierno suave y el verano dormible son incompatibles en la península.**
+  Cruzando las dos series (837 estaciones), la correlación de Spearman entre noches de
+  calefacción en invierno y noches tropicales en verano es **−0,70**. En península lo que
+  se puede pedir es: verano de 0-1 noches tropicales → Estaca de Bares, pero **75 noches
+  de calefacción** y 14 días de terraza; invierno de 4-9 noches de calefacción → Cabo de
+  Gata o Ceuta, pero **77 y 59 noches tropicales**. Málaga: 24 noches de calefacción y
+  78,7 tropicales. **Solo dos estaciones de España cumplen las dos cosas** (≤40 calefacción
+  y ≤5 tropicales) y las dos son canarias: **San Andrés y Sauces** (La Palma, 362 m: 0
+  noches de calefacción, 3,2 tropicales — pero 51 días de lluvia y solo 104 de terraza) y
+  **Tías** (Lanzarote, 376 m: 3 y 4,3, con 121 días de terraza y 18 de lluvia). Mención
+  aparte para **Lomo del Balo** (Tenerife): 0 calefacción, 144 días de terraza, 10 de
+  lluvia, con 5-15 tropicales.
+- **En invierno no hay meses hombro.** Noviembre y marzo son el 40,4 % de los días de la
+  temporada y se llevan el 37,2 % de las noches de calefacción (×0,92 su cuota): el frío
+  general no se concentra en dic-feb. La helada sí (22,8 %, ×0,56). Es lo contrario de lo
+  que pasa en verano con jun-ago, y desmonta la idea de que noviembre y marzo sean
+  templados. **155 estaciones no han tenido una sola helada** en ninguna temporada.
 - El **gradiente térmico nocturno** real es **0,35 °C/100 m** (0,26 solo en península),
   no los 0,6 de manual. Y con R²=0,15: la altitud sola NO predice la mínima nocturna.
   52 de 285 pares tienen inversión pura (el pueblo alto duerme peor que el bajo).

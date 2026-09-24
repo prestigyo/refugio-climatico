@@ -11022,6 +11022,7 @@ MENU_EN = [
     ("Coolest towns", "/en/coolest-towns-spain/"),
     ("Frost-free towns", "/en/frost-free-towns-spain/"),
     ("Mildest winters", "/en/spains-mildest-winters/"),
+    ("Best year round", "/en/best-climate-in-spain-year-round/"),
 ]
 
 
@@ -11046,6 +11047,8 @@ def footer_en_html(site: str) -> str:
     c1 = [("Coolest towns to sleep in summer", "/en/coolest-towns-spain/"),
           ("Frost-free towns to spend winter", "/en/frost-free-towns-spain/"),
           ("Spain's mildest winters, city by city", "/en/spains-mildest-winters/"),
+          ("The best climate in Spain, year round",
+           "/en/best-climate-in-spain-year-round/"),
           ("Live heatwave map, animated (ES)", "/ola-de-calor/"),
           ("Interactive station map (ES)", "/mapa-estaciones/"),
           ("National tropical-nights ranking (ES)", "/ranking-noches-tropicales/")]
@@ -11206,6 +11209,412 @@ def _cabeza_en(site: str, titulo: str, desc: str, path: str, es_path: str,
         + _FUENTES_LINK + '\n<style>'
         + _CSS_EN + CSS_NAV_ESCUETO + CSS_FOOTER_ESCUETO + extra_css
         + '</style></head><body>\n')
+
+
+# ---------------------------------------------------------------------------
+# «THE BEST CLIMATE IN SPAIN, YEAR ROUND» — /en/best-climate-in-spain-year-round/
+#
+# La landing del cruce invierno-verano, en inglés porque ahí está la demanda:
+# el 25 % de las impresiones del sitio ya son páginas /en/ y las consultas son
+# de invierno («how cold does it get in spain in the winter»).
+#
+# La tesis: el mercado del winter sun vende medias mensuales, y con una media
+# de 17 °C en enero no se sabe cuántas noches hay que encender la calefacción.
+# Medido con conteos por umbral, el intercambio aparece: Spearman −0,71 entre
+# noches de calefacción y noches tropicales. Y la frontera de Pareto —quien no
+# es batido en las dos cosas a la vez— son DOS estaciones de 828.
+#
+# El dibujo es SVG inline generado en Python, sin librerías, como el mapa.
+# ---------------------------------------------------------------------------
+CSS_DOSCARAS = (
+    '.dc-fig{margin:26px 0 8px;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:14px;padding:18px 16px 10px}'
+    '.dc-fig svg{width:100%;height:auto;display:block;overflow:visible}'
+    '.dc-leg{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 2px 0;'
+    'font-size:12.5px;color:var(--muted)}'
+    '.dc-leg i{display:inline-block;width:10px;height:10px;border-radius:50%;'
+    'margin-right:6px;vertical-align:-1px}'
+    '.dc-cap{font-size:13px;color:var(--muted);margin:10px 0 0;line-height:1.6}'
+    '.dc-tabla{width:100%;border-collapse:collapse;margin:18px 0 6px;'
+    'font-size:14.5px}'
+    '.dc-tabla th{text-align:right;font-size:11.5px;text-transform:uppercase;'
+    'letter-spacing:.05em;color:var(--muted);font-weight:600;padding:0 0 9px 10px;'
+    'border-bottom:1px solid var(--line)}'
+    '.dc-tabla th:first-child{text-align:left;padding-left:0}'
+    '.dc-tabla td{padding:9px 0 9px 10px;text-align:right;'
+    'border-bottom:1px solid rgba(239,230,214,.07);font-variant-numeric:tabular-nums}'
+    '.dc-tabla td:first-child{text-align:left;padding-left:0}'
+    '.dc-tabla tr.grupo td{padding-top:20px;border-bottom:none;'
+    'font-family:var(--fd);font-weight:700;font-size:15px;color:var(--teja2)}'
+    '.dc-tabla .est{display:block;font-size:11.5px;color:var(--muted);'
+    'margin-top:2px}'
+    '.dc-mal{color:#d9744e}.dc-bien{color:#8fb07a}'
+    '.dc-dest{background:var(--bg2);border:1px solid var(--teal);'
+    'border-radius:14px;padding:18px 20px;margin:22px 0}'
+    '.dc-dest .t{font-family:var(--fd);font-weight:700;font-size:19px;'
+    'margin:0 0 8px;color:var(--teal)}'
+    '.dc-dest p{margin:0 0 10px;font-size:15px;line-height:1.7}'
+    '.dc-dest p:last-child{margin-bottom:0}'
+    '.dato{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0}'
+    '.dcard{flex:1;min-width:165px;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:13px;padding:15px 17px}'
+    '.dcard .n{font-family:var(--fd);font-weight:900;font-size:31px;line-height:1;'
+    'color:var(--teja2)}'
+    '.dcard .l{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}'
+    '.verifica{background:var(--bg2);border:1px solid var(--line);border-radius:14px;'
+    'padding:20px 22px;margin:26px 0 0}'
+    '.verifica .t{font-family:var(--fd);font-weight:700;font-size:18px;margin:0 0 10px}'
+    '.verifica p{font-size:14.5px;line-height:1.7;margin:0 0 11px}'
+    '.verifica p:last-child{margin-bottom:0}'
+    '@media(max-width:560px){.dc-tabla{font-size:13px}'
+    '.dc-tabla th{font-size:10px}.dc-tabla td{padding-left:6px}}'
+)
+
+# Etiquetas de los grupos de la tabla. El orden cuenta la historia: primero lo
+# que el lector vino buscando (la costa del winter sun), luego las Canarias que
+# rompen la regla, luego el norte que es su espejo, y al final el interior.
+_DC_GRUPOS = [
+    ("winter", "The winter-sun coast", "Mild in January. Now look at August."),
+    ("canary", "The Canaries", "The only place that breaks the rule."),
+    ("summer", "The cool-summer north", "You sleep in August. You pay in January."),
+    ("inland", "Inland cities", "The worst of both, by design: no sea to soften it."),
+]
+
+
+def _dc_caja(d: dict) -> tuple:
+    """Cuántas estaciones caen en el cuadrante bueno, y de dónde son.
+
+    Se cuenta, no se afirma: la primera versión de la página decía que el
+    cuadrante estaba vacío y no lo está —hay 17 estaciones dentro—. Lo que sí
+    es cierto, y es mejor titular, es que ninguna está en la península.
+    """
+    cal, trop = d["umbrales"]["techo_invierno"], CAJA_TROPICALES
+    dentro = [x for x in d["nube"] if x[0] <= cal and x[1] <= trop]
+    return len(dentro), sum(1 for x in dentro if x[2] == 0), len(d["nube"])
+
+
+CAJA_TROPICALES = 30      # techo de verano del cuadrante dibujado
+
+
+def _dc_svg(d: dict) -> str:
+    """La nube de 828 estaciones: un punto por estación, dos ejes, y el hueco.
+
+    Se dibuja en Python y se sirve como SVG inline, igual que el mapa de
+    estaciones: sin librerías, sin peticiones extra y legible sin JS.
+    """
+    W, H = 720, 470
+    ML, MR, MT, MB = 54, 14, 18, 46          # márgenes del área de dibujo
+    ax, ay = W - ML - MR, H - MT - MB
+    xmax, ymax = 151, 165
+    fx = lambda v: ML + ax * min(v, xmax) / xmax
+    fy = lambda v: MT + ay * (1 - min(v, ymax) / ymax)
+    partes = [f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="Scatter plot '
+              f'of {len(d["nube"])} AEMET weather stations: heating nights in '
+              f'winter against tropical nights per year. Only 17 stations sit in '
+              f'the bottom-left corner — mild winter and cool summer — and every '
+              f'one of them is in the Canary Islands.">']
+    # Rejilla y ejes
+    for v in range(0, xmax + 1, 30):
+        partes.append(f'<line x1="{fx(v):.0f}" y1="{MT}" x2="{fx(v):.0f}" '
+                      f'y2="{MT + ay}" stroke="rgba(239,230,214,.08)"/>')
+        partes.append(f'<text x="{fx(v):.0f}" y="{MT + ay + 18}" fill="#9a8d7c" '
+                      f'font-size="11" text-anchor="middle">{v}</text>')
+    for v in range(0, ymax + 1, 30):
+        partes.append(f'<line x1="{ML}" y1="{fy(v):.0f}" x2="{ML + ax}" '
+                      f'y2="{fy(v):.0f}" stroke="rgba(239,230,214,.08)"/>')
+        partes.append(f'<text x="{ML - 9}" y="{fy(v) + 4:.0f}" fill="#9a8d7c" '
+                      f'font-size="11" text-anchor="end">{v}</text>')
+    # El cuadrante que todo el mundo querría, y que está vacío.
+    partes.append(f'<rect x="{ML}" y="{fy(30):.0f}" width="{fx(40) - ML:.0f}" '
+                  f'height="{MT + ay - fy(30):.0f}" fill="rgba(143,176,122,.10)" '
+                  f'stroke="#8fb07a" stroke-dasharray="5 4" stroke-width="1"/>')
+    partes.append(f'<text x="{fx(40) + 8:.0f}" y="{fy(26):.0f}" fill="#8fb07a" '
+                  f'font-size="12.5" font-weight="600">what everyone wants</text>')
+    # La nube. Canarias en otro tono porque es la única que rompe la regla.
+    for cal, trop, can in d["nube"]:
+        partes.append(
+            f'<circle cx="{fx(cal):.1f}" cy="{fy(trop):.1f}" r="3" '
+            f'fill="{"#c9a24a" if can else "#d9744e"}" opacity="{.5 if can else .38}"/>')
+    # Las dos de la frontera, con nombre.
+    for i, f in enumerate(d["frontera"]):
+        x, y = fx(f["calefaccion"]), fy(f["tropicales"])
+        partes.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="6.5" fill="none" '
+                      f'stroke="#efe6d6" stroke-width="2"/>')
+        anc = "start" if i == 0 else "end"
+        dx = 12 if i == 0 else -12
+        partes.append(f'<text x="{x + dx:.0f}" y="{y + 4:.0f}" fill="#efe6d6" '
+                      f'font-size="12.5" font-weight="600" text-anchor="{anc}">'
+                      f'{titular(f["estacion"])}</text>')
+    # Rótulos de eje
+    partes.append(f'<text x="{ML + ax / 2:.0f}" y="{H - 8}" fill="#efe6d6" '
+                  f'font-size="12.5" text-anchor="middle">Nights you need heating '
+                  f'(below 10&#176;C), 1 Nov&#8211;31 Mar</text>')
+    partes.append(f'<text x="16" y="{MT + ay / 2:.0f}" fill="#efe6d6" '
+                  f'font-size="12.5" text-anchor="middle" '
+                  f'transform="rotate(-90 16 {MT + ay / 2:.0f})">Tropical nights '
+                  f'per year (above 20&#176;C)</text>')
+    return "".join(partes) + "</svg>"
+
+
+def _dc_tabla(d: dict) -> str:
+    """Las ciudades que el lector reconoce, con sus dos caras."""
+    filas = ['<table class="dc-tabla"><thead><tr><th>Place</th>'
+             '<th>Heating<br>nights</th><th>Terrace<br>days</th>'
+             '<th>Rainy<br>days</th><th>Tropical<br>nights/yr</th></tr></thead><tbody>']
+    for papel, titulo, sub in _DC_GRUPOS:
+        grupo = [c for c in d["ciudades"] if c["papel"] == papel]
+        if not grupo:
+            continue
+        filas.append(f'<tr class="grupo"><td colspan="5">{titulo} '
+                     f'<span class="est">{sub}</span></td></tr>')
+        for c in grupo:
+            cal_c = "dc-bien" if c["calefaccion"] <= 40 else "dc-mal"
+            tro_c = "dc-bien" if c["tropicales"] <= 5 else "dc-mal"
+            filas.append(
+                f'<tr><td><b>{c["etiqueta"]}</b><span class="est">'
+                f'{titular(c["estacion"])} &#183; {c["altitud"]} m</span></td>'
+                f'<td class="{cal_c}">{c["calefaccion"]}</td>'
+                f'<td>{c["terraza"]}</td><td>{c["lluvia"]}</td>'
+                f'<td class="{tro_c}">{_n_en(c["tropicales"])}</td></tr>')
+    filas.append("</tbody></table>")
+    return "".join(filas)
+
+
+def _n_en(x: float) -> str:
+    """Número con punto decimal, que esta página va en inglés."""
+    return f"{x:.0f}" if float(x).is_integer() else f"{x:.1f}"
+
+
+def construir_pagina_dos_caras(d: dict, site: str) -> str:
+    """/en/best-climate-in-spain-year-round/ — el cruce invierno-verano."""
+    per, umb, cor = d["periodo"], d["umbrales"], d["correlacion"]
+    fr = d["frontera"]
+    uno = d["ambos"][0] if d["ambos"] else None
+    # Dos ciudades con las que cerrar: la de invierno más suave de la costa y su
+    # espejo del norte. Salen de los datos, no elegidas a mano.
+    winter = [c for c in d["ciudades"] if c["papel"] == "winter"]
+    summer = [c for c in d["ciudades"] if c["papel"] == "summer"]
+    w = min(winter, key=lambda c: c["calefaccion"]) if winter else None
+    v = min(summer, key=lambda c: c["tropicales"]) if summer else None
+    path = "/en/best-climate-in-spain-year-round/"
+    titulo = ("The Best Climate in Spain, Year Round: What the Data Says You "
+              "Can't Have | NocheTropical.es")
+    desc = (f"Mild winter or a summer you can sleep through — {per['estaciones']} "
+            f"AEMET weather stations say you have to choose. Heating nights, "
+            f"terrace days and tropical nights, town by town.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "NocheTropical.es (EN)",
+             "item": site + "/en/"},
+            {"@type": "ListItem", "position": 2,
+             "name": "The best climate in Spain, year round", "item": site + path}]},
+        {"@type": "Article",
+         "headline": ("The town that is unbearable in August is the best place "
+                      "to be in February"),
+         "description": desc, "mainEntityOfPage": site + path,
+         "image": site + "/og.png", "inLanguage": "en-GB",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es"},
+         "isBasedOn": "https://opendata.aemet.es"},
+        {"@type": "Dataset",
+         "name": (f"Spanish winter and summer climate by weather station "
+                  f"({per['temporadas']} winters, AEMET)"),
+         "description": ("Nights below 10 °C, frost nights, days above 18 °C and "
+                         "rainy days per winter season (1 Nov–31 Mar), crossed "
+                         "with tropical nights per calendar year, for every AEMET "
+                         "station with enough coverage."),
+         "temporalCoverage": f"{per['ini']}/{per['fin']}",
+         "spatialCoverage": {"@type": "Place", "name": "Spain"},
+         "creator": {"@type": "Organization", "name": "nochetropical.es"},
+         "isBasedOn": "https://opendata.aemet.es",
+         "license": "https://creativecommons.org/licenses/by/4.0/"}]},
+        ensure_ascii=False)
+    caja_n, caja_pen, caja_tot = _dc_caja(d)
+    vac = d.get("vacio", {"pares": 0, "temporadas": 0, "dobles": 0})
+    h = [_cabeza_en(site, titulo, desc, path, "/", "/og.png", schema,
+                    CSS_DOSCARAS + _CSS_ARTICULO)]
+    h.append(nav_en_html(site))
+    h.append(
+        '<header class="h"><div class="wrap">'
+        f'<nav class="crumb" aria-label="breadcrumb"><a href="{site}/en/">'
+        'NocheTropical.es</a> &#183; Best climate, year round</nav>'
+        f'<div class="kick">{per["temporadas"]} winters &#183; '
+        f'{per["estaciones"]} weather stations &#183; AEMET data</div>'
+        '<h1>The town that&#8217;s unbearable in August is the best place to be '
+        'in February</h1>'
+        '<p class="intro">Every winter-sun brochure quotes the same kind of '
+        'number: <i>&#8220;Malaga, 17&#160;&#176;C average in January.&#8221;</i> '
+        'An average of 17&#160;&#176;C is what you get from twenty mild days '
+        '&#8212; and it is also what you get from ten days at 24&#160;&#176;C and '
+        'ten at 10&#160;&#176;C. It does not tell you the one thing you need to '
+        'know: <b>how many nights you will be switching the heating on</b>.</p>'
+        '<p class="intro">So we counted. Not averages: nights below '
+        '10&#160;&#176;C, days warm enough to eat outside, rainy days, frost '
+        'nights &#8212; station by station, winter by winter. Then we crossed it '
+        'with the summer.</p>'
+        '</div></header>')
+
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>There is a trade-off, and it is steep</h2>'
+        f'<p>Across <b>{cor["n"]} weather stations</b> with both records, the '
+        f'correlation between winter heating nights and summer tropical nights is '
+        f'<b>{cor["rho"]}</b> (Spearman). In plain English: <b>the milder the '
+        f'winter, the worse the summer night &#8212; almost without '
+        f'exception</b>.</p>'
+        f'<div class="dc-fig">{_dc_svg(d)}'
+        '<p class="dc-leg"><span><i style="background:#d9744e"></i>Mainland &amp; '
+        'Balearics</span><span><i style="background:#c9a24a"></i>Canary Islands'
+        '</span><span><i style="background:#efe6d6"></i>Not beaten on both counts'
+        '</span></p></div>'
+        f'<p class="dc-cap">Each dot is one AEMET weather station, '
+        f'{per["temporadas"]} winters and up to ten summers. The dashed box is the '
+        f'climate everyone says they want: under {umb["techo_invierno"]} heating '
+        f'nights <i>and</i> under {CAJA_TROPICALES} tropical nights. '
+        f'<b>{caja_n} stations of {caja_tot} are inside it &#8212; and '
+        f'{"not one" if caja_pen == 0 else str(caja_pen)} of them '
+        f'{"is" if caja_pen != 1 else "is"} on the mainland or the '
+        f'Balearics.</b></p>'
+        '</div></section>')
+
+    # El cuadrante bueno, en números: 12 estaciones peninsulares tienen el
+    # invierno, 542 tienen el verano, y ninguna las dos.
+    pen_inv = sum(1 for x in d["nube"]
+                  if x[2] == 0 and x[0] <= umb["techo_invierno"])
+    pen_ver = sum(1 for x in d["nube"] if x[2] == 0 and x[1] <= CAJA_TROPICALES)
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>On the mainland you cannot have both. Not anywhere.</h2>'
+        f'<p>Of the stations on the mainland and the Balearics, <b>{pen_inv}</b> '
+        f'have a winter mild enough to stay under {umb["techo_invierno"]} heating '
+        f'nights. <b>{pen_ver}</b> have a summer quiet enough to stay under '
+        f'{CAJA_TROPICALES} tropical nights. <b>None has both.</b></p>'
+        f'<p>And that is not an artefact of taking the middle year. We checked '
+        f'each winter against the summer that followed it &#8212; '
+        f'<b>{vac["pares"]:,} station-seasons</b> across {vac["temporadas"]} '
+        f'years &#8212; and the count of places with both was '
+        f'<b>{vac["dobles"]}</b>. Every single year.</p>'
+        f'<p>The {caja_n} stations that do manage both are, every single one of '
+        f'them, in the Canary Islands. That is not a quirk of the data: it is '
+        f'what 28&#176; of latitude and an ocean with no seasons do to a '
+        f'thermometer.</p>'
+        '</div></section>')
+
+    front = " and ".join(
+        f'<b>{titular(f["estacion"])}</b> ({f["calefaccion"]} heating nights, '
+        f'{_n_en(f["tropicales"])} tropical)' for f in fr)
+    h.append(
+        '<section><div class="wrap">'
+        f'<h2>Out of {cor["n"]} stations, exactly {len(fr)} are not beaten</h2>'
+        '<p>A place is &#8220;not beaten&#8221; if no other station in Spain has '
+        '<i>both</i> a milder winter and a cooler summer than it. That is the '
+        'honest way to answer &#8220;where is the best climate in Spain&#8221;: '
+        'not a winner, but a set of options nobody improves on. That set has '
+        f'<b>{len(fr)} members</b>: {front}.</p>'
+        '<p>Everything else in the country &#8212; every costa, every city, every '
+        'mountain village &#8212; is beaten by one of those two on both counts at '
+        'once.</p>'
+        '<div class="dato">'
+        f'<div class="dcard"><div class="n">{cor["rho"]}</div><div class="l">'
+        'correlation between a mild winter and a hot summer night</div></div>'
+        f'<div class="dcard"><div class="n">{len(fr)} of {cor["n"]}</div>'
+        '<div class="l">stations nobody beats on both counts</div></div>'
+        f'<div class="dcard"><div class="n">{d["sin_helada"]}</div><div class="l">'
+        f'stations with no frost at all in {per["temporadas"]} winters</div></div>'
+        '</div></div></section>')
+
+    if uno:
+        h.append(
+            '<section><div class="wrap"><div class="dc-dest">'
+            '<div class="t">The one place that has both &#8212; and its catch</div>'
+            f'<p><b>{titular(uno["estacion"])}</b>, on the north-east of La Palma, '
+            f'{uno["altitud"]}&#160;m up: <b>{uno["calefaccion"]} nights below '
+            f'10&#160;&#176;C</b> in a typical winter, <b>'
+            f'{_n_en(uno["tropicales"])} tropical nights</b> a year, and <b>not a '
+            f'single frost</b> in {uno["temporadas"]} winters. Its worst winter '
+            f'needed the heating on {uno["calefaccion_peor"]} nights.</p>'
+            f'<p>The catch is in the same table: <b>{uno["lluvia"]} rainy days</b> '
+            f'per winter and only <b>{uno["terraza"]} days out of '
+            f'{per["dias_temporada"]}</b> warm enough to eat outside. This is the '
+            f'windward, cloud-catching side of the island. The climate is '
+            f'extraordinary; the weather is often grey. We publish both numbers '
+            f'because the second one is what a brochure would leave out.</p>'
+            '</div></div></section>')
+
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>Your favourite place, both ways round</h2>'
+        f'<p>Same stations, same method. <b>Heating nights</b> are nights below '
+        f'{umb["calefaccion"]:.0f}&#160;&#176;C between 1 November and 31 March '
+        f'(out of {per["dias_temporada"]}). <b>Terrace days</b> are days that reach '
+        f'{umb["terraza"]:.0f}&#160;&#176;C. <b>Tropical nights</b> are nights that '
+        f'never drop below 20&#160;&#176;C, counted over the whole calendar year, '
+        f'not just summer. Green means comfortable, orange means it costs you.</p>'
+        f'{_dc_tabla(d)}'
+        '<p class="dc-cap">Median of the series, never the mean: averaging a brutal '
+        'winter with a gentle one invents a mild one that never happened. Each row '
+        'names its weather station &#8212; where a city has several they can differ '
+        'a lot, and that difference is the urban heat island, not an error.</p>'
+        '</div></section>')
+
+    if w and v:
+        h.append(
+            '<section><div class="wrap">'
+            '<h2>What this actually means if you are choosing</h2>'
+            f'<p>Take the two ends. <b>{w["etiqueta"]}</b> asks you to heat the '
+            f'house on <b>{w["calefaccion"]} nights</b> a winter and gives you '
+            f'<b>{w["terraza"]} terrace days</b> &#8212; then hands you <b>'
+            f'{_n_en(w["tropicales"])} tropical nights</b> a year. '
+            f'<b>{v["etiqueta"]}</b> gives you <b>{_n_en(v["tropicales"])}</b> '
+            f'tropical nights &#8212; and asks for <b>{v["calefaccion"]} heating '
+            f'nights</b>, leaving you just <b>{v["terraza"]} terrace days</b>.</p>'
+            '<p>Neither is &#8220;the best climate in Spain&#8221;. They are two '
+            'different bargains, and the honest question is not which is better but '
+            '<b>which discomfort you mind less</b>: a cold evening you can fix with '
+            'a jumper and a radiator, or a hot night you cannot fix at all without '
+            'air conditioning.</p>'
+            f'<p>If it is the heat you mind, our <a href="{site}/en/coolest-towns-'
+            f'spain/">coolest towns to sleep in summer</a> ranks the places where '
+            f'the night still cools down. If it is the cold, <a href="{site}/en/'
+            f'spains-mildest-winters/">Spain&#8217;s mildest winters</a> and the '
+            f'<a href="{site}/en/frost-free-towns-spain/">frost-free towns</a> do '
+            f'the opposite.</p>'
+            '</div></section>')
+
+    h.append(
+        '<section><div class="wrap"><div class="verifica">'
+        '<div class="t">How this is made, and what it does not say</div>'
+        '<p><b>Source:</b> daily climate records from <a '
+        'href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET</a>, '
+        'Spain&#8217;s national weather service. Winter seasons run 1 November to '
+        '31 March and are labelled by the year they start; a season counts only if '
+        f'the station recorded at least 120 of its {per["dias_temporada"]} days. '
+        f'{per["temporadas"]} seasons, {per["ini"]} to {per["fin"]}. Summer figures '
+        'come from the same daily records over whole calendar years.</p>'
+        '<p><b>Why 1 November and not December:</b> because November and March are '
+        f'not a shoulder season. They are {d["hombro"]["cuota_dias"]}&#160;% of the '
+        f'winter days and carry {d["hombro"]["calefaccion"]}&#160;% of the heating '
+        f'nights &#8212; their fair share. Frost is different: only '
+        f'{d["hombro"]["heladas"]}&#160;% of it falls outside '
+        'December&#8211;February.</p>'
+        '<p><b>Nothing is interpolated.</b> Every figure comes from a real '
+        'thermometer with a name. We do not model the weather between stations and '
+        'we do not average stations together: if your town has no station, the '
+        'nearest one is a neighbour&#8217;s reading, not yours.</p>'
+        '<p><b>This is climate, not a forecast.</b> Nine winters describe what has '
+        'been happening, not what next January will do. And it says nothing about '
+        'anything other than temperature and rain &#8212; not wind, not humidity, '
+        'not what a place costs, not whether you will like it.</p>'
+        '</div>'
+        f'<p class="sigue">More: <a href="{site}/en/">all our English guides</a> '
+        f'&#183; <a href="{site}/en/coolest-towns-spain/">coolest towns in summer</a> '
+        f'&#183; <a href="{site}/en/spains-mildest-winters/">mildest winters</a> '
+        f'&#183; <a href="{site}/en/search/">search {per["estaciones"]}+ stations</a>.'
+        '</p></div></section>')
+    h.append(footer_en_html(site))
+    h.append("\n</body></html>")
+    return "".join(h)
 
 
 def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> str:
@@ -15183,9 +15592,21 @@ def main() -> int:
         (DOCS_DIR / "en" / "spains-mildest-winters").mkdir(parents=True, exist_ok=True)
         (DOCS_DIR / "en" / "spains-mildest-winters" / "index.html").write_text(
             inviernos_en, encoding="utf-8")
+    # El cruce invierno-verano: sale del JSON de analisis_invierno.py. Sin él
+    # no se publica, igual que los otros estudios.
+    caras_json = DOCS_DIR / "estudios" / "invierno-datos.json"
+    dos_caras = None
+    if caras_json.exists():
+        dos_caras = json.loads(caras_json.read_text(encoding="utf-8"))
+        destino = DOCS_DIR / "en" / "best-climate-in-spain-year-round"
+        destino.mkdir(parents=True, exist_ok=True)
+        (destino / "index.html").write_text(
+            construir_pagina_dos_caras(dos_caras, site), encoding="utf-8")
     print("   versión EN: /en/ + /en/coolest-towns-spain/"
           + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "")
-          + (" + /en/spains-mildest-winters/" if inviernos_en else "") + " generadas")
+          + (" + /en/spains-mildest-winters/" if inviernos_en else "")
+          + (" + /en/best-climate-in-spain-year-round/" if dos_caras else "")
+          + " generadas")
     # Hoteles en refugios climáticos (afiliación Booking) + sello por hotel.
     hoteles = cargar_hoteles(estaciones)
     for h in hoteles:  # complemento de datos: humedad/viento de su estación ref

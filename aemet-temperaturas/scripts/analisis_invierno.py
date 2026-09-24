@@ -55,6 +55,28 @@ DIAS_TEMPORADA = 151
 MIN_DIAS = 120       # ~80 % de cobertura para que la temporada cuente
 MIN_TEMPORADAS = 5   # para entrar en el resumen por estación
 
+# Los dos techos que definen "invierno vendible" y "verano dormible". 40 noches
+# de calefacción son menos de una de cada cuatro de la temporada; 5 noches
+# tropicales al año es el criterio con el que el sitio certifica refugios.
+TECHO_INVIERNO = 40
+TECHO_VERANO = 5.0
+CAJA_TROPICALES = 30  # techo de verano del cuadrante que dibuja la web
+BANDAS = [(0, 1), (1, 5), (5, 15), (15, 40), (40, 70), (70, 999)]
+
+
+def es_canaria(provincia: pd.Series) -> pd.Series:
+    """Canarias juega en otra liga y tapa a la península en todas las listas."""
+    return provincia.str.contains("PALMAS|CRUZ DE T|TENERIFE", case=False,
+                                  na=False)
+
+
+def mejor_de_banda(sub: pd.DataFrame, lo: float, hi: float):
+    """De las estaciones con ese techo de verano, la de invierno más suave."""
+    b = sub[(sub["tropicales"] > lo) & (sub["tropicales"] <= hi)]
+    if b.empty:
+        return None
+    return b.loc[b["calefaccion_mediana"].idxmin()]
+
 
 def rutas_diarios() -> list[Path]:
     """Los CSV diarios, EMPEZANDO por el rolling.
@@ -307,93 +329,244 @@ def informe(t: pd.DataFrame, r: pd.DataFrame) -> None:
               f"noches ({f['salto']:+d}) · mediana {f['calefaccion_mediana']:.0f}")
 
 
-def cruce_verano(r: pd.DataFrame) -> None:
-    """El hallazgo editorial: el mejor invierno es el peor verano.
+def serie_verano() -> "pd.DataFrame | None":
+    """Noches tropicales por estación, del AÑO COMPLETO y con mediana.
 
-    Cruza con el ranking nocturno de verano, que es la fuente de verdad de la
-    web. Si el cruce no está disponible, se dice y se sigue.
+    Se usa noches_por_anio.csv y no refugios_nocturnos_ranking.csv a propósito.
+    El ranking publica `noches_trop_anio`, que es la MEDIA de jun-ago: dos
+    defectos a la vez para lo que aquí se compara. Uno, la ventana jun-ago
+    descarta el 21,4 % de las noches tropicales del histórico (en Canarias, más
+    de la mitad), y este análisis mide el invierno de noviembre a marzo, así que
+    mezclar una ventana recortada con otra completa falsearía el intercambio.
+    Dos, es una media. Aquí va la mediana del año natural y el peor año.
     """
-    ruta = SALIDA / "refugios_nocturnos_ranking.csv"
+    ruta = SALIDA / "noches_por_anio.csv"
     if not ruta.exists():
-        print("\n  (sin refugios_nocturnos_ranking.csv: no se cruza con verano)")
-        return
-    v = pd.read_csv(ruta)
-    col_ind = next((c for c in v.columns if c.lower() in
-                    ("indicativo", "idema", "estacion")), None)
-    col_nt = next((c for c in v.columns
-                   if c.lower() in ("noches_trop_anio", "noches_tropicales")
-                   or "tropical" in c.lower()), None)
-    if not col_ind or not col_nt:
-        print(f"\n  (ranking de verano sin columnas esperadas: {list(v.columns)[:8]})")
-        return
-    j = r.merge(v[[col_ind, col_nt]].rename(
-        columns={col_ind: "indicativo", col_nt: "noches_tropicales"}),
-        on="indicativo", how="inner")
+        return None
+    a = pd.read_csv(ruta)
+    a = a[a["dias_con_dato"] >= 300]      # años incompletos fuera
+    if a.empty:
+        return None
+    g = a.groupby("indicativo")["noches_trop"]
+    return pd.DataFrame({
+        "indicativo": g.median().index,
+        "tropicales": g.median().values,
+        "tropicales_peor": g.max().values,
+        "anios_verano": g.size().values,
+    })
+
+
+def cruce_verano(r: pd.DataFrame) -> "pd.DataFrame | None":
+    """El hallazgo editorial: el mejor invierno es el peor verano."""
+    v = serie_verano()
+    if v is None:
+        print("\n  (sin noches_por_anio.csv: no se cruza con el verano)")
+        return None
+    j = r.merge(v, on="indicativo", how="inner")
+    j = j[j["anios_verano"] >= MIN_TEMPORADAS]
     if len(j) < 30:
         print(f"\n  (solo {len(j)} estaciones cruzadas: muy pocas)")
-        return
-    rho = j["calefaccion_mediana"].corr(j["noches_tropicales"], method="spearman")
+        return None
+    # Spearman a mano: rangos + Pearson. pandas lo hace con method="spearman",
+    # pero eso importa scipy, que NO está en requirements.txt. Añadir una
+    # dependencia entera para un coeficiente no compensa, y el workflow se
+    # caería en la primera ejecución.
+    rho = (j["calefaccion_mediana"].rank()).corr(j["tropicales"].rank())
     print("\n" + "=" * 72)
-    print("  EL CRUCE: invierno suave ↔ verano invivible")
+    print("  EL CRUCE: invierno suave <-> verano invivible")
     print("=" * 72)
-    print(f"    {len(j)} estaciones con las dos series.")
-    print(f"    Correlación de Spearman entre noches de calefacción y noches "
-          f"tropicales: {rho:+.2f}")
-    print("    (negativa = cuanto menos calefacción en invierno, más noches "
-          "tropicales en verano)")
-    print("\n  LAS DOS CARAS, EN PENÍNSULA Y BALEARES")
-    pen = j[~j["provincia"].str.contains("PALMAS|CRUZ DE T|TENERIFE",
-                                         case=False, na=False)]
+    print(f"    {len(j)} estaciones con las dos series completas.")
+    print(f"    Spearman entre noches de calefaccion y noches tropicales "
+          f"(ano natural): {rho:+.2f}")
+
+    print("\n  LAS DOS CARAS, EN PENINSULA Y BALEARES")
+    pen = j[~es_canaria(j["provincia"])]
     for _, f in pen.nsmallest(14, "calefaccion_mediana").iterrows():
         print(f"    {f['nombre'][:30]:30} {f['provincia'][:14]:14} "
               f"calef. {f['calefaccion_mediana']:3.0f}  ·  terraza "
               f"{f['terraza_mediana']:3.0f} d  ·  lluvia "
               f"{f['lluvia_mediana']:3.0f} d  ·  verano "
-              f"{f['noches_tropicales']:5.1f} trop.")
+              f"{f['tropicales']:5.1f} trop.")
 
     # LA PREGUNTA QUE VALE DINERO: ¿hay algún sitio con las dos cosas?
-    # Si la respuesta es "ninguno", esa frase es el titular y además es un
-    # dato verificable, no una opinión.
-    INV, VER = 40, 5.0
-    ambos = j[(j["calefaccion_mediana"] <= INV) &
-              (j["noches_tropicales"] <= VER)]
-    print(f"\n  ¿ALGÚN SITIO CON LAS DOS COSAS?")
-    print(f"    Criterio: <= {INV} noches de calefacción en invierno "
-          f"Y <= {VER:.0f} noches tropicales en verano.")
+    ambos = j[(j["calefaccion_mediana"] <= TECHO_INVIERNO) &
+              (j["tropicales"] <= TECHO_VERANO)]
+    print(f"\n  ¿ALGUN SITIO CON LAS DOS COSAS?")
+    print(f"    Criterio: <= {TECHO_INVIERNO} noches de calefaccion Y "
+          f"<= {TECHO_VERANO:.0f} noches tropicales al ano.")
     if ambos.empty:
         print(f"    NINGUNA de las {len(j)} estaciones lo cumple.")
     else:
         for _, f in ambos.sort_values("calefaccion_mediana").iterrows():
             print(f"    {f['nombre'][:30]:30} {f['provincia'][:14]:14} "
-                  f"{f['calefaccion_mediana']:3.0f} noches calef. · "
-                  f"{f['noches_tropicales']:.1f} trop. · terraza "
+                  f"{f['calefaccion_mediana']:3.0f} calef. · "
+                  f"{f['tropicales']:.1f} trop. · terraza "
                   f"{f['terraza_mediana']:.0f} d · lluvia "
-                  f"{f['lluvia_mediana']:.0f} d · {f['temporadas']} temporadas")
+                  f"{f['lluvia_mediana']:.0f} d")
 
-    # La frontera del compromiso: por cada BANDA de verano, el invierno más
-    # suave que se puede conseguir. En bandas y no acumulado, porque acumulando
-    # gana siempre la misma estación y no se ve la forma del intercambio.
-    # Separado península/Canarias: son dos mercados y dos climas.
     print("\n  LA FRONTERA DEL COMPROMISO: lo mejor que se puede pedir")
-    bandas = [(0, 1), (1, 5), (5, 15), (15, 40), (40, 70), (70, 999)]
-    for etq, sub in (("Península y Baleares",
-                      j[~j["provincia"].str.contains("PALMAS|CRUZ DE T|TENERIFE",
-                                                     case=False, na=False)]),
-                     ("Canarias",
-                      j[j["provincia"].str.contains("PALMAS|CRUZ DE T|TENERIFE",
-                                                    case=False, na=False)])):
+    for etq, sub in (("Peninsula y Baleares", j[~es_canaria(j["provincia"])]),
+                     ("Canarias", j[es_canaria(j["provincia"])])):
         print(f"\n    -- {etq}")
-        for lo, hi in bandas:
-            b = sub[(sub["noches_tropicales"] > lo) &
-                    (sub["noches_tropicales"] <= hi)]
-            if b.empty:
+        for lo, hi in BANDAS:
+            f = mejor_de_banda(sub, lo, hi)
+            if f is None:
                 continue
-            f = b.loc[b["calefaccion_mediana"].idxmin()]
             print(f"       verano {lo:3.0f}-{min(hi, 99):3.0f} trop.  ->  "
                   f"{f['nombre'][:27]:27} {f['provincia'][:12]:12} "
-                  f"{f['calefaccion_mediana']:3.0f} noches calef. · "
+                  f"{f['calefaccion_mediana']:3.0f} calef. · "
                   f"{f['terraza_mediana']:3.0f} d terraza · "
                   f"{f['lluvia_mediana']:3.0f} d lluvia")
+    return j
+
+
+# Las estaciones que un lector extranjero reconoce, agrupadas por el papel que
+# juegan en el relato. Nombre EXACTO del catálogo de AEMET: el sitio no
+# interpola ni promedia estaciones vecinas, así que cada fila publicada dice de
+# qué termómetro sale. Ojo con las ciudades que tienen varias: MÁLAGA (centro)
+# y MÁLAGA AEROPUERTO difieren en 46 noches de calefacción, que es el efecto de
+# isla de calor, no un error.
+CIUDADES_WEB = [
+    ("winter", "MÁLAGA", "Malaga"),
+    ("winter", "MARBELLA", "Marbella"),
+    ("winter", "ESTEPONA", "Estepona"),
+    ("winter", "NERJA", "Nerja"),
+    ("winter", "CÁDIZ", "Cadiz"),
+    ("winter", "ALMERÍA AEROPUERTO", "Almeria"),
+    ("winter", "ALACANT/ALICANTE", "Alicante"),
+    ("winter", "BENIDORM", "Benidorm"),
+    ("winter", "MURCIA", "Murcia"),
+    ("winter", "VALENCIA AEROPUERTO", "Valencia"),
+    ("winter", "PALMA, PUERTO", "Palma de Mallorca"),
+    ("winter", "BARCELONA, DRASSANES", "Barcelona"),
+    ("canary", "TENERIFE SUR AEROPUERTO", "Tenerife South"),
+    ("canary", "LANZAROTE AEROPUERTO", "Lanzarote"),
+    ("canary", "LAS PALMAS DE GRAN CANARIA, SAN CRISTOBAL", "Las Palmas"),
+    ("canary", "SAN ANDRÉS Y SAUCES", "San Andres y Sauces (La Palma)"),
+    ("summer", "A CORUÑA", "A Coruna"),
+    ("summer", "ESTACA DE BARES", "Estaca de Bares"),
+    ("summer", "SANTANDER", "Santander"),
+    ("summer", "DONOSTIA / SAN SEBASTIÁN, IGELDO", "San Sebastian"),
+    ("summer", "BILBAO AEROPUERTO", "Bilbao"),
+    ("summer", "VIGO", "Vigo"),
+    ("inland", "MADRID, RETIRO", "Madrid"),
+    ("inland", "SEVILLA AEROPUERTO", "Seville"),
+    ("inland", "GRANADA-CARTUJA", "Granada"),
+]
+
+
+def frontera_pareto(j: pd.DataFrame) -> pd.DataFrame:
+    """Las estaciones que nadie mejora en las DOS cosas a la vez.
+
+    Una estación está en la frontera si ninguna otra tiene a la vez menos
+    noches de calefacción y menos noches tropicales. Es la forma honesta de
+    responder «¿dónde está el mejor clima de España?»: no hay un ganador, hay
+    un conjunto de opciones no dominadas, y su tamaño es la noticia.
+    """
+    j = j.sort_values(["calefaccion_mediana", "tropicales"])
+    fila, mejor = [], float("inf")
+    for _, f in j.iterrows():
+        if f["tropicales"] < mejor:
+            fila.append(f)
+            mejor = f["tropicales"]
+    return pd.DataFrame(fila)
+
+
+def _fila_web(f) -> dict:
+    return {
+        "estacion": f["nombre"],
+        "provincia": f["provincia"],
+        "altitud": int(f["altitud"]) if pd.notna(f["altitud"]) else None,
+        "calefaccion": int(f["calefaccion_mediana"]),
+        "calefaccion_peor": int(f["calefaccion_peor"]),
+        "tropicales": float(f["tropicales"]),
+        "terraza": int(f["terraza_mediana"]),
+        "lluvia": int(f["lluvia_mediana"]),
+        "heladas": int(f["heladas_mediana"]),
+        "temporadas": int(f["temporadas"]),
+    }
+
+
+def vacio_temporada_a_temporada(t: pd.DataFrame) -> dict:
+    """¿El hueco peninsular está vacío CADA temporada, o solo en la mediana?
+
+    Es una comprobación distinta y más exigente: que ninguna estación tenga las
+    dos cosas en la mediana de nueve años no implica que no las tuviera en
+    algún año suelto. Se cruza cada temporada de invierno con el verano que la
+    sigue y se cuenta. Sin esto, la frase "y ha estado vacío todos los años"
+    sería una suposición.
+    """
+    a = pd.read_csv(SALIDA / "noches_por_anio.csv")
+    a = a[a["dias_con_dato"] >= 300]
+    pen = t[~es_canaria(t["provincia"])].copy()
+    # La temporada 2024-25 termina en marzo de 2025: le toca el verano de 2025.
+    pen["anio_verano"] = pen["temporada"].str[:4].astype(int) + 1
+    j = pen.merge(a[["indicativo", "anio", "noches_trop"]],
+                  left_on=["indicativo", "anio_verano"],
+                  right_on=["indicativo", "anio"])
+    if j.empty:
+        return {"temporadas": 0, "pares": 0, "dobles": 0}
+    dobles = j[(j["noches_calefaccion"] <= TECHO_INVIERNO) &
+               (j["noches_trop"] <= CAJA_TROPICALES)]
+    return {"temporadas": int(j["temporada"].nunique()),
+            "pares": len(j), "dobles": len(dobles)}
+
+
+def guardar_json_web(t: pd.DataFrame, j: pd.DataFrame, ruta: Path) -> None:
+    """Las cifras que consume la landing inglesa. Sin JSON no hay página."""
+    import json
+    temps = sorted(t["temporada"].unique())
+    fr = frontera_pareto(j)
+    ciudades = []
+    for papel, estacion, etiqueta in CIUDADES_WEB:
+        # .strip(): el catálogo de AEMET trae nombres con espacio final ("VIGO ").
+        m = j[j["nombre"].str.strip() == estacion]
+        if m.empty:
+            print(f"   (aviso: '{estacion}' no está en el cruce; se omite)")
+            continue
+        d = _fila_web(m.iloc[0])
+        d["papel"], d["etiqueta"] = papel, etiqueta
+        ciudades.append(d)
+    ambos = j[(j["calefaccion_mediana"] <= TECHO_INVIERNO) &
+              (j["tropicales"] <= TECHO_VERANO)]
+    tot = int(t["noches_calefaccion"].sum())
+    nuc = int(t["calefaccion_nucleo"].sum())
+    hel_t, hel_n = int(t["heladas"].sum()), int(t["heladas_nucleo"].sum())
+    datos = {
+        "periodo": {
+            "temporadas": len(temps), "ini": temps[0], "fin": temps[-1],
+            "estaciones": int(j["indicativo"].nunique()),
+            "dias_temporada": DIAS_TEMPORADA,
+        },
+        "umbrales": {
+            "calefaccion": CALEFACCION, "terraza": TERRAZA, "helada": HELADA,
+            "lluvia": LLUVIA, "techo_invierno": TECHO_INVIERNO,
+            "techo_verano": TECHO_VERANO,
+        },
+        "correlacion": {"rho": round(float(
+            j["calefaccion_mediana"].rank().corr(j["tropicales"].rank())), 2),
+            "n": len(j)},
+        "frontera": [_fila_web(f) for _, f in fr.iterrows()],
+        "ambos": [_fila_web(f) for _, f in
+                  ambos.sort_values("calefaccion_mediana").iterrows()],
+        "ciudades": ciudades,
+        # La nube entera, redondeada: es lo que hace ver de un vistazo que el
+        # cuadrante bueno está vacío. 828 puntos pesan ~12 KB.
+        "nube": [[int(f["calefaccion_mediana"]), round(float(f["tropicales"]), 1),
+                  1 if es_canaria(pd.Series([f["provincia"]])).iloc[0] else 0]
+                 for _, f in j.iterrows()],
+        "sin_helada": int((j["heladas_peor"] == 0).sum()),
+        "vacio": vacio_temporada_a_temporada(t),
+        "hombro": {
+            "cuota_dias": round(100 * 61 / DIAS_TEMPORADA, 1),
+            "calefaccion": round(100 * (tot - nuc) / tot, 1),
+            "heladas": round(100 * (hel_t - hel_n) / hel_t, 1),
+        },
+        "fuente": "AEMET OpenData · valores climatológicos diarios",
+    }
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    ruta.write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    print(f"-> {ruta}  ({ruta.stat().st_size // 1024} KB, datos para la landing)")
 
 
 def main() -> None:
@@ -406,7 +579,10 @@ def main() -> None:
     t.to_csv(SALIDA / "invierno_por_temporada.csv", index=False)
     r.to_csv(SALIDA / "invierno_por_estacion.csv", index=False)
     informe(t, r)
-    cruce_verano(r)
+    j = cruce_verano(r)
+    if j is not None:
+        guardar_json_web(t, j, ROOT.parent / "docs" / "estudios" /
+                         "invierno-datos.json")
     print(f"\n-> analisis/invierno_por_temporada.csv  ({len(t)} filas)")
     print(f"-> analisis/invierno_por_estacion.csv   ({len(r)} filas)")
 

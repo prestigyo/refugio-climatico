@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-24",
- "total": 847,
- "tropicales": 138,
- "ecuatoriales": 25,
+ "fecha": "2026-09-25",
+ "total": 846,
+ "tropicales": 139,
+ "ecuatoriales": 31,
  "peor": {
   "id": "C668V",
   "nombre": "Agaete - Suerte Alta",
-  "min": 28.4,
+  "min": 30.9,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "9016X",
-  "nombre": "Cubillo de Ebro",
-  "min": 3.5,
-  "prov": "Cantabria"
+  "id": "1735X",
+  "nombre": "Xinzo de Limia",
+  "min": 1.6,
+  "prov": "Ourense"
  },
  "top_calor": [
   {
    "id": "C668V",
    "nombre": "Agaete - Suerte Alta",
-   "min": 28.4,
+   "min": 30.9,
    "prov": "Las Palmas"
   },
   {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 27.5,
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 30.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 27.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C628B",
-   "nombre": "San Nicolas T.-Tasarte/Coparlita",
-   "min": 26.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 26.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C018J",
-   "nombre": "Tias-las Vegas",
-   "min": 26.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C117Z",
-   "nombre": "Tijarafe-Mirador Time",
-   "min": 26.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C648N",
-   "nombre": "Telde-Centro Forestal Doramas",
-   "min": 26.4,
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
+   "min": 29.4,
    "prov": "Las Palmas"
   },
   {
    "id": "C648C",
    "nombre": "Agüimes-el Milano",
-   "min": 26.2,
+   "min": 29.4,
    "prov": "Las Palmas"
   },
   {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 26.0,
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 28.8,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 28.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C628B",
+   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "min": 28.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 27.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
+   "min": 27.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C919K",
+   "nombre": "Tacorón-Lapillas-Tortuga",
+   "min": 27.5,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 3.5,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 3.6,
-   "prov": "Cantabria"
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 1.6,
+   "prov": "Ourense"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 4.1,
+   "min": 2.8,
    "prov": "Zamora"
   },
   {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": 4.3,
-   "prov": "Palencia"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 4.7,
-   "prov": "León"
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 3.2,
+   "prov": "Ourense"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 5.0,
+   "min": 3.9,
    "prov": "Segovia"
   },
   {
-   "id": "3319D",
-   "nombre": "Puerto el Pico",
-   "min": 5.0,
-   "prov": "Ávila"
-  },
-  {
-   "id": "9051",
-   "nombre": "Medina de Pomar",
-   "min": 6.0,
-   "prov": "Burgos"
-  },
-  {
-   "id": "2624C",
-   "nombre": "Riaño-Ermita Quintanilla",
-   "min": 6.3,
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 4.6,
    "prov": "León"
   },
   {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 6.4,
-   "prov": "Lleida"
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 4.7,
+   "prov": "Soria"
+  },
+  {
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": 4.7,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 5.4,
+   "prov": "Soria"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 5.5,
+   "prov": "Soria"
+  },
+  {
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": 5.9,
+   "prov": "Palencia"
   }
  ]
 }

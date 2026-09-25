@@ -61,6 +61,17 @@ MIN_TEMPORADAS = 5   # para entrar en el resumen por estación
 TECHO_INVIERNO = 40
 TECHO_VERANO = 5.0
 CAJA_TROPICALES = 30  # techo de verano del cuadrante que dibuja la web
+
+# EL SELLO "MILD WINTER". Dos condiciones, las dos sobre el frío, que es lo
+# único que el sello promete: ni una helada en NINGUNA temporada medida, y como
+# mucho 40 noches de calefacción (menos de una de cada cuatro de la temporada).
+#
+# Se dejó fuera un mínimo de días de terraza, que era la primera idea: con
+# terraza>=90 el sello se lo llevaban 48 sitios y 45 eran canarios, y Málaga
+# (85 días) quedaba fuera por cinco días mientras Marbella (90) entraba. Un
+# umbral que parte por la mitad el mismo paseo marítimo no certifica nada.
+# Así son 60, con 11 en península: justo la costa del winter sun.
+SELLO_CALEFACCION = 40
 BANDAS = [(0, 1), (1, 5), (5, 15), (15, 40), (40, 70), (70, 999)]
 
 
@@ -512,6 +523,88 @@ def vacio_temporada_a_temporada(t: pd.DataFrame) -> dict:
             "pares": len(j), "dobles": len(dobles)}
 
 
+def sellos_mild_winter(j: pd.DataFrame) -> list:
+    """Las estaciones que se llevan el sello, ordenadas por invierno.
+
+    El criterio va en el JSON junto a la lista para que la página lo publique
+    desde el dato y no desde un texto escrito a mano: si algún día se cambia el
+    umbral, la definición que lee el lector cambia con él.
+    """
+    ok = j[(j["heladas_peor"] == 0) &
+           (j["calefaccion_mediana"] <= SELLO_CALEFACCION)]
+    ok = ok.sort_values(["calefaccion_mediana", "terraza_mediana"],
+                        ascending=[True, False])
+    return [_fila_web(f) | {"canaria": bool(
+        es_canaria(pd.Series([f["provincia"]])).iloc[0])}
+        for _, f in ok.iterrows()]
+
+
+def guardar_json_estaciones(j: pd.DataFrame, ruta: Path) -> None:
+    """Las 828 estaciones enteras, para la herramienta de la web.
+
+    Formato de columnas + filas en vez de un objeto por estación: con 828
+    filas, repetir las claves multiplicaría el peso por tres para no decir
+    nada. Así el fichero baja de 60 KB y se carga bajo demanda, solo cuando
+    alguien abre la herramienta.
+
+    Nombres en titular ("Naut Aran, Arties") y no en mayúsculas de AEMET: la
+    página es para leer, no un volcado.
+    """
+    import json
+    import re
+
+    def titular(n: str) -> str:
+        """Copia mínima de generar_calculadora.titular(), para no importarlo.
+
+        Importarlo aquí ataría este análisis al generador de la web, y el
+        acoplamiento va en la dirección contraria: es el generador quien lee
+        lo que escriben los análisis.
+        """
+        n = re.sub(r"\s+", " ", n.strip())
+        menores = {"de", "del", "la", "las", "el", "los", "y", "a", "en"}
+        salida, primera = [], True
+        for trozo in re.split(r"([ ,/()-])", n):
+            if trozo in " ,/()-":
+                salida.append(trozo)
+                continue
+            if not trozo:
+                continue
+            bajo = trozo.lower()
+            salida.append(bajo if (bajo in menores and not primera)
+                          else bajo.capitalize())
+            primera = False
+        return "".join(salida)
+
+    filas = []
+    for _, f in j.sort_values("calefaccion_mediana").iterrows():
+        filas.append([
+            titular(f["nombre"]),
+            titular(f["provincia"]),
+            int(f["altitud"]) if pd.notna(f["altitud"]) else 0,
+            int(f["calefaccion_mediana"]),      # noches de calefacción
+            int(f["terraza_mediana"]),          # días de terraza
+            int(f["lluvia_mediana"]),           # días de lluvia
+            int(f["heladas_mediana"]),          # heladas
+            round(float(f["tropicales"]), 1),   # noches tropicales/año
+            int(f["calefaccion_peor"]),         # el peor invierno de la serie
+            int(f["temporadas_sin_helada"]),    # temporadas sin una helada
+            1 if es_canaria(pd.Series([f["provincia"]])).iloc[0] else 0,
+        ])
+    datos = {
+        "cols": ["name", "province", "alt", "heat", "terrace", "rain",
+                 "frost", "tropical", "heat_worst", "no_frost_seasons",
+                 "canary"],
+        "n": len(filas),
+        "source": "AEMET OpenData · daily climate records",
+        "rows": filas,
+    }
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    ruta.write_text(json.dumps(datos, ensure_ascii=False,
+                               separators=(",", ":")), encoding="utf-8")
+    print(f"-> {ruta}  ({ruta.stat().st_size // 1024} KB, "
+          f"{len(filas)} estaciones para la herramienta)")
+
+
 def guardar_json_web(t: pd.DataFrame, j: pd.DataFrame, ruta: Path) -> None:
     """Las cifras que consume la landing inglesa. Sin JSON no hay página."""
     import json
@@ -557,6 +650,10 @@ def guardar_json_web(t: pd.DataFrame, j: pd.DataFrame, ruta: Path) -> None:
                  for _, f in j.iterrows()],
         "sin_helada": int((j["heladas_peor"] == 0).sum()),
         "vacio": vacio_temporada_a_temporada(t),
+        "sello": {
+            "calefaccion_max": SELLO_CALEFACCION,
+            "lista": sellos_mild_winter(j),
+        },
         "hombro": {
             "cuota_dias": round(100 * 61 / DIAS_TEMPORADA, 1),
             "calefaccion": round(100 * (tot - nuc) / tot, 1),
@@ -583,6 +680,8 @@ def main() -> None:
     if j is not None:
         guardar_json_web(t, j, ROOT.parent / "docs" / "estudios" /
                          "invierno-datos.json")
+        guardar_json_estaciones(j, ROOT.parent / "docs" / "en" /
+                                "winter-stations.json")
     print(f"\n-> analisis/invierno_por_temporada.csv  ({len(t)} filas)")
     print(f"-> analisis/invierno_por_estacion.csv   ({len(r)} filas)")
 

@@ -1,12 +1,12 @@
 {
  "fecha": "2026-09-25",
- "total": 846,
- "tropicales": 139,
- "ecuatoriales": 31,
+ "total": 847,
+ "tropicales": 141,
+ "ecuatoriales": 33,
  "peor": {
-  "id": "C668V",
-  "nombre": "Agaete - Suerte Alta",
-  "min": 30.9,
+  "id": "C639M",
+  "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+  "min": 31.9,
   "prov": "Las Palmas"
  },
  "mejor": {
@@ -16,6 +16,12 @@
   "prov": "Ourense"
  },
  "top_calor": [
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 31.9,
+   "prov": "Las Palmas"
+  },
   {
    "id": "C668V",
    "nombre": "Agaete - Suerte Alta",
@@ -31,7 +37,7 @@
   {
    "id": "C639U",
    "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 29.4,
+   "min": 30.0,
    "prov": "Las Palmas"
   },
   {
@@ -47,10 +53,10 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 28.6,
-   "prov": "Las Palmas"
+   "id": "C429I",
+   "nombre": "Tenerife/Sur",
+   "min": 28.2,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C628B",
@@ -67,14 +73,8 @@
   {
    "id": "C649I",
    "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 27.5,
+   "min": 27.6,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C919K",
-   "nombre": "Tacorón-Lapillas-Tortuga",
-   "min": 27.5,
-   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [

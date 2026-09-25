@@ -20,8 +20,16 @@ on:
 permissions:
   contents: write
 
+# GRUPO PROPIO, no el de commit-docs. GitHub solo guarda UNA ejecución en cola
+# por grupo de concurrencia: cuando llega otra, la que esperaba se CANCELA, aunque
+# cancel-in-progress sea false. Con commit-docs —donde se apilan construir-web,
+# los GIFs, el parte y el calendario— este workflow se quedaba en la cola y moría
+# sin llegar a arrancar (cero jobs, cancelado a los 21 s). Le pasó el 2026-09-24 y
+# dejó la landing sin publicar: sin su JSON, el generador la omite.
+# Solaparse no cuesta nada: escribe un fichero que no toca nadie más y el push va
+# protegido por el reintento con pull --rebase --autostash de abajo.
 concurrency:
-  group: commit-docs
+  group: estudio-horario
   cancel-in-progress: false
 
 jobs:

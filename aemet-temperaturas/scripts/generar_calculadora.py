@@ -12194,7 +12194,7 @@ def construir_pagina_dos_caras(d: dict, site: str) -> str:
          "license": "https://creativecommons.org/licenses/by/4.0/"}]},
         ensure_ascii=False)
     caja_n, caja_pen, caja_tot = _dc_caja(d)
-    vac = d.get("vacio", {"pares": 0, "temporadas": 0, "dobles": 0})
+    vac = d.get("vacio") or {}
     h = [_cabeza_en(site, titulo, desc, path, "/", "/og.png", schema,
                     CSS_DOSCARAS + _CSS_ARTICULO)]
     h.append(nav_en_html(site))
@@ -12253,11 +12253,17 @@ def construir_pagina_dos_caras(d: dict, site: str) -> str:
         f'have a winter mild enough to stay under {umb["techo_invierno"]} heating '
         f'nights. <b>{pen_ver}</b> have a summer quiet enough to stay under '
         f'{CAJA_TROPICALES} tropical nights. <b>None has both.</b></p>'
-        f'<p>And that is not an artefact of taking the middle year. We checked '
-        f'each winter against the summer that followed it &#8212; '
-        f'<b>{vac["pares"]:,} station-seasons</b> across {vac["temporadas"]} '
-        f'years &#8212; and the count of places with both was '
-        f'<b>{vac["dobles"]}</b>. Every single year.</p>'
+        # Un dato que falta NO es un cero. Con un valor por defecto esta frase
+        # salía publicada como «0 station-seasons across 0 years», una
+        # afirmación falsa con aspecto de hallazgo. O está la comprobación, o
+        # no está el párrafo.
+        + (f'<p>And that is not an artefact of taking the middle year. We '
+           f'checked each winter against the summer that followed it &#8212; '
+           f'<b>{vac["pares"]:,} station-seasons</b> across '
+           f'{vac["temporadas"]} years &#8212; and the count of places with '
+           f'both was <b>{vac["dobles"]}</b>. Every single year.</p>'
+           if vac.get("pares") else "")
+        +
         f'<p>The {caja_n} stations that do manage both are, every single one of '
         f'them, in the Canary Islands. That is not a quirk of the data: it is '
         f'what 28&#176; of latitude and an ocean with no seasons do to a '
@@ -16362,6 +16368,7 @@ def main() -> int:
     # no se publica, igual que los otros estudios.
     caras_json = DOCS_DIR / "estudios" / "invierno-datos.json"
     dos_caras = None
+    _sellos = None
     if caras_json.exists():
         dos_caras = json.loads(caras_json.read_text(encoding="utf-8"))
         destino = DOCS_DIR / "en" / "best-climate-in-spain-year-round"
@@ -16375,28 +16382,41 @@ def main() -> int:
         # El sello Mild Winter: índice + una página de verificación y un SVG
         # por sitio. El SVG va a docs/badges/ con prefijo propio para no
         # chocar con los sellos de verano (pueblo-<slug>.svg).
-        mw_dir = DOCS_DIR / "en" / "mild-winter"
-        mw_dir.mkdir(parents=True, exist_ok=True)
-        (mw_dir / "index.html").write_text(
-            construir_indice_mild(dos_caras, site), encoding="utf-8")
-        badges = DOCS_DIR / "badges"
-        badges.mkdir(parents=True, exist_ok=True)
-        for _e in dos_caras["sello"]["lista"]:
-            _sl = slug(_e["estacion"])
-            (badges / f"mild-winter-{_sl}.svg").write_text(
-                sello_mild_svg(_e, site), encoding="utf-8")
-            _c = mw_dir / _sl
-            _c.mkdir(exist_ok=True)
-            (_c / "index.html").write_text(
-                construir_pagina_mild(_e, dos_caras, site), encoding="utf-8")
-        print(f"   sello Mild Winter: {len(dos_caras['sello']['lista'])} "
-              f"lugares (página + SVG) + índice")
+        #
+        # El .get() NO es paranoia: la lista del sello la añadió una versión
+        # posterior de analisis_invierno.py, así que un invierno-datos.json
+        # generado antes no la trae. La primera versión de esto hacía
+        # dos_caras["sello"] y reventaba el build ENTERO con KeyError —404 en
+        # las 400 páginas del sitio por una sección nueva—. Aquí se omite lo
+        # nuevo y se dice qué hay que ejecutar, igual que hacen los demás
+        # estudios cuando les falta su JSON.
+        _sellos = (dos_caras.get("sello") or {}).get("lista")
+        if _sellos:
+            mw_dir = DOCS_DIR / "en" / "mild-winter"
+            mw_dir.mkdir(parents=True, exist_ok=True)
+            (mw_dir / "index.html").write_text(
+                construir_indice_mild(dos_caras, site), encoding="utf-8")
+            badges = DOCS_DIR / "badges"
+            badges.mkdir(parents=True, exist_ok=True)
+            for _e in _sellos:
+                _sl = slug(_e["estacion"])
+                (badges / f"mild-winter-{_sl}.svg").write_text(
+                    sello_mild_svg(_e, site), encoding="utf-8")
+                _c = mw_dir / _sl
+                _c.mkdir(exist_ok=True)
+                (_c / "index.html").write_text(
+                    construir_pagina_mild(_e, dos_caras, site), encoding="utf-8")
+            print(f"   sello Mild Winter: {len(_sellos)} lugares "
+                  f"(página + SVG) + índice")
+        else:
+            print("   sello Mild Winter: el JSON de invierno no trae la lista "
+                  "(ejecuta analisis_invierno.py); se omite")
     print("   versión EN: /en/ + /en/coolest-towns-spain/"
           + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "")
           + (" + /en/spains-mildest-winters/" if inviernos_en else "")
           + (" + /en/best-climate-in-spain-year-round/" if dos_caras else "")
           + (" + /en/find-your-winter-address/" if dos_caras else "")
-          + (" + /en/mild-winter/" if dos_caras else "")
+          + (" + /en/mild-winter/" if _sellos else "")
           + " generadas")
     # Hoteles en refugios climáticos (afiliación Booking) + sello por hotel.
     hoteles = cargar_hoteles(estaciones)

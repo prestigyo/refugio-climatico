@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-25",
- "total": 847,
- "tropicales": 141,
- "ecuatoriales": 33,
+ "fecha": "2026-09-26",
+ "total": 855,
+ "tropicales": 162,
+ "ecuatoriales": 27,
  "peor": {
-  "id": "C639M",
-  "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-  "min": 31.9,
-  "prov": "Las Palmas"
+  "id": "C449F",
+  "nombre": "Anaga-Col. Rep. Argentina",
+  "min": 27.5,
+  "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
-  "id": "1735X",
-  "nombre": "Xinzo de Limia",
-  "min": 1.6,
-  "prov": "Ourense"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": 2.4,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 31.9,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C668V",
-   "nombre": "Agaete - Suerte Alta",
-   "min": 30.9,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 30.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C639U",
-   "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 30.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 29.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 28.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C429I",
-   "nombre": "Tenerife/Sur",
-   "min": 28.2,
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 27.5,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C919K",
+   "nombre": "Tacorón-Lapillas-Tortuga",
+   "min": 27.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 27.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C648N",
+   "nombre": "Telde-Centro Forestal Doramas",
+   "min": 26.9,
+   "prov": "Las Palmas"
   },
   {
    "id": "C628B",
    "nombre": "San Nicolas T.-Tasarte/Coparlita",
-   "min": 28.2,
+   "min": 26.8,
    "prov": "Las Palmas"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 27.7,
+   "id": "C419X",
+   "nombre": "Adeje-Caldera B",
+   "min": 26.4,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C668V",
+   "nombre": "Agaete - Suerte Alta",
+   "min": 26.3,
    "prov": "Las Palmas"
   },
   {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 27.6,
-   "prov": "Las Palmas"
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 26.2,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 26.1,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C939T",
+   "nombre": "Sabinosa-Balneario",
+   "min": 26.1,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 1.6,
-   "prov": "Ourense"
-  },
-  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 2.8,
+   "min": 2.4,
    "prov": "Zamora"
-  },
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 3.2,
-   "prov": "Ourense"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 3.9,
-   "prov": "Segovia"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 4.6,
+   "min": 3.1,
    "prov": "León"
   },
   {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 4.7,
-   "prov": "Soria"
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 3.3,
+   "prov": "Zamora"
   },
   {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 4.7,
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 3.8,
+   "prov": "Segovia"
+  },
+  {
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 3.9,
    "prov": "Cantabria"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 5.4,
-   "prov": "Soria"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": 4.5,
+   "prov": "Ávila"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 5.5,
-   "prov": "Soria"
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 5.3,
+   "prov": "Salamanca"
   },
   {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
+   "id": "1696O",
+   "nombre": "Beariz",
    "min": 5.9,
-   "prov": "Palencia"
+   "prov": "Ourense"
+  },
+  {
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 6.0,
+   "prov": "Ourense"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 6.2,
+   "prov": "Lleida"
   }
  ]
 }

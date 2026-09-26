@@ -16451,16 +16451,28 @@ def main() -> int:
     caras_json = DOCS_DIR / "estudios" / "invierno-datos.json"
     dos_caras = None
     _sellos = None
+    _hay_tool = False
     if caras_json.exists():
         dos_caras = json.loads(caras_json.read_text(encoding="utf-8"))
         destino = DOCS_DIR / "en" / "best-climate-in-spain-year-round"
         destino.mkdir(parents=True, exist_ok=True)
         (destino / "index.html").write_text(
             construir_pagina_dos_caras(dos_caras, site), encoding="utf-8")
-        herramienta = DOCS_DIR / "en" / "find-your-winter-address"
-        herramienta.mkdir(parents=True, exist_ok=True)
-        (herramienta / "index.html").write_text(
-            construir_pagina_winter_tool(dos_caras, site), encoding="utf-8")
+        # La herramienta NO se publica sin su fichero de datos. Una pagina
+        # cuya razon de ser es filtrar 828 estaciones, servida sin las 828,
+        # solo sabe decir "the station data could not be loaded": es peor que
+        # un 404, porque parece que el sitio esta roto. Lo escribe
+        # analisis_invierno.py, igual que el JSON del estudio.
+        if (DOCS_DIR / "en" / "winter-stations.json").exists():
+            herramienta = DOCS_DIR / "en" / "find-your-winter-address"
+            herramienta.mkdir(parents=True, exist_ok=True)
+            (herramienta / "index.html").write_text(
+                construir_pagina_winter_tool(dos_caras, site), encoding="utf-8")
+            _hay_tool = True
+        else:
+            _hay_tool = False
+            print("   herramienta de invierno: falta en/winter-stations.json "
+                  "(ejecuta analisis_invierno.py); se omite")
         # El sello Mild Winter: índice + una página de verificación y un SVG
         # por sitio. El SVG va a docs/badges/ con prefijo propio para no
         # chocar con los sellos de verano (pueblo-<slug>.svg).
@@ -16497,7 +16509,7 @@ def main() -> int:
           + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "")
           + (" + /en/spains-mildest-winters/" if inviernos_en else "")
           + (" + /en/best-climate-in-spain-year-round/" if dos_caras else "")
-          + (" + /en/find-your-winter-address/" if dos_caras else "")
+          + (" + /en/find-your-winter-address/" if _hay_tool else "")
           + (" + /en/mild-winter/" if _sellos else "")
           + " generadas")
     # Hoteles en refugios climáticos (afiliación Booking) + sello por hotel.

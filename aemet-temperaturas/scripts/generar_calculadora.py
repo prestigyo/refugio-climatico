@@ -11424,6 +11424,16 @@ CSS_WINTER_TOOL = (
     'background:transparent}'
     '.wt-val{font-family:var(--fm);font-size:14px;color:var(--paper);'
     'text-align:right;font-variant-numeric:tabular-nums}'
+    '.wt-como{font-size:13.5px;color:var(--muted);margin:0 0 6px;'
+    'line-height:1.6}'
+    '.wt-vivo{font-size:15px;line-height:1.55;margin:14px 0 4px;'
+    'padding:11px 14px;border-radius:10px;background:#12100c;'
+    'border:1px solid var(--line)}'
+    '.wt-cuesta{display:block;margin-top:7px;font-size:13px;'
+    'color:var(--muted)}'
+    '.wt-vivo b{color:var(--teal);font-family:var(--fd);'
+    'font-weight:700;font-size:17px}'
+    '.wt-vivo.cero b{color:var(--teja2)}'
     '.wt-chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 2px}'
     '.wt-chips a{text-decoration:none}'
     '.wt-chips button,.wt-chips a{background:transparent;border:1px solid var(--line);'
@@ -11519,6 +11529,71 @@ JS_WINTER_TOOL = """<script>
     return REG === "all" || (REG === "canary" ? f[10] === 1 : f[10] === 0);
   }
 
+  // EL AVISO VIVO, pegado a los deslizadores. Un contador NO es una
+  // respuesta: quien abre esto pregunta "¿a donde voy?". Asi que nombra el
+  // sitio que encabeza la lista con sus cuatro cifras y, cuando ese primero
+  // es canario, tambien el mejor de peninsula: Canarias copa todas las listas
+  // y un lector que no se plantea mudarse a Fuerteventura se quedaba sin
+  // respuesta util.
+  var ETQ2 = {heat:"heating nights", terrace:"terrace days",
+              rain:"rainy days", tropical:"tropical nights",
+              frost:"frost nights"};
+
+  function ficha(f){
+    return "<b>" + f[0] + "</b> (" + f[1] + "): " + f[3]
+      + " heating nights, " + f[4] + " terrace days, " + f[5]
+      + " rainy days, " + f[7] + " tropical nights";
+  }
+
+  // Cual de los limites puestos es el que mas corta: se cuenta cuantos
+  // sobrevivirian si ese se soltara.
+  function elQueMasCuesta(base, nOk){
+    var peor = null, peorN = 0;
+    CAMPOS.filter(function(c){ return c.val !== c.def; }).forEach(function(c){
+      var n = base.filter(function(f){
+        return CAMPOS.every(function(o){ return o === c || cumple(f, o); });
+      }).length - nOk;
+      if (n > peorN) { peorN = n; peor = c; }
+    });
+    return peor ? "<span class='wt-cuesta'>Costing you most: " + ETQ2[peor.k]
+      + " &#8212; relaxing that alone would bring back " + peorN
+      + " places.</span>" : "";
+  }
+
+  function pintaAviso(base, ok){
+    var vivo = document.getElementById("wt-vivo");
+    if (!vivo) return;
+    if (!CAMPOS.some(function(c){ return c.val !== c.def; })) {
+      vivo.className = "wt-vivo";
+      vivo.innerHTML = "All <b>" + base.length + "</b> measured places are on "
+        + "the list. Move any slider to start taking places off it.";
+      return;
+    }
+    var cuesta = elQueMasCuesta(base, ok.length);
+    // Sin resultados NO hay sitio que nombrar: ok[0] es undefined y la ficha
+    // reventaba el repintado entero, dejando los deslizadores mudos.
+    if (!ok.length) {
+      vivo.className = "wt-vivo cero";
+      vivo.innerHTML = "<b>No place in Spain</b> clears all five at once. "
+        + "Below you can see which ones come closest, and by how much."
+        + cuesta;
+      return;
+    }
+    var pen = null;
+    if (ok[0][10] === 1 && REG === "all") {
+      for (var k = 0; k < ok.length; k++) {
+        if (ok[k][10] === 0) { pen = ok[k]; break; }
+      }
+    }
+    vivo.className = "wt-vivo";
+    vivo.innerHTML = "<b>" + ok.length + "</b> of " + base.length
+      + " places clear your limits. Top of the list: " + ficha(ok[0]) + "."
+      + (pen ? " Best on the mainland: <b>" + pen[0] + "</b> (" + pen[1]
+               + "), " + pen[3] + " heating nights and " + pen[4]
+               + " terrace days." : "")
+      + cuesta;
+  }
+
   function pinta(){
     if (!FILAS) return;
     var base = FILAS.filter(region);
@@ -11526,6 +11601,7 @@ JS_WINTER_TOOL = """<script>
     var col = {heat:3, terrace:4, rain:5, tropical:7, alt:2}[ORDEN];
     var inv = (ORDEN === "terrace");   // más días de terraza es mejor
     ok.sort(function(a, b){ return inv ? b[col] - a[col] : a[col] - b[col]; });
+    pintaAviso(base, ok);
     $("#wt-count").innerHTML = ok.length
       ? "<b>" + ok.length + "</b> of " + base.length + " places match"
       : "<b>Nothing</b> matches all five";
@@ -11742,7 +11818,13 @@ def construir_pagina_winter_tool(d: dict, site: str) -> str:
     h.append(
         '<section><div class="wrap"><div class="wt">'
         '<div class="wt-ctrl">'
+        '<p class="wt-como">This is a filter, not a ranking. All '
+        f'{per["estaciones"]} measured places start on the list; every limit '
+        'you set takes some of them off it.</p>'
         f'{filas}'
+        '<p class="wt-vivo" id="wt-vivo" aria-live="polite">'
+        'Every measured place in Spain is on the list right now. '
+        'Each slider you move takes some out.</p>'
         '<div class="wt-chips" role="group" aria-label="Region">'
         '<button type="button" data-reg="all" aria-pressed="true">All of Spain</button>'
         '<button type="button" data-reg="mainland" aria-pressed="false">Mainland &amp; Balearics</button>'

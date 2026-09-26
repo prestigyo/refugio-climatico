@@ -1,6 +1,6 @@
 {
  "fecha": "2026-09-26",
- "total": 855,
+ "total": 854,
  "tropicales": 162,
  "ecuatoriales": 27,
  "peor": {
@@ -19,12 +19,6 @@
   {
    "id": "C449F",
    "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 27.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C919K",
-   "nombre": "Tacorón-Lapillas-Tortuga",
    "min": 27.5,
    "prov": "Santa Cruz de Tenerife"
   },
@@ -75,6 +69,12 @@
    "nombre": "Sabinosa-Balneario",
    "min": 26.1,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 26.0,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [

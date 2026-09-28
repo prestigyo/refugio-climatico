@@ -1,10 +1,10 @@
 {
  "periodo": {
   "ini": "2026-08-29",
-  "fin": "2026-09-23",
-  "noches": 23,
-  "pares": 17495,
-  "estaciones": 814
+  "fin": "2026-09-28",
+  "noches": 28,
+  "pares": 21295,
+  "estaciones": 815
  },
  "ventana": {
   "inicio": 23,
@@ -13,7 +13,7 @@
  "minimas": [
   {
    "min": 6,
-   "n": 194,
+   "n": 200,
    "peor": 8,
    "mejor": 9,
    "mediana": 9.0,
@@ -22,25 +22,25 @@
   },
   {
    "min": 7,
-   "n": 231,
+   "n": 258,
    "peor": 8,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 8,
-   "n": 409,
+   "n": 470,
    "peor": 7,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 9,
-   "n": 459,
+   "n": 549,
    "peor": 7,
    "mejor": 9,
    "mediana": 9,
@@ -49,8 +49,8 @@
   },
   {
    "min": 10,
-   "n": 680,
-   "peor": 7,
+   "n": 814,
+   "peor": 6,
    "mejor": 9,
    "mediana": 9.0,
    "p10": 9,
@@ -58,8 +58,8 @@
   },
   {
    "min": 11,
-   "n": 701,
-   "peor": 6,
+   "n": 843,
+   "peor": 4,
    "mejor": 9,
    "mediana": 9,
    "p10": 8,
@@ -67,70 +67,70 @@
   },
   {
    "min": 12,
-   "n": 1041,
+   "n": 1262,
    "peor": 5,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 8,
+   "p90": 9
+  },
+  {
+   "min": 13,
+   "n": 1139,
+   "peor": 4,
    "mejor": 9,
    "mediana": 9,
    "p10": 8,
    "p90": 9
   },
   {
-   "min": 13,
-   "n": 924,
-   "peor": 4,
-   "mejor": 9,
-   "mediana": 9.0,
-   "p10": 8,
-   "p90": 9
-  },
-  {
    "min": 14,
-   "n": 1336,
+   "n": 1651,
    "peor": 2,
    "mejor": 9,
-   "mediana": 9.0,
+   "mediana": 9,
    "p10": 7,
    "p90": 9
   },
   {
    "min": 15,
-   "n": 1142,
+   "n": 1447,
    "peor": 3,
    "mejor": 9,
-   "mediana": 9.0,
+   "mediana": 9,
    "p10": 6,
    "p90": 9
   },
   {
    "min": 16,
-   "n": 1505,
+   "n": 1856,
    "peor": 2,
    "mejor": 9,
-   "mediana": 8,
+   "mediana": 8.0,
    "p10": 5,
    "p90": 9
   },
   {
    "min": 17,
-   "n": 1119,
+   "n": 1418,
    "peor": 1,
    "mejor": 9,
-   "mediana": 6,
+   "mediana": 6.5,
    "p10": 4,
    "p90": 9
   },
   {
    "min": 18,
-   "n": 1415,
+   "n": 1744,
    "peor": 1,
    "mejor": 9,
-   "mediana": 5,
+   "mediana": 5.0,
    "p10": 3,
    "p90": 9
   },
   {
    "min": 19,
-   "n": 1110,
+   "n": 1392,
    "peor": 1,
    "mejor": 9,
    "mediana": 3.0,
@@ -139,7 +139,7 @@
   },
   {
    "min": 20,
-   "n": 1287,
+   "n": 1591,
    "peor": 0,
    "mejor": 9,
    "mediana": 0,
@@ -148,16 +148,16 @@
   },
   {
    "min": 21,
-   "n": 867,
+   "n": 1054,
    "peor": 0,
    "mejor": 0,
-   "mediana": 0,
+   "mediana": 0.0,
    "p10": 0,
    "p90": 0
   },
   {
    "min": 22,
-   "n": 940,
+   "n": 1112,
    "peor": 0,
    "mejor": 0,
    "mediana": 0.0,
@@ -166,7 +166,7 @@
   },
   {
    "min": 23,
-   "n": 760,
+   "n": 868,
    "peor": 0,
    "mejor": 0,
    "mediana": 0.0,
@@ -175,28 +175,28 @@
   },
   {
    "min": 24,
-   "n": 669,
+   "n": 756,
    "peor": 0,
    "mejor": 0,
-   "mediana": 0,
+   "mediana": 0.0,
    "p10": 0,
    "p90": 0
   },
   {
    "min": 25,
-   "n": 253,
+   "n": 304,
    "peor": 0,
    "mejor": 0,
-   "mediana": 0,
+   "mediana": 0.0,
    "p10": 0,
    "p90": 0
   },
   {
    "min": 26,
-   "n": 161,
+   "n": 222,
    "peor": 0,
    "mejor": 0,
-   "mediana": 0,
+   "mediana": 0.0,
    "p10": 0,
    "p90": 0
   }
@@ -204,66 +204,66 @@
  "cruces": [
   {
    "hora": 0,
-   "n": 1188
+   "n": 1493
   },
   {
    "hora": 1,
-   "n": 996
+   "n": 1234
   },
   {
    "hora": 2,
-   "n": 830
+   "n": 1014
   },
   {
    "hora": 3,
-   "n": 699
+   "n": 877
   },
   {
    "hora": 4,
-   "n": 681
+   "n": 841
   },
   {
    "hora": 5,
-   "n": 606
+   "n": 721
   },
   {
    "hora": 6,
-   "n": 495
+   "n": 596
   },
   {
    "hora": 7,
-   "n": 455
+   "n": 557
   },
   {
    "hora": 23,
-   "n": 7115
+   "n": 8672
   },
   {
    "hora": "nunca",
-   "n": 4430
+   "n": 5290
   }
  ],
  "tramos": [
   {
    "etq": "ni una hora",
-   "n": 153
+   "n": 157
   },
   {
    "etq": "menos de 4 h",
-   "n": 99
+   "n": 97
   },
   {
    "etq": "de 4 a 7 h",
-   "n": 118
+   "n": 119
   },
   {
    "etq": "7 h o más",
-   "n": 439
+   "n": 437
   }
  ],
- "estaciones_resumidas": 809,
- "mediana_h20": 7,
- "mediana_h18": 4,
+ "estaciones_resumidas": 810,
+ "mediana_h20": 7.0,
+ "mediana_h18": 4.0,
  "sin_respiro": {
   "n": 31,
   "lista": [
@@ -325,7 +325,7 @@
    "h20_mediana": 9.0,
    "h20_peor": 9,
    "h20_mejor": 9,
-   "noches": 22,
+   "noches": 26,
    "noches_sin_alivio": 0,
    "cruce_20_tipico": 23,
    "tira": [
@@ -438,6 +438,26 @@
      "noche": "2026-09-23",
      "tmin": 9.8,
      "h": 9
+    },
+    {
+     "noche": "2026-09-24",
+     "tmin": 8.7,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-25",
+     "tmin": 9.0,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-27",
+     "tmin": 9.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-09-28",
+     "tmin": 12.5,
+     "h": 9
     }
    ]
   },
@@ -445,11 +465,11 @@
    "nombre": "MADRID, RETIRO",
    "provincia": "MADRID",
    "altitud": 667,
-   "h20_mediana": 0,
+   "h20_mediana": 0.0,
    "h20_peor": 0,
    "h20_mejor": 9,
-   "noches": 23,
-   "noches_sin_alivio": 12,
+   "noches": 28,
+   "noches_sin_alivio": 16,
    "cruce_20_tipico": 4,
    "tira": [
     {
@@ -566,6 +586,31 @@
      "noche": "2026-09-23",
      "tmin": 20.4,
      "h": 0
+    },
+    {
+     "noche": "2026-09-24",
+     "tmin": 20.3,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-25",
+     "tmin": 20.2,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-26",
+     "tmin": 19.5,
+     "h": 1
+    },
+    {
+     "noche": "2026-09-27",
+     "tmin": 20.5,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-28",
+     "tmin": 20.7,
+     "h": 0
     }
    ]
   },
@@ -573,11 +618,11 @@
    "nombre": "CAPDEPERA",
    "provincia": "BALEARES",
    "altitud": 57,
-   "h20_mediana": 0,
+   "h20_mediana": 0.0,
    "h20_peor": 0,
    "h20_mejor": 0,
-   "noches": 23,
-   "noches_sin_alivio": 23,
+   "noches": 28,
+   "noches_sin_alivio": 28,
    "cruce_20_tipico": "",
    "tira": [
     {
@@ -693,6 +738,31 @@
     {
      "noche": "2026-09-23",
      "tmin": 22.5,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-24",
+     "tmin": 22.6,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-25",
+     "tmin": 22.4,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-26",
+     "tmin": 23.7,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-27",
+     "tmin": 23.9,
+     "h": 0
+    },
+    {
+     "noche": "2026-09-28",
+     "tmin": 24.8,
      "h": 0
     }
    ]

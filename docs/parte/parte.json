@@ -1,142 +1,142 @@
 {
- "fecha": "2026-09-27",
- "total": 849,
- "tropicales": 180,
- "ecuatoriales": 14,
+ "fecha": "2026-09-28",
+ "total": 842,
+ "tropicales": 200,
+ "ecuatoriales": 0,
  "peor": {
-  "id": "C449C",
-  "nombre": "Santa Cruz de Tenerife",
-  "min": 26.1,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "B569X",
+  "nombre": "Capdepera-Faro",
+  "min": 24.8,
+  "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": 7.1,
-  "prov": "Ávila"
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": 3.9,
+  "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 26.1,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 24.8,
+   "prov": "Illes Balears"
   },
   {
-   "id": "C429I",
-   "nombre": "Tenerife/Sur",
-   "min": 26.0,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "B434X",
+   "nombre": "Portocolom",
+   "min": 24.6,
+   "prov": "Illes Balears"
   },
   {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
-   "min": 26.0,
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
+   "min": 24.5,
+   "prov": "Málaga"
+  },
+  {
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 24.4,
    "prov": "Las Palmas"
   },
   {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 26.0,
+   "id": "B954",
+   "nombre": "Ibiza/Es Codolá",
+   "min": 24.2,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B496X",
+   "nombre": "Son Servera-Can Pep Monjo",
+   "min": 24.1,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "6175X",
+   "nombre": "Rincon de la Victoria (Automatica)",
+   "min": 24.0,
+   "prov": "Málaga"
+  },
+  {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 24.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 25.9,
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 24.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "C419X",
-   "nombre": "Adeje-Caldera B",
-   "min": 25.8,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 25.8,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 25.7,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 25.6,
-   "prov": "Cádiz"
-  },
-  {
-   "id": "C439J",
-   "nombre": "Tenerife-Güimar",
-   "min": 25.6,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 23.9,
+   "prov": "Almería"
   }
  ],
  "top_fresco": [
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 7.1,
-   "prov": "Segovia"
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 3.9,
+   "prov": "Granada"
+  },
+  {
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 6.1,
+   "prov": "Granada"
+  },
+  {
+   "id": "C406G",
+   "nombre": "Cañadas Parador",
+   "min": 7.2,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 7.6,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 7.6,
+   "prov": "Huesca"
+  },
+  {
+   "id": "C430E",
+   "nombre": "Izaña",
+   "min": 7.7,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": 7.1,
+   "min": 7.9,
    "prov": "Ávila"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 7.2,
-   "prov": "Soria"
-  },
-  {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 7.2,
-   "prov": "Granada"
-  },
-  {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 7.5,
-   "prov": "Soria"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": 7.5,
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 8.0,
    "prov": "Lleida"
   },
   {
-   "id": "9016X",
-   "nombre": "Cubillo de Ebro",
-   "min": 7.6,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 7.9,
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 8.2,
    "prov": "Lleida"
   },
   {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 8.0,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 8.0,
-   "prov": "Cantabria"
+   "id": "C101A",
+   "nombre": "Roque de los Muchachos",
+   "min": 8.3,
+   "prov": "Santa Cruz de Tenerife"
   }
  ]
 }

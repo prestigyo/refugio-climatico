@@ -1192,6 +1192,12 @@ CSS_NAV_ESCUETO = (
     '.nav-e .links a.lupa{display:inline-flex;align-items:center;padding:6px 9px;'
     'border:1px solid var(--line);border-radius:8px;color:var(--teja2)}'
     '.nav-e .links a.lupa:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}'
+    '.nav-e .lang.fijo{flex:none;margin-left:6px;border:1px solid var(--line);'
+    'border-radius:999px;padding:6px 11px;font-size:12.5px;'
+    'font-family:system-ui,-apple-system,sans-serif;font-weight:700;'
+    'letter-spacing:.04em;color:var(--muted);text-decoration:none}'
+    '.nav-e .lang.fijo:hover{border-color:var(--teja);color:var(--teja2);'
+    'background:rgba(217,116,78,.14)}'
     '.nav-e .links a.lang{margin-left:4px;border:1px solid var(--line);'
     'color:var(--teja2);font-weight:600;letter-spacing:.04em}'
     '.nav-e .links a.lang:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}'
@@ -6795,6 +6801,11 @@ CSS_PARPADEO = (
     '.par input:checked ~ label .on{display:none}'
     '.par label .off{display:none}'
     '.par input:checked ~ label .off{display:inline}'
+    '.par-lee{font-size:14.5px;color:var(--muted);margin:12px 0 0;'
+    'padding:10px 13px;border-radius:9px;background:#120d07;'
+    'border:1px solid var(--line);line-height:1.5;min-height:1.5em}'
+    '.par-lee.on{color:var(--paper)}'
+    '.par-lee b{color:var(--teal)}'
     '.par .pie{font-size:13px;color:var(--muted);margin:10px 0 0;line-height:1.55}'
     # Quien pide menos movimiento no ve ninguno: arranca parado y en el estado
     # que informa. Una animación de 2,4 s en bucle es justo lo que molesta.
@@ -6805,10 +6816,118 @@ CSS_PARPADEO = (
 )
 
 
-def bloque_parpadeo(estaciones: list, site: str) -> str:
-    """El comparador: silueta caliente vs. los refugios que nunca se colorean."""
-    # Misma proyección con la que se generó SILUETA_ES.
+# Ciudades que un lector extranjero sabe situar en un mapa de España. Sirven
+# SOLO para orientar ("115 km al norte de Madrid"): un nombre como Sanabria no
+# le dice nada a quien no es de aquí, y sin una referencia el mapa se queda en
+# un punto bonito. No son un dato climático y no se mezclan con los medidos.
+CIUDADES_REF = [
+    ("Madrid", 40.42, -3.70), ("Barcelona", 41.39, 2.17),
+    ("Valencia", 39.47, -0.38), ("Seville", 37.39, -5.98),
+    ("Malaga", 36.72, -4.42), ("Bilbao", 43.26, -2.93),
+    ("Alicante", 38.35, -0.48), ("Zaragoza", 41.65, -0.89),
+    ("Granada", 37.18, -3.60), ("Santiago de Compostela", 42.88, -8.54),
+    ("Oviedo", 43.36, -5.84), ("Pamplona", 42.81, -1.64),
+]
+
+TEXTOS_PARPADEO = {
+    "es": {
+        "h": "El interruptor del verano",
+        "sub": ("Mira fijo al mapa y no lo sigas con los ojos. Cuando el calor se "
+                "apaga, lo que queda encendido son las <b>{n} estaciones de AEMET "
+                "que no registran ni una noche tropical al año</b>. Es el mismo "
+                "truco con el que se encontró Plutón: el ojo compara mal, pero "
+                "detecta el cambio como nadie."),
+        "on": "■ Parar el parpadeo", "off": "▶ Volver a alternar",
+        "toca": "Pasa el cursor o toca un punto para saber cuál es.",
+        "pie": ('Cada punto es una estación medida, no una interpolación: las '
+                '<b>{n}</b> del <a href="{site}/ranking-noches-tropicales/">ranking'
+                '</a> con <b>cero noches tropicales al año</b> en los veranos '
+                '2017–2026. Fuente: AEMET.'),
+        "alt": ("Mapa de España que alterna entre el calor del verano y las {n} "
+                "estaciones de AEMET sin ninguna noche tropical al año."),
+        "de": "de", "m": "m",
+    },
+    "en": {
+        "h": "The summer switch",
+        "sub": ("Stare at the map without following it with your eyes. When the "
+                "heat goes out, what stays lit are the <b>{n} AEMET weather "
+                "stations that record no tropical night at all in a year</b>. It "
+                "is the trick that found Pluto: the eye compares badly, but it "
+                "spots change like nothing else."),
+        "on": "■ Stop the blinking", "off": "▶ Blink again",
+        "toca": "Hover or tap any dot to find out which one it is.",
+        "pie": ('Every dot is a measured station, not an interpolation: the '
+                '<b>{n}</b> in our <a href="{site}/en/coolest-towns-spain/">'
+                'ranking</a> with <b>zero tropical nights a year</b> across the '
+                'summers of 2017–2026. Source: AEMET.'),
+        "alt": ("Map of Spain alternating between the summer heat and the {n} "
+                "AEMET weather stations with no tropical night in a year."),
+        "de": "of", "m": "m",
+    },
+}
+
+
+def orientacion(lat: float, lon: float, lang: str) -> str:
+    """«115 km north of Madrid»: la referencia que convierte un punto en un sitio.
+
+    Un topónimo español no ubica a nadie de fuera. Con la ciudad conocida más
+    cercana, rumbo y distancia, el mismo punto pasa a ser accionable. Todo se
+    calcula, nada se escribe a mano.
+    """
     import math
+    mejor, mejor_d = None, 1e9
+    for nombre, la, lo in CIUDADES_REF:
+        # Equirectangular: a estas distancias el error frente a la haversine
+        # es de metros, y evita trigonometría que aquí no aporta nada.
+        dx = math.radians(lon - lo) * math.cos(math.radians((lat + la) / 2))
+        dy = math.radians(lat - la)
+        d = 6371 * math.hypot(dx, dy)
+        if d < mejor_d:
+            mejor, mejor_d = (nombre, la, lo), d
+    nombre, la, lo = mejor
+    ang = math.degrees(math.atan2(
+        math.radians(lon - lo) * math.cos(math.radians(lat)),
+        math.radians(lat - la))) % 360
+    rosa_en = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    rosa_es = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]
+    rosa = rosa_en if lang == "en" else rosa_es
+    rumbo = rosa[int((ang + 22.5) % 360 // 45)]
+    if lang == "en":
+        return f"{mejor_d:.0f} km {rumbo} of {nombre}"
+    return f"a {mejor_d:.0f} km al {rumbo} de {nombre}"
+
+
+# El rótulo se rellena al pasar el cursor Y al tocar. El <title> del SVG solo
+# funciona con ratón, y tres de cada cuatro visitas son de móvil: sin esto, el
+# mapa era un punto que no se podía interrogar.
+JS_PARPADEO = """<script>
+(function(){
+  var caja = document.querySelector(".par");
+  if (!caja) return;
+  var out = caja.querySelector(".par-lee");
+  if (!out) return;
+  var base = out.innerHTML;
+  var pts = caja.querySelectorAll(".pt");
+  for (var i = 0; i < pts.length; i++) (function(p){
+    function ver(){ out.innerHTML = p.getAttribute("data-n"); out.className = "par-lee on"; }
+    p.addEventListener("mouseenter", ver);
+    p.addEventListener("click", ver);
+  })(pts[i]);
+  caja.addEventListener("mouseleave", function(){
+    out.innerHTML = base; out.className = "par-lee";
+  });
+})();
+</script>"""
+
+def bloque_parpadeo(estaciones: list, site: str, lang: str = "es") -> str:
+    """El comparador: silueta caliente vs. los refugios que nunca se colorean.
+
+    Un solo bloque para los dos idiomas. Duplicarlo habría garantizado que el
+    día que se toque uno, el otro se quede atrás.
+    """
+    import math
+    T = TEXTOS_PARPADEO[lang]
+    # Misma proyección con la que se generó SILUETA_ES.
     k = math.cos(math.radians(40)); esc = 190 / 7.9
     dx = (300 - 12.8 * k * esc) / 2
     ceros = [e for e in estaciones if e["nt"] == 0]
@@ -6817,21 +6936,25 @@ def bloque_parpadeo(estaciones: list, site: str) -> str:
     for i, e in enumerate(ceros):
         x = dx + (e["lon"] + 9.4) * k * esc
         y = (43.9 - e["lat"]) * esc
-        pts.append(f'<circle class="pt" style="--i:{i}" cx="{x:.1f}" cy="{y:.1f}" r="2.3">'
-                   f'<title>{_esc(e["loc"])} ({_esc(e["prov"])}, {miles(e["alt"])} m) — '
-                   f'cero noches tropicales al año</title></circle>')
+        alt_txt = (f'{int(e["alt"]):,}' if lang == "en" else miles(e["alt"]))
+        ficha = (f'<b>{_esc(titular(e["loc"]))}</b> ({_esc(titular(e["prov"]))}, '
+                 f'{alt_txt}&nbsp;{T["m"]}) &#183; '
+                 f'{_esc(orientacion(e["lat"], e["lon"], lang))}')
+        # title para ratón y lectores de pantalla; data-n para el rótulo, que
+        # es lo único que funciona al tocar.
+        pts.append(f'<circle class="pt" style="--i:{i}" cx="{x:.1f}" cy="{y:.1f}" '
+                   f'r="2.3" data-n="{_esc(ficha)}">'
+                   f'<title>{_esc(titular(e["loc"]))} ({_esc(titular(e["prov"]))}, '
+                   f'{alt_txt} {T["m"]}) — '
+                   f'{_esc(orientacion(e["lat"], e["lon"], lang))}</title></circle>')
+    n = len(ceros)
     return (
         '<div class="par">'
-        '<h3>El interruptor del verano</h3>'
-        '<p class="sub">Mira fijo al mapa y no lo sigas con los ojos. Cuando el calor se '
-        'apaga, lo que queda encendido son las <b>' + str(len(ceros)) + ' estaciones de '
-        'AEMET que no registran ni una noche tropical al año</b>. Es el mismo truco con el '
-        'que se encontró Plutón: el ojo compara mal, pero detecta el cambio como nadie.</p>'
+        f'<h3>{T["h"]}</h3>'
+        f'<p class="sub">{T["sub"].format(n=n)}</p>'
         '<input type="checkbox" id="par-stop">'
         '<figure>'
-        '<svg viewBox="0 0 300 190" role="img" '
-        'aria-label="Mapa de España que alterna entre el calor del verano y las '
-        + str(len(ceros)) + ' estaciones de AEMET sin ninguna noche tropical al año.">'
+        f'<svg viewBox="0 0 300 190" role="img" aria-label="{T["alt"].format(n=n)}">'
         '<defs><linearGradient id="par-g" x1="0" y1="0" x2="0" y2="1">'
         '<stop offset="0" stop-color="#e7318f"/><stop offset="1" stop-color="#b8344f"/>'
         '</linearGradient></defs>'
@@ -6840,16 +6963,15 @@ def bloque_parpadeo(estaciones: list, site: str) -> str:
         f'<g fill="#a9c6d4">{"".join(pts)}</g>'
         '</svg>'
         '</figure>'
-                # ■ y ▶ son del mismo bloque Unicode (Geometric Shapes) y están en
+        # ■ y ▶ son del mismo bloque Unicode (Geometric Shapes) y están en
         # cualquier fuente del sistema. ⏸ (U+23F8) necesita fuente de emoji
         # y salía como un cuadrado vacío.
-        '<label for="par-stop"><span class="on">■ Parar el parpadeo</span>'
-        '<span class="off">▶ Volver a alternar</span></label>'
-        '<p class="pie">Cada punto es una estación medida, no una interpolación: las '
-        f'<b>{len(ceros)}</b> del <a href="{site}/ranking-noches-tropicales/">ranking</a> '
-        'con <b>cero noches tropicales al año</b> en los veranos 2017–2026. Pasa el cursor '
-        'por encima para ver cuál es. Fuente: AEMET.</p>'
-        '</div>')
+        f'<label for="par-stop"><span class="on">{T["on"]}</span>'
+        f'<span class="off">{T["off"]}</span></label>'
+        f'<p class="par-lee">{T["toca"]}</p>'
+        f'<p class="pie">{T["pie"].format(n=n, site=site)}</p>'
+        '</div>' + JS_PARPADEO)
+
 
 # ---------------------------------------------------------------------------
 # /cuantas-horas-se-duerme-en-verano/ — el estudio del archivo horario.
@@ -11023,9 +11145,9 @@ MENU_EN = [
     ("Coolest towns", "/en/coolest-towns-spain/"),
     ("Frost-free towns", "/en/frost-free-towns-spain/"),
     ("Mildest winters", "/en/spains-mildest-winters/"),
-    ("Best year round", "/en/best-climate-in-spain-year-round/"),
-    ("Find your address", "/en/find-your-winter-address/"),
-    ("Mild Winter seal", "/en/mild-winter/"),
+    ("Year round", "/en/best-climate-in-spain-year-round/"),
+    ("Your address", "/en/find-your-winter-address/"),
+    ("Mild Winter", "/en/mild-winter/"),
 ]
 
 
@@ -11036,14 +11158,16 @@ def nav_en_html(site: str) -> str:
     # enlace no había forma de llegar a él desde la sección inglesa.
     enlaces += (f'<a href="{site}/en/search/" class="lupa" aria-label="Search"'
                 f' title="Search the site">{_LUPA_SVG}</a>')
-    enlaces += f'<a href="{site}/" hreflang="es" class="lang">ES · Español</a>'
+    conmutador = (f'<a href="{site}/" hreflang="es" class="lang fijo" '
+                  f'title="Versión en español">ES</a>')
     # Mismo botón y script de hamburguesa que el menú español: sin ellos, el CSS
     # móvil de CSS_NAV_ESCUETO oculta los enlaces y no queda forma de abrirlos.
     boton = BOTON_BURGER.replace("Abrir menú", "Open menu")
     js = JS_BURGER.replace("Cerrar menú", "Close menu").replace("Abrir menú", "Open menu")
     return ('<nav class="nav-e" aria-label="main"><div class="in">'
             f'<a class="brand" href="{site}/en/" aria-label="nochetropical.es">{_LOGO_ESCUETO}</a>'
-            f'<div class="links" id="menu-nav">{enlaces}</div>' + boton + '</div>' + js + '</nav>')
+            f'<div class="links" id="menu-nav">{enlaces}</div>'
+            + conmutador + boton + '</div>' + js + '</nav>')
 
 
 def footer_en_html(site: str) -> str:
@@ -12785,6 +12909,7 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
         '<div class="lang-note">The town cards open their Spanish data page — the numbers '
         'read the same in any language, and your browser can translate the rest. A fully '
         'English destination guide is on its way.</div>'
+        + bloque_parpadeo(estaciones, site, "en")
         + "".join(regiones_html)
         + '<div class="cta">'
         '<b>Not sure which region suits you?</b>'
@@ -12801,7 +12926,7 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
         + footer_en_html(site))
     return _cabeza_en(site, titulo, desc, "/en/coolest-towns-spain/",
                       "/dormir-con-manta-en-verano/", "/estudios/frescor-dia.png",
-                      schema) + cuerpo + "</body></html>\n"
+                      schema, CSS_PARPADEO) + cuerpo + "</body></html>\n"
 
 
 # «Spain's Mildest Winters»: comparación de ciudades con los MISMOS datos que la

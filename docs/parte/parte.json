@@ -1,7 +1,7 @@
 {
  "fecha": "2026-09-29",
- "total": 847,
- "tropicales": 167,
+ "total": 846,
+ "tropicales": 171,
  "ecuatoriales": 1,
  "peor": {
   "id": "0201D",
@@ -87,13 +87,13 @@
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 5.4,
+   "min": 5.5,
    "prov": "Granada"
   },
   {
    "id": "9677",
    "nombre": "Port Aine L?orri",
-   "min": 6.0,
+   "min": 6.3,
    "prov": "Lleida"
   },
   {

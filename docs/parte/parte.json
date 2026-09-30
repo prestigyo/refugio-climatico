@@ -1,79 +1,79 @@
 {
- "fecha": "2026-09-29",
- "total": 846,
- "tropicales": 171,
+ "fecha": "2026-09-30",
+ "total": 850,
+ "tropicales": 206,
  "ecuatoriales": 1,
  "peor": {
-  "id": "0201D",
-  "nombre": "Barcelona Port Olímpic",
+  "id": "B569X",
+  "nombre": "Capdepera-Faro",
   "min": 25.0,
-  "prov": "Barcelona"
+  "prov": "Illes Balears"
  },
  "mejor": {
   "id": "5511",
   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 3.9,
+  "min": 5.1,
   "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "0201D",
-   "nombre": "Barcelona Port Olímpic",
-   "min": 25.0,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "B434X",
-   "nombre": "Portocolom",
-   "min": 24.9,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "B569X",
    "nombre": "Capdepera-Faro",
-   "min": 24.7,
+   "min": 25.0,
    "prov": "Illes Balears"
   },
   {
-   "id": "B496X",
-   "nombre": "Son Servera-Can Pep Monjo",
+   "id": "B860X",
+   "nombre": "Ciutadella-Son Quim",
+   "min": 24.8,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B870C",
+   "nombre": "Ciutadella-Cala Galdana",
+   "min": 24.8,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
    "min": 24.4,
-   "prov": "Illes Balears"
+   "prov": "Las Palmas"
   },
   {
-   "id": "B410B",
-   "nombre": "Santanyí",
-   "min": 24.3,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "0244X",
-   "nombre": "Vilassar de Dalt",
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
    "min": 24.2,
-   "prov": "Barcelona"
+   "prov": "Murcia"
+  },
+  {
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 24.2,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 24.1,
+   "prov": "Las Palmas"
   },
   {
    "id": "6329X",
    "nombre": "Cabo de Gata Faro",
-   "min": 24.1,
+   "min": 24.0,
    "prov": "Almería"
   },
   {
-   "id": "0076",
-   "nombre": "Barcelona Aeropuerto",
+   "id": "B228",
+   "nombre": "Palma-Portopí",
    "min": 23.9,
-   "prov": "Barcelona"
+   "prov": "Illes Balears"
   },
   {
-   "id": "0252D",
-   "nombre": "Arenys de Mar",
-   "min": 23.8,
-   "prov": "Barcelona"
-  },
-  {
-   "id": "B087X",
-   "nombre": "Banyalbufar",
-   "min": 23.8,
+   "id": "B434X",
+   "nombre": "Portocolom",
+   "min": 23.9,
    "prov": "Illes Balears"
   }
  ],
@@ -81,62 +81,62 @@
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 3.9,
-   "prov": "Granada"
-  },
-  {
-   "id": "5516D",
-   "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 5.5,
+   "min": 5.1,
    "prov": "Granada"
   },
   {
    "id": "9677",
    "nombre": "Port Aine L?orri",
-   "min": 6.3,
+   "min": 7.2,
    "prov": "Lleida"
+  },
+  {
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 7.6,
+   "prov": "Granada"
   },
   {
    "id": "9839V",
    "nombre": "Cerler Cogulla",
-   "min": 6.4,
+   "min": 7.8,
    "prov": "Huesca"
   },
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 6.4,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 6.5,
-   "prov": "Segovia"
-  },
-  {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": 6.8,
-   "prov": "Huesca"
-  },
-  {
-   "id": "6299I",
-   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
-   "min": 7.6,
-   "prov": "Granada"
-  },
-  {
-   "id": "2302N",
-   "nombre": "Monterrubio de la Demanda",
    "min": 8.0,
-   "prov": "Burgos"
+   "prov": "Lleida"
   },
   {
    "id": "9590D",
    "nombre": "Cap de Rec",
-   "min": 8.1,
+   "min": 8.2,
    "prov": "Lleida"
+  },
+  {
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 8.7,
+   "prov": "Huesca"
+  },
+  {
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 8.9,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 9.0,
+   "prov": "Asturias"
+  },
+  {
+   "id": "9585",
+   "nombre": "La Molina",
+   "min": 9.2,
+   "prov": "Girona"
   }
  ]
 }

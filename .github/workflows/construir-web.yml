@@ -1,8 +1,9 @@
 name: Construir y publicar la web
 
 # Regenera TODO el sitio en docs/ (calculadora + reportaje + 52 páginas de
-# provincia + sitemap + robots + GIFs + og:image) y lo commitea. Así no hay
-# que subir nada a mano: editas el script o cambian los datos y se reconstruye.
+# provincia + sus miniaturas + sitemap + robots + GIFs + og:image) y lo
+# commitea. Así no hay que subir nada a mano: editas el script o cambian los
+# datos y se reconstruye.
 
 on:
   workflow_dispatch:           # ejecutar a mano desde la pestaña Actions
@@ -11,6 +12,7 @@ on:
       - "aemet-temperaturas/scripts/generar_calculadora.py"
       - "aemet-temperaturas/scripts/generar_pagina_mapa.py"
       - "aemet-temperaturas/scripts/generar_gif.py"
+      - "aemet-temperaturas/scripts/generar_miniaturas.py"
       - "aemet-temperaturas/scripts/estudio_colores.py"
       - "aemet-temperaturas/analisis/refugios_nocturnos_ranking.csv"
       - "aemet-temperaturas/datos/spain-provinces.geojson"
@@ -45,6 +47,9 @@ jobs:
 
       - name: Generar estudios de superposición (La España que nunca se colorea)
         run: python aemet-temperaturas/scripts/estudio_colores.py
+
+      - name: Generar miniaturas de las 52 landings provinciales
+        run: python aemet-temperaturas/scripts/generar_miniaturas.py
 
       - name: Generar web (calculadora + provincias + sitemap + robots)
         run: python aemet-temperaturas/scripts/generar_calculadora.py

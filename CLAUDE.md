@@ -1,6 +1,6 @@
 # refugio-climatico — contexto del proyecto para Claude Code
 
-> Última revisión: 2026-08-09. Este fichero no se actualiza solo: si cambias la
+> Última revisión: 2026-09-30. Este fichero no se actualiza solo: si cambias la
 > estructura, añades un workflow o publicas una sección nueva, actualízalo en el
 > mismo commit.
 
@@ -41,13 +41,14 @@ refugio-climatico/
 
 | Script | Qué escribe en `docs/` |
 |---|---|
-| `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa, con `en/best-climate-in-spain-year-round/`), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
+| `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa: `en/best-climate-in-spain-year-round/`, `en/find-your-winter-address/` + `en/winter-stations.json`, `en/mild-winter/` y una página por sello), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
+| `generar_miniaturas.py` | `miniaturas/<slug-provincia>.png` (1200×1200, la que usa Google) y `miniaturas/<slug-provincia>-og.png` (1200×630, la de redes) — silueta de la provincia + sus estaciones coloreadas + la cifra grande. También `miniaturas/indice.json`, que dice qué provincias llevan mapa: lo lee `generar_calculadora.py` para escribir un `alt` que describa la imagen de verdad (Ceuta y Melilla no llevan silueta). **Tiene que correr ANTES que `generar_calculadora.py`**, y así está en el workflow |
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
 | `generar_gif.py` | `ola-minimas.gif`, `ola-maximas.gif`, `ola-dia-noche.gif`, `ola-canarias-minimas.gif`, `og.png` |
 | `estudio_colores.py` | `estudios/*.png` + `estudios/estudio-datos.json` |
 | `generar_certificados.py` | `certificados/index.html` + `certificados/<slug>/` (una página por estación certificada), `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) y `badges/pueblo-<slug>.svg` y `badges/pueblo-<slug>-claro.svg` (el sello del pueblo en sus dos temas, para que el alojamiento incruste en su web el que le pegue al fondo) |
 | `generar_calendario_datos.py` | `datos/<slug-provincia>.json` (calendario de calor que carga la calculadora bajo demanda) |
-| `analisis_invierno.py` | `estudios/invierno-datos.json` (las cifras de `/en/best-climate-in-spain-year-round/`, que arma `generar_calculadora.py`) |
+| `analisis_invierno.py` | `estudios/invierno-datos.json` (cifras de `/en/best-climate-in-spain-year-round/` y la lista del sello Mild Winter) + `en/winter-stations.json` (las 828 estaciones que consume la herramienta) |
 | `analisis_curva_nocturna.py` | `estudios/horas-datos.json` (las cifras de la landing `/cuantas-horas-se-duerme-en-verano/`, que arma `generar_calculadora.py`) |
 | `parte_nocturno.py` | `parte/index.html`, `parte/parte.txt`, `parte/parte.json` |
 
@@ -71,6 +72,8 @@ refugio-climatico/
 | `normales.yml` | manual | `descarga_normales.py` (una sola vez) |
 
 Los workflows que escriben en `docs/` comparten `concurrency: group: commit-docs` para no pisarse, y el push reintenta con `pull --rebase --autostash` hasta 5 veces.
+
+**Cuidado con `commit-docs`**: GitHub solo guarda **una** ejecución en cola por grupo, y cuando llega otra **cancela la que esperaba**, aunque `cancel-in-progress` sea `false`. Un workflow esporádico metido en ese grupo se queda en la cola detrás de `construir-web` y muere sin arrancar (cero jobs). Le pasó a `estudio-invierno.yml` el 2026-09-24. Por eso `archivo-horario.yml`, `estudio-horario.yml` y `estudio-invierno.yml` tienen **grupo propio**: escriben ficheros que no toca nadie más, y la colisión real en el push ya la resuelve el reintento con rebase.
 
 **Secrets**: `AEMET_API_KEY`, y para publicar el parte en X (`@nochetropicales`): `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_SECRET`. `publicar_x.py` sale limpio sin fallar si faltan.
 
@@ -114,6 +117,41 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **GitHub Pages** sirve desde `<repo>/docs/` o `<repo>/`, no desde subcarpetas anidadas.
 - **Permisos de workflow**: Settings → Actions → General → "Read and write permissions" activado.
 - **`requirements.txt` no incluye Pillow** aunque varios scripts la necesitan; los workflows hacen `pip install pillow numpy` a mano. Si añades un script con Pillow, revisa el workflow.
+- **Google NO usa SVG como miniatura de resultado** — ni en la búsqueda ni en Imágenes.
+  Daba igual que los 219 sellos de pueblo y los 67 de Mild Winter fueran `<img src=".svg">`:
+  a efectos de miniatura esas páginas no tenían imagen. Solo cuenta un ráster (PNG/JPEG/WebP)
+  dentro de un `<img>` VISIBLE en el cuerpo. El `og:image` no basta: Google elige de lo que ve
+  en la página, no del `<head>`.
+- **Un `og:image` compartido no lo elige Google.** 369 páginas declaraban el mismo `og.png`:
+  con eso no hay forma de que asocie la imagen a ninguna en concreto, así que no ponía
+  ninguna. Tiene que ser distinta por página.
+- **La miniatura del resultado se recorta CUADRADA**; el `og:image` de redes es 1,91:1. Son
+  dos formatos incompatibles y por eso `generar_miniaturas.py` escribe los dos. Un 1200×630
+  usado como miniatura pierde casi la mitad por los lados.
+- **A tamaño real de miniatura (~92 px en escritorio) no se lee NADA.** Solo sobreviven la
+  silueta y una cifra grande. Todo lo demás de la composición es para cuando se ve entera.
+- **`Image.quantize()` rompe los degradados** en un escalón duro (medido: un salto de 9
+  niveles a media altura) y el dither no lo arregla. Para reducir peso hay que usar
+  `convert("P", palette=Image.ADAPTIVE, colors=256)`, que sí lo conserva: deja los PNG
+  en el 37 % sin artefactos (13,4 MB → 5,2 MB en las 104 miniaturas).
+- **Un islote remoto estira el encuadre de la provincia y la deja diminuta.** El encuadre
+  sale de la caja envolvente, así que **Isla de Alborán** (0,7 km² a 90 km de la costa, sin
+  estación) doblaba la caja de Almería: de 1,21×0,8° a 1,21×1,98°, y la silueta se dibujaba
+  a 308 px dentro de una caja de 1.060. `anillos_utiles()` descarta un anillo solo si es
+  despreciable (<0,5 % del área del mayor) **y** no tiene ninguna estación dentro; Menorca,
+  Ibiza, Lanzarote y Fuerteventura están muy por encima y se quedan. Afecta a 28 provincias.
+  De paso Ceuta baja de 0,92° a 0,08° —sus 0,92 eran islotes— y pasa al formato sin mapa,
+  igual que Melilla.
+- **En la miniatura cuadrada el reparto va anclado de ABAJO ARRIBA** (pie → línea de altitud
+  → nombre de la estación → fila de la cifra → y el mapa se queda con lo que sobre). Así el
+  nombre de la estación dispone del ancho entero: hay muchos largos o compuestos
+  («La Póveda de Soria, Barriomartín», «Vélez Blanco - Topares») que en media columna se
+  encogían hasta no leerse. La apaisada mantiene dos columnas porque en 630 px de alto no
+  cabe ese reparto.
+- **`textbbox()` se come los espacios de los extremos**: encadenar trozos de texto con
+  fuentes distintas medidos así los pega unos a otros. Para eso está `avance()`, con
+  `textlength()`.
+- **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
 - **Ids duplicados en `lugares.csv` mezclan votos de pueblos distintos** en el Observatorio. `generar_lugares.py` ya lo arregló (barrios de Madrid/Barcelona renombrados como «Salamanca (Madrid)»); no reintroducir duplicados.
 - **Las normales 1991-2020 se descargaron** pero el cruce salió con `tmax_normal_verano` vacío — bug pendiente.
@@ -124,6 +162,33 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **`aemet-temperaturas/generar_gif.py`** existe además de `scripts/generar_gif.py` y **difiere**. Los workflows usan el de `scripts/`.
 - **`README.md` está desfasado**: describe solo el archivo de mapas y apunta a `descarga-diaria.yml`, que ya no existe en `.github/`.
 - **`actualizar-gifs.yml` y `construir-web.yml` corren los dos a las 11:00 UTC** y ambos generan los GIFs. Redundante.
+- **El escaneo de `docs/` llega a 3 niveles** (`*/*/*/index.html`) en sitemap, revisor
+  de enlaces y buscador. Estaba en 2 y las 67 páginas de `en/mild-winter/<slug>/` se
+  quedaban fuera de los tres sin que nada avisara. Si algún día hay páginas a 4, hay que
+  tocar los tres sitios.
+- **Una sección nueva no puede tumbar el build.** Cada bloque de `main()` que depende
+  de un JSON tiene que comprobar que la clave está (`.get()`) y omitirse con un mensaje
+  si falta, como hacen los estudios. El sello Mild Winter hacía `dos_caras["sello"]` y
+  reventó `construir-web` entero con `KeyError` cuando el JSON de producción aún no
+  traía esa clave: 400 páginas sin publicar por una sección nueva. Y al revés, **un dato
+  que falta NO es un cero**: poner valores por defecto hizo que la landing publicara
+  «0 station-seasons across 0 years» como si fuera un hallazgo. O está el dato, o no
+  está el párrafo.
+- **Nada de `aggregateRating`, y por eso tampoco `offers`.** Las cinco páginas con
+  `WebApplication` (portada, confortómetro, observatorio, refugios-cerca-de-mi y la
+  herramienta inglesa) llevaban un `Offer` de 0 €. Ese precio ficticio es lo que hace
+  que Google evalúe la entidad como ficha de «Software App», cuyo rich result **exige**
+  `aggregateRating` — de ahí el aviso «falta el campo aggregateRating». Ese campo son
+  valoraciones reales de usuarios con su recuento: aquí no hay ninguna, así que ponerlo
+  sería inventarse reseñas. Va contra las normas de datos estructurados de Google y
+  contra la premisa del sitio. Se quitó el `offers`; `WebApplication` se queda porque es
+  cierto.
+- **Quedan 317 páginas compartiendo `og.png`** (las 52 provinciales ya no). Los 219
+  certificados y los 67 Mild Winter tienen `og:image` propio pero **apuntando a un SVG**,
+  que no vale ni para Google ni para WhatsApp: hay que rasterizar esos sellos.
+- **Los 26 diplomas PNG de certificado no están en un `<img>`** en su propia página, solo
+  como `href` de descarga y como `og:image`. Google puntúa mucho más una imagen que el
+  visitante ve de verdad.
 - **No hay tests.** Serían bienvenidos para los parsers de fechas y la conversión DMS→decimal.
 - **`docs/` pesa lo suyo** (GIFs de 2-5 MB, 219 certificados PNG) y `datos/` son 217 MB versionados. Sostenible hoy, vigilarlo.
 

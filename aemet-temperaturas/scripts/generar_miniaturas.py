@@ -535,6 +535,7 @@ def main() -> None:
     filtro = {x.strip() for x in args.solo.split(",")} if args.solo else None
 
     hechas, sin_silueta, peso = 0, [], 0
+    indice: dict[str, bool] = {}
     for prov, lista in sorted(por_prov.items()):
         sl = g.slug(prov)
         if filtro and sl not in filtro:
@@ -544,12 +545,21 @@ def main() -> None:
             # Sin silueta no hay miniatura: mejor ninguna que una caja vacía.
             sin_silueta.append(prov)
             continue
+        indice[sl] = extension(anillos_utiles(anillos, lista)) >= EXT_MINIMA
         for cuadrada, nombre in ((True, f"{sl}.png"), (False, f"{sl}-og.png")):
             ruta = OUT_DIR / nombre
             componer(prov, lista, anillos, cuadrada).save(ruta, optimize=True)
             peso += ruta.stat().st_size
         hechas += 1
 
+    # Quién lleva mapa y quién no, para que generar_calculadora escriba un alt
+    # que describa la imagen de verdad. Solo se reescribe si se generaron TODAS
+    # (con --solo se quedaría a medias y dejaría el índice mintiendo).
+    if not filtro:
+        (OUT_DIR / "indice.json").write_text(
+            json.dumps({"con_mapa": sorted(k for k, v in indice.items() if v),
+                        "sin_mapa": sorted(k for k, v in indice.items() if not v)},
+                       ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"   miniaturas: {hechas} provincias × 2 tamaños = {hechas * 2} PNG "
           f"({peso / 1048576:.1f} MB) en {OUT_DIR.relative_to(g.REPO_ROOT)}/")
     if sin_silueta:

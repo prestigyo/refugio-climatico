@@ -364,7 +364,6 @@ def construir_schema(datos: dict, site: str) -> dict:
                 "browserRequirements": "Requires JavaScript",
                 "description": ("Elige tu provincia y la estación más cercana y descubre cuántas "
                                 "noches tropicales sufre tu pueblo al año y si es un refugio climático."),
-                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
             },
             {
                 "@type": "FAQPage",
@@ -1621,10 +1620,13 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
 <meta property="og:title" content="__OGTITLE__">
 <meta property="og:description" content="__DESC__">
 <meta property="og:url" content="__CANONICAL__">
-<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:image" content="__OGIMG__">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="__MINIALT__">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="__SITE__/og.png">
+<meta name="twitter:image" content="__OGIMG__">
 <link rel="icon" type="image/svg+xml" href="__SITE_URL__/favicon.svg">
 <script type="application/ld+json">__SCHEMA__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1673,6 +1675,9 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
  footer{border-top:1px solid var(--line);padding:30px 0 60px;color:#9a8a6f;font-size:12.5px;margin-top:18px}
  footer a{color:#9a8a6f}
  caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600}
+ figure.mini{margin:0 0 26px}
+ figure.mini img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px}
+ figure.mini figcaption{color:var(--muted);font-size:12.5px;margin-top:8px}
  .prose{margin:28px 0;max-width:760px}
  .prose h2{font-family:var(--fd);font-weight:700;font-size:clamp(20px,3.6vw,25px);line-height:1.2;margin:30px 0 10px}
  .prose h2:first-child{margin-top:0}
@@ -1738,7 +1743,12 @@ __NAV__
 __WIDGET__
 
 <section><div class="wrap"><div class="dcols">
-  <div><div class="prose">__PROSA__</div></div>
+  <div>
+  <figure class="mini">
+    <img src="__MINI__" width="1200" height="1200" alt="__MINIALT__" loading="lazy" decoding="async">
+    <figcaption>__MINICAP__</figcaption>
+  </figure>
+  <div class="prose">__PROSA__</div></div>
 
   <div>
   <table>
@@ -1824,6 +1834,18 @@ def ntfmt(nt: float) -> str:
     return f"{nt:.1f}".replace(".", ",") if nt < 10 else f"{round(nt)}"
 
 
+def nt_cifra(nt: float) -> str:
+    """La cifra tal y como se PINTA: '0' · '0,6' · '73'. Sin entidades HTML.
+
+    Vive aquí, y no en generar_miniaturas.py, porque la usan los dos: la imagen
+    y el alt/caption que la describen. Con dos reglas distintas el texto
+    alternativo acabaría diciendo un número que la imagen no enseña.
+    """
+    if nt < 0.05:
+        return "0"
+    return f"{nt:.1f}".replace(".", ",") if nt < 10 else f"{round(nt)}"
+
+
 def nt_prosa(nt: float) -> str:
     """Como ntfmt pero para texto plano (meta description): sin entidades HTML."""
     if nt < 1:
@@ -1875,6 +1897,9 @@ def construir_schema_provincia(prov: str, site: str, sl: str, n: int, titulo: st
                                 desc: str, faq: list[tuple[str, str]],
                                 fecha_mod: str) -> dict:
     url = f"{site}/{sl}/"
+    # Imagen PROPIA de esta provincia. Que las 52 declararan el mismo og.png es
+    # exactamente lo que hacía que Google no eligiera ninguna como miniatura.
+    img = f"{site}/miniaturas/{sl}.png"
     return {"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
@@ -1882,7 +1907,7 @@ def construir_schema_provincia(prov: str, site: str, sl: str, n: int, titulo: st
         {"@type": "Article",
          "headline": titulo,
          "description": desc,
-         "image": site + "/og.png",
+         "image": img,
          "author": {"@type": "Person", "name": "Ramón J. Lowesting",
                     "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
@@ -2783,6 +2808,23 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             return f"<b>una noche tropical</b>{sufijo}"
         return f"<b>{n_} noches tropicales</b>{sufijo}"
 
+    # Texto alternativo de la miniatura: describe lo que la imagen enseña, con
+    # las mismas cifras. Es lo que lee Google para decidir si la imagen ilustra
+    # la página — y lo único que oye quien usa lector de pantalla.
+    import html as _html
+    _contra = peor["id"] != mejor["id"] and n > 1
+    mini_alt = _html.escape(
+        f'Mapa de {prov} con sus {n} estaciones de AEMET coloreadas por noches '
+        f'tropicales: {nt_cifra(mejor["nt"])} al año en {mejor["loc"]} '
+        f'({miles(mejor["alt"])} m)'
+        + (f' frente a {nt_cifra(peor["nt"])} en {peor["loc"]}.' if _contra else '.'))
+    mini_cap = _html.escape(
+        f'Las {n} estaciones de AEMET de {prov}, por noches tropicales al año '
+        f'(veranos 2017–2026). Azul: se duerme fresco. Rojo: no baja de 20 °C.'
+        if n > 1 else
+        f'La única estación de AEMET de {prov} con serie suficiente '
+        f'(veranos 2017–2026).')
+
     alt_mejor = f"{mejor['alt']:,}".replace(",", ".")
     if n <= 1:
         mtxt = ("prácticamente no se registran <b>noches tropicales</b>"
@@ -2876,6 +2918,10 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             .replace("__FOOTER__", footer_escueto_html(
                 site, f"Última actualización de los datos: {fecha_mod_txt}"))
             .replace("__OGTITLE__", title)
+            .replace("__OGIMG__", f"{site}/miniaturas/{sl}-og.png")
+            .replace("__MINIALT__", mini_alt)
+            .replace("__MINICAP__", mini_cap)
+            .replace("__MINI__", f"{site}/miniaturas/{sl}.png")
             .replace("__FICHA__", ficha_datos(fecha_mod, fecha_mod_txt))
             .replace("__TITLE__", title)
             .replace("__DESC__", desc)
@@ -4858,7 +4904,6 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
          "url": url, "applicationCategory": "ReferenceApplication",
          "operatingSystem": "Web",
          "description": "Encuentra los refugios climáticos naturales más cercanos a tu ubicación, con la distancia y la ruta. Con diez veranos de datos de AEMET.",
-         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
          "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
         ensure_ascii=False)
     # Texto para compartir: dato favorable primero y sin emojis.
@@ -6576,8 +6621,7 @@ def construir_pagina_confortometro(estaciones: list, site: str,
          "description": ("Estudio de investigación participativa sobre confort climático y "
                           "turismo climático: votos anónimos de sensación térmica (día y "
                           "noche, verano e invierno) contrastados con los datos oficiales "
-                          "de AEMET de cada zona."),
-         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}},
+                          "de AEMET de cada zona.")},
     ]}, ensure_ascii=False)
     return (PAGINA_CONFORTOMETRO
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
@@ -11908,8 +11952,6 @@ def construir_pagina_winter_tool(d: dict, site: str) -> str:
          "url": site + path, "applicationCategory": "TravelApplication",
          "operatingSystem": "Any web browser", "inLanguage": "en-GB",
          "description": desc,
-         "offers": {"@type": "Offer", "price": "0",
-                    "priceCurrency": "EUR"},
          "isBasedOn": "https://opendata.aemet.es",
          "publisher": {"@type": "Organization", "name": "nochetropical.es"}}]},
         ensure_ascii=False)
@@ -15844,7 +15886,7 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
         {"@type": "WebApplication", "name": "El Observatorio del Descanso",
          "url": site + "/observatorio-del-descanso/", "applicationCategory": "LifestyleApplication",
          "operatingSystem": "Web", "description": desc,
-         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}},
+         },
         # FAQ con las dos preguntas que trae la gente desde Google, para que
         # pueda mostrarse como respuesta directa en el buscador.
         {"@type": "FAQPage", "mainEntity": [

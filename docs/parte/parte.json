@@ -1,7 +1,7 @@
 {
  "fecha": "2026-09-30",
- "total": 850,
- "tropicales": 206,
+ "total": 849,
+ "tropicales": 210,
  "ecuatoriales": 1,
  "peor": {
   "id": "B569X",
@@ -85,33 +85,27 @@
    "prov": "Granada"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 7.2,
-   "prov": "Lleida"
-  },
-  {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
    "min": 7.6,
    "prov": "Granada"
   },
   {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 8.3,
+   "prov": "Lleida"
+  },
+  {
    "id": "9839V",
    "nombre": "Cerler Cogulla",
-   "min": 7.8,
+   "min": 8.3,
    "prov": "Huesca"
   },
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 8.0,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 8.2,
+   "min": 8.3,
    "prov": "Lleida"
   },
   {
@@ -137,6 +131,12 @@
    "nombre": "La Molina",
    "min": 9.2,
    "prov": "Girona"
+  },
+  {
+   "id": "1521X",
+   "nombre": "Becerrea-Penamaior",
+   "min": 9.3,
+   "prov": "Lugo"
   }
  ]
 }

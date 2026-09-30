@@ -364,7 +364,6 @@ def construir_schema(datos: dict, site: str) -> dict:
                 "browserRequirements": "Requires JavaScript",
                 "description": ("Elige tu provincia y la estación más cercana y descubre cuántas "
                                 "noches tropicales sufre tu pueblo al año y si es un refugio climático."),
-                "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
             },
             {
                 "@type": "FAQPage",
@@ -1192,6 +1191,12 @@ CSS_NAV_ESCUETO = (
     '.nav-e .links a.lupa{display:inline-flex;align-items:center;padding:6px 9px;'
     'border:1px solid var(--line);border-radius:8px;color:var(--teja2)}'
     '.nav-e .links a.lupa:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}'
+    '.nav-e .lang.fijo{flex:none;margin-left:6px;border:1px solid var(--line);'
+    'border-radius:999px;padding:6px 11px;font-size:12.5px;'
+    'font-family:system-ui,-apple-system,sans-serif;font-weight:700;'
+    'letter-spacing:.04em;color:var(--muted);text-decoration:none}'
+    '.nav-e .lang.fijo:hover{border-color:var(--teja);color:var(--teja2);'
+    'background:rgba(217,116,78,.14)}'
     '.nav-e .links a.lang{margin-left:4px;border:1px solid var(--line);'
     'color:var(--teja2);font-weight:600;letter-spacing:.04em}'
     '.nav-e .links a.lang:hover{border-color:var(--teja);background:rgba(217,116,78,.14)}'
@@ -1284,6 +1289,8 @@ _F_GUIAS = [("Qué es una noche tropical", "/noches-tropicales/"),
             ("🏨 Hoteles donde dormir con manta", "/hoteles-refugio-climatico/"),
             ("Pueblos para dormir con manta en verano", "/dormir-con-manta-en-verano/"),
             ("La España que nunca se colorea (estudio)", "/la-espana-que-nunca-se-colorea/"),
+            ("Cuántas horas se duerme en verano (estudio)",
+             "/cuantas-horas-se-duerme-en-verano/"),
             ("Microclimas: los refugios de la naturaleza", "/microclimas/"),
             ("Cómo crear un refugio climático natural", "/refugio-climatico-natural/"),
             ("Refugios y España vaciada", "/refugios-y-espana-vaciada/"),
@@ -1613,10 +1620,13 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
 <meta property="og:title" content="__OGTITLE__">
 <meta property="og:description" content="__DESC__">
 <meta property="og:url" content="__CANONICAL__">
-<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:image" content="__OGIMG__">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="__MINIALT__">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="__SITE__/og.png">
+<meta name="twitter:image" content="__OGIMG__">
 <link rel="icon" type="image/svg+xml" href="__SITE_URL__/favicon.svg">
 <script type="application/ld+json">__SCHEMA__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1665,6 +1675,9 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
  footer{border-top:1px solid var(--line);padding:30px 0 60px;color:#9a8a6f;font-size:12.5px;margin-top:18px}
  footer a{color:#9a8a6f}
  caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600}
+ figure.mini{margin:0 0 26px}
+ figure.mini img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px}
+ figure.mini figcaption{color:var(--muted);font-size:12.5px;margin-top:8px}
  .prose{margin:28px 0;max-width:760px}
  .prose h2{font-family:var(--fd);font-weight:700;font-size:clamp(20px,3.6vw,25px);line-height:1.2;margin:30px 0 10px}
  .prose h2:first-child{margin-top:0}
@@ -1730,7 +1743,12 @@ __NAV__
 __WIDGET__
 
 <section><div class="wrap"><div class="dcols">
-  <div><div class="prose">__PROSA__</div></div>
+  <div>
+  <figure class="mini">
+    <img src="__MINI__" width="1200" height="1200" alt="__MINIALT__" loading="lazy" decoding="async">
+    <figcaption>__MINICAP__</figcaption>
+  </figure>
+  <div class="prose">__PROSA__</div></div>
 
   <div>
   <table>
@@ -1816,6 +1834,18 @@ def ntfmt(nt: float) -> str:
     return f"{nt:.1f}".replace(".", ",") if nt < 10 else f"{round(nt)}"
 
 
+def nt_cifra(nt: float) -> str:
+    """La cifra tal y como se PINTA: '0' · '0,6' · '73'. Sin entidades HTML.
+
+    Vive aquí, y no en generar_miniaturas.py, porque la usan los dos: la imagen
+    y el alt/caption que la describen. Con dos reglas distintas el texto
+    alternativo acabaría diciendo un número que la imagen no enseña.
+    """
+    if nt < 0.05:
+        return "0"
+    return f"{nt:.1f}".replace(".", ",") if nt < 10 else f"{round(nt)}"
+
+
 def nt_prosa(nt: float) -> str:
     """Como ntfmt pero para texto plano (meta description): sin entidades HTML."""
     if nt < 1:
@@ -1867,6 +1897,9 @@ def construir_schema_provincia(prov: str, site: str, sl: str, n: int, titulo: st
                                 desc: str, faq: list[tuple[str, str]],
                                 fecha_mod: str) -> dict:
     url = f"{site}/{sl}/"
+    # Imagen PROPIA de esta provincia. Que las 52 declararan el mismo og.png es
+    # exactamente lo que hacía que Google no eligiera ninguna como miniatura.
+    img = f"{site}/miniaturas/{sl}.png"
     return {"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
@@ -1874,7 +1907,7 @@ def construir_schema_provincia(prov: str, site: str, sl: str, n: int, titulo: st
         {"@type": "Article",
          "headline": titulo,
          "description": desc,
-         "image": site + "/og.png",
+         "image": img,
          "author": {"@type": "Person", "name": "Ramón J. Lowesting",
                     "url": site + "/sobre-el-proyecto/"},
          "publisher": {"@type": "Organization", "name": "Refugio Climático",
@@ -2775,6 +2808,23 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             return f"<b>una noche tropical</b>{sufijo}"
         return f"<b>{n_} noches tropicales</b>{sufijo}"
 
+    # Texto alternativo de la miniatura: describe lo que la imagen enseña, con
+    # las mismas cifras. Es lo que lee Google para decidir si la imagen ilustra
+    # la página — y lo único que oye quien usa lector de pantalla.
+    import html as _html
+    _contra = peor["id"] != mejor["id"] and n > 1
+    mini_alt = _html.escape(
+        f'Mapa de {prov} con sus {n} estaciones de AEMET coloreadas por noches '
+        f'tropicales: {nt_cifra(mejor["nt"])} al año en {mejor["loc"]} '
+        f'({miles(mejor["alt"])} m)'
+        + (f' frente a {nt_cifra(peor["nt"])} en {peor["loc"]}.' if _contra else '.'))
+    mini_cap = _html.escape(
+        f'Las {n} estaciones de AEMET de {prov}, por noches tropicales al año '
+        f'(veranos 2017–2026). Azul: se duerme fresco. Rojo: no baja de 20 °C.'
+        if n > 1 else
+        f'La única estación de AEMET de {prov} con serie suficiente '
+        f'(veranos 2017–2026).')
+
     alt_mejor = f"{mejor['alt']:,}".replace(",", ".")
     if n <= 1:
         mtxt = ("prácticamente no se registran <b>noches tropicales</b>"
@@ -2868,6 +2918,10 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             .replace("__FOOTER__", footer_escueto_html(
                 site, f"Última actualización de los datos: {fecha_mod_txt}"))
             .replace("__OGTITLE__", title)
+            .replace("__OGIMG__", f"{site}/miniaturas/{sl}-og.png")
+            .replace("__MINIALT__", mini_alt)
+            .replace("__MINICAP__", mini_cap)
+            .replace("__MINI__", f"{site}/miniaturas/{sl}.png")
             .replace("__FICHA__", ficha_datos(fecha_mod, fecha_mod_txt))
             .replace("__TITLE__", title)
             .replace("__DESC__", desc)
@@ -4479,6 +4533,7 @@ __CSS_COMUN__
       <a class="card2" href="__SITE__/noches-tropicales-y-salud/"><h3>🫀 Noches tropicales y salud</h3><p>Por qué el calor nocturno afecta a la salud con independencia del calor del día. Los estudios, con las fuentes delante.</p></a>
       <a class="card2" href="__SITE__/aumento-noches-tropicales-espana/"><h3>España pierde sus noches frescas</h3><p>746 estaciones, diez veranos: 54 pueblos ya no tienen cero.</p></a>
       <a class="card2 destacada" href="__SITE__/la-espana-que-nunca-se-colorea/"><h3>🗺️ La España que nunca se colorea</h3><p>Superponemos los mapas de AEMET del verano: el mapa honesto de los refugios climáticos, de noche y de día.</p></a>
+      <a class="card2 destacada" href="__SITE__/cuantas-horas-se-duerme-en-verano/"><h3>⏱️ ¿Cuántas horas se duerme de verdad?</h3><p>Con la misma mínima de 19°, hay noches de una hora de alivio y de nueve. La mínima no lo dice: lo hemos medido hora a hora.</p></a>
       <a class="card2 destacada" href="__SITE__/hoteles-refugio-climatico/"><h3>🏨 Hoteles donde dormir con manta</h3><p>__NHOT__ hoteles en refugios climáticos naturales: la geografía del descanso, con el dato de AEMET de cada zona.</p></a>
       <a class="card2 destacada" href="__SITE__/dormir-con-calor/"><h3>😴 Cómo dormir con calor sin aire acondicionado</h3><p>Lo que de verdad funciona esta noche, lo que no sirve de nada, y a partir de qué temperatura ya no hay truco que valga.</p></a>
       <a class="card2" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/"><h3>💧 Enfriar una habitación sin aire acondicionado</h3><p>La sábana húmeda sobre una cuerda funciona, pero solo donde el aire es seco. Cuántos grados puede bajar en tu zona, con la humedad que mide AEMET.</p></a>
@@ -4849,7 +4904,6 @@ def construir_pagina_cerca(estaciones: list, datos: dict, site: str,
          "url": url, "applicationCategory": "ReferenceApplication",
          "operatingSystem": "Web",
          "description": "Encuentra los refugios climáticos naturales más cercanos a tu ubicación, con la distancia y la ruta. Con diez veranos de datos de AEMET.",
-         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
          "isPartOf": {"@type": "WebSite", "name": "Refugio Climático", "url": site + "/"}}]},
         ensure_ascii=False)
     # Texto para compartir: dato favorable primero y sin emojis.
@@ -6567,8 +6621,7 @@ def construir_pagina_confortometro(estaciones: list, site: str,
          "description": ("Estudio de investigación participativa sobre confort climático y "
                           "turismo climático: votos anónimos de sensación térmica (día y "
                           "noche, verano e invierno) contrastados con los datos oficiales "
-                          "de AEMET de cada zona."),
-         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}},
+                          "de AEMET de cada zona.")},
     ]}, ensure_ascii=False)
     return (PAGINA_CONFORTOMETRO
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
@@ -6652,6 +6705,7 @@ PAGINA_ESTUDIO = r"""<!DOCTYPE html>
  .navcard span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
  __NAVCSS__
  __FOOTERCSS__
+ __CSSPAR__
 </style>
 </head>
 <body>
@@ -6681,6 +6735,7 @@ __NAV__
     </div>
   </figure>
   <p>Los refugios profundos son <b>montaña interior seca</b>: la Cordillera Cantábrica, el Sistema Central, el Ibérico, el Pirineo. Y fíjate en el <b>halo ámbar</b> que los rodea: al bajar de la sierra hacia el valle, primero se cruza esa franja dudosa. Por eso, para valorar un pueblo, <a href="__SITE__/">no vale la media — hay que mirar su peor noche</a>.</p>
+__PARPADEO__
 </div></section>
 
 <section><div class="wrap">
@@ -6735,7 +6790,642 @@ __FOOTER__
 """
 
 
-def construir_pagina_estudio(site: str, datos: dict) -> str:
+# ---------------------------------------------------------------------------
+# COMPARADOR DE PARPADEO para /la-espana-que-nunca-se-colorea/
+#
+# La técnica es vieja y buenísima: un blink comparator, lo que usó Tombaugh
+# para encontrar Plutón. Se alternan dos imágenes del mismo encuadre y el ojo,
+# que es malísimo comparando en paralelo pero excelente detectando cambios,
+# fija solo lo que NO cambia. Aquí alternamos «España en verano» con «lo que
+# nunca se colorea»: los refugios se quedan quietos mientras el resto late.
+#
+# Los puntos NO salen de medir píxeles sobre un mapa: son las estaciones de
+# AEMET del ranking con cero noches tropicales, con sus coordenadas exactas.
+# Se proyectan con la MISMA fórmula que generó SILUETA_ES (ver proj() en el
+# Observatorio) o el país saldría ensanchado y los puntos, desplazados.
+#
+# Todo CSS: la animación va sola, y una casilla la para. Sin JS, así que
+# funciona con el script bloqueado y no hay nada que pueda fallar al cargar.
+CSS_PARPADEO = (
+    '.par{margin:26px 0 8px;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:14px;padding:16px 16px 12px}'
+    '.par h3{font-family:var(--fd);font-weight:700;font-size:clamp(17px,3vw,21px);margin:0 0 6px}'
+    '.par p.sub{font-size:14.5px;color:var(--muted);margin:0 0 14px;max-width:62ch}'
+    '.par figure{margin:0}'
+    '.par svg{width:100%;height:auto;display:block;max-width:560px;margin:0 auto;'
+    'background:#120d07;border-radius:12px}'
+    # Las dos capas laten en contrafase: 2,4 s de ciclo, con una meseta en cada
+    # extremo para que dé tiempo a leer cada estado (un cruce continuo mareaba).
+    '@keyframes par-calor{0%,38%{opacity:1}50%,88%{opacity:.06}100%{opacity:1}}'
+    '@keyframes par-frio{0%,38%{opacity:.10}50%,88%{opacity:1}100%{opacity:.10}}'
+    '@keyframes par-pt{0%,38%{opacity:0;r:0}50%,88%{opacity:1;r:2.3}100%{opacity:0;r:0}}'
+    '.par .capa-calor{animation:par-calor 2.4s ease-in-out infinite}'
+    '.par .capa-frio{animation:par-frio 2.4s ease-in-out infinite}'
+    '.par .pt{animation:par-pt 2.4s ease-in-out infinite;'
+    'animation-delay:calc(var(--i)*9ms);transform-box:fill-box}'
+    # La casilla es el interruptor. Oculta pero enfocable: el <label> la acciona
+    # con ratón y con teclado, y el foco se ve.
+    '.par input{position:absolute;opacity:0;width:1px;height:1px}'
+    # Se QUITA la animación, no se pausa: una animación pausada sigue
+    # imponiendo el valor del fotograma en que se quedó, y gana al CSS
+    # normal. Pausándola, el botón paraba el parpadeo pero podía dejar el
+    # mapa en rojo, que es justo el estado que no informa.
+    '.par input:checked ~ figure .capa-calor,'
+    '.par input:checked ~ figure .capa-frio,'
+    '.par input:checked ~ figure .pt{animation:none}'
+    # Parado se queda en el estado útil: los refugios encendidos.
+    '.par input:checked ~ figure .capa-calor{opacity:.06}'
+    '.par input:checked ~ figure .capa-frio{opacity:1}'
+    '.par input:checked ~ figure .pt{opacity:1;r:2.3}'
+    '.par label{display:inline-flex;align-items:center;gap:8px;margin:12px 0 0;'
+    'cursor:pointer;border:1px solid var(--teja);color:var(--teja2);background:transparent;'
+    'font-weight:700;font-size:14px;padding:9px 16px;border-radius:999px}'
+    '.par label:hover{background:var(--teja);color:#1a1209}'
+    '.par input:focus-visible ~ label{outline:2px solid var(--teal);outline-offset:2px}'
+    '.par input:checked ~ label .on{display:none}'
+    '.par label .off{display:none}'
+    '.par input:checked ~ label .off{display:inline}'
+    '.par-lee{font-size:14.5px;color:var(--muted);margin:12px 0 0;'
+    'padding:10px 13px;border-radius:9px;background:#120d07;'
+    'border:1px solid var(--line);line-height:1.5;min-height:1.5em}'
+    '.par-lee.on{color:var(--paper)}'
+    '.par-lee b{color:var(--teal)}'
+    '.par .pie{font-size:13px;color:var(--muted);margin:10px 0 0;line-height:1.55}'
+    # Quien pide menos movimiento no ve ninguno: arranca parado y en el estado
+    # que informa. Una animación de 2,4 s en bucle es justo lo que molesta.
+    '@media(prefers-reduced-motion:reduce){'
+    '.par .capa-calor,.par .capa-frio,.par .pt{animation:none}'
+    '.par .capa-calor{opacity:.06}.par .capa-frio{opacity:1}'
+    '.par .pt{opacity:1;r:2.3}}'
+)
+
+
+# Ciudades que un lector extranjero sabe situar en un mapa de España. Sirven
+# SOLO para orientar ("115 km al norte de Madrid"): un nombre como Sanabria no
+# le dice nada a quien no es de aquí, y sin una referencia el mapa se queda en
+# un punto bonito. No son un dato climático y no se mezclan con los medidos.
+CIUDADES_REF = [
+    ("Madrid", 40.42, -3.70), ("Barcelona", 41.39, 2.17),
+    ("Valencia", 39.47, -0.38), ("Seville", 37.39, -5.98),
+    ("Malaga", 36.72, -4.42), ("Bilbao", 43.26, -2.93),
+    ("Alicante", 38.35, -0.48), ("Zaragoza", 41.65, -0.89),
+    ("Granada", 37.18, -3.60), ("Santiago de Compostela", 42.88, -8.54),
+    ("Oviedo", 43.36, -5.84), ("Pamplona", 42.81, -1.64),
+]
+
+TEXTOS_PARPADEO = {
+    "es": {
+        "h": "El interruptor del verano",
+        "sub": ("Mira fijo al mapa y no lo sigas con los ojos. Cuando el calor se "
+                "apaga, lo que queda encendido son las <b>{n} estaciones de AEMET "
+                "que no registran ni una noche tropical al año</b>. Es el mismo "
+                "truco con el que se encontró Plutón: el ojo compara mal, pero "
+                "detecta el cambio como nadie."),
+        "on": "■ Parar el parpadeo", "off": "▶ Volver a alternar",
+        "toca": "Pasa el cursor o toca un punto para saber cuál es.",
+        "pie": ('Cada punto es una estación medida, no una interpolación: las '
+                '<b>{n}</b> del <a href="{site}/ranking-noches-tropicales/">ranking'
+                '</a> con <b>cero noches tropicales al año</b> en los veranos '
+                '2017–2026. Fuente: AEMET.'),
+        "alt": ("Mapa de España que alterna entre el calor del verano y las {n} "
+                "estaciones de AEMET sin ninguna noche tropical al año."),
+        "de": "de", "m": "m",
+    },
+    "en": {
+        "h": "The summer switch",
+        "sub": ("Stare at the map without following it with your eyes. When the "
+                "heat goes out, what stays lit are the <b>{n} AEMET weather "
+                "stations that record no tropical night at all in a year</b>. It "
+                "is the trick that found Pluto: the eye compares badly, but it "
+                "spots change like nothing else."),
+        "on": "■ Stop the blinking", "off": "▶ Blink again",
+        "toca": "Hover or tap any dot to find out which one it is.",
+        "pie": ('Every dot is a measured station, not an interpolation: the '
+                '<b>{n}</b> in our <a href="{site}/en/coolest-towns-spain/">'
+                'ranking</a> with <b>zero tropical nights a year</b> across the '
+                'summers of 2017–2026. Source: AEMET.'),
+        "alt": ("Map of Spain alternating between the summer heat and the {n} "
+                "AEMET weather stations with no tropical night in a year."),
+        "de": "of", "m": "m",
+    },
+}
+
+
+def orientacion(lat: float, lon: float, lang: str) -> str:
+    """«115 km north of Madrid»: la referencia que convierte un punto en un sitio.
+
+    Un topónimo español no ubica a nadie de fuera. Con la ciudad conocida más
+    cercana, rumbo y distancia, el mismo punto pasa a ser accionable. Todo se
+    calcula, nada se escribe a mano.
+    """
+    import math
+    mejor, mejor_d = None, 1e9
+    for nombre, la, lo in CIUDADES_REF:
+        # Equirectangular: a estas distancias el error frente a la haversine
+        # es de metros, y evita trigonometría que aquí no aporta nada.
+        dx = math.radians(lon - lo) * math.cos(math.radians((lat + la) / 2))
+        dy = math.radians(lat - la)
+        d = 6371 * math.hypot(dx, dy)
+        if d < mejor_d:
+            mejor, mejor_d = (nombre, la, lo), d
+    nombre, la, lo = mejor
+    ang = math.degrees(math.atan2(
+        math.radians(lon - lo) * math.cos(math.radians(lat)),
+        math.radians(lat - la))) % 360
+    rosa_en = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    rosa_es = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]
+    rosa = rosa_en if lang == "en" else rosa_es
+    rumbo = rosa[int((ang + 22.5) % 360 // 45)]
+    if lang == "en":
+        return f"{mejor_d:.0f} km {rumbo} of {nombre}"
+    return f"a {mejor_d:.0f} km al {rumbo} de {nombre}"
+
+
+# El rótulo se rellena al pasar el cursor Y al tocar. El <title> del SVG solo
+# funciona con ratón, y tres de cada cuatro visitas son de móvil: sin esto, el
+# mapa era un punto que no se podía interrogar.
+JS_PARPADEO = """<script>
+(function(){
+  var caja = document.querySelector(".par");
+  if (!caja) return;
+  var out = caja.querySelector(".par-lee");
+  if (!out) return;
+  var base = out.innerHTML;
+  var pts = caja.querySelectorAll(".pt");
+  for (var i = 0; i < pts.length; i++) (function(p){
+    function ver(){ out.innerHTML = p.getAttribute("data-n"); out.className = "par-lee on"; }
+    p.addEventListener("mouseenter", ver);
+    p.addEventListener("click", ver);
+  })(pts[i]);
+  caja.addEventListener("mouseleave", function(){
+    out.innerHTML = base; out.className = "par-lee";
+  });
+})();
+</script>"""
+
+def bloque_parpadeo(estaciones: list, site: str, lang: str = "es") -> str:
+    """El comparador: silueta caliente vs. los refugios que nunca se colorean.
+
+    Un solo bloque para los dos idiomas. Duplicarlo habría garantizado que el
+    día que se toque uno, el otro se quede atrás.
+    """
+    import math
+    T = TEXTOS_PARPADEO[lang]
+    # Misma proyección con la que se generó SILUETA_ES.
+    k = math.cos(math.radians(40)); esc = 190 / 7.9
+    dx = (300 - 12.8 * k * esc) / 2
+    ceros = [e for e in estaciones if e["nt"] == 0]
+    ceros.sort(key=lambda e: -e["alt"])          # de cumbre a valle: la ola sube
+    pts = []
+    for i, e in enumerate(ceros):
+        x = dx + (e["lon"] + 9.4) * k * esc
+        y = (43.9 - e["lat"]) * esc
+        alt_txt = (f'{int(e["alt"]):,}' if lang == "en" else miles(e["alt"]))
+        ficha = (f'<b>{_esc(titular(e["loc"]))}</b> ({_esc(titular(e["prov"]))}, '
+                 f'{alt_txt}&nbsp;{T["m"]}) &#183; '
+                 f'{_esc(orientacion(e["lat"], e["lon"], lang))}')
+        # title para ratón y lectores de pantalla; data-n para el rótulo, que
+        # es lo único que funciona al tocar.
+        pts.append(f'<circle class="pt" style="--i:{i}" cx="{x:.1f}" cy="{y:.1f}" '
+                   f'r="2.3" data-n="{_esc(ficha)}">'
+                   f'<title>{_esc(titular(e["loc"]))} ({_esc(titular(e["prov"]))}, '
+                   f'{alt_txt} {T["m"]}) — '
+                   f'{_esc(orientacion(e["lat"], e["lon"], lang))}</title></circle>')
+    n = len(ceros)
+    return (
+        '<div class="par">'
+        f'<h3>{T["h"]}</h3>'
+        f'<p class="sub">{T["sub"].format(n=n)}</p>'
+        '<input type="checkbox" id="par-stop">'
+        '<figure>'
+        f'<svg viewBox="0 0 300 190" role="img" aria-label="{T["alt"].format(n=n)}">'
+        '<defs><linearGradient id="par-g" x1="0" y1="0" x2="0" y2="1">'
+        '<stop offset="0" stop-color="#e7318f"/><stop offset="1" stop-color="#b8344f"/>'
+        '</linearGradient></defs>'
+        f'<path class="capa-frio" d="{SILUETA_ES}" fill="#241b11" stroke="#3a2c1c" stroke-width=".6"/>'
+        f'<path class="capa-calor" d="{SILUETA_ES}" fill="url(#par-g)"/>'
+        f'<g fill="#a9c6d4">{"".join(pts)}</g>'
+        '</svg>'
+        '</figure>'
+        # ■ y ▶ son del mismo bloque Unicode (Geometric Shapes) y están en
+        # cualquier fuente del sistema. ⏸ (U+23F8) necesita fuente de emoji
+        # y salía como un cuadrado vacío.
+        f'<label for="par-stop"><span class="on">{T["on"]}</span>'
+        f'<span class="off">{T["off"]}</span></label>'
+        f'<p class="par-lee">{T["toca"]}</p>'
+        f'<p class="pie">{T["pie"].format(n=n, site=site)}</p>'
+        '</div>' + JS_PARPADEO)
+
+
+# ---------------------------------------------------------------------------
+# /cuantas-horas-se-duerme-en-verano/ — el estudio del archivo horario.
+#
+# Sale de docs/estudios/horas-datos.json, que escribe analisis_curva_nocturna.py
+# leyendo datos/horarias/. Si el JSON no está, la página no se genera: mismo
+# trato que el estudio de los colores.
+#
+# La tesis: el dato que publica todo el mundo —la mínima de la noche— no dice
+# cuánto se pudo dormir. Dos noches con la misma mínima pueden haber tenido 1
+# hora de alivio o 9. Es la primera vez que se puede enseñar, porque hace falta
+# el dato HORARIO y AEMET no lo archiva: lo borra a las ~12 h.
+#
+# Todo el dibujo es CSS: barras con height en %, sin una línea de JS.
+CSS_HORAS = (
+    # --- 1) misma mínima, horas distintas -------------------------------
+    # La barra NO se lee sola: sin eje, un rectángulo de color no dice
+    # cuántas horas son. De ahí las líneas de hora en el fondo de la pista
+    # y la fila de números debajo.
+    '.hz-tabla{margin:20px 0 4px;display:grid;gap:6px}'
+    '.hz-f{display:grid;grid-template-columns:52px 1fr 62px;align-items:center;gap:12px}'
+    '.hz-f .et{font-family:var(--fm);font-size:13px;color:var(--muted);text-align:right}'
+    '.hz-b{position:relative;height:22px;background:#12100c;border-radius:5px;'
+    'background-image:repeating-linear-gradient(90deg,rgba(239,230,214,.10) 0 1px,'
+    'transparent 1px calc(100%/__DIV__));overflow:hidden}'
+    '.hz-r{position:absolute;top:3px;bottom:3px;border-radius:3px}'
+    '.hz-m{position:absolute;top:0;bottom:0;width:2px;background:var(--paper);'
+    'opacity:.92}'
+    '.hz-f .n{font-family:var(--fm);font-size:12.5px;color:var(--muted)}'
+    # Eje de horas: los números van centrados bajo su línea, por eso se
+    # posicionan en absoluto y no con un flex repartido.
+    '.hz-eje{position:relative;height:16px}'
+    '.hz-eje span{position:absolute;transform:translateX(-50%);font-family:var(--fm);'
+    'font-size:11px;color:var(--muted)}'
+    '.hz-cabf{font-size:12px;color:var(--muted);text-transform:uppercase;'
+    'letter-spacing:.06em}'
+    '.hz-ley{font-size:13px;color:var(--muted);margin:4px 0 0;line-height:1.6}'
+    # Leyenda de color, común a toda la página: el color significa lo mismo
+    # en las barras de arriba y en las noches de abajo.
+    '.hz-leg{display:flex;flex-wrap:wrap;gap:7px 16px;margin:16px 0 14px;'
+    'font-size:12.5px;color:var(--muted)}'
+    '.hz-leg i{display:inline-block;width:11px;height:11px;border-radius:3px;'
+    'margin-right:6px;vertical-align:-1px}'
+    # Tarjetas de dato y caja de método: propias, no heredadas.
+    '.dato{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0}'
+    '.dcard{flex:1;min-width:170px;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:13px;padding:15px 17px}'
+    '.dcard .n{font-family:var(--fd);font-weight:900;font-size:31px;line-height:1;'
+    'color:var(--teja2)}'
+    '.dcard .l{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}'
+    '.verifica{background:var(--bg2);border:1px solid var(--line);border-radius:14px;'
+    'padding:20px 22px;margin:26px 0 0}'
+    '.verifica .t{font-family:var(--fd);font-weight:700;font-size:18px;margin:0 0 10px}'
+    '.verifica p{font-size:15px;line-height:1.7;margin:0 0 11px}'
+    '.verifica p:last-child{margin-bottom:0}'
+    '.sigue{border-top:1px solid var(--line);margin-top:28px;padding-top:22px;'
+    'font-size:15px}'
+    # --- 2) las tiras de noches -----------------------------------------
+    '.hz-e{background:linear-gradient(180deg,var(--bg2),var(--panel));'
+    'border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 13px}'
+    '.hz-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;'
+    'flex-wrap:wrap}'
+    '.hz-cab b{font-family:var(--fd);font-weight:700;font-size:17.5px}'
+    '.hz-cab span{color:var(--muted);font-size:13px}'
+    '.hz-big{display:flex;align-items:baseline;gap:11px;margin:10px 0 14px;'
+    'flex-wrap:wrap}'
+    '.hz-big .v{font-family:var(--fd);font-weight:700;font-size:40px;line-height:1;'
+    'color:var(--teal)}'
+    '.hz-big .u{color:var(--muted);font-size:13.5px}'
+    '.hz-big .r{font-family:var(--fm);font-size:12px;color:var(--paper);'
+    'border:1px solid var(--line);border-radius:999px;padding:4px 10px}'
+    # La tira, con su eje vertical al lado: sin el "9 h / 0" no se sabe
+    # contra qué se compara la altura de cada barra.
+    '.hz-graf{display:flex;gap:9px;align-items:stretch}'
+    '.hz-ejey{display:flex;flex-direction:column;justify-content:space-between;'
+    'font-family:var(--fm);font-size:10.5px;color:var(--muted);text-align:right;'
+    'width:26px;flex:none;padding:1px 0}'
+    '.hz-tira{flex:1;display:flex;gap:3px;align-items:flex-end;height:52px;'
+    'border-top:1px dashed rgba(239,230,214,.16);'
+    'border-bottom:1px solid rgba(239,230,214,.22)}'
+    '.hz-n{flex:1;min-width:3px;border-radius:2px 2px 0 0;cursor:default;'
+    'transition:filter .12s}'
+    '.hz-n:hover{filter:brightness(1.45)}'
+    '.hz-fechas{display:flex;justify-content:space-between;margin:5px 0 0 35px;'
+    'font-family:var(--fm);font-size:10.5px;color:var(--muted)}'
+    '.hz-det{display:block;color:var(--muted);font-size:12.5px;margin:9px 0 0;'
+    'line-height:1.5;min-height:1.5em}'
+    '.hz-det b{color:var(--teja2)}'
+    '.hz-det.on{color:var(--paper)}'
+    # --- 3) horas del cruce ---------------------------------------------
+    '.hz-cr{display:flex;gap:4px;align-items:flex-end;margin:20px 0 6px}'
+    '.hz-cc{flex:1;display:flex;flex-direction:column;justify-content:flex-end;'
+    'align-items:center;gap:5px}'
+    '.hz-cb{width:100%;border-radius:3px 3px 0 0;min-height:2px}'
+    '.hz-cl{font-family:var(--fm);font-size:11px;color:var(--muted)}'
+    '@media(max-width:560px){.hz-f{grid-template-columns:42px 1fr 52px;gap:8px}'
+    '.hz-cl{font-size:9.5px}.hz-big .v{font-size:34px}.hz-eje span{font-size:9.5px}}'
+)
+
+# Pequeño JS (vanilla, como el resto del sitio) para que al pasar el cursor
+# —o al tocar en el móvil, donde no hay cursor— la noche se cuente con
+# palabras debajo de la tira. El atributo title se queda como respaldo.
+JS_HORAS = """<script>
+(function(){
+  var tarj = document.querySelectorAll('.hz-e');
+  for (var i = 0; i < tarj.length; i++) (function(c){
+    var det = c.querySelector('.hz-det');
+    if (!det) return;
+    var base = det.innerHTML;
+    var barras = c.querySelectorAll('.hz-n');
+    for (var j = 0; j < barras.length; j++) (function(b){
+      function ver(){ det.innerHTML = b.getAttribute('data-d'); det.className = 'hz-det on'; }
+      b.addEventListener('mouseenter', ver);
+      b.addEventListener('click', ver);
+    })(barras[j]);
+    c.addEventListener('mouseleave', function(){
+      det.innerHTML = base; det.className = 'hz-det';
+    });
+  })(tarj[i]);
+})();
+</script>"""
+
+LEYENDA_HORAS = (
+    '<p class="hz-leg">'
+    '<span><i style="background:#8fb07a"></i>7 h o más: se duerme</span>'
+    '<span><i style="background:#c9a24a"></i>de 4 a 6 h</span>'
+    '<span><i style="background:#d9744e"></i>de 1 a 3 h: un respiro corto</span>'
+    '<span><i style="background:#c94a2e"></i>ni una hora por debajo de 20&nbsp;°C</span>'
+    '</p>')
+
+
+def _hz_color(h: float) -> str:
+    """Verde si se duerme, rojo si no. Mismo criterio en TODA la página: el
+    color significa lo mismo en las barras de rango y en cada noche."""
+    return ("#8fb07a" if h >= 7 else "#c9a24a" if h >= 4
+            else "#d9744e" if h >= 1 else "#c94a2e")
+
+
+def _hz_fecha(iso: str) -> str:
+    """'2026-08-29' -> '29 ago'."""
+    f = date.fromisoformat(iso)
+    return f"{f.day} {MESES_ES[f.month - 1][:3]}"
+
+
+def bloque_horas(d: dict, site: str) -> str:
+    """Las tres piezas visuales del estudio. Devuelve (tabla, tiras, cruces)."""
+    vent = d["ventana"]["horas"]
+    # --- 1) misma mínima, horas distintas -------------------------------
+    # El color de la barra es el de SU MEDIANA, no un degradado decorativo:
+    # así una fila verde y una roja significan lo mismo que una noche verde
+    # y una roja más abajo.
+    filas = []
+    for m in d["minimas"]:
+        if not 12 <= m["min"] <= 24:
+            continue
+        izq, der = 100 * m["p10"] / vent, 100 * m["p90"] / vent
+        med = 100 * m["mediana"] / vent
+        ayuda = (f'Noches con mínima de {m["min"]} °C: {m["n"]:,} medidas. '
+                 f'Mediana {_n_es(m["mediana"])} h bajo 20 °C; '
+                 f'el 80 % de ellas va de {m["p10"]} a {m["p90"]} h; el rango completo, '
+                 f'de {m["peor"]} a {m["mejor"]}.').replace(",", ".")
+        filas.append(
+            f'<div class="hz-f" title="{ayuda}">'
+            f'<span class="et">{m["min"]}&nbsp;°C</span>'
+            f'<span class="hz-b"><span class="hz-r" style="left:{izq:.1f}%;'
+            f'width:{max(der - izq, 1.4):.1f}%;'
+            f'background:{_hz_color(m["mediana"])}"></span>'
+            f'<span class="hz-m" style="left:calc(clamp(0.7%, {med:.1f}%, 99.3%) - 1px)"></span></span>'
+            f'<span class="n">{m["peor"]}–{m["mejor"]} h</span></div>')
+    eje = "".join(f'<span style="left:{100 * h / vent:.1f}%">{h}</span>'
+                  for h in range(vent + 1))
+    tabla = (f'<div class="hz-f hz-cabf"><span class="et">mínima</span>'
+             f'<span>horas por debajo de 20&nbsp;°C</span>'
+             f'<span>rango</span></div>'
+             f'<div class="hz-tabla">{"".join(filas)}</div>'
+             f'<div class="hz-f"><span></span><span class="hz-eje">{eje}</span>'
+             f'<span></span></div>')
+    # --- 2) las tiras de noches -----------------------------------------
+    tiras = [LEYENDA_HORAS]
+    for e in d["ejemplos"]:
+        alto = 46 / vent
+        barras = "".join(
+            f'<span class="hz-n" style="height:{5 + n["h"] * alto:.0f}px;'
+            f'background:{_hz_color(n["h"])}" '
+            f'title="{_hz_fecha(n["noche"])}: mínima {_n_es(n["tmin"])}°, '
+            f'{n["h"]} h bajo 20°" '
+            f'data-d="Noche del <b>{_hz_fecha(n["noche"])}</b> · mínima '
+            f'{_n_es(n["tmin"])}&nbsp;°C · <b>{n["h"]} de {vent} horas</b> '
+            f'por debajo de 20&nbsp;°C"></span>'
+            for n in e["tira"])
+        cr = e["cruce_20_tipico"]
+        cruce = (f"suele refrescar sobre las {int(cr):02d}:00" if cr not in ("", None)
+                 else "no llega a refrescar")
+        # "Todas iguales" no dice nada por sí solo: iguales a nueve horas y
+        # iguales a cero son la noticia contraria.
+        if e["h20_peor"] != e["h20_mejor"]:
+            rango = f'de {e["h20_peor"]} a {e["h20_mejor"]} h según la noche'
+        elif e["h20_peor"] == 0:
+            rango = "ninguna noche bajó de 20 °C"
+        else:
+            rango = f'{e["h20_peor"]} h todas las noches, sin excepción'
+        sin = (f' · <b>{e["noches_sin_alivio"]} de {e["noches"]} sin un solo '
+               f'respiro</b>' if e["noches_sin_alivio"] else "")
+        tiras.append(
+            f'<div class="hz-e"><div class="hz-cab"><b>{titular(e["nombre"])}</b>'
+            f'<span>{titular(e["provincia"])} · {miles(e["altitud"])} m</span></div>'
+            f'<div class="hz-big"><span class="v">{_n_es(e["h20_mediana"])}</span>'
+            f'<span class="u">h de {vent} en una noche normal</span>'
+            f'<span class="r">{rango}</span></div>'
+            f'<div class="hz-graf"><div class="hz-ejey"><span>{vent} h</span>'
+            f'<span>0</span></div><div class="hz-tira">{barras}</div></div>'
+            f'<div class="hz-fechas"><span>{_hz_fecha(e["tira"][0]["noche"])}</span>'
+            f'<span>{e["noches"]} noches</span>'
+            f'<span>{_hz_fecha(e["tira"][-1]["noche"])}</span></div>'
+            f'<span class="hz-det">Cada barra es una noche; la altura, sus horas '
+            f'por debajo de 20&nbsp;°C. {cruce.capitalize()}{sin}. '
+            f'<b>Pasa el cursor o toca una barra.</b></span></div>')
+    # --- 3) la hora del alivio ------------------------------------------
+    tot = sum(c["n"] for c in d["cruces"]) or 1
+    mx = max(c["n"] for c in d["cruces"])
+    cols = []
+    # En orden de NOCHE, no de reloj: las 23:00 abren la ventana y van primero.
+    # Ordenado por el reloj, el grupo más numeroso caería al final y el gráfico
+    # contaría la noche al revés.
+    orden = sorted(d["cruces"], key=lambda c: (
+        99 if c["hora"] == "nunca" else -1 if c["hora"] == 23 else c["hora"]))
+    for c in orden:
+        h = c["hora"]
+        etq = "nunca" if h == "nunca" else f"{int(h):02d}"
+        col = ("#c94a2e" if h == "nunca" else "#8fb07a" if int(h) in (23, 0, 1)
+               else "#c9a24a" if int(h) <= 4 else "#d9744e")
+        pct = 100 * c["n"] / tot
+        ayuda = (f'{c["n"]:,} noches'.replace(",", ".") +
+                 (" no bajaron de 20 °C en toda la ventana"
+                  if h == "nunca" else f" cruzaron los 20 °C a las {etq}:00"))
+        cols.append(
+            f'<div class="hz-cc" title="{ayuda}">'
+            f'<span class="hz-cl">{pct:.0f}%</span>'
+            f'<span class="hz-cb" style="height:{4 + 82 * c["n"] / mx:.0f}px;'
+            f'background:{col}"></span><span class="hz-cl">{etq}</span></div>')
+    return tabla, "".join(tiras), f'<div class="hz-cr">{"".join(cols)}</div>'
+
+
+PAGINA_HORAS = r"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/cuantas-horas-se-duerme-en-verano/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__TITLE__">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/cuantas-horas-se-duerme-en-verano/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=Lora:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>__CSS__ __CSSART__ __NAVCSS__ __FOOTERCSS__ __CSSATAJO__ __CSSHZ__</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__HOME__">Refugio Climático</a> · Cuántas horas se duerme</nav>
+  <div class="kick">Estudio · Archivo horario propio · Datos AEMET</div>
+  <h1>La mínima no dice <em>cuánto se duerme</em></h1>
+  <p class="intro">Toda España mide la noche con un solo número: la <b>temperatura mínima</b>. Hemos medido <b>__NOCHES__ noches hora a hora</b> en __EST__ estaciones de AEMET, y el resultado es incómodo: <b>dos noches con la misma mínima pueden haber tenido una hora de alivio o nueve</b>. El dato que se publica no distingue una de otra.</p>
+  __ATAJO__
+</div></header>
+
+<section><div class="wrap">
+  <h2>La prueba: misma mínima, noches opuestas</h2>
+  <p>Agrupamos todas las noches medidas por su <b>mínima</b>, redondeada al grado, y miramos cuántas horas estuvo cada una por debajo de 20&nbsp;°C entre las 23:00 y las 07:00. <b>Una fila = todas las noches con esa mínima.</b> La barra cubre al 80&nbsp;% de ellas (del percentil 10 al 90), la marca clara es la mediana, y a la derecha va el rango completo: la peor noche de ese grupo y la mejor. La escala de horas está debajo, y el color de cada barra es el de su mediana.</p>
+  <div class="hz-tabla">__HZ_TABLA__</div>
+  <p class="hz-ley">De __PARES__ noches-estación. Si la mínima bastara, cada fila sería una raya fina. No lo es.</p>
+  <div class="dato">
+    <div class="dcard"><div class="n">__M19_MED__ h</div><div class="l">mediana con mínima de 19&nbsp;°C — pero va de __M19_PEOR__ a __M19_MEJOR__</div></div>
+    <div class="dcard"><div class="n">__MED20__ h</div><div class="l">mediana nacional bajo 20&nbsp;°C, de __VENT__</div></div>
+    <div class="dcard"><div class="n">__MED18__ h</div><div class="l">bajo 18&nbsp;°C, el umbral del sueño profundo</div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Cómo se ve una noche, noche a noche</h2>
+  <p>Las barras de arriba resumen miles de noches. Estas son <b>noches concretas de tres estaciones</b>, una al lado de otra, en el mismo orden en que ocurrieron. <b>Cada barra es una noche</b>; su altura, las horas que pasó por debajo de 20&nbsp;°C: la barra llega arriba del todo si lo estuvo la ventana entera, y se queda en un tope rojo si no bajó ni una hora. Pasa el cursor por encima de cualquiera —o tócala en el móvil— y debajo te dice qué noche fue.</p>
+  __HZ_TIRAS__
+  <p>Las tres tienen la misma escala, y ahí está el asunto. La primera es una raya verde continua: <b>siempre</b> se duerme. La última, una raya roja continua: <b>nunca</b>. La de en medio es la misma ciudad, el mismo termómetro, y sus noches saltan de cero a nueve horas sin previo aviso. <b>Promediar esas noches inventaría una templada que no existió jamás</b>, y por eso aquí publicamos la mediana y los extremos, nunca la media.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Lo que de verdad decide la noche: a qué hora refresca</h2>
+  <p>No es cuánto baja, es <b>cuándo</b>. Reparto de la hora local en que se cruzan los 20&nbsp;°C:</p>
+  __HZ_CRUCES__
+  <p class="hz-ley">Hora local del cruce · «nunca» = la noche entera por encima de 20&nbsp;°C.</p>
+  <p><b>El __PCT23__&nbsp;% de las noches ya empieza por debajo de 20&nbsp;°C a las 23:00</b> — y es el único grupo con la noche entera fresca. En el otro extremo, el __PCTN__&nbsp;% no cruza nunca. Y entre medias hay una trampa: <b>cruzar a las cinco de la mañana equivale a no cruzar</b>. El alivio llega cuando ya no sirve.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>El mapa del insomnio: donde no hubo ni un respiro</h2>
+  <p>De las __RESUM__ estaciones con al menos diez noches medidas, <b>__NIUNA__ no bajaron de 20&nbsp;°C ni una sola hora</b> en una noche típica. Y __SINRESP__ no lo hicieron <b>en ninguna de las noches del periodo</b>:</p>
+  <p class="hz-ley">__LISTA_SIN__</p>
+  <div class="dato">__TRAMOS__</div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="verifica">
+    <div class="t">Cómo está hecho, y qué no dice</div>
+    <p>Ventana local de <b>23:00 a 07:00</b> (__VENT__ horas), del __INI__ al __FIN__: <b>__NOCHES__ noches completas</b> y __PARES__ pares noche-estación. Las horas se cuentan sobre lecturas horarias reales de la red de observación de <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET</a>, no sobre interpolaciones.</p>
+    <p><b>AEMET no publica histórico horario</b>: la observación se borra a las ~12 horas. Este archivo existe porque lo guardamos cada día desde el 29 de agosto de 2026. Por eso el periodo es corto — y por eso no hay forma de rellenarlo hacia atrás.</p>
+    <p><b>Lo que esto NO dice:</b> son __NOCHES__ noches de final de verano, no un año. La tabla describe <i>estas</i> noches, no el clima de cada pueblo. Para eso hacen falta veranos enteros, y los estamos guardando. El <a href="__SITE__/ranking-noches-tropicales/">ranking de noches tropicales</a> sí cubre diez veranos, con el dato diario.</p>
+  </div>
+  <p class="sigue">Sigue: <a href="__SITE__/noches-tropicales/">qué es una noche tropical</a> · <a href="__SITE__/noches-tropicales-y-salud/">por qué importa para la salud</a> · <a href="__SITE__/la-espana-que-nunca-se-colorea/">la España que nunca se colorea</a> · <a href="__SITE__/refugios-climaticos-naturales-cerca-de-mi/">el refugio más cercano a ti</a>.</p>
+</div></section>
+__FOOTER__
+__JS__
+</body>
+</html>
+"""
+
+
+def construir_pagina_horas(d: dict, site: str) -> str:
+    """La landing del estudio horario. Devuelve None si faltan datos."""
+    tabla, tiras, cruces = bloque_horas(d, site)
+    p = d["periodo"]
+    vent = d["ventana"]["horas"]
+    m19 = next((m for m in d["minimas"] if m["min"] == 19), None)
+    tot_cruces = sum(c["n"] for c in d["cruces"]) or 1
+    c23 = next((c["n"] for c in d["cruces"] if c["hora"] == 23), 0)
+    cn = next((c["n"] for c in d["cruces"] if c["hora"] == "nunca"), 0)
+    niuna = next((t["n"] for t in d["tramos"] if t["etq"] == "ni una hora"), 0)
+    tramos = "".join(
+        f'<div class="dcard"><div class="n">{t["n"]}</div>'
+        f'<div class="l">estaciones con {t["etq"]} de alivio</div></div>'
+        for t in d["tramos"])
+    lista = " · ".join(f'{titular(x["nombre"])} ({titular(x["provincia"])})'
+                       for x in d["sin_respiro"]["lista"])
+    if d["sin_respiro"]["n"] > len(d["sin_respiro"]["lista"]):
+        lista += f' · y {d["sin_respiro"]["n"] - len(d["sin_respiro"]["lista"])} más'
+    title = "¿Cuántas horas se duerme de verdad en verano? | Noche Tropical"
+    desc = (f"La mínima no dice cuánto se duerme: con la misma mínima de 19 °C hay noches "
+            f"de una hora de alivio y de nueve. {p['noches']} noches medidas hora a hora "
+            f"en {p['estaciones']} estaciones de AEMET.")
+    url = site + "/cuantas-horas-se-duerme-en-verano/"
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Cuántas horas se duerme", "item": url}]},
+        {"@type": "Article", "headline": "La mínima no dice cuánto se duerme",
+         "description": desc, "mainEntityOfPage": url, "image": site + "/og.png",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es"},
+         "datePublished": iso_tz(p["fin"]), "dateModified": iso_tz(p["fin"]),
+         "isBasedOn": "https://opendata.aemet.es"},
+        {"@type": "Dataset",
+         "name": f"Horas dormibles por estación (AEMET, {p['noches']} noches)",
+         "description": ("Horas por debajo de 20 °C entre las 23:00 y las 07:00, por "
+                         "estación y noche, a partir del archivo horario propio de "
+                         "observación de AEMET."),
+         "temporalCoverage": f"{p['ini']}/{p['fin']}",
+         "spatialCoverage": {"@type": "Place", "name": "España"},
+         "creator": {"@type": "Organization", "name": "nochetropical.es"},
+         "isBasedOn": "https://opendata.aemet.es",
+         "license": "https://creativecommons.org/licenses/by/4.0/"}]}, ensure_ascii=False)
+    return (PAGINA_HORAS
+            .replace("__SCHEMA__", schema)
+            .replace("__CSS__", _CSS_CHROME)
+            .replace("__CSSART__", _CSS_ARTICULO)
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__CSSATAJO__", CSS_ATAJO)
+            .replace("__CSSHZ__", CSS_HORAS.replace("__DIV__", str(vent)))
+            .replace("__NAV__", nav_escueto_html(site))
+            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__ATAJO__", ATAJO_CERCA)
+            .replace("__JS__", JS_HORAS)
+            .replace("__HZ_TABLA__", tabla)
+            .replace("__HZ_TIRAS__", tiras)
+            .replace("__HZ_CRUCES__", cruces)
+            .replace("__TRAMOS__", tramos)
+            .replace("__LISTA_SIN__", lista)
+            .replace("__TITLE__", title)
+            .replace("__DESC__", desc)
+            .replace("__NOCHES__", str(p["noches"]))
+            .replace("__PARES__", f"{p['pares']:,}".replace(",", "."))
+            .replace("__EST__", str(p["estaciones"]))
+            .replace("__RESUM__", str(d["estaciones_resumidas"]))
+            .replace("__NIUNA__", str(niuna))
+            .replace("__SINRESP__", str(d["sin_respiro"]["n"]))
+            .replace("__M19_MED__", _n_es(m19["mediana"]) if m19 else "?")
+            .replace("__M19_PEOR__", str(m19["peor"]) if m19 else "?")
+            .replace("__M19_MEJOR__", str(m19["mejor"]) if m19 else "?")
+            .replace("__MED20__", _n_es(d["mediana_h20"]))
+            .replace("__MED18__", _n_es(d["mediana_h18"]))
+            .replace("__PCT23__", f"{100 * c23 / tot_cruces:.0f}")
+            .replace("__PCTN__", f"{100 * cn / tot_cruces:.0f}")
+            .replace("__VENT__", str(vent))
+            .replace("__INI__", fecha_es_dia(date.fromisoformat(p["ini"])))
+            .replace("__FIN__", fecha_es_dia(date.fromisoformat(p["fin"])))
+            .replace("__SITE__", site)
+            .replace("__HOME__", site + "/"))
+
+def construir_pagina_estudio(site: str, datos: dict, estaciones: list) -> str:
     per = datos["periodo"]; noc = datos["nocturno"]; dia = datos["dia"]
     ini = fecha_es(date.fromisoformat(per["ini"]))
     fin = fecha_es(date.fromisoformat(per["fin"]))
@@ -6767,6 +7457,8 @@ def construir_pagina_estudio(site: str, datos: dict) -> str:
             .replace("__SCHEMA__", schema)
             .replace("__TITLE__", title)
             .replace("__DESC__", desc)
+            .replace("__CSSPAR__", CSS_PARPADEO)
+            .replace("__PARPADEO__", bloque_parpadeo(estaciones, site))
             .replace("__PROFUNDO__", f"{noc['profundo']:.0f}")
             .replace("__MARGEN__", f"{noc['margen']:.0f}")
             .replace("__TROPICAL__", f"{noc['tropical']:.0f}")
@@ -7083,6 +7775,7 @@ __NAV__
       <a class="navcard" href="__SITE__/enfriar-habitacion-sin-aire-acondicionado/"><span class="ic">💧</span><b>Enfriar sin aire acondicionado</b><span>La sábana húmeda y dónde baja grados de verdad.</span></a>
       <a class="navcard" href="__SITE__/noches-tropicales-y-salud/"><span class="ic">🫀</span><b>Noches tropicales y salud</b><span>Qué dice la ciencia sobre dormir con calor.</span></a>
       <a class="navcard" href="__SITE__/la-espana-que-nunca-se-colorea/"><span class="ic">🗺️</span><b>La España que nunca se colorea</b><span>El estudio de los mapas de AEMET, píxel a píxel.</span></a>
+      <a class="navcard" href="__SITE__/cuantas-horas-se-duerme-en-verano/"><span class="ic">⏱️</span><b>Cuántas horas se duerme</b><span>La mínima no dice cuánto se duerme. Lo medimos hora a hora.</span></a>
       <a class="navcard" href="__SITE__/metodologia/"><span class="ic">📐</span><b>Cómo medimos</b><span>Qué es una noche tropical y de dónde salen los datos.</span></a>
       <a class="navcard" href="__SITE__/"><span class="ic">🏡</span><b>Tu pueblo</b><span>¿Cuántas noches tropicales tiene al año?</span></a>
     </div>
@@ -7893,7 +8586,8 @@ def construir_indice_buscador(estaciones: list, site: str) -> int:
     """
     paginas = []
     for f in (list(DOCS_DIR.glob("index.html")) + list(DOCS_DIR.glob("*/index.html"))
-              + list(DOCS_DIR.glob("*/*/index.html"))):
+              + list(DOCS_DIR.glob("*/*/index.html"))
+              + list(DOCS_DIR.glob("*/*/*/index.html"))):
         rel = f.parent.relative_to(DOCS_DIR).as_posix()
         rel = "" if rel == "." else rel
         if rel in REDIRECCIONES or rel in FUERA_DEL_BUSCADOR:
@@ -10495,6 +11189,9 @@ MENU_EN = [
     ("Coolest towns", "/en/coolest-towns-spain/"),
     ("Frost-free towns", "/en/frost-free-towns-spain/"),
     ("Mildest winters", "/en/spains-mildest-winters/"),
+    ("Year round", "/en/best-climate-in-spain-year-round/"),
+    ("Your address", "/en/find-your-winter-address/"),
+    ("Mild Winter", "/en/mild-winter/"),
 ]
 
 
@@ -10505,20 +11202,27 @@ def nav_en_html(site: str) -> str:
     # enlace no había forma de llegar a él desde la sección inglesa.
     enlaces += (f'<a href="{site}/en/search/" class="lupa" aria-label="Search"'
                 f' title="Search the site">{_LUPA_SVG}</a>')
-    enlaces += f'<a href="{site}/" hreflang="es" class="lang">ES · Español</a>'
+    conmutador = (f'<a href="{site}/" hreflang="es" class="lang fijo" '
+                  f'title="Versión en español">ES</a>')
     # Mismo botón y script de hamburguesa que el menú español: sin ellos, el CSS
     # móvil de CSS_NAV_ESCUETO oculta los enlaces y no queda forma de abrirlos.
     boton = BOTON_BURGER.replace("Abrir menú", "Open menu")
     js = JS_BURGER.replace("Cerrar menú", "Close menu").replace("Abrir menú", "Open menu")
     return ('<nav class="nav-e" aria-label="main"><div class="in">'
             f'<a class="brand" href="{site}/en/" aria-label="nochetropical.es">{_LOGO_ESCUETO}</a>'
-            f'<div class="links" id="menu-nav">{enlaces}</div>' + boton + '</div>' + js + '</nav>')
+            f'<div class="links" id="menu-nav">{enlaces}</div>'
+            + conmutador + boton + '</div>' + js + '</nav>')
 
 
 def footer_en_html(site: str) -> str:
     c1 = [("Coolest towns to sleep in summer", "/en/coolest-towns-spain/"),
           ("Frost-free towns to spend winter", "/en/frost-free-towns-spain/"),
           ("Spain's mildest winters, city by city", "/en/spains-mildest-winters/"),
+          ("The best climate in Spain, year round",
+           "/en/best-climate-in-spain-year-round/"),
+          ("Find your winter address (tool)",
+           "/en/find-your-winter-address/"),
+          ("The Mild Winter seal", "/en/mild-winter/"),
           ("Live heatwave map, animated (ES)", "/ola-de-calor/"),
           ("Interactive station map (ES)", "/mapa-estaciones/"),
           ("National tropical-nights ranking (ES)", "/ranking-noches-tropicales/")]
@@ -10679,6 +11383,1255 @@ def _cabeza_en(site: str, titulo: str, desc: str, path: str, es_path: str,
         + _FUENTES_LINK + '\n<style>'
         + _CSS_EN + CSS_NAV_ESCUETO + CSS_FOOTER_ESCUETO + extra_css
         + '</style></head><body>\n')
+
+
+# ---------------------------------------------------------------------------
+# «THE BEST CLIMATE IN SPAIN, YEAR ROUND» — /en/best-climate-in-spain-year-round/
+#
+# La landing del cruce invierno-verano, en inglés porque ahí está la demanda:
+# el 25 % de las impresiones del sitio ya son páginas /en/ y las consultas son
+# de invierno («how cold does it get in spain in the winter»).
+#
+# La tesis: el mercado del winter sun vende medias mensuales, y con una media
+# de 17 °C en enero no se sabe cuántas noches hay que encender la calefacción.
+# Medido con conteos por umbral, el intercambio aparece: Spearman −0,71 entre
+# noches de calefacción y noches tropicales. Y la frontera de Pareto —quien no
+# es batido en las dos cosas a la vez— son DOS estaciones de 828.
+#
+# El dibujo es SVG inline generado en Python, sin librerías, como el mapa.
+# ---------------------------------------------------------------------------
+CSS_DOSCARAS = (
+    '.dc-fig{margin:26px 0 8px;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:14px;padding:18px 16px 10px}'
+    '.dc-fig svg{width:100%;height:auto;display:block;overflow:visible}'
+    '.dc-leg{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 2px 0;'
+    'font-size:12.5px;color:var(--muted)}'
+    '.dc-leg i{display:inline-block;width:10px;height:10px;border-radius:50%;'
+    'margin-right:6px;vertical-align:-1px}'
+    '.dc-cap{font-size:13px;color:var(--muted);margin:10px 0 0;line-height:1.6}'
+    '.dc-tabla{width:100%;border-collapse:collapse;margin:18px 0 6px;'
+    'font-size:14.5px}'
+    '.dc-tabla th{text-align:right;font-size:11.5px;text-transform:uppercase;'
+    'letter-spacing:.05em;color:var(--muted);font-weight:600;padding:0 0 9px 10px;'
+    'border-bottom:1px solid var(--line)}'
+    '.dc-tabla th:first-child{text-align:left;padding-left:0}'
+    '.dc-tabla td{padding:9px 0 9px 10px;text-align:right;'
+    'border-bottom:1px solid rgba(239,230,214,.07);font-variant-numeric:tabular-nums}'
+    '.dc-tabla td:first-child{text-align:left;padding-left:0}'
+    '.dc-tabla tr.grupo td{padding-top:20px;border-bottom:none;'
+    'font-family:var(--fd);font-weight:700;font-size:15px;color:var(--teja2)}'
+    '.dc-tabla .est{display:block;font-size:11.5px;color:var(--muted);'
+    'margin-top:2px}'
+    '.dc-mal{color:#d9744e}.dc-bien{color:#8fb07a}'
+    '.dc-dest{background:var(--bg2);border:1px solid var(--teal);'
+    'border-radius:14px;padding:18px 20px;margin:22px 0}'
+    '.dc-dest .t{font-family:var(--fd);font-weight:700;font-size:19px;'
+    'margin:0 0 8px;color:var(--teal)}'
+    '.dc-dest p{margin:0 0 10px;font-size:15px;line-height:1.7}'
+    '.dc-dest p:last-child{margin-bottom:0}'
+    '.dato{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0}'
+    '.dcard{flex:1;min-width:165px;background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:13px;padding:15px 17px}'
+    '.dcard .n{font-family:var(--fd);font-weight:900;font-size:31px;line-height:1;'
+    'color:var(--teja2)}'
+    '.dcard .l{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}'
+    '.verifica{background:var(--bg2);border:1px solid var(--line);border-radius:14px;'
+    'padding:20px 22px;margin:26px 0 0}'
+    '.verifica .t{font-family:var(--fd);font-weight:700;font-size:18px;margin:0 0 10px}'
+    '.verifica p{font-size:14.5px;line-height:1.7;margin:0 0 11px}'
+    '.verifica p:last-child{margin-bottom:0}'
+    '@media(max-width:560px){.dc-tabla{font-size:13px}'
+    '.dc-tabla th{font-size:10px}.dc-tabla td{padding-left:6px}}'
+)
+
+# Etiquetas de los grupos de la tabla. El orden cuenta la historia: primero lo
+# que el lector vino buscando (la costa del winter sun), luego las Canarias que
+# rompen la regla, luego el norte que es su espejo, y al final el interior.
+_DC_GRUPOS = [
+    ("winter", "The winter-sun coast", "Mild in January. Now look at August."),
+    ("canary", "The Canaries", "The only place that breaks the rule."),
+    ("summer", "The cool-summer north", "You sleep in August. You pay in January."),
+    ("inland", "Inland cities", "The worst of both, by design: no sea to soften it."),
+]
+
+
+def _dc_caja(d: dict) -> tuple:
+    """Cuántas estaciones caen en el cuadrante bueno, y de dónde son.
+
+    Se cuenta, no se afirma: la primera versión de la página decía que el
+    cuadrante estaba vacío y no lo está —hay 17 estaciones dentro—. Lo que sí
+    es cierto, y es mejor titular, es que ninguna está en la península.
+    """
+    cal, trop = d["umbrales"]["techo_invierno"], CAJA_TROPICALES
+    dentro = [x for x in d["nube"] if x[0] <= cal and x[1] <= trop]
+    return len(dentro), sum(1 for x in dentro if x[2] == 0), len(d["nube"])
+
+
+CAJA_TROPICALES = 30      # techo de verano del cuadrante dibujado
+
+
+def _dc_svg(d: dict) -> str:
+    """La nube de 828 estaciones: un punto por estación, dos ejes, y el hueco.
+
+    Se dibuja en Python y se sirve como SVG inline, igual que el mapa de
+    estaciones: sin librerías, sin peticiones extra y legible sin JS.
+    """
+    W, H = 720, 470
+    ML, MR, MT, MB = 54, 14, 18, 46          # márgenes del área de dibujo
+    ax, ay = W - ML - MR, H - MT - MB
+    xmax, ymax = 151, 165
+    fx = lambda v: ML + ax * min(v, xmax) / xmax
+    fy = lambda v: MT + ay * (1 - min(v, ymax) / ymax)
+    partes = [f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="Scatter plot '
+              f'of {len(d["nube"])} AEMET weather stations: heating nights in '
+              f'winter against tropical nights per year. Only 17 stations sit in '
+              f'the bottom-left corner — mild winter and cool summer — and every '
+              f'one of them is in the Canary Islands.">']
+    # Rejilla y ejes
+    for v in range(0, xmax + 1, 30):
+        partes.append(f'<line x1="{fx(v):.0f}" y1="{MT}" x2="{fx(v):.0f}" '
+                      f'y2="{MT + ay}" stroke="rgba(239,230,214,.08)"/>')
+        partes.append(f'<text x="{fx(v):.0f}" y="{MT + ay + 18}" fill="#9a8d7c" '
+                      f'font-size="11" text-anchor="middle">{v}</text>')
+    for v in range(0, ymax + 1, 30):
+        partes.append(f'<line x1="{ML}" y1="{fy(v):.0f}" x2="{ML + ax}" '
+                      f'y2="{fy(v):.0f}" stroke="rgba(239,230,214,.08)"/>')
+        partes.append(f'<text x="{ML - 9}" y="{fy(v) + 4:.0f}" fill="#9a8d7c" '
+                      f'font-size="11" text-anchor="end">{v}</text>')
+    # El cuadrante que todo el mundo querría, y que está vacío.
+    partes.append(f'<rect x="{ML}" y="{fy(30):.0f}" width="{fx(40) - ML:.0f}" '
+                  f'height="{MT + ay - fy(30):.0f}" fill="rgba(143,176,122,.10)" '
+                  f'stroke="#8fb07a" stroke-dasharray="5 4" stroke-width="1"/>')
+    partes.append(f'<text x="{fx(40) + 8:.0f}" y="{fy(26):.0f}" fill="#8fb07a" '
+                  f'font-size="12.5" font-weight="600">what everyone wants</text>')
+    # La nube. Canarias en otro tono porque es la única que rompe la regla.
+    for cal, trop, can in d["nube"]:
+        partes.append(
+            f'<circle cx="{fx(cal):.1f}" cy="{fy(trop):.1f}" r="3" '
+            f'fill="{"#c9a24a" if can else "#d9744e"}" opacity="{.5 if can else .38}"/>')
+    # Las dos de la frontera, con nombre.
+    for i, f in enumerate(d["frontera"]):
+        x, y = fx(f["calefaccion"]), fy(f["tropicales"])
+        partes.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="6.5" fill="none" '
+                      f'stroke="#efe6d6" stroke-width="2"/>')
+        anc = "start" if i == 0 else "end"
+        dx = 12 if i == 0 else -12
+        partes.append(f'<text x="{x + dx:.0f}" y="{y + 4:.0f}" fill="#efe6d6" '
+                      f'font-size="12.5" font-weight="600" text-anchor="{anc}">'
+                      f'{titular(f["estacion"])}</text>')
+    # Rótulos de eje
+    partes.append(f'<text x="{ML + ax / 2:.0f}" y="{H - 8}" fill="#efe6d6" '
+                  f'font-size="12.5" text-anchor="middle">Nights you need heating '
+                  f'(below 10&#176;C), 1 Nov&#8211;31 Mar</text>')
+    partes.append(f'<text x="16" y="{MT + ay / 2:.0f}" fill="#efe6d6" '
+                  f'font-size="12.5" text-anchor="middle" '
+                  f'transform="rotate(-90 16 {MT + ay / 2:.0f})">Tropical nights '
+                  f'per year (above 20&#176;C)</text>')
+    return "".join(partes) + "</svg>"
+
+
+def _dc_tabla(d: dict) -> str:
+    """Las ciudades que el lector reconoce, con sus dos caras."""
+    filas = ['<table class="dc-tabla"><thead><tr><th>Place</th>'
+             '<th>Heating<br>nights</th><th>Terrace<br>days</th>'
+             '<th>Rainy<br>days</th><th>Tropical<br>nights/yr</th></tr></thead><tbody>']
+    for papel, titulo, sub in _DC_GRUPOS:
+        grupo = [c for c in d["ciudades"] if c["papel"] == papel]
+        if not grupo:
+            continue
+        filas.append(f'<tr class="grupo"><td colspan="5">{titulo} '
+                     f'<span class="est">{sub}</span></td></tr>')
+        for c in grupo:
+            cal_c = "dc-bien" if c["calefaccion"] <= 40 else "dc-mal"
+            tro_c = "dc-bien" if c["tropicales"] <= 5 else "dc-mal"
+            filas.append(
+                f'<tr><td><b>{c["etiqueta"]}</b><span class="est">'
+                f'{titular(c["estacion"])} &#183; {c["altitud"]} m</span></td>'
+                f'<td class="{cal_c}">{c["calefaccion"]}</td>'
+                f'<td>{c["terraza"]}</td><td>{c["lluvia"]}</td>'
+                f'<td class="{tro_c}">{_n_en(c["tropicales"])}</td></tr>')
+    filas.append("</tbody></table>")
+    return "".join(filas)
+
+
+def _n_en(x: float) -> str:
+    """Número con punto decimal, que esta página va en inglés."""
+    return f"{x:.0f}" if float(x).is_integer() else f"{x:.1f}"
+
+
+
+# ---------------------------------------------------------------------------
+# «FIND YOUR WINTER ADDRESS» — /en/find-your-winter-address/
+#
+# La pieza pensada contra el resumen. Una IA puede recitar «Malaga is mild» y
+# quedarse con la visita; lo que no puede es cruzar CINCO umbrales que pone el
+# lector contra 828 estaciones y devolver su lista. Por eso:
+#
+#   - El resultado depende de lo que el usuario fija, no de un ranking fijo.
+#   - El estado va en el hash de la URL, así que un resultado se comparte y,
+#     sobre todo, se puede ENLAZAR ya preparado. Los presets de abajo son
+#     exactamente lo que un asistente enlazaría en vez de recitar.
+#   - Cuando NO hay nada que cumpla los umbrales —lo normal en la península—
+#     la herramienta no dice «sin resultados»: enseña por cuánto falla cada
+#     candidato. Eso es el intercambio del estudio, aplicado al caso de uno.
+#
+# Sin librerías: los datos son un JSON de columnas+filas que se pide al abrir.
+# ---------------------------------------------------------------------------
+CSS_WINTER_TOOL = (
+    '.wt{margin:24px 0 0}'
+    '.wt-ctrl{background:var(--bg2);border:1px solid var(--line);'
+    'border-radius:14px;padding:18px 20px}'
+    '.wt-row{display:grid;grid-template-columns:1fr 150px 62px;gap:14px;'
+    'align-items:center;padding:11px 0;border-bottom:1px solid '
+    'rgba(239,230,214,.07)}'
+    '.wt-row:last-of-type{border-bottom:none}'
+    '.wt-row label{font-size:14.5px;line-height:1.45}'
+    '.wt-row label span{display:block;font-size:12px;color:var(--muted);'
+    'margin-top:2px}'
+    '.wt-row input[type=range]{width:100%;accent-color:var(--teal);'
+    'background:transparent}'
+    '.wt-val{font-family:var(--fm);font-size:14px;color:var(--paper);'
+    'text-align:right;font-variant-numeric:tabular-nums}'
+    '.wt-como{font-size:13.5px;color:var(--muted);margin:0 0 6px;'
+    'line-height:1.6}'
+    '.wt-vivo{font-size:15px;line-height:1.55;margin:14px 0 4px;'
+    'padding:11px 14px;border-radius:10px;background:#12100c;'
+    'border:1px solid var(--line)}'
+    '.wt-cuesta{display:block;margin-top:7px;font-size:13px;'
+    'color:var(--muted)}'
+    '.wt-vivo b{color:var(--teal);font-family:var(--fd);'
+    'font-weight:700;font-size:17px}'
+    '.wt-vivo.cero b{color:var(--teja2)}'
+    '.wt-chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 2px}'
+    '.wt-chips a{text-decoration:none}'
+    '.wt-chips button,.wt-chips a{background:transparent;border:1px solid var(--line);'
+    'color:var(--muted);border-radius:999px;padding:7px 14px;font-size:13px;'
+    'cursor:pointer;font-family:inherit}'
+    '.wt-chips button:hover,.wt-chips a:hover{border-color:var(--teal);color:var(--teal)}'
+    '.wt-chips button[aria-pressed=true]{border-color:var(--teal);'
+    'color:var(--bg);background:var(--teal)}'
+    '.wt-out{margin:20px 0 0}'
+    '.wt-count{font-family:var(--fd);font-weight:700;font-size:21px;'
+    'margin:0 0 4px}'
+    '.wt-count b{color:var(--teal)}'
+    '.wt-count.cero b{color:var(--teja2)}'
+    '.wt-sub{font-size:13.5px;color:var(--muted);margin:0 0 14px;'
+    'line-height:1.6}'
+    '.wt-tab{width:100%;border-collapse:collapse;font-size:14.5px}'
+    '.wt-tab th{text-align:right;font-size:11px;text-transform:uppercase;'
+    'letter-spacing:.05em;color:var(--muted);font-weight:600;'
+    'padding:0 0 9px 10px;border-bottom:1px solid var(--line);cursor:pointer;'
+    'white-space:nowrap}'
+    '.wt-tab th:first-child{text-align:left;padding-left:0;cursor:default}'
+    '.wt-tab th[aria-sort]{color:var(--teal)}'
+    '.wt-tab td{padding:9px 0 9px 10px;text-align:right;'
+    'border-bottom:1px solid rgba(239,230,214,.06);'
+    'font-variant-numeric:tabular-nums}'
+    '.wt-tab td:first-child{text-align:left;padding-left:0}'
+    '.wt-tab .est{display:block;font-size:11.5px;color:var(--muted);'
+    'margin-top:2px}'
+    '.wt-falla{color:var(--teja2)}'
+    '.wt-miss{background:var(--bg2);border:1px solid var(--teja);'
+    'border-radius:14px;padding:16px 18px;margin:16px 0 0}'
+    '.wt-miss .t{font-family:var(--fd);font-weight:700;font-size:16.5px;'
+    'margin:0 0 6px;color:var(--teja2)}'
+    '.wt-miss p{font-size:14px;line-height:1.65;margin:0 0 10px}'
+    '.wt-share{display:flex;flex-wrap:wrap;gap:10px;align-items:center;'
+    'margin:18px 0 0;font-size:13px;color:var(--muted)}'
+    '.wt-share button{background:transparent;border:1px solid var(--teal);'
+    'color:var(--teal);border-radius:999px;padding:8px 16px;font-size:13px;'
+    'cursor:pointer;font-family:inherit}'
+    '.wt-nojs{font-size:14px;color:var(--muted);line-height:1.7}'
+    '@media(max-width:620px){'
+    '.wt-row{grid-template-columns:1fr 92px 52px;gap:9px}'
+    '.wt-tab{font-size:13px}.wt-tab th{font-size:9.5px}'
+    '.wt-tab td{padding-left:6px}'
+    '.wt-tab .ocultar,.wt-tab th.ocultar{display:none}}'
+)
+
+
+JS_WINTER_TOOL = """<script>
+(function(){
+  "use strict";
+  // Los umbrales, con su tope y su sentido. "max" = el valor del usuario es un
+  // techo; "min" = es un suelo. El orden es el de la interfaz.
+  var CAMPOS = [
+    {k:"heat",    q:"h", i:3,  dir:"max", tope:151, def:151},
+    {k:"terrace", q:"t", i:4,  dir:"min", tope:151, def:0},
+    {k:"rain",    q:"r", i:5,  dir:"max", tope:90,  def:90},
+    {k:"tropical",q:"n", i:7,  dir:"max", tope:175, def:175},
+    {k:"frost",   q:"f", i:6,  dir:"max", tope:130, def:130}
+  ];
+  var FILAS = null, REG = "all", ORDEN = "heat", ASC = true;
+  var $ = function(s){ return document.querySelector(s); };
+
+  function leerHash(){
+    var h = location.hash.replace(/^#/, "");
+    if (!h) return;
+    h.split("&").forEach(function(par){
+      var kv = par.split("="), v = parseInt(kv[1], 10);
+      if (kv[0] === "reg") { REG = kv[1]; return; }
+      if (kv[0] === "sort") { ORDEN = kv[1]; return; }
+      CAMPOS.forEach(function(c){
+        if (c.q === kv[0] && !isNaN(v)) c.val = Math.min(Math.max(v, 0), c.tope);
+      });
+    });
+  }
+
+  function escribirHash(){
+    var p = CAMPOS.filter(function(c){ return c.val !== c.def; })
+                  .map(function(c){ return c.q + "=" + c.val; });
+    if (REG !== "all") p.push("reg=" + REG);
+    if (ORDEN !== "heat") p.push("sort=" + ORDEN);
+    // replaceState y no location.hash: cambiar el hash en cada tirón del
+    // deslizador llenaría el historial y el botón atrás dejaria de servir.
+    history.replaceState(null, "", p.length ? "#" + p.join("&")
+                                            : location.pathname);
+  }
+
+  function cumple(f, c){
+    return c.dir === "max" ? f[c.i] <= c.val : f[c.i] >= c.val;
+  }
+
+  function region(f){
+    return REG === "all" || (REG === "canary" ? f[10] === 1 : f[10] === 0);
+  }
+
+  // EL AVISO VIVO, pegado a los deslizadores. Un contador NO es una
+  // respuesta: quien abre esto pregunta "¿a donde voy?". Asi que nombra el
+  // sitio que encabeza la lista con sus cuatro cifras y, cuando ese primero
+  // es canario, tambien el mejor de peninsula: Canarias copa todas las listas
+  // y un lector que no se plantea mudarse a Fuerteventura se quedaba sin
+  // respuesta util.
+  var ETQ2 = {heat:"heating nights", terrace:"terrace days",
+              rain:"rainy days", tropical:"tropical nights",
+              frost:"frost nights"};
+
+  function ficha(f){
+    return "<b>" + f[0] + "</b> (" + f[1] + "): " + f[3]
+      + " heating nights, " + f[4] + " terrace days, " + f[5]
+      + " rainy days, " + f[7] + " tropical nights";
+  }
+
+  // Cual de los limites puestos es el que mas corta: se cuenta cuantos
+  // sobrevivirian si ese se soltara.
+  function elQueMasCuesta(base, nOk){
+    var peor = null, peorN = 0;
+    CAMPOS.filter(function(c){ return c.val !== c.def; }).forEach(function(c){
+      var n = base.filter(function(f){
+        return CAMPOS.every(function(o){ return o === c || cumple(f, o); });
+      }).length - nOk;
+      if (n > peorN) { peorN = n; peor = c; }
+    });
+    return peor ? "<span class='wt-cuesta'>Costing you most: " + ETQ2[peor.k]
+      + " &#8212; relaxing that alone would bring back " + peorN
+      + " places.</span>" : "";
+  }
+
+  function pintaAviso(base, ok){
+    var vivo = document.getElementById("wt-vivo");
+    if (!vivo) return;
+    if (!CAMPOS.some(function(c){ return c.val !== c.def; })) {
+      vivo.className = "wt-vivo";
+      vivo.innerHTML = "All <b>" + base.length + "</b> measured places are on "
+        + "the list. Move any slider to start taking places off it.";
+      return;
+    }
+    var cuesta = elQueMasCuesta(base, ok.length);
+    // Sin resultados NO hay sitio que nombrar: ok[0] es undefined y la ficha
+    // reventaba el repintado entero, dejando los deslizadores mudos.
+    if (!ok.length) {
+      vivo.className = "wt-vivo cero";
+      vivo.innerHTML = "<b>No place in Spain</b> clears all five at once. "
+        + "Below you can see which ones come closest, and by how much."
+        + cuesta;
+      return;
+    }
+    var pen = null;
+    if (ok[0][10] === 1 && REG === "all") {
+      for (var k = 0; k < ok.length; k++) {
+        if (ok[k][10] === 0) { pen = ok[k]; break; }
+      }
+    }
+    vivo.className = "wt-vivo";
+    vivo.innerHTML = "<b>" + ok.length + "</b> of " + base.length
+      + " places clear your limits. Top of the list: " + ficha(ok[0]) + "."
+      + (pen ? " Best on the mainland: <b>" + pen[0] + "</b> (" + pen[1]
+               + "), " + pen[3] + " heating nights and " + pen[4]
+               + " terrace days." : "")
+      + cuesta;
+  }
+
+  function pinta(){
+    if (!FILAS) return;
+    var base = FILAS.filter(region);
+    var ok = base.filter(function(f){ return CAMPOS.every(function(c){ return cumple(f, c); }); });
+    var col = {heat:3, terrace:4, rain:5, tropical:7, alt:2}[ORDEN];
+    var inv = (ORDEN === "terrace");   // más días de terraza es mejor
+    ok.sort(function(a, b){ return inv ? b[col] - a[col] : a[col] - b[col]; });
+    pintaAviso(base, ok);
+    $("#wt-count").innerHTML = ok.length
+      ? "<b>" + ok.length + "</b> of " + base.length + " places match"
+      : "<b>Nothing</b> matches all five";
+    $("#wt-count").className = "wt-count" + (ok.length ? "" : " cero");
+    $("#wt-sub").textContent = ok.length
+      ? "Sorted by " + ({heat:"heating nights", terrace:"terrace days",
+          rain:"rainy days", tropical:"tropical nights", alt:"altitude"}[ORDEN])
+        + ". Click a column to re-sort."
+      : "";
+    var filas = ok.slice(0, 60).map(function(f){
+      return "<tr><td><b>" + f[0] + "</b><span class='est'>" + f[1]
+        + " &#183; " + f[2] + " m</span></td><td>" + f[3] + "</td><td>"
+        + f[4] + "</td><td class='ocultar'>" + f[5] + "</td><td class='ocultar'>"
+        + f[6] + "</td><td>" + f[7] + "</td></tr>";
+    }).join("");
+    $("#wt-body").innerHTML = filas;
+    $("#wt-tabla").style.display = ok.length ? "" : "none";
+    $("#wt-mas").textContent = ok.length > 60
+      ? "Showing the first 60 of " + ok.length + "." : "";
+    pintaFallos(base, ok.length);
+    escribirHash();
+  }
+
+  // Cuando no cumple ninguna, decir "no hay resultados" seria tirar la
+  // pregunta a la basura. Lo util es por CUANTO falla el que menos falla: eso
+  // es el intercambio del estudio aplicado al caso de quien pregunta.
+  function pintaFallos(base, hay){
+    var caja = $("#wt-miss");
+    if (hay || !base.length) { caja.style.display = "none"; return; }
+    var mejor = base.map(function(f){
+      var exceso = CAMPOS.map(function(c){
+        var d = c.dir === "max" ? f[c.i] - c.val : c.val - f[c.i];
+        return {c: c, d: d > 0 ? d : 0};
+      });
+      var tot = exceso.reduce(function(s, e){ return s + e.d / (e.c.tope || 1); }, 0);
+      return {f: f, exceso: exceso.filter(function(e){ return e.d > 0; }), tot: tot};
+    }).sort(function(a, b){ return a.tot - b.tot; }).slice(0, 3);
+    var ETQ = {heat:"heating nights", terrace:"terrace days", rain:"rainy days",
+               tropical:"tropical nights", frost:"frost nights"};
+    caja.innerHTML = "<div class='t'>Nobody in Spain does all of that. "
+      + "Here is what you would have to give up.</div>"
+      + mejor.map(function(m){
+          return "<p><b>" + m.f[0] + "</b> (" + m.f[1] + ") misses by "
+            + m.exceso.map(function(e){
+                return "<span class='wt-falla'>" + e.d + " "
+                  + ETQ[e.c.k] + "</span>"; }).join(" and ")
+            + ".</p>"; }).join("")
+      + "<p style='margin-bottom:0'>Loosen whichever of those you mind least "
+        + "and the list fills up again.</p>";
+    caja.style.display = "";
+  }
+
+  function montaControles(){
+    CAMPOS.forEach(function(c){
+      var inp = document.getElementById("wt-" + c.k);
+      if (!inp) return;
+      inp.value = c.val;
+      document.getElementById("wt-v-" + c.k).textContent = c.val;
+      inp.addEventListener("input", function(){
+        c.val = parseInt(inp.value, 10);
+        document.getElementById("wt-v-" + c.k).textContent = c.val;
+        pinta();
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-reg]"),
+      function(b){
+        b.setAttribute("aria-pressed", b.dataset.reg === REG);
+        b.addEventListener("click", function(){
+          REG = b.dataset.reg;
+          Array.prototype.forEach.call(document.querySelectorAll("[data-reg]"),
+            function(o){ o.setAttribute("aria-pressed", o.dataset.reg === REG); });
+          pinta();
+        });
+      });
+    // Son anclas: el navegador pone el hash y salta hashchange. Esto solo
+    // cubre el caso de volver a pulsar el preset que ya esta puesto, donde
+    // hashchange NO se dispara.
+    Array.prototype.forEach.call(document.querySelectorAll("[data-preset]"),
+      function(b){
+        b.addEventListener("click", function(){
+          if (location.hash === b.dataset.preset) {
+            leerHash(); sincroniza(); pinta();
+          }
+        });
+      });
+    Array.prototype.forEach.call(document.querySelectorAll("th[data-sort]"),
+      function(th){
+        th.addEventListener("click", function(){
+          ORDEN = th.dataset.sort;
+          Array.prototype.forEach.call(document.querySelectorAll("th[data-sort]"),
+            function(o){ o.removeAttribute("aria-sort"); });
+          th.setAttribute("aria-sort", "ascending");
+          pinta();
+        });
+      });
+    var cp = $("#wt-copiar");
+    if (cp) cp.addEventListener("click", function(){
+      var u = location.href;
+      if (navigator.clipboard) navigator.clipboard.writeText(u);
+      cp.textContent = "Link copied";
+      setTimeout(function(){ cp.textContent = "Copy this search"; }, 2000);
+    });
+  }
+
+  function sincroniza(){
+    CAMPOS.forEach(function(c){
+      var inp = document.getElementById("wt-" + c.k);
+      if (!inp) return;
+      inp.value = c.val;
+      document.getElementById("wt-v-" + c.k).textContent = c.val;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-reg]"),
+      function(o){ o.setAttribute("aria-pressed", o.dataset.reg === REG); });
+  }
+
+  CAMPOS.forEach(function(c){ c.val = c.def; });
+  leerHash();
+  montaControles();
+  fetch("../winter-stations.json").then(function(r){ return r.json(); })
+    .then(function(d){
+      FILAS = d.rows;
+      $("#wt-cargando").style.display = "none";
+      $("#wt-out").style.display = "";
+      pinta();
+    })
+    .catch(function(){
+      $("#wt-cargando").textContent =
+        "The station data could not be loaded. Reload the page, or use the "
+        + "tables on our other pages instead.";
+    });
+  window.addEventListener("hashchange", function(){
+    leerHash(); sincroniza(); pinta();
+  });
+})();
+</script>"""
+
+
+
+# Presets: la puerta por la que un asistente puede mandar a alguien sin tener
+# que recitar nada. Cada uno es un enlace con los umbrales ya puestos.
+PRESETS_WINTER = [
+    ("I can't stand the cold", "#h=30&t=80"),
+    ("I can't sleep in the heat", "#n=5"),
+    ("No frost, ever", "#f=0"),
+    ("Mild and dry", "#h=40&r=20"),
+    ("Mainland only, as mild as it gets", "#h=45&reg=mainland"),
+]
+
+# Los cinco deslizadores. (clave, etiqueta, ayuda, tope, valor de partida)
+CAMPOS_WINTER = [
+    ("heat", "Heating nights I'll accept",
+     "Nights below 10 °C, out of 151", 151, 151),
+    ("terrace", "Terrace days I want, at least",
+     "Days reaching 18 °C, out of 151", 151, 0),
+    ("rain", "Rainy days I'll accept",
+     "Days with 1 mm or more, out of 151", 90, 90),
+    ("tropical", "Tropical nights I'll accept",
+     "Nights above 20 °C, per whole year", 175, 175),
+    ("frost", "Frost nights I'll accept",
+     "Nights below 0 °C, out of 151", 130, 130),
+]
+
+
+def construir_pagina_winter_tool(d: dict, site: str) -> str:
+    """/en/find-your-winter-address/ — la herramienta de los cinco umbrales."""
+    per, umb = d["periodo"], d["umbrales"]
+    path = "/en/find-your-winter-address/"
+    titulo = ("Find Your Winter Address in Spain: Set Your Own Limits "
+              "| NocheTropical.es")
+    desc = (f"Set what you will put up with — heating nights, rain, frost, hot "
+            f"summer nights — and see which of {per['estaciones']} Spanish "
+            f"towns actually clear it. {per['temporadas']} winters of AEMET data.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "NocheTropical.es (EN)",
+             "item": site + "/en/"},
+            {"@type": "ListItem", "position": 2,
+             "name": "Find your winter address", "item": site + path}]},
+        {"@type": "WebApplication", "name": "Find your winter address in Spain",
+         "url": site + path, "applicationCategory": "TravelApplication",
+         "operatingSystem": "Any web browser", "inLanguage": "en-GB",
+         "description": desc,
+         "isBasedOn": "https://opendata.aemet.es",
+         "publisher": {"@type": "Organization", "name": "nochetropical.es"}}]},
+        ensure_ascii=False)
+    filas = "".join(
+        f'<div class="wt-row"><label for="wt-{k}">{etq}'
+        f'<span>{ayuda}</span></label>'
+        f'<input type="range" id="wt-{k}" min="0" max="{tope}" value="{ini}" '
+        f'aria-describedby="wt-v-{k}">'
+        f'<span class="wt-val" id="wt-v-{k}">{ini}</span></div>'
+        for k, etq, ayuda, tope, ini in CAMPOS_WINTER)
+    chips = "".join(f'<a href="{h}" data-preset="{h}">{t}</a>'
+                    for t, h in PRESETS_WINTER)
+    h = [_cabeza_en(site, titulo, desc, path, "/", "/og.png", schema,
+                    CSS_WINTER_TOOL + _CSS_ARTICULO)]
+    h.append(nav_en_html(site))
+    h.append(
+        '<header class="h"><div class="wrap">'
+        f'<nav class="crumb" aria-label="breadcrumb"><a href="{site}/en/">'
+        'NocheTropical.es</a> &#183; Find your winter address</nav>'
+        f'<div class="kick">{per["estaciones"]} weather stations &#183; '
+        f'{per["temporadas"]} winters &#183; AEMET data</div>'
+        '<h1>Find your winter address in Spain</h1>'
+        '<p class="intro">There is no single best place, because nobody wants '
+        'the same things. Somebody who hates being cold and somebody who cannot '
+        'sleep in the heat are looking for opposite towns. So instead of a '
+        'ranking, this asks you: <b>what will you actually put up with?</b> '
+        'Move the five sliders and see which of Spain&#8217;s '
+        f'{per["estaciones"]} measured places clear your bar.</p>'
+        '</div></header>')
+    h.append(
+        '<section><div class="wrap"><div class="wt">'
+        '<div class="wt-ctrl">'
+        '<p class="wt-como">This is a filter, not a ranking. All '
+        f'{per["estaciones"]} measured places start on the list; every limit '
+        'you set takes some of them off it.</p>'
+        f'{filas}'
+        '<p class="wt-vivo" id="wt-vivo" aria-live="polite">'
+        'Every measured place in Spain is on the list right now. '
+        'Each slider you move takes some out.</p>'
+        '<div class="wt-chips" role="group" aria-label="Region">'
+        '<button type="button" data-reg="all" aria-pressed="true">All of Spain</button>'
+        '<button type="button" data-reg="mainland" aria-pressed="false">Mainland &amp; Balearics</button>'
+        '<button type="button" data-reg="canary" aria-pressed="false">Canary Islands</button>'
+        '</div>'
+        f'<div class="wt-chips" role="group" aria-label="Quick starts">{chips}</div>'
+        '</div>'
+        '<p id="wt-cargando" class="wt-nojs">Loading '
+        f'{per["estaciones"]} weather stations&#8230; If nothing appears, your '
+        'browser has JavaScript switched off &#8212; the tables on '
+        f'<a href="{site}/en/spains-mildest-winters/">Spain&#8217;s mildest '
+        f'winters</a> and <a href="{site}/en/coolest-towns-spain/">the coolest '
+        'towns</a> work without it.</p>'
+        '<div class="wt-out" id="wt-out" style="display:none">'
+        '<p class="wt-count" id="wt-count"></p>'
+        '<p class="wt-sub" id="wt-sub"></p>'
+        '<div class="wt-miss" id="wt-miss" style="display:none"></div>'
+        '<table class="wt-tab" id="wt-tabla"><thead><tr>'
+        '<th>Place</th>'
+        '<th data-sort="heat" aria-sort="ascending">Heating<br>nights</th>'
+        '<th data-sort="terrace">Terrace<br>days</th>'
+        '<th data-sort="rain" class="ocultar">Rainy<br>days</th>'
+        '<th class="ocultar">Frost<br>nights</th>'
+        '<th data-sort="tropical">Tropical<br>nights</th>'
+        '</tr></thead><tbody id="wt-body"></tbody></table>'
+        '<p class="wt-sub" id="wt-mas"></p>'
+        '<div class="wt-share">'
+        '<button type="button" id="wt-copiar">Copy this search</button>'
+        '<span>The web address holds your five limits, so the link brings '
+        'anyone straight to your list.</span>'
+        '</div></div></div></div></section>')
+    # Los mismos presets otra vez, pero en prosa y con la URL entera visible.
+    # Es la seccion que un asistente puede copiar tal cual: "para esto, este
+    # enlace". Enlazar le sale mas barato que recitar 828 filas, y al lector le
+    # llega algo que la respuesta de texto no le puede dar.
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>Ready-made searches</h2>'
+        '<p>Each of these is a normal web address with the limits already set. '
+        'Open one, then move the sliders from there. They are also the easiest '
+        'thing to send someone &#8212; or to be sent.</p>'
+        '<ul>'
+        + "".join(
+            f'<li><a href="{site}{path}{hs}"><b>{t}</b></a><br>'
+            f'<span style="font-size:12.5px;color:var(--muted);'
+            f'font-family:var(--fm)">{site}{path}{hs}</span></li>'
+            for t, hs in PRESETS_WINTER)
+        + '</ul>'
+        '<p>The limits live in the address itself, so nothing is stored about '
+        'you and no account is needed. Two people opening the same link see the '
+        'same list.</p>'
+        '</div></section>')
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>What the five numbers mean</h2>'
+        '<p>All of them come from the daily records of <a '
+        'href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET</a>, '
+        'Spain&#8217;s national weather service, and all of them are the '
+        '<b>median</b> of the series &#8212; never the mean. Averaging a brutal '
+        'winter with a gentle one invents a mild one that never happened.</p>'
+        '<ul>'
+        f'<li><b>Heating nights</b>: nights below {umb["calefaccion"]:.0f}&#160;&#176;C '
+        f'between 1 November and 31 March, out of {per["dias_temporada"]}. This is '
+        'the number a monthly average hides.</li>'
+        f'<li><b>Terrace days</b>: days that reach {umb["terraza"]:.0f}&#160;&#176;C, '
+        'in the same window. What you actually came for.</li>'
+        '<li><b>Rainy days</b>: days with 1&#160;mm or more. Over a three-month '
+        'stay this decides more than a degree either way.</li>'
+        '<li><b>Frost nights</b>: nights below 0&#160;&#176;C. For a lot of people '
+        'this is a yes-or-no question, not a number.</li>'
+        '<li><b>Tropical nights</b>: nights that never drop below 20&#160;&#176;C, '
+        'counted over the <b>whole calendar year</b> &#8212; not just summer, '
+        'because a fifth of them fall outside it. This is the price of a mild '
+        'winter, and it is the one nobody quotes you.</li>'
+        '</ul>'
+        '<p><b>Every row is one real thermometer.</b> Nothing is interpolated and '
+        'no stations are averaged together: if your town has no station, the '
+        'nearest one is a neighbour&#8217;s reading, not yours. Where a city has '
+        'several stations they can differ a lot &#8212; that gap is the urban heat '
+        'island, not an error.</p>'
+        f'<p>Why the trade-off is so hard to beat, with the whole cloud of '
+        f'{per["estaciones"]} stations on one chart: <a href="{site}'
+        f'/en/best-climate-in-spain-year-round/">the best climate in Spain, year '
+        f'round</a>.</p>'
+        '</div></section>')
+    h.append(footer_en_html(site))
+    h.append(JS_WINTER_TOOL)
+    h.append("\n</body></html>")
+    return "".join(h)
+
+
+# ---------------------------------------------------------------------------
+# EL SELLO «MILD WINTER» — /en/mild-winter/
+#
+# El gemelo invernal del sello de refugio climático, y con la misma regla de
+# honestidad: certifica el CLIMA DE LA ZONA medido por una estación de AEMET
+# con nombre, no el interior de ningún establecimiento.
+#
+# Criterio (lo fija analisis_invierno.py y viaja en el JSON, para que la
+# definición que lee el visitante salga del dato y no de un texto suelto):
+# ni una helada en NINGUNA temporada medida, y como mucho 40 noches por debajo
+# de 10 °C en un invierno normal.
+#
+# Para qué sirve: el alojamiento se lo incrusta y eso es un enlace entrante;
+# la página de verificación es lo que un asistente puede citar cuando alguien
+# pregunta «¿de verdad no hiela ahí?». Por eso cada sello tiene su página con
+# los números y la serie detrás, no solo una imagen.
+# ---------------------------------------------------------------------------
+CSS_MILD = (
+    '.mw-hero{display:flex;gap:26px;align-items:center;flex-wrap:wrap;'
+    'margin:22px 0 0}'
+    '.mw-hero img{width:190px;height:190px;flex:none}'
+    '.mw-hero .d{flex:1;min-width:250px}'
+    '.mw-nums{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}'
+    '.mw-nums>div{flex:1;min-width:120px;background:var(--bg2);'
+    'border:1px solid var(--line);border-radius:12px;padding:13px 15px}'
+    '.mw-nums .n{font-family:var(--fd);font-weight:900;font-size:27px;'
+    'line-height:1;color:var(--teja2)}'
+    '.mw-nums .l{font-size:12.5px;color:var(--muted);margin-top:6px;'
+    'line-height:1.45}'
+    '.mw-code{background:#12100c;border:1px solid var(--line);border-radius:12px;'
+    'padding:14px 16px;margin:12px 0;overflow-x:auto;max-width:100%}'
+    '.mw-code pre{margin:0;font-family:var(--fm);font-size:12px;line-height:1.7;'
+    'color:var(--paper);white-space:pre-wrap;word-break:break-all}'
+    '.mw-lista{width:100%;border-collapse:collapse;font-size:14.5px;'
+    'margin:14px 0 0}'
+    '.mw-lista th{text-align:right;font-size:11px;text-transform:uppercase;'
+    'letter-spacing:.05em;color:var(--muted);font-weight:600;'
+    'padding:0 0 9px 10px;border-bottom:1px solid var(--line)}'
+    '.mw-lista th:first-child{text-align:left;padding-left:0}'
+    '.mw-lista td{padding:9px 0 9px 10px;text-align:right;'
+    'border-bottom:1px solid rgba(239,230,214,.06);'
+    'font-variant-numeric:tabular-nums}'
+    '.mw-lista td:first-child{text-align:left;padding-left:0}'
+    '.mw-lista .est{display:block;font-size:11.5px;color:var(--muted);'
+    'margin-top:2px}'
+    '.mw-lista tr.grupo td{padding-top:20px;border-bottom:none;'
+    'font-family:var(--fd);font-weight:700;font-size:15px;color:var(--teja2)}'
+    '@media(max-width:560px){.mw-hero img{width:140px;height:140px}'
+    '.mw-lista{font-size:13px}.mw-lista th{font-size:9.5px}}'
+)
+
+
+def sello_mild_svg(e: dict, site: str) -> str:
+    """El sello circular, 300x300, mismo lenguaje visual que el de verano.
+
+    Una sola variante, la oscura, por la lección del otro sello: la versión
+    clara desaparecía sobre los fondos grises de los constructores de webs.
+    """
+    S = _SELLO
+    zona = titular(e["estacion"])
+    zona_up = (zona if len(zona) <= 17 else zona[:16] + "…").upper()
+    prov = titular(e["provincia"])
+    url = site + "/en/mild-winter/"
+    alt = (f"Mild Winter seal — {zona} ({prov}). {e['calefaccion']} nights "
+           f"below 10 °C in a typical winter and no frost in "
+           f"{e['temporadas']} measured winters. Based on AEMET data.")
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" '
+        f'width="300" height="300" role="img" aria-label="{_esc(alt)}">'
+        f'<title>{_esc(alt)}</title>'
+        f'<desc>{_esc(alt)} Issued by nochetropical.es from AEMET daily '
+        f'records (CC BY 4.0). It certifies the climate of the area measured by '
+        f'a named weather station, not the inside of any building.</desc>'
+        f'<defs><radialGradient id="mwbg" cx="50%" cy="34%" r="74%">'
+        f'<stop offset="0" stop-color="{S["bg2"]}"/>'
+        f'<stop offset="1" stop-color="{S["bg"]}"/></radialGradient></defs>'
+        f'<circle cx="150" cy="150" r="148" fill="url(#mwbg)" '
+        f'stroke="{S["teja"]}" stroke-width="3"/>'
+        f'<circle cx="150" cy="150" r="136" fill="none" stroke="{S["line"]}"/>'
+        f'<text x="150" y="52" text-anchor="middle" fill="{S["teja2"]}" '
+        f'font-family="Georgia,serif" font-size="13" letter-spacing="3.2">'
+        f'MILD WINTER</text>'
+        f'<text x="150" y="72" text-anchor="middle" fill="{S["muted"]}" '
+        f'font-family="Georgia,serif" font-size="10" letter-spacing="1.6">'
+        f'VERIFIED AREA</text>'
+        f'<text x="150" y="118" text-anchor="middle" fill="{S["paper"]}" '
+        f'font-family="Georgia,serif" font-weight="bold" '
+        f'font-size="{22 if len(zona_up) <= 12 else 17}">{_esc(zona_up)}</text>'
+        f'<text x="150" y="139" text-anchor="middle" fill="{S["muted"]}" '
+        f'font-family="Georgia,serif" font-size="11">{_esc(prov.upper())}</text>'
+        f'<line x1="86" y1="153" x2="214" y2="153" stroke="{S["line"]}"/>'
+        f'<text x="150" y="186" text-anchor="middle" fill="{S["teal"]}" '
+        f'font-family="Georgia,serif" font-weight="bold" font-size="34">'
+        f'{e["calefaccion"]}</text>'
+        f'<text x="150" y="203" text-anchor="middle" fill="{S["muted"]}" '
+        f'font-family="Georgia,serif" font-size="10">'
+        f'NIGHTS BELOW 10&#176;C, OF 151</text>'
+        f'<text x="150" y="228" text-anchor="middle" fill="{S["verde"]}" '
+        f'font-family="Georgia,serif" font-size="12">no frost in '
+        f'{e["temporadas"]} winters</text>'
+        f'<text x="150" y="258" text-anchor="middle" fill="{S["muted"]}" '
+        f'font-family="Georgia,serif" font-size="9.5">AEMET DATA</text>'
+        f'<text x="150" y="276" text-anchor="middle" fill="{S["teja2"]}" '
+        f'font-family="Georgia,serif" font-size="11">nochetropical.es</text>'
+        f'</svg>')
+
+
+def _mw_fila(e: dict, site: str) -> str:
+    sl = slug(e["estacion"])
+    return (f'<tr><td><a href="{site}/en/mild-winter/{sl}/"><b>'
+            f'{titular(e["estacion"])}</b></a><span class="est">'
+            f'{titular(e["provincia"])} &#183; {e["altitud"]} m &#183; '
+            f'{e["temporadas"]} winters</span></td>'
+            f'<td>{e["calefaccion"]}</td><td>{e["terraza"]}</td>'
+            f'<td>{e["lluvia"]}</td><td>{_n_en(e["tropicales"])}</td></tr>')
+
+
+def construir_indice_mild(d: dict, site: str) -> str:
+    """/en/mild-winter/ — el directorio del sello."""
+    sello = d["sello"]
+    lista, per = sello["lista"], d["periodo"]
+    pen = [e for e in lista if not e["canaria"]]
+    can = [e for e in lista if e["canaria"]]
+    path = "/en/mild-winter/"
+    titulo = ("The Mild Winter Seal: Places in Spain Where It Has Never "
+              "Frozen | NocheTropical.es")
+    desc = (f"{len(lista)} places in Spain where AEMET has not recorded a "
+            f"single frost, with at most {sello['calefaccion_max']} nights "
+            f"below 10 °C in a typical winter. Measured, not claimed.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "NocheTropical.es (EN)",
+             "item": site + "/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Mild Winter seal",
+             "item": site + path}]},
+        {"@type": "ItemList", "name": "Mild Winter seal holders",
+         "numberOfItems": len(lista), "itemListOrder": "https://schema.org/ItemListOrderAscending",
+         "itemListElement": [
+             {"@type": "ListItem", "position": i + 1,
+              "name": titular(e["estacion"]),
+              "url": site + "/en/mild-winter/" + slug(e["estacion"]) + "/"}
+             for i, e in enumerate(lista[:30])]}]}, ensure_ascii=False)
+    cab = ('<tr><th>Place</th><th>Heating<br>nights</th><th>Terrace<br>days</th>'
+           '<th>Rainy<br>days</th><th>Tropical<br>nights</th></tr>')
+    h = [_cabeza_en(site, titulo, desc, path, "/", "/og.png", schema,
+                    CSS_MILD + _CSS_ARTICULO)]
+    h.append(nav_en_html(site))
+    h.append(
+        '<header class="h"><div class="wrap">'
+        f'<nav class="crumb" aria-label="breadcrumb"><a href="{site}/en/">'
+        'NocheTropical.es</a> &#183; Mild Winter seal</nav>'
+        f'<div class="kick">{len(lista)} places &#183; {per["temporadas"]} '
+        f'winters &#183; AEMET data</div>'
+        '<h1>The Mild Winter seal</h1>'
+        '<p class="intro">Any hotel can write &#8220;mild winter climate&#8221; '
+        'on its website. Nobody can invent nine winters of a national weather '
+        'service&#8217;s records. This seal marks the places where AEMET has '
+        '<b>never recorded a frost</b> and where a typical winter needs the '
+        f'heating on <b>{sello["calefaccion_max"]} nights or fewer</b> out of '
+        f'{per["dias_temporada"]}.</p>'
+        f'<p class="intro">{len(lista)} of the {per["estaciones"]} measured '
+        f'places in Spain clear it. <b>{len(pen)}</b> are on the mainland or '
+        f'the Balearics; <b>{len(can)}</b> are in the Canaries.</p>'
+        '</div></header>')
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>What it certifies, and what it does not</h2>'
+        '<p><b>It certifies the climate of an area</b>, measured by a named '
+        'AEMET weather station, over every winter that station has recorded '
+        'since 2017. It does not certify a building: a badly insulated flat in '
+        'Marbella can still be cold, and no thermometer outside will tell you '
+        'otherwise. We say this on every page because the opposite claim would '
+        'sell better and be false.</p>'
+        f'<p>Two conditions, both about cold, both countable: <b>no frost in any '
+        f'measured winter</b>, and <b>at most {sello["calefaccion_max"]} nights '
+        f'below 10&#160;&#176;C</b> in a typical winter, counted from 1 November '
+        f'to 31 March. Medians, never means.</p>'
+        f'<p>Rainy days and tropical nights are published beside each place '
+        f'without being part of the test &#8212; a mild winter that rains every '
+        f'third day is still a mild winter, and you deserve to know before you '
+        f'book. If you want to weigh all of them yourself, use <a href="{site}'
+        f'/en/find-your-winter-address/">find your winter address</a>.</p>'
+        '</div></section>')
+    h.append('<section><div class="wrap"><h2>Mainland and the Balearics</h2>'
+             f'<table class="mw-lista"><thead>{cab}</thead><tbody>'
+             + "".join(_mw_fila(e, site) for e in pen)
+             + '</tbody></table></div></section>')
+    h.append('<section><div class="wrap"><h2>The Canary Islands</h2>'
+             '<p>Almost the whole archipelago qualifies, which is the least '
+             'surprising result in this project: 28&#176; of latitude and an '
+             'ocean that barely changes temperature all year.</p>'
+             f'<table class="mw-lista"><thead>{cab}</thead><tbody>'
+             + "".join(_mw_fila(e, site) for e in can)
+             + '</tbody></table></div></section>')
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>Run a hotel or a holiday let in one of these?</h2>'
+        '<p>The seal is free and there is nothing to apply for: if your place is '
+        'on the list, open its page and copy the embed code. It links back here, '
+        'where anyone can check the numbers for themselves &#8212; which is the '
+        'whole point of it.</p>'
+        f'<p>In summer the argument runs the other way, and we have a seal for '
+        f'that too: <a href="{site}/tu-hotel/" hreflang="es">refugio clim&#225;tico '
+        f'(in Spanish)</a>.</p>'
+        '</div></section>')
+    h.append(footer_en_html(site))
+    h.append("\n</body></html>")
+    return "".join(h)
+
+
+def construir_pagina_mild(e: dict, d: dict, site: str) -> str:
+    """/en/mild-winter/<slug>/ — la página de verificación de un sello."""
+    sello, per = d["sello"], d["periodo"]
+    sl = slug(e["estacion"])
+    zona, prov = titular(e["estacion"]), titular(e["provincia"])
+    path = f"/en/mild-winter/{sl}/"
+    img = f"{site}/badges/mild-winter-{sl}.svg"
+    titulo = f"{zona} in Winter: {e['calefaccion']} Nights Below 10 °C, No Frost | NocheTropical.es"
+    desc = (f"{zona} ({prov}) holds the Mild Winter seal: {e['calefaccion']} "
+            f"nights below 10 °C in a typical winter, no frost in "
+            f"{e['temporadas']} winters of AEMET records, {e['terraza']} days "
+            f"warm enough to eat outside.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "NocheTropical.es (EN)",
+             "item": site + "/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Mild Winter seal",
+             "item": site + "/en/mild-winter/"},
+            {"@type": "ListItem", "position": 3, "name": zona,
+             "item": site + path}]},
+        {"@type": "Place", "name": zona,
+         "address": {"@type": "PostalAddress", "addressRegion": prov,
+                     "addressCountry": "ES"},
+         "description": desc}]}, ensure_ascii=False)
+    incrusta = (f'&lt;a href="{site}{path}" target="_blank" rel="noopener"&gt;\n'
+                f'  &lt;img src="{img}"\n'
+                f'       alt="Mild Winter seal — {zona}, {prov}: '
+                f'{e["calefaccion"]} nights below 10 °C, no frost"\n'
+                f'       width="150" height="150" loading="lazy"&gt;\n'
+                f'&lt;/a&gt;')
+    h = [_cabeza_en(site, titulo, desc, path, "/", f"/badges/mild-winter-{sl}.svg",
+                    schema, CSS_MILD + _CSS_ARTICULO)]
+    h.append(nav_en_html(site))
+    h.append(
+        '<header class="h"><div class="wrap">'
+        f'<nav class="crumb" aria-label="breadcrumb"><a href="{site}/en/">'
+        f'NocheTropical.es</a> &#183; <a href="{site}/en/mild-winter/">Mild '
+        f'Winter seal</a> &#183; {zona}</nav>'
+        f'<h1>{zona}, {prov}</h1>'
+        '<div class="mw-hero">'
+        f'<img src="{img}" alt="Mild Winter seal for {zona}" width="190" '
+        f'height="190">'
+        '<div class="d">'
+        f'<p class="intro">In a typical winter, {zona} needs the heating on '
+        f'<b>{e["calefaccion"]} nights</b> out of {per["dias_temporada"]}, and '
+        f'AEMET has not recorded a single frost there in <b>{e["temporadas"]} '
+        f'measured winters</b>. Its worst winter of the series needed '
+        f'<b>{e["calefaccion_peor"]}</b>.</p>'
+        '</div></div>'
+        '</div></header>')
+    h.append(
+        '<section><div class="wrap">'
+        '<div class="mw-nums">'
+        f'<div><div class="n">{e["calefaccion"]}</div><div class="l">nights '
+        f'below 10&#160;&#176;C, of {per["dias_temporada"]}</div></div>'
+        f'<div><div class="n">{e["terraza"]}</div><div class="l">days reaching '
+        f'18&#160;&#176;C</div></div>'
+        f'<div><div class="n">{e["lluvia"]}</div><div class="l">days with '
+        f'1&#160;mm of rain or more</div></div>'
+        f'<div><div class="n">{_n_en(e["tropicales"])}</div><div class="l">'
+        f'tropical nights a year &#8212; the price of the mild winter</div></div>'
+        '</div>'
+        f'<p>Every figure is the <b>median</b> of {e["temporadas"]} winters from '
+        f'1 November to 31 March, measured at the AEMET station named '
+        f'<b>{zona}</b>, at {e["altitud"]}&#160;m. Never a mean: averaging a hard '
+        f'winter with a gentle one invents a mild one that did not happen.</p>'
+        f'<p>The last column is the part a brochure leaves out. A winter this '
+        f'mild is paid for in summer, and here the bill is '
+        f'<b>{_n_en(e["tropicales"])} nights a year above 20&#160;&#176;C</b>. '
+        f'Why that trade-off is almost impossible to escape: <a href="{site}'
+        f'/en/best-climate-in-spain-year-round/">the best climate in Spain, year '
+        f'round</a>.</p>'
+        '</div></section>')
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>Put the seal on your site</h2>'
+        '<p>Free, no registration, no strings. Paste this where you want it:</p>'
+        f'<div class="mw-code"><pre>{incrusta}</pre></div>'
+        '<p>The badge is an SVG, so it stays sharp at any size; change '
+        '<code>width</code> and <code>height</code> to taste. It links back to '
+        'this page, where your guests can check the figures themselves. That '
+        'link is the point: a seal nobody can verify is a sticker.</p>'
+        '<p><b>What you may claim with it:</b> that the area around '
+        f'{zona} has this measured winter climate. <b>What you may not:</b> '
+        'that your rooms are warm. A thermometer outside says nothing about '
+        'insulation, and we would have to withdraw the seal from anyone who '
+        'implies otherwise.</p>'
+        f'<p>If the numbers change &#8212; and they are changing &#8212; this '
+        f'page changes with them. It is rebuilt from AEMET&#8217;s records every '
+        f'month, so it can also stop saying what it says today.</p>'
+        '</div></section>')
+    h.append(
+        '<section><div class="wrap">'
+        f'<p class="sigue">See <a href="{site}/en/mild-winter/">all '
+        f'{len(sello["lista"])} places with the seal</a> &#183; '
+        f'<a href="{site}/en/find-your-winter-address/#h='
+        f'{max(e["calefaccion"], 5)}&amp;f=0">find places like this one</a> '
+        f'&#183; <a href="{site}/en/spains-mildest-winters/">the mildest winters, '
+        f'city by city</a>.</p>'
+        '</div></section>')
+    h.append(footer_en_html(site))
+    h.append("\n</body></html>")
+    return "".join(h)
+
+def construir_pagina_dos_caras(d: dict, site: str) -> str:
+    """/en/best-climate-in-spain-year-round/ — el cruce invierno-verano."""
+    per, umb, cor = d["periodo"], d["umbrales"], d["correlacion"]
+    fr = d["frontera"]
+    uno = d["ambos"][0] if d["ambos"] else None
+    # Dos ciudades con las que cerrar: la de invierno más suave de la costa y su
+    # espejo del norte. Salen de los datos, no elegidas a mano.
+    winter = [c for c in d["ciudades"] if c["papel"] == "winter"]
+    summer = [c for c in d["ciudades"] if c["papel"] == "summer"]
+    w = min(winter, key=lambda c: c["calefaccion"]) if winter else None
+    v = min(summer, key=lambda c: c["tropicales"]) if summer else None
+    path = "/en/best-climate-in-spain-year-round/"
+    titulo = ("The Best Climate in Spain, Year Round: What the Data Says You "
+              "Can't Have | NocheTropical.es")
+    desc = (f"Mild winter or a summer you can sleep through — {per['estaciones']} "
+            f"AEMET weather stations say you have to choose. Heating nights, "
+            f"terrace days and tropical nights, town by town.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "NocheTropical.es (EN)",
+             "item": site + "/en/"},
+            {"@type": "ListItem", "position": 2,
+             "name": "The best climate in Spain, year round", "item": site + path}]},
+        {"@type": "Article",
+         "headline": ("The town that is unbearable in August is the best place "
+                      "to be in February"),
+         "description": desc, "mainEntityOfPage": site + path,
+         "image": site + "/og.png", "inLanguage": "en-GB",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting",
+                    "url": site + "/sobre-el-proyecto/"},
+         "publisher": {"@type": "Organization", "name": "nochetropical.es"},
+         "isBasedOn": "https://opendata.aemet.es"},
+        {"@type": "Dataset",
+         "name": (f"Spanish winter and summer climate by weather station "
+                  f"({per['temporadas']} winters, AEMET)"),
+         "description": ("Nights below 10 °C, frost nights, days above 18 °C and "
+                         "rainy days per winter season (1 Nov–31 Mar), crossed "
+                         "with tropical nights per calendar year, for every AEMET "
+                         "station with enough coverage."),
+         "temporalCoverage": f"{per['ini']}/{per['fin']}",
+         "spatialCoverage": {"@type": "Place", "name": "Spain"},
+         "creator": {"@type": "Organization", "name": "nochetropical.es"},
+         "isBasedOn": "https://opendata.aemet.es",
+         "license": "https://creativecommons.org/licenses/by/4.0/"}]},
+        ensure_ascii=False)
+    caja_n, caja_pen, caja_tot = _dc_caja(d)
+    vac = d.get("vacio") or {}
+    h = [_cabeza_en(site, titulo, desc, path, "/", "/og.png", schema,
+                    CSS_DOSCARAS + _CSS_ARTICULO)]
+    h.append(nav_en_html(site))
+    h.append(
+        '<header class="h"><div class="wrap">'
+        f'<nav class="crumb" aria-label="breadcrumb"><a href="{site}/en/">'
+        'NocheTropical.es</a> &#183; Best climate, year round</nav>'
+        f'<div class="kick">{per["temporadas"]} winters &#183; '
+        f'{per["estaciones"]} weather stations &#183; AEMET data</div>'
+        '<h1>The town that&#8217;s unbearable in August is the best place to be '
+        'in February</h1>'
+        '<p class="intro">Every winter-sun brochure quotes the same kind of '
+        'number: <i>&#8220;Malaga, 17&#160;&#176;C average in January.&#8221;</i> '
+        'An average of 17&#160;&#176;C is what you get from twenty mild days '
+        '&#8212; and it is also what you get from ten days at 24&#160;&#176;C and '
+        'ten at 10&#160;&#176;C. It does not tell you the one thing you need to '
+        'know: <b>how many nights you will be switching the heating on</b>.</p>'
+        '<p class="intro">So we counted. Not averages: nights below '
+        '10&#160;&#176;C, days warm enough to eat outside, rainy days, frost '
+        'nights &#8212; station by station, winter by winter. Then we crossed it '
+        'with the summer.</p>'
+        '</div></header>')
+
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>There is a trade-off, and it is steep</h2>'
+        f'<p>Across <b>{cor["n"]} weather stations</b> with both records, the '
+        f'correlation between winter heating nights and summer tropical nights is '
+        f'<b>{cor["rho"]}</b> (Spearman). In plain English: <b>the milder the '
+        f'winter, the worse the summer night &#8212; almost without '
+        f'exception</b>.</p>'
+        f'<div class="dc-fig">{_dc_svg(d)}'
+        '<p class="dc-leg"><span><i style="background:#d9744e"></i>Mainland &amp; '
+        'Balearics</span><span><i style="background:#c9a24a"></i>Canary Islands'
+        '</span><span><i style="background:#efe6d6"></i>Not beaten on both counts'
+        '</span></p></div>'
+        f'<p class="dc-cap">Each dot is one AEMET weather station, '
+        f'{per["temporadas"]} winters and up to ten summers. The dashed box is the '
+        f'climate everyone says they want: under {umb["techo_invierno"]} heating '
+        f'nights <i>and</i> under {CAJA_TROPICALES} tropical nights. '
+        f'<b>{caja_n} stations of {caja_tot} are inside it &#8212; and '
+        f'{"not one" if caja_pen == 0 else str(caja_pen)} of them '
+        f'{"is" if caja_pen != 1 else "is"} on the mainland or the '
+        f'Balearics.</b></p>'
+        '</div></section>')
+
+    # El cuadrante bueno, en números: 12 estaciones peninsulares tienen el
+    # invierno, 542 tienen el verano, y ninguna las dos.
+    pen_inv = sum(1 for x in d["nube"]
+                  if x[2] == 0 and x[0] <= umb["techo_invierno"])
+    pen_ver = sum(1 for x in d["nube"] if x[2] == 0 and x[1] <= CAJA_TROPICALES)
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>On the mainland you cannot have both. Not anywhere.</h2>'
+        f'<p>Of the stations on the mainland and the Balearics, <b>{pen_inv}</b> '
+        f'have a winter mild enough to stay under {umb["techo_invierno"]} heating '
+        f'nights. <b>{pen_ver}</b> have a summer quiet enough to stay under '
+        f'{CAJA_TROPICALES} tropical nights. <b>None has both.</b></p>'
+        # Un dato que falta NO es un cero. Con un valor por defecto esta frase
+        # salía publicada como «0 station-seasons across 0 years», una
+        # afirmación falsa con aspecto de hallazgo. O está la comprobación, o
+        # no está el párrafo.
+        + (f'<p>And that is not an artefact of taking the middle year. We '
+           f'checked each winter against the summer that followed it &#8212; '
+           f'<b>{vac["pares"]:,} station-seasons</b> across '
+           f'{vac["temporadas"]} years &#8212; and the count of places with '
+           f'both was <b>{vac["dobles"]}</b>. Every single year.</p>'
+           if vac.get("pares") else "")
+        +
+        f'<p>The {caja_n} stations that do manage both are, every single one of '
+        f'them, in the Canary Islands. That is not a quirk of the data: it is '
+        f'what 28&#176; of latitude and an ocean with no seasons do to a '
+        f'thermometer.</p>'
+        '</div></section>')
+
+    front = " and ".join(
+        f'<b>{titular(f["estacion"])}</b> ({f["calefaccion"]} heating nights, '
+        f'{_n_en(f["tropicales"])} tropical)' for f in fr)
+    h.append(
+        '<section><div class="wrap">'
+        f'<h2>Out of {cor["n"]} stations, exactly {len(fr)} are not beaten</h2>'
+        '<p>A place is &#8220;not beaten&#8221; if no other station in Spain has '
+        '<i>both</i> a milder winter and a cooler summer than it. That is the '
+        'honest way to answer &#8220;where is the best climate in Spain&#8221;: '
+        'not a winner, but a set of options nobody improves on. That set has '
+        f'<b>{len(fr)} members</b>: {front}.</p>'
+        '<p>Everything else in the country &#8212; every costa, every city, every '
+        'mountain village &#8212; is beaten by one of those two on both counts at '
+        'once.</p>'
+        '<div class="dato">'
+        f'<div class="dcard"><div class="n">{cor["rho"]}</div><div class="l">'
+        'correlation between a mild winter and a hot summer night</div></div>'
+        f'<div class="dcard"><div class="n">{len(fr)} of {cor["n"]}</div>'
+        '<div class="l">stations nobody beats on both counts</div></div>'
+        f'<div class="dcard"><div class="n">{d["sin_helada"]}</div><div class="l">'
+        f'stations with no frost at all in {per["temporadas"]} winters</div></div>'
+        '</div></div></section>')
+
+    if uno:
+        h.append(
+            '<section><div class="wrap"><div class="dc-dest">'
+            '<div class="t">The one place that has both &#8212; and its catch</div>'
+            f'<p><b>{titular(uno["estacion"])}</b>, on the north-east of La Palma, '
+            f'{uno["altitud"]}&#160;m up: <b>{uno["calefaccion"]} nights below '
+            f'10&#160;&#176;C</b> in a typical winter, <b>'
+            f'{_n_en(uno["tropicales"])} tropical nights</b> a year, and <b>not a '
+            f'single frost</b> in {uno["temporadas"]} winters. Its worst winter '
+            f'needed the heating on {uno["calefaccion_peor"]} nights.</p>'
+            f'<p>The catch is in the same table: <b>{uno["lluvia"]} rainy days</b> '
+            f'per winter and only <b>{uno["terraza"]} days out of '
+            f'{per["dias_temporada"]}</b> warm enough to eat outside. This is the '
+            f'windward, cloud-catching side of the island. The climate is '
+            f'extraordinary; the weather is often grey. We publish both numbers '
+            f'because the second one is what a brochure would leave out.</p>'
+            '</div></div></section>')
+
+    h.append(
+        '<section><div class="wrap">'
+        '<h2>Your favourite place, both ways round</h2>'
+        f'<p>Same stations, same method. <b>Heating nights</b> are nights below '
+        f'{umb["calefaccion"]:.0f}&#160;&#176;C between 1 November and 31 March '
+        f'(out of {per["dias_temporada"]}). <b>Terrace days</b> are days that reach '
+        f'{umb["terraza"]:.0f}&#160;&#176;C. <b>Tropical nights</b> are nights that '
+        f'never drop below 20&#160;&#176;C, counted over the whole calendar year, '
+        f'not just summer. Green means comfortable, orange means it costs you.</p>'
+        f'{_dc_tabla(d)}'
+        '<p class="dc-cap">Median of the series, never the mean: averaging a brutal '
+        'winter with a gentle one invents a mild one that never happened. Each row '
+        'names its weather station &#8212; where a city has several they can differ '
+        'a lot, and that difference is the urban heat island, not an error.</p>'
+        '</div></section>')
+
+    if w and v:
+        h.append(
+            '<section><div class="wrap">'
+            '<h2>What this actually means if you are choosing</h2>'
+            f'<p>Take the two ends. <b>{w["etiqueta"]}</b> asks you to heat the '
+            f'house on <b>{w["calefaccion"]} nights</b> a winter and gives you '
+            f'<b>{w["terraza"]} terrace days</b> &#8212; then hands you <b>'
+            f'{_n_en(w["tropicales"])} tropical nights</b> a year. '
+            f'<b>{v["etiqueta"]}</b> gives you <b>{_n_en(v["tropicales"])}</b> '
+            f'tropical nights &#8212; and asks for <b>{v["calefaccion"]} heating '
+            f'nights</b>, leaving you just <b>{v["terraza"]} terrace days</b>.</p>'
+            '<p>Neither is &#8220;the best climate in Spain&#8221;. They are two '
+            'different bargains, and the honest question is not which is better but '
+            '<b>which discomfort you mind less</b>: a cold evening you can fix with '
+            'a jumper and a radiator, or a hot night you cannot fix at all without '
+            'air conditioning.</p>'
+            f'<p>If it is the heat you mind, our <a href="{site}/en/coolest-towns-'
+            f'spain/">coolest towns to sleep in summer</a> ranks the places where '
+            f'the night still cools down. If it is the cold, <a href="{site}/en/'
+            f'spains-mildest-winters/">Spain&#8217;s mildest winters</a> and the '
+            f'<a href="{site}/en/frost-free-towns-spain/">frost-free towns</a> do '
+            f'the opposite.</p>'
+            '</div></section>')
+
+    h.append(
+        '<section><div class="wrap"><div class="verifica">'
+        '<div class="t">How this is made, and what it does not say</div>'
+        '<p><b>Source:</b> daily climate records from <a '
+        'href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET</a>, '
+        'Spain&#8217;s national weather service. Winter seasons run 1 November to '
+        '31 March and are labelled by the year they start; a season counts only if '
+        f'the station recorded at least 120 of its {per["dias_temporada"]} days. '
+        f'{per["temporadas"]} seasons, {per["ini"]} to {per["fin"]}. Summer figures '
+        'come from the same daily records over whole calendar years.</p>'
+        '<p><b>Why 1 November and not December:</b> because November and March are '
+        f'not a shoulder season. They are {d["hombro"]["cuota_dias"]}&#160;% of the '
+        f'winter days and carry {d["hombro"]["calefaccion"]}&#160;% of the heating '
+        f'nights &#8212; their fair share. Frost is different: only '
+        f'{d["hombro"]["heladas"]}&#160;% of it falls outside '
+        'December&#8211;February.</p>'
+        '<p><b>Nothing is interpolated.</b> Every figure comes from a real '
+        'thermometer with a name. We do not model the weather between stations and '
+        'we do not average stations together: if your town has no station, the '
+        'nearest one is a neighbour&#8217;s reading, not yours.</p>'
+        '<p><b>This is climate, not a forecast.</b> Nine winters describe what has '
+        'been happening, not what next January will do. And it says nothing about '
+        'anything other than temperature and rain &#8212; not wind, not humidity, '
+        'not what a place costs, not whether you will like it.</p>'
+        '</div>'
+        f'<p class="sigue">More: <a href="{site}/en/">all our English guides</a> '
+        f'&#183; <a href="{site}/en/coolest-towns-spain/">coolest towns in summer</a> '
+        f'&#183; <a href="{site}/en/spains-mildest-winters/">mildest winters</a> '
+        f'&#183; <a href="{site}/en/search/">search {per["estaciones"]}+ stations</a>.'
+        '</p></div></section>')
+    h.append(footer_en_html(site))
+    h.append("\n</body></html>")
+    return "".join(h)
 
 
 def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> str:
@@ -10998,6 +12951,7 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
         '<div class="lang-note">The town cards open their Spanish data page — the numbers '
         'read the same in any language, and your browser can translate the rest. A fully '
         'English destination guide is on its way.</div>'
+        + bloque_parpadeo(estaciones, site, "en")
         + "".join(regiones_html)
         + '<div class="cta">'
         '<b>Not sure which region suits you?</b>'
@@ -11014,7 +12968,7 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
         + footer_en_html(site))
     return _cabeza_en(site, titulo, desc, "/en/coolest-towns-spain/",
                       "/dormir-con-manta-en-verano/", "/estudios/frescor-dia.png",
-                      schema) + cuerpo + "</body></html>\n"
+                      schema, CSS_PARPADEO) + cuerpo + "</body></html>\n"
 
 
 # «Spain's Mildest Winters»: comparación de ciudades con los MISMOS datos que la
@@ -12114,7 +14068,10 @@ def revisar_enlaces(site: str) -> str:
     No detiene la construcción: avisa. Un enlace roto no justifica dejar el
     sitio sin publicar."""
     paginas, enlaces = {}, {}
-    for f in list(DOCS_DIR.glob("index.html")) + list(DOCS_DIR.glob("*/index.html"))             + list(DOCS_DIR.glob("*/*/index.html")):
+    for f in (list(DOCS_DIR.glob("index.html"))
+              + list(DOCS_DIR.glob("*/index.html"))
+              + list(DOCS_DIR.glob("*/*/index.html"))
+              + list(DOCS_DIR.glob("*/*/*/index.html"))):
         rel = f.parent.relative_to(DOCS_DIR).as_posix()
         rel = "" if rel == "." else rel
         try:
@@ -13929,7 +15886,7 @@ def construir_pagina_observatorio(estaciones: list, site: str) -> str:
         {"@type": "WebApplication", "name": "El Observatorio del Descanso",
          "url": site + "/observatorio-del-descanso/", "applicationCategory": "LifestyleApplication",
          "operatingSystem": "Web", "description": desc,
-         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}},
+         },
         # FAQ con las dos preguntas que trae la gente desde Google, para que
         # pueda mostrarse como respuesta directa en el buscador.
         {"@type": "FAQPage", "mainEntity": [
@@ -14604,10 +16561,23 @@ def main() -> int:
         datos_estudio = json.loads(estudio_json.read_text(encoding="utf-8"))
         (DOCS_DIR / "la-espana-que-nunca-se-colorea").mkdir(parents=True, exist_ok=True)
         (DOCS_DIR / "la-espana-que-nunca-se-colorea" / "index.html").write_text(
-            construir_pagina_estudio(site, datos_estudio), encoding="utf-8")
+            construir_pagina_estudio(site, datos_estudio, estaciones), encoding="utf-8")
         print("   estudio 'nunca se colorea': landing generada")
     else:
         print("   estudio 'nunca se colorea': sin datos (ejecuta estudio_colores.py); se omite")
+    # Estudio horario "cuántas horas se duerme": mismo trato, sale del JSON que
+    # escribe analisis_curva_nocturna.py sobre el archivo horario propio. Sin
+    # JSON no hay página: el archivo empezó el 29-08-2026 y no se puede rellenar
+    # hacia atrás, así que la landing solo existe donde hay noches medidas.
+    horas_json = DOCS_DIR / "estudios" / "horas-datos.json"
+    if horas_json.exists():
+        datos_horas = json.loads(horas_json.read_text(encoding="utf-8"))
+        (DOCS_DIR / "cuantas-horas-se-duerme-en-verano").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "cuantas-horas-se-duerme-en-verano" / "index.html").write_text(
+            construir_pagina_horas(datos_horas, site), encoding="utf-8")
+        print(f"   estudio horario: landing generada ({datos_horas['periodo']['noches']} noches)")
+    else:
+        print("   estudio horario: sin datos (ejecuta analisis_curva_nocturna.py); se omite")
     # Estudio abierto de la deuda de sueño: las cifras del Observatorio, en
     # abierto y con sus limitaciones delante. Mismo trato que el de arriba: sale
     # de un JSON que escribe otro script, y sin JSON no hay página. Se refresca
@@ -14643,9 +16613,72 @@ def main() -> int:
         (DOCS_DIR / "en" / "spains-mildest-winters").mkdir(parents=True, exist_ok=True)
         (DOCS_DIR / "en" / "spains-mildest-winters" / "index.html").write_text(
             inviernos_en, encoding="utf-8")
+    # El cruce invierno-verano: sale del JSON de analisis_invierno.py. Sin él
+    # no se publica, igual que los otros estudios.
+    caras_json = DOCS_DIR / "estudios" / "invierno-datos.json"
+    dos_caras = None
+    _sellos = None
+    _hay_tool = False
+    if caras_json.exists():
+        dos_caras = json.loads(caras_json.read_text(encoding="utf-8"))
+        destino = DOCS_DIR / "en" / "best-climate-in-spain-year-round"
+        destino.mkdir(parents=True, exist_ok=True)
+        (destino / "index.html").write_text(
+            construir_pagina_dos_caras(dos_caras, site), encoding="utf-8")
+        # La herramienta NO se publica sin su fichero de datos. Una pagina
+        # cuya razon de ser es filtrar 828 estaciones, servida sin las 828,
+        # solo sabe decir "the station data could not be loaded": es peor que
+        # un 404, porque parece que el sitio esta roto. Lo escribe
+        # analisis_invierno.py, igual que el JSON del estudio.
+        if (DOCS_DIR / "en" / "winter-stations.json").exists():
+            herramienta = DOCS_DIR / "en" / "find-your-winter-address"
+            herramienta.mkdir(parents=True, exist_ok=True)
+            (herramienta / "index.html").write_text(
+                construir_pagina_winter_tool(dos_caras, site), encoding="utf-8")
+            _hay_tool = True
+        else:
+            _hay_tool = False
+            print("   herramienta de invierno: falta en/winter-stations.json "
+                  "(ejecuta analisis_invierno.py); se omite")
+        # El sello Mild Winter: índice + una página de verificación y un SVG
+        # por sitio. El SVG va a docs/badges/ con prefijo propio para no
+        # chocar con los sellos de verano (pueblo-<slug>.svg).
+        #
+        # El .get() NO es paranoia: la lista del sello la añadió una versión
+        # posterior de analisis_invierno.py, así que un invierno-datos.json
+        # generado antes no la trae. La primera versión de esto hacía
+        # dos_caras["sello"] y reventaba el build ENTERO con KeyError —404 en
+        # las 400 páginas del sitio por una sección nueva—. Aquí se omite lo
+        # nuevo y se dice qué hay que ejecutar, igual que hacen los demás
+        # estudios cuando les falta su JSON.
+        _sellos = (dos_caras.get("sello") or {}).get("lista")
+        if _sellos:
+            mw_dir = DOCS_DIR / "en" / "mild-winter"
+            mw_dir.mkdir(parents=True, exist_ok=True)
+            (mw_dir / "index.html").write_text(
+                construir_indice_mild(dos_caras, site), encoding="utf-8")
+            badges = DOCS_DIR / "badges"
+            badges.mkdir(parents=True, exist_ok=True)
+            for _e in _sellos:
+                _sl = slug(_e["estacion"])
+                (badges / f"mild-winter-{_sl}.svg").write_text(
+                    sello_mild_svg(_e, site), encoding="utf-8")
+                _c = mw_dir / _sl
+                _c.mkdir(exist_ok=True)
+                (_c / "index.html").write_text(
+                    construir_pagina_mild(_e, dos_caras, site), encoding="utf-8")
+            print(f"   sello Mild Winter: {len(_sellos)} lugares "
+                  f"(página + SVG) + índice")
+        else:
+            print("   sello Mild Winter: el JSON de invierno no trae la lista "
+                  "(ejecuta analisis_invierno.py); se omite")
     print("   versión EN: /en/ + /en/coolest-towns-spain/"
           + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "")
-          + (" + /en/spains-mildest-winters/" if inviernos_en else "") + " generadas")
+          + (" + /en/spains-mildest-winters/" if inviernos_en else "")
+          + (" + /en/best-climate-in-spain-year-round/" if dos_caras else "")
+          + (" + /en/find-your-winter-address/" if _hay_tool else "")
+          + (" + /en/mild-winter/" if _sellos else "")
+          + " generadas")
     # Hoteles en refugios climáticos (afiliación Booking) + sello por hotel.
     hoteles = cargar_hoteles(estaciones)
     for h in hoteles:  # complemento de datos: humedad/viento de su estación ref
@@ -14953,7 +16986,7 @@ def main() -> int:
 
     paginas = [("", DOCS_DIR / "index.html")] + sorted(
         (rel, f)
-        for patron in ("*/index.html", "*/*/index.html")
+        for patron in ("*/index.html", "*/*/index.html", "*/*/*/index.html")
         for f in DOCS_DIR.glob(patron)
         if (rel := f.parent.relative_to(DOCS_DIR).as_posix()) not in REDIRECCIONES
         and not _es_noindex(f))

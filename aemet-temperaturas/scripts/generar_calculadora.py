@@ -1834,6 +1834,32 @@ def ntfmt(nt: float) -> str:
     return f"{nt:.1f}".replace(".", ",") if nt < 10 else f"{round(nt)}"
 
 
+_MINI_INDICE: dict | None = None
+
+
+def mini_mapa(sl: str) -> bool | None:
+    """¿La miniatura de esta provincia lleva mapa? True / False / None si no consta.
+
+    Lo publica generar_miniaturas.py en docs/miniaturas/indice.json: Ceuta y
+    Melilla no llevan silueta (su polígono es demasiado pequeño para dibujarlo).
+    Si el fichero no está —primer build, o generar_miniaturas no ejecutado— se
+    devuelve None y el alt se escribe sin mencionar el mapa, en vez de afirmar
+    algo que puede ser falso.
+    """
+    global _MINI_INDICE
+    if _MINI_INDICE is None:
+        f = DOCS_DIR / "miniaturas" / "indice.json"
+        try:
+            _MINI_INDICE = json.loads(f.read_text(encoding="utf-8"))
+        except Exception:
+            _MINI_INDICE = {}
+    if sl in (_MINI_INDICE.get("con_mapa") or []):
+        return True
+    if sl in (_MINI_INDICE.get("sin_mapa") or []):
+        return False
+    return None
+
+
 def nt_cifra(nt: float) -> str:
     """La cifra tal y como se PINTA: '0' · '0,6' · '73'. Sin entidades HTML.
 
@@ -2813,9 +2839,14 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
     # la página — y lo único que oye quien usa lector de pantalla.
     import html as _html
     _contra = peor["id"] != mejor["id"] and n > 1
+    _ests = (f'sus {n} estaciones de AEMET' if n > 1
+             else 'su única estación de AEMET')
+    # Solo se dice "Mapa de" cuando consta que la miniatura lleva mapa. Ceuta y
+    # Melilla no lo llevan, y si el índice falta tampoco se afirma.
+    _cabeza = (f'Mapa de {prov} con {_ests}, coloreadas por noches tropicales:'
+               if mini_mapa(sl) else f'{prov}, según {_ests}:')
     mini_alt = _html.escape(
-        f'Mapa de {prov} con sus {n} estaciones de AEMET coloreadas por noches '
-        f'tropicales: {nt_cifra(mejor["nt"])} al año en {mejor["loc"]} '
+        f'{_cabeza} {nt_cifra(mejor["nt"])} noches al año en {mejor["loc"]} '
         f'({miles(mejor["alt"])} m)'
         + (f' frente a {nt_cifra(peor["nt"])} en {peor["loc"]}.' if _contra else '.'))
     mini_cap = _html.escape(

@@ -59,6 +59,7 @@ LINEA     = (58, 44, 28)      # --line    #3a2c1c
 PAPEL     = (239, 230, 214)   # --paper   #efe6d6
 MUTED     = (179, 164, 140)   # --muted   #b3a48c
 TEJA      = (217, 116, 78)    # --teja    #d9744e
+TEJA2     = (232, 154, 115)   # --teja2   #e89a73
 VERDE     = (143, 176, 122)   # --verde   #8fb07a
 TEAL      = (150, 182, 196)   # --teal    #96b6c4
 
@@ -517,6 +518,205 @@ def componer(prov: str, lista: list, anillos: list, cuadrada: bool) -> Image.Ima
               .convert("P", palette=Image.ADAPTIVE, colors=256))
 
 
+
+# ===========================================================================
+#  Miniaturas de las páginas en INGLÉS
+# ===========================================================================
+# No son provincias: cada una necesita su propia cifra. NINGUNA es inventada —
+# o sale de los datos del repo, o es lo que la propia página ya afirma. La
+# columna «fuente» dice de dónde, para que al rehacerlas se pueda comprobar.
+#
+# El color SIEMPRE codifica temperatura, nunca juicio: en las páginas de verano
+# rojo = noche caliente; en las de invierno azul = noche helada. Por eso el
+# mismo tono cálido es malo en verano y bueno en invierno — la escala dice
+# cuánto calor hace, y es la estación del año la que decide si eso conviene.
+
+PAGINAS_EN = [
+    dict(slug="en", metrica="verano", cifra="4%",
+         l1="of Spain cools below 18 °C", l2="every single night of summer",
+         pie="Across a whole Spanish summer",
+         fuente="lo afirma la propia /en/"),
+    dict(slug="en/coolest-towns-spain", metrica="verano", cifra="14",
+         l1="mountain towns where AEMET records", l2="almost no tropical nights",
+         pie="Ten summers · 857 AEMET stations",
+         fuente="lo afirma la propia página"),
+    dict(slug="en/spains-mildest-winters", metrica="invierno", cifra="10,3",
+         l1="nights a winter at 5 °C or below", l2="at Málaga Airport",
+         pie="101,8 at Madrid Airport, over the same winters",
+         fuente="las dos tarjetas de la propia página"),
+    dict(slug="en/best-climate-in-spain-year-round", metrica="invierno", cifra="2",
+         l1="of 828 stations give you", l2="a mild winter AND a cool summer",
+         pie="Nine winters · ten summers · AEMET",
+         fuente="lo afirma la propia página («2 of 828»)"),
+    dict(slug="en/find-your-winter-address", metrica="invierno", cifra="828",
+         l1="weather stations, nine winters.", l2="Set what you will put up with",
+         pie="Heating nights · frost · rain · hot summer nights",
+         fuente="kicker de la propia página"),
+    dict(slug="en/frost-free-towns-spain", metrica="invierno", cifra="414",
+         l1="Spanish towns have not seen", l2="a single frost in nine winters",
+         pie="of the 4.113 towns measured",
+         fuente="docs/datos/municipios_sin_heladas.json (heladas_por_año == 0)"),
+    dict(slug="en/mild-winter", metrica="invierno", cifra="67",
+         l1="places carry the", l2="Mild Winter seal",
+         pie="No frost on record · at most 40 nights below 10 °C",
+         fuente="kicker de la propia página"),
+]
+
+
+def color_helada(n: float) -> tuple[int, int, int]:
+    """Noches de helada -> color. 0 heladas = cálido; muchas = azul frío.
+
+    Escala propia, no la de verano: aquí lo que se mide es el invierno. Sigue
+    el mismo principio (el color es temperatura) con los tonos de la paleta.
+    """
+    stops = [(0, (217, 116, 78)), (10, (232, 154, 115)), (30, (150, 182, 196)),
+             (70, (90, 130, 160)), (130, (52, 78, 110))]
+    c = stops[0][1]
+    for i in range(len(stops) - 1):
+        a, ca = stops[i]
+        b, cb = stops[i + 1]
+        if n <= b:
+            t = max(0.0, (n - a) / (b - a))
+            c = tuple(round(ca[k] + (cb[k] - ca[k]) * t) for k in range(3))
+            break
+        c = cb
+    return tuple(c)
+
+
+def proyectar_espana(lat: float, lon: float) -> tuple[float, float]:
+    """La MISMA proyección del mapa interactivo (generar_pagina_mapa.project),
+    con Canarias en su recuadro. Copiarla aquí evita importar ese módulo, que
+    escribe ficheros al cargarse."""
+    if lat < 31:
+        x = (lon - (-18.3)) / ((-13.2) - (-18.3))
+        y = (29.6 - lat) / (29.6 - 27.5)
+        return (55 + x * 200, 590 + y * 95)
+    x = (lon - (-9.6)) / (4.6 - (-9.6))
+    y = (44.2 - lat) / (44.2 - 35.8)
+    return (70 + x * 640, 35 + y * 545)
+
+
+def dibujar_espana(d: ImageDraw.ImageDraw, caja, s: int, puntos: list) -> float:
+    """España entera con sus estaciones. puntos = [(lat, lon, color), ...]."""
+    gj = json.loads(GEOJSON.read_text(encoding="utf-8"))
+    anillos = []
+    for ft in gj["features"]:
+        geom = ft["geometry"]
+        polys = (geom["coordinates"] if geom["type"] == "MultiPolygon"
+                 else [geom["coordinates"]])
+        for poly in polys:
+            if len(poly[0]) >= 3:
+                anillos.append([proyectar_espana(lat, lon) for lon, lat in poly[0]])
+    todos = [q for a in anillos for q in a] + [proyectar_espana(la, lo) for la, lo, _ in puntos]
+    x0 = min(q[0] for q in todos); x1 = max(q[0] for q in todos)
+    y0 = min(q[1] for q in todos); y1 = max(q[1] for q in todos)
+    cx0, cy0, cx1, cy1 = caja
+    esc = min((cx1 - cx0) / (x1 - x0), (cy1 - cy0) / (y1 - y0))
+    dx = cx0 + (cx1 - cx0 - (x1 - x0) * esc) / 2
+    enc = lambda p: (dx + (p[0] - x0) * esc, cy0 + (p[1] - y0) * esc)
+
+    for a in anillos:
+        pts = [enc(q) for q in a]
+        if len(pts) >= 3:
+            d.polygon(pts, fill=TIERRA, outline=BORDE, width=max(1, int(1.2 * s)))
+    r = min(cx1 - cx0, cy1 - cy0) * 0.0075
+    for la, lo, col in sorted(puntos, key=lambda p: 0):
+        x, y = enc(proyectar_espana(la, lo))
+        h = r + 1.6 * s
+        d.ellipse([x - h, y - h, x + h, y + h], fill=BG)
+        d.ellipse([x - r, y - r, x + r, y + r], fill=col)
+    return cy0 + (y1 - y0) * esc
+
+
+def puntos_verano(estaciones: list) -> list:
+    """Estaciones coloreadas por noches tropicales (de más caliente a más fresca,
+    para que los refugios queden encima)."""
+    return [(e["lat"], e["lon"], color_nt(e["nt"]))
+            for e in sorted(estaciones, key=lambda x: -x["nt"])]
+
+
+def puntos_invierno(estaciones: list) -> list:
+    """Estaciones coloreadas por noches de helada. Se unen por indicativo con
+    invierno_por_estacion.csv; las que no estén en esa serie no se dibujan."""
+    import csv as _csv
+    f = g.AEMET_DIR / "analisis" / "invierno_por_estacion.csv"
+    if not f.exists():
+        return []
+    coord = {e["id"]: (e["lat"], e["lon"]) for e in estaciones}
+    out = []
+    for fila in _csv.DictReader(f.open(encoding="utf-8")):
+        c = coord.get(fila["indicativo"])
+        if not c:
+            continue
+        out.append((c[0], c[1], color_helada(float(fila["heladas_mediana"]))))
+    return sorted(out, key=lambda p: 0)
+
+
+
+def componer_en(pag: dict, puntos: list, cuadrada: bool) -> Image.Image:
+    """Miniatura de una página inglesa: España entera arriba, cifra abajo.
+
+    Mismo reparto anclado de abajo arriba que la cuadrada provincial, para que
+    el sitio se vea como un sistema. La diferencia es que aquí no hay nombre de
+    estación: debajo de la cifra va la frase que explica qué cuenta.
+    """
+    W, H = (1200, 1200) if cuadrada else (1200, 630)
+    s = ESCALA
+    im = fondo(W, H, s)
+    d = ImageDraw.Draw(im)
+    M = int((70 if cuadrada else 56) * s)
+
+    # Cabecera
+    f_kick = fuente(_SANS, int((21 if cuadrada else 18) * s))
+    espaciado(d, (M, int((56 if cuadrada else 40) * s)),
+              "NOCHETROPICAL.ES · AEMET DATA", f_kick, TEJA, sep=int(3.2 * s))
+    y_reg = int((56 if cuadrada else 40) * s) + int((40 if cuadrada else 32) * s)
+    d.line([(M, y_reg), (M + int(120 * s), y_reg)], fill=TEJA, width=int(4 * s))
+
+    y_regla_pie = _pie_en(d, pag, W, H, M, s, cuadrada)
+
+    # Fila de abajo: el contrapunto / contexto
+    cuerpo_bajo = int((26 if cuadrada else 21) * s)
+    y_bajo = y_regla_pie - int((24 if cuadrada else 18) * s) - cuerpo_bajo
+
+    # Las dos líneas que explican la cifra, a TODO el ancho
+    util = W * s - 2 * M
+    f_l = ajustar(d, max(pag["l1"], pag["l2"], key=len), _SANS,
+                  int((38 if cuadrada else 28) * s), util, int(16 * s))
+    y_l2 = y_bajo - int((22 if cuadrada else 16) * s) - f_l.size
+    y_l1 = y_l2 - int(1.28 * f_l.size)
+
+    # La cifra, grande y a la derecha
+    f_c = ajustar(d, pag["cifra"], _SERIF, int((150 if cuadrada else 110) * s),
+                  int(620 * s), int(60 * s))
+    y_cif = y_l1 - int((18 if cuadrada else 12) * s) - f_c.size
+
+    top = y_reg + int((30 if cuadrada else 22) * s)
+    if puntos:
+        dibujar_espana(d, (M, top, W * s - M, y_cif - int(14 * s)), s, puntos)
+
+    d.text((W * s - M - avance(d, pag["cifra"], f_c), y_cif), pag["cifra"],
+           font=f_c, fill=VERDE if pag["metrica"] == "verano" else TEJA2)
+    d.text((M, y_l1), pag["l1"], font=f_l, fill=PAPEL)
+    d.text((M, y_l2), pag["l2"], font=f_l, fill=PAPEL)
+    d.text((M, y_bajo), pag["pie"], font=fuente(_SANS_R, cuerpo_bajo), fill=MUTED)
+
+    return (im.resize((W, H), Image.LANCZOS)
+              .convert("P", palette=Image.ADAPTIVE, colors=256))
+
+
+def _pie_en(d, pag, W, H, M, s, cuadrada) -> int:
+    y_pie = H * s - int((72 if cuadrada else 54) * s)
+    y_reg = y_pie - int(26 * s)
+    d.line([(M, y_reg), (W * s - M, y_reg)], fill=LINEA, width=max(1, int(2 * s)))
+    f = fuente(_SANS_R, int((24 if cuadrada else 21) * s))
+    d.text((M, y_pie), "Official AEMET data · no interpolation", font=f, fill=MUTED)
+    f2 = fuente(_SANS, int((24 if cuadrada else 21) * s))
+    d.text((W * s - M - ancho(d, "nochetropical.es", f2), y_pie),
+           "nochetropical.es", font=f2, fill=TEJA)
+    return y_reg
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Miniaturas de las landings provinciales")
     ap.add_argument("--solo", help="slugs separados por coma, para revisar unas pocas")
@@ -551,6 +751,24 @@ def main() -> None:
             componer(prov, lista, anillos, cuadrada).save(ruta, optimize=True)
             peso += ruta.stat().st_size
         hechas += 1
+
+    # --- Las 7 páginas en inglés ---
+    # Se nombran aplanando la ruta: /en/coolest-towns-spain/ -> en-coolest-towns-spain.png
+    if not filtro:
+        pv = puntos_verano(estaciones)
+        pi = puntos_invierno(estaciones)
+        if not pi:
+            print("   inglés: falta analisis/invierno_por_estacion.csv; "
+                  "las de invierno saldrán sin mapa")
+        for pag in PAGINAS_EN:
+            nom = pag["slug"].replace("/", "-")
+            pts = pv if pag["metrica"] == "verano" else pi
+            for cuadrada, fich in ((True, f"{nom}.png"), (False, f"{nom}-og.png")):
+                ruta = OUT_DIR / fich
+                componer_en(pag, pts, cuadrada).save(ruta, optimize=True)
+                peso += ruta.stat().st_size
+        print(f"   inglés: {len(PAGINAS_EN)} páginas × 2 tamaños = "
+              f"{len(PAGINAS_EN) * 2} PNG")
 
     # Quién lleva mapa y quién no, para que generar_calculadora escriba un alt
     # que describa la imagen de verdad. Solo se reescribe si se generaron TODAS

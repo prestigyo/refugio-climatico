@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-01",
- "total": 848,
- "tropicales": 162,
- "ecuatoriales": 5,
+ "fecha": "2026-10-02",
+ "total": 849,
+ "tropicales": 182,
+ "ecuatoriales": 1,
  "peor": {
-  "id": "C329Z",
-  "nombre": "San Sebastián de la Gomera",
-  "min": 26.0,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "6277C",
+  "nombre": "Adra Faro",
+  "min": 25.5,
+  "prov": "Almería"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 1.5,
-  "prov": "Zamora"
+  "id": "1696O",
+  "nombre": "Beariz",
+  "min": 2.6,
+  "prov": "Ourense"
  },
  "top_calor": [
   {
+   "id": "6277C",
+   "nombre": "Adra Faro",
+   "min": 25.5,
+   "prov": "Almería"
+  },
+  {
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
+   "min": 24.9,
+   "prov": "Málaga"
+  },
+  {
+   "id": "7012X",
+   "nombre": "Cartagena",
+   "min": 24.9,
+   "prov": "Murcia"
+  },
+  {
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 24.8,
+   "prov": "Almería"
+  },
+  {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 26.0,
+   "min": 24.8,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "B434X",
-   "nombre": "Portocolom",
-   "min": 25.2,
-   "prov": "Illes Balears"
+   "id": "6291B",
+   "nombre": "El Ejido (Ayuntamiento - Automatica)",
+   "min": 24.3,
+   "prov": "Almería"
   },
   {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 25.2,
-   "prov": "Illes Balears"
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
+   "min": 24.3,
+   "prov": "Murcia"
   },
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 25.2,
+   "id": "7031X",
+   "nombre": "Murcia/San Javier",
+   "min": 24.3,
+   "prov": "Murcia"
+  },
+  {
+   "id": "6175X",
+   "nombre": "Rincon de la Victoria (Automatica)",
+   "min": 24.2,
+   "prov": "Málaga"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 24.2,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "B860X",
-   "nombre": "Ciutadella-Son Quim",
-   "min": 25.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
-   "min": 24.7,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B780X",
-   "nombre": "Port Pollença-Aerodrom",
-   "min": 24.6,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B870C",
-   "nombre": "Ciutadella-Cala Galdana",
-   "min": 24.6,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 24.6,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "B410B",
-   "nombre": "Santanyí",
-   "min": 24.4,
-   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 1.5,
-   "prov": "Zamora"
-  },
-  {
    "id": "1696O",
    "nombre": "Beariz",
-   "min": 2.1,
+   "min": 2.6,
    "prov": "Ourense"
-  },
-  {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": 2.3,
-   "prov": "Zamora"
-  },
-  {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 3.3,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "1302F",
-   "nombre": "Degaña Coto Cortés",
-   "min": 3.4,
-   "prov": "Asturias"
-  },
-  {
-   "id": "1410X",
-   "nombre": "Sobrado dos Monxes",
-   "min": 4.3,
-   "prov": "A Coruña"
-  },
-  {
-   "id": "1561I",
-   "nombre": "Villar de Otero (los Trobos)",
-   "min": 4.5,
-   "prov": "León"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": 4.6,
+   "min": 3.1,
    "prov": "León"
   },
   {
-   "id": "1700X",
-   "nombre": "O Carballiño",
-   "min": 4.6,
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 3.5,
+   "prov": "Zamora"
+  },
+  {
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 3.8,
+   "prov": "Asturias"
+  },
+  {
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 3.8,
    "prov": "Ourense"
   },
   {
-   "id": "2777K",
-   "nombre": "Santibañez de Vidriales",
-   "min": 4.7,
-   "prov": "Zamora"
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 4.3,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "1221D",
+   "nombre": "Pajares - Valgrande",
+   "min": 4.3,
+   "prov": "Asturias"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 4.5,
+   "prov": "Granada"
+  },
+  {
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 4.6,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "1706A",
+   "nombre": "Allariz-Rimelo",
+   "min": 4.9,
+   "prov": "Ourense"
   }
  ]
 }

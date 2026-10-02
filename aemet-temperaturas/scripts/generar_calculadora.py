@@ -26,6 +26,7 @@ import json
 import os
 import math
 import re
+import shutil
 import urllib.request
 import unicodedata
 from datetime import date
@@ -341,6 +342,7 @@ def construir_schema(datos: dict, site: str) -> dict:
         "@graph": [
             {
                 "@type": "Dataset",
+                **descarga("ranking"),
                 "name": "Noches tropicales en España (AEMET, 2017–2026)",
                 "description": (
                     f"Número de noches tropicales (temperatura mínima ≥ 20 °C) al año en "
@@ -1860,6 +1862,49 @@ def mini_mapa(sl: str) -> bool | None:
     return None
 
 
+# --- Descargas que respaldan las fichas Dataset ---------------------------
+# Una ficha Dataset sin `distribution` le dice a Google Dataset Search QUÉ hay
+# pero no DÓNDE, así que sale como mención y no como dataset descargable. Estos
+# son los CSV de análisis que respaldan cada ficha; se copian a docs/datos/ para
+# que la URL que se declara exista de verdad.
+DESCARGAS_FUENTE = {
+    "ranking":            AEMET_DIR / "analisis" / "refugios_nocturnos_ranking.csv",
+    "horas_dormibles":    AEMET_DIR / "analisis" / "horas_dormibles.csv",
+    "invierno_estacion":  AEMET_DIR / "analisis" / "invierno_por_estacion.csv",
+    "invierno_temporada": AEMET_DIR / "analisis" / "invierno_por_temporada.csv",
+}
+_DESCARGAS: dict[str, str] = {}
+
+
+def publicar_descargas(site: str) -> None:
+    """Copia a docs/datos/ los CSV de análisis que existan. Idempotente."""
+    destino = DOCS_DIR / "datos"
+    destino.mkdir(parents=True, exist_ok=True)
+    faltan = []
+    for clave, origen in DESCARGAS_FUENTE.items():
+        if not origen.exists():
+            faltan.append(origen.name)
+            continue
+        shutil.copyfile(origen, destino / origen.name)
+        _DESCARGAS[clave] = f"{site}/datos/{origen.name}"
+    print(f"   descargas publicadas: {len(_DESCARGAS)}/{len(DESCARGAS_FUENTE)} CSV"
+          + (f" · faltan (su Dataset irá sin distribution): {', '.join(faltan)}" if faltan else ""))
+
+
+def descarga(clave: str, formato: str = "text/csv") -> dict:
+    """{"distribution": [...]} si el fichero está publicado; {} si no.
+
+    Se devuelve un dict para expandirlo con ** dentro de la ficha. Si el CSV no
+    está, la ficha sale SIN el campo: declarar una URL muerta es peor que no
+    declarar nada — Google la rastrea, no la encuentra y descarta el dataset.
+    """
+    url = _DESCARGAS.get(clave) if not clave.startswith("http") else clave
+    if not url:
+        return {}
+    return {"distribution": [{"@type": "DataDownload",
+                              "encodingFormat": formato, "contentUrl": url}]}
+
+
 def nt_cifra(nt: float) -> str:
     """La cifra tal y como se PINTA: '0' · '0,6' · '73'. Sin entidades HTML.
 
@@ -1942,6 +1987,7 @@ def construir_schema_provincia(prov: str, site: str, sl: str, n: int, titulo: st
          "dateModified": iso_tz(fecha_mod),
          "mainEntityOfPage": url},
         {"@type": "Dataset",
+         **descarga(f"{site}/{sl}/datos.csv"),
          "name": f"Noches tropicales en {prov} (AEMET, 2017–2026)",
          "description": (f"Noches tropicales al año en la única estación de AEMET de {prov}"
                           if n == 1 else
@@ -7409,6 +7455,7 @@ def construir_pagina_horas(d: dict, site: str) -> str:
          "datePublished": iso_tz(p["fin"]), "dateModified": iso_tz(p["fin"]),
          "isBasedOn": "https://opendata.aemet.es"},
         {"@type": "Dataset",
+         **descarga("horas_dormibles"),
          "name": f"Horas dormibles por estación (AEMET, {p['noches']} noches)",
          "description": ("Horas por debajo de 20 °C entre las 23:00 y las 07:00, por "
                          "estación y noche, a partir del archivo horario propio de "
@@ -11107,6 +11154,7 @@ def construir_pagina_pilar(estaciones: list, datos: dict, balance: dict, site: s
             {"@type": "ListItem", "position": 2, "name": "Noches tropicales en España",
              "item": url}]},
         {"@type": "Dataset",
+         **descarga("ranking"),
          "name": f"Noches tropicales en España (AEMET, {n_veranos} veranos)",
          "description": (f"Noches tropicales al año en {n_estaciones} estaciones "
                          f"meteorológicas de AEMET."),
@@ -12460,6 +12508,7 @@ def construir_pagina_dos_caras(d: dict, site: str) -> str:
          "publisher": {"@type": "Organization", "name": "nochetropical.es"},
          "isBasedOn": "https://opendata.aemet.es"},
         {"@type": "Dataset",
+         **descarga("invierno_estacion"),
          "name": (f"Spanish winter and summer climate by weather station "
                   f"({per['temporadas']} winters, AEMET)"),
          "description": ("Nights below 10 °C, frost nights, days above 18 °C and "
@@ -13245,6 +13294,7 @@ def construir_pagina_en_inviernos_suaves(site: str) -> str | None:
          "inLanguage": "en-GB", "datePublished": iso_tz("2026-09-14"),
          "dateModified": iso_tz(date.today().isoformat()), "mainEntityOfPage": site + ruta},
         {"@type": "Dataset",
+         **descarga("invierno_temporada"),
          "name": "Frost nights and cold nights per winter at AEMET stations in Spanish cities",
          "description": ("Nights per winter (1 November – 31 March) with a minimum temperature at or "
                          "below 0, 5 and 10 °C, and winters with no frost, at the reference AEMET "
@@ -16477,6 +16527,9 @@ def main() -> int:
     datos = construir_datos(estaciones, total)
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     site = SITE_URL.rstrip("/")
+    # Antes de construir nada: las fichas Dataset declaran estas URLs y tienen
+    # que existir cuando Google las rastree.
+    publicar_descargas(site)
     provnav = "".join(f'<a href="{site}/{slug(p)}/">{p}</a>' for p in datos["provincias"])
     # PORTADA: el nuevo diseño (el que se validó en /beta/) es ahora la home,
     # indexable. El TEMPLATE antiguo queda como referencia por si portamos piezas

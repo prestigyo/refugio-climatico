@@ -1,12 +1,12 @@
 {
  "fecha": "2026-10-02",
- "total": 849,
- "tropicales": 182,
+ "total": 848,
+ "tropicales": 184,
  "ecuatoriales": 1,
  "peor": {
   "id": "6277C",
   "nombre": "Adra Faro",
-  "min": 25.5,
+  "min": 26.1,
   "prov": "Almería"
  },
  "mejor": {
@@ -19,7 +19,7 @@
   {
    "id": "6277C",
    "nombre": "Adra Faro",
-   "min": 25.5,
+   "min": 26.1,
    "prov": "Almería"
   },
   {
@@ -109,34 +109,34 @@
    "prov": "Ourense"
   },
   {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 4.3,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "1221D",
-   "nombre": "Pajares - Valgrande",
-   "min": 4.3,
-   "prov": "Asturias"
-  },
-  {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
    "min": 4.5,
    "prov": "Granada"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 4.6,
-   "prov": "Cantabria"
-  },
-  {
    "id": "1706A",
    "nombre": "Allariz-Rimelo",
    "min": 4.9,
    "prov": "Ourense"
+  },
+  {
+   "id": "2701D",
+   "nombre": "Miñera de Luna-Embalse",
+   "min": 5.3,
+   "prov": "León"
+  },
+  {
+   "id": "1521I",
+   "nombre": "O Paramo",
+   "min": 5.4,
+   "prov": "Lugo"
+  },
+  {
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 5.5,
+   "prov": "Cantabria"
   }
  ]
 }

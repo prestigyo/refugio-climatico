@@ -43,7 +43,7 @@ refugio-climatico/
 |---|---|
 | `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa: `en/best-climate-in-spain-year-round/`, `en/find-your-winter-address/` + `en/winter-stations.json`, `en/mild-winter/` y una página por sello), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
 | `generar_miniaturas.py` | `miniaturas/<slug-provincia>.png` (1200×1200, la que usa Google) y `miniaturas/<slug-provincia>-og.png` (1200×630, la de redes) — silueta de la provincia + sus estaciones coloreadas + la cifra grande. También `miniaturas/indice.json`, que dice qué provincias llevan mapa: lo lee `generar_calculadora.py` para escribir un `alt` que describa la imagen de verdad (Ceuta y Melilla no llevan silueta). **Tiene que correr ANTES que `generar_calculadora.py`**, y así está en el workflow |
-| `generar_calculadora.py` (descargas) | Copia a `datos/` los CSV de análisis que respaldan las fichas `Dataset`: `refugios_nocturnos_ranking.csv`, `horas_dormibles.csv`, `invierno_por_estacion.csv`, `invierno_por_temporada.csv` (1,1 MB). Sin ellos las fichas irían sin `distribution` |
+| `generar_calculadora.py` (descargas) | Copia a `datos/` los CSV de análisis que respaldan las fichas `Dataset`: `refugios_nocturnos_ranking.csv`, `horas_dormibles.csv`, `invierno_por_estacion.csv`, `invierno_por_temporada.csv` (1,1 MB). `tendencia_estaciones.csv` se copió a mano, porque su página también se mantiene a mano. Sin ellos las fichas irían sin `distribution` |
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
 | `generar_gif.py` | `ola-minimas.gif`, `ola-maximas.gif`, `ola-dia-noche.gif`, `ola-canarias-minimas.gif`, `og.png` |
 | `estudio_colores.py` | `estudios/*.png` + `estudios/estudio-datos.json` |
@@ -179,7 +179,7 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   acceso a **Google Dataset Search**, un vertical aparte donde buscan investigadores y
   periodistas de datos. Pero sin `distribution` (un `DataDownload` con `contentUrl`) la
   ficha dice QUÉ hay y no DÓNDE, así que sale como mención y no como descarga. 58 de las
-  60 estaban así. Las 52 provinciales apuntan ya a su `datos.csv`, que la página enlazaba
+  60 estaban así; hoy están las **60**. Las 52 provinciales apuntan ya a su `datos.csv`, que la página enlazaba
   desde siempre; las de estudio, a los CSV que ahora se copian a `docs/datos/`.
   **Nunca declarar una URL que no exista**: Google la rastrea, no la encuentra y descarta
   el dataset entero — por eso `descarga()` devuelve `{}` y no un campo vacío cuando falta
@@ -199,14 +199,26 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **Los 26 diplomas PNG de certificado no están en un `<img>`** en su propia página, solo
   como `href` de descarga y como `og:image`. Google puntúa mucho más una imagen que el
   visitante ve de verdad.
-- **`/aumento-noches-tropicales-espana/` es una página HUÉRFANA.** Está publicada,
-  enlazada desde el menú, varias landings y el sitemap, y en Search Console — pero
-  **ningún script del repo la escribe**. `generar_calculadora.py` solo la enlaza y
-  `analisis_tendencia.py` solo produce `datos/tendencia_resumen.json`. Su fichero es del
-  2026-09-24 y los builds posteriores no lo tocan; sobrevive porque `git add docs` nunca
-  borra. Rompe la regla de reproducibilidad del proyecto y es la única de las 60 fichas
-  `Dataset` que se quedó sin `distribution`, porque no hay generador que editar. Hay que
-  decidir: reescribir su generador o retirarla.
+- **`/aumento-noches-tropicales-espana/` SE MANTIENE A MANO**, y es la única del sitio.
+  Está publicada y enlazada desde el menú —y por tanto desde **308 páginas**— y en el
+  sitemap, pero **ningún script del repo la escribe**: `generar_calculadora.py` solo la
+  enlaza y `analisis_tendencia.py` solo produce `datos/tendencia_resumen.json`. Sobrevive
+  porque `git add docs` nunca borra.
+  **La regla «no tocar `docs/` a mano» no aplica aquí**, y conviene entender por qué: esa
+  regla existe porque un cambio manual se pierde en el siguiente build. A esta página no
+  la reconstruye nadie, así que no se pierde. Editarla a mano es lo correcto **mientras
+  siga sin generador**.
+  Decidido (2026-10-02): se trata como **estudio con edición anual**. Lleva el antetítulo
+  «Estudio 2026», una nota de edición visible diciendo que las cifras son del análisis de
+  agosto de 2026 y que se rehará al cerrar el verano de 2027, y la fecha y los scripts en
+  metodología. Con fecha encima, que las cifras estén congeladas deja de ser un defecto.
+  Por eso tampoco se meten `analisis_tendencia.py` ni `analisis_gradiente.py` en ningún
+  cron: se ejecutan cuando toca rehacer la edición.
+  **Pendiente, sin prisa**: mover su HTML a `generar_calculadora.py` como constante
+  `PAGINA_TENDENCIA` (igual que las ~30 `PAGINA_*` que ya hay) cambiando `<nav>` y pie por
+  `__NAV__` y `__FOOTER__`. El HTML ya fechado es exactamente el literal que entra, así
+  que el trabajo a mano NO se tira. Hasta entonces, cualquier cambio en el menú o el pie
+  del sitio **no llega a esta página**: hay que replicarlo a mano.
 - **No hay tests.** Serían bienvenidos para los parsers de fechas y la conversión DMS→decimal.
 - **`docs/` pesa lo suyo** (GIFs de 2-5 MB, 219 certificados PNG) y `datos/` son 217 MB versionados. Sostenible hoy, vigilarlo.
 

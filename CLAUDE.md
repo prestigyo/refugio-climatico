@@ -41,7 +41,7 @@ refugio-climatico/
 
 | Script | Qué escribe en `docs/` |
 |---|---|
-| `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa: `en/best-climate-in-spain-year-round/`, `en/find-your-winter-address/` + `en/winter-stations.json`, `en/mild-winter/` y una página por sello), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
+| `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa: `en/best-climate-in-spain-year-round/`, `en/find-your-winter-address/` + `en/winter-stations.json`, `en/mild-winter/` y una página por sello, `en/winter-in-spain-long-stay/`), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
 | `generar_miniaturas.py` | `miniaturas/<slug-provincia>.png` (1200×1200, la que usa Google) y `miniaturas/<slug-provincia>-og.png` (1200×630, la de redes) — silueta de la provincia + sus estaciones coloreadas + la cifra grande. Además las **7 páginas en inglés** (`miniaturas/en-*.png`), con España entera y sus 857 estaciones: ahí **el color codifica temperatura, nunca juicio** — en las de verano rojo = noche caliente (`color_nt`), en las de invierno azul = noche helada (`color_helada`). Por eso el mismo tono cálido es malo en verano y bueno en invierno: la escala dice cuánto calor hace y es la estación del año la que decide si conviene. También `miniaturas/indice.json`, que dice qué provincias llevan mapa: lo lee `generar_calculadora.py` para escribir un `alt` que describa la imagen de verdad (Ceuta y Melilla no llevan silueta). **Tiene que correr ANTES que `generar_calculadora.py`**, y así está en el workflow |
 | `generar_calculadora.py` (descargas) | Copia a `datos/` los CSV de análisis que respaldan las fichas `Dataset`: `refugios_nocturnos_ranking.csv`, `horas_dormibles.csv`, `invierno_por_estacion.csv`, `invierno_por_temporada.csv` (1,1 MB). `tendencia_estaciones.csv` se copió a mano, porque su página también se mantiene a mano. Sin ellos las fichas irían sin `distribution` |
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
@@ -106,6 +106,16 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **Idempotencia**: scripts pensados para re-ejecutarse sin romper nada. Los workflows commitean solo si hay cambios reales.
 - **Métricas honestas**: para identificar refugios no usamos medias (esconden picos). Usamos P95 de Tmin de verano, racha máxima consecutiva de noches tropicales, y conteos por umbral.
 - **Nada interpolado**: todo lo que se afirma sale de una estación medida de AEMET.
+- **Para una estancia larga manda la RACHA, no la mediana.** `/en/winter-in-spain-long-stay/`
+  usa `racha_sin_terraza_max` —el tramo más largo sin un solo día que llegara a 18 °C— y no
+  la usa ninguna otra página. La mediana nacional son **90 días en península y Baleares**
+  frente a **8 en Canarias**: en medio país puedes pasar casi toda una estancia de tres
+  meses sin una tarde para sentarte fuera. Para una semana da igual; para noventa días es lo
+  único que no puedes esperar a que pase. **Ojo al filtrar**: sin el tope de calefacción
+  (≤45 noches bajo 10 °C) la tabla colaba Torre-Pacheco (111), Murcia (105) y Salobreña (98)
+  por tener la racha corta — una racha buena con noches frías no sirve a quien paga la
+  calefacción tres meses. Con los tres filtros quedan **ocho estaciones en toda la península
+  y Baleares**.
 - **La divulgación de afiliación va JUNTO al enlace, no en el pie.** El sitio monetiza con
   Booking vía CJ (`cj_deeplink()`, `CJ_PID`). Cada enlace lleva `rel="sponsored nofollow
   noopener"` y, al lado, el texto de `DIVULGACION_AFILIADO` — que vive en **un solo sitio**

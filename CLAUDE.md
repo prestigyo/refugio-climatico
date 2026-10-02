@@ -106,6 +106,15 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **Idempotencia**: scripts pensados para re-ejecutarse sin romper nada. Los workflows commitean solo si hay cambios reales.
 - **Métricas honestas**: para identificar refugios no usamos medias (esconden picos). Usamos P95 de Tmin de verano, racha máxima consecutiva de noches tropicales, y conteos por umbral.
 - **Nada interpolado**: todo lo que se afirma sale de una estación medida de AEMET.
+- **La divulgación de afiliación va JUNTO al enlace, no en el pie.** El sitio monetiza con
+  Booking vía CJ (`cj_deeplink()`, `CJ_PID`). Cada enlace lleva `rel="sponsored nofollow
+  noopener"` y, al lado, el texto de `DIVULGACION_AFILIADO` — que vive en **un solo sitio**
+  para que el directorio y las 32 fichas digan lo mismo. Lo exigen la LSSI (art. 20) y los
+  términos de CJ y Booking, y además es lo que sostiene la premisa del sitio: un botón de
+  comisión sin declarar en la ficha de un hotel que tú mismo certificas es justo lo que un
+  periodista usaría para desmontarte. **Solo se emite si hay enlace de afiliado**: en las
+  fichas sin `slug_booking` el botón va a la web del alojamiento y declarar una comisión
+  que no existe sería falso.
 
 ## Gotchas aprendidos a las malas
 

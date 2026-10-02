@@ -1905,6 +1905,96 @@ def descarga(clave: str, formato: str = "text/csv") -> dict:
                               "encodingFormat": formato, "contentUrl": url}]}
 
 
+# --- Miniaturas de las páginas en inglés -----------------------------------
+# Las escribe generar_miniaturas.py. Se inyectan AQUÍ, sobre el HTML ya
+# construido, y no dentro de cada plantilla: son siete constructores distintos
+# y bastaba que uno se olvidara para que esa página siguiera sin imagen. Así o
+# entran las siete o no entra ninguna, y se ve de un vistazo cuál falta.
+MINIS_EN = {
+    "en": ("Map of Spain with 857 AEMET weather stations coloured by tropical "
+           "nights: only about 4% of the country cools below 18 °C every night "
+           "of summer.",
+           "The 857 AEMET stations by tropical nights per year. Blue: the night "
+           "cools. Red: it never drops below 20 °C."),
+    "en/coolest-towns-spain": (
+        "Map of Spain with 857 AEMET weather stations coloured by tropical "
+        "nights, showing the 14 mountain towns with almost none.",
+        "The 857 AEMET stations by tropical nights per year. The cool north and "
+        "the mountain interior against the Mediterranean coast."),
+    "en/spains-mildest-winters": (
+        "Map of Spain with 837 AEMET weather stations coloured by frost nights "
+        "per winter: 10.3 nights a winter at 5 °C or below at Málaga Airport, "
+        "101.8 at Madrid Airport.",
+        "The 837 AEMET stations by median frost nights per winter. Warm: no "
+        "frost on record. Blue: the night freezes."),
+    "en/best-climate-in-spain-year-round": (
+        "Map of Spain with 837 AEMET weather stations coloured by frost nights: "
+        "only 2 of 828 give both a mild winter and a summer you can sleep through.",
+        "The 837 AEMET stations by median frost nights per winter, nine winters."),
+    "en/find-your-winter-address": (
+        "Map of Spain with 837 AEMET weather stations coloured by frost nights "
+        "per winter, the 828 the tool lets you filter.",
+        "The AEMET stations by median frost nights per winter. Warm: no frost."),
+    "en/frost-free-towns-spain": (
+        "Map of Spain with 837 AEMET weather stations coloured by frost nights: "
+        "414 of 4,113 Spanish towns have not seen a single frost in nine winters.",
+        "The 837 AEMET stations by median frost nights per winter."),
+    "en/mild-winter": (
+        "Map of Spain with 837 AEMET weather stations coloured by frost nights: "
+        "the 67 places that carry the Mild Winter seal.",
+        "The 837 AEMET stations by median frost nights per winter."),
+}
+
+
+def inyectar_miniatura(html: str, site: str, ruta: str) -> str:
+    """Pone la miniatura de una página inglesa: og:image, twitter:image, el
+    <img> VISIBLE (que es de donde Google elige) y Article.image si lo hay.
+
+    Si el PNG no está generado todavía devuelve el HTML intacto: mejor sin
+    imagen que con una URL muerta.
+    """
+    base = ruta.replace("/", "-")
+    if not (DOCS_DIR / "miniaturas" / f"{base}.png").exists():
+        return html
+    alt, cap = MINIS_EN.get(ruta, ("", ""))
+    cua = f"{site}/miniaturas/{base}.png"
+    og = f"{site}/miniaturas/{base}-og.png"
+    html = re.sub(r'<meta property="og:image" content="[^"]*">',
+                  f'<meta property="og:image" content="{og}">'
+                  f'<meta property="og:image:width" content="1200">'
+                  f'<meta property="og:image:height" content="630">'
+                  f'<meta property="og:image:alt" content="{alt}">', html, count=1)
+    html = re.sub(r'<meta name="twitter:image" content="[^"]*">',
+                  f'<meta name="twitter:image" content="{og}">', html, count=1)
+
+    # Article.image: se parsea el JSON-LD en vez de buscar texto. Buscando
+    # '"image": ".../og.png"' se escapaba /en/coolest-towns-spain/, cuyo Article
+    # apuntaba a estudios/frescor-dia.png — una imagen real, pero distinta de la
+    # que la página enseña, que es justo la incoherencia que esto evita.
+    def _art(m):
+        try:
+            d = json.loads(m.group(1))
+        except Exception:
+            return m.group(0)
+        for n in (d.get("@graph") or [d]):
+            if n.get("@type") == "Article":
+                n["image"] = cua
+        return ('<script type="application/ld+json">'
+                + json.dumps(d, ensure_ascii=False) + '</script>')
+
+    html = re.sub(r'<script type="application/ld\+json">(.*?)</script>', _art,
+                  html, flags=re.S)
+    fig = (f'<section><div class="wrap"><figure class="mini">'
+           f'<img src="{cua}" width="1200" height="1200" alt="{alt}" '
+           f'loading="lazy" decoding="async">'
+           f'<figcaption>{cap} Source: AEMET.</figcaption></figure></div></section>')
+    css = ('<style>figure.mini{margin:26px 0 0}'
+           'figure.mini img{width:100%;height:auto;display:block;'
+           'border:1px solid rgba(255,255,255,.12);border-radius:12px}'
+           'figure.mini figcaption{opacity:.72;font-size:12.5px;margin-top:8px}</style>')
+    return html.replace("</header>", "</header>" + css + fig, 1)
+
+
 def nt_cifra(nt: float) -> str:
     """La cifra tal y como se PINTA: '0' · '0,6' · '73'. Sin entidades HTML.
 
@@ -16713,22 +16803,24 @@ def main() -> int:
     # SEO propio, hreflang bidireccional y navegación con tarjetas/botones.
     (DOCS_DIR / "en").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "en" / "index.html").write_text(
-        construir_pagina_en_home(site, datos_estudio), encoding="utf-8")
+        inyectar_miniatura(construir_pagina_en_home(site, datos_estudio), site, "en"), encoding="utf-8")
     (DOCS_DIR / "en" / "coolest-towns-spain").mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "en" / "coolest-towns-spain" / "index.html").write_text(
-        construir_pagina_en_pueblos(estaciones, site), encoding="utf-8")
+        inyectar_miniatura(construir_pagina_en_pueblos(estaciones, site), site, "en/coolest-towns-spain"), encoding="utf-8")
     # Pueblos sin heladas en inglés: comparte datos, CSS y JS con la española.
     sin_heladas_en = construir_pagina_sin_heladas(site, "en")
     if sin_heladas_en:
         (DOCS_DIR / "en" / "frost-free-towns-spain").mkdir(parents=True, exist_ok=True)
         (DOCS_DIR / "en" / "frost-free-towns-spain" / "index.html").write_text(
-            sin_heladas_en[0], encoding="utf-8")
+            inyectar_miniatura(sin_heladas_en[0], site, "en/frost-free-towns-spain"),
+            encoding="utf-8")
     # Artículo de invierno en inglés, con los mismos datos que la calculadora.
     inviernos_en = construir_pagina_en_inviernos_suaves(site)
     if inviernos_en:
         (DOCS_DIR / "en" / "spains-mildest-winters").mkdir(parents=True, exist_ok=True)
         (DOCS_DIR / "en" / "spains-mildest-winters" / "index.html").write_text(
-            inviernos_en, encoding="utf-8")
+            inyectar_miniatura(inviernos_en, site, "en/spains-mildest-winters"),
+            encoding="utf-8")
     # El cruce invierno-verano: sale del JSON de analisis_invierno.py. Sin él
     # no se publica, igual que los otros estudios.
     caras_json = DOCS_DIR / "estudios" / "invierno-datos.json"
@@ -16740,7 +16832,7 @@ def main() -> int:
         destino = DOCS_DIR / "en" / "best-climate-in-spain-year-round"
         destino.mkdir(parents=True, exist_ok=True)
         (destino / "index.html").write_text(
-            construir_pagina_dos_caras(dos_caras, site), encoding="utf-8")
+            inyectar_miniatura(construir_pagina_dos_caras(dos_caras, site), site, "en/best-climate-in-spain-year-round"), encoding="utf-8")
         # La herramienta NO se publica sin su fichero de datos. Una pagina
         # cuya razon de ser es filtrar 828 estaciones, servida sin las 828,
         # solo sabe decir "the station data could not be loaded": es peor que
@@ -16750,7 +16842,7 @@ def main() -> int:
             herramienta = DOCS_DIR / "en" / "find-your-winter-address"
             herramienta.mkdir(parents=True, exist_ok=True)
             (herramienta / "index.html").write_text(
-                construir_pagina_winter_tool(dos_caras, site), encoding="utf-8")
+                inyectar_miniatura(construir_pagina_winter_tool(dos_caras, site), site, "en/find-your-winter-address"), encoding="utf-8")
             _hay_tool = True
         else:
             _hay_tool = False
@@ -16772,7 +16864,7 @@ def main() -> int:
             mw_dir = DOCS_DIR / "en" / "mild-winter"
             mw_dir.mkdir(parents=True, exist_ok=True)
             (mw_dir / "index.html").write_text(
-                construir_indice_mild(dos_caras, site), encoding="utf-8")
+                inyectar_miniatura(construir_indice_mild(dos_caras, site), site, "en/mild-winter"), encoding="utf-8")
             badges = DOCS_DIR / "badges"
             badges.mkdir(parents=True, exist_ok=True)
             for _e in _sellos:

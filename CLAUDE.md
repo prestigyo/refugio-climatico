@@ -42,7 +42,7 @@ refugio-climatico/
 | Script | Qué escribe en `docs/` |
 |---|---|
 | `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa: `en/best-climate-in-spain-year-round/`, `en/find-your-winter-address/` + `en/winter-stations.json`, `en/mild-winter/` y una página por sello), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
-| `generar_miniaturas.py` | `miniaturas/<slug-provincia>.png` (1200×1200, la que usa Google) y `miniaturas/<slug-provincia>-og.png` (1200×630, la de redes) — silueta de la provincia + sus estaciones coloreadas + la cifra grande. También `miniaturas/indice.json`, que dice qué provincias llevan mapa: lo lee `generar_calculadora.py` para escribir un `alt` que describa la imagen de verdad (Ceuta y Melilla no llevan silueta). **Tiene que correr ANTES que `generar_calculadora.py`**, y así está en el workflow |
+| `generar_miniaturas.py` | `miniaturas/<slug-provincia>.png` (1200×1200, la que usa Google) y `miniaturas/<slug-provincia>-og.png` (1200×630, la de redes) — silueta de la provincia + sus estaciones coloreadas + la cifra grande. Además las **7 páginas en inglés** (`miniaturas/en-*.png`), con España entera y sus 857 estaciones: ahí **el color codifica temperatura, nunca juicio** — en las de verano rojo = noche caliente (`color_nt`), en las de invierno azul = noche helada (`color_helada`). Por eso el mismo tono cálido es malo en verano y bueno en invierno: la escala dice cuánto calor hace y es la estación del año la que decide si conviene. También `miniaturas/indice.json`, que dice qué provincias llevan mapa: lo lee `generar_calculadora.py` para escribir un `alt` que describa la imagen de verdad (Ceuta y Melilla no llevan silueta). **Tiene que correr ANTES que `generar_calculadora.py`**, y así está en el workflow |
 | `generar_calculadora.py` (descargas) | Copia a `datos/` los CSV de análisis que respaldan las fichas `Dataset`: `refugios_nocturnos_ranking.csv`, `horas_dormibles.csv`, `invierno_por_estacion.csv`, `invierno_por_temporada.csv` (1,1 MB). `tendencia_estaciones.csv` se copió a mano, porque su página también se mantiene a mano. Sin ellos las fichas irían sin `distribution` |
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
 | `generar_gif.py` | `ola-minimas.gif`, `ola-maximas.gif`, `ola-dia-noche.gif`, `ola-canarias-minimas.gif`, `og.png` |
@@ -228,6 +228,13 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   `__NAV__` y `__FOOTER__`. El HTML ya fechado es exactamente el literal que entra, así
   que el trabajo a mano NO se tira. Hasta entonces, cualquier cambio en el menú o el pie
   del sitio **no llega a esta página**: hay que replicarlo a mano.
+- **La cifra de una miniatura tiene que ser la que esa página YA publica.** Las inglesas
+  llevan cada una su número (`PAGINAS_EN` en `generar_miniaturas.py`, con la columna
+  `fuente` diciendo de dónde sale). La de `/en/spains-mildest-winters/` arrancó diciendo
+  «0 frost nights in Alicante» —cierto, pero la página titula con otra métrica y otras
+  ciudades: 10,3 noches a 5 °C en Málaga frente a 101,8 en Madrid—. Quien pulsa desde la
+  miniatura aterriza en algo que no cuadra. Solo se vio al RENDERIZAR la página; la
+  comprobación automática ahora es que la cifra aparezca en el texto de su propia página.
 - **No hay tests.** Serían bienvenidos para los parsers de fechas y la conversión DMS→decimal.
 - **`docs/` pesa lo suyo** (GIFs de 2-5 MB, 219 certificados PNG) y `datos/` son 217 MB versionados. Sostenible hoy, vigilarlo.
 

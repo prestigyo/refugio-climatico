@@ -1939,6 +1939,12 @@ MINIS_EN = {
         "Map of Spain with 837 AEMET weather stations coloured by frost nights: "
         "414 of 4,113 Spanish towns have not seen a single frost in nine winters.",
         "The 837 AEMET stations by median frost nights per winter."),
+    "en/winter-in-spain-long-stay": (
+        "Map of Spain with 837 AEMET weather stations coloured by frost nights: the "
+        "median mainland station goes 90 days in a row without one warm enough to sit "
+        "outside, against 8 in the Canaries.",
+        "The 837 AEMET stations by median frost nights per winter. Warm: no frost on "
+        "record. Blue: the night freezes."),
     "en/mild-winter": (
         "Map of Spain with 837 AEMET weather stations coloured by frost nights: "
         "the 67 places that carry the Mild Winter seal.",
@@ -11372,6 +11378,7 @@ MENU_EN = [
     ("Year round", "/en/best-climate-in-spain-year-round/"),
     ("Your address", "/en/find-your-winter-address/"),
     ("Mild Winter", "/en/mild-winter/"),
+    ("Long stays", "/en/winter-in-spain-long-stay/"),
 ]
 
 
@@ -13512,6 +13519,23 @@ def construir_pagina_en_inviernos_suaves(site: str) -> str | None:
 # editables para descarga/impresión se pre-renderizan aparte.
 # ===========================================================================
 CJ_PID = "101842593"  # Publisher ID de CJ Affiliate para Booking.com
+
+
+def cj_enlace(destino: str) -> str:
+    """Envuelve cualquier URL de Booking en el deep-link de afiliado.
+
+    Hacía falta además de cj_deeplink porque las estancias largas no apuntan a
+    una ficha de hotel sino a una BÚSQUEDA por destino y fechas: quien viene a
+    pasar el invierno no ha elegido hotel, ha elegido zona.
+    """
+    return f"https://www.anrdoezrs.net/links/{CJ_PID}/type/dlg/{destino}"
+
+
+def booking_estancia(destino: str) -> str:
+    """Búsqueda en Booking de la zona, filtrada a estancias de un mes."""
+    from urllib.parse import quote_plus
+    return cj_enlace("https://www.booking.com/searchresults.html?"
+                     f"ss={quote_plus(destino + ', Spain')}&lang=en-gb")
 
 
 def cj_deeplink(booking_slug: str, sid: str) -> str:
@@ -16484,6 +16508,310 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         + footer_escueto_html(site) + '</body></html>\n')
 
 
+PAGINA_ESTANCIA = r"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__CANONICAL__">
+<link rel="alternate" hreflang="es" href="__SITE__/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__TITLE__">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__CANONICAL__">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.68;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:min(94vw,900px);margin:0 auto;padding:0 24px}
+ a{color:var(--teal)}a:hover{text-decoration:underline}
+ header.h{padding:44px 0 10px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:20px 0 12px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(29px,5.4vw,46px);line-height:1.1;letter-spacing:-.01em}
+ h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,3.5vw,27px);line-height:1.2;margin:38px 0 12px}
+ .lead{margin:22px 0 0}.lead p{font-size:clamp(17px,2.6vw,19px);color:#e7dcc8;margin:0 0 15px}
+ .lead p b,p b{color:var(--paper)}
+ p{margin:0 0 15px;color:var(--muted)}
+ section{padding:6px 0 10px}
+ .big{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:26px 0}
+ .big .c{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+ .big .v{font-family:var(--fd);font-weight:900;font-size:clamp(34px,7vw,54px);line-height:1;color:var(--teja2)}
+ .big .c.ok .v{color:var(--verde)}
+ .big .k{font-size:13.5px;color:var(--muted);margin-top:8px}
+ table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+ th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left}
+ th{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
+ td.n{text-align:right;font-variant-numeric:tabular-nums}
+ tr.can td{background:rgba(150,182,196,.045)}
+ .loc{font-weight:600;color:var(--paper)}
+ .note{font-size:12.5px;color:var(--muted);margin-top:10px}
+ .disc{margin:18px 0 0;font-size:12.5px;color:#9a8a6f;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
+ .acts{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 4px}
+ .btn{display:inline-block;padding:11px 17px;border-radius:999px;font-weight:600;font-size:14.5px;text-decoration:none}
+ .btn.pri{background:var(--teja);color:#1a1209}.btn.pri:hover{background:var(--teja2);text-decoration:none}
+ .btn.sec{background:transparent;border:1px solid var(--teja);color:var(--teja2)}.btn.sec:hover{background:rgba(217,116,78,.12);text-decoration:none}
+ figure.mini{margin:26px 0 0}
+ figure.mini img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px}
+ figure.mini figcaption{color:var(--muted);font-size:12.5px;margin-top:8px}
+ @media(max-width:560px){.big{grid-template-columns:1fr}}
+__NAVCSS__
+__FOOTERCSS__
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__SITE__/en/">NocheTropical.es</a> · Spending a winter in Spain</nav>
+  <div class="kick">__KICK__</div>
+  <h1>A week you can get lucky. Three months, you get the median.</h1>
+  <div class="lead">
+    <p>If you are coming to Spain for a fortnight, the averages will do. If you are coming
+    for the winter — one, two, three months — there is a different number that decides how
+    it goes, and almost nobody publishes it: <b>the longest run of days without a single one
+    warm enough to sit outside.</b></p>
+    <p>A bad week is a bad week. A bad <b>run</b> is your whole stay.</p>
+  </div>
+</div></header>
+__FIGURA__
+<section><div class="wrap">
+  <div class="big">
+    <div class="c"><div class="v">__RACHA_PEN__</div>
+      <div class="k">days in a row with no terrace day — the median across
+      __N_PEN__ mainland and Balearic AEMET stations</div></div>
+    <div class="c ok"><div class="v">__RACHA_CAN__</div>
+      <div class="k">the same figure across the __N_CAN__ Canary Islands stations</div></div>
+  </div>
+  <p>A <b>terrace day</b> here is a day whose maximum reached 18&nbsp;°C — warm enough to
+  eat outside with a jumper on. The figure above is not an average of bad days: it is the
+  <b>longest unbroken run</b> AEMET recorded at each station across nine winters, and then
+  the median of those runs.</p>
+  <p>Read it again, because it is the whole point: in half of mainland Spain you could spend
+  <b>__RACHA_PEN__ consecutive days</b> — most of a three-month stay — without one afternoon
+  warm enough to sit outside. That is not the Spain in the brochure, and it is why
+  &laquo;go south&raquo; is not a precise enough answer.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>The mainland: a short coastline, and that is it</h2>
+  <p>These are the mainland and Balearic stations that clear three bars at once: the run
+  stays under a month, at least 80 terrace days a winter, and no more than 45 nights below
+  10&nbsp;°C — because a short run is no use if you are paying to heat the place anyway.
+  Sorted by the run, shortest first.</p>
+  <table>
+    <thead><tr><th>Where</th><th class="n">Worst run<br>without a terrace day</th>
+    <th class="n">Terrace days<br>a winter</th><th class="n">Heating nights<br>(below 10&nbsp;°C)</th>
+    <th class="n">Rain days</th></tr></thead>
+    <tbody>__TABLA_PEN__</tbody>
+  </table>
+  <p class="note">Median per station across __TEMPS__ winters (1 November – 31 March),
+  AEMET official daily records. The figure is for the <b>weather station</b>, not the whole
+  municipality.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>The Canaries: a different country, climatically</h2>
+  <p>__FRASE_CAN__</p>
+  <table>
+    <thead><tr><th>Where</th><th class="n">Worst run<br>without a terrace day</th>
+    <th class="n">Terrace days<br>a winter</th><th class="n">Heating nights<br>(below 10&nbsp;°C)</th>
+    <th class="n">Rain days</th></tr></thead>
+    <tbody>__TABLA_CAN__</tbody>
+  </table>
+</div></section>
+
+<section><div class="wrap">
+  <h2>What this means if you are booking a month or more</h2>
+  <p>Three things the data says that a holiday brochure will not:</p>
+  <p><b>One: altitude beats latitude.</b> Going south is not enough — a town at 700&nbsp;m in
+  Andalusia can be colder through the winter than the coast of Galicia. What decides is how
+  far you are from the sea and how high you are.</p>
+  <p><b>Two: rain and cold are different problems.</b> Some of the mildest places on this list
+  are also among the wettest. If you are staying three months, check both columns.</p>
+  <p><b>Three: the worst winter matters more than the typical one.</b> Every figure here is a
+  median across nine winters, but the column that should worry you is the run — because that
+  is the one you cannot wait out.</p>
+  <div class="acts">
+    <a class="btn sec" href="__SITE__/en/find-your-winter-address/">Set your own limits and
+    see which towns pass →</a>
+    <a class="btn sec" href="__SITE__/en/mild-winter/">The __N_SELLO__ places with the Mild
+    Winter seal →</a>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Where to stay for a month or three</h2>
+  <p>We do not run accommodation and we do not rank it. These are searches on Booking.com
+  for the areas above, which is where the long-stay rates are — monthly stays are usually
+  far cheaper per night than a week.</p>
+  <div class="acts">__ENLACES__</div>
+  __DIVULGACION__
+</div></section>
+
+<section><div class="wrap">
+  <h2>How this is built</h2>
+  <p>Nine winters (1 November – 31 March, 2017–2025) of official AEMET daily records, from
+  __N_TOT__ weather stations with at least seven complete winters. A <b>terrace day</b> is a
+  day with a maximum of 18&nbsp;°C or above; a <b>heating night</b>, a minimum below
+  10&nbsp;°C; a <b>rain day</b>, any day with measurable precipitation. Every figure is a
+  median per station except the run, which is the single worst unbroken stretch recorded.</p>
+  <p>Nothing here is interpolated or modelled: if no station measured it, we do not publish
+  it. <a href="__SITE__/datos/invierno_por_estacion.csv">Download the full table (CSV)</a> ·
+  <a href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET OpenData</a></p>
+</div></section>
+__FOOTER__
+</body></html>
+"""
+
+
+def construir_pagina_estancia_larga(site: str) -> str | None:
+    """/en/winter-in-spain-long-stay/ — para quien viene a pasar el invierno.
+
+    Por qué existe teniendo ya /en/find-your-winter-address/ y /en/mild-winter/:
+    esas responden DÓNDE con medianas. Esta responde una pregunta distinta, la
+    de quien se queda tres meses, y con una métrica que no usa ninguna otra
+    página: `racha_sin_terraza_max`, el tramo más largo sin un solo día que
+    llegara a 18 °C. Para una semana manda la mediana; para noventa días manda
+    la racha, porque es la que no se puede esperar a que pase.
+
+    Devuelve None si falta el CSV de invierno: una sección nueva no puede tumbar
+    el build, y sin ese dato la página no tiene nada que decir.
+    """
+    import csv as _csv
+    import statistics as _st
+    f = AEMET_DIR / "analisis" / "invierno_por_estacion.csv"
+    if not f.exists():
+        return None
+    filas = [x for x in _csv.DictReader(f.open(encoding="utf-8"))
+             if x.get("temporadas") and int(x["temporadas"]) >= 7]
+    if len(filas) < 100:
+        return None
+
+    def num(x, k):
+        v = x.get(k)
+        return float(v) if v not in ("", None) else None
+
+    CAN = ("LAS PALMAS", "SANTA CRUZ", "STA. CRUZ", "STA.CRUZ")
+    canaria = lambda x: any(c in x["provincia"].upper() for c in CAN)
+    pen = [x for x in filas if not canaria(x)]
+    can = [x for x in filas if canaria(x)]
+    if not pen or not can:
+        return None
+
+    r_pen = round(_st.median([num(x, "racha_sin_terraza_max") for x in pen]))
+    r_can = round(_st.median([num(x, "racha_sin_terraza_max") for x in can]))
+    temps = max(int(x["temporadas"]) for x in filas)
+
+    def fila(x, clase=""):
+        return (f'<tr class="{clase}"><td class="loc">{titular(x["nombre"])}</td>'
+                f'<td class="n">{num(x, "racha_sin_terraza_max"):.0f} days</td>'
+                f'<td class="n">{num(x, "terraza_mediana"):.0f}</td>'
+                f'<td class="n">{num(x, "calefaccion_mediana"):.0f}</td>'
+                f'<td class="n">{num(x, "lluvia_mediana"):.0f}</td></tr>')
+
+    # El tope de calefacción NO es decorativo: sin él colaban Torre-Pacheco (111
+    # noches bajo 10 °C) o Murcia (105) por tener la racha corta. Para quien paga
+    # la calefacción tres meses, una racha buena con noches frías no sirve.
+    sel_pen = sorted([x for x in pen if num(x, "racha_sin_terraza_max") <= 31
+                      and num(x, "terraza_mediana") >= 80
+                      and num(x, "calefaccion_mediana") <= 45],
+                     key=lambda x: (num(x, "racha_sin_terraza_max"),
+                                    -num(x, "terraza_mediana")))[:10]
+    sel_can = sorted([x for x in can if num(x, "terraza_mediana") >= 140
+                      and num(x, "lluvia_mediana") <= 25],
+                     key=lambda x: (num(x, "lluvia_mediana"),
+                                    num(x, "racha_sin_terraza_max")))[:10]
+    if not sel_pen or not sel_can:
+        return None
+
+    frase_can = (f"Across the {len(can)} Canary stations the median run is {r_can} days, "
+                 f"against {r_pen} on the mainland. These are the ten driest of the islands' "
+                 f"stations with at least 140 terrace days a winter — that is, out of "
+                 f"{temps * 151} winter days measured, almost all of them warm enough to be "
+                 f"outside.")
+
+    # Enlaces de estancia larga: las zonas de la tabla, no hoteles concretos.
+    zonas = []
+    for x in sel_pen[:3] + sel_can[:3]:
+        z = titular(x["nombre"]).split(",")[0].split(" - ")[0].strip()
+        if z not in zonas:
+            zonas.append(z)
+    enlaces = "".join(
+        f'<a class="btn pri" href="{booking_estancia(z)}" target="_blank" '
+        f'rel="sponsored nofollow noopener">Monthly stays in {z} →</a>' for z in zonas)
+
+    url = f"{site}/en/winter-in-spain-long-stay/"
+    title = "Spending a Winter in Spain: the number nobody publishes"
+    desc = (f"Coming to Spain for a month or three? The median mainland station goes "
+            f"{r_pen} days in a row without one warm enough to sit outside. In the Canaries, "
+            f"{r_can}. Nine winters of AEMET data.")
+    schema = json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "NocheTropical.es",
+             "item": site + "/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Spending a winter in Spain",
+             "item": url}]},
+        {"@type": "Article", "headline": title, "description": desc,
+         "image": site + "/og.png", "inLanguage": "en",
+         "author": {"@type": "Person", "name": "Ramón J. Lowesting"},
+         "publisher": {"@type": "Organization", "name": "NocheTropical.es",
+                       "logo": {"@type": "ImageObject", "url": site + "/favicon.svg"}},
+         "datePublished": iso_tz(date.today().isoformat()),
+         "dateModified": iso_tz(date.today().isoformat()),
+         "mainEntityOfPage": url, "isBasedOn": "https://opendata.aemet.es"},
+        {"@type": "Dataset",
+         **descarga("invierno_estacion"),
+         "name": f"Winter comfort by AEMET station ({temps} winters)",
+         "description": ("Terrace days, heating nights, rain days and the longest run "
+                         "without a terrace day, per winter season, at Spanish AEMET "
+                         "weather stations."),
+         "url": url, "isBasedOn": "https://opendata.aemet.es",
+         "spatialCoverage": {"@type": "Place", "name": "Spain"},
+         "temporalCoverage": "2017/2026", "inLanguage": "en",
+         "variableMeasured": "Days above 18 °C, nights below 10 °C, rain days per winter",
+         "license": "https://creativecommons.org/licenses/by/4.0/",
+         "creator": {"@type": "Person", "name": "Ramón J. Lowesting"}},
+    ]}, ensure_ascii=False)
+
+    return (PAGINA_ESTANCIA
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_en_html(site))
+            .replace("__FOOTER__", footer_en_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__TITLE__", title)
+            .replace("__DESC__", desc)
+            .replace("__CANONICAL__", url)
+            .replace("__KICK__", f"Long stays · {temps} winters · AEMET data")
+            .replace("__FIGURA__", "")
+            .replace("__RACHA_PEN__", str(r_pen))
+            .replace("__RACHA_CAN__", str(r_can))
+            .replace("__N_PEN__", miles(len(pen)))
+            .replace("__N_CAN__", str(len(can)))
+            .replace("__N_TOT__", miles(len(filas)))
+            .replace("__TEMPS__", str(temps))
+            .replace("__FRASE_CAN__", frase_can)
+            .replace("__TABLA_PEN__", "".join(fila(x) for x in sel_pen))
+            .replace("__TABLA_CAN__", "".join(fila(x, "can") for x in sel_can))
+            .replace("__ENLACES__", enlaces)
+            .replace("__DIVULGACION__", DIVULGACION_AFILIADO)
+            .replace("__N_SELLO__", "67")
+            .replace("__SITE__", site))
+
+
 PAGINA_TUHOTEL = r"""<!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16880,6 +17208,18 @@ def main() -> int:
         else:
             print("   sello Mild Winter: el JSON de invierno no trae la lista "
                   "(ejecuta analisis_invierno.py); se omite")
+    # /en/winter-in-spain-long-stay/ — el público inglés de invierno no busca
+    # hotel, busca dónde pasar unos meses. Se omite sin tumbar el build si falta
+    # el CSV de invierno.
+    _larga = construir_pagina_estancia_larga(site)
+    if _larga:
+        (DOCS_DIR / "en" / "winter-in-spain-long-stay").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "en" / "winter-in-spain-long-stay" / "index.html").write_text(
+            inyectar_miniatura(_larga, site, "en/winter-in-spain-long-stay"),
+            encoding="utf-8")
+        print("   /en/winter-in-spain-long-stay/: generada")
+    else:
+        print("   /en/winter-in-spain-long-stay/: falta invierno_por_estacion.csv; se omite")
     print("   versión EN: /en/ + /en/coolest-towns-spain/"
           + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "")
           + (" + /en/spains-mildest-winters/" if inviernos_en else "")

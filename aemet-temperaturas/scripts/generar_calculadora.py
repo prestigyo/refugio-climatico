@@ -10786,6 +10786,17 @@ __NAV__
   <h2>Datos personales</h2>
   <p><b>No usamos cookies</b> —ni de rastreo ni de ningún tipo—, así que no verás ningún aviso de consentimiento: no hay nada que consentir. Tampoco hay perfiles publicitarios. El <a href="__SITE__/confortometro/">Confortómetro</a> guarda tu voto de forma <b>anónima</b> por zona y usa el almacenamiento local de tu navegador (no una cookie) solo para recordar tu zona y no dejarte votar dos veces seguidas; la ubicación exacta nunca sale de tu dispositivo. Si nos dejas tu correo para recibir un informe o alertas, lo usamos solo para eso; puedes pedir su baja en la dirección de arriba.</p>
 
+  <h2>Enlaces de afiliado</h2>
+  <p>Las fichas de <a href="__SITE__/hoteles-refugio-climatico/">alojamientos certificados</a>
+  incluyen enlaces de afiliado de <b>Booking.com</b>: si reservas a través de ellos, este sitio
+  puede recibir una comisión, <b>sin coste adicional para ti</b> y sin que el precio cambie. Esos
+  enlaces van marcados en cada página y técnicamente como <code>rel="sponsored"</code>.</p>
+  <p><b>La certificación no se compra ni se vende.</b> Un alojamiento entra en el directorio
+  porque la estación de AEMET de su zona cumple el criterio climático, y por ninguna otra razón:
+  ni paga por aparecer, ni la comisión influye en el orden, ni en el nivel del sello, ni en las
+  cifras publicadas. Si una estación deja de cumplir el criterio, su ficha se retira — ha pasado
+  ya. Los alojamientos sin enlace de afiliado aparecen exactamente igual que el resto.</p>
+
   <h2>Descargo</h2>
   <p>La información se ofrece «tal cual», con fines divulgativos. El dato es de la <b>estación</b> de AEMET, no del municipio entero, y no sustituye a la información oficial de AEMET ni a un aviso meteorológico. Hacemos lo posible por que sea correcta, pero no garantizamos que esté libre de errores.</p>
 </div></section>
@@ -13421,6 +13432,20 @@ def cj_deeplink(booking_slug: str, sid: str) -> str:
     return f"https://www.anrdoezrs.net/links/{CJ_PID}/type/dlg/{dest}"
 
 
+# Divulgación de la relación de afiliación. Obligatoria por la LSSI (art. 20:
+# identificar la comunicación comercial y a quien la hace) y por los propios
+# términos de CJ y de Booking, que la exigen para seguir en el programa. Tiene
+# que ir JUNTO al enlace, no escondida en el pie: el lector debe saberlo ANTES
+# de pulsar. Vive aquí, en un solo sitio, para que el directorio y las fichas
+# digan exactamente lo mismo.
+DIVULGACION_AFILIADO = (
+    '<p class="disc"><b>Divulgación:</b> esta página contiene enlaces de afiliado de Booking.com. Si reservas a través de ellos, podemos recibir una comisión <b>sin coste adicional para ti</b>. La certificación climática se basa en datos oficiales de AEMET y es independiente de la relación de afiliación: certifica el clima de la zona, no el interior del establecimiento.</p>'''
+)
+
+CSS_DISC = ('.disc{margin:18px 0 0;font-size:12.5px;color:#9a8a6f;background:var(--bg2);'
+            'border:1px solid var(--line);border-radius:10px;padding:11px 14px;max-width:none}')
+
+
 # --- Sello "Refugio Climático Natural" (SVG parametrizado) -----------------
 _SELLO = dict(bg="#161009", bg2="#241b11", line="#3a2c1c", paper="#efe6d6",
               muted="#b3a48c", teja="#d9744e", teja2="#e89a73", teal="#96b6c4",
@@ -13771,7 +13796,7 @@ __NAV__
   __EJEMPLO__
   <h1>Hoteles donde se duerme con <em>manta</em> en verano</h1>
   <p class="intro">Mientras la ola de calor asa el país y las noches tropicales impiden dormir en la costa, hay una <b>España que no arde</b>: valles y sierras donde la mínima nocturna baja sistemáticamente de los 20&nbsp;°C. Hemos cruzado 10 veranos de <b>datos de AEMET</b> con la oferta hotelera para reunir hoteles en <b>refugios climáticos naturales</b>, de __FRIO__ para arriba. Se duerme fresco, <a href="__SITE__/alojamiento-sin-aire-acondicionado/">sin depender del aire acondicionado</a>.</p>
-  <p class="disc"><b>Divulgación:</b> esta página contiene enlaces de afiliado de Booking.com. Si reservas a través de ellos, podemos recibir una comisión <b>sin coste adicional para ti</b>. La certificación climática se basa en datos oficiales de AEMET y es independiente de la relación de afiliación: certifica el clima de la zona, no el interior del establecimiento.</p>
+  __DIVULGACION__
 </div></header>
 
 <section class="edwrap"><div class="wrap ed">
@@ -14082,6 +14107,7 @@ def construir_pagina_hoteles(hoteles: list, site: str) -> str:
 
     frio_txt = (f"{hotel_frio['municipio']} ({_n_es(hotel_frio['tmin'])}°)" if hotel_frio else "la montaña interior")
     return (PAGINA_HOTELES
+            .replace("__DIVULGACION__", DIVULGACION_AFILIADO)
             .replace("__NAVCSS__", CSS_NAV_ESCUETO)
             .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
             .replace("__NAV__", nav_escueto_html(site))
@@ -16226,6 +16252,9 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
     else:
         reservar = (f'<a class="btn pri" href="{site}/tu-hotel/">¿Gestionas este alojamiento? '
                     'Añade tu web y reservas →</a>')
+    # Divulgación pegada a cada botón de reserva, no en el pie. Si el alojamiento
+    # no tiene enlace de afiliado no hay nada que declarar y no se emite.
+    divulga = DIVULGACION_AFILIADO if h["slug_booking"] else ""
     tel = h.get("telefono", "").strip()
     tel_btn = (f'<a class="btn sec" href="tel:{tel.replace(" ", "")}">☎ Reservas: {tel}</a>' if tel else "")
     maps = "https://www.google.com/maps/search/?api=1&query=" + quote_plus(
@@ -16260,6 +16289,7 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         'body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.65}'
         '.wrap{max-width:min(94vw,1000px);margin:0 auto;padding:0 24px}'
         'a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}'
+        + CSS_DISC +
         'header.h{padding:44px 0 8px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}'
         '.crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}'
         '.kick{font:600 12px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:' + acento + ';margin:14px 0 8px}'
@@ -16332,6 +16362,7 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         '</div>'
         f'{hum_note}'
         f'<div class="acts">{reservar}{tel_btn}<a class="btn sec" href="{maps}" target="_blank" rel="noopener">📍 Cómo llegar</a></div>'
+        + divulga +
         '</div></div></div></section>'
         # Certificado
         '<section><div class="wrap"><div class="panel">'
@@ -16351,6 +16382,7 @@ def construir_pagina_hotel(h: dict, site: str) -> str:
         f'<p>Consulta precios, disponibilidad y las opiniones de otros huéspedes, o abre la '
         f'ubicación en el mapa para calcular tu ruta hasta <b>{h["municipio"]}</b>.</p>'
         f'<div class="acts">{reservar}{tel_btn}<a class="btn sec" href="{maps}" target="_blank" rel="noopener">📍 Ver en el mapa</a></div>'
+        + divulga +
         '</div></section>'
         # Sigue
         '<section><div class="wrap"><div class="panel">'

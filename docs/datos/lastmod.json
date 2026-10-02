@@ -5,11 +5,11 @@
 },
 "a-coruna": {
 "f": "2026-10-02",
-"h": "50c007ba105d54ba"
+"h": "965875ffad725838"
 },
 "albacete": {
 "f": "2026-10-02",
-"h": "7dea5de008cc93e3"
+"h": "a834d5632ed46628"
 },
 "alicante": {
 "f": "2026-10-02",
@@ -25,11 +25,11 @@
 },
 "araba-alava": {
 "f": "2026-10-02",
-"h": "7007f272822ebf6a"
+"h": "23d8be3df17107c9"
 },
 "asturias": {
 "f": "2026-10-02",
-"h": "26f75e04b86a3875"
+"h": "1ba092362feb877e"
 },
 "aumento-noches-tropicales-espana": {
 "f": "2026-10-02",
@@ -37,7 +37,7 @@
 },
 "avila": {
 "f": "2026-10-02",
-"h": "de8409e2a5a4d83a"
+"h": "a2e12486d48bee99"
 },
 "aviso-legal": {
 "f": "2026-10-02",
@@ -45,35 +45,35 @@
 },
 "badajoz": {
 "f": "2026-10-02",
-"h": "d49fe71cf2f7bb05"
+"h": "e327a3b4f9686be9"
 },
 "barcelona": {
 "f": "2026-10-02",
-"h": "cdd926125f7073bc"
+"h": "98cf7eb2814c5883"
 },
 "bizkaia": {
 "f": "2026-10-02",
-"h": "2c4939541ee93d56"
+"h": "196dda5862a01e86"
 },
 "burgos": {
 "f": "2026-10-02",
-"h": "86f92c30f5b7763a"
+"h": "5832b87862bde888"
 },
 "caceres": {
 "f": "2026-10-02",
-"h": "3b9f03df7d10d3c2"
+"h": "26b5f41a485e4f26"
 },
 "cadiz": {
 "f": "2026-10-02",
-"h": "3879abdb68cb7ca4"
+"h": "e6babca1b406cb54"
 },
 "cantabria": {
 "f": "2026-10-02",
-"h": "7644382416e30909"
+"h": "e13793c1558ac757"
 },
 "castellon": {
 "f": "2026-10-02",
-"h": "a931288e0c2b6a4b"
+"h": "fa359b74b15d180d"
 },
 "certificados": {
 "f": "2026-09-15",
@@ -877,15 +877,15 @@
 },
 "ciudad-real": {
 "f": "2026-10-02",
-"h": "bb3b5426076a0407"
+"h": "2cf6e9297c0c8d52"
 },
 "confortometro": {
-"f": "2026-10-01",
-"h": "7a247f70bd54a2fb"
+"f": "2026-10-02",
+"h": "bdfead9bb3de98a3"
 },
 "cordoba": {
 "f": "2026-10-02",
-"h": "b61cbf64d86a2bd7"
+"h": "86661e994134ef4a"
 },
 "cuantas-horas-se-duerme-en-verano": {
 "f": "2026-10-02",
@@ -893,7 +893,7 @@
 },
 "cuenca": {
 "f": "2026-10-02",
-"h": "bef104334b62e67f"
+"h": "7e980d8241d2f2a5"
 },
 "deuda-de-sueno": {
 "f": "2026-09-28",
@@ -909,299 +909,303 @@
 },
 "en": {
 "f": "2026-10-02",
-"h": "8f5171c319d64ebc"
+"h": "312035ee632bc7fe"
 },
 "en/best-climate-in-spain-year-round": {
 "f": "2026-10-02",
-"h": "ae52834418ec9830"
+"h": "69974210fccd2255"
 },
 "en/coolest-towns-spain": {
 "f": "2026-10-02",
-"h": "413eaef5eb741e17"
+"h": "690a4924c8aa95ea"
 },
 "en/find-your-winter-address": {
 "f": "2026-10-02",
-"h": "0c206d72f18196ca"
+"h": "36d0abaa8a9d8fdb"
 },
 "en/frost-free-towns-spain": {
 "f": "2026-10-02",
-"h": "c62704fcd4ac760f"
+"h": "a21ad18901b2c50c"
 },
 "en/mild-winter": {
 "f": "2026-10-02",
-"h": "3e6065323b8425bb"
+"h": "b86523154fc01c4c"
 },
 "en/mild-winter/adeje": {
-"f": "2026-09-28",
-"h": "816bfaea443ab160"
+"f": "2026-10-02",
+"h": "ad238c431719dabc"
 },
 "en/mild-winter/agaete": {
-"f": "2026-09-28",
-"h": "8784a117195b17ee"
+"f": "2026-10-02",
+"h": "c3dabf9fed9f20d0"
 },
 "en/mild-winter/agaete-suerte-alta": {
-"f": "2026-09-28",
-"h": "db14a769a2fe1f88"
+"f": "2026-10-02",
+"h": "ba46f62b71b3a7de"
 },
 "en/mild-winter/aguimes": {
-"f": "2026-09-28",
-"h": "5c1f2e749afd0fa6"
+"f": "2026-10-02",
+"h": "e575c706ccb2d91f"
 },
 "en/mild-winter/agulo": {
-"f": "2026-09-28",
-"h": "a961d4635ca4baac"
+"f": "2026-10-02",
+"h": "2c23251de6ec3f49"
 },
 "en/mild-winter/anaga": {
-"f": "2026-09-28",
-"h": "c7b046ee1e573eb4"
+"f": "2026-10-02",
+"h": "24c74313ccf96414"
 },
 "en/mild-winter/antigua": {
-"f": "2026-09-28",
-"h": "2418f00f690989b1"
+"f": "2026-10-02",
+"h": "cf9600d04a5322d8"
 },
 "en/mild-winter/arico": {
-"f": "2026-09-28",
-"h": "87e31747e979883c"
+"f": "2026-10-02",
+"h": "d9babc1c33e051fa"
 },
 "en/mild-winter/arucas": {
-"f": "2026-09-28",
-"h": "b81cb6aaaf6c8a49"
+"f": "2026-10-02",
+"h": "0d61a2713a473472"
 },
 "en/mild-winter/cabo-de-gata": {
-"f": "2026-09-28",
-"h": "c72ba3b03404459c"
+"f": "2026-10-02",
+"h": "ada7dedbe6071d84"
 },
 "en/mild-winter/cadiz": {
-"f": "2026-09-28",
-"h": "7c95819ecd700181"
+"f": "2026-10-02",
+"h": "631b32eeecda630d"
 },
 "en/mild-winter/candelaria": {
-"f": "2026-09-28",
-"h": "14c034a63a9ad179"
+"f": "2026-10-02",
+"h": "e12a52302d2f8253"
 },
 "en/mild-winter/capdepera": {
-"f": "2026-09-28",
-"h": "5ae203f7854aba5e"
+"f": "2026-10-02",
+"h": "ee34c43fa3654e36"
 },
 "en/mild-winter/ceuta": {
-"f": "2026-09-28",
-"h": "a3d704837bee21c2"
+"f": "2026-10-02",
+"h": "314a5af13a70ccde"
 },
 "en/mild-winter/el-pinar-la-dehesa": {
-"f": "2026-09-28",
-"h": "ff168f0fc477b412"
+"f": "2026-10-02",
+"h": "ba221a54f785f356"
 },
 "en/mild-winter/estepona": {
-"f": "2026-09-28",
-"h": "fe1e14ba22213284"
+"f": "2026-10-02",
+"h": "cc9b6bc2dbc25fac"
 },
 "en/mild-winter/frontera-sabinosa": {
-"f": "2026-09-28",
-"h": "521d5fa59afa895e"
+"f": "2026-10-02",
+"h": "634f3f7fed555f87"
 },
 "en/mild-winter/fuencaliente": {
-"f": "2026-09-28",
-"h": "af221d5eef999dd6"
+"f": "2026-10-02",
+"h": "d236e584f1e1403c"
 },
 "en/mild-winter/fuerteventura-aeropuerto": {
-"f": "2026-09-28",
-"h": "81b32b56dec7cf33"
+"f": "2026-10-02",
+"h": "2cf7484f9ee6e537"
 },
 "en/mild-winter/gran-canaria-aeropuerto": {
-"f": "2026-09-28",
-"h": "32bc85392efaa773"
+"f": "2026-10-02",
+"h": "1bf80a2559b409d1"
 },
 "en/mild-winter/guimar": {
-"f": "2026-09-28",
-"h": "a34ca4f9f5e41177"
+"f": "2026-10-02",
+"h": "956c6d016ebd7bdf"
 },
 "en/mild-winter/haria": {
-"f": "2026-09-28",
-"h": "b83340c55899d996"
+"f": "2026-10-02",
+"h": "6feae29d999df8b2"
 },
 "en/mild-winter/hermigua": {
-"f": "2026-09-28",
-"h": "bb294a1470832964"
+"f": "2026-10-02",
+"h": "3be668f72659b874"
 },
 "en/mild-winter/hierro-aeropuerto": {
-"f": "2026-09-28",
-"h": "530fab456215d719"
+"f": "2026-10-02",
+"h": "6bbeae96dfe55f7e"
 },
 "en/mild-winter/la-aldea-de-san-nicolas": {
-"f": "2026-09-28",
-"h": "6764cce323c1f60a"
+"f": "2026-10-02",
+"h": "6085fa87f5879aa4"
 },
 "en/mild-winter/la-aldea-de-san-nicolas-tasarte": {
-"f": "2026-09-28",
-"h": "733c1f380b77f9a2"
+"f": "2026-10-02",
+"h": "aa557b5e3ef530dc"
 },
 "en/mild-winter/la-gomera-aeropuerto": {
-"f": "2026-09-28",
-"h": "7e11b51c2925a442"
+"f": "2026-10-02",
+"h": "c56d7c27a360d1ef"
 },
 "en/mild-winter/la-graciosa": {
-"f": "2026-09-28",
-"h": "7dba54ac18bd511d"
+"f": "2026-10-02",
+"h": "2518622ba27bad13"
 },
 "en/mild-winter/la-oliva": {
-"f": "2026-09-28",
-"h": "2d3d37346bcb6a90"
+"f": "2026-10-02",
+"h": "4d2e1d8081dd9f55"
 },
 "en/mild-winter/la-palma-aeropuerto": {
-"f": "2026-09-28",
-"h": "8f32bbf05567496b"
+"f": "2026-10-02",
+"h": "846aeccfc52ce2f8"
 },
 "en/mild-winter/lanzarote-aeropuerto": {
-"f": "2026-09-28",
-"h": "4237897dfafc3591"
+"f": "2026-10-02",
+"h": "f66733803b58a719"
 },
 "en/mild-winter/las-palmas-de-g-c-tafira-cmt": {
-"f": "2026-09-28",
-"h": "8ace7b0291bf0961"
+"f": "2026-10-02",
+"h": "c855e36e84ab7457"
 },
 "en/mild-winter/las-palmas-de-gran-canaria-pl-de-la-feria": {
-"f": "2026-09-28",
-"h": "505ee1a2f32fdcda"
+"f": "2026-10-02",
+"h": "bae919d88e531cc9"
 },
 "en/mild-winter/las-palmas-de-gran-canaria-san-cristobal": {
-"f": "2026-09-28",
-"h": "6428980797995856"
+"f": "2026-10-02",
+"h": "d2b062a89cd5efe4"
 },
 "en/mild-winter/las-palmas-de-gran-canaria-tafira": {
-"f": "2026-09-28",
-"h": "41fcdb337efc9b73"
+"f": "2026-10-02",
+"h": "35b163cabcf72c17"
 },
 "en/mild-winter/lomo-del-balo": {
-"f": "2026-09-28",
-"h": "6b7d5f260520ca10"
+"f": "2026-10-02",
+"h": "6b685702519c16be"
 },
 "en/mild-winter/malaga": {
-"f": "2026-09-28",
-"h": "66b06fbaee46537e"
+"f": "2026-10-02",
+"h": "1fa5378a4ee119b2"
 },
 "en/mild-winter/marbella": {
-"f": "2026-09-28",
-"h": "cad62185fdc62f24"
+"f": "2026-10-02",
+"h": "c8f532b63f18a0c0"
 },
 "en/mild-winter/marbella-puerto": {
-"f": "2026-09-28",
-"h": "c786b33dbd226fa9"
+"f": "2026-10-02",
+"h": "604cb17453e87e3b"
 },
 "en/mild-winter/maspalomas-c-insular-turismo": {
-"f": "2026-09-28",
-"h": "3d0f020cac0bee1b"
+"f": "2026-10-02",
+"h": "0389628eceb2ae23"
 },
 "en/mild-winter/melilla": {
-"f": "2026-09-28",
-"h": "a35618aba3596a30"
+"f": "2026-10-02",
+"h": "37527e8f8d380f70"
 },
 "en/mild-winter/mogan-puerto": {
-"f": "2026-09-28",
-"h": "74fffa118ee3f665"
+"f": "2026-10-02",
+"h": "5d331dc976cdc39b"
 },
 "en/mild-winter/mogan-puerto-rico": {
-"f": "2026-09-28",
-"h": "f337074e1cdf6c81"
+"f": "2026-10-02",
+"h": "46847140ac8008ee"
 },
 "en/mild-winter/nerja": {
-"f": "2026-09-28",
-"h": "a02b7354b6a2a945"
+"f": "2026-10-02",
+"h": "e52e923a6f31a83d"
 },
 "en/mild-winter/pajara": {
-"f": "2026-09-28",
-"h": "8f9ecd92ba8729fe"
+"f": "2026-10-02",
+"h": "32b5e3edce74de07"
 },
 "en/mild-winter/puerto-de-la-cruz": {
-"f": "2026-09-28",
-"h": "01aee2970fe16ff1"
+"f": "2026-10-02",
+"h": "024d4f895b025678"
 },
 "en/mild-winter/rincon-de-la-victoria": {
-"f": "2026-09-28",
-"h": "578dcab1dae42606"
+"f": "2026-10-02",
+"h": "8364993c84f2be01"
 },
 "en/mild-winter/san-andres-y-sauces": {
-"f": "2026-09-28",
-"h": "41db915bdaa3165d"
+"f": "2026-10-02",
+"h": "1767411acc354522"
 },
 "en/mild-winter/san-bartolome-tirajana-el-matorral": {
-"f": "2026-09-28",
-"h": "c58e38aca0017dd6"
+"f": "2026-10-02",
+"h": "8dfb72fc0fd212e6"
 },
 "en/mild-winter/san-bartolome-tirajana-lomo-pedro-alfonso": {
-"f": "2026-09-28",
-"h": "c9be6e3b0e34e6f1"
+"f": "2026-10-02",
+"h": "c105be3397f962a9"
 },
 "en/mild-winter/san-sebastian-de-la-gomera": {
-"f": "2026-09-28",
-"h": "e5ca0c53cd58b42f"
+"f": "2026-10-02",
+"h": "d3f60a67cb7e016b"
 },
 "en/mild-winter/sta-cruz-de-tenerife": {
-"f": "2026-09-28",
-"h": "3c8fc90a1eb9cb60"
+"f": "2026-10-02",
+"h": "49ed0441c72e3b6b"
 },
 "en/mild-winter/tacoron-lapillas-tortuga": {
-"f": "2026-09-28",
-"h": "2ce014528a084745"
+"f": "2026-10-02",
+"h": "6f776b47b2ebcd13"
 },
 "en/mild-winter/tacoronte": {
-"f": "2026-09-28",
-"h": "0b12944f17e392aa"
+"f": "2026-10-02",
+"h": "5f38f217e6919e6b"
 },
 "en/mild-winter/tazacorte": {
-"f": "2026-09-28",
-"h": "05b721737c098f30"
+"f": "2026-10-02",
+"h": "cebc0e4f927dc422"
 },
 "en/mild-winter/telde-centro-forestal-doramas": {
-"f": "2026-09-28",
-"h": "8c71c45960e7cf77"
+"f": "2026-10-02",
+"h": "7bfcda69162c3c7b"
 },
 "en/mild-winter/telde-melenara": {
-"f": "2026-09-28",
-"h": "489b9d87dcf51f85"
+"f": "2026-10-02",
+"h": "8876beea0a1d0f30"
 },
 "en/mild-winter/tenerife-norte-aeropuerto": {
-"f": "2026-09-28",
-"h": "6d2aae8b8a765356"
+"f": "2026-10-02",
+"h": "b6420a24374c8611"
 },
 "en/mild-winter/tenerife-sur-aeropuerto": {
-"f": "2026-09-28",
-"h": "d6d4f8eb034a4430"
+"f": "2026-10-02",
+"h": "b68f2f236c037c91"
 },
 "en/mild-winter/tias": {
-"f": "2026-09-28",
-"h": "fe791d6798a0e208"
+"f": "2026-10-02",
+"h": "5dcaba1cead8aa4a"
 },
 "en/mild-winter/tijarafe": {
-"f": "2026-09-28",
-"h": "6c12c1ad14cf1988"
+"f": "2026-10-02",
+"h": "8297aee782589045"
 },
 "en/mild-winter/tinajo": {
-"f": "2026-09-28",
-"h": "9f3f7252e0add110"
+"f": "2026-10-02",
+"h": "efb3b4cca086cca7"
 },
 "en/mild-winter/torremolinos": {
-"f": "2026-09-28",
-"h": "afab216d3ff73cc9"
+"f": "2026-10-02",
+"h": "dd028ebc3721dd8e"
 },
 "en/mild-winter/tuineje-puerto-gran-tarajal": {
-"f": "2026-09-28",
-"h": "97bb9dc6fcef32ae"
+"f": "2026-10-02",
+"h": "6982801f5b6a514e"
 },
 "en/mild-winter/vallehermoso-dama": {
-"f": "2026-09-28",
-"h": "6c4bc1fdce601e50"
+"f": "2026-10-02",
+"h": "7d258acb556b3848"
 },
 "en/mild-winter/valverde": {
-"f": "2026-09-28",
-"h": "7341952b54043ba9"
+"f": "2026-10-02",
+"h": "1d4120c3a6b8c07e"
 },
 "en/mild-winter/yaiza-playa-blanca": {
-"f": "2026-09-28",
-"h": "82389f17b9a429a4"
+"f": "2026-10-02",
+"h": "8662d41359cfcab5"
 },
 "en/spains-mildest-winters": {
 "f": "2026-10-02",
-"h": "61d972827d753659"
+"h": "3be55a7426db9c64"
+},
+"en/winter-in-spain-long-stay": {
+"f": "2026-10-02",
+"h": "a2f278efd8c4ade8"
 },
 "enfriar-habitacion-sin-aire-acondicionado": {
 "f": "2026-09-28",
@@ -1213,19 +1217,19 @@
 },
 "gipuzkoa": {
 "f": "2026-10-02",
-"h": "d3094a6b9068d198"
+"h": "120bb1aa5bdb1b63"
 },
 "girona": {
 "f": "2026-10-02",
-"h": "686a100ec9191cfa"
+"h": "898b89874a842ca0"
 },
 "granada": {
 "f": "2026-10-02",
-"h": "b91202dfb5fe5585"
+"h": "b336eb01745ea8dd"
 },
 "guadalajara": {
 "f": "2026-10-02",
-"h": "660e02caedea0fb4"
+"h": "98571b9a55ed3d9c"
 },
 "hipoteca-termica": {
 "f": "2026-09-15",
@@ -1369,47 +1373,47 @@
 },
 "huelva": {
 "f": "2026-10-02",
-"h": "0d06e822f4e49ad2"
+"h": "a6b7da5c855b5ddb"
 },
 "huesca": {
 "f": "2026-10-02",
-"h": "400f09c7d017f71e"
+"h": "6da6ecd1de2325c6"
 },
 "illes-balears": {
 "f": "2026-10-02",
-"h": "74fb79a0022dda2d"
+"h": "5fa2dd95711ea718"
 },
 "jaen": {
 "f": "2026-10-02",
-"h": "2cd63fc44dc079c3"
+"h": "461c11cc59231684"
 },
 "la-espana-que-nunca-se-colorea": {
-"f": "2026-10-01",
-"h": "988bf275e5197be8"
+"f": "2026-10-02",
+"h": "b7000511183e7e9e"
 },
 "la-rioja": {
 "f": "2026-10-02",
-"h": "c999d36abae9b326"
+"h": "61bc9d81eda5a9f1"
 },
 "las-palmas": {
 "f": "2026-10-02",
-"h": "9f4c1eac5a3d1d7a"
+"h": "8772aae94d4746cf"
 },
 "leon": {
 "f": "2026-10-02",
-"h": "b0402ca16ebc3b8a"
+"h": "fb3e4c2f1dbaf7cc"
 },
 "lleida": {
 "f": "2026-10-02",
-"h": "d099f8d753b00f7c"
+"h": "13280a9ba377c714"
 },
 "lugo": {
 "f": "2026-10-02",
-"h": "73f979cbc46fd3b5"
+"h": "8e8aa8dd79673a7f"
 },
 "madrid": {
 "f": "2026-10-02",
-"h": "3afc44df394b0655"
+"h": "1a8bd5fbe8538796"
 },
 "malaga": {
 "f": "2026-10-02",
@@ -1425,7 +1429,7 @@
 },
 "melilla": {
 "f": "2026-10-02",
-"h": "039bdba625cb7828"
+"h": "452ff362ab9a9b45"
 },
 "metodologia": {
 "f": "2026-09-28",
@@ -1441,15 +1445,15 @@
 },
 "murcia": {
 "f": "2026-10-02",
-"h": "0c35d78710605e67"
+"h": "2ee40e4c2f5ad272"
 },
 "navarra": {
 "f": "2026-10-02",
-"h": "d7cd5cbb55b307cf"
+"h": "b36e446567c4cb26"
 },
 "noches-tropicales": {
 "f": "2026-10-02",
-"h": "f61112ef055cf163"
+"h": "fa73212ee016fb5f"
 },
 "noches-tropicales-y-salud": {
 "f": "2026-09-28",
@@ -1465,19 +1469,19 @@
 },
 "ourense": {
 "f": "2026-10-02",
-"h": "3bd6f8b65fcb8612"
+"h": "21c70270469a8084"
 },
 "palencia": {
 "f": "2026-10-02",
-"h": "40a4458c164d84f9"
+"h": "48f9b5328e8d5bbb"
 },
 "parte": {
 "f": "2026-10-02",
-"h": "ab9e41f2f2ee0cab"
+"h": "1f27f5d8906c367a"
 },
 "pontevedra": {
 "f": "2026-10-02",
-"h": "2f272bf1482db054"
+"h": "9d5c37779b5a3af4"
 },
 "prensa": {
 "f": "2026-10-01",
@@ -1505,15 +1509,15 @@
 },
 "santa-cruz-de-tenerife": {
 "f": "2026-10-02",
-"h": "b2d9508bfa0b811e"
+"h": "dee8f12394ea76bd"
 },
 "segovia": {
 "f": "2026-10-02",
-"h": "1ff155d96b9b076b"
+"h": "fecfbe69ff0dd7c3"
 },
 "sevilla": {
 "f": "2026-10-02",
-"h": "bc0154affb9eefb8"
+"h": "ccfcf0dc357a7d04"
 },
 "sobre-el-proyecto": {
 "f": "2026-09-28",
@@ -1521,19 +1525,19 @@
 },
 "soria": {
 "f": "2026-10-02",
-"h": "dab3fcb7cce78681"
+"h": "dba2becb0e743de7"
 },
 "tarragona": {
 "f": "2026-10-02",
-"h": "708fdbe2aa9b624e"
+"h": "dcc5ce4209be6f59"
 },
 "teruel": {
 "f": "2026-10-02",
-"h": "4763c22ba709a54a"
+"h": "7b1e043a34ebdb35"
 },
 "toledo": {
 "f": "2026-10-02",
-"h": "57abc6f9cd00bd57"
+"h": "88cb3afbf2c593bf"
 },
 "tu-hotel": {
 "f": "2026-09-28",
@@ -1549,18 +1553,18 @@
 },
 "valencia": {
 "f": "2026-10-02",
-"h": "3fb9d62592c3e18a"
+"h": "058e102fd74d0b7b"
 },
 "valladolid": {
 "f": "2026-10-02",
-"h": "ef9d7c74fe20e688"
+"h": "80608d584153101b"
 },
 "zamora": {
 "f": "2026-10-02",
-"h": "8f17a26301f96252"
+"h": "656c0db26914a01c"
 },
 "zaragoza": {
 "f": "2026-10-02",
-"h": "053c1ee419fcaf20"
+"h": "0bc78e57cde17d40"
 }
 }

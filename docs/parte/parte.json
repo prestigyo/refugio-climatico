@@ -1,6 +1,6 @@
 {
  "fecha": "2026-10-03",
- "total": 847,
+ "total": 848,
  "tropicales": 156,
  "ecuatoriales": 0,
  "peor": {
@@ -35,6 +35,12 @@
    "prov": "Illes Balears"
   },
   {
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 24.3,
+   "prov": "Almería"
+  },
+  {
    "id": "B410B",
    "nombre": "Santanyí",
    "min": 24.2,
@@ -51,12 +57,6 @@
    "nombre": "Puerto de Mogán",
    "min": 24.2,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 24.1,
-   "prov": "Almería"
   },
   {
    "id": "C629Q",

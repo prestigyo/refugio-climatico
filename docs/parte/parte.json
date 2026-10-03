@@ -1,113 +1,83 @@
 {
- "fecha": "2026-10-02",
- "total": 848,
- "tropicales": 184,
- "ecuatoriales": 1,
+ "fecha": "2026-10-03",
+ "total": 847,
+ "tropicales": 156,
+ "ecuatoriales": 0,
  "peor": {
-  "id": "6277C",
-  "nombre": "Adra Faro",
-  "min": 26.1,
-  "prov": "Almería"
+  "id": "B569X",
+  "nombre": "Capdepera-Faro",
+  "min": 24.7,
+  "prov": "Illes Balears"
  },
  "mejor": {
-  "id": "1696O",
-  "nombre": "Beariz",
-  "min": 2.6,
-  "prov": "Ourense"
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": 4.5,
+  "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "6277C",
-   "nombre": "Adra Faro",
-   "min": 26.1,
-   "prov": "Almería"
+   "id": "B569X",
+   "nombre": "Capdepera-Faro",
+   "min": 24.7,
+   "prov": "Illes Balears"
   },
   {
    "id": "6083X",
    "nombre": "Marbella Cabopino",
-   "min": 24.9,
+   "min": 24.6,
    "prov": "Málaga"
   },
   {
-   "id": "7012X",
-   "nombre": "Cartagena",
-   "min": 24.9,
-   "prov": "Murcia"
+   "id": "B434X",
+   "nombre": "Portocolom",
+   "min": 24.6,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B410B",
+   "nombre": "Santanyí",
+   "min": 24.2,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "B496X",
+   "nombre": "Son Servera-Can Pep Monjo",
+   "min": 24.2,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
+   "min": 24.2,
+   "prov": "Las Palmas"
   },
   {
    "id": "6329X",
    "nombre": "Cabo de Gata Faro",
-   "min": 24.8,
+   "min": 24.1,
    "prov": "Almería"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 24.8,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "6291B",
-   "nombre": "El Ejido (Ayuntamiento - Automatica)",
-   "min": 24.3,
-   "prov": "Almería"
-  },
-  {
-   "id": "7019X",
-   "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 24.3,
-   "prov": "Murcia"
-  },
-  {
-   "id": "7031X",
-   "nombre": "Murcia/San Javier",
-   "min": 24.3,
-   "prov": "Murcia"
-  },
-  {
-   "id": "6175X",
-   "nombre": "Rincon de la Victoria (Automatica)",
-   "min": 24.2,
-   "prov": "Málaga"
   },
   {
    "id": "C629Q",
    "nombre": "Mogan (Puerto Rico)",
-   "min": 24.2,
+   "min": 24.1,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "6076X",
+   "nombre": "Marbella (Puerto Banus - Automatica)",
+   "min": 23.9,
+   "prov": "Málaga"
+  },
+  {
+   "id": "B228",
+   "nombre": "Palma-Portopí",
+   "min": 23.9,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
-  {
-   "id": "1696O",
-   "nombre": "Beariz",
-   "min": 2.6,
-   "prov": "Ourense"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 3.1,
-   "prov": "León"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 3.5,
-   "prov": "Zamora"
-  },
-  {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 3.8,
-   "prov": "Asturias"
-  },
-  {
-   "id": "1735X",
-   "nombre": "Xinzo de Limia",
-   "min": 3.8,
-   "prov": "Ourense"
-  },
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
@@ -115,28 +85,58 @@
    "prov": "Granada"
   },
   {
-   "id": "1706A",
-   "nombre": "Allariz-Rimelo",
-   "min": 4.9,
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 5.0,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 5.4,
+   "prov": "Huesca"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 5.7,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 6.5,
+   "prov": "Huesca"
+  },
+  {
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 6.7,
+   "prov": "Granada"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 6.9,
+   "prov": "Lleida"
+  },
+  {
+   "id": "6299I",
+   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
+   "min": 7.9,
+   "prov": "Granada"
+  },
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 8.2,
    "prov": "Ourense"
   },
   {
-   "id": "2701D",
-   "nombre": "Miñera de Luna-Embalse",
-   "min": 5.3,
-   "prov": "León"
-  },
-  {
-   "id": "1521I",
-   "nombre": "O Paramo",
-   "min": 5.4,
-   "prov": "Lugo"
-  },
-  {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 5.5,
-   "prov": "Cantabria"
+   "id": "9814I",
+   "nombre": "Torla-Ordesa el Cebollar",
+   "min": 8.2,
+   "prov": "Huesca"
   }
  ]
 }

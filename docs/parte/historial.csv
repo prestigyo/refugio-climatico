@@ -126,19 +126,20 @@ fecha,total,tropicales,ecuatoriales,peor,peor_prov,peor_min,mejor,mejor_prov,mej
 2026-09-14,807,116,2,"San Bartolome Tirajana, Lomo Pedro Alfonso",Las Palmas,25.4,Cuéllar,Segovia,4.1
 2026-09-15,806,147,19,Agüimes,Las Palmas,27.7,Cuéllar,Segovia,5.0
 2026-09-16,800,93,5,Agüimes,Las Palmas,26.4,Cap de Vaquèira,Lleida,0.8
-2026-09-17,799,75,0,Hierro Aeropuerto,Santa Cruz de Tenerife,23.8,"Sanabria, Robleda-Cervantes",Zamora,1.0
-2026-09-18,812,62,0,Maspalomas,Las Palmas,23.8,Cuéllar,Segovia,1.1
-2026-09-19,814,90,0,Marbella,Málaga,24.6,Reinosa,Cantabria,0.9
-2026-09-20,810,91,0,Cabo de Gata,Almería,24.1,San Pedro Manrique,Soria,3.5
-2026-09-21,805,86,0,Marbella,Málaga,23.8,Puerto del Pico,Ávila,3.2
-2026-09-22,807,87,0,Pájara,Las Palmas,24.0,Cuéllar,Segovia,-0.3
-2026-09-23,803,86,1,Agüimes,Las Palmas,26.3,"Valderredible, Cubillo de Ebro",Cantabria,3.4
-2026-09-24,805,124,22,Agaete - Suerte Alta,Las Palmas,28.2,"Valderredible, Cubillo de Ebro",Cantabria,3.5
-2026-09-25,815,128,24,"San Bartolome Tirajana, el Matorral",Las Palmas,29.5,Xinzo de Limia,Ourense,1.6
-2026-09-26,819,147,24,"Telde, Centro Forestal Doramas",Las Palmas,26.9,"Sanabria, Robleda-Cervantes",Zamora,2.4
-2026-09-27,810,157,2,San Sebastián de la Gomera,Santa Cruz de Tenerife,25.7,Ucero,Soria,7.1
-2026-09-28,803,139,0,Capdepera,Illes Balears,24.8,"Pradollano, Parque Nacional Sierra Nevada",Granada,3.1
-2026-09-29,846,171,1,Barcelona Port Olímpic,Barcelona,25.0,Pradollano Parque Nacional Sierra Nevada,Granada,3.9
+2026-09-17,800,75,0,Hierro Aeropuerto,Santa Cruz de Tenerife,23.8,"Sanabria, Robleda-Cervantes",Zamora,1.0
+2026-09-18,814,62,0,Maspalomas,Las Palmas,23.8,Cuéllar,Segovia,1.1
+2026-09-19,816,90,0,Marbella,Málaga,24.6,Reinosa,Cantabria,0.9
+2026-09-20,812,91,0,Cabo de Gata,Almería,24.1,San Pedro Manrique,Soria,3.5
+2026-09-21,807,86,0,Marbella,Málaga,23.8,Puerto del Pico,Ávila,3.2
+2026-09-22,809,87,0,Pájara,Las Palmas,24.0,Cuéllar,Segovia,-0.3
+2026-09-23,805,86,1,Agüimes,Las Palmas,26.3,"Valderredible, Cubillo de Ebro",Cantabria,3.4
+2026-09-24,808,124,22,Agaete - Suerte Alta,Las Palmas,28.2,"Valderredible, Cubillo de Ebro",Cantabria,3.5
+2026-09-25,818,128,24,"San Bartolome Tirajana, el Matorral",Las Palmas,29.5,Xinzo de Limia,Ourense,1.6
+2026-09-26,822,147,24,"Telde, Centro Forestal Doramas",Las Palmas,26.9,"Sanabria, Robleda-Cervantes",Zamora,2.4
+2026-09-27,814,157,2,San Sebastián de la Gomera,Santa Cruz de Tenerife,25.7,Ucero,Soria,7.1
+2026-09-28,808,139,0,Capdepera,Illes Balears,24.8,"Pradollano, Parque Nacional Sierra Nevada",Granada,3.1
+2026-09-29,808,142,0,Portocolom,Illes Balears,24.9,"Pradollano, Parque Nacional Sierra Nevada",Granada,3.9
 2026-09-30,849,210,1,Capdepera-Faro,Illes Balears,25.0,Pradollano Parque Nacional Sierra Nevada,Granada,5.1
 2026-10-01,848,162,5,San Sebastián de la Gomera,Santa Cruz de Tenerife,26.0,El Puente (Casa Forestal),Zamora,1.5
 2026-10-02,848,184,1,Adra Faro,Almería,26.1,Beariz,Ourense,2.6
+2026-10-03,847,156,0,Capdepera-Faro,Illes Balears,24.7,Pradollano Parque Nacional Sierra Nevada,Granada,4.5

@@ -93,7 +93,7 @@
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 4.1,
+   "min": 4.3,
    "prov": "Granada"
   },
   {
@@ -121,16 +121,16 @@
    "prov": "Granada"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 6.4,
-   "prov": "Lleida"
-  },
-  {
    "id": "2491C",
    "nombre": "La Covatilla Estación de Esquí",
    "min": 6.7,
    "prov": "Salamanca"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 7.2,
+   "prov": "Lleida"
   },
   {
    "id": "2777K",

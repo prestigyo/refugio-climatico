@@ -76,8 +76,8 @@
 "h": "8a520ba58dba61c9"
 },
 "certificados": {
-"f": "2026-09-15",
-"h": "14b3ccd3b861c6b7"
+"f": "2026-10-05",
+"h": "bf6b62888b23465c"
 },
 "certificados/a-coruna-aeropuerto": {
 "f": "2026-09-14",
@@ -116,8 +116,8 @@
 "h": "28601aece2503e40"
 },
 "certificados/alto-campoo": {
-"f": "2026-09-15",
-"h": "0aa61a58ea8fccb7"
+"f": "2026-10-05",
+"h": "ff2cabdabcff3ed7"
 },
 "certificados/amieva-panizales": {
 "f": "2026-09-14",
@@ -148,8 +148,8 @@
 "h": "e8af666bf338567b"
 },
 "certificados/astun-la-raca": {
-"f": "2026-09-15",
-"h": "9b53c1ff651f2cfa"
+"f": "2026-10-05",
+"h": "7f6e4abbe32bc857"
 },
 "certificados/asturias-aeropuerto": {
 "f": "2026-09-14",
@@ -168,8 +168,8 @@
 "h": "7a814154981e1c5e"
 },
 "certificados/barrios-de-luna-minera": {
-"f": "2026-09-15",
-"h": "156b863e55c389a7"
+"f": "2026-10-05",
+"h": "194bac52896b5203"
 },
 "certificados/beariz": {
 "f": "2026-09-14",
@@ -184,8 +184,8 @@
 "h": "6a9e6b70ca94b351"
 },
 "certificados/benasque": {
-"f": "2026-09-15",
-"h": "348050c02ab59e06"
+"f": "2026-10-05",
+"h": "6eb2431332c67953"
 },
 "certificados/beteta": {
 "f": "2026-09-14",
@@ -196,8 +196,8 @@
 "h": "8a4d8ca6bc4ed00d"
 },
 "certificados/biescas-embalse-de-bubal": {
-"f": "2026-09-15",
-"h": "9006ca353a51142f"
+"f": "2026-10-05",
+"h": "4dfe4222bfdd0f99"
 },
 "certificados/boadilla-fuente-san-esteban": {
 "f": "2026-09-14",
@@ -259,17 +259,21 @@
 "f": "2026-09-15",
 "h": "3d825f757ffa08b5"
 },
+"certificados/canfranc-estacion": {
+"f": "2026-10-05",
+"h": "0c6a8cd12c8e69eb"
+},
 "certificados/canizares": {
 "f": "2026-09-14",
 "h": "5f9c8f2d9fe9a250"
 },
 "certificados/cap-de-rec": {
-"f": "2026-09-15",
-"h": "9d16ef9f6abddb0f"
+"f": "2026-10-05",
+"h": "db675cc3ee70cb64"
 },
 "certificados/cap-de-vaqueira": {
-"f": "2026-09-15",
-"h": "52d39316ee5e32b0"
+"f": "2026-10-05",
+"h": "41a2f51e6e986164"
 },
 "certificados/carballo-depuradora": {
 "f": "2026-09-14",
@@ -284,16 +288,16 @@
 "h": "658858983843a92f"
 },
 "certificados/cedrillas": {
-"f": "2026-09-15",
-"h": "7d8ae1e11685e5da"
+"f": "2026-10-05",
+"h": "97530d93020db57a"
 },
 "certificados/cerler-cogulla": {
-"f": "2026-09-15",
-"h": "29a16d13440e7040"
+"f": "2026-10-05",
+"h": "04217ed8dfc9cef2"
 },
 "certificados/cervera-de-pisuerga": {
-"f": "2026-09-15",
-"h": "b3560052d8e2aefb"
+"f": "2026-10-05",
+"h": "e29545ad2b81af72"
 },
 "certificados/chandrexa-de-queixa": {
 "f": "2026-09-14",
@@ -392,12 +396,12 @@
 "h": "5f9f4763700da560"
 },
 "certificados/la-molina": {
-"f": "2026-09-15",
-"h": "776ce5c40d939480"
+"f": "2026-10-05",
+"h": "833216538e817cb7"
 },
 "certificados/la-poveda-de-soria-barriomartin": {
-"f": "2026-09-15",
-"h": "a1fca6d8852b5721"
+"f": "2026-10-05",
+"h": "f683151c160b3fa9"
 },
 "certificados/la-seu-d-urgell": {
 "f": "2026-09-14",
@@ -436,8 +440,8 @@
 "h": "dfe6e733d8357b54"
 },
 "certificados/lubia": {
-"f": "2026-09-15",
-"h": "6c3527073194105c"
+"f": "2026-10-05",
+"h": "5d5e975baa866384"
 },
 "certificados/lugo": {
 "f": "2026-09-14",
@@ -500,8 +504,8 @@
 "h": "7b6751671e7ced20"
 },
 "certificados/naut-aran-arties": {
-"f": "2026-09-15",
-"h": "91bc51709989c705"
+"f": "2026-10-05",
+"h": "1e435690458253d9"
 },
 "certificados/navascues-nabaskoze": {
 "f": "2026-09-14",
@@ -596,8 +600,8 @@
 "h": "7e189d99ef8fb058"
 },
 "certificados/port-aine": {
-"f": "2026-09-15",
-"h": "8dba53f52ae386fa"
+"f": "2026-10-05",
+"h": "1826830a7db86e90"
 },
 "certificados/posada-de-valdeon-soto": {
 "f": "2026-09-14",
@@ -612,20 +616,20 @@
 "h": "a5f5a8a1899262f0"
 },
 "certificados/puerto-de-san-isidro": {
-"f": "2026-09-15",
-"h": "12cffa869dffed75"
+"f": "2026-10-05",
+"h": "f51b421e3ca4e2ef"
 },
 "certificados/puerto-del-pico": {
-"f": "2026-09-15",
-"h": "82b96f80a6b34173"
+"f": "2026-10-05",
+"h": "b6d31d889f38ad58"
 },
 "certificados/quintana-del-castillo-villameca": {
 "f": "2026-09-14",
 "h": "646b1155ff589728"
 },
 "certificados/rascafria": {
-"f": "2026-09-15",
-"h": "2f709770729f1d90"
+"f": "2026-10-05",
+"h": "358ecff662ca8495"
 },
 "certificados/reinosa": {
 "f": "2026-09-14",
@@ -664,8 +668,8 @@
 "h": "d4903fdc621ed724"
 },
 "certificados/salvacanete": {
-"f": "2026-09-15",
-"h": "74be1e4f660cedae"
+"f": "2026-10-05",
+"h": "6e42a264d789faaf"
 },
 "certificados/san-pedro-manrique": {
 "f": "2026-09-14",
@@ -684,8 +688,8 @@
 "h": "7d7918ccc540f44a"
 },
 "certificados/sant-maurici-llac": {
-"f": "2026-09-15",
-"h": "692bcd4692c93a85"
+"f": "2026-10-05",
+"h": "29548ed421d322d1"
 },
 "certificados/sant-pau-de-seguries": {
 "f": "2026-09-14",
@@ -728,8 +732,8 @@
 "h": "d92cf533a576e8d0"
 },
 "certificados/sierra-nevada-radiotelescopio": {
-"f": "2026-09-15",
-"h": "90194c122f36a527"
+"f": "2026-10-05",
+"h": "290fe8117a9851cf"
 },
 "certificados/siguenza": {
 "f": "2026-09-14",
@@ -772,12 +776,12 @@
 "h": "71715e816b3bfa74"
 },
 "certificados/torla-ordesa-el-cebollar": {
-"f": "2026-09-15",
-"h": "8ff9ee8958cecedc"
+"f": "2026-10-05",
+"h": "b1bb02cbbae1ae2d"
 },
 "certificados/torre-de-cabdella": {
-"f": "2026-09-15",
-"h": "4069b53e9e201a86"
+"f": "2026-10-05",
+"h": "1361fc05d5849abb"
 },
 "certificados/tuixent": {
 "f": "2026-09-14",
@@ -860,8 +864,8 @@
 "h": "54dfb309d5d26cec"
 },
 "certificados/vinuesa-quintanarejo": {
-"f": "2026-09-15",
-"h": "010eace60385321a"
+"f": "2026-10-05",
+"h": "d4bb36c9b3df876a"
 },
 "certificados/vitoria-gasteiz-aeropuerto": {
 "f": "2026-09-14",
@@ -921,7 +925,7 @@
 },
 "en/find-your-winter-address": {
 "f": "2026-10-05",
-"h": "039060f308068bb0"
+"h": "b86f000fe65603fb"
 },
 "en/frost-free-towns-spain": {
 "f": "2026-10-05",
@@ -1420,8 +1424,8 @@
 "h": "355ce959ceebdd57"
 },
 "mapa-estaciones": {
-"f": "2026-10-02",
-"h": "80c2aebc199fc78a"
+"f": "2026-10-05",
+"h": "5dfd3687b5f5cfe7"
 },
 "margen-refugios-climaticos": {
 "f": "2026-10-05",

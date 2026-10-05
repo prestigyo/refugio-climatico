@@ -1,44 +1,32 @@
 {
- "fecha": "2026-10-04",
- "total": 841,
- "tropicales": 166,
- "ecuatoriales": 3,
+ "fecha": "2026-10-05",
+ "total": 840,
+ "tropicales": 153,
+ "ecuatoriales": 0,
  "peor": {
-  "id": "C625O",
-  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-  "min": 26.0,
-  "prov": "Las Palmas"
+  "id": "6083X",
+  "nombre": "Marbella Cabopino",
+  "min": 24.8,
+  "prov": "Málaga"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": 3.8,
-  "prov": "Zamora"
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": 3.5,
+  "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 26.0,
-   "prov": "Las Palmas"
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
+   "min": 24.8,
+   "prov": "Málaga"
   },
   {
    "id": "C614H",
    "nombre": "Tejeda Casco",
-   "min": 25.5,
+   "min": 24.7,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
-   "min": 25.0,
-   "prov": "Málaga"
-  },
-  {
-   "id": "B434X",
-   "nombre": "Portocolom",
-   "min": 24.6,
-   "prov": "Illes Balears"
   },
   {
    "id": "B569X",
@@ -47,95 +35,107 @@
    "prov": "Illes Balears"
   },
   {
-   "id": "B496X",
-   "nombre": "Son Servera-Can Pep Monjo",
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
    "min": 24.3,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B410B",
-   "nombre": "Santanyí",
-   "min": 24.2,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 24.1,
-   "prov": "Almería"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 24.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "6175X",
-   "nombre": "Rincon de la Victoria (Automatica)",
+   "id": "5996B",
+   "nombre": "Barbate Depuradora",
+   "min": 24.1,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 24.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "6277C",
+   "nombre": "Adra Faro",
    "min": 23.9,
-   "prov": "Málaga"
+   "prov": "Almería"
+  },
+  {
+   "id": "5950X",
+   "nombre": "San Jose del Valle-Pt Guadalcacín",
+   "min": 23.8,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "5973",
+   "nombre": "Cádiz Observatorio",
+   "min": 23.8,
+   "prov": "Cádiz"
+  },
+  {
+   "id": "B860X",
+   "nombre": "Ciutadella-Son Quim",
+   "min": 23.8,
+   "prov": "Illes Balears"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 3.8,
-   "prov": "Zamora"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 4.0,
-   "prov": "Lleida"
-  },
-  {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 4.3,
+   "min": 3.5,
    "prov": "Granada"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 5.6,
+   "prov": "Salamanca"
   },
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 5.0,
+   "min": 5.6,
    "prov": "Lleida"
-  },
-  {
-   "id": "9839V",
-   "nombre": "Cerler Cogulla",
-   "min": 5.8,
-   "prov": "Huesca"
-  },
-  {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": 6.1,
-   "prov": "Huesca"
   },
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 6.4,
+   "min": 5.7,
    "prov": "Granada"
   },
   {
    "id": "2491C",
    "nombre": "La Covatilla Estación de Esquí",
-   "min": 6.7,
+   "min": 6.1,
    "prov": "Salamanca"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 6.2,
+   "prov": "Lleida"
   },
   {
    "id": "9590D",
    "nombre": "Cap de Rec",
-   "min": 7.2,
+   "min": 6.3,
    "prov": "Lleida"
   },
   {
-   "id": "2777K",
-   "nombre": "Santibañez de Vidriales",
-   "min": 7.3,
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 6.4,
+   "prov": "Huesca"
+  },
+  {
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 6.7,
+   "prov": "Huesca"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 7.1,
    "prov": "Zamora"
   }
  ]

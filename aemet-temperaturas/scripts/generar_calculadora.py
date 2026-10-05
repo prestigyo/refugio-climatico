@@ -11897,63 +11897,152 @@ CSS_WINTER_TOOL = (
     '.wt-row{grid-template-columns:1fr 92px 52px;gap:9px}'
     '.wt-tab{font-size:13px}.wt-tab th{font-size:9.5px}'
     '.wt-tab td{padding-left:6px}'
+    # Hay nombres de estación larguísimos («Las Palmas de Gran Canaria, Pl. de
+    # la Feria»). Sin dejarlos partir, uno solo ensancha la tabla entera y la
+    # saca de la pantalla: pasaba en febrero a 480 px y en ningún otro caso,
+    # que es justo como se escapan estas cosas.
+    '.wt-tab td:first-child{overflow-wrap:anywhere}'
     '.wt-tab .ocultar,.wt-tab th.ocultar{display:none}}'
+    # Con ocho columnas —dos más desde que la ventana la elige el visitante— la
+    # tabla se salía 40 px en un móvil de 390. Se aprieta antes de esconder
+    # nada: las dos nuevas son justo las que contestan a la duración, así que
+    # son las últimas que deberían caerse.
+    '@media(max-width:470px){'
+    '.wt-tab{font-size:11.5px}.wt-tab th{font-size:9px;padding-left:5px}'
+    '.wt-tab td{padding-left:4px}'
+    '.wt-tab .est{font-size:10.5px}}'
+    # El ancho mínimo de la tabla lo fijan las cabeceras, que no parten palabra:
+    # 311 px pase lo que pase. En un móvil de 360 no caben seis columnas, así
+    # que cae la de noches tropicales — es la única cuyo dato sigue dicho en
+    # prosa, justo encima, en el aviso que nombra al primero de la lista.
+    '@media(max-width:399px){'
+    '.wt-tab .estrecho,.wt-tab th.estrecho{display:none}'
+    # Y que las cabeceras partan palabra: son ellas las que fijaban el suelo de
+    # 311 px, y sin eso la tabla se salía 7 px en una pantalla de 320.
+    '.wt-tab th{white-space:normal;overflow-wrap:anywhere}}'
 )
 
 
 JS_WINTER_TOOL = """<script>
 (function(){
   "use strict";
-  // Los umbrales, con su tope y su sentido. "max" = el valor del usuario es un
-  // techo; "min" = es un suelo. El orden es el de la interfaz.
+  // CUÁNTO te quedas decide QUÉ número es verdad. El mismo sitio, llegando el
+  // 1 de noviembre: Huelva da 14 días de terraza de 14 en una quincena, y 53
+  // de 90 en tres meses, con un tramo de 25 días seguidos sin ninguno. Con
+  // quince días no se distingue de ningún otro sitio del sur; con noventa, el
+  // orden se da la vuelta. Por eso la ventana va delante de los umbrales.
+  var MESES = ["January","February","March","April","May","June","July",
+               "August","September","October","November","December"];
+  var DURS = [[7,"1 week"],[14,"2 weeks"],[30,"1 month"],[90,"3 months"],
+              [182,"6 months"]];
+  // frac = qué parte de la ventana es el tope del deslizador. La lluvia no
+  // llega nunca al 100 % de los días, y un tope inalcanzable deja medio
+  // recorrido muerto.
   var CAMPOS = [
-    {k:"heat",    q:"h", i:3,  dir:"max", tope:151, def:151},
-    {k:"terrace", q:"t", i:4,  dir:"min", tope:151, def:0},
-    {k:"rain",    q:"r", i:5,  dir:"max", tope:90,  def:90},
-    {k:"tropical",q:"n", i:7,  dir:"max", tope:175, def:175},
-    {k:"frost",   q:"f", i:6,  dir:"max", tope:130, def:130}
+    {k:"heat",    q:"h", i:3, dir:"max", frac:1,   serie:"calef"},
+    {k:"terrace", q:"t", i:4, dir:"min", frac:1,   serie:"terraza"},
+    {k:"rain",    q:"r", i:5, dir:"max", frac:0.6, serie:"lluvia"},
+    {k:"tropical",q:"n", i:7, dir:"max", frac:1,   serie:"tropi"},
+    {k:"frost",   q:"f", i:6, dir:"max", frac:1,   serie:"helada"}
   ];
-  var FILAS = null, REG = "all", ORDEN = "heat", ASC = true;
+  var MES = 11, DIAS = 90;
+  var FILAS = null, CAT = null, REG = "all", ORDEN = "heat";
+  var CACHE = {}, TOCADO = {};
   var $ = function(s){ return document.querySelector(s); };
+
+  function tope(c){ return Math.max(1, Math.round(DIAS * c.frac)); }
+  function porDefecto(c){ return c.dir === "max" ? tope(c) : 0; }
+  function pad(n, a){ n = String(n); while (n.length < a) n = "0" + n; return n; }
+  function nomVentana(){
+    var e = DURS.filter(function(x){ return x[0] === DIAS; })[0];
+    return (e ? e[1] : DIAS + " days") + " from 1 " + MESES[MES-1];
+  }
 
   function leerHash(){
     var h = location.hash.replace(/^#/, "");
     if (!h) return;
     h.split("&").forEach(function(par){
       var kv = par.split("="), v = parseInt(kv[1], 10);
+      if (kv[0] === "m" && v >= 1 && v <= 12) { MES = v; return; }
+      if (kv[0] === "d") {
+        for (var i = 0; i < DURS.length; i++) if (DURS[i][0] === v) DIAS = v;
+        return;
+      }
       if (kv[0] === "reg") { REG = kv[1]; return; }
       if (kv[0] === "sort") { ORDEN = kv[1]; return; }
       CAMPOS.forEach(function(c){
-        if (c.q === kv[0] && !isNaN(v)) c.val = Math.min(Math.max(v, 0), c.tope);
+        if (c.q === kv[0] && !isNaN(v)) {
+          c.val = Math.min(Math.max(v, 0), tope(c));
+          TOCADO[c.k] = true;
+        }
       });
     });
   }
 
   function escribirHash(){
-    var p = CAMPOS.filter(function(c){ return c.val !== c.def; })
-                  .map(function(c){ return c.q + "=" + c.val; });
+    var p = ["m=" + MES, "d=" + DIAS];
+    CAMPOS.forEach(function(c){ if (TOCADO[c.k]) p.push(c.q + "=" + c.val); });
     if (REG !== "all") p.push("reg=" + REG);
     if (ORDEN !== "heat") p.push("sort=" + ORDEN);
     // replaceState y no location.hash: cambiar el hash en cada tirón del
-    // deslizador llenaría el historial y el botón atrás dejaria de servir.
-    history.replaceState(null, "", p.length ? "#" + p.join("&")
-                                            : location.pathname);
+    // deslizador llenaría el historial y el botón atrás dejaría de servir.
+    history.replaceState(null, "", "#" + p.join("&"));
   }
 
   function cumple(f, c){
     return c.dir === "max" ? f[c.i] <= c.val : f[c.i] >= c.val;
   }
-
   function region(f){
     return REG === "all" || (REG === "canary" ? f[10] === 1 : f[10] === 0);
   }
 
-  // EL AVISO VIVO, pegado a los deslizadores. Un contador NO es una
-  // respuesta: quien abre esto pregunta "¿a donde voy?". Asi que nombra el
-  // sitio que encabeza la lista con sus cuatro cifras y, cuando ese primero
-  // es canario, tambien el mejor de peninsula: Canarias copa todas las listas
-  // y un lector que no se plantea mudarse a Fuerteventura se quedaba sin
-  // respuesta util.
+  // Mediana y peor caso se calculan AQUÍ, a partir del valor de cada año, y no
+  // vienen ya digeridos del servidor: con los años sueltos se puede además
+  // contar en cuántos de ellos habría salido bien, que es lo único que le
+  // sirve a quien viene una semana. El -1 es un año que AEMET no midió
+  // entero; no es un cero.
+  function mediana(a){
+    var v = a.filter(function(x){ return x >= 0; })
+             .sort(function(p, q){ return p - q; });
+    if (!v.length) return 0;
+    var m = v.length >> 1;
+    return v.length % 2 ? v[m] : Math.round((v[m-1] + v[m]) / 2);
+  }
+  function peor(a){
+    var v = a.filter(function(x){ return x >= 0; });
+    return v.length ? Math.max.apply(null, v) : 0;
+  }
+
+  function prepara(d){
+    return d.filas.map(function(f){
+      var v = {}, id = f[0];
+      d.campos.forEach(function(c, i){ v[c] = f[i+1]; });
+      var cat = CAT[id] || ["Unknown", "", 0, 0];
+      return [cat[0], cat[1], cat[2],
+              mediana(v.calef), mediana(v.terraza), mediana(v.lluvia),
+              mediana(v.helada), mediana(v.tropi),
+              peor(v.sin_terraza), 0, cat[3],
+              v.terraza.filter(function(x){ return x >= 0; }).length, v];
+    });
+  }
+
+  // En cuántos de los años medidos habría cumplido TODO lo que pides. Para una
+  // semana o una quincena esto importa más que la mediana: la mediana dice
+  // cómo suele ir, y tú solo vienes una vez.
+  function exitos(f){
+    var v = f[12], n = v.terraza.length, ok = 0, val = 0;
+    for (var y = 0; y < n; y++) {
+      if (v.terraza[y] < 0) continue;
+      val++;
+      var bien = CAMPOS.every(function(c){
+        var x = v[c.serie][y];
+        return c.dir === "max" ? x <= c.val : x >= c.val;
+      });
+      if (bien) ok++;
+    }
+    return [ok, val];
+  }
+
   var ETQ2 = {heat:"heating nights", terrace:"terrace days",
               rain:"rainy days", tropical:"tropical nights",
               frost:"frost nights"};
@@ -11964,17 +12053,15 @@ JS_WINTER_TOOL = """<script>
       + " rainy days, " + f[7] + " tropical nights";
   }
 
-  // Cual de los limites puestos es el que mas corta: se cuenta cuantos
-  // sobrevivirian si ese se soltara.
   function elQueMasCuesta(base, nOk){
-    var peor = null, peorN = 0;
-    CAMPOS.filter(function(c){ return c.val !== c.def; }).forEach(function(c){
+    var peorC = null, peorN = 0;
+    CAMPOS.filter(function(c){ return TOCADO[c.k]; }).forEach(function(c){
       var n = base.filter(function(f){
         return CAMPOS.every(function(o){ return o === c || cumple(f, o); });
       }).length - nOk;
-      if (n > peorN) { peorN = n; peor = c; }
+      if (n > peorN) { peorN = n; peorC = c; }
     });
-    return peor ? "<span class='wt-cuesta'>Costing you most: " + ETQ2[peor.k]
+    return peorC ? "<span class='wt-cuesta'>Costing you most: " + ETQ2[peorC.k]
       + " &#8212; relaxing that alone would bring back " + peorN
       + " places.</span>" : "";
   }
@@ -11982,20 +12069,19 @@ JS_WINTER_TOOL = """<script>
   function pintaAviso(base, ok){
     var vivo = document.getElementById("wt-vivo");
     if (!vivo) return;
-    if (!CAMPOS.some(function(c){ return c.val !== c.def; })) {
+    if (!CAMPOS.some(function(c){ return TOCADO[c.k]; })) {
       vivo.className = "wt-vivo";
       vivo.innerHTML = "All <b>" + base.length + "</b> measured places are on "
-        + "the list. Move any slider to start taking places off it.";
+        + "the list for <b>" + nomVentana() + "</b>. Move any slider to start "
+        + "taking places off it.";
       return;
     }
     var cuesta = elQueMasCuesta(base, ok.length);
-    // Sin resultados NO hay sitio que nombrar: ok[0] es undefined y la ficha
-    // reventaba el repintado entero, dejando los deslizadores mudos.
     if (!ok.length) {
       vivo.className = "wt-vivo cero";
-      vivo.innerHTML = "<b>No place in Spain</b> clears all five at once. "
-        + "Below you can see which ones come closest, and by how much."
-        + cuesta;
+      vivo.innerHTML = "<b>No place in Spain</b> clears all of that for "
+        + nomVentana() + ". Below you can see which ones come closest, and by "
+        + "how much." + cuesta;
       return;
     }
     var pen = null;
@@ -12004,9 +12090,12 @@ JS_WINTER_TOOL = """<script>
         if (ok[k][10] === 0) { pen = ok[k]; break; }
       }
     }
+    var e = exitos(ok[0]);
     vivo.className = "wt-vivo";
     vivo.innerHTML = "<b>" + ok.length + "</b> of " + base.length
-      + " places clear your limits. Top of the list: " + ficha(ok[0]) + "."
+      + " places clear your limits for " + nomVentana()
+      + ". Top of the list: " + ficha(ok[0]) + "."
+      + " It would have worked <b>" + e[0] + " of the last " + e[1] + "</b> times."
       + (pen ? " Best on the mainland: <b>" + pen[0] + "</b> (" + pen[1]
                + "), " + pen[3] + " heating nights and " + pen[4]
                + " terrace days." : "")
@@ -12016,25 +12105,39 @@ JS_WINTER_TOOL = """<script>
   function pinta(){
     if (!FILAS) return;
     var base = FILAS.filter(region);
-    var ok = base.filter(function(f){ return CAMPOS.every(function(c){ return cumple(f, c); }); });
-    var col = {heat:3, terrace:4, rain:5, tropical:7, alt:2}[ORDEN];
-    var inv = (ORDEN === "terrace");   // más días de terraza es mejor
+    var ok = base.filter(function(f){
+      return CAMPOS.every(function(c){ return cumple(f, c); });
+    });
+    // La cuota de años se calcula antes de ordenar: depende de los umbrales,
+    // así que no puede venir hecha del servidor.
+    ok.forEach(function(f){
+      var e = exitos(f);
+      f[9] = e[1] ? e[0] / e[1] : 0;
+    });
+    var col = {heat:3, terrace:4, rain:5, tropical:7, run:8, anios:9,
+               alt:2}[ORDEN];
+    var inv = (ORDEN === "terrace" || ORDEN === "anios");  // más es mejor
     ok.sort(function(a, b){ return inv ? b[col] - a[col] : a[col] - b[col]; });
     pintaAviso(base, ok);
     $("#wt-count").innerHTML = ok.length
       ? "<b>" + ok.length + "</b> of " + base.length + " places match"
       : "<b>Nothing</b> matches all five";
     $("#wt-count").className = "wt-count" + (ok.length ? "" : " cero");
-    $("#wt-sub").textContent = ok.length
+    $("#wt-sub").innerHTML = ok.length
       ? "Sorted by " + ({heat:"heating nights", terrace:"terrace days",
-          rain:"rainy days", tropical:"tropical nights", alt:"altitude"}[ORDEN])
+          rain:"rainy days", tropical:"tropical nights",
+          run:"the longest run with no terrace day",
+          anios:"how often it actually worked", alt:"altitude"}[ORDEN])
         + ". Click a column to re-sort."
       : "";
     var filas = ok.slice(0, 60).map(function(f){
+      var e = exitos(f);
       return "<tr><td><b>" + f[0] + "</b><span class='est'>" + f[1]
         + " &#183; " + f[2] + " m</span></td><td>" + f[3] + "</td><td>"
         + f[4] + "</td><td class='ocultar'>" + f[5] + "</td><td class='ocultar'>"
-        + f[6] + "</td><td>" + f[7] + "</td></tr>";
+        + f[6] + "</td><td class='estrecho'>" + f[7] + "</td><td>"
+        + f[8] + "</td><td>"
+        + e[0] + "/" + e[1] + "</td></tr>";
     }).join("");
     $("#wt-body").innerHTML = filas;
     $("#wt-tabla").style.display = ok.length ? "" : "none";
@@ -12044,9 +12147,6 @@ JS_WINTER_TOOL = """<script>
     escribirHash();
   }
 
-  // Cuando no cumple ninguna, decir "no hay resultados" seria tirar la
-  // pregunta a la basura. Lo util es por CUANTO falla el que menos falla: eso
-  // es el intercambio del estudio aplicado al caso de quien pregunta.
   function pintaFallos(base, hay){
     var caja = $("#wt-miss");
     if (hay || !base.length) { caja.style.display = "none"; return; }
@@ -12055,68 +12155,132 @@ JS_WINTER_TOOL = """<script>
         var d = c.dir === "max" ? f[c.i] - c.val : c.val - f[c.i];
         return {c: c, d: d > 0 ? d : 0};
       });
-      var tot = exceso.reduce(function(s, e){ return s + e.d / (e.c.tope || 1); }, 0);
-      return {f: f, exceso: exceso.filter(function(e){ return e.d > 0; }), tot: tot};
+      var tot = exceso.reduce(function(s, x){
+        return s + x.d / (tope(x.c) || 1); }, 0);
+      return {f: f, exceso: exceso.filter(function(x){ return x.d > 0; }),
+              tot: tot};
     }).sort(function(a, b){ return a.tot - b.tot; }).slice(0, 3);
-    var ETQ = {heat:"heating nights", terrace:"terrace days", rain:"rainy days",
-               tropical:"tropical nights", frost:"frost nights"};
-    caja.innerHTML = "<div class='t'>Nobody in Spain does all of that. "
-      + "Here is what you would have to give up.</div>"
+    caja.innerHTML = "<div class='t'>Nobody in Spain does all of that for "
+      + nomVentana() + ". Here is what you would have to give up.</div>"
       + mejor.map(function(m){
           return "<p><b>" + m.f[0] + "</b> (" + m.f[1] + ") misses by "
-            + m.exceso.map(function(e){
-                return "<span class='wt-falla'>" + e.d + " "
-                  + ETQ[e.c.k] + "</span>"; }).join(" and ")
+            + m.exceso.map(function(x){
+                return "<span class='wt-falla'>" + x.d + " "
+                  + ETQ2[x.c.k] + "</span>"; }).join(" and ")
             + ".</p>"; }).join("")
-      + "<p style='margin-bottom:0'>Loosen whichever of those you mind least "
-        + "and the list fills up again.</p>";
+      + "<p style='margin-bottom:0'>Loosen whichever of those you mind least, "
+        + "or come for less time &#8212; a fortnight forgives what three "
+        + "months do not.</p>";
     caja.style.display = "";
+  }
+
+  // Al cambiar de ventana los topes cambian, así que los límites se reescalan
+  // en proporción: quien pidió «como mucho media estancia con calefacción»
+  // sigue pidiendo eso al pasar de 14 días a 90. Resetear a cero le obligaría
+  // a recolocar los cinco cada vez, que es justo la comparación que la página
+  // quiere que haga.
+  function reescala(topeViejo){
+    CAMPOS.forEach(function(c){
+      var t = tope(c);
+      if (!TOCADO[c.k] || c.val == null) { c.val = porDefecto(c); return; }
+      var prop = topeViejo ? c.val / Math.max(1, Math.round(topeViejo * c.frac))
+                           : 1;
+      c.val = Math.min(t, Math.max(0, Math.round(prop * t)));
+    });
+  }
+
+  function sincroniza(){
+    CAMPOS.forEach(function(c){
+      var inp = document.getElementById("wt-" + c.k);
+      if (!inp) return;
+      inp.max = tope(c);
+      inp.value = c.val;
+      document.getElementById("wt-v-" + c.k).textContent = c.val;
+      var ay = document.getElementById("wt-a-" + c.k);
+      if (ay) ay.textContent = ay.dataset.base.replace("{n}", tope(c));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-reg]"),
+      function(o){ o.setAttribute("aria-pressed", o.dataset.reg === REG); });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mes]"),
+      function(o){ o.setAttribute("aria-pressed",
+        parseInt(o.dataset.mes, 10) === MES); });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-dur]"),
+      function(o){ o.setAttribute("aria-pressed",
+        parseInt(o.dataset.dur, 10) === DIAS); });
+    var t = document.getElementById("wt-ventana");
+    if (t) t.textContent = nomVentana();
+  }
+
+  function carga(){
+    var clave = pad(MES, 2) + "-" + pad(DIAS, 3);
+    if (CACHE[clave]) { FILAS = CACHE[clave]; sincroniza(); pinta(); return; }
+    $("#wt-cargando").style.display = "";
+    $("#wt-cargando").textContent = "Loading " + nomVentana() + "\\u2026";
+    $("#wt-out").style.display = "none";
+    var pide = [fetch("../stays/" + clave + ".json").then(function(r){
+      if (!r.ok) throw new Error("no window"); return r.json(); })];
+    if (!CAT) pide.unshift(fetch("../stays/stations.json").then(function(r){
+      return r.json(); }));
+    Promise.all(pide).then(function(res){
+      if (res.length === 2) CAT = res[0];
+      FILAS = prepara(res[res.length - 1]);
+      CACHE[clave] = FILAS;
+      $("#wt-cargando").style.display = "none";
+      $("#wt-out").style.display = "";
+      sincroniza();
+      pinta();
+    }).catch(function(){
+      $("#wt-cargando").style.display = "";
+      $("#wt-cargando").textContent =
+        "The station data could not be loaded. Reload the page, or use the "
+        + "tables on our other pages instead.";
+    });
   }
 
   function montaControles(){
     CAMPOS.forEach(function(c){
       var inp = document.getElementById("wt-" + c.k);
       if (!inp) return;
-      inp.value = c.val;
-      document.getElementById("wt-v-" + c.k).textContent = c.val;
       inp.addEventListener("input", function(){
         c.val = parseInt(inp.value, 10);
+        TOCADO[c.k] = true;
         document.getElementById("wt-v-" + c.k).textContent = c.val;
         pinta();
       });
     });
     Array.prototype.forEach.call(document.querySelectorAll("[data-reg]"),
       function(b){
-        b.setAttribute("aria-pressed", b.dataset.reg === REG);
         b.addEventListener("click", function(){
-          REG = b.dataset.reg;
-          Array.prototype.forEach.call(document.querySelectorAll("[data-reg]"),
-            function(o){ o.setAttribute("aria-pressed", o.dataset.reg === REG); });
-          pinta();
+          REG = b.dataset.reg; sincroniza(); pinta();
         });
       });
-    // Son anclas: el navegador pone el hash y salta hashchange. Esto solo
-    // cubre el caso de volver a pulsar el preset que ya esta puesto, donde
-    // hashchange NO se dispara.
-    Array.prototype.forEach.call(document.querySelectorAll("[data-preset]"),
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mes]"),
       function(b){
         b.addEventListener("click", function(){
-          if (location.hash === b.dataset.preset) {
-            leerHash(); sincroniza(); pinta();
-          }
+          MES = parseInt(b.dataset.mes, 10); carga();
         });
       });
-    Array.prototype.forEach.call(document.querySelectorAll("th[data-sort]"),
+    Array.prototype.forEach.call(document.querySelectorAll("[data-dur]"),
+      function(b){
+        b.addEventListener("click", function(){
+          var viejo = DIAS;
+          DIAS = parseInt(b.dataset.dur, 10);
+          reescala(viejo);
+          carga();
+        });
+      });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-sort]"),
       function(th){
         th.addEventListener("click", function(){
           ORDEN = th.dataset.sort;
-          Array.prototype.forEach.call(document.querySelectorAll("th[data-sort]"),
-            function(o){ o.removeAttribute("aria-sort"); });
+          Array.prototype.forEach.call(
+            document.querySelectorAll("[data-sort]"), function(o){
+              o.removeAttribute("aria-sort"); });
           th.setAttribute("aria-sort", "ascending");
           pinta();
         });
       });
-    var cp = $("#wt-copiar");
+    var cp = document.getElementById("wt-copiar");
     if (cp) cp.addEventListener("click", function(){
       var u = location.href;
       if (navigator.clipboard) navigator.clipboard.writeText(u);
@@ -12125,81 +12289,82 @@ JS_WINTER_TOOL = """<script>
     });
   }
 
-  function sincroniza(){
-    CAMPOS.forEach(function(c){
-      var inp = document.getElementById("wt-" + c.k);
-      if (!inp) return;
-      inp.value = c.val;
-      document.getElementById("wt-v-" + c.k).textContent = c.val;
-    });
-    Array.prototype.forEach.call(document.querySelectorAll("[data-reg]"),
-      function(o){ o.setAttribute("aria-pressed", o.dataset.reg === REG); });
+  // El enlace describe la búsqueda ENTERA, así que al llegar uno nuevo hay que
+  // borrar lo anterior. Sin esto, abrir un enlace con t=12 y luego otro sin t
+  // dejaba el límite viejo puesto y el segundo enlace enseñaba otra lista que
+  // la que enseña recién abierto: la promesa de «dos personas con el mismo
+  // enlace ven lo mismo» se rompía en cuanto navegabas dentro de la página.
+  function aplicaHash(){
+    CAMPOS.forEach(function(c){ c.val = null; });
+    TOCADO = {};
+    REG = "all";
+    ORDEN = "heat";
+    leerHash();
+    CAMPOS.forEach(function(c){ if (c.val == null) c.val = porDefecto(c); });
   }
 
-  CAMPOS.forEach(function(c){ c.val = c.def; });
-  leerHash();
+  aplicaHash();
   montaControles();
-  fetch("../winter-stations.json").then(function(r){ return r.json(); })
-    .then(function(d){
-      FILAS = d.rows;
-      $("#wt-cargando").style.display = "none";
-      $("#wt-out").style.display = "";
-      pinta();
-    })
-    .catch(function(){
-      $("#wt-cargando").textContent =
-        "The station data could not be loaded. Reload the page, or use the "
-        + "tables on our other pages instead.";
-    });
+  carga();
   window.addEventListener("hashchange", function(){
-    leerHash(); sincroniza(); pinta();
+    aplicaHash(); carga();
   });
 })();
 </script>"""
 
 
-
 # Presets: la puerta por la que un asistente puede mandar a alguien sin tener
-# que recitar nada. Cada uno es un enlace con los umbrales ya puestos.
+# que recitar nada. Cada uno es un enlace con la VENTANA y los umbrales ya
+# puestos — y la ventana es justo lo que un resumen de texto no sabe fijar.
 PRESETS_WINTER = [
-    ("I can't stand the cold", "#h=30&t=80"),
-    ("I can't sleep in the heat", "#n=5"),
-    ("No frost, ever", "#f=0"),
-    ("Mild and dry", "#h=40&r=20"),
-    ("Mainland only, as mild as it gets", "#h=45&reg=mainland"),
+    ("Three winter months, no heating bills", "#m=11&d=90&h=20"),
+    ("A fortnight in February, terraces guaranteed", "#m=2&d=14&t=12"),
+    ("A week in August where I can sleep", "#m=8&d=7&n=0"),
+    ("Half a year from October, mainland only",
+     "#m=10&d=182&h=60&reg=mainland"),
+    ("A month in June without frost or tropical nights", "#m=6&d=30&f=0&n=0"),
 ]
 
-# Los cinco deslizadores. (clave, etiqueta, ayuda, tope, valor de partida)
+# Los cinco deslizadores. El tope ya no es fijo: lo pone la ventana elegida,
+# y «{n}» lo sustituye el JS en cada cambio. (clave, etiqueta, ayuda)
 CAMPOS_WINTER = [
-    ("heat", "Heating nights I'll accept",
-     "Nights below 10 °C, out of 151", 151, 151),
+    ("heat", "Heating nights I'll accept", "Nights below 10 &#176;C, out of {n}"),
     ("terrace", "Terrace days I want, at least",
-     "Days reaching 18 °C, out of 151", 151, 0),
-    ("rain", "Rainy days I'll accept",
-     "Days with 1 mm or more, out of 151", 90, 90),
+     "Days reaching 18 &#176;C, out of {n}"),
+    ("rain", "Rainy days I'll accept", "Days with 1 mm or more, out of {n}"),
     ("tropical", "Tropical nights I'll accept",
-     "Nights above 20 °C, per whole year", 175, 175),
-    ("frost", "Frost nights I'll accept",
-     "Nights below 0 °C, out of 151", 130, 130),
+     "Nights above 20 &#176;C, out of {n}"),
+    ("frost", "Frost nights I'll accept", "Nights below 0 &#176;C, out of {n}"),
 ]
+
+MESES_EN = ["January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December"]
+DURACIONES_EN = [(7, "1 week"), (14, "2 weeks"), (30, "1 month"),
+                 (90, "3 months"), (182, "6 months")]
 
 
 def construir_pagina_winter_tool(d: dict, site: str) -> str:
-    """/en/find-your-winter-address/ — la herramienta de los cinco umbrales."""
-    per, umb = d["periodo"], d["umbrales"]
+    """/en/find-your-winter-address/ — la herramienta de la estancia.
+
+    `d` ya no se usa: las cifras salen de docs/en/stays/, que escribe
+    analisis_estancia.py, y las calcula el navegador a partir del valor de
+    cada año. Se mantiene el parámetro porque la llamada viene del bloque de
+    invierno y no merece la pena tocar la cadena entera por esto.
+    """
     path = "/en/find-your-winter-address/"
-    titulo = ("Find Your Winter Address in Spain: Set Your Own Limits "
-              "| NocheTropical.es")
-    desc = (f"Set what you will put up with — heating nights, rain, frost, hot "
-            f"summer nights — and see which of {per['estaciones']} Spanish "
-            f"towns actually clear it. {per['temporadas']} winters of AEMET data.")
+    titulo = ("Find Your Address in Spain: Pick Your Month, Your Length of "
+              "Stay and Your Limits | NocheTropical.es")
+    desc = ("Say when you are coming and for how long, set what you will put "
+            "up with — heating nights, rain, frost, tropical nights — and see "
+            "which Spanish towns actually cleared it, year by year. Nine years "
+            "of AEMET daily records, no averages.")
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "NocheTropical.es (EN)",
              "item": site + "/en/"},
             {"@type": "ListItem", "position": 2,
              "name": "Find your winter address", "item": site + path}]},
-        {"@type": "WebApplication", "name": "Find your winter address in Spain",
+        {"@type": "WebApplication", "name": "Find your address in Spain",
          "url": site + path, "applicationCategory": "TravelApplication",
          "operatingSystem": "Any web browser", "inLanguage": "en-GB",
          "description": desc,
@@ -12208,11 +12373,20 @@ def construir_pagina_winter_tool(d: dict, site: str) -> str:
         ensure_ascii=False)
     filas = "".join(
         f'<div class="wt-row"><label for="wt-{k}">{etq}'
-        f'<span>{ayuda}</span></label>'
-        f'<input type="range" id="wt-{k}" min="0" max="{tope}" value="{ini}" '
+        f'<span id="wt-a-{k}" data-base="{ayuda}">{ayuda.replace("{n}", "90")}'
+        f'</span></label>'
+        f'<input type="range" id="wt-{k}" min="0" max="90" value="90" '
         f'aria-describedby="wt-v-{k}">'
-        f'<span class="wt-val" id="wt-v-{k}">{ini}</span></div>'
-        for k, etq, ayuda, tope, ini in CAMPOS_WINTER)
+        f'<span class="wt-val" id="wt-v-{k}">90</span></div>'
+        for k, etq, ayuda in CAMPOS_WINTER)
+    meses = "".join(
+        f'<button type="button" data-mes="{i+1}" '
+        f'aria-pressed="{"true" if i+1 == 11 else "false"}">{m[:3]}</button>'
+        for i, m in enumerate(MESES_EN))
+    duras = "".join(
+        f'<button type="button" data-dur="{d}" '
+        f'aria-pressed="{"true" if d == 90 else "false"}">{t}</button>'
+        for d, t in DURACIONES_EN)
     chips = "".join(f'<a href="{h}" data-preset="{h}">{t}</a>'
                     for t, h in PRESETS_WINTER)
     h = [_cabeza_en(site, titulo, desc, path, "/", "/og.png", schema,
@@ -12222,22 +12396,36 @@ def construir_pagina_winter_tool(d: dict, site: str) -> str:
         '<header class="h"><div class="wrap">'
         f'<nav class="crumb" aria-label="breadcrumb"><a href="{site}/en/">'
         'NocheTropical.es</a> &#183; Find your winter address</nav>'
-        f'<div class="kick">{per["estaciones"]} weather stations &#183; '
-        f'{per["temporadas"]} winters &#183; AEMET data</div>'
-        '<h1>Find your winter address in Spain</h1>'
+        '<div class="kick">854 weather stations &#183; 2017&#8211;2025 '
+        '&#183; AEMET daily records</div>'
+        '<h1>Find your address in Spain</h1>'
         '<p class="intro">There is no single best place, because nobody wants '
-        'the same things. Somebody who hates being cold and somebody who cannot '
-        'sleep in the heat are looking for opposite towns. So instead of a '
-        'ranking, this asks you: <b>what will you actually put up with?</b> '
-        'Move the five sliders and see which of Spain&#8217;s '
-        f'{per["estaciones"]} measured places clear your bar.</p>'
+        'the same things &#8212; and because <b>the length of your stay '
+        'changes which number is true</b>. A fortnight anywhere in the south '
+        'looks perfect. Three months is a different town. So this asks you '
+        'three things: when you are coming, how long for, and what you will '
+        'actually put up with. Then it shows you which measured places cleared '
+        'it, and in how many of the last nine years.</p>'
+        '<p class="intro" style="font-size:16px">It started as a winter tool '
+        'and the address still says so, but it now answers for all twelve '
+        'months: a week in August where you can sleep is the same question '
+        'asked the other way round.</p>'
         '</div></header>')
     h.append(
         '<section><div class="wrap"><div class="wt">'
         '<div class="wt-ctrl">'
-        '<p class="wt-como">This is a filter, not a ranking. All '
-        f'{per["estaciones"]} measured places start on the list; every limit '
-        'you set takes some of them off it.</p>'
+        '<p class="wt-como"><b>When you come and how long you stay change '
+        'the answer</b>, so they come first. Huelva gives you 14 terrace days '
+        'out of 14 in a November fortnight &#8212; and 53 out of 90 over three '
+        'months, with one stretch of 25 days running without a single one. '
+        'Same town, same month, different question.</p>'
+        '<div class="wt-chips" role="group" aria-label="Month you arrive">'
+        f'{meses}</div>'
+        '<div class="wt-chips" role="group" aria-label="How long you stay">'
+        f'{duras}</div>'
+        '<p class="wt-como">Showing <b id="wt-ventana">3 months from 1 '
+        'November</b>. Every limit below is counted inside that window, and '
+        'every measured place starts on the list.</p>'
         f'{filas}'
         '<p class="wt-vivo" id="wt-vivo" aria-live="polite">'
         'Every measured place in Spain is on the list right now. '
@@ -12250,7 +12438,7 @@ def construir_pagina_winter_tool(d: dict, site: str) -> str:
         f'<div class="wt-chips" role="group" aria-label="Quick starts">{chips}</div>'
         '</div>'
         '<p id="wt-cargando" class="wt-nojs">Loading '
-        f'{per["estaciones"]} weather stations&#8230; If nothing appears, your '
+        'the weather stations&#8230; If nothing appears, your '
         'browser has JavaScript switched off &#8212; the tables on '
         f'<a href="{site}/en/spains-mildest-winters/">Spain&#8217;s mildest '
         f'winters</a> and <a href="{site}/en/coolest-towns-spain/">the coolest '
@@ -12265,13 +12453,18 @@ def construir_pagina_winter_tool(d: dict, site: str) -> str:
         '<th data-sort="terrace">Terrace<br>days</th>'
         '<th data-sort="rain" class="ocultar">Rainy<br>days</th>'
         '<th class="ocultar">Frost<br>nights</th>'
-        '<th data-sort="tropical">Tropical<br>nights</th>'
+        '<th data-sort="tropical" class="estrecho">Tropical<br>nights</th>'
+        '<th data-sort="run" title="Longest stretch inside your stay with no '
+        'day reaching 18 &#176;C">Worst run,<br>no terrace</th>'
+        '<th id="wt-th-anios" data-sort="anios" title="In how many of the '
+        'measured years your limits would all have held">Years it<br>worked</th>'
         '</tr></thead><tbody id="wt-body"></tbody></table>'
         '<p class="wt-sub" id="wt-mas"></p>'
         '<div class="wt-share">'
         '<button type="button" id="wt-copiar">Copy this search</button>'
-        '<span>The web address holds your five limits, so the link brings '
-        'anyone straight to your list.</span>'
+        '<span>The web address holds your month, your length of stay and '
+        'your five limits, so the link brings anyone straight to your '
+        'list.</span>'
         '</div></div></div></div></section>')
     # Los mismos presets otra vez, pero en prosa y con la URL entera visible.
     # Es la seccion que un asistente puede copiar tal cual: "para esto, este
@@ -12280,9 +12473,10 @@ def construir_pagina_winter_tool(d: dict, site: str) -> str:
     h.append(
         '<section><div class="wrap">'
         '<h2>Ready-made searches</h2>'
-        '<p>Each of these is a normal web address with the limits already set. '
-        'Open one, then move the sliders from there. They are also the easiest '
-        'thing to send someone &#8212; or to be sent.</p>'
+        '<p>Each of these is a normal web address with the month, the length '
+        'of stay and the limits already set. Open one, then move things from '
+        'there. They are also the easiest thing to send someone &#8212; or to '
+        'be sent.</p>'
         '<ul>'
         + "".join(
             f'<li><a href="{site}{path}{hs}"><b>{t}</b></a><br>'
@@ -12290,42 +12484,57 @@ def construir_pagina_winter_tool(d: dict, site: str) -> str:
             f'font-family:var(--fm)">{site}{path}{hs}</span></li>'
             for t, hs in PRESETS_WINTER)
         + '</ul>'
-        '<p>The limits live in the address itself, so nothing is stored about '
-        'you and no account is needed. Two people opening the same link see the '
-        'same list.</p>'
+        '<p>Your whole search lives in the address itself, so nothing is '
+        'stored about you and no account is needed. Two people opening the '
+        'same link see the same list.</p>'
         '</div></section>')
     h.append(
         '<section><div class="wrap">'
-        '<h2>What the five numbers mean</h2>'
+        '<h2>What the numbers mean</h2>'
         '<p>All of them come from the daily records of <a '
         'href="https://opendata.aemet.es" target="_blank" rel="noopener">AEMET</a>, '
-        'Spain&#8217;s national weather service, and all of them are the '
-        '<b>median</b> of the series &#8212; never the mean. Averaging a brutal '
+        'Spain&#8217;s national weather service, and every one of them is '
+        'counted <b>inside the window you picked</b> &#8212; not over a season '
+        'or a year. They are <b>medians</b>, never means. Averaging a brutal '
         'winter with a gentle one invents a mild one that never happened.</p>'
         '<ul>'
-        f'<li><b>Heating nights</b>: nights below {umb["calefaccion"]:.0f}&#160;&#176;C '
-        f'between 1 November and 31 March, out of {per["dias_temporada"]}. This is '
-        'the number a monthly average hides.</li>'
-        f'<li><b>Terrace days</b>: days that reach {umb["terraza"]:.0f}&#160;&#176;C, '
-        'in the same window. What you actually came for.</li>'
-        '<li><b>Rainy days</b>: days with 1&#160;mm or more. Over a three-month '
-        'stay this decides more than a degree either way.</li>'
-        '<li><b>Frost nights</b>: nights below 0&#160;&#176;C. For a lot of people '
-        'this is a yes-or-no question, not a number.</li>'
-        '<li><b>Tropical nights</b>: nights that never drop below 20&#160;&#176;C, '
-        'counted over the <b>whole calendar year</b> &#8212; not just summer, '
-        'because a fifth of them fall outside it. This is the price of a mild '
-        'winter, and it is the one nobody quotes you.</li>'
+        '<li><b>Heating nights</b>: nights below 10&#160;&#176;C. This is the '
+        'number a monthly average hides.</li>'
+        '<li><b>Terrace days</b>: days that reach 18&#160;&#176;C. What you '
+        'actually came for.</li>'
+        '<li><b>Rainy days</b>: days with 1&#160;mm or more. Over a long stay '
+        'this decides more than a degree either way.</li>'
+        '<li><b>Frost nights</b>: nights below 0&#160;&#176;C. For a lot of '
+        'people this is a yes-or-no question, not a number.</li>'
+        '<li><b>Tropical nights</b>: nights that never drop below '
+        '20&#160;&#176;C. The price of a mild winter, and the one nobody '
+        'quotes you.</li>'
+        '<li><b>Worst run with no terrace day</b>: the longest stretch inside '
+        'your stay without a single day reaching 18&#160;&#176;C. For a week '
+        'this hardly matters. For three months it is the only thing you cannot '
+        'wait out, and it is why the same town can be a perfect fortnight and '
+        'a poor quarter.</li>'
+        '<li><b>Years it worked</b>: in how many of the measured years all '
+        'your limits would have held at once. The median tells you how it '
+        'usually goes; you are only coming once.</li>'
         '</ul>'
+        '<p><b>Two things this does not do.</b> The window always starts on '
+        'the 1st of the month: a fortnight from the 20th of June is not the '
+        'one measured here. And a year only counts when AEMET measured at '
+        'least 90&#160;% of that window&#8217;s days, so some places carry '
+        'fewer than nine years &#8212; the last column says how many. A '
+        'missing day is never counted as a good one.</p>'
         '<p><b>Every row is one real thermometer.</b> Nothing is interpolated and '
         'no stations are averaged together: if your town has no station, the '
         'nearest one is a neighbour&#8217;s reading, not yours. Where a city has '
         'several stations they can differ a lot &#8212; that gap is the urban heat '
         'island, not an error.</p>'
         f'<p>Why the trade-off is so hard to beat, with the whole cloud of '
-        f'{per["estaciones"]} stations on one chart: <a href="{site}'
+        f'stations on one chart: <a href="{site}'
         f'/en/best-climate-in-spain-year-round/">the best climate in Spain, year '
-        f'round</a>.</p>'
+        f'round</a>. And why a long stay is decided by the worst run and not '
+        f'by the median: <a href="{site}/en/winter-in-spain-long-stay/">'
+        f'spending a winter in Spain</a>.</p>'
         '</div></section>')
     h.append(footer_en_html(site))
     h.append(JS_WINTER_TOOL)
@@ -17230,16 +17439,21 @@ def main() -> int:
         # solo sabe decir "the station data could not be loaded": es peor que
         # un 404, porque parece que el sitio esta roto. Lo escribe
         # analisis_invierno.py, igual que el JSON del estudio.
-        if (DOCS_DIR / "en" / "winter-stations.json").exists():
+        _stays = DOCS_DIR / "en" / "stays"
+        _ventanas = sorted(_stays.glob("[0-9][0-9]-[0-9][0-9][0-9].json")) \
+            if _stays.is_dir() else []
+        if (_stays / "stations.json").exists() and _ventanas:
             herramienta = DOCS_DIR / "en" / "find-your-winter-address"
             herramienta.mkdir(parents=True, exist_ok=True)
             (herramienta / "index.html").write_text(
                 inyectar_miniatura(construir_pagina_winter_tool(dos_caras, site), site, "en/find-your-winter-address"), encoding="utf-8")
             _hay_tool = True
+            print(f"   herramienta de estancia: {len(_ventanas)} ventanas "
+                  "(mes x duración) en en/stays/")
         else:
             _hay_tool = False
-            print("   herramienta de invierno: falta en/winter-stations.json "
-                  "(ejecuta analisis_invierno.py); se omite")
+            print("   herramienta de estancia: falta en/stays/ "
+                  "(ejecuta analisis_estancia.py); se omite")
         # El sello Mild Winter: índice + una página de verificación y un SVG
         # por sitio. El SVG va a docs/badges/ con prefijo propio para no
         # chocar con los sellos de verano (pueblo-<slug>.svg).

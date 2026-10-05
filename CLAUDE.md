@@ -50,6 +50,7 @@ refugio-climatico/
 | `generar_certificados.py` | `certificados/index.html` + `certificados/<slug>/` (una página por estación certificada), `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) y `badges/pueblo-<slug>.svg` y `badges/pueblo-<slug>-claro.svg` (el sello del pueblo en sus dos temas, para que el alojamiento incruste en su web el que le pegue al fondo) |
 | `generar_calendario_datos.py` | `datos/<slug-provincia>.json` (calendario de calor que carga la calculadora bajo demanda) |
 | `analisis_invierno.py` | `estudios/invierno-datos.json` (cifras de `/en/best-climate-in-spain-year-round/` y la lista del sello Mild Winter) + `en/winter-stations.json` (las 828 estaciones que consume la herramienta) |
+| `analisis_estancia.py` | `en/stays/stations.json` (catálogo) + `en/stays/<mes>-<días>.json` (60 ventanas: 12 meses de llegada × 5 duraciones, con el valor de **cada año** por separado). De ahí vive `/en/find-your-winter-address/`. 7,2 MB en disco; por la red son 16-36 KB, que es lo que descarga el visitante de una ventana |
 | `analisis_curva_nocturna.py` | `estudios/horas-datos.json` (las cifras de la landing `/cuantas-horas-se-duerme-en-verano/`, que arma `generar_calculadora.py`) |
 | `parte_nocturno.py` | `parte/index.html`, `parte/parte.txt`, `parte/parte.json` |
 
@@ -67,6 +68,7 @@ refugio-climatico/
 | `analisis.yml` | mensual (día 1, 06:00 UTC) | `analisis_refugios.py` + `analisis_refugios_nocturnos.py` |
 | `estudio-horario.yml` | lunes 04:00 UTC + manual | `analisis_curva_nocturna.py` (rehace `docs/estudios/horas-datos.json`; la landing la construye el build de las 11:00) |
 | `estudio-invierno.yml` | día 1 de cada mes, 08:00 UTC + manual | `analisis_invierno.py` (rehace `docs/estudios/invierno-datos.json`; corre tras `analisis.yml`, que rehace `noches_por_anio.csv`) |
+| `estudio-estancia.yml` | día 1 de cada mes, 09:00 UTC + manual | `analisis_estancia.py` (rehace `docs/en/stays/`; va tras `estudio-invierno.yml` y antes del build de las 11:00). **Grupo propio**, por lo del `commit-docs` |
 | `certificados.yml` | manual | `generar_certificados.py` |
 | `evolucion.yml` | manual (input `buscar`) | `evolucion_estacion.py` para una estación |
 | `backfill.yml` | manual | `backfill_historico.py` |
@@ -74,7 +76,7 @@ refugio-climatico/
 
 Los workflows que escriben en `docs/` comparten `concurrency: group: commit-docs` para no pisarse, y el push reintenta con `pull --rebase --autostash` hasta 5 veces.
 
-**Cuidado con `commit-docs`**: GitHub solo guarda **una** ejecución en cola por grupo, y cuando llega otra **cancela la que esperaba**, aunque `cancel-in-progress` sea `false`. Un workflow esporádico metido en ese grupo se queda en la cola detrás de `construir-web` y muere sin arrancar (cero jobs). Le pasó a `estudio-invierno.yml` el 2026-09-24. Por eso `archivo-horario.yml`, `estudio-horario.yml` y `estudio-invierno.yml` tienen **grupo propio**: escriben ficheros que no toca nadie más, y la colisión real en el push ya la resuelve el reintento con rebase.
+**Cuidado con `commit-docs`**: GitHub solo guarda **una** ejecución en cola por grupo, y cuando llega otra **cancela la que esperaba**, aunque `cancel-in-progress` sea `false`. Un workflow esporádico metido en ese grupo se queda en la cola detrás de `construir-web` y muere sin arrancar (cero jobs). Le pasó a `estudio-invierno.yml` el 2026-09-24. Por eso `archivo-horario.yml`, `estudio-horario.yml`, `estudio-invierno.yml` y `estudio-estancia.yml` tienen **grupo propio**: escriben ficheros que no toca nadie más, y la colisión real en el push ya la resuelve el reintento con rebase.
 
 **Secrets**: `AEMET_API_KEY`, y para publicar el parte en X (`@nochetropicales`): `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_SECRET`. `publicar_x.py` sale limpio sin fallar si faltan.
 
@@ -171,6 +173,35 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **`textbbox()` se come los espacios de los extremos**: encadenar trozos de texto con
   fuentes distintas medidos así los pega unos a otros. Para eso está `avance()`, con
   `textlength()`.
+- **El umbral de la hamburguesa hay que MEDIRLO, no elegirlo bonito.** Estaba en 960 px
+  porque es un número redondo, pero el menú español necesita 982 px de ventana para sus
+  754 px de pestañas: entre 961 y 976 px las últimas entradas se recortaban en las ~400
+  páginas, y `overflow-x:auto` recorta **sin avisar** (ni desborda la página, ni sale
+  barra, ni falla nada). El menú inglés era peor: siete pestañas más la lupa piden 899 px
+  y en una banda de 1.100 solo quedan 803 —48 de relleno, 160 del logotipo, 40 de huecos
+  y 49 del chip «ES»—, así que faltaban 96 px **en todos los anchos de escritorio**,
+  también a 1.600. Hoy: fila a partir de 1.024 px (español) y de 1.260 (inglés, con la
+  banda ensanchada a 1.260), panel por debajo. La comprobación es un barrido con
+  Playwright mirando `scrollWidth > clientWidth`; a ojo no se ve.
+- **`.nav-e` la comparten el menú inglés y el escueto español**, así que no sirve para
+  distinguirlos: el inglés lleva además `.nav-en`, y sus reglas van con `nav.nav-e.nav-en`.
+- **El panel absoluto se posiciona contra la CAJA DE RELLENO de `.in`**, no contra el
+  botón: con `right:0` sobresalía 24 px por fuera de la hamburguesa que lo abre.
+- **El CSS móvil compartido rotulaba la lupa en español** («Buscar en la web») dentro del
+  panel de las ocho páginas inglesas. Cualquier regla con `content:` que viaje en el CSS
+  común necesita su contrapartida en `.nav-en`.
+- **Si el estado vive en el hash, un enlace nuevo tiene que BORRAR el anterior.** La
+  herramienta de estancia guarda mes, duración, los cinco umbrales y la región en la URL.
+  Al navegar de un enlace con `t=12` a otro sin `t`, el límite viejo seguía puesto: el
+  segundo enlace enseñaba una lista distinta según vinieras de otro o lo abrieras recién,
+  y la promesa de «dos personas con el mismo enlace ven lo mismo» se caía. En `hashchange`
+  hay que reiniciar umbrales, región y orden ANTES de leer el hash. No se ve probando
+  enlaces de uno en uno en pestañas limpias — solo navegando entre ellos.
+- **El ancho mínimo de una tabla lo fijan las cabeceras con `white-space:nowrap`.** No baja
+  de ahí por mucho que aprietes la letra o el relleno: 311 px en la tabla de la herramienta,
+  con una caja de 250 en una pantalla de 320. Y un solo nombre largo («Las Palmas de Gran
+  Canaria, Pl. de la Feria») ensancha la tabla entera si la primera columna no parte palabra
+  — pasaba solo en febrero y solo a 480 px, que es justo como se escapan estas cosas.
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
 - **Ids duplicados en `lugares.csv` mezclan votos de pueblos distintos** en el Observatorio. `generar_lugares.py` ya lo arregló (barrios de Madrid/Barcelona renombrados como «Salamanca (Madrid)»); no reintroducir duplicados.
@@ -245,6 +276,17 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   ciudades: 10,3 noches a 5 °C en Málaga frente a 101,8 en Madrid—. Quien pulsa desde la
   miniatura aterriza en algo que no cuadra. Solo se vio al RENDERIZAR la página; la
   comprobación automática ahora es que la cifra aparezca en el texto de su propia página.
+- **`docs/en/stays/` son 7,2 MB** (60 ventanas × ~120 KB + catálogo) sobre los 90 MB que
+  ya pesaba `docs/`. Por la red el visitante solo baja la ventana que pide (16-36 KB con
+  gzip, que es lo que sirve Pages) más 13 KB de catálogo, así que el coste es de repo, no
+  de página. Si algún día molesta, lo que sobra son las ventanas largas: para 90 y 182 días
+  la frecuencia por años aporta menos que la mediana y el peor tramo.
+- **`docs/en/winter-stations.json` ya no lo lee nadie.** Lo sigue escribiendo
+  `analisis_invierno.py` y lo sigue commiteando `estudio-invierno.yml`, pero la herramienta
+  pasó a `en/stays/`. Son 48 KB muertos; quitarlo es tocar los dos sitios a la vez.
+- **Hay un segundo `CLAUDE.md` en `aemet-temperaturas/`**, de 2026-08-09, que describe 10
+  workflows y ni la mitad de las páginas. El bueno es el de la raíz. Confunde a cualquiera
+  —persona o modelo— que entre por esa carpeta.
 - **No hay tests.** Serían bienvenidos para los parsers de fechas y la conversión DMS→decimal.
 - **`docs/` pesa lo suyo** (GIFs de 2-5 MB, 219 certificados PNG) y `datos/` son 217 MB versionados. Sostenible hoy, vigilarlo.
 
@@ -289,6 +331,11 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   rachas consecutivas, P05 de tmin y extremos con fecha. Lo escribe `analisis_invierno.py`.
 - `analisis/invierno_por_estacion.csv` — el anterior por estación: mediana, peor y mejor
   temporada con su año, racha máxima sin terraza, temporadas sin una sola helada.
+- `analisis/estancia_por_ventana.csv` — una fila por estación, **mes de llegada** y
+  **duración** (7/14/30/90/182 días): mediana de días de terraza, noches de calefacción,
+  heladas, tropicales y días de lluvia dentro de esa ventana, más el peor tramo sin un
+  solo día de terraza. Lo escribe `analisis_estancia.py`. La ventana arranca el **día 1**
+  del mes y un año solo cuenta si AEMET midió el 90 % de sus días.
 - `analisis/noches_por_estacion.csv` — resumen por estación con **extremos, no promedios**:
   peor año y cuál fue, mejor año, último año, racha máxima real de la serie, P95, peor noche
   con fecha, y cuántas noches tropicales al año se pierden por mirar solo jun-ago
@@ -317,6 +364,18 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   a las 05:00 equivale a no cruzar. Mediana nacional: 7,5 h de 9 bajo 20°, pero solo 4,5 h
   bajo 18°. **31 estaciones no bajaron de 20° ni una hora en ninguna de las 22 noches**
   (Cabo de Gata, Capdepera, Cádiz, y media Canarias).
+- **La duración de la estancia cambia la respuesta, no solo la confianza.** Llegando el
+  1 de noviembre a Huelva: una quincena da **14 días de terraza de 14**; tres meses dan
+  **53 de 90, con un tramo de 25 días seguidos sin ninguno** y 60 noches de calefacción.
+  Sevilla: 14 de 14 y luego 44 de 90 con **32 días seguidos**. Con quince días no se
+  distinguen —todo el sur da 14 de 14—; con noventa, el orden se da la vuelta. Medido con
+  el mismo filtro (terrazas en el 86 % de los días, calefacción como mucho un tercio),
+  **117 estaciones de península valen para la quincena y exactamente 1 para el trimestre**
+  (El Ejido, y solo cumplió 2 de sus 6 años). Es el argumento de `/en/find-your-winter-address/`.
+- **La mediana dice cómo suele ir; tú solo vienes una vez.** Punta Galea tiene mediana de
+  **0 noches tropicales** en una quincena de julio y en uno de los nueve años tuvo **9 de
+  14**. Por eso la herramienta publica además en cuántos de los años medidos habrían
+  cumplido TODOS los umbrales a la vez, y no solo la mediana.
 - **El invierno suave y el verano dormible son incompatibles en la península.**
   Cruzando las dos series (837 estaciones), la correlación de Spearman entre noches de
   calefacción en invierno y noches tropicales en verano es **−0,70**. En península lo que
@@ -405,6 +464,10 @@ python scripts/generar_gif.py
 python scripts/estudio_colores.py
 python scripts/generar_calculadora.py     # escribe ../docs/ completo
 python scripts/generar_pagina_mapa.py
+
+# Ventanas de estancia (mes x duración) — rehace docs/en/stays/
+python scripts/analisis_estancia.py
+python scripts/analisis_estancia.py --sin-json   # solo el CSV, sin tocar docs/
 
 # Análisis (regeneran el ranking del que vive la web)
 python scripts/analisis_refugios_nocturnos.py

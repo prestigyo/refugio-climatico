@@ -3182,8 +3182,11 @@ CSS_BURGER = (
     '.burger[aria-expanded="true"] span:nth-child(2){opacity:0}'
     '.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}'
     '@media(prefers-reduced-motion:reduce){.burger span{transition:none}}'
-    # --- móvil ---
-    '@media(max-width:960px){'
+    # --- móvil y tableta ---
+    # El umbral son 1.024 px, no 960: medido, el menú español necesita 982 px
+    # de ventana para sus 754 px de pestañas, así que entre 961 y 976 px
+    # recortaba las últimas sin avisar. 1.024 deja 42 px de margen.
+    '@media(max-width:1023px){'
     '.burger{display:flex}'
     # El panel cuelga de la barra, ocupa el ancho y apila las entradas: se ven
     # todas de golpe, que era justo lo que fallaba.
@@ -3245,7 +3248,11 @@ JS_BURGER = """<script>
  });
  // Si se vuelve a escritorio con el panel abierto, hay que dejarlo cerrado o
  // el .abre se queda pegado y el menú aparece apilado donde ya cabía en fila.
- window.addEventListener('resize',function(){ if(window.innerWidth>960) set(false); });
+ // El inglés vuelve a fila a los 1.260 px, no a los 1.024: sus siete pestañas
+ // no caben antes. Con un solo umbral, uno de los dos menús se queda apilado
+ // donde ya cabía en fila.
+ var fila=nav.classList.contains('nav-en')?1259:1023;
+ window.addEventListener('resize',function(){ if(window.innerWidth>fila) set(false); });
 })();
 </script>"""
 
@@ -3262,7 +3269,7 @@ CSS_MENU_UNICO = (
     'nav.nav .menu a[aria-current],nav.nav-e .links a[aria-current]{color:#ee9769;font-weight:600}'
     'nav.nav .menu a.lupa,nav.nav-e .links a.lupa,nav.nav .menu a.lang,nav.nav-e .links a.lang{color:#ee9769}'
     'nav.nav .menu a.lang,nav.nav-e .links a.lang{font-weight:600;letter-spacing:.04em}'
-    '@media(min-width:961px){'
+    '@media(min-width:1024px){'
     'nav.nav .menu,nav.nav-e .links{align-items:center;gap:2px}'
     'nav.nav .menu a,nav.nav-e .links a{display:inline-flex;align-items:center;box-sizing:border-box;'
     'height:40px;padding:0 12px;font-size:14.5px;line-height:1;border:1px solid transparent;'
@@ -3272,14 +3279,71 @@ CSS_MENU_UNICO = (
     'nav.nav .menu a.lupa:hover,nav.nav-e .links a.lupa:hover,nav.nav .menu a.lang:hover,'
     'nav.nav-e .links a.lang:hover{border-color:#ee9769;background:rgba(238,151,105,.14)}'
     '}'
-    '@media(max-width:960px){'
+    '@media(max-width:1023px){'
     'nav.nav .menu a,nav.nav-e .links a{display:flex;align-items:center;height:auto;padding:13px 14px;'
     'font-size:16px;line-height:1.3;border:0;border-radius:9px;margin:0}'
     'nav.nav .menu a.lupa,nav.nav-e .links a.lupa{gap:10px;justify-content:flex-start}'
     'nav.nav .menu a.lang,nav.nav-e .links a.lang{align-self:flex-start;margin:6px 0 0 14px;'
     'padding:8px 12px;border:1px solid #3a3122}'
     '}')
-JS_BURGER = "<style>" + CSS_MENU_UNICO + "</style>" + JS_BURGER
+# Menú inglés: siete pestañas no caben en una banda de 1.100 px, y el
+# desbordamiento no se anuncia solo. Medido, no estimado: de los 1.100 px de
+# `.in` se van 48 de padding, 160 del logotipo, 40 de los dos huecos y 49 del
+# chip «ES», así que a los enlaces les quedan 803 — y los siete más la lupa
+# piden 899. Faltaban 96 px EN TODOS LOS ANCHOS DE ESCRITORIO, también a
+# 1.600: las dos últimas entradas quedaban cortadas con `overflow-x:auto`,
+# que recorta sin avisar. Siguen en el HTML (Google las ve), pero nadie las
+# pulsa.
+#
+# Dos reglas, y solo para el menú inglés (`.nav-en`), porque la clase `.nav-e`
+# la comparte con el menú escueto español, al que sí le caben:
+#   - A 1.260 px o más, la banda se ensancha a 1.260: quedan 963 px para 899,
+#     con 64 de margen. No desalinea nada, porque el cuerpo de estas páginas
+#     mide entre 820 y 1.180 px y nunca estuvo alineado con la barra.
+#   - Por debajo, no caben de ninguna manera, así que manda el panel de la
+#     hamburguesa: ya existe, es accesible y aguanta cualquier número de
+#     entradas. Son las reglas del bloque móvil con otro umbral.
+# El panel a pantalla completa se diseñó para el móvil. De 761 px en adelante
+# —tabletas y la franja que antes iba en fila— ocupar los 1.023 px de banda
+# para ocho entradas cortas desorienta: ahí cuelga del botón que lo abre.
+CSS_PANEL_ANCHO = (
+    '@media(min-width:761px) and (max-width:1023px){'
+    'nav.nav .menu,nav.nav-e .links{left:auto;right:24px;'
+    'width:min(360px,calc(100% - 24px))}'
+    '}')
+
+CSS_MENU_EN = (
+    '@media(min-width:1260px){nav.nav-e.nav-en .in{max-width:1260px}}'
+    '@media(min-width:1024px) and (max-width:1259px){'
+    'nav.nav-e.nav-en .burger{display:flex}'
+    'nav.nav-e.nav-en .in{position:relative;flex-wrap:nowrap}'
+    'nav.nav-e.nav-en .links{position:absolute;top:calc(100% + 9px);left:auto;right:24px;'
+    # A 1.200 px un panel de 1.100 de ancho para ocho entradas cortas es un
+    # cartelón. Colgado del botón se lee como lo que es: un desplegable.
+    'width:min(360px,calc(100% - 24px));'
+    'display:none;flex-direction:column;align-items:stretch;gap:0;overflow:visible;'
+    'background:var(--panel);border:1px solid var(--line);border-radius:14px;'
+    'padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5);z-index:60}'
+    'nav.nav-e.nav-en .links.abre{display:flex}'
+    'nav.nav-e.nav-en .links a{display:flex;align-items:center;height:auto;'
+    'padding:13px 14px;font-size:16px;line-height:1.3;border:0;border-radius:9px;'
+    'margin:0;text-align:left}'
+    'nav.nav-e.nav-en .links a:hover{background:rgba(217,116,78,.12)}'
+    'nav.nav-e.nav-en .links a.lupa{gap:10px;justify-content:flex-start;'
+    'border:0;padding:13px 14px;width:auto;height:auto}'
+    '}'
+    # Un icono suelto en una lista vertical no se entiende, así que en el panel
+    # la lupa lleva su texto. El bloque móvil compartido lo escribe en español
+    # («Buscar en la web») y se colaba tal cual en las ocho páginas inglesas.
+    '@media(max-width:1259px){'
+    'nav.nav-e.nav-en .links a.lupa::after{content:"Search the site"}'
+    # Con el panel fuera del flujo, el chip «ES» se quedaba varado junto al
+    # logotipo y la hamburguesa al otro extremo. Van juntos a la derecha.
+    'nav.nav-e.nav-en .lang.fijo{margin-left:auto}'
+    'nav.nav-e.nav-en .burger{margin-left:8px}'
+    '}')
+
+JS_BURGER = "<style>" + CSS_MENU_UNICO + CSS_PANEL_ANCHO + CSS_MENU_EN + "</style>" + JS_BURGER
 
 _CSS_NAV_MOVIL = ('@media(max-width:560px){.nav .brand span{display:none}'
                   '.nav .in{gap:14px}.menu a{padding:8px 10px}}')
@@ -11395,7 +11459,7 @@ def nav_en_html(site: str) -> str:
     # móvil de CSS_NAV_ESCUETO oculta los enlaces y no queda forma de abrirlos.
     boton = BOTON_BURGER.replace("Abrir menú", "Open menu")
     js = JS_BURGER.replace("Cerrar menú", "Close menu").replace("Abrir menú", "Open menu")
-    return ('<nav class="nav-e" aria-label="main"><div class="in">'
+    return ('<nav class="nav-e nav-en" aria-label="main"><div class="in">'
             f'<a class="brand" href="{site}/en/" aria-label="nochetropical.es">{_LOGO_ESCUETO}</a>'
             f'<div class="links" id="menu-nav">{enlaces}</div>'
             + conmutador + boton + '</div>' + js + '</nav>')

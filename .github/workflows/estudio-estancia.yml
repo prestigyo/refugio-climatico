@@ -1,0 +1,76 @@
+name: Estudio de estancia (mes × duración)
+
+# Recalcula analisis_estancia.py: para cada estación, cada mes de llegada y cada
+# duración de estancia, qué pasó en CADA uno de los nueve años. Escribe
+# docs/en/stays/ (60 ventanas + catálogo), de donde vive la herramienta
+# /en/find-your-winter-address/. Sin esos ficheros el generador la omite: una
+# herramienta servida sin sus datos solo sabe decir "the station data could not
+# be loaded", que parece que el sitio está roto.
+#
+# MENSUAL, el día 1 a las 09:00. Después de analisis.yml (06:00) y de
+# estudio-invierno.yml (08:00) para no amontonar tres análisis pesados a la vez,
+# y antes del build de las 11:00, así que la página se reconstruye el mismo día
+# sin tocar nada.
+#
+# Mensual y no semanal porque la serie son nueve años: una semana más de datos no
+# mueve la mediana de una ventana, y el script recorre los diez CSV diarios
+# enteros (~2,9 millones de filas) para construir 60 ventanas.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 1 * *"        # día 1 de cada mes, tras estudio-invierno.yml
+
+permissions:
+  contents: write
+
+# GRUPO PROPIO, no el de commit-docs. GitHub solo guarda UNA ejecución en cola por
+# grupo: cuando llega otra, la que esperaba se CANCELA aunque cancel-in-progress
+# sea false. Un workflow mensual metido en commit-docs —donde se apilan
+# construir-web, los GIFs, el parte y el calendario— se queda en la cola y muere
+# sin arrancar. Le pasó a estudio-invierno.yml el 2026-09-24. Aquí no hace falta:
+# escribe ficheros que no toca nadie más y el push va protegido por el reintento
+# con pull --rebase --autostash.
+concurrency:
+  group: estudio-estancia
+  cancel-in-progress: false
+
+jobs:
+  estancia:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Descargar repo
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # numpy además de pandas: las ventanas se recortan sobre rejillas
+      # día × estación y las rachas se calculan ahí, no fila a fila.
+      - name: Instalar pandas y numpy
+        run: pip install pandas numpy
+
+      - name: Recalcular las ventanas de estancia
+        run: python aemet-temperaturas/scripts/analisis_estancia.py
+
+      - name: Commit si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Las 60 ventanas Y el catálogo: sin stations.json la tabla saldría
+          # sin nombres, y el generador omite la página entera si falta.
+          git add docs/en/stays \
+                  aemet-temperaturas/analisis/estancia_por_ventana.csv
+          if git diff --staged --quiet; then
+            echo "Sin cambios en las ventanas de estancia."
+          else
+            git commit -m "Actualizar ventanas de estancia ($(date -u +%Y-%m-%d))"
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash origin main && git push && exit 0
+              echo "push rechazado (colisión con otro workflow), reintento $i…"; sleep 4
+            done
+            echo "No se pudo empujar tras 5 intentos"; exit 1
+          fi

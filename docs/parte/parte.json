@@ -1,7 +1,7 @@
 {
  "fecha": "2026-10-06",
- "total": 848,
- "tropicales": 132,
+ "total": 849,
+ "tropicales": 134,
  "ecuatoriales": 0,
  "peor": {
   "id": "C629X",
@@ -12,7 +12,7 @@
  "mejor": {
   "id": "5511",
   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 1.9,
+  "min": 2.6,
   "prov": "Granada"
  },
  "top_calor": [
@@ -81,13 +81,13 @@
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 1.9,
+   "min": 2.6,
    "prov": "Granada"
   },
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 3.6,
+   "min": 4.3,
    "prov": "Granada"
   },
   {
@@ -105,14 +105,8 @@
   {
    "id": "9839V",
    "nombre": "Cerler Cogulla",
-   "min": 6.4,
+   "min": 6.7,
    "prov": "Huesca"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 6.8,
-   "prov": "Lleida"
   },
   {
    "id": "1167G",
@@ -127,16 +121,22 @@
    "prov": "Granada"
   },
   {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 7.1,
+   "prov": "Lleida"
+  },
+  {
    "id": "9195C",
    "nombre": "Astún - la Raca",
    "min": 7.4,
    "prov": "Huesca"
   },
   {
-   "id": "5103E",
-   "nombre": "Camarate 2 Parque Nacional Sierra Nevada",
-   "min": 7.7,
-   "prov": "Granada"
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 8.2,
+   "prov": "Cantabria"
   }
  ]
 }

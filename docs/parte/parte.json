@@ -1,123 +1,105 @@
 {
- "fecha": "2026-10-05",
- "total": 840,
- "tropicales": 153,
+ "fecha": "2026-10-06",
+ "total": 848,
+ "tropicales": 132,
  "ecuatoriales": 0,
  "peor": {
-  "id": "6083X",
-  "nombre": "Marbella Cabopino",
-  "min": 24.8,
-  "prov": "Málaga"
+  "id": "C629X",
+  "nombre": "Puerto de Mogán",
+  "min": 24.3,
+  "prov": "Las Palmas"
  },
  "mejor": {
   "id": "5511",
   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 3.5,
+  "min": 1.9,
   "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
-   "min": 24.8,
-   "prov": "Málaga"
-  },
-  {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 24.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "B569X",
-   "nombre": "Capdepera-Faro",
-   "min": 24.5,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
    "min": 24.3,
    "prov": "Las Palmas"
   },
   {
-   "id": "5996B",
-   "nombre": "Barbate Depuradora",
-   "min": 24.1,
-   "prov": "Cádiz"
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 24.2,
+   "prov": "Las Palmas"
   },
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
    "min": 24.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "6277C",
-   "nombre": "Adra Faro",
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 24.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
    "min": 23.9,
-   "prov": "Almería"
+   "prov": "Las Palmas"
   },
   {
-   "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcacín",
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
    "min": 23.8,
-   "prov": "Cádiz"
+   "prov": "Las Palmas"
   },
   {
-   "id": "5973",
-   "nombre": "Cádiz Observatorio",
+   "id": "C689E",
+   "nombre": "Maspalomas",
    "min": 23.8,
-   "prov": "Cádiz"
+   "prov": "Las Palmas"
   },
   {
-   "id": "B860X",
-   "nombre": "Ciutadella-Son Quim",
-   "min": 23.8,
-   "prov": "Illes Balears"
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 23.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 23.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 23.5,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 3.5,
+   "min": 1.9,
    "prov": "Granada"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 5.6,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 5.6,
-   "prov": "Lleida"
   },
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 5.7,
+   "min": 3.6,
    "prov": "Granada"
-  },
-  {
-   "id": "2491C",
-   "nombre": "La Covatilla Estación de Esquí",
-   "min": 6.1,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 6.2,
-   "prov": "Lleida"
   },
   {
    "id": "9590D",
    "nombre": "Cap de Rec",
-   "min": 6.3,
+   "min": 4.9,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 5.4,
    "prov": "Lleida"
   },
   {
@@ -127,16 +109,34 @@
    "prov": "Huesca"
   },
   {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 6.8,
+   "prov": "Lleida"
+  },
+  {
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 7.0,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "6299I",
+   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
+   "min": 7.0,
+   "prov": "Granada"
+  },
+  {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": 6.7,
+   "min": 7.4,
    "prov": "Huesca"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 7.1,
-   "prov": "Zamora"
+   "id": "5103E",
+   "nombre": "Camarate 2 Parque Nacional Sierra Nevada",
+   "min": 7.7,
+   "prov": "Granada"
   }
  ]
 }

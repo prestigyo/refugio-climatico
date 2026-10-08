@@ -131,19 +131,20 @@ fecha,total,tropicales,ecuatoriales,peor,peor_prov,peor_min,mejor,mejor_prov,mej
 2026-09-19,817,90,0,Marbella,Málaga,24.6,Reinosa,Cantabria,0.9
 2026-09-20,813,92,0,Cabo de Gata,Almería,24.1,San Pedro Manrique,Soria,3.5
 2026-09-21,810,88,0,Marbella,Málaga,23.8,Puerto del Pico,Ávila,3.2
-2026-09-22,813,89,0,Pájara,Las Palmas,24.0,Cuéllar,Segovia,-0.3
-2026-09-23,808,87,1,Agüimes,Las Palmas,26.3,"Valderredible, Cubillo de Ebro",Cantabria,3.4
-2026-09-24,811,125,22,Agaete - Suerte Alta,Las Palmas,28.2,"Valderredible, Cubillo de Ebro",Cantabria,3.5
-2026-09-25,821,130,24,"San Bartolome Tirajana, el Matorral",Las Palmas,29.5,Xinzo de Limia,Ourense,1.6
-2026-09-26,825,148,24,"Telde, Centro Forestal Doramas",Las Palmas,26.9,"Sanabria, Robleda-Cervantes",Zamora,2.4
-2026-09-27,818,158,2,San Sebastián de la Gomera,Santa Cruz de Tenerife,25.7,Ucero,Soria,7.1
-2026-09-28,811,140,0,Capdepera,Illes Balears,24.8,"Pradollano, Parque Nacional Sierra Nevada",Granada,3.1
-2026-09-29,811,143,0,Portocolom,Illes Balears,24.9,"Pradollano, Parque Nacional Sierra Nevada",Granada,3.9
-2026-09-30,812,150,1,Capdepera,Illes Balears,25.0,"Pradollano, Parque Nacional Sierra Nevada",Granada,5.1
+2026-09-22,814,89,0,Pájara,Las Palmas,24.0,Cuéllar,Segovia,-0.3
+2026-09-23,809,87,1,Agüimes,Las Palmas,26.3,"Valderredible, Cubillo de Ebro",Cantabria,3.4
+2026-09-24,812,125,22,Agaete - Suerte Alta,Las Palmas,28.2,"Valderredible, Cubillo de Ebro",Cantabria,3.5
+2026-09-25,822,130,24,"San Bartolome Tirajana, el Matorral",Las Palmas,29.5,Xinzo de Limia,Ourense,1.6
+2026-09-26,826,148,24,"Telde, Centro Forestal Doramas",Las Palmas,26.9,"Sanabria, Robleda-Cervantes",Zamora,2.4
+2026-09-27,819,158,2,San Sebastián de la Gomera,Santa Cruz de Tenerife,25.7,Ucero,Soria,7.1
+2026-09-28,812,140,0,Capdepera,Illes Balears,24.8,"Pradollano, Parque Nacional Sierra Nevada",Granada,3.1
+2026-09-29,812,143,0,Portocolom,Illes Balears,24.9,"Pradollano, Parque Nacional Sierra Nevada",Granada,3.9
+2026-09-30,813,150,1,Capdepera,Illes Balears,25.0,"Pradollano, Parque Nacional Sierra Nevada",Granada,5.1
 2026-10-01,765,113,0,San Sebastián de la Gomera,Santa Cruz de Tenerife,24.9,"Sanabria, Robleda-Cervantes",Zamora,1.5
 2026-10-02,809,148,1,Adra,Almería,25.0,Beariz,Ourense,2.6
 2026-10-03,805,145,0,Capdepera,Illes Balears,24.7,Port Ainé,Lleida,3.8
-2026-10-04,841,166,3,San Bartolome Tirajana-Lomo Pedro Alfonso,Las Palmas,26.0,El Puente (Casa Forestal),Zamora,3.8
+2026-10-04,803,142,0,Marbella,Málaga,24.8,"Pradollano, Parque Nacional Sierra Nevada",Granada,3.4
 2026-10-05,840,153,0,Marbella Cabopino,Málaga,24.8,Pradollano Parque Nacional Sierra Nevada,Granada,3.5
 2026-10-06,849,134,0,Puerto de Mogán,Las Palmas,24.3,Pradollano Parque Nacional Sierra Nevada,Granada,2.6
 2026-10-07,846,82,1,Alicante,Alicante,26.3,Pradollano Parque Nacional Sierra Nevada,Granada,1.0
+2026-10-08,849,57,0,El Hierro/Aeropuerto,Santa Cruz de Tenerife,23.3,Astún - la Raca,Huesca,-1.2

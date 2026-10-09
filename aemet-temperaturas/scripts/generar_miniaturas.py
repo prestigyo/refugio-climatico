@@ -548,14 +548,23 @@ PAGINAS_EN = [
          l1="of 828 stations give you", l2="a mild winter AND a cool summer",
          pie="Nine winters · ten summers · AEMET",
          fuente="lo afirma la propia página («2 of 828»)"),
-    dict(slug="en/find-your-winter-address", metrica="invierno", cifra="828",
-         l1="weather stations, nine winters.", l2="Set what you will put up with",
-         pie="Heating nights · frost · rain · hot summer nights",
-         fuente="kicker de la propia página"),
-    dict(slug="en/frost-free-towns-spain", metrica="invierno", cifra="414",
-         l1="Spanish towns have not seen", l2="a single frost in nine winters",
-         pie="of the 4.113 towns measured",
-         fuente="docs/datos/municipios_sin_heladas.json (heladas_por_año == 0)"),
+    # La herramienta dejó de ser un filtro de invierno: ahora pregunta CUÁNDO
+    # vienes y CUÁNTO te quedas. Su miniatura decía «828 weather stations, nine
+    # winters», que ya no está ni en el kicker, y pintaba heladas. Lleva la cifra
+    # con la que la propia página abre —el tramo de Huelva— y el mapa pinta esa
+    # misma métrica, no otra.
+    dict(slug="en/find-your-winter-address", metrica="estancia", cifra="25",
+         l1="days in a row with no day warm", l2="enough to sit outside, in Huelva",
+         pie="The same town: 14 terrace days out of 14 if you come for a fortnight",
+         fuente="lo afirma la propia página (el párrafo de cabecera de la herramienta)"),
+    # Decía «414 towns, not a single frost in nine winters». Puede ser cierto en
+    # el JSON, pero la página no lo dice en ninguna parte: cuenta invierno a
+    # invierno y su cifra es otra. Quien pulsaba desde el buscador aterrizaba en
+    # un número que no estaba. Lo cazó cifra_en_su_pagina().
+    dict(slug="en/frost-free-towns-spain", metrica="invierno", cifra="845",
+         l1="Spanish towns saw no frost at all", l2="in the winter of 2025/26",
+         pie="of the 4,113 towns measured · AEMET & IGN",
+         fuente="lo afirma la propia página («the reference station of 845 towns»)"),
     dict(slug="en/winter-in-spain-long-stay", metrica="invierno", cifra="90",
          l1="days in a row with no day warm enough", l2="to sit outside, on the mainland",
          pie="8 days in the Canaries · median of 806 AEMET stations",
@@ -575,6 +584,31 @@ def color_helada(n: float) -> tuple[int, int, int]:
     """
     stops = [(0, (217, 116, 78)), (10, (232, 154, 115)), (30, (150, 182, 196)),
              (70, (90, 130, 160)), (130, (52, 78, 110))]
+    c = stops[0][1]
+    for i in range(len(stops) - 1):
+        a, ca = stops[i]
+        b, cb = stops[i + 1]
+        if n <= b:
+            t = max(0.0, (n - a) / (b - a))
+            c = tuple(round(ca[k] + (cb[k] - ca[k]) * t) for k in range(3))
+            break
+        c = cb
+    return tuple(c)
+
+
+def color_sin_terraza(n: float) -> tuple[int, int, int]:
+    """Días seguidos SIN uno que llegue a 18 °C, dentro de una estancia de tres
+    meses desde el 1 de noviembre. Mismo principio que las otras dos escalas:
+    el color es temperatura, no juicio. Cálido = el día alcanza los 18°; azul =
+    no los alcanza en semanas.
+
+    Los cortes salen del reparto real de las 822 estaciones, no de números
+    redondos: la MEDIANA son 63 días —dos tercios de la estancia— y más del
+    10 % del país no tiene ni una sola terraza en los 90. Con cortes regulares
+    (0-20-40-60-90) medio mapa quedaba del mismo tono y no se veía nada.
+    """
+    stops = [(0, (217, 116, 78)), (15, (232, 154, 115)), (35, (150, 182, 196)),
+             (63, (90, 130, 160)), (90, (52, 78, 110))]
     c = stops[0][1]
     for i in range(len(stops) - 1):
         a, ca = stops[i]
@@ -655,6 +689,62 @@ def puntos_invierno(estaciones: list) -> list:
         out.append((c[0], c[1], color_helada(float(fila["heladas_mediana"]))))
     return sorted(out, key=lambda p: 0)
 
+
+
+def cifra_en_su_pagina(pag: dict) -> str:
+    """¿La cifra de la miniatura aparece en el texto de SU página? Devuelve el
+    aviso, o cadena vacía si todo bien.
+
+    Existe porque ya pasó dos veces. La de /en/spains-mildest-winters/ decía
+    «0 frost nights in Alicante» —cierto, pero la página titula con otra
+    métrica—, y la de la herramienta siguió diciendo «828 weather stations,
+    nine winters» cuando la página ya había dejado de ser un filtro de invierno.
+    En los dos casos quien pulsa desde el buscador aterriza en algo que no
+    cuadra, y en los dos casos solo se vio mirando la página con los ojos.
+
+    Es una comprobación floja a propósito: busca la cifra como número suelto,
+    no la frase. Si algún día da un falso positivo, es que la página dice el
+    número de otra forma — y entonces la miniatura tampoco debería decirlo así.
+    """
+    import re
+    pag_html = g.DOCS_DIR / pag["slug"] / "index.html"
+    if not pag_html.exists():
+        return f"{pag['slug']}: aún no está construida, no se puede comprobar"
+    txt = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", pag_html.read_text("utf-8"),
+                 flags=re.S | re.I)
+    txt = re.sub(r"<[^>]+>", " ", txt)
+    # La ficha escribe las decimales en español («10,3») y la página en inglés
+    # («10.3»): sin igualar la coma, la comprobación saltaría con razón aparente
+    # y sin motivo. El % y los espacios finos tampoco cuentan.
+    def limpia(t):
+        return t.replace(",", ".").replace("\u00a0", " ").replace("%", "")
+    objetivo = limpia(pag["cifra"]).strip()
+    if not objetivo:
+        return ""
+    if re.search(r"(?<![\d.])" + re.escape(objetivo) + r"(?![\d])", limpia(txt)):
+        return ""
+    return (f"{pag['slug']}: la miniatura dice «{pag['cifra']}» y esa cifra NO "
+            f"aparece en la página. Fuente declarada: {pag['fuente']}")
+
+
+def puntos_estancia(estaciones: list) -> list:
+    """Estaciones coloreadas por el peor tramo sin un día de terraza en una
+    estancia de tres meses desde el 1 de noviembre. Se unen por indicativo con
+    estancia_por_ventana.csv; las que no estén en esa ventana no se dibujan."""
+    import csv as _csv
+    f = g.AEMET_DIR / "analisis" / "estancia_por_ventana.csv"
+    if not f.exists():
+        return []
+    coord = {e["id"]: (e["lat"], e["lon"]) for e in estaciones}
+    out = []
+    for fila in _csv.DictReader(f.open(encoding="utf-8")):
+        if fila["mes"] != "11" or fila["dias"] != "90":
+            continue
+        c = coord.get(fila["indicativo"])
+        if not c:
+            continue
+        out.append((c[0], c[1], color_sin_terraza(float(fila["sin_terraza_peor"]))))
+    return out
 
 
 def componer_en(pag: dict, puntos: list, cuadrada: bool) -> Image.Image:
@@ -759,20 +849,27 @@ def main() -> None:
     # --- Las 7 páginas en inglés ---
     # Se nombran aplanando la ruta: /en/coolest-towns-spain/ -> en-coolest-towns-spain.png
     if not filtro:
-        pv = puntos_verano(estaciones)
-        pi = puntos_invierno(estaciones)
-        if not pi:
-            print("   inglés: falta analisis/invierno_por_estacion.csv; "
-                  "las de invierno saldrán sin mapa")
+        mapas = {"verano": puntos_verano(estaciones),
+                 "invierno": puntos_invierno(estaciones),
+                 "estancia": puntos_estancia(estaciones)}
+        for clave, csv_falta in (("invierno", "analisis/invierno_por_estacion.csv"),
+                                 ("estancia", "analisis/estancia_por_ventana.csv")):
+            if not mapas[clave]:
+                print(f"   inglés: falta {csv_falta}; las de «{clave}» saldrán "
+                      "sin mapa")
+        descuadra = [a for a in (cifra_en_su_pagina(p) for p in PAGINAS_EN) if a]
+        for aviso in descuadra:
+            print(f"   AVISO [miniatura] {aviso}")
         for pag in PAGINAS_EN:
             nom = pag["slug"].replace("/", "-")
-            pts = pv if pag["metrica"] == "verano" else pi
+            pts = mapas.get(pag["metrica"], [])
             for cuadrada, fich in ((True, f"{nom}.png"), (False, f"{nom}-og.png")):
                 ruta = OUT_DIR / fich
                 componer_en(pag, pts, cuadrada).save(ruta, optimize=True)
                 peso += ruta.stat().st_size
         print(f"   inglés: {len(PAGINAS_EN)} páginas × 2 tamaños = "
-              f"{len(PAGINAS_EN) * 2} PNG")
+              f"{len(PAGINAS_EN) * 2} PNG · cifras comprobadas contra su propia "
+              f"página: {len(PAGINAS_EN) - len(descuadra)} de {len(PAGINAS_EN)}")
 
     # Quién lleva mapa y quién no, para que generar_calculadora escriba un alt
     # que describa la imagen de verdad. Solo se reescribe si se generaron TODAS

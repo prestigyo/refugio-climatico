@@ -18,6 +18,7 @@ Uso:
 
 from __future__ import annotations
 
+import argparse
 import glob
 import re
 from pathlib import Path
@@ -86,9 +87,31 @@ def fecha_bonita(nombre: str) -> str:
     return f"{d} {MESES[mes]} {a}"
 
 
+# Ventana de la EDICIÓN, en texto AAAA-MM-DD. La rellena main() antes de
+# generar nada. Si se queda en None se usa todo lo que haya, que era el
+# comportamiento viejo y es justo el que había que quitar.
+VENTANA: tuple[str, str] | None = None
+
+
 def archivos(tipo: str, zona: str = "peninsula") -> list[Path]:
+    """Los mapas de esa serie DENTRO de la ventana de la edición.
+
+    Antes devolvía todo lo que hubiera en la carpeta, sin filtro, y el GIF
+    crecía solo hacia el otoño: el 6 de octubre el último fotograma —el que
+    se queda 1,7 s en pantalla, el doble que los demás— era un mapa templado
+    en el que no pasa nada, dentro de una animación titulada «ola de calor».
+    Y cada reconstrucción añadía ~22 MB al historial para empeorarla.
+
+    La fecha sale del NOMBRE del fichero (AAAA-MM-DD.png), que es como los
+    escribe descarga_aemet.py; no de la fecha de modificación, que cambia al
+    clonar el repo.
+    """
     base = AEMET_DIR / "images" / zona
-    return sorted(Path(p) for p in glob.glob(str(base / tipo / "*.png")))
+    todos = sorted(Path(p) for p in glob.glob(str(base / tipo / "*.png")))
+    if not VENTANA:
+        return todos
+    desde, hasta = VENTANA
+    return [p for p in todos if desde <= p.stem <= hasta]
 
 
 def texto_centrado(draw, cx, y, txt, fnt, fill):
@@ -205,10 +228,16 @@ def gif_vertical(salida: Path) -> None:
 
 def og_image(salida: Path) -> None:
     """Imagen 1200x630 para og:image (preview al compartir en redes/buscadores)."""
+    fmin = archivos("minima")
+    if not fmin:
+        # Sin mapas no se escribe NADA. Antes se publicaba igual, con el hueco
+        # del mapa vacío: 33 KB en vez de 250, y es el og:image de 317 páginas.
+        # No reventaba ni avisaba — solo dejaba el sitio peor.
+        print("  (sin mapas en la edición: og.png se queda como estaba)")
+        return
     W, H = 1200, 630
     canvas = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(canvas)
-    fmin = archivos("minima")
     if fmin:
         m = Image.open(fmin[-1]).convert("RGB")
         mw = 600
@@ -231,8 +260,35 @@ def og_image(salida: Path) -> None:
     print(f"  OK {salida.name}: {salida.stat().st_size/1024:.0f} KB")
 
 
+def ultimo_anio() -> int:
+    """El año del mapa más reciente que haya descargado. Es la edición en curso.
+
+    No se usa la fecha de hoy: en enero no hay mapas nuevos y la edición que
+    toca sigue siendo la del verano pasado, no un año vacío.
+    """
+    fechas = []
+    for zona in ("peninsula", "canarias"):
+        for p in glob.glob(str(AEMET_DIR / "images" / zona / "*" / "*.png")):
+            fechas.append(Path(p).stem)
+    return int(max(fechas)[:4]) if fechas else 0
+
+
 def main() -> int:
-    print("Generando GIFs de la ola de calor...")
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--anio", type=int,
+                    help="edición a generar (por defecto, la del mapa más reciente)")
+    ap.add_argument("--desde", help="AAAA-MM-DD; manda sobre --anio")
+    ap.add_argument("--hasta", help="AAAA-MM-DD; manda sobre --anio")
+    args = ap.parse_args()
+
+    global VENTANA
+    anio = args.anio or ultimo_anio()
+    if not anio:
+        print("No hay ningún mapa descargado: nada que animar.")
+        return 0
+    VENTANA = (args.desde or f"{anio}-01-01", args.hasta or f"{anio}-12-31")
+    print(f"Generando GIFs de la ola de calor · edición {anio} "
+          f"({VENTANA[0]} a {VENTANA[1]})")
     # GIFs independientes (para embeber responsive: lado a lado en escritorio,
     # apilados en móvil).
     gif_simple("maxima", "Máximas · de día", DOCS_DIR / "ola-maximas.gif", TEJA)

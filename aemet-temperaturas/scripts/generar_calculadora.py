@@ -1931,13 +1931,19 @@ MINIS_EN = {
         "Map of Spain with 837 AEMET weather stations coloured by frost nights: "
         "only 2 of 828 give both a mild winter and a summer you can sleep through.",
         "The 837 AEMET stations by median frost nights per winter, nine winters."),
+    # El alt describe la imagen que hay, no la que hubo: esta miniatura dejó de
+    # pintar heladas cuando la herramienta dejó de ser un filtro de invierno.
     "en/find-your-winter-address": (
-        "Map of Spain with 837 AEMET weather stations coloured by frost nights "
-        "per winter, the 828 the tool lets you filter.",
-        "The AEMET stations by median frost nights per winter. Warm: no frost."),
+        "Map of Spain with 822 AEMET weather stations coloured by the longest "
+        "run with no day warm enough to sit outside, over a three-month stay "
+        "from 1 November: 25 days in a row in Huelva.",
+        "The 822 AEMET stations by their worst run with no terrace day in a "
+        "three-month stay. Warm: the day reaches 18 \u00b0C within days. Blue: "
+        "it does not for weeks."),
     "en/frost-free-towns-spain": (
         "Map of Spain with 837 AEMET weather stations coloured by frost nights: "
-        "414 of 4,113 Spanish towns have not seen a single frost in nine winters.",
+        "the reference station of 845 of the 4,113 Spanish towns measured "
+        "recorded no frost at all in the winter of 2025/26.",
         "The 837 AEMET stations by median frost nights per winter."),
     "en/winter-in-spain-long-stay": (
         "Map of Spain with 837 AEMET weather stations coloured by frost nights: the "
@@ -1982,8 +1988,12 @@ def inyectar_miniatura(html: str, site: str, ruta: str) -> str:
             d = json.loads(m.group(1))
         except Exception:
             return m.group(0)
+        # Article Y WebApplication: las dos herramientas inglesas declaran
+        # WebApplication y no Article, así que se quedaban sin `image` mientras
+        # las landings sí lo llevaban. La imagen existe y es suya; no decirlo
+        # es tirar la única pista que Google tiene para asociarlas.
         for n in (d.get("@graph") or [d]):
-            if n.get("@type") == "Article":
+            if n.get("@type") in ("Article", "WebApplication"):
                 n["image"] = cua
         return ('<script type="application/ld+json">'
                 + json.dumps(d, ensure_ascii=False) + '</script>')

@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-08",
- "total": 849,
- "tropicales": 57,
+ "fecha": "2026-10-09",
+ "total": 850,
+ "tropicales": 33,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C929I",
-  "nombre": "El Hierro/Aeropuerto",
-  "min": 23.3,
+  "id": "C329Z",
+  "nombre": "San Sebastián de la Gomera",
+  "min": 22.9,
   "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
-  "id": "9195C",
-  "nombre": "Astún - la Raca",
-  "min": -1.2,
-  "prov": "Huesca"
+  "id": "9988B",
+  "nombre": "Cap de Vaqueira",
+  "min": -7.1,
+  "prov": "Lleida"
  },
  "top_calor": [
   {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 23.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 23.2,
+   "min": 22.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 23.1,
+   "min": 22.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 22.9,
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 22.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C619Y",
    "nombre": "La Aldea de San Nicolas",
-   "min": 22.9,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C919K",
-   "nombre": "Tacorón-Lapillas-Tortuga",
-   "min": 22.8,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 22.7,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 22.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 22.4,
+   "min": 22.3,
    "prov": "Las Palmas"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 22.4,
+   "min": 22.3,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 22.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 22.0,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 22.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
+   "min": 21.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C919K",
+   "nombre": "Tacorón-Lapillas-Tortuga",
+   "min": 21.9,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": -1.2,
-   "prov": "Huesca"
-  },
-  {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": -0.9,
+   "min": -7.1,
    "prov": "Lleida"
   },
   {
    "id": "9677",
    "nombre": "Port Aine L?orri",
-   "min": -0.4,
+   "min": -5.2,
    "prov": "Lleida"
   },
   {
-   "id": "9839V",
-   "nombre": "Cerler Cogulla",
-   "min": 0.7,
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": -4.9,
    "prov": "Huesca"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 0.8,
-   "prov": "Cantabria"
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": -2.6,
+   "prov": "Lleida"
   },
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 1.5,
-   "prov": "Granada"
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": -1.7,
+   "prov": "Madrid"
+  },
+  {
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": -1.6,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9632X",
+   "nombre": "Tuixent",
+   "min": -1.1,
+   "prov": "Lleida"
   },
   {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": 2.0,
+   "min": -1.0,
    "prov": "Zamora"
   },
   {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 2.1,
-   "prov": "Cantabria"
+   "id": "9838B",
+   "nombre": "Benasque",
+   "min": -0.9,
+   "prov": "Huesca"
   },
   {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
-   "min": 2.6,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "9115X",
-   "nombre": "Valdezcaray",
-   "min": 2.8,
-   "prov": "La Rioja"
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": -0.8,
+   "prov": "Lleida"
   }
  ]
 }

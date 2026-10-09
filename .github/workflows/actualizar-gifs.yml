@@ -4,7 +4,8 @@ name: Actualizar GIFs de la ola de calor
 # partir de los mapas diarios que descarga descarga_aemet.py. Commitea solo si
 # han cambiado.
 #
-# ESTACIONAL, de junio a septiembre. Antes corría todos los días del año, y eso
+# ESTACIONAL, de abril a octubre — la temporada cálida medida, no un verano de
+# calendario. Antes corría todos los días del año, y eso
 # hacía dos cosas malas a la vez:
 #
 #   - Empeoraba la pieza. El GIF se titula «ola de calor» y cada día de otoño le
@@ -25,10 +26,17 @@ name: Actualizar GIFs de la ola de calor
 
 on:
   schedule:
-    # minuto hora día-del-mes MES día-de-semana → 11:00 UTC, solo de junio a
-    # septiembre, tras la descarga diaria de las 10:30. De octubre a mayo no
-    # dispara: el workflow existe pero no se ejecuta solo.
-    - cron: "0 11 * 6-9 *"
+    # minuto hora día-del-mes MES día-de-semana → 11:00 UTC, de abril a octubre,
+    # tras la descarga diaria de las 10:30. De noviembre a marzo no dispara: el
+    # workflow existe pero no se ejecuta solo.
+    #
+    # Abril y octubre entran porque el dato lo pide: el 20 % de las estaciones
+    # ya pasaba de 30 °C el 26 de abril en el año más amplio, Valencia nunca ha
+    # tenido menos de 6 días de 30° en mayo (15 en 2022), y en octubre el mapa
+    # de MÁXIMAS sigue marcando 22-28 °C en media España. El script solo mete
+    # fotogramas del 15 de abril al 31 de octubre, así que las primeras pasadas
+    # de abril no escriben nada y no commitean.
+    - cron: "0 11 * 4-10 *"
   workflow_dispatch:
     inputs:
       anio:

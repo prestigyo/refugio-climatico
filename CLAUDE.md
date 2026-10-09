@@ -63,7 +63,7 @@ refugio-climatico/
 | `main.yml` | cron 10:30 UTC | `descarga_aemet.py` (mapas PNG) + `descarga_datos.py` (OpenData) |
 | `construir-web.yml` | cron 11:00 UTC + push a los generadores + manual | Reconstruye **toda** la web: estudios → miniaturas → calculadora → mapa. **Ya no genera los GIFs** (2026-10-07) |
 | `parte-nocturno.yml` | cron 07:15 UTC (+ 08:50 de red de seguridad) | `parte_nocturno.py` (parte + **archivo horario**) + `publicar_x.py` |
-| `actualizar-gifs.yml` | **cron 11:00 UTC solo de junio a septiembre** (`0 11 * 6-9 *`) + manual con año/recorte | Solo `generar_gif.py`. Fuera de temporada no dispara; el botón «Run workflow» funciona los 365 días |
+| `actualizar-gifs.yml` | **cron 11:00 UTC de abril a octubre** (`0 11 * 4-10 *`) + manual con año/recorte | Solo `generar_gif.py`. Fuera de temporada no dispara; el botón «Run workflow» funciona los 365 días |
 | `datos-calendario.yml` | lunes 05:00 UTC | `generar_calendario_datos.py` |
 | `analisis.yml` | mensual (día 1, 06:00 UTC) | `analisis_refugios.py` + `analisis_refugios_nocturnos.py` |
 | `estudio-horario.yml` | lunes 04:00 UTC + manual | `analisis_curva_nocturna.py` (rehace `docs/estudios/horas-datos.json`; la landing la construye el build de las 11:00) |
@@ -122,10 +122,16 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   todo lo que hubiera en `images/` y los metía todos, así que la animación crecía sola
   hacia el otoño: el 6 de octubre de 2026 el último fotograma de «la ola de calor» —el que
   se queda 1,7 s, el doble que los demás— era un mapa templado en el que no pasa nada.
-  Ahora la ventana por defecto es **el año del mapa más reciente** (no el año de hoy: en
-  enero la edición que toca sigue siendo la del verano pasado), y se puede recortar con
-  `--desde/--hasta`. En junio de 2027 pasará solo a 2027 y el historial de 2026 se queda
-  en `images/`, regenerable con `--anio 2026`.
+  Ahora la ventana por defecto es **del 15 de abril al 31 de octubre del año del mapa más
+  reciente** (no el año de hoy: en enero la edición que toca sigue siendo la del verano
+  pasado), y se puede recortar con `--desde/--hasta`. En 2027 pasará solo a 2027 y el
+  historial de 2026 se queda en `images/`, regenerable con `--anio 2026`.
+  **Las fechas están medidas, no elegidas**: sobre 2017-2025, el 5 % de las estaciones
+  pasa de 30 °C del 3 de mayo al 25 de octubre de mediana, y el 20 % ya lo hacía el 26 de
+  abril en el año más amplio. Valencia **nunca ha tenido menos de 6 días de 30 °C en mayo**
+  (15 en 2022) y tiene 15 días de 25 °C en octubre; en noviembre, uno. Y ojo con lo que se
+  mira para decidir: en octubre el mapa de MÍNIMAS está vacío pero el de MÁXIMAS marca
+  22-28 °C en media España — dar octubre por muerto mirando solo las mínimas fue un error.
   **Lo que NO se para es la descarga**: los 8 PNG diarios son 181 KB, AEMET los borra y no
   se pueden recuperar. Es el mismo argumento del archivo horario. Se para la animación.
 - **La divulgación de afiliación va JUNTO al enlace, no en el pie.** El sitio monetiza con
@@ -507,7 +513,7 @@ python scripts/generar_pagina_mapa.py
 
 # Los GIFs van aparte desde 2026-10-07: ya no son parte del build, y su
 # workflow solo corre de junio a septiembre.
-python scripts/generar_gif.py                          # edición del año más reciente
+python scripts/generar_gif.py                          # temporada cálida del año más reciente
 python scripts/generar_gif.py --anio 2026              # rehacer una edición pasada
 python scripts/generar_gif.py --desde 2026-06-01 --hasta 2026-09-30
 

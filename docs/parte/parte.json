@@ -1,6 +1,6 @@
 {
  "fecha": "2026-10-09",
- "total": 850,
+ "total": 851,
  "tropicales": 33,
  "ecuatoriales": 0,
  "peor": {
@@ -25,7 +25,7 @@
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.6,
+   "min": 22.8,
    "prov": "Las Palmas"
   },
   {
@@ -85,16 +85,16 @@
    "prov": "Lleida"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": -5.2,
-   "prov": "Lleida"
-  },
-  {
    "id": "9195C",
    "nombre": "Astún - la Raca",
    "min": -4.9,
    "prov": "Huesca"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": -4.1,
+   "prov": "Lleida"
   },
   {
    "id": "9590D",

@@ -52,6 +52,7 @@ refugio-climatico/
 | `analisis_invierno.py` | `estudios/invierno-datos.json` (cifras de `/en/best-climate-in-spain-year-round/` y la lista del sello Mild Winter) + `en/winter-stations.json` (las 828 estaciones que consume la herramienta) |
 | `analisis_estancia.py` | `en/stays/stations.json` (catálogo) + `en/stays/<mes>-<días>.json` (60 ventanas: 12 meses de llegada × 5 duraciones, con el valor de **cada año** por separado). De ahí vive `/en/find-your-winter-address/`. 7,2 MB en disco; por la red son 16-36 KB, que es lo que descarga el visitante de una ventana |
 | `analisis_curva_nocturna.py` | `estudios/horas-datos.json` (las cifras de la landing `/cuantas-horas-se-duerme-en-verano/`, que arma `generar_calculadora.py`) |
+| `generar_presskit.py` | `prensa/kit/index.html` — dosier de prensa de dos A4, pensado para imprimirse o guardarse en PDF. **Lee las cifras de los ficheros de análisis en cada ejecución**, para que un PDF estático no se quede viejo. Lleva `noindex`: es un dosier, no contenido de buscador |
 | `parte_nocturno.py` | `parte/index.html`, `parte/parte.txt`, `parte/parte.json` |
 
 **`generar_calculadora.py` es además un módulo compartido**: varios scripts hacen `import generar_calculadora as g` para reutilizar `PROVINCIAS`, `slug()`, `RANKING_CSV`, `DOCS_DIR` (lo hacen `generar_certificados.py`, `generar_calendario_datos.py`, `generar_informe_lead.py`, `publicar_x.py`). Si tocas esos nombres, rompes a los demás.
@@ -234,6 +235,15 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   vacíos —el caso del cron— fallaba siempre. Usar `if … then … fi`.
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
+- **Santa Cruz de Tenerife viene ESCRITA DE DOS FORMAS en el catálogo de AEMET**:
+  19 estaciones como «SANTA CRUZ DE TENERIFE» y otras 19 como «STA. CRUZ DE TENERIFE»,
+  en `datos/estaciones.csv` y por tanto en `analisis/refugios_nocturnos_ranking.csv`.
+  Cualquier agrupación por provincia que no lo unifique parte la provincia por la mitad:
+  38 estaciones contadas como dos grupos de 19, con contrastes falsos. `generar_pitch.py`
+  normaliza «Sta.» → «Santa»; conviene comprobar si otros agrupamientos lo hacen.
+- **`.title()` de Python escribe «Santa Cruz De Tenerife»** — pone en mayúscula las
+  preposiciones. En un titular o en el asunto de un correo canta. Para topónimos
+  castellanos hace falta bajar de, del, la, las, los, y, el (salvo si abren el nombre).
 - **Ids duplicados en `lugares.csv` mezclan votos de pueblos distintos** en el Observatorio. `generar_lugares.py` ya lo arregló (barrios de Madrid/Barcelona renombrados como «Salamanca (Madrid)»); no reintroducir duplicados.
 - **Las normales 1991-2020 se descargaron** pero el cruce salió con `tmax_normal_verano` vacío — bug pendiente.
 
@@ -463,9 +473,12 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - Página `/prensa/`, generador de informes por lead y export a Excel por estación
 
 **Pendiente para el lanzamiento mediático:**
-- Press kit PDF de 2 páginas
+- ~~Press kit PDF de 2 páginas~~ **HECHO (2026-10-09)**: `generar_presskit.py` →
+  `/prensa/kit/`, dos A4 que se guardan en PDF desde el navegador. Y
+  `generar_pitch.py`, que escribe el correo de presentación con la cifra de CADA
+  provincia — el contraste de dentro de una provincia (Valencia: Utiel 1,0 contra
+  Miramar 77,1) es mejor titular local que cualquier cifra nacional.
 - Lista de ~20-25 periodistas españoles (clima/medio ambiente, nacionales + regionales)
-- Email pitch template
 - Plan de lanzamiento coordinado
 - Envío de los certificados a los ayuntamientos (backlinks institucionales + prensa local)
 
@@ -516,6 +529,13 @@ python scripts/generar_pagina_mapa.py
 python scripts/generar_gif.py                          # temporada cálida del año más reciente
 python scripts/generar_gif.py --anio 2026              # rehacer una edición pasada
 python scripts/generar_gif.py --desde 2026-06-01 --hasta 2026-09-30
+
+# Prensa: dosier y correos de presentación
+python scripts/generar_presskit.py                       # escribe docs/prensa/kit/
+python scripts/generar_pitch.py --provincia Teruel       # correo regional
+python scripts/generar_pitch.py --tipo nacional          # correo a sección de clima
+python scripts/generar_pitch.py --tipo datos             # correo a unidad de datos
+python scripts/generar_pitch.py --listar                 # provincias por contraste
 
 # Ventanas de estancia (mes x duración) — rehace docs/en/stays/
 python scripts/analisis_estancia.py

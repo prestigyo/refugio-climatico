@@ -90,6 +90,23 @@ def fecha_bonita(nombre: str) -> str:
 # Ventana de la EDICIÓN, en texto AAAA-MM-DD. La rellena main() antes de
 # generar nada. Si se queda en None se usa todo lo que haya, que era el
 # comportamiento viejo y es justo el que había que quitar.
+# LA TEMPORADA CÁLIDA, medida sobre 2017-2025 y no elegida a ojo:
+#
+#   · 5 % de estaciones con 30 °C o más: del 3 de mayo al 25 de octubre de
+#     mediana; en el año más amplio, del 9 de marzo al 15 de noviembre.
+#   · 20 % con 30 °C o más: del 16 de mayo al 4 de octubre, y en el año más
+#     amplio ya estaba activo el 26 de abril.
+#   · Valencia en mayo NUNCA ha bajado de 6 días de 30 °C o más (15 en 2022),
+#     y en octubre tiene 15 días de 25 °C o más. En noviembre, uno.
+#
+# De ahí el 15 de abril al 31 de octubre: coge mayo entero, la parte de abril
+# que algunos años ya arde, y octubre, donde el mapa de MÁXIMAS sigue diciendo
+# algo —22-28 °C en media España— aunque el de mínimas ya no.
+#
+# No se usa el año natural: la descarga corre los 365 días, así que un GIF de
+# «la ola de calor» arrancaría en enero con media España helada.
+TEMPORADA = ("04-15", "10-31")
+
 VENTANA: tuple[str, str] | None = None
 
 
@@ -286,9 +303,11 @@ def main() -> int:
     if not anio:
         print("No hay ningún mapa descargado: nada que animar.")
         return 0
-    VENTANA = (args.desde or f"{anio}-01-01", args.hasta or f"{anio}-12-31")
-    print(f"Generando GIFs de la ola de calor · edición {anio} "
-          f"({VENTANA[0]} a {VENTANA[1]})")
+    VENTANA = (args.desde or f"{anio}-{TEMPORADA[0]}",
+               args.hasta or f"{anio}-{TEMPORADA[1]}")
+    recorte = "a medida" if (args.desde or args.hasta) else "temporada cálida"
+    print(f"Generando GIFs de la ola de calor · edición {anio} · {recorte}: "
+          f"{VENTANA[0]} a {VENTANA[1]}")
     # GIFs independientes (para embeber responsive: lado a lado en escritorio,
     # apilados en móvil).
     gif_simple("maxima", "Máximas · de día", DOCS_DIR / "ola-maximas.gif", TEJA)

@@ -11,13 +11,12 @@ on:
     paths:
       - "aemet-temperaturas/scripts/generar_calculadora.py"
       - "aemet-temperaturas/scripts/generar_pagina_mapa.py"
-      - "aemet-temperaturas/scripts/generar_gif.py"
       - "aemet-temperaturas/scripts/generar_miniaturas.py"
       - "aemet-temperaturas/scripts/estudio_colores.py"
       - "aemet-temperaturas/analisis/refugios_nocturnos_ranking.csv"
       - "aemet-temperaturas/datos/spain-provinces.geojson"
   schedule:
-    - cron: "0 11 * * *"       # refresco diario de los GIFs (tras la descarga de mapas)
+    - cron: "0 11 * * *"       # reconstrucción diaria de la web
 
 permissions:
   contents: write
@@ -39,11 +38,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Instalar Pillow y numpy (GIFs, og:image y estudios de mapas)
+      - name: Instalar Pillow y numpy (miniaturas y estudios de mapas)
         run: pip install pillow numpy
-
-      - name: Generar GIFs y og:image
-        run: python aemet-temperaturas/scripts/generar_gif.py
 
       - name: Generar estudios de superposición (La España que nunca se colorea)
         run: python aemet-temperaturas/scripts/estudio_colores.py

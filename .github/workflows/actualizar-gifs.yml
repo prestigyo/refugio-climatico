@@ -1,13 +1,45 @@
 name: Actualizar GIFs de la ola de calor
 
-# Regenera los GIFs animados (máximas, mínimas y doble panel) a partir de los
-# mapas diarios que descarga descarga_aemet.py. Se ejecuta tras la descarga
-# diaria; commitea solo si los GIFs han cambiado.
+# Regenera los GIFs animados (máximas, mínimas y doble panel) y el og:image a
+# partir de los mapas diarios que descarga descarga_aemet.py. Commitea solo si
+# han cambiado.
+#
+# ESTACIONAL, de junio a septiembre. Antes corría todos los días del año, y eso
+# hacía dos cosas malas a la vez:
+#
+#   - Empeoraba la pieza. El GIF se titula «ola de calor» y cada día de otoño le
+#     añadía un fotograma templado. El 6 de octubre de 2026 el último —el que se
+#     queda 1,7 s en pantalla, el doble que los demás— era un mapa en el que no
+#     pasa nada.
+#   - Costaba ~22 MB de historial AL DÍA, que no se recuperan nunca. Y se hacía
+#     dos veces: construir-web.yml también llamaba a generar_gif.py, y además se
+#     disparaba en cada push a un generador. Eso ya se quitó de allí.
+#
+# Los mapas PNG se siguen descargando todo el año (main.yml): son 181 KB al día,
+# AEMET los borra y no se pueden recuperar. Lo que se para es la ANIMACIÓN, no
+# el archivo.
+#
+# El botón «Run workflow» sigue disponible los 365 días: si en noviembre hay un
+# episodio cálido que merezca la pena, se lanza a mano. Un evento así merece una
+# decisión, no un cron.
 
 on:
   schedule:
-    - cron: "0 11 * * *"   # 11:00 UTC, después de la descarga diaria (10:30 UTC)
-  workflow_dispatch:        # ejecutar a mano desde la pestaña Actions
+    # minuto hora día-del-mes MES día-de-semana → 11:00 UTC, solo de junio a
+    # septiembre, tras la descarga diaria de las 10:30. De octubre a mayo no
+    # dispara: el workflow existe pero no se ejecuta solo.
+    - cron: "0 11 * 6-9 *"
+  workflow_dispatch:
+    inputs:
+      anio:
+        description: "Edición a generar (vacío = la del mapa más reciente)"
+        required: false
+      desde:
+        description: "Recorte AAAA-MM-DD (opcional, manda sobre el año)"
+        required: false
+      hasta:
+        description: "Recorte AAAA-MM-DD (opcional, manda sobre el año)"
+        required: false
 
 permissions:
   contents: write
@@ -31,8 +63,25 @@ jobs:
       - name: Instalar Pillow
         run: pip install pillow
 
+      # Sin argumentos, el script coge el año del mapa más reciente: en enero
+      # eso sigue siendo el verano pasado, que es la edición que toca, y en
+      # junio de 2027 pasará solo al año en curso. El historial de 2026 se
+      # queda en images/, intacto y regenerable con --anio 2026.
       - name: Regenerar GIFs
-        run: python aemet-temperaturas/scripts/generar_gif.py
+        env:
+          ANIO: ${{ inputs.anio }}
+          DESDE: ${{ inputs.desde }}
+          HASTA: ${{ inputs.hasta }}
+        # Con `if`, no con `[ -n … ] && …`: el shell de Actions lleva `-e`, y un
+        # test que da falso en la última orden de la línea aborta el paso. Con
+        # los tres campos vacíos —el caso normal, el del cron— fallaba siempre.
+        run: |
+          ARGS=""
+          if [ -n "$ANIO" ];  then ARGS="$ARGS --anio $ANIO"; fi
+          if [ -n "$DESDE" ]; then ARGS="$ARGS --desde $DESDE"; fi
+          if [ -n "$HASTA" ]; then ARGS="$ARGS --hasta $HASTA"; fi
+          echo "generar_gif.py$ARGS"
+          python aemet-temperaturas/scripts/generar_gif.py $ARGS
 
       - name: Commit si hay cambios
         run: |

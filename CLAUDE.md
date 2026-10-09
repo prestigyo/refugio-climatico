@@ -42,10 +42,10 @@ refugio-climatico/
 | Script | Qué escribe en `docs/` |
 |---|---|
 | `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa: `en/best-climate-in-spain-year-round/`, `en/find-your-winter-address/` + `en/winter-stations.json`, `en/mild-winter/` y una página por sello, `en/winter-in-spain-long-stay/`), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
-| `generar_miniaturas.py` | `miniaturas/<slug-provincia>.png` (1200×1200, la que usa Google) y `miniaturas/<slug-provincia>-og.png` (1200×630, la de redes) — silueta de la provincia + sus estaciones coloreadas + la cifra grande. Además las **7 páginas en inglés** (`miniaturas/en-*.png`), con España entera y sus 857 estaciones: ahí **el color codifica temperatura, nunca juicio** — en las de verano rojo = noche caliente (`color_nt`), en las de invierno azul = noche helada (`color_helada`). Por eso el mismo tono cálido es malo en verano y bueno en invierno: la escala dice cuánto calor hace y es la estación del año la que decide si conviene. También `miniaturas/indice.json`, que dice qué provincias llevan mapa: lo lee `generar_calculadora.py` para escribir un `alt` que describa la imagen de verdad (Ceuta y Melilla no llevan silueta). **Tiene que correr ANTES que `generar_calculadora.py`**, y así está en el workflow |
+| `generar_miniaturas.py` | `miniaturas/<slug-provincia>.png` (1200×1200, la que usa Google) y `miniaturas/<slug-provincia>-og.png` (1200×630, la de redes) — silueta de la provincia + sus estaciones coloreadas + la cifra grande. Además las **7 páginas en inglés** (`miniaturas/en-*.png`), con España entera y sus 857 estaciones: ahí **el color codifica temperatura, nunca juicio** — en las de verano rojo = noche caliente (`color_nt`), en las de invierno azul = noche helada (`color_helada`), y en la de la herramienta de estancia azul = semanas sin un día que llegue a 18 °C (`color_sin_terraza`, sobre `estancia_por_ventana.csv`). Por eso el mismo tono cálido es malo en verano y bueno en invierno: la escala dice cuánto calor hace y es la estación del año la que decide si conviene. También `miniaturas/indice.json`, que dice qué provincias llevan mapa: lo lee `generar_calculadora.py` para escribir un `alt` que describa la imagen de verdad (Ceuta y Melilla no llevan silueta). **Tiene que correr ANTES que `generar_calculadora.py`**, y así está en el workflow |
 | `generar_calculadora.py` (descargas) | Copia a `datos/` los CSV de análisis que respaldan las fichas `Dataset`: `refugios_nocturnos_ranking.csv`, `horas_dormibles.csv`, `invierno_por_estacion.csv`, `invierno_por_temporada.csv` (1,1 MB). `tendencia_estaciones.csv` se copió a mano, porque su página también se mantiene a mano. Sin ellos las fichas irían sin `distribution` |
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
-| `generar_gif.py` | `ola-minimas.gif`, `ola-maximas.gif`, `ola-dia-noche.gif`, `ola-canarias-minimas.gif`, `og.png` |
+| `generar_gif.py` | `ola-minimas.gif`, `ola-maximas.gif`, `ola-dia-noche.gif`, `ola-dia-noche-vertical.gif`, `ola-canarias-minimas.gif`, `og.png`. **Por EDICIÓN**: solo los mapas del año del más reciente, o los de `--anio` / `--desde` / `--hasta` |
 | `estudio_colores.py` | `estudios/*.png` + `estudios/estudio-datos.json` |
 | `generar_certificados.py` | `certificados/index.html` + `certificados/<slug>/` (una página por estación certificada), `certificados/certificado-<slug>.png` (25 diplomas para ayuntamientos) y `badges/pueblo-<slug>.svg` y `badges/pueblo-<slug>-claro.svg` (el sello del pueblo en sus dos temas, para que el alojamiento incruste en su web el que le pegue al fondo) |
 | `generar_calendario_datos.py` | `datos/<slug-provincia>.json` (calendario de calor que carga la calculadora bajo demanda) |
@@ -61,9 +61,9 @@ refugio-climatico/
 | Workflow | Cuándo | Qué hace |
 |---|---|---|
 | `main.yml` | cron 10:30 UTC | `descarga_aemet.py` (mapas PNG) + `descarga_datos.py` (OpenData) |
-| `construir-web.yml` | cron 11:00 UTC + push a los generadores + manual | Reconstruye **toda** la web: gif → estudios → calculadora → mapa |
+| `construir-web.yml` | cron 11:00 UTC + push a los generadores + manual | Reconstruye **toda** la web: estudios → miniaturas → calculadora → mapa. **Ya no genera los GIFs** (2026-10-07) |
 | `parte-nocturno.yml` | cron 07:15 UTC (+ 08:50 de red de seguridad) | `parte_nocturno.py` (parte + **archivo horario**) + `publicar_x.py` |
-| `actualizar-gifs.yml` | cron 11:00 UTC + manual | Solo `generar_gif.py` (se solapa con construir-web) |
+| `actualizar-gifs.yml` | **cron 11:00 UTC solo de junio a septiembre** (`0 11 * 6-9 *`) + manual con año/recorte | Solo `generar_gif.py`. Fuera de temporada no dispara; el botón «Run workflow» funciona los 365 días |
 | `datos-calendario.yml` | lunes 05:00 UTC | `generar_calendario_datos.py` |
 | `analisis.yml` | mensual (día 1, 06:00 UTC) | `analisis_refugios.py` + `analisis_refugios_nocturnos.py` |
 | `estudio-horario.yml` | lunes 04:00 UTC + manual | `analisis_curva_nocturna.py` (rehace `docs/estudios/horas-datos.json`; la landing la construye el build de las 11:00) |
@@ -118,6 +118,16 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   por tener la racha corta — una racha buena con noches frías no sirve a quien paga la
   calefacción tres meses. Con los tres filtros quedan **ocho estaciones en toda la península
   y Baleares**.
+- **Los GIFs son una EDICIÓN anual, no un acumulador.** `generar_gif.py` hacía `glob` de
+  todo lo que hubiera en `images/` y los metía todos, así que la animación crecía sola
+  hacia el otoño: el 6 de octubre de 2026 el último fotograma de «la ola de calor» —el que
+  se queda 1,7 s, el doble que los demás— era un mapa templado en el que no pasa nada.
+  Ahora la ventana por defecto es **el año del mapa más reciente** (no el año de hoy: en
+  enero la edición que toca sigue siendo la del verano pasado), y se puede recortar con
+  `--desde/--hasta`. En junio de 2027 pasará solo a 2027 y el historial de 2026 se queda
+  en `images/`, regenerable con `--anio 2026`.
+  **Lo que NO se para es la descarga**: los 8 PNG diarios son 181 KB, AEMET los borra y no
+  se pueden recuperar. Es el mismo argumento del archivo horario. Se para la animación.
 - **La divulgación de afiliación va JUNTO al enlace, no en el pie.** El sitio monetiza con
   Booking vía CJ (`cj_deeplink()`, `CJ_PID`). Cada enlace lleva `rel="sponsored nofollow
   noopener"` y, al lado, el texto de `DIVULGACION_AFILIADO` — que vive en **un solo sitio**
@@ -202,6 +212,20 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   con una caja de 250 en una pantalla de 320. Y un solo nombre largo («Las Palmas de Gran
   Canaria, Pl. de la Feria») ensancha la tabla entera si la primera columna no parte palabra
   — pasaba solo en febrero y solo a 480 px, que es justo como se escapan estas cosas.
+- **Los cortes de una escala de color salen del reparto real, no de números redondos.**
+  En el peor tramo sin terraza de una estancia de tres meses la MEDIANA son 63 días y
+  más del 10 % del país no tiene ni uno en los 90: con cortes regulares (0-20-40-60-90)
+  medio mapa quedaba del mismo tono. `color_sin_terraza()` usa 0-15-35-63-90.
+- **`inyectar_miniatura` parcheaba `Article.image` y las herramientas declaran
+  `WebApplication`**, así que las dos inglesas se quedaban sin `image` en su JSON-LD
+  mientras las landings sí lo llevaban. Ahora parchea los dos tipos.
+- **Un generador que no encuentra datos no debe ESCRIBIR igualmente.** `og_image()` pintaba
+  el `og.png` sin mapa cuando la edición salía vacía: 33 KB en vez de 250, sin error ni
+  aviso, sobre la imagen social de 317 páginas. No reventaba nada — solo dejaba el sitio
+  peor. Ahora sale sin tocar el fichero.
+- **El shell de Actions lleva `-e`**, así que `[ -n "$X" ] && ARGS=…` como última orden de
+  una línea aborta el paso cuando el test da falso. Con los campos de `workflow_dispatch`
+  vacíos —el caso del cron— fallaba siempre. Usar `if … then … fi`.
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
 - **Ids duplicados en `lugares.csv` mezclan votos de pueblos distintos** en el Observatorio. `generar_lugares.py` ya lo arregló (barrios de Madrid/Barcelona renombrados como «Salamanca (Madrid)»); no reintroducir duplicados.
@@ -212,7 +236,10 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **7 copias con fecha de `generar_calculadora.py`** en `scripts/` (`22-07-2026`, `23-07-26`, `26-07-26`, `29-07-26`, `-21-07-26`, `(26)`, `respaldo`) + una de `estudio_colores.py`. La buena es la que no lleva sufijo: es la que ejecutan los workflows. Las demás son ~2 MB de ruido y confunden las búsquedas.
 - **`aemet-temperaturas/generar_gif.py`** existe además de `scripts/generar_gif.py` y **difiere**. Los workflows usan el de `scripts/`.
 - **`README.md` está desfasado**: describe solo el archivo de mapas y apunta a `descarga-diaria.yml`, que ya no existe en `.github/`.
-- **`actualizar-gifs.yml` y `construir-web.yml` corren los dos a las 11:00 UTC** y ambos generan los GIFs. Redundante.
+- ~~`actualizar-gifs.yml` y `construir-web.yml` generan los dos los GIFs~~ **RESUELTO (2026-10-07)**:
+  `construir-web.yml` ya no los genera ni se dispara al tocar `generar_gif.py`. Era peor que
+  redundante: al estar en los `paths` del build, **cada push a un generador reescribía 22 MB
+  de GIFs**. Medido: 7 versiones de los cinco ficheros ocupan 152 MB de historial, ~22 MB al día.
 - **El escaneo de `docs/` llega a 3 niveles** (`*/*/*/index.html`) en sitemap, revisor
   de enlaces y buscador. Estaba en 2 y las 67 páginas de `en/mild-winter/<slug>/` se
   quedaban fuera de los tres sin que nada avisara. Si algún día hay páginas a 4, hay que
@@ -274,8 +301,16 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   `fuente` diciendo de dónde sale). La de `/en/spains-mildest-winters/` arrancó diciendo
   «0 frost nights in Alicante» —cierto, pero la página titula con otra métrica y otras
   ciudades: 10,3 noches a 5 °C en Málaga frente a 101,8 en Madrid—. Quien pulsa desde la
-  miniatura aterriza en algo que no cuadra. Solo se vio al RENDERIZAR la página; la
-  comprobación automática ahora es que la cifra aparezca en el texto de su propia página.
+  miniatura aterriza en algo que no cuadra. Solo se vio al RENDERIZAR la página.
+  **La comprobación automática se daba por hecha aquí pero NO existía en el código**;
+  está desde 2026-10-07 en `cifra_en_su_pagina()` (`generar_miniaturas.py`), y a la
+  primera ejecución cazó otras dos: la herramienta seguía diciendo «828 weather
+  stations, nine winters» cuando ya no era un filtro de invierno, y
+  `/en/frost-free-towns-spain/` decía «414 pueblos sin una helada en nueve inviernos»
+  —puede ser cierto en el JSON, pero la página cuenta invierno a invierno y su cifra
+  es otra (845 en 2025/26)—. Avisa y sigue: una miniatura vieja publicada es mala,
+  tumbar el build por un aviso es peor. Iguala la coma decimal española con el punto
+  inglés, o saltaría con razón aparente en «10,3».
 - **`docs/en/stays/` son 7,2 MB** (60 ventanas × ~120 KB + catálogo) sobre los 90 MB que
   ya pesaba `docs/`. Por la red el visitante solo baja la ventana que pide (16-36 KB con
   gzip, que es lo que sirve Pages) más 13 KB de catálogo, así que el coste es de repo, no
@@ -287,6 +322,11 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **Hay un segundo `CLAUDE.md` en `aemet-temperaturas/`**, de 2026-08-09, que describe 10
   workflows y ni la mitad de las páginas. El bueno es el de la raíz. Confunde a cualquiera
   —persona o modelo— que entre por esa carpeta.
+- **El formato apaisado (1200×630) de las 8 inglesas desperdicia más de media imagen.**
+  `componer_en()` da al mapa una caja de todo el ancho pero poca altura, y `dibujar_espana`
+  encaja por el lado que limita: en 630 px de alto el mapa sale de ~290 px de ancho y deja
+  dos franjas vacías. Es el `og:image`, o sea lo que se ve al compartir en WhatsApp o X.
+  Arreglarlo es rehacer el reparto apaisado (mapa a un lado, texto al otro) y toca las ocho.
 - **No hay tests.** Serían bienvenidos para los parsers de fechas y la conversión DMS→decimal.
 - **`docs/` pesa lo suyo** (GIFs de 2-5 MB, 219 certificados PNG) y `datos/` son 217 MB versionados. Sostenible hoy, vigilarlo.
 
@@ -460,10 +500,16 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 cd aemet-temperaturas
 
 # Reconstruir la web entera (el orden importa: es el de construir-web.yml)
-python scripts/generar_gif.py
 python scripts/estudio_colores.py
+python scripts/generar_miniaturas.py      # ANTES que la calculadora
 python scripts/generar_calculadora.py     # escribe ../docs/ completo
 python scripts/generar_pagina_mapa.py
+
+# Los GIFs van aparte desde 2026-10-07: ya no son parte del build, y su
+# workflow solo corre de junio a septiembre.
+python scripts/generar_gif.py                          # edición del año más reciente
+python scripts/generar_gif.py --anio 2026              # rehacer una edición pasada
+python scripts/generar_gif.py --desde 2026-06-01 --hasta 2026-09-30
 
 # Ventanas de estancia (mes x duración) — rehace docs/en/stays/
 python scripts/analisis_estancia.py

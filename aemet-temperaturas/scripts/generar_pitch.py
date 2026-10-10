@@ -63,6 +63,16 @@ def num(x: float, dec: int = 1) -> str:
     return f"{x:,.{dec}f}".replace(",", " ").replace(".", ",")
 
 
+# Provincias que el catálogo de AEMET escribe de dos formas. Medido sobre
+# datos/estaciones.csv: Baleares aparece 33 veces en castellano y 11 en catalán,
+# y Tenerife 19 y 19. Sin unificarlas, cualquier agrupación por provincia las
+# parte en dos y calcula contrastes falsos — y además salen 54 «provincias»
+# donde hay 52.
+EQUIVALENTES = {
+    "ILLES BALEARS": "BALEARES",
+}
+
+
 def sin_tildes(s: str) -> str:
     """Normaliza el nombre de provincia para comparar.
 
@@ -73,7 +83,8 @@ def sin_tildes(s: str) -> str:
     """
     t = "".join(c for c in unicodedata.normalize("NFD", str(s))
                 if unicodedata.category(c) != "Mn").upper().strip()
-    return t.replace("STA.", "SANTA").replace("  ", " ")
+    t = t.replace("STA.", "SANTA").replace("  ", " ")
+    return EQUIVALENTES.get(t, t)
 
 
 def carga():
@@ -234,7 +245,15 @@ def main() -> int:
 
     if args.listar:
         filas = []
+        # Se recorre la provincia NORMALIZADA, no el texto tal cual: «Santa Cruz
+        # de Tenerife» y «Sta. Cruz de Tenerife» son la misma y salían dos veces,
+        # cada una con la mitad de sus estaciones y un contraste falso.
+        vistas = set()
         for prov in sorted(rank["provincia"].unique()):
+            clave = sin_tildes(prov)
+            if clave in vistas:
+                continue
+            vistas.add(clave)
             d = datos_provincia(rank, tend, prov)
             if d and d["peor_v"] > 0:
                 filas.append((d["peor_v"] - d["mejor_v"], d))

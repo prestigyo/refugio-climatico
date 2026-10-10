@@ -216,6 +216,20 @@ function pinta(la,lo,origen){
  document.getElementById("msg").textContent="Tus 5 refugios climáticos naturales más cercanos"+(origen?" a "+origen:"")+":";
  document.getElementById("msg").scrollIntoView({behavior:"smooth",block:"start"});
 }
+// GEOLOCALIZACIÓN. Las mismas opciones en las cuatro páginas con botón de
+// ubicación (esta, municipios-sin-heladas, confortómetro y hoteles).
+// El plazo de getCurrentPosition empieza a contar en la LLAMADA, no cuando
+// el usuario concede el permiso: el diálogo del navegador se come el
+// presupuesto. Con los 8-9 s que había, la PRIMERA vez en un móvil se
+// agotaba entre leer el diálogo y conseguir un arreglo en frío (5-20 s por
+// GPS), y saltaba el error; la segunda vez el permiso ya estaba dado y el
+// sistema tenía una posición reciente, así que respondía al instante. De ahí
+// el "no va a la primera y sí a la segunda".
+// `maximumAge:300000` es lo que lo arregla de verdad: acepta la posición de
+// hasta cinco minutos que es justo la que hacía funcionar el segundo
+// intento, y cinco minutos no mueven un puesto en un ranking de pueblos a
+// decenas de km. `enableHighAccuracy` se queda en false a propósito: el GPS
+// fino tarda mucho más y aquí la red de wifi/móvil da de sobra.
 var gb=document.getElementById("geo"), gh=document.getElementById("geohint");
 gb.addEventListener("click",function(){
  if(!navigator.geolocation){gh.textContent="Tu navegador no permite la geolocalización. Elige tu provincia y estación aquí abajo.";return;}
@@ -223,10 +237,10 @@ gb.addEventListener("click",function(){
  navigator.geolocation.getCurrentPosition(function(p){
    gb.disabled=false; gb.textContent="Usar mi ubicación";
    pinta(p.coords.latitude,p.coords.longitude,"tu ubicación");
- },function(){
+ },function(e){
    gb.disabled=false; gb.textContent="Usar mi ubicación";
-   gh.textContent="No se pudo obtener tu ubicación (¿permiso denegado?). Elige tu provincia y estación aquí abajo.";
- },{timeout:9000});
+   gh.textContent=(e&&e.code===1?'Has bloqueado el permiso de ubicación. Puedes darlo desde el candado de la barra de direcciones. Elige tu provincia y estación aquí abajo.':e&&e.code===3?'La ubicación tarda más de lo normal. Vuelve a pulsar el botón: la segunda vez suele ser inmediata. Elige tu provincia y estación aquí abajo.':'Tu dispositivo no ha podido determinar dónde estás. Elige tu provincia y estación aquí abajo.');
+ },{enableHighAccuracy:false,timeout:25000,maximumAge:300000});
 });
 var prov=document.getElementById("prov"), est=document.getElementById("est");
 Object.keys(EST).forEach(function(p){var o=document.createElement("option");o.value=p;o.textContent=p;prov.appendChild(o);});

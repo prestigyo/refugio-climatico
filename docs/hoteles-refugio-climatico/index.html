@@ -303,10 +303,10 @@ function pintaProv(p){
   navigator.geolocation.getCurrentPosition(function(p){
    gb.disabled=false; gb.textContent="📍 Usar mi ubicación";
    pinta(p.coords.latitude,p.coords.longitude,"tu ubicación");
-  },function(){
+  },function(e){
    gb.disabled=false; gb.textContent="📍 Usar mi ubicación";
-   gh.textContent="No se pudo obtener tu ubicación (¿permiso denegado?). Elige tu provincia aquí abajo.";
-  },{timeout:9000});
+   gh.textContent=(e&&e.code===1?'Has bloqueado el permiso de ubicación. Puedes darlo desde el candado de la barra de direcciones. Elige tu provincia aquí abajo.':e&&e.code===3?'La ubicación tarda más de lo normal. Vuelve a pulsar el botón: la segunda vez suele ser inmediata. Elige tu provincia aquí abajo.':'Tu dispositivo no ha podido determinar dónde estás. Elige tu provincia aquí abajo.');
+  },{enableHighAccuracy:false,timeout:25000,maximumAge:300000});
  });
  var sel=document.getElementById("provh");
  HOT.map(function(h){return h.p;}).filter(function(v,i,a){return a.indexOf(v)===i;})

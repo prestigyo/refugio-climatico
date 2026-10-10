@@ -441,10 +441,10 @@ document.getElementById("geo").addEventListener("click",function(){
   var la=p.coords.latitude,lo=p.coords.longitude;
   // Redondeo EN el navegador a 2 decimales (~1 km): el punto exacto no viaja.
   fijaZona(cerca(la,lo),la.toFixed(2)+","+lo.toFixed(2));
- },function(){
+ },function(e){
   b.disabled=false;b.textContent="📍 Usar mi zona";
-  h.textContent="No se pudo (¿permiso denegado?). Elige tu zona a mano:";
- },{timeout:9000});
+  h.textContent=(e&&e.code===1?'Has bloqueado el permiso de ubicación. Puedes darlo desde el candado de la barra de direcciones. Elige tu zona a mano aquí abajo.':e&&e.code===3?'La ubicación tarda más de lo normal. Vuelve a pulsar el botón: la segunda vez suele ser inmediata. Elige tu zona a mano aquí abajo.':'Tu dispositivo no ha podido determinar dónde estás. Elige tu zona a mano aquí abajo.');
+ },{enableHighAccuracy:false,timeout:25000,maximumAge:300000});
 });
 var prov=document.getElementById("prov"),est=document.getElementById("est"),PR={};
 EST.forEach(function(e){(PR[e[4]]=PR[e[4]]||[]).push(e);});

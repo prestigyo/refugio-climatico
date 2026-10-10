@@ -234,6 +234,28 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **El shell de Actions lleva `-e`**, así que `[ -n "$X" ] && ARGS=…` como última orden de
   una línea aborta el paso cuando el test da falso. Con los campos de `workflow_dispatch`
   vacíos —el caso del cron— fallaba siempre. Usar `if … then … fi`.
+- **El plazo de `getCurrentPosition` incluye el diálogo del permiso.** El reloj del
+  `timeout` empieza a contar en la LLAMADA, no cuando el usuario concede el permiso,
+  así que el diálogo del navegador se come el presupuesto. Con los 8-9 s que había,
+  la **primera** vez en un móvil se agotaba entre leer el diálogo y conseguir un
+  arreglo en frío (5-20 s por GPS) y saltaba el error; la segunda vez el permiso ya
+  estaba dado y el sistema tenía una posición reciente, así que respondía al
+  instante. Síntoma exacto: **no va a la primera y sí a la segunda**. Reproducido con
+  Playwright sustituyendo el proveedor de posición por uno lento.
+  Hoy las cuatro páginas con botón de ubicación piden
+  `{enableHighAccuracy:false,timeout:25000,maximumAge:300000}`. **La pieza que lo
+  arregla es `maximumAge`**, no el `timeout`: acepta la posición de hasta cinco
+  minutos que es justo la que hacía funcionar el segundo intento, y cinco minutos no
+  mueven un puesto en un ranking de pueblos a decenas de km. `enableHighAccuracy`
+  se queda en **false** a propósito: el GPS fino tarda mucho más y aquí la red de
+  wifi/móvil da de sobra.
+- **Un fallo de ubicación no es «permiso denegado».** Los cinco manejadores decían
+  «(¿permiso denegado?)» pasara lo que pasara, así que el caso más frecuente
+  —agotarse el plazo con el permiso **recién concedido**— acusaba al usuario de algo
+  que no había hecho, y encima aconsejaba lo peor: «elige a mano», cuando lo que
+  funciona es volver a pulsar. Hay que mirar `e.code`: 1 permiso, 2 posición no
+  disponible, 3 plazo agotado. En la página bilingüe de heladas son `T.geoNeg`,
+  `T.geoTarda` y `T.falloGeo`, con sus dos idiomas.
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
 - **DOS provincias vienen escritas de dos formas en el catálogo de AEMET**, en
@@ -362,6 +384,15 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   **El arreglo no es copiar `_fecha_de()` tal cual**: la huella se calcula del HTML
   ya escrito, así que la fecha no se puede conocer mientras se escribe la página.
   Hay que parchear el JSON-LD en una segunda pasada, como hace `inyectar_miniatura`.
+- **`TEMPLATE` es código muerto: 652 líneas y 41 KB.** Era la portada vieja; hoy la
+  escribe `construir_pagina_beta()` y el único sitio que menciona `TEMPLATE` es un
+  comentario que dice que se queda «como referencia por si portamos piezas». El
+  riesgo no es el peso, es **confundir al que busca**: lleva su propio botón
+  `id="geo"` con `getCurrentPosition`, sus propios estilos y su propia
+  calculadora, así que un `grep` de cualquiera de esas cosas da seis resultados
+  cuando solo cinco se ejecutan. Pasó el 2026-10-10 arreglando la geolocalización:
+  parche aplicado a seis sitios, uno de ellos inerte. Si de verdad se quiere la
+  referencia, que viva en un fichero aparte y no dentro del núcleo.
 - **No hay tests.** Serían bienvenidos para los parsers de fechas y la conversión DMS→decimal.
 - **`docs/` pesa lo suyo** (GIFs de 2-5 MB, 219 certificados PNG) y `datos/` son 217 MB versionados. Sostenible hoy, vigilarlo.
 

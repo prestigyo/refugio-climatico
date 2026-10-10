@@ -1,0 +1,84 @@
+name: Correo de presentación a prensa
+
+# Escribe el correo con el que se manda el dosier, con la cifra de la provincia
+# que elijas, y lo deja EN EL REGISTRO DE LA EJECUCIÓN para copiar y pegar.
+#
+# POR QUÉ UN WORKFLOW Y NO UN SCRIPT EN LOCAL. `generar_pitch.py` no escribe
+# ningún fichero: imprime en pantalla. Eso en un ordenador con Python es
+# cómodo, pero este proyecto se maneja desde la web de GitHub, y ahí no hay
+# pantalla donde imprimir. Con este botón se pide la provincia en un campo y
+# el correo sale en el log, que se puede seleccionar y copiar desde el
+# navegador.
+#
+# NO COMMITEA NADA. No toca la web, no escribe en docs/ y no deja rastro en el
+# repositorio: el correo es material interno que acaba en tu cliente de correo.
+#
+# Cómo se usa:
+#   Actions → «Correo de presentación a prensa» → Run workflow
+#   · tipo = regional  y  provincia = Teruel   → el contraste de esa provincia
+#   · tipo = nacional                          → el gancho metodológico
+#   · tipo = datos                             → para una unidad de datos
+#   · tipo = listar                            → las 52 provincias ordenadas
+#                                                por contraste, para elegir
+#   Luego se abre el paso «Escribir el correo» y se copia lo que hay entre las
+#   líneas de iguales.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tipo:
+        description: "Qué correo quieres"
+        required: true
+        default: regional
+        type: choice
+        options: [regional, nacional, datos, listar]
+      provincia:
+        description: "Solo para «regional» (ej: Teruel, Valencia, Granada)"
+        required: false
+        type: string
+
+# Solo lectura: este workflow no escribe en el repositorio.
+permissions:
+  contents: read
+
+jobs:
+  pitch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # Solo pandas: el script lee dos CSV y dos JSON, nada más.
+      - name: Instalar pandas
+        run: pip install pandas
+
+      - name: Escribir el correo
+        working-directory: aemet-temperaturas
+        env:
+          TIPO: ${{ inputs.tipo }}
+          PROVINCIA: ${{ inputs.provincia }}
+        run: |
+          if [ "$TIPO" = "listar" ]; then
+            python scripts/generar_pitch.py --listar
+          elif [ "$TIPO" = "regional" ]; then
+            if [ -z "$PROVINCIA" ]; then
+              echo "::error::Para el correo regional hay que rellenar «provincia»."
+              echo "Vuelve a lanzarlo con tipo=listar para ver las disponibles."
+              exit 1
+            fi
+            python scripts/generar_pitch.py --provincia "$PROVINCIA"
+          else
+            python scripts/generar_pitch.py --tipo "$TIPO"
+          fi
+
+      - name: Recordatorio
+        if: always()
+        run: |
+          echo "El correo está en el paso de arriba: ábrelo, selecciona y copia."
+          echo "Sustituye [NOMBRE] por el del periodista antes de enviar."
+          echo "Adjunta el PDF del dosier O enlaza https://nochetropical.es/prensa/kit/,"
+          echo "no las dos cosas: un adjunto de un desconocido baja la entregabilidad."

@@ -12,6 +12,7 @@ on:
       - "aemet-temperaturas/scripts/generar_calculadora.py"
       - "aemet-temperaturas/scripts/generar_pagina_mapa.py"
       - "aemet-temperaturas/scripts/generar_miniaturas.py"
+      - "aemet-temperaturas/scripts/generar_presskit.py"
       - "aemet-temperaturas/scripts/estudio_colores.py"
       - "aemet-temperaturas/analisis/refugios_nocturnos_ranking.csv"
       - "aemet-temperaturas/datos/spain-provinces.geojson"
@@ -52,6 +53,13 @@ jobs:
 
       - name: Generar mapa interactivo de estaciones
         run: python aemet-temperaturas/scripts/generar_pagina_mapa.py
+
+      # El dosier de prensa va aquí, y no en un workflow aparte, justamente
+      # porque sus cifras se leen de los ficheros de análisis en cada
+      # ejecución: así nunca se queda viejo. No necesita pandas —usa csv y
+      # statistics— para no engordar esta instalación por cuatro medianas.
+      - name: Generar dosier de prensa
+        run: python aemet-temperaturas/scripts/generar_presskit.py
 
       - name: Commit si hay cambios
         run: |

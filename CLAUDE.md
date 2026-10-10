@@ -1,6 +1,6 @@
 # refugio-climatico — contexto del proyecto para Claude Code
 
-> Última revisión: 2026-09-30. Este fichero no se actualiza solo: si cambias la
+> Última revisión: 2026-10-10. Este fichero no se actualiza solo: si cambias la
 > estructura, añades un workflow o publicas una sección nueva, actualízalo en el
 > mismo commit.
 
@@ -52,7 +52,7 @@ refugio-climatico/
 | `analisis_invierno.py` | `estudios/invierno-datos.json` (cifras de `/en/best-climate-in-spain-year-round/` y la lista del sello Mild Winter) + `en/winter-stations.json` (las 828 estaciones que consume la herramienta) |
 | `analisis_estancia.py` | `en/stays/stations.json` (catálogo) + `en/stays/<mes>-<días>.json` (60 ventanas: 12 meses de llegada × 5 duraciones, con el valor de **cada año** por separado). De ahí vive `/en/find-your-winter-address/`. 7,2 MB en disco; por la red son 16-36 KB, que es lo que descarga el visitante de una ventana |
 | `analisis_curva_nocturna.py` | `estudios/horas-datos.json` (las cifras de la landing `/cuantas-horas-se-duerme-en-verano/`, que arma `generar_calculadora.py`) |
-| `generar_presskit.py` | `prensa/kit/index.html` — dosier de prensa de dos A4, pensado para imprimirse o guardarse en PDF. **Lee las cifras de los ficheros de análisis en cada ejecución**, para que un PDF estático no se quede viejo. Lleva `noindex`: es un dosier, no contenido de buscador |
+| `generar_presskit.py` | `prensa/kit/index.html` — dosier de prensa de dos A4, pensado para imprimirse o guardarse en PDF. **Lee las cifras de los ficheros de análisis en cada ejecución**, para que un PDF estático no se quede viejo: por eso es **el último paso de `construir-web.yml`** y no un workflow aparte. Lleva `noindex`, así que el filtro `_es_noindex()` lo deja fuera del sitemap; sus URLs van en `<a>` con la dirección a la vista, que es lo único que sirve a la vez en papel y en pantalla. No necesita pandas —`csv` y `statistics`— para no engordar la instalación del build diario |
 | `parte_nocturno.py` | `parte/index.html`, `parte/parte.txt`, `parte/parte.json` |
 
 **`generar_calculadora.py` es además un módulo compartido**: varios scripts hacen `import generar_calculadora as g` para reutilizar `PROVINCIAS`, `slug()`, `RANKING_CSV`, `DOCS_DIR` (lo hacen `generar_certificados.py`, `generar_calendario_datos.py`, `generar_informe_lead.py`, `publicar_x.py`). Si tocas esos nombres, rompes a los demás.
@@ -62,7 +62,7 @@ refugio-climatico/
 | Workflow | Cuándo | Qué hace |
 |---|---|---|
 | `main.yml` | cron 10:30 UTC | `descarga_aemet.py` (mapas PNG) + `descarga_datos.py` (OpenData) |
-| `construir-web.yml` | cron 11:00 UTC + push a los generadores + manual | Reconstruye **toda** la web: estudios → miniaturas → calculadora → mapa. **Ya no genera los GIFs** (2026-10-07) |
+| `construir-web.yml` | cron 11:00 UTC + push a los generadores + manual | Reconstruye **toda** la web: estudios → miniaturas → calculadora → mapa → **dosier de prensa**. **Ya no genera los GIFs** (2026-10-07) |
 | `parte-nocturno.yml` | cron 07:15 UTC (+ 08:50 de red de seguridad) | `parte_nocturno.py` (parte + **archivo horario**) + `publicar_x.py` |
 | `actualizar-gifs.yml` | **cron 11:00 UTC de abril a octubre** (`0 11 * 4-10 *`) + manual con año/recorte | Solo `generar_gif.py`. Fuera de temporada no dispara; el botón «Run workflow» funciona los 365 días |
 | `datos-calendario.yml` | lunes 05:00 UTC | `generar_calendario_datos.py` |
@@ -70,6 +70,7 @@ refugio-climatico/
 | `estudio-horario.yml` | lunes 04:00 UTC + manual | `analisis_curva_nocturna.py` (rehace `docs/estudios/horas-datos.json`; la landing la construye el build de las 11:00) |
 | `estudio-invierno.yml` | día 1 de cada mes, 08:00 UTC + manual | `analisis_invierno.py` (rehace `docs/estudios/invierno-datos.json`; corre tras `analisis.yml`, que rehace `noches_por_anio.csv`) |
 | `estudio-estancia.yml` | día 1 de cada mes, 09:00 UTC + manual | `analisis_estancia.py` (rehace `docs/en/stays/`; va tras `estudio-invierno.yml` y antes del build de las 11:00). **Grupo propio**, por lo del `commit-docs` |
+| `pitch.yml` | manual (desplegable `tipo` + campo `provincia`) | `generar_pitch.py`. **No commitea nada** y tiene permisos de solo lectura: el correo sale en el registro de la ejecución, para copiar desde el navegador. Existe porque el script imprime en pantalla y el proyecto se maneja desde la web de GitHub, donde no hay pantalla |
 | `certificados.yml` | manual | `generar_certificados.py` |
 | `evolucion.yml` | manual (input `buscar`) | `evolucion_estacion.py` para una estación |
 | `backfill.yml` | manual | `backfill_historico.py` |
@@ -235,12 +236,15 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   vacíos —el caso del cron— fallaba siempre. Usar `if … then … fi`.
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
-- **Santa Cruz de Tenerife viene ESCRITA DE DOS FORMAS en el catálogo de AEMET**:
-  19 estaciones como «SANTA CRUZ DE TENERIFE» y otras 19 como «STA. CRUZ DE TENERIFE»,
-  en `datos/estaciones.csv` y por tanto en `analisis/refugios_nocturnos_ranking.csv`.
-  Cualquier agrupación por provincia que no lo unifique parte la provincia por la mitad:
-  38 estaciones contadas como dos grupos de 19, con contrastes falsos. `generar_pitch.py`
-  normaliza «Sta.» → «Santa»; conviene comprobar si otros agrupamientos lo hacen.
+- **DOS provincias vienen escritas de dos formas en el catálogo de AEMET**, en
+  `datos/estaciones.csv` y por tanto en `analisis/refugios_nocturnos_ranking.csv`:
+  **Santa Cruz de Tenerife** («SANTA CRUZ DE TENERIFE» 19 / «STA. CRUZ DE TENERIFE» 19)
+  y **Baleares** («BALEARES» 33 / «ILLES BALEARS» 11). Cualquier agrupación por provincia
+  que no las unifique las parte por la mitad y calcula contrastes falsos: Baleares salía
+  con 13 estaciones y un salto de 73,8 en vez de 44 y 78,9. **El síntoma que lo delata es
+  contar 54 provincias donde España tiene 52** — si un listado por provincia no da 52,
+  hay un duplicado. `generar_pitch.py` lo arregla con `EQUIVALENTES` más la regla
+  «Sta.» → «Santa»; conviene comprobar si otros agrupamientos lo hacen.
 - **`.title()` de Python escribe «Santa Cruz De Tenerife»** — pone en mayúscula las
   preposiciones. En un titular o en el asunto de un correo canta. Para topónimos
   castellanos hace falta bajar de, del, la, las, los, y, el (salvo si abren el nombre).
@@ -343,6 +347,21 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   encaja por el lado que limita: en 630 px de alto el mapa sale de ~290 px de ancho y deja
   dos franjas vacías. Es el `og:image`, o sea lo que se ve al compartir en WhatsApp o X.
   Arreglarlo es rehacer el reparto apaisado (mapa a un lado, texto al otro) y toca las ocho.
+- **5 páginas declaran `dateModified` = día del build**, así que dicen que cambiaron hoy
+  cada vez que corre `construir-web`, cambie su contenido o no. Son las que usan
+  `iso_tz(date.today().isoformat())` en su JSON-LD (líneas 10852, 13379, 13686,
+  14494 y 17056 de `generar_calculadora.py`): `dormir-con-manta-en-verano`,
+  `hoteles-refugio-climatico`, `en/coolest-towns-spain`, `en/spains-mildest-winters`
+  y `en/winter-in-spain-long-stay`. Las demás llevan una fecha explícita.
+  **Es el mismo error que ya se arregló en el sitemap** —«un sitemap donde todo
+  cambió ayer es un sitemap que Google acaba ignorando»— pero en los datos
+  estructurados, y aquí es peor porque los dos se contradicen: el sitemap de esas
+  cinco dice `2026-10-02` (su huella real en `lastmod.json`) mientras la página
+  dice hoy. Detectado el 2026-10-10 porque un build de prueba movió sus cinco
+  fechas de `2026-10-07` a `2026-10-10` sin tocar una sola palabra del contenido.
+  **El arreglo no es copiar `_fecha_de()` tal cual**: la huella se calcula del HTML
+  ya escrito, así que la fecha no se puede conocer mientras se escribe la página.
+  Hay que parchear el JSON-LD en una segunda pasada, como hace `inyectar_miniatura`.
 - **No hay tests.** Serían bienvenidos para los parsers de fechas y la conversión DMS→decimal.
 - **`docs/` pesa lo suyo** (GIFs de 2-5 MB, 219 certificados PNG) y `datos/` son 217 MB versionados. Sostenible hoy, vigilarlo.
 
@@ -523,6 +542,7 @@ python scripts/estudio_colores.py
 python scripts/generar_miniaturas.py      # ANTES que la calculadora
 python scripts/generar_calculadora.py     # escribe ../docs/ completo
 python scripts/generar_pagina_mapa.py
+python scripts/generar_presskit.py        # el dosier, con las cifras de hoy
 
 # Los GIFs van aparte desde 2026-10-07: ya no son parte del build, y su
 # workflow solo corre de junio a septiembre.

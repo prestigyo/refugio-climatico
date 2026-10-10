@@ -454,6 +454,11 @@ PLANTILLA = r"""<!doctype html>
  .mision .mt{font:600 11px/1 var(--fb);letter-spacing:.14em;text-transform:uppercase;color:var(--verde);margin-bottom:8px}
  .mision p{font-size:14.5px;color:#e3d8c4;margin:0;line-height:1.6}.mision p b{color:var(--paper)}
  .archivo{font-size:13px;color:var(--muted);margin:18px 0 0}
+ .todoarch{font-size:13px;color:var(--muted);margin:10px 0 0}
+ .todoarch summary{cursor:pointer;color:var(--teja, #d9744e)}
+ .mesarch{display:block;margin:9px 0 0;line-height:2}
+ .mesarch b{color:var(--paper, #efe6d6);font-weight:600;text-transform:capitalize;margin-right:6px}
+ .mesarch a{display:inline-block;min-width:26px;text-align:center}
  .archivo a{font-family:var(--fm);font-size:12.5px}
  .cta{margin:26px 0;text-align:center}
  .cta a{display:inline-block;background:var(--teja);color:#1a1209;font-weight:700;padding:13px 22px;border-radius:12px}
@@ -762,14 +767,34 @@ def main() -> int:
                         seccion_temporada_html(analisis_temporada(), site))
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    # Archivo navegable: enlaces a los últimos partes fechados (más el de hoy).
+    # Archivo navegable. ANTES solo enlazaba los 12 últimos, así que de los 96
+    # partes publicados se veían 12: los otros 84 existían, se servían y eran
+    # alcanzables —cada parte fechado lleva su propia lista de 12, congelada en
+    # su día—, pero llegar a agosto costaba siete saltos hacia atrás. Nadie los
+    # daba, y desde fuera parecía que el parte estaba «detenido en septiembre».
+    # Ahora se listan TODOS, agrupados por mes: en el grupo basta el número del
+    # día, así que un verano entero cabe en tres líneas.
     fechas_previas = sorted(d.name for d in OUT_DIR.glob("????-??-??") if d.is_dir())
-    fechas_arch = sorted(set(fechas_previas + [fecha_iso]))[-12:]
-    enlaces_arch = " · ".join(
+    todas = sorted(set(fechas_previas + [fecha_iso]))
+    recientes = " · ".join(
         f'<a href="{site}/parte/{f}/">{int(f[8:10])} {MESES[int(f[5:7]) - 1][:3]}</a>'
-        for f in fechas_arch)
-    html = html.replace("__ARCHIVO__",
-                        f'<p class="archivo">Archivo del parte: {enlaces_arch}</p>')
+        for f in todas[-12:])
+    por_mes: dict[str, list[str]] = {}
+    for f in todas:
+        por_mes.setdefault(f[:7], []).append(f)
+    meses = []
+    for clave, dias in sorted(por_mes.items()):
+        nombre = MESES[int(clave[5:7]) - 1]
+        enlaces = " ".join(
+            f'<a href="{site}/parte/{d}/">{int(d[8:10])}</a>' for d in dias)
+        meses.append(f'<span class="mesarch"><b>{nombre}</b> {enlaces}</span>')
+    html = html.replace(
+        "__ARCHIVO__",
+        f'<p class="archivo">Lo último: {recientes}</p>'
+        f'<details class="todoarch"><summary>Todos los partes '
+        f'({len(todas)} noches desde el {int(todas[0][8:10])} de '
+        f'{MESES[int(todas[0][5:7]) - 1]})</summary>'
+        + "".join(meses) + "</details>")
     (OUT_DIR / "index.html").write_text(html, encoding="utf-8")
     # Página FECHADA del día: URL propia por noche (/parte/AAAA-MM-DD/), con su
     # canonical/og propios -> cada tuit enlaza a SU noche y X trae tarjeta fresca.

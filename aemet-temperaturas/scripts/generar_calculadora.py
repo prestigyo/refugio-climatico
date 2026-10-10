@@ -27,6 +27,7 @@ import os
 import math
 import re
 import shutil
+import sys
 import urllib.request
 import unicodedata
 from datetime import date
@@ -1650,6 +1651,11 @@ PAGINA_PROVINCIA = r"""<!DOCTYPE html>
  .intro b{color:var(--paper)}
  section{padding:30px 0}
  table{width:100%;border-collapse:collapse;font-size:15px}
+ /* La tabla rueda por DENTRO en pantallas estrechas. Sin esto arrastra la
+    página entera: medido, la de «dónde dormir» ocupa 471 px en una ventana
+    de 360, y 31 de las 52 provinciales se arrastraban. `overscroll-behavior-x`
+    evita que el gesto se escape al navegador y dispare el «atrás» del móvil. */
+ .twrap{overflow-x:auto;overscroll-behavior-x:contain}
  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
  th{font:600 11px/1 var(--fb);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
  th.r,td.n{text-align:right}
@@ -1753,11 +1759,11 @@ __WIDGET__
   <div class="prose">__PROSA__</div></div>
 
   <div>
-  <table>
+  <div class="twrap"><table>
     <caption>__CAPTION__</caption>
     <thead><tr><th>Localidad</th><th class="hide">Altitud</th><th class="r">Noches tropicales/año</th>__COLHUM__<th>Cómo se duerme</th></tr></thead>
     <tbody>__TABLE__</tbody>
-  </table>
+  </table></div>
   <p class="note">Una noche tropical es aquella en que la mínima no baja de 20&nbsp;°C. Media anual, veranos 2017–2026. Fuente: AEMET. · <a href="datos.csv" download>Descargar estos datos (CSV)</a></p>
 
   <div class="ctarow">
@@ -2004,7 +2010,16 @@ def inyectar_miniatura(html: str, site: str, ruta: str) -> str:
            f'<img src="{cua}" width="1200" height="1200" alt="{alt}" '
            f'loading="lazy" decoding="async">'
            f'<figcaption>{cap} Source: AEMET.</figcaption></figure></div></section>')
-    css = ('<style>figure.mini{margin:26px 0 0}'
+    # La miniatura es CUADRADA (1200x1200), así que un `width:100%` sin tope
+    # la convierte en un bloque del ancho entero y la MISMA altura: medido,
+    # /en/frost-free-towns-spain/ la pintaba a 1600x1600 en una ventana de
+    # 1600 —de borde a borde y 1,8 pantallas de alto— porque su contenedor no
+    # tiene tope, y otras tres a 1132. Las provinciales españolas, con el mismo
+    # CSS, salen a 540 porque su columna sí lo tiene; de ahí el tope de 540,
+    # que las iguala. El fichero sigue siendo de 1200 px y los atributos
+    # width/height también, que es lo que mira Google: aquí solo se limita
+    # cómo se PINTA.
+    css = ('<style>figure.mini{margin:26px auto 0;max-width:540px}'
            'figure.mini img{width:100%;height:auto;display:block;'
            'border:1px solid rgba(255,255,255,.12);border-radius:12px}'
            'figure.mini figcaption{opacity:.72;font-size:12.5px;margin-top:8px}</style>')
@@ -2913,7 +2928,7 @@ def bloque_escapada(prov: str, peor: dict, site: str) -> str:
     if not lista or peor.get("tmin") is None:
         return ""
     filas = "".join(
-        f'<tr><td class="loc">{enlace_certificado(e, site)}</td>'
+        f'<tr><td class="loc" translate="no">{enlace_certificado(e, site)}</td>'
         f'<td>{e["prov"]}</td>'
         f'<td class="n">{d}&nbsp;km</td>'
         f'<td class="n">{_n_es(e["tmin"])}&nbsp;°C</td>'
@@ -2926,10 +2941,10 @@ def bloque_escapada(prov: str, peor: dict, site: str) -> str:
         f'mínima media de verano es de <b>{_n_es(peor["tmin"])}&nbsp;°C</b>. A '
         f'<b>{mas_cerca[0]}&nbsp;km</b> hay un pueblo donde la madrugada baja '
         f'{_n_es(round(peor["tmin"] - mas_cerca[1]["tmin"], 1))}&nbsp;°C más.</p>'
-        '<table>'
+        '<div class="twrap"><table>'
         '<thead><tr><th>Dónde dormir</th><th>Provincia</th><th class="r">Distancia</th>'
         '<th class="r">Mínima media</th><th class="r">Alivio</th></tr></thead>'
-        f'<tbody>{filas}</tbody></table>'
+        f'<tbody>{filas}</tbody></table></div>'
         '<p class="note">Distancia en línea recta desde la estación de referencia, no por '
         'carretera. Solo pueblos: se dejan fuera cumbres, pistas de esquí y embalses. '
         'Uno por provincia, para que sean cinco opciones de verdad.</p>')
@@ -2971,7 +2986,7 @@ def construir_pagina_provincia(prov: str, lista: list, site: str, provnav: str,
             td_hum = (f'<td class="r hide">{hd["hr"]}%</td>' if hd
                       else '<td class="r hide">—</td>')
         filas.append(
-            f'<tr><td class="loc">{enlace_certificado(e, site)}</td><td class="hide">{alt} m</td>'
+            f'<tr><td class="loc" translate="no">{enlace_certificado(e, site)}</td><td class="hide">{alt} m</td>'
             f'<td class="n">{ntfmt(e["nt"])}</td>{td_hum}'
             f'<td><span class="v" style="color:{col};background:{bg}">{etq}</span></td></tr>')
     # La unidad se NOMBRA siempre ("noches tropicales al año"): decir "son unas 2
@@ -3684,6 +3699,7 @@ PAGINA_RANKING = r"""<!doctype html>
  h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,4vw,28px);margin:6px 0 6px;letter-spacing:-.01em}
  .note{font-size:12.5px;color:var(--muted);margin-bottom:12px}
  table{width:100%;border-collapse:collapse;font-size:14.5px}
+ .twrap{overflow-x:auto;overscroll-behavior-x:contain}
  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line)}
  th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
  th.r,td.n{text-align:right}
@@ -3717,20 +3733,20 @@ PAGINA_RANKING = r"""<!doctype html>
 <section><div class="wrap">
   <h2>Los 30 lugares donde peor se duerme</h2>
   <p class="note">Más noches tropicales al año = más noches sin que baje de 20&nbsp;°C. Dato de la estación de AEMET.</p>
-  <table>
+  <div class="twrap"><table>
     <thead><tr><th>#</th><th>Lugar</th><th>Provincia</th><th class="r hide">Altitud</th><th class="r">Noches trop./año</th></tr></thead>
     <tbody>__PEOR__</tbody>
-  </table>
+  </table></div>
 </div></section>
 
 <section><div class="wrap">
   <p class="note">Treinta o sesenta noches al año por encima de 20&nbsp;°C no es solo una molestia: <a href="__SITE__/noches-tropicales-y-salud/">qué dice la ciencia sobre el calor nocturno y la salud</a>.</p>
   <h2>Los refugios: donde mejor se duerme</h2>
   <p class="note"><b>__CERO__ estaciones</b> no registran ni una noche tropical al año de media. Estas son 30 de ellas, las de mayor altitud entre las de cero.</p>
-  <table>
+  <div class="twrap"><table>
     <thead><tr><th>Lugar</th><th>Provincia</th><th class="r hide">Altitud</th><th class="r">Noches trop./año</th></tr></thead>
     <tbody>__MEJOR__</tbody>
-  </table>
+  </table></div>
 </div></section>
 
 <section><div class="wrap">__COMPARTIR__</div></section>
@@ -3847,13 +3863,13 @@ def construir_pagina_ranking(estaciones: list, site: str,
     cero = len(refus)
     mejor = sorted(refus, key=lambda x: (x["nt"], -x["alt"]))[:30]
     filas_peor = "".join(
-        f'<tr><td class="pos">{i}</td><td class="loc">{e["loc"]}</td>'
+        f'<tr><td class="pos">{i}</td><td class="loc" translate="no">{e["loc"]}</td>'
         f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
         f'<td class="n hide">{miles(e["alt"])}&nbsp;m</td>'
         f'<td class="n">{ntfmt(e["nt"])}</td></tr>'
         for i, e in enumerate(peor, 1))
     filas_mejor = "".join(
-        f'<tr><td class="loc">{enlace_certificado(e, site)}</td>'
+        f'<tr><td class="loc" translate="no">{enlace_certificado(e, site)}</td>'
         f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
         f'<td class="n hide">{miles(e["alt"])}&nbsp;m</td>'
         f'<td class="n">{ntfmt(e["nt"])}</td></tr>'
@@ -5505,7 +5521,7 @@ function ficha(i,origen,cercanos){
  actual={i:i,origen:origen,cercanos:cercanos};
  var m=M[i], e=EST[m[4]]||{n:m[4],a:""}, t=+sel.value, k=U.indexOf(t);
  var dz=(m[6]>0?"+":"")+m[6];
- var h="<div class='ref first'><div class='rtop'><span class='rn'>"+esc(m[0])+"</span>"
+ var h="<div class='ref first'><div class='rtop'><span class='rn' translate='no'>"+esc(m[0])+"</span>"
   +(origen?"<span class='rkm'>"+esc(origen)+"</span>":"")+"</div>"
   +"<div class='rp'>"+esc(PN[m[1]]||"")+" · "+miles(m[2])+T.hab+(m[3]!==null?" · "+m[3]+" m":"")+"</div>"
   +"<div class='rp'>"+T.estRef+"<b>"+esc(e.n)+"</b> ("+e.a+" m)"+fmt(T.dist,{km:n1(m[5])})+fmt(T.desn,{dz:dz})
@@ -5652,9 +5668,12 @@ function filtra(){
 function pinta(){
  tb.innerHTML=filas.slice(0,lim).map(function(i){
   var m=M[i], e=EST[m[4]]||{n:m[4]};
-  return "<tr><td><button type='button' data-i='"+i+"'>"+esc(m[0])+"</button></td>"
-   +"<td>"+esc(PN[m[1]]||"")+"</td><td class='n'>"+miles(m[2])+"</td>"
-   +"<td class='n'>"+(m[3]!==null?m[3]+" m":"—")+"</td><td>"+esc(e.n)+"</td>"
+   // Los topónimos NO se traducen. Con el traductor de Chrome, «A Capela»
+   // salía «Una capa» y «A Guía» «Una guía»: en un sitio cuya premisa es que
+   // cada cifra sale de una estación medida, un nombre inventado lo desmonta.
+  return "<tr><td translate='no'><button type='button' data-i='"+i+"'>"+esc(m[0])+"</button></td>"
+   +"<td translate='no'>"+esc(PN[m[1]]||"")+"</td><td class='n'>"+miles(m[2])+"</td>"
+   +"<td class='n'>"+(m[3]!==null?m[3]+" m":"—")+"</td><td translate='no'>"+esc(e.n)+"</td>"
    +"<td class='n'>"+n1(m[5])+" km</td><td class='n'>"+(m[6]>0?"+":"")+m[6]+" m</td>"
    +"<td class='n'>"+st(i)[2]+"</td><td class='n'>"+n1(st(i)[0])+"</td>"
    +"<td class='n'>"+st(i)[1]+T.de+st(i)[2]+"</td>"
@@ -5972,7 +5991,9 @@ def construir_pagina_sin_heladas(site: str, lang: str = "es") -> tuple[str, dict
         nombres = sorted((f[0] for f in sin_ult if f[1] == sp), key=clave_orden)
         if nombres:
             grupos.append(
-                f'<div class="grupo"><b><a href="{site}{ruta}?provincia={sp}#tabla">'
+                # `translate="no"` se hereda: basta ponerlo en el div para que el
+                # traductor deje en paz los cientos de topónimos de dentro.
+                f'<div class="grupo" translate="no"><b><a href="{site}{ruta}?provincia={sp}#tabla">'
                 f'{_html.escape(nombres_prov[sp])}</a></b> ({len(nombres)}) '
                 + " · ".join(_html.escape(n) for n in nombres) + "</div>")
     etiqueta_cero = " (frost)" if en else " (helada)"
@@ -8159,6 +8180,10 @@ _CSS_ARTICULO = (
     'color:var(--paper);margin:20px 0 7px}'
     '.faq dd{margin:0;color:var(--muted);font-size:clamp(15px,2.3vw,16.5px);line-height:1.75}'
     'table{width:100%;border-collapse:collapse;font-size:14.5px;margin:6px 0 10px}'
+    # La tabla rueda por DENTRO en pantallas estrechas; si no, arrastra la
+    # página entera. `overscroll-behavior-x` evita que el gesto se escape al
+    # navegador y dispare el «atrás» del móvil al llegar al borde.
+    '.twrap{overflow-x:auto;overscroll-behavior-x:contain}'
     'th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}'
     'th{font:600 11px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}'
     'th.r,td.n{text-align:right}'
@@ -8342,7 +8367,7 @@ __NAV__
   estaciones de AEMET y salieron dos cosas que casi nadie cuenta.</p>
   <h3>No es cuánto baja: es dónde acaba</h3>
   <p>Lo intuitivo sería que en el interior la noche se desploma y en la costa no. Falso:</p>
-  <table>
+  <div class="twrap"><table>
     <thead><tr><th>Julio y agosto</th><th class="r">Lo que cae al día</th><th class="r">Dónde acaba de madrugada</th></tr></thead>
     <tbody>__TABLA_NOCHE__</tbody>
   </table>
@@ -8439,7 +8464,7 @@ def construir_pagina_dormir(estaciones: list, site: str) -> str:
             f"AEMET: {m30} estaciones acumulan un mes o más de madrugadas sobre 20 °C.")
     ciu, pue = NOCHE_2025["sevilla"], NOCHE_2025["cedrillas"]
     tabla_noche = "".join(
-        f'<tr><td class="loc">{x["nombre"]}</td>'
+        f'<tr><td class="loc" translate="no">{x["nombre"]}</td>'
         f'<td class="n">{_n_es(x["cae"])} °C</td>'
         f'<td class="n">{_n_es(x["acaba"])} °C</td></tr>' for x in (ciu, pue))
     faq = [
@@ -9629,6 +9654,11 @@ PAGINA_EVAPORATIVO = r"""<!doctype html>
    border:1px solid var(--line);border-radius:12px}
  .buscador input:focus{outline:2px solid var(--teja);outline-offset:1px}
  .tev{width:100%;border-collapse:collapse;margin:6px 0 4px;font-size:15px}
+ /* La tabla rueda por DENTRO en pantallas estrechas. Sin esto arrastra la
+    página entera: medido, la de provincia ocupa 471 px en una ventana de
+    360. `overscroll-behavior-x` evita que el gesto se escape al navegador
+    y dispare el «atrás» del móvil al llegar al borde. */
+ .twrap{overflow-x:auto;overscroll-behavior-x:contain}
  .tev th{text-align:left;font-family:var(--fd);font-weight:600;color:var(--paper);
    padding:9px 10px;border-bottom:1px solid var(--line);font-size:13.5px;
    text-transform:uppercase;letter-spacing:.04em}
@@ -9741,10 +9771,10 @@ __NAV__
     <span><i class="pill med">marginal</i> entre 2 y 4&nbsp;°C</span>
     <span><i class="pill no">no sirve</i> menos de 2&nbsp;°C</span>
   </div>
-  <table class="tev">
+  <div class="twrap"><table class="tev">
     <thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Techo</th><th style="text-align:right">Humedad</th><th></th></tr></thead>
     <tbody id="tbev">__FILAS__</tbody>
-  </table>
+  </table></div>
   <p class="nores" id="nores" hidden>No hay ninguna estación con ese nombre. Prueba con la provincia, o mira el <a href="__SITE__/mapa-estaciones/">mapa de estaciones</a>.</p>
   <p class="tot" id="totev"></p>
   <p style="margin-top:16px">La estación más cercana no es tu calle: un patio interior, una vaguada o un ático bajo cubierta se separan varios grados del dato oficial. Si quieres afinar, mira <a href="__SITE__/microclimas/">cómo funcionan los microclimas</a> y cuenta tu caso en <a href="__SITE__/observatorio-del-descanso/">el Observatorio del Descanso</a>.</p>
@@ -9828,7 +9858,7 @@ def construir_pagina_evaporativo(site: str = SITE_URL) -> str:
         busca = f'{e["nombre"]} {e["provincia"]}'
         filas_html.append(
             f'<tr data-b="{_html.escape(busca, quote=True)}">'
-            f'<td class="loc">{_html.escape(e["nombre"].title())}</td>'
+            f'<td class="loc" translate="no">{_html.escape(e["nombre"].title())}</td>'
             f'<td>{_html.escape(e["provincia"].title())}</td>'
             f'<td class="num">{_n_es(e["margen"])} °C</td>'
             f'<td class="num">{e["hr"]} %</td>'
@@ -10522,10 +10552,10 @@ __NAV__
 <section><div class="wrap">
   <h2>El mapa que no se ve: refugios al sur del paralelo de Burgos</h2>
   <p class="note">Un destino por provincia, el de mayor altitud entre las estaciones que <b>no llegan a una noche tropical al año</b> con diez veranos de datos, y todas <b>por debajo del paralelo 42</b> —es decir, fuera de la franja norte—. Se dejan fuera aeropuertos y observatorios de alta montaña: aquí solo hay sitios donde se puede dormir. Pincha la provincia para ver todas sus estaciones.</p>
-  <table>
+  <div class="twrap"><table>
     <thead><tr><th>Lugar</th><th>Provincia</th><th class="r hide">Altitud</th><th class="r">Noches tropicales/año</th></tr></thead>
     <tbody>__TABLA__</tbody>
-  </table>
+  </table></div></div>
   <p class="note">__LEYENDA__</p>
   <p>El caso más reconocible es la <b>Serranía de Albarracín</b>, en Teruel, donde el nórdico en agosto no es una rareza. Pero el mismo patrón se repite en la Serranía de Cuenca, el Sistema Central —Gredos, el Jerte, Somosierra—, los Montes Universales, la sierra de Segura o las zonas altas de la Alpujarra. Ninguno de esos sitios está en el norte.</p>
   <div class="destacado">
@@ -10588,7 +10618,7 @@ def construir_pagina_vacaciones(estaciones: list, site: str) -> str:
             por_prov[e["prov"]] = e
     destinos = sorted(por_prov.values(), key=lambda x: -x["alt"])[:18]
     tabla = "".join(
-        f'<tr><td class="loc">{enlace_certificado(e, site)}</td>'
+        f'<tr><td class="loc" translate="no">{enlace_certificado(e, site)}</td>'
         f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
         f'<td class="hide n">{miles(e["alt"])} m</td>'
         f'<td class="n">{_n_es(e["nt"])}</td></tr>' for e in destinos)
@@ -10831,7 +10861,7 @@ def construir_pagina_manta(estaciones: list, site: str) -> str:
     filas = []
     for e in destinos:
         filas.append(
-            f'<tr><td class="loc">{enlace_certificado(e, site)}</td>'
+            f'<tr><td class="loc" translate="no">{enlace_certificado(e, site)}</td>'
             f'<td><a href="{site}/{slug(e["prov"])}/">{e["prov"]}</a></td>'
             f'<td class="hide n">{miles(e["alt"])} m</td>'
             f'<td class="n">&lt;1</td></tr>')
@@ -11822,13 +11852,13 @@ def _dc_tabla(d: dict) -> str:
         grupo = [c for c in d["ciudades"] if c["papel"] == papel]
         if not grupo:
             continue
-        filas.append(f'<tr class="grupo"><td colspan="5">{titulo} '
+        filas.append(f'<tr class="grupo"><td colspan="5" translate="no">{titulo} '
                      f'<span class="est">{sub}</span></td></tr>')
         for c in grupo:
             cal_c = "dc-bien" if c["calefaccion"] <= 40 else "dc-mal"
             tro_c = "dc-bien" if c["tropicales"] <= 5 else "dc-mal"
             filas.append(
-                f'<tr><td><b>{c["etiqueta"]}</b><span class="est">'
+                f'<tr><td translate="no"><b>{c["etiqueta"]}</b><span class="est">'
                 f'{titular(c["estacion"])} &#183; {c["altitud"]} m</span></td>'
                 f'<td class="{cal_c}">{c["calefaccion"]}</td>'
                 f'<td>{c["terraza"]}</td><td>{c["lluvia"]}</td>'
@@ -12683,7 +12713,7 @@ def sello_mild_svg(e: dict, site: str) -> str:
 
 def _mw_fila(e: dict, site: str) -> str:
     sl = slug(e["estacion"])
-    return (f'<tr><td><a href="{site}/en/mild-winter/{sl}/"><b>'
+    return (f'<tr><td translate="no"><a href="{site}/en/mild-winter/{sl}/"><b>'
             f'{titular(e["estacion"])}</b></a><span class="est">'
             f'{titular(e["provincia"])} &#183; {e["altitud"]} m &#183; '
             f'{e["temporadas"]} winters</span></td>'
@@ -13560,7 +13590,8 @@ def construir_pagina_en_inviernos_suaves(site: str) -> str | None:
         e = c[k]
         cls = ' class="ref"' if k in ("m4", "mb") else ""
         fr = ' class="fr"' if e["sin"] < e["n"] else ""
-        filas += (f'<tr{cls}><td>{e["rotulo"]}<span class="est">{e["nombre"]} · '
+        # Ciudad y estación: topónimos, no se traducen.
+        filas += (f'<tr{cls}><td translate="no">{e["rotulo"]}<span class="est">{e["nombre"]} · '
                   f'{e["alt"]:,}&nbsp;m</span></td>'
                   f'<td{fr}>{f1(e["hel"])}</td><td>{e["sin"]} of {e["n"]}</td>'
                   f'<td>{f1(e["le5"])}</td><td>{f1(e["le10"])}</td></tr>')
@@ -14657,18 +14688,27 @@ def revisar_enlaces(site: str) -> str:
     return "\n".join(lineas)
 
 
-def avisar_indexnow(site: str, urls: list) -> str:
+def avisar_indexnow(site: str, urls: list, todo: bool = False) -> str:
     """Avisa a los buscadores que usan IndexNow de las páginas que han cambiado
     HOY —las que el sitemap acaba de fechar con la fecha de hoy—, no de las 137.
 
     Se manda solo lo que cambió porque avisar cada día de todo el sitio es
     exactamente lo que estos buscadores consideran abuso. Y si algo falla, se
     dice y se sigue: el build no puede caerse porque un buscador esté de
-    mantenimiento."""
+    mantenimiento.
+
+    Con `todo=True` manda el sitemap ENTERO. Hace falta porque el aviso diario
+    solo cubre lo que cambia, y una página que el buscador descubrió pero nunca
+    rastreó no cambia nunca: se queda fuera para siempre. Es justo el caso de
+    «Discovered but not crawled» de Bing. Ese modo NO va en el cron —ahí sí sería
+    abuso—: se lanza a mano con --indexnow-todo.
+    """
     if not INDEXNOW_KEY or not urls:
         return "sin avisos que mandar"
-    if len(urls) > 200:                     # algo va mal: no se avisa a ciegas
+    if len(urls) > 200 and not todo:        # algo va mal: no se avisa a ciegas
         return f"{len(urls)} URLs cambiadas: demasiadas, no se avisa (revisar lastmod)"
+    if len(urls) > 10000:                   # tope del propio protocolo
+        return f"{len(urls)} URLs: por encima del tope de IndexNow (10.000)"
     dominio = site.split("//")[-1].strip("/")
     cuerpo = json.dumps({
         "host": dominio,
@@ -16858,6 +16898,11 @@ PAGINA_ESTANCIA = r"""<!doctype html>
  .big .c.ok .v{color:var(--verde)}
  .big .k{font-size:13.5px;color:var(--muted);margin-top:8px}
  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+ /* La tabla rueda por DENTRO en pantallas estrechas. Sin esto arrastra la
+    página entera: medido, la de provincia ocupa 471 px en una ventana de
+    360. `overscroll-behavior-x` evita que el gesto se escape al navegador
+    y dispare el «atrás» del móvil al llegar al borde. */
+ .twrap{overflow-x:auto;overscroll-behavior-x:contain}
  th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left}
  th{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
  td.n{text-align:right;font-variant-numeric:tabular-nums}
@@ -16916,12 +16961,12 @@ __FIGURA__
   stays under a month, at least 80 terrace days a winter, and no more than 45 nights below
   10&nbsp;°C — because a short run is no use if you are paying to heat the place anyway.
   Sorted by the run, shortest first.</p>
-  <table>
+  <div class="twrap"><table>
     <thead><tr><th>Where</th><th class="n">Worst run<br>without a terrace day</th>
     <th class="n">Terrace days<br>a winter</th><th class="n">Heating nights<br>(below 10&nbsp;°C)</th>
     <th class="n">Rain days</th></tr></thead>
     <tbody>__TABLA_PEN__</tbody>
-  </table>
+  </table></div>
   <p class="note">Median per station across __TEMPS__ winters (1 November – 31 March),
   AEMET official daily records. The figure is for the <b>weather station</b>, not the whole
   municipality.</p>
@@ -16930,12 +16975,12 @@ __FIGURA__
 <section><div class="wrap">
   <h2>The Canaries: a different country, climatically</h2>
   <p>__FRASE_CAN__</p>
-  <table>
+  <div class="twrap"><table>
     <thead><tr><th>Where</th><th class="n">Worst run<br>without a terrace day</th>
     <th class="n">Terrace days<br>a winter</th><th class="n">Heating nights<br>(below 10&nbsp;°C)</th>
     <th class="n">Rain days</th></tr></thead>
     <tbody>__TABLA_CAN__</tbody>
-  </table>
+  </table></div>
 </div></section>
 
 <section><div class="wrap">
@@ -17021,7 +17066,10 @@ def construir_pagina_estancia_larga(site: str) -> str | None:
     temps = max(int(x["temporadas"]) for x in filas)
 
     def fila(x, clase=""):
-        return (f'<tr class="{clase}"><td class="loc">{titular(x["nombre"])}</td>'
+        # El nombre del pueblo no se traduce (ver el comentario de la tabla
+        # de municipios: el traductor convierte «A Capela» en «Una capa»).
+        return (f'<tr class="{clase}"><td class="loc" translate="no">'
+                f'{titular(x["nombre"])}</td>'
                 f'<td class="n">{num(x, "racha_sin_terraza_max"):.0f} days</td>'
                 f'<td class="n">{num(x, "terraza_mediana"):.0f}</td>'
                 f'<td class="n">{num(x, "calefaccion_mediana"):.0f}</td>'
@@ -17887,7 +17935,12 @@ def main() -> int:
     (DOCS_DIR / "en" / "search" / "index.html").write_text(
         construir_pagina_buscar(n_est_idx, n_pag, site, "en"), encoding="utf-8")
     print("   enlaces: " + revisar_enlaces(site))
-    print("   indexnow: " + avisar_indexnow(site, nuevas))
+    # Con --indexnow-todo se avisa del sitemap entero; por defecto, solo de
+    # lo que el registro de huellas marcó como cambiado hoy.
+    todo_in = "--indexnow-todo" in sys.argv
+    print("   indexnow: "
+          + avisar_indexnow(site, urls if todo_in else nuevas, todo=todo_in)
+          + (" (sitemap entero, a mano)" if todo_in else ""))
     print(f"   sitemap automático: {len(urls)} URLs (escaneo de docs/)"
           + f" · {cambiadas} con contenido nuevo hoy"
           + (f" · {migradas} páginas estáticas migradas de dominio" if migradas else "")

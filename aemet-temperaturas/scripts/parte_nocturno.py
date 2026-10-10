@@ -428,6 +428,9 @@ PLANTILLA = r"""<!doctype html>
  .card .p{font-size:13px;color:var(--muted);margin-top:2px}
  h2{font-family:var(--fd);font-weight:700;font-size:clamp(19px,3.4vw,24px);margin:30px 0 10px}
  table{width:100%;border-collapse:collapse;font-size:14px}
+ /* Rueda la TABLA, no la página: en un móvil de 360 px estas tres columnas
+    piden 379 y arrastraban el parte entero de lado. */
+ .twrap{overflow-x:auto;overscroll-behavior-x:contain}
  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
  th{font:600 10.5px/1 var(--fb);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
  td.n{text-align:right;font-family:var(--fm);font-weight:700}
@@ -482,12 +485,12 @@ PLANTILLA = r"""<!doctype html>
   </div>
 
   <h2>Donde peor se durmió</h2>
-  <table><thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Mínima</th></tr></thead>
-  <tbody>__TOP_CALOR__</tbody></table>
+  <div class="twrap"><table><thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Mínima</th></tr></thead>
+  <tbody>__TOP_CALOR__</tbody></table></div>
 
   <h2>Donde mejor se durmió</h2>
-  <table><thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Mínima</th></tr></thead>
-  <tbody>__TOP_FRESCO__</tbody></table>
+  <div class="twrap"><table><thead><tr><th>Estación</th><th>Provincia</th><th style="text-align:right">Mínima</th></tr></thead>
+  <tbody>__TOP_FRESCO__</tbody></table></div>
 
   <div class="mision">
     <div class="mt">Aún hay refugios</div>

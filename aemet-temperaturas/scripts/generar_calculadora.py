@@ -5075,6 +5075,20 @@ function pinta(la,lo,origen){
  document.getElementById("msg").textContent="Tus 5 refugios climáticos naturales más cercanos"+(origen?" a "+origen:"")+":";
  document.getElementById("msg").scrollIntoView({behavior:"smooth",block:"start"});
 }
+// GEOLOCALIZACIÓN. Las mismas opciones en las cuatro páginas con botón de
+// ubicación (esta, municipios-sin-heladas, confortómetro y hoteles).
+// El plazo de getCurrentPosition empieza a contar en la LLAMADA, no cuando
+// el usuario concede el permiso: el diálogo del navegador se come el
+// presupuesto. Con los 8-9 s que había, la PRIMERA vez en un móvil se
+// agotaba entre leer el diálogo y conseguir un arreglo en frío (5-20 s por
+// GPS), y saltaba el error; la segunda vez el permiso ya estaba dado y el
+// sistema tenía una posición reciente, así que respondía al instante. De ahí
+// el "no va a la primera y sí a la segunda".
+// `maximumAge:300000` es lo que lo arregla de verdad: acepta la posición de
+// hasta cinco minutos que es justo la que hacía funcionar el segundo
+// intento, y cinco minutos no mueven un puesto en un ranking de pueblos a
+// decenas de km. `enableHighAccuracy` se queda en false a propósito: el GPS
+// fino tarda mucho más y aquí la red de wifi/móvil da de sobra.
 var gb=document.getElementById("geo"), gh=document.getElementById("geohint");
 gb.addEventListener("click",function(){
  if(!navigator.geolocation){gh.textContent="Tu navegador no permite la geolocalización. Elige tu provincia y estación aquí abajo.";return;}
@@ -5082,10 +5096,10 @@ gb.addEventListener("click",function(){
  navigator.geolocation.getCurrentPosition(function(p){
    gb.disabled=false; gb.textContent="Usar mi ubicación";
    pinta(p.coords.latitude,p.coords.longitude,"tu ubicación");
- },function(){
+ },function(e){
    gb.disabled=false; gb.textContent="Usar mi ubicación";
-   gh.textContent="No se pudo obtener tu ubicación (¿permiso denegado?). Elige tu provincia y estación aquí abajo.";
- },{timeout:9000});
+   gh.textContent=(e&&e.code===1?'Has bloqueado el permiso de ubicación. Puedes darlo desde el candado de la barra de direcciones. Elige tu provincia y estación aquí abajo.':e&&e.code===3?'La ubicación tarda más de lo normal. Vuelve a pulsar el botón: la segunda vez suele ser inmediata. Elige tu provincia y estación aquí abajo.':'Tu dispositivo no ha podido determinar dónde estás. Elige tu provincia y estación aquí abajo.');
+ },{enableHighAccuracy:false,timeout:25000,maximumAge:300000});
 });
 var prov=document.getElementById("prov"), est=document.getElementById("est");
 Object.keys(EST).forEach(function(p){var o=document.createElement("option");o.value=p;o.textContent=p;prov.appendChild(o);});
@@ -5545,10 +5559,10 @@ gb.addEventListener("click",function(){
   sin.sort(function(a,b){return a.d-b.d;});
   ficha(mejor,fmt(T.cercano,{km:(dmin<10?n1(dmin):Math.round(dmin))}),sin.slice(0,5));
   box.scrollIntoView({behavior:"smooth",block:"start"});
- },function(){
+ },function(e){
   gb.disabled=false; gb.textContent=T.usar;
-  gh.textContent=T.falloGeo;
- },{timeout:9000});
+  gh.textContent=(e&&e.code===1?T.geoNeg:e&&e.code===3?T.geoTarda:T.falloGeo);
+ },{enableHighAccuracy:false,timeout:25000,maximumAge:300000});
 });
 
 var prov=document.getElementById("prov"), mun=document.getElementById("mun"), fprov=document.getElementById("fprov");
@@ -5705,8 +5719,12 @@ T_SIN_HELADAS = {
            "thInv": "Invierno (nov–mar)", "thNoches": "Noches a {t} o menos",
            "noGeo": "Tu navegador no permite la geolocalización. Elige provincia y municipio aquí abajo.",
            "buscando": "Buscando tu ubicación…", "usar": "Usar mi ubicación",
-           "falloGeo": ("No se pudo obtener tu ubicación (¿permiso denegado?). Elige provincia y "
+           "falloGeo": ("Tu dispositivo no ha podido determinar dónde estás. Elige provincia y "
                         "municipio aquí abajo."),
+           "geoNeg": ("Has bloqueado el permiso de ubicación. Puedes darlo desde el candado de "
+                      "la barra de direcciones, o elige provincia y municipio aquí abajo."),
+           "geoTarda": ("La ubicación tarda más de lo normal. Vuelve a pulsar el botón: la "
+                        "segunda vez suele ser inmediata. O elige provincia y municipio aquí abajo."),
            "cercano": "el más cercano a ti · {km} km", "munOpt": "…y el municipio",
            "municipios": " municipios", "mostrando": " · mostrando ",
            "th0": "Heladas/invierno", "thT": "Noches a {t}/invierno",
@@ -5728,7 +5746,11 @@ T_SIN_HELADAS = {
            "thInv": "Winter (Nov–Mar)", "thNoches": "Nights at {t} or below",
            "noGeo": "Your browser doesn't support geolocation. Choose a province and town below.",
            "buscando": "Finding your location…", "usar": "Use my location",
-           "falloGeo": "Couldn't get your location (permission denied?). Choose a province and town below.",
+           "falloGeo": "Your device couldn't work out where you are. Choose a province and town below.",
+           "geoNeg": ("Location permission is blocked. You can allow it from the padlock in the "
+                      "address bar, or choose a province and town below."),
+           "geoTarda": ("Your location is taking longer than usual. Press the button again — the "
+                        "second try is usually instant. Or choose a province and town below."),
            "cercano": "nearest to you · {km} km", "munOpt": "…and the town",
            "municipios": " towns", "mostrando": " · showing ",
            "th0": "Frost nights/winter", "thT": "Nights at {t}/winter",
@@ -6626,10 +6648,10 @@ document.getElementById("geo").addEventListener("click",function(){
   var la=p.coords.latitude,lo=p.coords.longitude;
   // Redondeo EN el navegador a 2 decimales (~1 km): el punto exacto no viaja.
   fijaZona(cerca(la,lo),la.toFixed(2)+","+lo.toFixed(2));
- },function(){
+ },function(e){
   b.disabled=false;b.textContent="📍 Usar mi zona";
-  h.textContent="No se pudo (¿permiso denegado?). Elige tu zona a mano:";
- },{timeout:9000});
+  h.textContent=(e&&e.code===1?'Has bloqueado el permiso de ubicación. Puedes darlo desde el candado de la barra de direcciones. Elige tu zona a mano aquí abajo.':e&&e.code===3?'La ubicación tarda más de lo normal. Vuelve a pulsar el botón: la segunda vez suele ser inmediata. Elige tu zona a mano aquí abajo.':'Tu dispositivo no ha podido determinar dónde estás. Elige tu zona a mano aquí abajo.');
+ },{enableHighAccuracy:false,timeout:25000,maximumAge:300000});
 });
 var prov=document.getElementById("prov"),est=document.getElementById("est"),PR={};
 EST.forEach(function(e){(PR[e[4]]=PR[e[4]]||[]).push(e);});
@@ -14280,10 +14302,10 @@ function pintaProv(p){
   navigator.geolocation.getCurrentPosition(function(p){
    gb.disabled=false; gb.textContent="📍 Usar mi ubicación";
    pinta(p.coords.latitude,p.coords.longitude,"tu ubicación");
-  },function(){
+  },function(e){
    gb.disabled=false; gb.textContent="📍 Usar mi ubicación";
-   gh.textContent="No se pudo obtener tu ubicación (¿permiso denegado?). Elige tu provincia aquí abajo.";
-  },{timeout:9000});
+   gh.textContent=(e&&e.code===1?'Has bloqueado el permiso de ubicación. Puedes darlo desde el candado de la barra de direcciones. Elige tu provincia aquí abajo.':e&&e.code===3?'La ubicación tarda más de lo normal. Vuelve a pulsar el botón: la segunda vez suele ser inmediata. Elige tu provincia aquí abajo.':'Tu dispositivo no ha podido determinar dónde estás. Elige tu provincia aquí abajo.');
+  },{enableHighAccuracy:false,timeout:25000,maximumAge:300000});
  });
  var sel=document.getElementById("provh");
  HOT.map(function(h){return h.p;}).filter(function(v,i,a){return a.indexOf(v)===i;})

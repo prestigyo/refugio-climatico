@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-09",
+ "fecha": "2026-10-10",
  "total": 851,
- "tropicales": 33,
+ "tropicales": 30,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C329Z",
-  "nombre": "San Sebastián de la Gomera",
+  "id": "C929I",
+  "nombre": "El Hierro/Aeropuerto",
   "min": 22.9,
   "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
   "id": "9988B",
   "nombre": "Cap de Vaqueira",
-  "min": -7.1,
+  "min": 1.0,
   "prov": "Lleida"
  },
  "top_calor": [
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
    "min": 22.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.8,
-   "prov": "Las Palmas"
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 22.6,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
+   "id": "C939T",
+   "nombre": "Sabinosa-Balneario",
    "min": 22.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
-   "min": 22.3,
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 22.2,
    "prov": "Las Palmas"
   },
   {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 22.3,
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 22.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619Y",
+   "nombre": "La Aldea de San Nicolas",
+   "min": 22.0,
    "prov": "Las Palmas"
   },
   {
    "id": "C629Q",
    "nombre": "Mogan (Puerto Rico)",
-   "min": 22.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 22.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
    "min": 22.0,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C129V",
-   "nombre": "Fuencaliente-Salinas",
-   "min": 21.9,
-   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C919K",
    "nombre": "Tacorón-Lapillas-Tortuga",
    "min": 21.9,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 21.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
+   "min": 21.6,
+   "prov": "Málaga"
   }
  ],
  "top_fresco": [
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": -7.1,
+   "min": 1.0,
    "prov": "Lleida"
   },
   {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": -4.9,
-   "prov": "Huesca"
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 1.2,
+   "prov": "Segovia"
+  },
+  {
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 1.5,
+   "prov": "Cuenca"
   },
   {
    "id": "9677",
    "nombre": "Port Aine L?orri",
-   "min": -4.1,
+   "min": 1.5,
    "prov": "Lleida"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": -2.6,
-   "prov": "Lleida"
+   "id": "7067Y",
+   "nombre": "Cañadas del Nerpio",
+   "min": 1.7,
+   "prov": "Albacete"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": -1.7,
-   "prov": "Madrid"
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": 1.9,
+   "prov": "Cuenca"
   },
   {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": -1.6,
-   "prov": "Lleida"
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 2.1,
+   "prov": "Burgos"
   },
   {
-   "id": "9632X",
-   "nombre": "Tuixent",
-   "min": -1.1,
-   "prov": "Lleida"
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 2.3,
+   "prov": "Soria"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": -1.0,
-   "prov": "Zamora"
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 2.4,
+   "prov": "Soria"
   },
   {
-   "id": "9838B",
-   "nombre": "Benasque",
-   "min": -0.9,
-   "prov": "Huesca"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": -0.8,
-   "prov": "Lleida"
+   "id": "8458X",
+   "nombre": "Cedrillas Antenas",
+   "min": 2.4,
+   "prov": "Teruel"
   }
  ]
 }

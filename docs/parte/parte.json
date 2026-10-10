@@ -1,7 +1,7 @@
 {
  "fecha": "2026-10-10",
  "total": 851,
- "tropicales": 30,
+ "tropicales": 31,
  "ecuatoriales": 0,
  "peor": {
   "id": "C929I",
@@ -37,7 +37,7 @@
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 22.2,
+   "min": 22.3,
    "prov": "Las Palmas"
   },
   {
@@ -71,10 +71,10 @@
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
-   "min": 21.6,
-   "prov": "Málaga"
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 21.8,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [

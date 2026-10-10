@@ -256,6 +256,57 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   funciona es volver a pulsar. Hay que mirar `e.code`: 1 permiso, 2 posición no
   disponible, 3 plazo agotado. En la página bilingüe de heladas son `T.geoNeg`,
   `T.geoTarda` y `T.falloGeo`, con sus dos idiomas.
+- **Una miniatura CUADRADA con `width:100%` ocupa el ancho entero × la misma altura.**
+  `inyectar_miniatura()` mete el PNG de 1200×1200 en el cuerpo de las 8 páginas
+  inglesas. Sin tope, en `/en/frost-free-towns-spain/` se pintaba a **1600×1600** en
+  una ventana de 1600 —de borde a borde y **1,8 pantallas de alto**— porque su
+  contenedor no tiene `max-width`; otras tres a 1132. Las 52 provinciales llevan el
+  mismo CSS y salían bien (540) solo porque su columna sí lo tiene: el defecto no
+  estaba en el CSS de la figura sino en confiar en el contenedor. Hoy
+  `figure.mini{max-width:540px;margin:26px auto 0}` las iguala. El fichero sigue
+  siendo de 1200 px y los atributos `width`/`height` también, que es lo que mira
+  Google: solo se limita cómo se pinta. Se mide con Playwright, no a ojo.
+- **IndexNow solo avisa de lo que CAMBIÓ ese día, y eso deja fuera lo nunca rastreado.**
+  El aviso diario manda las URLs cuyo contenido cambió —correcto: avisar del sitio
+  entero a diario es lo que estos buscadores consideran abuso—. Pero una página que
+  Bing «descubrió y no rastreó» no cambia nunca, así que **no se la vuelve a**
+  **anunciar jamás**. El 2026-10-10 el build decía `indexnow: sin avisos que mandar`
+  con `0 con contenido nuevo hoy`. Para eso está
+  `python scripts/generar_calculadora.py --indexnow-todo`, que manda el sitemap
+  entero; **a mano, nunca en el cron**. La guardia de >200 URLs sigue activa en el
+  modo diario y el tope de 10.000 es el del propio protocolo.
+- **Un fragmento (`#m=11&d=90`) NO es una URL distinta para un rastreador.** Se
+  descarta antes de pedir la página, así que inspeccionar en Bing una URL con
+  fragmento y leer «Discovered but not crawled» no indica ningún defecto: no hay
+  recurso que rastrear ahí. La herramienta de estancia enlaza cinco presets con
+  hash, y de ahí salen esos descubrimientos. Antes de tocar nada, comprobar la URL
+  **sin** fragmento: canonical a sí misma, `index, follow`, en el sitemap y permitida
+  por robots.txt. Si todo eso está (lo estaba), lo que queda es presupuesto de
+  rastreo del buscador, no código.
+- **Una tabla ancha arrastra la PÁGINA entera si no rueda por dentro.** Barrido con
+  Playwright a 360 px: **38 páginas de 473** se arrastraban en horizontal, 31 de ellas
+  por la tabla (la de «dónde dormir» pide 471 px). Se envuelven en
+  `<div class="twrap">` con `overflow-x:auto` —la clase que ya usaban las inglesas— y
+  `overscroll-behavior-x:contain`, que evita que el gesto se escape al navegador y
+  dispare el «atrás» del móvil al llegar al borde. Quedan 3, y son **partes
+  archivados que ningún script regenera**: su HTML está congelado.
+  **Ojo al barrer**: reutilizar una pestaña de Playwright para 500 páginas da
+  falsos negativos —las de certificado y hotel redirigen, y esa navegación aborta la
+  carga siguiente con «Execution context was destroyed»—. Se saldían 330 páginas sin
+  avisar, y `vacaciones-sin-calor` desapareció de la lista estando rota. Pestaña
+  nueva por página.
+- **El traductor de Chrome se inventa los topónimos si no se lo impides.** En las
+  páginas inglesas leídas con traducción automática, **«A Capela» salía «Una capa»**,
+  «A Guía» «Una guía», «A Bola» «La Bola» y «A Guarda» «La Guarda». En un sitio cuya
+  premisa es que cada cifra sale de una estación medida, un nombre de pueblo
+  inventado la desmonta entera. Se marca `translate="no"` en la celda del nombre;
+  **el atributo se hereda**, así que en el listado por provincia basta ponerlo en el
+  `<div class="grupo">` para cubrir los cientos de nombres de dentro. Lo llevan ya
+  las tablas de municipios, estación y provincia de las páginas inglesas, las `.loc`
+  y el sello Mild Winter. **Lo que NO se marca son titulares, párrafos y cabeceras**:
+  esos sí deben traducirse. Comprobación: recorrer el árbol como hace el traductor
+  —parando en cada `translate="no"`— y contar nodos protegidos frente a traducibles;
+  en `/en/frost-free-towns-spain/` salen 352 protegidos y 1.102 traducibles.
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
 - **DOS provincias vienen escritas de dos formas en el catálogo de AEMET**, en

@@ -307,6 +307,20 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   esos sí deben traducirse. Comprobación: recorrer el árbol como hace el traductor
   —parando en cada `translate="no"`— y contar nodos protegidos frente a traducibles;
   en `/en/frost-free-towns-spain/` salen 352 protegidos y 1.102 traducibles.
+- **El archivo del parte se veía «detenido» sin estarlo.** El índice de `/parte/`
+  enlazaba `[-12:]`, los doce últimos. Con 96 partes publicados eso dejaba 84
+  invisibles: existían, se servían y eran **alcanzables** —cada parte fechado lleva
+  su propia lista de 12, congelada en su día, así que encadenando hacia atrás se
+  llega a todos—, pero subía a siete saltos llegar a agosto. Por eso el revisor de
+  enlaces **no los marcaba como huérfanos** y por eso desde fuera parecía que el
+  parte se había parado en septiembre. Hoy se listan todos en un `<details>`
+  agrupados por mes (solo el número del día dentro del grupo): un verano entero
+  cabe en 343 px de alto a 360 px de ancho.
+  **Moraleja**: «no se ve» y «no existe» son diagnósticos distintos, y un clon
+  local viejo los confunde. Antes de dar por roto algo que produce un workflow,
+  comprobarlo contra `main`, no contra el clon de la sesión: aquí el clon mostraba
+  18 huecos en el parte y 16 días perdidos del archivo horario que en `main` no
+  existían.
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
 - **DOS provincias vienen escritas de dos formas en el catálogo de AEMET**, en

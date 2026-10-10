@@ -43,6 +43,11 @@
  .big .c.ok .v{color:var(--verde)}
  .big .k{font-size:13.5px;color:var(--muted);margin-top:8px}
  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+ /* La tabla rueda por DENTRO en pantallas estrechas. Sin esto arrastra la
+    página entera: medido, la de provincia ocupa 471 px en una ventana de
+    360. `overscroll-behavior-x` evita que el gesto se escape al navegador
+    y dispare el «atrás» del móvil al llegar al borde. */
+ .twrap{overflow-x:auto;overscroll-behavior-x:contain}
  th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left}
  th{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
  td.n{text-align:right;font-variant-numeric:tabular-nums}
@@ -113,7 +118,7 @@
     warm enough to sit outside.</b></p>
     <p>A bad week is a bad week. A bad <b>run</b> is your whole stay.</p>
   </div>
-</div></header><style>figure.mini{margin:26px 0 0}figure.mini img{width:100%;height:auto;display:block;border:1px solid rgba(255,255,255,.12);border-radius:12px}figure.mini figcaption{opacity:.72;font-size:12.5px;margin-top:8px}</style><section><div class="wrap"><figure class="mini"><img src="https://nochetropical.es/miniaturas/en-winter-in-spain-long-stay.png" width="1200" height="1200" alt="Map of Spain with 837 AEMET weather stations coloured by frost nights: the median mainland station goes 90 days in a row without one warm enough to sit outside, against 8 in the Canaries." loading="lazy" decoding="async"><figcaption>The 837 AEMET stations by median frost nights per winter. Warm: no frost on record. Blue: the night freezes. Source: AEMET.</figcaption></figure></div></section>
+</div></header><style>figure.mini{margin:26px auto 0;max-width:540px}figure.mini img{width:100%;height:auto;display:block;border:1px solid rgba(255,255,255,.12);border-radius:12px}figure.mini figcaption{opacity:.72;font-size:12.5px;margin-top:8px}</style><section><div class="wrap"><figure class="mini"><img src="https://nochetropical.es/miniaturas/en-winter-in-spain-long-stay.png" width="1200" height="1200" alt="Map of Spain with 837 AEMET weather stations coloured by frost nights: the median mainland station goes 90 days in a row without one warm enough to sit outside, against 8 in the Canaries." loading="lazy" decoding="async"><figcaption>The 837 AEMET stations by median frost nights per winter. Warm: no frost on record. Blue: the night freezes. Source: AEMET.</figcaption></figure></div></section>
 
 <section><div class="wrap">
   <div class="big">
@@ -139,12 +144,12 @@
   stays under a month, at least 80 terrace days a winter, and no more than 45 nights below
   10&nbsp;°C — because a short run is no use if you are paying to heat the place anyway.
   Sorted by the run, shortest first.</p>
-  <table>
+  <div class="twrap"><table>
     <thead><tr><th>Where</th><th class="n">Worst run<br>without a terrace day</th>
     <th class="n">Terrace days<br>a winter</th><th class="n">Heating nights<br>(below 10&nbsp;°C)</th>
     <th class="n">Rain days</th></tr></thead>
-    <tbody><tr class=""><td class="loc">Rincón de la Victoria</td><td class="n">13 days</td><td class="n">128</td><td class="n">26</td><td class="n">20</td></tr><tr class=""><td class="loc">El Ejido</td><td class="n">14 days</td><td class="n">122</td><td class="n">44</td><td class="n">13</td></tr><tr class=""><td class="loc">Torremolinos</td><td class="n">20 days</td><td class="n">90</td><td class="n">29</td><td class="n">25</td></tr><tr class=""><td class="loc">Marbella</td><td class="n">24 days</td><td class="n">90</td><td class="n">11</td><td class="n">20</td></tr><tr class=""><td class="loc">Melilla</td><td class="n">24 days</td><td class="n">87</td><td class="n">29</td><td class="n">23</td></tr><tr class=""><td class="loc">Málaga</td><td class="n">24 days</td><td class="n">85</td><td class="n">24</td><td class="n">20</td></tr><tr class=""><td class="loc">Nerja</td><td class="n">28 days</td><td class="n">88</td><td class="n">35</td><td class="n">23</td></tr><tr class=""><td class="loc">Estepona</td><td class="n">29 days</td><td class="n">89</td><td class="n">24</td><td class="n">31</td></tr></tbody>
-  </table>
+    <tbody><tr class=""><td class="loc" translate="no">Rincón de la Victoria</td><td class="n">13 days</td><td class="n">128</td><td class="n">26</td><td class="n">20</td></tr><tr class=""><td class="loc" translate="no">El Ejido</td><td class="n">14 days</td><td class="n">122</td><td class="n">44</td><td class="n">13</td></tr><tr class=""><td class="loc" translate="no">Torremolinos</td><td class="n">20 days</td><td class="n">90</td><td class="n">29</td><td class="n">25</td></tr><tr class=""><td class="loc" translate="no">Marbella</td><td class="n">24 days</td><td class="n">90</td><td class="n">11</td><td class="n">20</td></tr><tr class=""><td class="loc" translate="no">Melilla</td><td class="n">24 days</td><td class="n">87</td><td class="n">29</td><td class="n">23</td></tr><tr class=""><td class="loc" translate="no">Málaga</td><td class="n">24 days</td><td class="n">85</td><td class="n">24</td><td class="n">20</td></tr><tr class=""><td class="loc" translate="no">Nerja</td><td class="n">28 days</td><td class="n">88</td><td class="n">35</td><td class="n">23</td></tr><tr class=""><td class="loc" translate="no">Estepona</td><td class="n">29 days</td><td class="n">89</td><td class="n">24</td><td class="n">31</td></tr></tbody>
+  </table></div>
   <p class="note">Median per station across 9 winters (1 November – 31 March),
   AEMET official daily records. The figure is for the <b>weather station</b>, not the whole
   municipality.</p>
@@ -153,12 +158,12 @@
 <section><div class="wrap">
   <h2>The Canaries: a different country, climatically</h2>
   <p>Across the 73 Canary stations the median run is 8 days, against 90 on the mainland. These are the ten driest of the islands' stations with at least 140 terrace days a winter — that is, out of 1359 winter days measured, almost all of them warm enough to be outside.</p>
-  <table>
+  <div class="twrap"><table>
     <thead><tr><th>Where</th><th class="n">Worst run<br>without a terrace day</th>
     <th class="n">Terrace days<br>a winter</th><th class="n">Heating nights<br>(below 10&nbsp;°C)</th>
     <th class="n">Rain days</th></tr></thead>
-    <tbody><tr class="can"><td class="loc">Mogán, Puerto</td><td class="n">1 days</td><td class="n">149</td><td class="n">0</td><td class="n">5</td></tr><tr class="can"><td class="loc">Mogán, Puerto Rico</td><td class="n">2 days</td><td class="n">151</td><td class="n">0</td><td class="n">5</td></tr><tr class="can"><td class="loc">Tuineje,Puerto Gran Tarajal</td><td class="n">2 days</td><td class="n">151</td><td class="n">1</td><td class="n">6</td></tr><tr class="can"><td class="loc">Fuerteventura Aeropuerto</td><td class="n">1 days</td><td class="n">150</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc">Tenerife Sur Aeropuerto</td><td class="n">1 days</td><td class="n">151</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc">Maspalomas, C. Insular Turismo</td><td class="n">1 days</td><td class="n">150</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc">Pájara</td><td class="n">2 days</td><td class="n">149</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc">Yaiza Playa Blanca</td><td class="n">4 days</td><td class="n">150</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc">San Bartolome Tirajana, el Matorral</td><td class="n">1 days</td><td class="n">151</td><td class="n">0</td><td class="n">8</td></tr><tr class="can"><td class="loc">Tazacorte</td><td class="n">1 days</td><td class="n">150</td><td class="n">0</td><td class="n">8</td></tr></tbody>
-  </table>
+    <tbody><tr class="can"><td class="loc" translate="no">Mogán, Puerto</td><td class="n">1 days</td><td class="n">149</td><td class="n">0</td><td class="n">5</td></tr><tr class="can"><td class="loc" translate="no">Mogán, Puerto Rico</td><td class="n">2 days</td><td class="n">151</td><td class="n">0</td><td class="n">5</td></tr><tr class="can"><td class="loc" translate="no">Tuineje,Puerto Gran Tarajal</td><td class="n">2 days</td><td class="n">151</td><td class="n">1</td><td class="n">6</td></tr><tr class="can"><td class="loc" translate="no">Fuerteventura Aeropuerto</td><td class="n">1 days</td><td class="n">150</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc" translate="no">Tenerife Sur Aeropuerto</td><td class="n">1 days</td><td class="n">151</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc" translate="no">Maspalomas, C. Insular Turismo</td><td class="n">1 days</td><td class="n">150</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc" translate="no">Pájara</td><td class="n">2 days</td><td class="n">149</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc" translate="no">Yaiza Playa Blanca</td><td class="n">4 days</td><td class="n">150</td><td class="n">0</td><td class="n">7</td></tr><tr class="can"><td class="loc" translate="no">San Bartolome Tirajana, el Matorral</td><td class="n">1 days</td><td class="n">151</td><td class="n">0</td><td class="n">8</td></tr><tr class="can"><td class="loc" translate="no">Tazacorte</td><td class="n">1 days</td><td class="n">150</td><td class="n">0</td><td class="n">8</td></tr></tbody>
+  </table></div>
 </div></section>
 
 <section><div class="wrap">

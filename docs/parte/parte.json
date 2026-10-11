@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-10",
+ "fecha": "2026-10-11",
  "total": 851,
- "tropicales": 31,
+ "tropicales": 30,
  "ecuatoriales": 0,
  "peor": {
   "id": "C929I",
   "nombre": "El Hierro/Aeropuerto",
-  "min": 22.9,
+  "min": 23.2,
   "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
-  "id": "9988B",
-  "nombre": "Cap de Vaqueira",
-  "min": 1.0,
-  "prov": "Lleida"
+  "id": "9838B",
+  "nombre": "Benasque",
+  "min": 2.5,
+  "prov": "Huesca"
  },
  "top_calor": [
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 22.9,
+   "min": 23.2,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 22.6,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C939T",
-   "nombre": "Sabinosa-Balneario",
-   "min": 22.4,
+   "min": 23.0,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 22.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619Y",
+   "nombre": "La Aldea de San Nicolas",
+   "min": 22.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
+   "min": 22.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
    "min": 22.3,
    "prov": "Las Palmas"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
+   "min": 22.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
    "min": 22.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
-   "min": 22.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 22.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C919K",
-   "nombre": "Tacorón-Lapillas-Tortuga",
-   "min": 21.9,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
    "min": 21.8,
-   "prov": "Santa Cruz de Tenerife"
+   "prov": "Las Palmas"
   },
   {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 21.8,
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
+   "min": 21.7,
    "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 1.0,
+   "id": "9838B",
+   "nombre": "Benasque",
+   "min": 2.5,
+   "prov": "Huesca"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 2.8,
    "prov": "Lleida"
   },
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 1.2,
-   "prov": "Segovia"
-  },
-  {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 1.5,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 1.5,
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": 2.8,
    "prov": "Lleida"
+  },
+  {
+   "id": "C406G",
+   "nombre": "Cañadas Parador",
+   "min": 2.9,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "7067Y",
    "nombre": "Cañadas del Nerpio",
-   "min": 1.7,
+   "min": 3.5,
    "prov": "Albacete"
+  },
+  {
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 3.5,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 3.5,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9453X",
+   "nombre": "Biescas Embalse de Búbal",
+   "min": 3.9,
+   "prov": "Huesca"
   },
   {
    "id": "8245Y",
    "nombre": "Mira",
-   "min": 1.9,
+   "min": 4.0,
    "prov": "Cuenca"
   },
   {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 2.1,
-   "prov": "Burgos"
-  },
-  {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 2.3,
-   "prov": "Soria"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 2.4,
-   "prov": "Soria"
-  },
-  {
-   "id": "8458X",
-   "nombre": "Cedrillas Antenas",
-   "min": 2.4,
-   "prov": "Teruel"
+   "id": "9990X",
+   "nombre": "Arties",
+   "min": 4.3,
+   "prov": "Lleida"
   }
  ]
 }

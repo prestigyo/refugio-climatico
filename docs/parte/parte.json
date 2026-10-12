@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-11",
- "total": 850,
- "tropicales": 30,
+ "fecha": "2026-10-12",
+ "total": 829,
+ "tropicales": 27,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C929I",
-  "nombre": "El Hierro/Aeropuerto",
-  "min": 23.2,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "C229J",
+  "nombre": "Pájara-Puerto Morro Jable",
+  "min": 22.7,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "9838B",
-  "nombre": "Benasque",
-  "min": 2.5,
-  "prov": "Huesca"
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": 3.5,
+  "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 23.2,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 23.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 22.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
-   "min": 22.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 22.5,
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 22.7,
    "prov": "Las Palmas"
   },
   {
    "id": "C629Q",
    "nombre": "Mogan (Puerto Rico)",
+   "min": 22.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
    "min": 22.3,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
+   "min": 21.7,
    "prov": "Las Palmas"
   },
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 22.0,
-   "prov": "Las Palmas"
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 21.7,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C639M",
    "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 21.8,
+   "min": 21.6,
    "prov": "Las Palmas"
   },
   {
-   "id": "C129V",
-   "nombre": "Fuencaliente-Salinas",
-   "min": 21.7,
+   "id": "6329X",
+   "nombre": "Cabo de Gata Faro",
+   "min": 21.4,
+   "prov": "Almería"
+  },
+  {
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
+   "min": 21.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C919K",
+   "nombre": "Tacorón-Lapillas-Tortuga",
+   "min": 21.1,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C689E",
+   "nombre": "Maspalomas",
+   "min": 21.0,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "9838B",
-   "nombre": "Benasque",
-   "min": 2.5,
-   "prov": "Huesca"
-  },
-  {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 2.8,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": 2.8,
-   "prov": "Lleida"
-  },
-  {
-   "id": "C406G",
-   "nombre": "Cañadas Parador",
-   "min": 2.9,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "7067Y",
-   "nombre": "Cañadas del Nerpio",
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
    "min": 3.5,
-   "prov": "Albacete"
+   "prov": "Granada"
   },
   {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 3.5,
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": 4.6,
    "prov": "Lleida"
   },
   {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 3.5,
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 4.9,
    "prov": "Lleida"
   },
   {
-   "id": "9453X",
-   "nombre": "Biescas Embalse de Búbal",
-   "min": 3.9,
-   "prov": "Huesca"
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 5.1,
+   "prov": "Granada"
+  },
+  {
+   "id": "6299I",
+   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
+   "min": 5.1,
+   "prov": "Granada"
+  },
+  {
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 5.2,
+   "prov": "Soria"
   },
   {
    "id": "8245Y",
    "nombre": "Mira",
-   "min": 4.0,
+   "min": 5.2,
    "prov": "Cuenca"
   },
   {
-   "id": "9990X",
-   "nombre": "Arties",
-   "min": 4.3,
-   "prov": "Lleida"
+   "id": "7067Y",
+   "nombre": "Cañadas del Nerpio",
+   "min": 5.4,
+   "prov": "Albacete"
+  },
+  {
+   "id": "3130C",
+   "nombre": "Sigüenza",
+   "min": 5.7,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 5.8,
+   "prov": "Segovia"
   }
  ]
 }

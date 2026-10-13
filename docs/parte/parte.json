@@ -1,13 +1,13 @@
 {
  "fecha": "2026-10-13",
- "total": 852,
- "tropicales": 40,
+ "total": 836,
+ "tropicales": 39,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C929I",
-  "nombre": "El Hierro/Aeropuerto",
+  "id": "C649R",
+  "nombre": "Telde-Melenara",
   "min": 23.2,
-  "prov": "Santa Cruz de Tenerife"
+  "prov": "Las Palmas"
  },
  "mejor": {
   "id": "2766E",
@@ -16,6 +16,12 @@
   "prov": "Zamora"
  },
  "top_calor": [
+  {
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
+   "min": 23.2,
+   "prov": "Las Palmas"
+  },
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
@@ -29,9 +35,9 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 23.1,
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 23.0,
    "prov": "Las Palmas"
   },
   {
@@ -47,15 +53,21 @@
    "prov": "Santa Cruz de Tenerife"
   },
   {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 22.9,
+   "prov": "Las Palmas"
+  },
+  {
    "id": "C939T",
    "nombre": "Sabinosa-Balneario",
    "min": 22.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.8,
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 22.7,
    "prov": "Las Palmas"
   },
   {
@@ -63,18 +75,6 @@
    "nombre": "Santa Cruz de Tenerife",
    "min": 22.6,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 22.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 22.5,
-   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [

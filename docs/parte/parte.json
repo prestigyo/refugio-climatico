@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-12",
- "total": 829,
- "tropicales": 27,
+ "fecha": "2026-10-13",
+ "total": 852,
+ "tropicales": 40,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C229J",
-  "nombre": "Pájara-Puerto Morro Jable",
-  "min": 22.7,
-  "prov": "Las Palmas"
+  "id": "C929I",
+  "nombre": "El Hierro/Aeropuerto",
+  "min": 23.2,
+  "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
-  "id": "5511",
-  "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 3.5,
-  "prov": "Granada"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": 4.2,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.7,
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 23.2,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C619Y",
+   "nombre": "La Aldea de San Nicolas",
+   "min": 23.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 22.4,
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
+   "min": 23.1,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 23.0,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 22.3,
+   "min": 22.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 21.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 21.7,
+   "id": "C939T",
+   "nombre": "Sabinosa-Balneario",
+   "min": 22.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 21.6,
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 22.8,
    "prov": "Las Palmas"
   },
   {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
-   "min": 21.4,
-   "prov": "Almería"
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 22.6,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 22.6,
+   "prov": "Las Palmas"
   },
   {
    "id": "C649I",
    "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 21.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C919K",
-   "nombre": "Tacorón-Lapillas-Tortuga",
-   "min": 21.1,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C689E",
-   "nombre": "Maspalomas",
-   "min": 21.0,
+   "min": 22.5,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 4.2,
+   "prov": "Zamora"
+  },
+  {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 3.5,
+   "min": 4.6,
    "prov": "Granada"
   },
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 4.6,
-   "prov": "Lleida"
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 5.2,
+   "prov": "Zamora"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 4.9,
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": 5.3,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 5.7,
+   "prov": "Soria"
+  },
+  {
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": 5.7,
    "prov": "Lleida"
   },
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 5.1,
-   "prov": "Granada"
-  },
-  {
-   "id": "6299I",
-   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
-   "min": 5.1,
-   "prov": "Granada"
-  },
-  {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 5.2,
-   "prov": "Soria"
-  },
-  {
-   "id": "8245Y",
-   "nombre": "Mira",
-   "min": 5.2,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "7067Y",
-   "nombre": "Cañadas del Nerpio",
-   "min": 5.4,
-   "prov": "Albacete"
-  },
-  {
-   "id": "3130C",
-   "nombre": "Sigüenza",
-   "min": 5.7,
-   "prov": "Guadalajara"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
    "min": 5.8,
-   "prov": "Segovia"
+   "prov": "Granada"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 6.2,
+   "prov": "Lleida"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": 6.3,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 6.3,
+   "prov": "Lleida"
   }
  ]
 }

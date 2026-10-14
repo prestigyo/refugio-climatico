@@ -1,7 +1,7 @@
 {
  "fecha": "2026-10-14",
- "total": 854,
- "tropicales": 64,
+ "total": 853,
+ "tropicales": 66,
  "ecuatoriales": 0,
  "peor": {
   "id": "C329Z",
@@ -25,7 +25,7 @@
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 23.4,
+   "min": 23.5,
    "prov": "Santa Cruz de Tenerife"
   },
   {
@@ -97,12 +97,6 @@
    "prov": "Huesca"
   },
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 4.9,
-   "prov": "Lleida"
-  },
-  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
    "min": 5.2,
@@ -137,6 +131,12 @@
    "nombre": "Cuellar",
    "min": 6.1,
    "prov": "Segovia"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 6.1,
+   "prov": "Lleida"
   }
  ]
 }

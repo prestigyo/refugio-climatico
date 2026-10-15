@@ -1,31 +1,37 @@
 {
- "fecha": "2026-10-14",
- "total": 853,
- "tropicales": 66,
+ "fecha": "2026-10-15",
+ "total": 850,
+ "tropicales": 73,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C329Z",
-  "nombre": "San Sebastián de la Gomera",
-  "min": 23.7,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "6083X",
+  "nombre": "Marbella Cabopino",
+  "min": 23.8,
+  "prov": "Málaga"
  },
  "mejor": {
-  "id": "5511",
-  "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 3.0,
+  "id": "5530E",
+  "nombre": "Granada/Aeropuerto",
+  "min": 1.9,
   "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 23.7,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "6083X",
+   "nombre": "Marbella Cabopino",
+   "min": 23.8,
+   "prov": "Málaga"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 23.4,
+   "prov": "Las Palmas"
   },
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 23.5,
+   "min": 23.3,
    "prov": "Santa Cruz de Tenerife"
   },
   {
@@ -35,107 +41,101 @@
    "prov": "Las Palmas"
   },
   {
+   "id": "7019X",
+   "nombre": "Cartagena/Salinas Cabo Palos",
+   "min": 22.9,
+   "prov": "Murcia"
+  },
+  {
+   "id": "5950X",
+   "nombre": "San Jose del Valle-Pt Guadalcacín",
+   "min": 22.8,
+   "prov": "Cádiz"
+  },
+  {
    "id": "C129V",
    "nombre": "Fuencaliente-Salinas",
-   "min": 23.1,
+   "min": 22.8,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 23.1,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 22.8,
+   "prov": "Las Palmas"
   },
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 23.1,
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 22.8,
    "prov": "Las Palmas"
   },
   {
    "id": "C649R",
    "nombre": "Telde-Melenara",
-   "min": 23.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 23.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C939T",
-   "nombre": "Sabinosa-Balneario",
-   "min": 23.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "6329X",
-   "nombre": "Cabo de Gata Faro",
    "min": 22.8,
-   "prov": "Almería"
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 3.0,
+   "id": "5530E",
+   "nombre": "Granada/Aeropuerto",
+   "min": 1.9,
    "prov": "Granada"
   },
   {
    "id": "9744B",
    "nombre": "Barruera",
-   "min": 4.3,
+   "min": 3.7,
    "prov": "Lleida"
   },
   {
    "id": "9838B",
    "nombre": "Benasque",
-   "min": 4.6,
+   "min": 4.0,
    "prov": "Huesca"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 5.2,
-   "prov": "Zamora"
   },
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 5.3,
+   "min": 4.5,
    "prov": "Granada"
-  },
-  {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 5.6,
-   "prov": "Lleida"
   },
   {
    "id": "9657X",
    "nombre": "Esterri D?aneu",
-   "min": 5.7,
+   "min": 4.6,
    "prov": "Lleida"
   },
   {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": 5.8,
-   "prov": "León"
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 5.1,
+   "prov": "Lleida"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 5.2,
+   "prov": "Granada"
+  },
+  {
+   "id": "6299I",
+   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
+   "min": 5.3,
+   "prov": "Granada"
   },
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": 6.1,
+   "min": 5.7,
    "prov": "Segovia"
   },
   {
    "id": "9590D",
    "nombre": "Cap de Rec",
-   "min": 6.1,
+   "min": 5.7,
    "prov": "Lleida"
   }
  ]

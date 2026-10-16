@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-15",
- "total": 851,
+ "fecha": "2026-10-16",
+ "total": 855,
  "tropicales": 74,
- "ecuatoriales": 0,
+ "ecuatoriales": 1,
  "peor": {
-  "id": "6083X",
-  "nombre": "Marbella Cabopino",
-  "min": 23.8,
-  "prov": "Málaga"
+  "id": "C628B",
+  "nombre": "San Nicolas T.-Tasarte/Coparlita",
+  "min": 25.1,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "5530E",
-  "nombre": "Granada/Aeropuerto",
-  "min": 1.9,
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": 3.0,
   "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "6083X",
-   "nombre": "Marbella Cabopino",
-   "min": 23.8,
-   "prov": "Málaga"
+   "id": "C628B",
+   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "min": 25.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C919K",
+   "nombre": "Tacorón-Lapillas-Tortuga",
+   "min": 24.0,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 23.7,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C619X",
    "nombre": "Agaete-Casco",
-   "min": 23.4,
+   "min": 23.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 23.3,
+   "min": 23.5,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 23.2,
+   "min": 23.3,
    "prov": "Las Palmas"
   },
   {
-   "id": "7019X",
-   "nombre": "Cartagena/Salinas Cabo Palos",
-   "min": 22.9,
-   "prov": "Murcia"
-  },
-  {
-   "id": "5950X",
-   "nombre": "San Jose del Valle-Pt Guadalcacín",
-   "min": 22.8,
-   "prov": "Cádiz"
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 23.1,
+   "prov": "Las Palmas"
   },
   {
    "id": "C129V",
    "nombre": "Fuencaliente-Salinas",
-   "min": 22.8,
+   "min": 23.0,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C625O",
-   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
-   "min": 22.8,
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 23.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 22.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 22.8,
-   "prov": "Las Palmas"
+   "id": "C939T",
+   "nombre": "Sabinosa-Balneario",
+   "min": 23.0,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "5530E",
-   "nombre": "Granada/Aeropuerto",
-   "min": 1.9,
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": 3.0,
    "prov": "Granada"
   },
   {
    "id": "9744B",
    "nombre": "Barruera",
-   "min": 3.7,
+   "min": 3.6,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": 4.1,
    "prov": "Lleida"
   },
   {
    "id": "9838B",
    "nombre": "Benasque",
-   "min": 4.0,
+   "min": 4.1,
    "prov": "Huesca"
   },
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 4.5,
+   "min": 4.2,
    "prov": "Granada"
-  },
-  {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 4.6,
-   "prov": "Lleida"
   },
   {
    "id": "9590",
    "nombre": "Martinet",
+   "min": 4.2,
+   "prov": "Lleida"
+  },
+  {
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": 4.8,
+   "prov": "León"
+  },
+  {
+   "id": "1696O",
+   "nombre": "Beariz",
+   "min": 4.8,
+   "prov": "Ourense"
+  },
+  {
+   "id": "1410X",
+   "nombre": "Sobrado dos Monxes",
    "min": 5.1,
-   "prov": "Lleida"
+   "prov": "A Coruña"
   },
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 5.2,
-   "prov": "Granada"
-  },
-  {
-   "id": "6299I",
-   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
-   "min": 5.3,
-   "prov": "Granada"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": 5.7,
-   "prov": "Segovia"
-  },
-  {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 5.7,
-   "prov": "Lleida"
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
+   "min": 5.1,
+   "prov": "Ourense"
   }
  ]
 }

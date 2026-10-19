@@ -41,7 +41,7 @@ refugio-climatico/
 
 | Script | Qué escribe en `docs/` |
 |---|---|
-| `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa: `en/best-climate-in-spain-year-round/`, `en/find-your-winter-address/` + `en/winter-stations.json`, `en/mild-winter/` y una página por sello, `en/winter-in-spain-long-stay/`), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
+| `generar_calculadora.py` (9.300 líneas, el núcleo) | `index.html` (reportaje + calculadora), las **52 landings de provincia**, `ranking-noches-tropicales/`, `prensa/`, `metodologia/`, `confortometro/`, `observatorio-del-descanso/`, `ola-de-calor/`, `la-espana-que-nunca-se-colorea/`, `refugios-climaticos-naturales-cerca-de-mi/`, `refugios-y-espana-vaciada/`, `hoteles-refugio-climatico/`, `tu-hotel/`, `tu-pueblo/`, `dormir-con-calor/`, `dormir-con-manta-en-verano/`, `vacaciones-sin-calor/`, `informes/`, `estudios/`, `en/` (versión inglesa: `en/best-climate-in-spain-year-round/`, `en/find-your-winter-address/` + `en/winter-stations.json`, `en/mild-winter/` y una página por sello, `en/winter-in-spain-long-stay/`, `en/climate-in-your-town/` + sus `towns.json` y `stations.json`), `badges/`, `sitemap.xml`, `robots.txt`, `favicon.svg`, `.nojekyll`, `CNAME` |
 | `generar_miniaturas.py` | `miniaturas/<slug-provincia>.png` (1200×1200, la que usa Google) y `miniaturas/<slug-provincia>-og.png` (1200×630, la de redes) — silueta de la provincia + sus estaciones coloreadas + la cifra grande. Además las **7 páginas en inglés** (`miniaturas/en-*.png`), con España entera y sus 857 estaciones: ahí **el color codifica temperatura, nunca juicio** — en las de verano rojo = noche caliente (`color_nt`), en las de invierno azul = noche helada (`color_helada`), y en la de la herramienta de estancia azul = semanas sin un día que llegue a 18 °C (`color_sin_terraza`, sobre `estancia_por_ventana.csv`). Por eso el mismo tono cálido es malo en verano y bueno en invierno: la escala dice cuánto calor hace y es la estación del año la que decide si conviene. También `miniaturas/indice.json`, que dice qué provincias llevan mapa: lo lee `generar_calculadora.py` para escribir un `alt` que describa la imagen de verdad (Ceuta y Melilla no llevan silueta). **Tiene que correr ANTES que `generar_calculadora.py`**, y así está en el workflow |
 | `generar_calculadora.py` (descargas) | Copia a `datos/` los CSV de análisis que respaldan las fichas `Dataset`: `refugios_nocturnos_ranking.csv`, `horas_dormibles.csv`, `invierno_por_estacion.csv`, `invierno_por_temporada.csv` (1,1 MB). `tendencia_estaciones.csv` se copió a mano, porque su página también se mantiene a mano. Sin ellos las fichas irían sin `distribution` |
 | `generar_pagina_mapa.py` | `mapa-estaciones/index.html` — mapa interactivo, provincias y puntos proyectados en Python con la misma `project()`, sin librerías JS |
@@ -136,6 +136,22 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   22-28 °C en media España — dar octubre por muerto mirando solo las mínimas fue un error.
   **Lo que NO se para es la descarga**: los 8 PNG diarios son 181 KB, AEMET los borra y no
   se pueden recuperar. Es el mismo argumento del archivo horario. Se para la animación.
+- **Hay dos direcciones de búsqueda, y la INVERSA es la del comprador.** Las
+  herramientas inglesas sirven para *encontrar* un sitio: pones criterios y salen
+  pueblos. Pero quien mira un piso en Ayamonte ya tiene la dirección: necesita lo
+  contrario, del pueblo a sus números. Eso es `/en/climate-in-your-town/`, con
+  buscador libre sobre los **4.113 municipios** y sin ningún filtro ni ranking.
+  **El emparejamiento pueblo→estación no se inventa**: sale de
+  `datos/municipios_estaciones.json`, el mismo cruce que usa la página de heladas,
+  y se enseña siempre —estación, distancia, desnivel y nivel de confianza— porque
+  el dato es de la estación y no del pueblo. Cobertura: los 4.113 tienen estación
+  con datos de invierno y de estancia, en 709 estaciones; 2.540 con confianza alta.
+  Pesan 103 KB con gzip entre `towns.json` y `stations.json`.
+  **El límite honesto de la página**: «día de terraza» es un día que llegó a 18 °C,
+  no la temperatura a las nueve de la noche. En verano coinciden; **en invierno no**,
+  y los diarios de AEMET solo traen máxima y mínima. Responder «cuántas noches ceno
+  fuera en enero» necesita el archivo horario, cuyo primer invierno cierra en marzo
+  de 2027. La página lo dice en un recuadro en vez de insinuar lo que no mide.
 - **La divulgación de afiliación va JUNTO al enlace, no en el pie.** El sitio monetiza con
   Booking vía CJ (`cj_deeplink()`, `CJ_PID`). Cada enlace lleva `rel="sponsored nofollow
   noopener"` y, al lado, el texto de `DIVULGACION_AFILIADO` — que vive en **un solo sitio**
@@ -198,8 +214,14 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   barra, ni falla nada). El menú inglés era peor: siete pestañas más la lupa piden 899 px
   y en una banda de 1.100 solo quedan 803 —48 de relleno, 160 del logotipo, 40 de huecos
   y 49 del chip «ES»—, así que faltaban 96 px **en todos los anchos de escritorio**,
-  también a 1.600. Hoy: fila a partir de 1.024 px (español) y de 1.260 (inglés, con la
-  banda ensanchada a 1.260), panel por debajo. La comprobación es un barrido con
+  también a 1.600. Y vuelve a pasar con **cada pestaña nueva**: al añadir la octava
+  («Your town», 2026-10-19) el menú inglés pasó a pedir **999 px donde caben 963** y
+  recortaba otra vez en todos los anchos. Hoy: fila a partir de 1.024 px (español) y de
+  **1.340** (inglés, con la banda ensanchada a 1.340), panel por debajo. La cuenta es
+  `pestañas + 297` (48 de relleno, 160 del logotipo, 40 de huecos, 49 del chip «ES»);
+  con 999 salen 1.296 y se dejó en 1.340 de margen. **Coste aceptado**: un portátil de
+  1.280 px ve la hamburguesa, que es mejor que un menú recortado en silencio. La
+  novena pestaña no cabe: habrá que acortar etiquetas o repensar el menú. La comprobación es un barrido con
   Playwright mirando `scrollWidth > clientWidth`; a ojo no se ve.
 - **`.nav-e` la comparten el menú inglés y el escueto español**, así que no sirve para
   distinguirlos: el inglés lleva además `.nav-en`, y sus reglas van con `nav.nav-e.nav-en`.

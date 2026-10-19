@@ -1,7 +1,7 @@
 {
  "fecha": "2026-10-19",
- "total": 848,
- "tropicales": 21,
+ "total": 847,
+ "tropicales": 22,
  "ecuatoriales": 0,
  "peor": {
   "id": "C329Z",
@@ -47,6 +47,12 @@
    "prov": "Santa Cruz de Tenerife"
   },
   {
+   "id": "B434X",
+   "nombre": "Portocolom",
+   "min": 21.1,
+   "prov": "Illes Balears"
+  },
+  {
    "id": "C689E",
    "nombre": "Maspalomas",
    "min": 21.0,
@@ -59,22 +65,16 @@
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "B434X",
-   "nombre": "Portocolom",
-   "min": 20.8,
-   "prov": "Illes Balears"
-  },
-  {
    "id": "C449C",
    "nombre": "Santa Cruz de Tenerife",
    "min": 20.8,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C439J",
-   "nombre": "Tenerife-Güimar",
-   "min": 20.6,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "C619Y",
+   "nombre": "La Aldea de San Nicolas",
+   "min": 20.7,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [

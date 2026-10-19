@@ -3276,7 +3276,7 @@ JS_BURGER = """<script>
  // El inglés vuelve a fila a los 1.260 px, no a los 1.024: sus siete pestañas
  // no caben antes. Con un solo umbral, uno de los dos menús se queda apilado
  // donde ya cabía en fila.
- var fila=nav.classList.contains('nav-en')?1259:1023;
+ var fila=nav.classList.contains('nav-en')?1339:1023;
  window.addEventListener('resize',function(){ if(window.innerWidth>fila) set(false); });
 })();
 </script>"""
@@ -3338,8 +3338,8 @@ CSS_PANEL_ANCHO = (
     '}')
 
 CSS_MENU_EN = (
-    '@media(min-width:1260px){nav.nav-e.nav-en .in{max-width:1260px}}'
-    '@media(min-width:1024px) and (max-width:1259px){'
+    '@media(min-width:1340px){nav.nav-e.nav-en .in{max-width:1340px}}'
+    '@media(min-width:1024px) and (max-width:1339px){'
     'nav.nav-e.nav-en .burger{display:flex}'
     'nav.nav-e.nav-en .in{position:relative;flex-wrap:nowrap}'
     'nav.nav-e.nav-en .links{position:absolute;top:calc(100% + 9px);left:auto;right:24px;'
@@ -3360,7 +3360,7 @@ CSS_MENU_EN = (
     # Un icono suelto en una lista vertical no se entiende, así que en el panel
     # la lupa lleva su texto. El bloque móvil compartido lo escribe en español
     # («Buscar en la web») y se colaba tal cual en las ocho páginas inglesas.
-    '@media(max-width:1259px){'
+    '@media(max-width:1339px){'
     'nav.nav-e.nav-en .links a.lupa::after{content:"Search the site"}'
     # Con el panel fuera del flujo, el chip «ES» se quedaba varado junto al
     # logotipo y la hamburguesa al otro extremo. Van juntos a la derecha.
@@ -11505,6 +11505,7 @@ MENU_EN = [
     ("Your address", "/en/find-your-winter-address/"),
     ("Mild Winter", "/en/mild-winter/"),
     ("Long stays", "/en/winter-in-spain-long-stay/"),
+    ("Your town", "/en/climate-in-your-town/"),
 ]
 
 
@@ -17165,6 +17166,411 @@ def construir_pagina_estancia_larga(site: str) -> str | None:
             .replace("__SITE__", site))
 
 
+# ---------------------------------------------------------------------------
+# /en/climate-in-your-town/ — la herramienta INVERSA.
+#
+# Las demás herramientas inglesas sirven para ENCONTRAR un sitio: pones
+# condiciones y salen los pueblos que las cumplen. Esta hace lo contrario, que
+# es lo que pide quien ya tiene una dirección delante —un comprador mirando un
+# piso, un agente que tiene que explicarle el clima a un inglés—: escribes el
+# pueblo y salen sus números. Sin filtros, sin ranking, sin «mejores sitios».
+#
+# El emparejamiento pueblo→estación NO se inventa aquí: sale de
+# `datos/municipios_estaciones.json`, el mismo cruce que usa la página de
+# heladas, con su distancia, su desnivel y su nivel de confianza. Y se enseña
+# siempre, porque el dato es de la estación y no del pueblo.
+PAGINA_CIUDAD_EN = r"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__CANONICAL__">
+<link rel="alternate" hreflang="es" href="__SITE__/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="__TITLE__">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__CANONICAL__">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.68;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:min(94vw,900px);margin:0 auto;padding:0 24px}
+ a{color:var(--teal)}a:hover{text-decoration:underline}
+ header.h{padding:44px 0 10px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:20px 0 12px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(29px,5.4vw,46px);line-height:1.1;letter-spacing:-.01em}
+ h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,3.5vw,27px);line-height:1.2;margin:38px 0 12px}
+ .lead{margin:22px 0 0}.lead p{font-size:clamp(17px,2.6vw,19px);color:#e7dcc8;margin:0 0 15px}
+ .lead p b,p b{color:var(--paper)}
+ p{margin:0 0 15px;color:var(--muted)}
+ section{padding:6px 0 10px}
+ .buscador{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px 20px 22px;margin:26px 0 10px;position:relative}
+ .buscador label{display:block;font:600 13px/1.4 var(--fb);color:var(--paper);margin-bottom:9px}
+ .buscador input{width:100%;background:#120d07;border:1px solid var(--line);border-radius:10px;color:var(--paper);font:400 17px/1.4 var(--fb);padding:13px 14px}
+ .buscador input:focus{outline:2px solid var(--teja);outline-offset:1px}
+ .pistas{font-size:12.5px;color:var(--muted);margin-top:9px}
+ .sug{list-style:none;margin:8px 0 0;max-height:280px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;background:#120d07}
+ .sug:empty{display:none}
+ .sug li{padding:10px 13px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);font-size:15px}
+ .sug li:last-child{border-bottom:0}
+ .sug li:hover,.sug li[aria-selected="true"]{background:#1d150c}
+ .sug .pr{color:var(--muted);font-size:13px}
+ .ficha{display:none}
+ .ficha.on{display:block}
+ .fuente{background:#1b140c;border:1px solid var(--line);border-left:3px solid var(--teja);border-radius:12px;padding:13px 16px;font-size:13.5px;line-height:1.6;margin:22px 0 8px}
+ .fuente b{color:var(--paper)}
+ .conf{display:inline-block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-left:6px}
+ .c2{background:rgba(143,176,122,.18);color:var(--verde)}
+ .c1{background:rgba(217,116,78,.18);color:var(--teja2)}
+ .c0{background:rgba(179,164,140,.18);color:var(--muted)}
+ .big{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 6px}
+ .big .c{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:16px 16px}
+ .big .v{font-family:var(--fd);font-weight:900;font-size:clamp(26px,5vw,40px);line-height:1;color:var(--teja2)}
+ .big .c.ok .v{color:var(--verde)}
+ .big .k{font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.45}
+ .twrap{overflow-x:auto;overscroll-behavior-x:contain}
+ table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+ th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+ th{font:600 11px/1.3 var(--fb);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+ th.n,td.n{text-align:right;white-space:nowrap}
+ td.mes{color:var(--paper);font-weight:600;white-space:nowrap}
+ tr.verano td{background:rgba(217,116,78,.07)}
+ .barra{display:inline-block;height:7px;border-radius:4px;background:var(--verde);vertical-align:middle;margin-right:7px}
+ .aviso{background:#1b140c;border:1px solid var(--line);border-radius:12px;padding:15px 17px;font-size:14px;line-height:1.65;margin:26px 0}
+ .aviso b{color:var(--paper)}
+ .nota{font-size:12.5px;color:var(--muted)}
+ footer.f{border-top:1px solid var(--line);margin-top:46px;padding:30px 0 50px;font-size:13.5px;color:var(--muted)}
+ @media(max-width:700px){.big{grid-template-columns:1fr 1fr}}
+ __NAVCSS__
+ __FOOTERCSS__
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <p class="crumb"><a href="__SITE__/en/">NocheTropical.es</a> · Town climate</p>
+  <p class="kick">__KICK__</p>
+  <h1>__H1__</h1>
+  <div class="lead">
+   <p>Every other tool here helps you <b>find</b> a town. This one does the opposite:
+   you already have an address in front of you — a flat you are thinking of buying,
+   a village someone recommended — and you want to know what the weather actually
+   does there.</p>
+   <p>Type the town. You get the measurements from <b>its AEMET weather station</b>:
+   how many days a month are warm enough to sit outside, how many nights you would
+   want the heating on, how many nights never drop below 20&nbsp;°C, and how often
+   it rains. <b>__N_PUEBLOS__ towns</b>, __N_EST__ weather stations, __TEMPS__ winters
+   of official records.</p>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="buscador">
+    <label for="q">Which town?</label>
+    <input id="q" type="search" autocomplete="off" spellcheck="false"
+           placeholder="Start typing — Ayamonte, Nerja, Jávea…"
+           aria-describedby="pistas" role="combobox" aria-expanded="false"
+           aria-controls="sug" aria-autocomplete="list">
+    <ul class="sug" id="sug" role="listbox" aria-label="Matching towns"></ul>
+    <p class="pistas" id="pistas">Spanish towns with more than 500 residents.
+    Accents are optional: <i>javea</i> finds <i>Jávea</i>.</p>
+  </div>
+
+  <div class="ficha" id="ficha" aria-live="polite">
+    <p class="fuente" id="fuente"></p>
+    <div class="big" id="big"></div>
+    <h2>Month by month</h2>
+    <p>Each row is a <b>30-day stay starting on the 1st</b>. The figure is the median
+    of the years measured, so it is what a typical year looks like — not a forecast
+    and not an average that hides the bad ones.</p>
+    <div class="twrap"><table>
+      <thead><tr>
+        <th>Arriving</th>
+        <th class="n">Days warm<br>enough to sit out</th>
+        <th class="n">Longest run<br>with none</th>
+        <th class="n">Heating<br>nights</th>
+        <th class="n">Nights above<br>20&nbsp;°C</th>
+        <th class="n">Rain<br>days</th>
+      </tr></thead>
+      <tbody id="tb"></tbody>
+    </table></div>
+    <p class="nota" id="pie"></p>
+  </div>
+
+  <div class="aviso">
+    <p><b>One thing this cannot tell you yet.</b> “Warm enough to sit out” means the
+    day reached <b>18&nbsp;°C</b>. In summer that is the same thing as dinner on the
+    terrace. <b>In winter it is not</b>: a day that touches 18&nbsp;°C at three in the
+    afternoon is a good deal colder by nine at night, and the daily records AEMET
+    publishes only carry the day's high and low — not the temperature at dinner time.</p>
+    <p style="margin-bottom:0">Answering “how many January evenings can I eat outside?”
+    needs hourly readings. We have been archiving them since August 2026, because AEMET
+    deletes them after about twelve hours and nobody else keeps them. The first winter
+    of that archive closes in March 2027; until then, this page tells you about the
+    <b>days</b>, honestly labelled as such.</p>
+  </div>
+
+  <h2>How the town is matched to a station</h2>
+  <p>AEMET measures at weather stations, not in town squares. Each town here is tied to
+  the most representative station within 35&nbsp;km, and the page always shows you which
+  one, how far away it is and the difference in altitude — because that difference is
+  what moves the numbers: roughly <b>0.6&nbsp;°C for every 100&nbsp;m</b>. A match is
+  marked <i>high</i> confidence within 15&nbsp;km and 100&nbsp;m, <i>medium</i> within
+  25&nbsp;km and 200&nbsp;m, and <i>rough</i> beyond that. Nothing is interpolated or
+  modelled: every figure on this page was measured at the station named.</p>
+  <p>If you want the opposite question — <i>where</i> in Spain fits what you need —
+  use <a href="__SITE__/en/find-your-winter-address/">find your winter address</a>
+  or the <a href="__SITE__/en/frost-free-towns-spain/">frost-free town finder</a>.</p>
+</div></section>
+
+__FOOTER__
+<script>
+(function(){
+ var SITE="__SITE__", MES=["January","February","March","April","May","June","July",
+   "August","September","October","November","December"];
+ var CONF=["rough","medium","high"];
+ var P=null, E=null, elegido=null;
+ var q=document.getElementById("q"), sug=document.getElementById("sug"),
+     ficha=document.getElementById("ficha"), tb=document.getElementById("tb");
+ function esc(s){return String(s).replace(/[&<>"]/g,function(c){
+   return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+ // Sin tildes y en minúsculas: "javea" tiene que encontrar "Jávea".
+ function plano(s){return String(s).normalize("NFD").replace(/[̀-ͯ]/g,"")
+   .toLowerCase().trim();}
+ function n1(x){return (Math.round(x*10)/10).toString().replace(/\.0$/,"");}
+ function slug(s){return plano(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+
+ function datos(){
+   if(P&&E) return Promise.resolve();
+   return Promise.all([
+     fetch(SITE+"/en/climate-in-your-town/towns.json").then(function(r){return r.json();}),
+     fetch(SITE+"/en/climate-in-your-town/stations.json").then(function(r){return r.json();})
+   ]).then(function(a){ P=a[0]; E=a[1];
+     P.forEach(function(p){ p.push(plano(p[0]+" "+p[1])); });  // 7: clave de busqueda
+   });
+ }
+
+ function buscar(t){
+   var k=plano(t); if(k.length<2) return [];
+   var empieza=[], dentro=[];
+   for(var i=0;i<P.length && empieza.length+dentro.length<60;i++){
+     var p=P[i], j=p[7].indexOf(k);
+     if(j===0) empieza.push(p); else if(j>0) dentro.push(p);
+   }
+   return empieza.concat(dentro).slice(0,12);
+ }
+
+ function pintaSug(lista){
+   sug.innerHTML=lista.map(function(p,i){
+     return "<li role='option' data-i='"+P.indexOf(p)+"'><span translate='no'>"+
+       esc(p[0])+"</span> <span class='pr' translate='no'>"+esc(p[1])+"</span></li>";
+   }).join("");
+   q.setAttribute("aria-expanded", lista.length?"true":"false");
+ }
+
+ function pinta(p){
+   var e=E[p[2]];
+   if(!e){ ficha.classList.remove("on"); return; }
+   elegido=p;
+   var km=p[3], dm=p[4], cf=p[5];
+   document.getElementById("fuente").innerHTML=
+     "Measured at the <b translate='no'>"+esc(e.n)+"</b> AEMET station, "+
+     n1(km)+"&nbsp;km from <b translate='no'>"+esc(p[0])+"</b>"+
+     (dm?", "+(dm>0?"+":"")+dm+"&nbsp;m difference in altitude":", same altitude")+
+     ". <span class='conf c"+cf+"'>"+CONF[cf]+" confidence</span><br>"+
+     "Station altitude "+e.a+"&nbsp;m · "+e.t+" winters of records.";
+   var inv=e.inv;   // 0 terraza/151 · 1 peor racha · 2 calefaccion · 3 heladas
+                    // 4 inviernos sin helada · 5 lluvia · 6 noche mas fria
+   var sinHel=inv[4]===e.t;
+   document.getElementById("big").innerHTML=
+     tarjeta(Math.round(inv[0]), "days warm enough to sit out, of the 151 from 1 November to 31 March", inv[0]>=100) +
+     tarjeta(n1(p[6]), "nights a year that never drop below 20&nbsp;°C", p[6]<10) +
+     tarjeta(Math.round(inv[2]), "nights a winter below 10&nbsp;°C — the heating ones", inv[2]<=40) +
+     tarjeta(sinHel? e.t+" of "+e.t : n1(inv[3]),
+             sinHel? "winters with no frost at all" : "frost nights in a typical winter", sinHel);
+   var filas="";
+   for(var m=0;m<12;m++){
+     var v=e.m[m];
+     if(!v||!v.length){ filas+="<tr><td class='mes'>"+MES[m]+"</td><td colspan='5' class='n'>not enough years measured</td></tr>"; continue; }
+     var ancho=Math.round(v[0]/30*58);
+     filas+="<tr"+(m>=5&&m<=8?" class='verano'":"")+"><td class='mes'>"+MES[m]+"</td>"+
+       "<td class='n'><span class='barra' style='width:"+ancho+"px'></span>"+n1(v[0])+" / 30</td>"+
+       "<td class='n'>"+n1(v[1])+" d</td><td class='n'>"+n1(v[2])+"</td>"+
+       "<td class='n'>"+n1(v[3])+"</td><td class='n'>"+n1(v[4])+"</td></tr>";
+   }
+   tb.innerHTML=filas;
+   document.getElementById("pie").innerHTML=
+     "Coldest night ever recorded at this station: <b>"+n1(inv[6])+"&nbsp;°C</b>. "+
+     "Rain days in a winter: <b>"+n1(inv[5])+"</b>. "+
+     "Longest run of winter days with none warm enough to sit out: <b>"+inv[1]+" days</b>.";
+   ficha.classList.add("on");
+   if(location.hash.slice(1)!==slug(p[0])) history.replaceState(null,"","#"+slug(p[0]));
+ }
+ function tarjeta(v,k,bien){
+   return "<div class='c"+(bien?" ok":"")+"'><div class='v'>"+v+"</div><div class='k'>"+k+"</div></div>";
+ }
+
+ q.addEventListener("input",function(){
+   datos().then(function(){ pintaSug(buscar(q.value)); });
+ });
+ sug.addEventListener("click",function(ev){
+   var li=ev.target.closest("li"); if(!li) return;
+   var p=P[+li.dataset.i]; q.value=p[0]; sug.innerHTML=""; q.setAttribute("aria-expanded","false");
+   pinta(p); document.getElementById("fuente").scrollIntoView({behavior:"smooth",block:"center"});
+ });
+ q.addEventListener("keydown",function(ev){
+   if(ev.key!=="Enter") return;
+   var li=sug.querySelector("li"); if(li){ ev.preventDefault(); li.click(); }
+ });
+ document.addEventListener("click",function(ev){
+   if(!ev.target.closest(".buscador")) sug.innerHTML="";
+ });
+
+ // Enlace directo: /en/climate-in-your-town/#ayamonte abre ese pueblo. Se
+ // reinicia TODO antes de leer el hash, que es la regla de la casa: si no, un
+ // enlace nuevo hereda el estado del anterior.
+ function delHash(){
+   sug.innerHTML=""; ficha.classList.remove("on"); elegido=null;
+   var h=plano(decodeURIComponent(location.hash.slice(1)));
+   if(!h) { q.value=""; return; }
+   datos().then(function(){
+     for(var i=0;i<P.length;i++){ if(slug(P[i][0])===h){ q.value=P[i][0]; pinta(P[i]); return; } }
+   });
+ }
+ window.addEventListener("hashchange",delHash);
+ if(location.hash) delHash();
+})();
+</script>
+</body>
+</html>
+"""
+
+
+def escribir_datos_ciudad_en(site: str) -> tuple[int, int] | None:
+    """Los dos JSON de /en/climate-in-your-town/: pueblos y estaciones.
+
+    Se separan a propósito. El de pueblos (4.113) es el que alimenta el
+    buscador y se baja siempre; el de estaciones (709) trae los números. Juntos
+    son ~103 KB con gzip, que es lo que sirve Pages: menos que el índice del
+    buscador del sitio.
+    """
+    cruce = AEMET_DIR / "datos" / "municipios_estaciones.json"
+    inv_csv = AEMET_DIR / "analisis" / "invierno_por_estacion.csv"
+    est_csv = AEMET_DIR / "analisis" / "estancia_por_ventana.csv"
+    if not (cruce.exists() and inv_csv.exists() and est_csv.exists()):
+        return None
+    municipios = json.loads(cruce.read_text(encoding="utf-8"))["municipios"]
+    nivel = {"alta": 2, "media": 1, "orientativa": 0}
+
+    inv: dict[str, dict] = {}
+    with inv_csv.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            inv[r["indicativo"]] = r
+    meses: dict[str, dict[int, list]] = {}
+    with est_csv.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            if r["dias"] != "30":
+                continue
+            meses.setdefault(r["indicativo"], {})[int(r["mes"])] = [
+                round(float(r["terraza_mediana"]), 1),
+                round(float(r["sin_terraza_peor"]), 1),
+                round(float(r["calef_mediana"]), 1),
+                round(float(r["tropi_mediana"]), 1),
+                round(float(r["lluvia_mediana"]), 1)]
+
+    pueblos, usadas = [], set()
+    for m in municipios:
+        ind = m["estacion"]
+        if ind not in inv or ind not in meses:
+            continue          # un dato que falta NO es un cero: el pueblo no sale
+        pueblos.append([m["nombre"], m["provincia"], ind,
+                        round(float(m["distancia_km"]), 1), int(m["delta_altitud"]),
+                        nivel[m["confianza"]],
+                        round(float(m.get("noches_tropicales_año") or 0), 1)])
+        usadas.add(ind)
+
+    estaciones = {}
+    for ind in sorted(usadas):
+        i = inv[ind]
+        estaciones[ind] = {
+            "n": titular(i["nombre"]), "a": int(float(i["altitud"])),
+            "t": int(float(i["temporadas"])),
+            "inv": [round(float(i["terraza_mediana"]), 1),
+                    int(float(i["racha_sin_terraza_max"])),
+                    round(float(i["calefaccion_mediana"]), 1),
+                    round(float(i["heladas_mediana"]), 1),
+                    int(float(i["temporadas_sin_helada"])),
+                    round(float(i["lluvia_mediana"]), 1),
+                    round(float(i["tmin_min"]), 1)],
+            "m": [meses[ind].get(k, []) for k in range(1, 13)]}
+
+    destino = DOCS_DIR / "en" / "climate-in-your-town"
+    destino.mkdir(parents=True, exist_ok=True)
+    (destino / "towns.json").write_text(
+        json.dumps(pueblos, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    (destino / "stations.json").write_text(
+        json.dumps(estaciones, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    return len(pueblos), len(estaciones)
+
+
+def construir_pagina_ciudad_en(site: str, n_pueblos: int, n_est: int) -> str:
+    """La página de la herramienta inversa. Los datos van en JSON aparte."""
+    url = f"{site}/en/climate-in-your-town/"
+    title = "What the weather is really like in any Spanish town"
+    desc = ("Type a Spanish town and see how many days a month are warm enough to sit "
+            "outside, how many nights need heating and how many never drop below 20 °C "
+            "— measured at its AEMET weather station.")
+    temporadas = 9
+    try:
+        with (AEMET_DIR / "analisis" / "invierno_por_estacion.csv").open(encoding="utf-8") as fh:
+            temporadas = max(int(float(r["temporadas"])) for r in csv.DictReader(fh))
+    except (OSError, ValueError):
+        pass
+    schema = json.dumps({
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "NocheTropical.es",
+                 "item": f"{site}/en/"},
+                {"@type": "ListItem", "position": 2, "name": "Town climate", "item": url}]},
+            {"@type": "WebApplication", "name": title, "description": desc, "url": url,
+             "applicationCategory": "ReferenceApplication",
+             "operatingSystem": "Any browser",
+             "inLanguage": "en-GB",
+             "dateModified": iso_tz(date.today().isoformat()),
+             "author": {"@type": "Person", "name": "Ramón J. Lowesting"}}]},
+        ensure_ascii=False)
+    return (PAGINA_CIUDAD_EN
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_en_html(site))
+            .replace("__FOOTER__", footer_en_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__TITLE__", title)
+            .replace("__DESC__", desc)
+            .replace("__CANONICAL__", url)
+            .replace("__KICK__", f"Tool · {n_pueblos:,} towns · AEMET data".replace(",", ","))
+            .replace("__H1__", "What is the weather <em>actually</em> like there?")
+            .replace("__N_PUEBLOS__", f"{n_pueblos:,}")
+            .replace("__N_EST__", str(n_est))
+            .replace("__TEMPS__", str(temporadas))
+            .replace("__SITE__", site))
+
+
 PAGINA_TUHOTEL = r"""<!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17578,6 +17984,18 @@ def main() -> int:
         print("   /en/winter-in-spain-long-stay/: generada")
     else:
         print("   /en/winter-in-spain-long-stay/: falta invierno_por_estacion.csv; se omite")
+    # /en/climate-in-your-town/ — la herramienta INVERSA: del pueblo a sus
+    # números, en vez de de los criterios al pueblo. Necesita el cruce de
+    # municipios y los dos CSV de análisis; si falta alguno se omite con aviso.
+    _ciudad = escribir_datos_ciudad_en(site)
+    if _ciudad:
+        _np, _ne = _ciudad
+        (DOCS_DIR / "en" / "climate-in-your-town" / "index.html").write_text(
+            construir_pagina_ciudad_en(site, _np, _ne), encoding="utf-8")
+        print(f"   /en/climate-in-your-town/: {_np} pueblos · {_ne} estaciones")
+    else:
+        print("   /en/climate-in-your-town/: faltan municipios_estaciones.json "
+              "o los CSV de invierno/estancia; se omite")
     print("   versión EN: /en/ + /en/coolest-towns-spain/"
           + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "")
           + (" + /en/spains-mildest-winters/" if inviernos_en else "")

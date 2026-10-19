@@ -3276,7 +3276,7 @@ JS_BURGER = """<script>
  // El inglés vuelve a fila a los 1.260 px, no a los 1.024: sus siete pestañas
  // no caben antes. Con un solo umbral, uno de los dos menús se queda apilado
  // donde ya cabía en fila.
- var fila=nav.classList.contains('nav-en')?1339:1023;
+ var fila=1023;   // seis pestañas: el inglés ya cabe donde el español
  window.addEventListener('resize',function(){ if(window.innerWidth>fila) set(false); });
 })();
 </script>"""
@@ -3338,29 +3338,15 @@ CSS_PANEL_ANCHO = (
     '}')
 
 CSS_MENU_EN = (
-    '@media(min-width:1340px){nav.nav-e.nav-en .in{max-width:1340px}}'
-    '@media(min-width:1024px) and (max-width:1339px){'
-    'nav.nav-e.nav-en .burger{display:flex}'
-    'nav.nav-e.nav-en .in{position:relative;flex-wrap:nowrap}'
-    'nav.nav-e.nav-en .links{position:absolute;top:calc(100% + 9px);left:auto;right:24px;'
-    # A 1.200 px un panel de 1.100 de ancho para ocho entradas cortas es un
-    # cartelón. Colgado del botón se lee como lo que es: un desplegable.
-    'width:min(360px,calc(100% - 24px));'
-    'display:none;flex-direction:column;align-items:stretch;gap:0;overflow:visible;'
-    'background:var(--panel);border:1px solid var(--line);border-radius:14px;'
-    'padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5);z-index:60}'
-    'nav.nav-e.nav-en .links.abre{display:flex}'
-    'nav.nav-e.nav-en .links a{display:flex;align-items:center;height:auto;'
-    'padding:13px 14px;font-size:16px;line-height:1.3;border:0;border-radius:9px;'
-    'margin:0;text-align:left}'
-    'nav.nav-e.nav-en .links a:hover{background:rgba(217,116,78,.12)}'
-    'nav.nav-e.nav-en .links a.lupa{gap:10px;justify-content:flex-start;'
-    'border:0;padding:13px 14px;width:auto;height:auto}'
-    '}'
+    '@media(min-width:1100px){nav.nav-e.nav-en .in{max-width:1100px}}'
+    # Aquí vivía el panel propio del inglés entre 1.024 px y la banda ancha,
+    # que hacía falta cuando el menú tenía ocho pestañas y no cabían. Con
+    # seis cabe donde el español, así que la hamburguesa y el panel vuelven
+    # a ser los del CSS compartido y este bloque sobra.
     # Un icono suelto en una lista vertical no se entiende, así que en el panel
     # la lupa lleva su texto. El bloque móvil compartido lo escribe en español
     # («Buscar en la web») y se colaba tal cual en las ocho páginas inglesas.
-    '@media(max-width:1339px){'
+    '@media(max-width:1023px){'
     'nav.nav-e.nav-en .links a.lupa::after{content:"Search the site"}'
     # Con el panel fuera del flujo, el chip «ES» se quedaba varado junto al
     # logotipo y la hamburguesa al otro extremo. Van juntos a la derecha.
@@ -11497,15 +11483,19 @@ def hreflang_block(es_path: str, en_path: str) -> str:
 # entrada es el conmutador de idioma hacia la web en español.
 # Solo páginas en inglés: el menú de la versión inglesa no manda a páginas en
 # español sin avisar; esas van en el pie, marcadas «(ES)».
+# SEIS pestañas, y el número no es decorativo: medido con Playwright, seis piden
+# 605 px y caben en el umbral normal de 1.024 con 122 de sobra; SIETE piden 1.074
+# y ya no caben ni acortando las etiquetas. Las tres de invierno —frost-free,
+# mildest winters y long stays— viven detrás de /en/winter/, que las reúne y de
+# paso ataca «winter in Spain». Ninguna pierde acceso: la portada inglesa las
+# lleva todas en su rejilla de botones.
 MENU_EN = [
-    ("Coolest towns", "/en/coolest-towns-spain/"),
-    ("Frost-free towns", "/en/frost-free-towns-spain/"),
-    ("Mildest winters", "/en/spains-mildest-winters/"),
+    ("Summer", "/en/coolest-towns-spain/"),
+    ("Winter", "/en/winter/"),
     ("Year round", "/en/best-climate-in-spain-year-round/"),
-    ("Your address", "/en/find-your-winter-address/"),
-    ("Mild Winter", "/en/mild-winter/"),
-    ("Long stays", "/en/winter-in-spain-long-stay/"),
-    ("Your town", "/en/climate-in-your-town/"),
+    ("My town", "/en/climate-in-your-town/"),
+    ("My address", "/en/find-your-winter-address/"),
+    ("The seal", "/en/mild-winter/"),
 ]
 
 
@@ -11589,6 +11579,13 @@ _CSS_EN = (
     '.hero-img{width:100%;height:auto;border:1px solid var(--line);border-radius:14px;margin:22px 0 4px;display:block}'
     '.cap{font-size:13px;color:var(--muted);margin:0 0 10px}'
     '.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0 6px}'
+    # Las herramientas van AGRUPADAS por la pregunta que contestan, no en una
+    # lista plana: al sacar tres páginas del menú (que bajó de ocho pestañas a
+    # seis) la portada pasa a ser su vía de acceso principal, y una rejilla de
+    # once botones sin encabezados es peor que el menú largo que sustituye.
+    '.gtit{font-family:var(--fd);font-weight:700;font-size:clamp(17px,2.6vw,20px);'
+    'color:var(--teja2);margin:30px 0 2px;letter-spacing:-.01em}'
+    '.gsub{font-size:13.5px;color:var(--muted);margin:0 0 4px}'
     '.card2{display:block;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);'
     'border-radius:14px;padding:18px 18px 16px;color:var(--paper)}'
     '.card2:hover{border-color:var(--teja);text-decoration:none;transform:translateY(-2px);transition:.15s}'
@@ -13175,37 +13172,72 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
     else:
         stat_line = ("Only a sliver of Spain — the mountain interior — stays cool enough "
                      "to sleep every night of the summer.")
-    tarjetas = [
-        ("pri", "🌙", "The coolest towns to sleep in", False,
-         "Region by region, the Spanish mountain towns with almost zero tropical nights — "
-         "backed by AEMET data.", "/en/coolest-towns-spain/"),
-        ("", "❄️", "Frost-free towns: where to spend winter", False,
-         "Winter by winter, the Spanish towns whose weather station recorded no frost — and how "
-         "many cold nights each one gets at the temperature you choose.", "/en/frost-free-towns-spain/"),
-        ("", "☀️", "Spain's mildest winters", False,
-         "City by city, the frost nights and nights at 5&nbsp;°C recorded in Málaga, Valencia, "
-         "Alicante, Murcia, Madrid and the Canary Islands, winter by winter.", "/en/spains-mildest-winters/"),
-        ("", "🔥", "Live heatwave map (animated)", True,
-         "Watch the heat spread across Spain day by day — highs by day, lows by night, "
-         "straight from AEMET maps.", "/ola-de-calor/"),
-        ("", "🗺️", "Interactive station map", True,
-         "Zoom into 848 weather stations and see the tropical-night count anywhere in Spain.",
-         "/mapa-estaciones/"),
-        ("", "🏨", "Where to stay: cool-sleep hotels", True,
-         "Hand-picked hotels in Spain's climate refuges, where the night cools down and "
-         "you sleep without air conditioning — the geography of rest.", "/hoteles-refugio-climatico/"),
-        ("", "🔎", "Search any town (calculator)", True,
-         "Type any Spanish town into the calculator and see how many tropical nights it "
-         "endures each summer.", "/"),
+    # (título del grupo, una línea de qué contesta, [tarjetas])
+    # El orden es el del visitante: primero por qué vino (verano o invierno),
+    # luego las dos herramientas de sitio concreto, y al final lo español.
+    grupos = [
+        ("Summer — can you sleep through it?",
+         "Spain is not one climate. An hour inland and a few hundred metres up, "
+         "the night cools down.", [
+         ("pri", "\U0001f319", "The coolest towns to sleep in", False,
+          "Region by region, the Spanish mountain towns with almost zero tropical "
+          "nights — backed by AEMET data.", "/en/coolest-towns-spain/"),
+         ("", "\U0001f525", "Live heatwave map (animated)", True,
+          "Watch the heat spread across Spain day by day — highs by day, lows by "
+          "night, straight from AEMET maps.", "/ola-de-calor/"),
+         ("", "\U0001f5fa\ufe0f", "Interactive station map", True,
+          "Zoom into 848 weather stations and see the tropical-night count anywhere "
+          "in Spain.", "/mapa-estaciones/")]),
+        ("Winter — how mild is it really?",
+         "Counted, not described: frost nights, nights you heat, days warm enough "
+         "to sit outside.", [
+         ("pri", "❄\ufe0f", "Winter in Spain, measured", False,
+          "The overview: what a Spanish winter does between 1 November and 31 March, "
+          "and which question to start from.", "/en/winter/"),
+         ("", "🏔\ufe0f", "Frost-free towns", False,
+          "Winter by winter, the towns whose weather station recorded no frost — and "
+          "how many cold nights each gets at the temperature you choose.",
+          "/en/frost-free-towns-spain/"),
+         ("", "☀\ufe0f", "Spain's mildest winters", False,
+          "Eight cities side by side on frost nights and nights below 5 and 10\u00a0°C, "
+          "winter by winter.", "/en/spains-mildest-winters/"),
+         ("", "📅", "Staying three months?", False,
+          "For a long stay the median lies: what decides is the longest run with no "
+          "day warm enough to sit outside.", "/en/winter-in-spain-long-stay/"),
+         ("", "🔄", "The best climate year round", False,
+          "Mild winter and a summer you can sleep through are close to incompatible "
+          "on the mainland. Two stations manage both.",
+          "/en/best-climate-in-spain-year-round/")]),
+        ("A place in mind, or looking for one?",
+         "The two directions of the same question.", [
+         ("pri", "📍", "What the weather is like in your town", False,
+          "Type any of 4,113 Spanish towns and get its numbers month by month, from "
+          "its own AEMET station — distance and altitude difference shown.",
+          "/en/climate-in-your-town/"),
+         ("", "🧭", "Find your winter address", False,
+          "Set your own thresholds, pick when you arrive and how long you stay, and "
+          "see which stations clear them.", "/en/find-your-winter-address/")]),
+        ("The seal, and where to stay",
+         "A fixed bar, not a league table.", [
+         ("", "🏅", "The Mild Winter seal", False,
+          "The stations that clear the bar — 67 of them, each with its own page.",
+          "/en/mild-winter/"),
+         ("", "🏨", "Cool-sleep hotels", True,
+          "Hand-picked hotels in Spain's climate refuges, where the night cools down "
+          "and you sleep without air conditioning.", "/hoteles-refugio-climatico/")]),
     ]
     cards_html = ""
-    for cls, ic, t, es, d, href in tarjetas:
-        hl = ' hreflang="es"' if es else ''
-        tag = ' <span class="estag">in Spanish</span>' if es else ''
-        cards_html += (f'<a class="card2 {cls}" href="{site}{href}"{hl}>'
-                       f'<div class="ic">{ic}</div>'
-                       f'<div class="t">{t}{tag}</div>'
-                       f'<div class="d">{d}</div></a>')
+    for _titulo, _sub, _items in grupos:
+        cards_html += (f'<h2 class="gtit">{_titulo}</h2>'
+                       f'<p class="gsub">{_sub}</p><div class="cards">')
+        for cls, ic, t, es, d, href in _items:
+            hl = ' hreflang="es"' if es else ''
+            tag = ' <span class="estag">in Spanish</span>' if es else ''
+            cards_html += (f'<a class="card2 {cls}" href="{site}{href}"{hl}>'
+                           f'<div class="ic">{ic}</div>'
+                           f'<div class="t">{t}{tag}</div>'
+                           f'<div class="d">{d}</div></a>')
+        cards_html += '</div>'
     # Leyenda del mapa nocturno, en inglés (el texto ya no va incrustado).
     if datos_estudio:
         nz = datos_estudio["nocturno"]
@@ -13277,7 +13309,7 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
         '</figcaption>' + leyenda_noche + '</figure>'
         '</div></div></header>'
         '<section><div class="wrap">'
-        '<div class="cards">' + cards_html + '</div>'
+        + cards_html +
         '</div></section>'
         '<section><div class="wrap">'
         '<div class="twocol">'
@@ -17571,6 +17603,268 @@ def construir_pagina_ciudad_en(site: str, n_pueblos: int, n_est: int) -> str:
             .replace("__SITE__", site))
 
 
+# ---------------------------------------------------------------------------
+# /en/winter/ — el hub de invierno.
+#
+# Nació de una restricción medida, no de una idea: con OCHO pestañas el menú
+# inglés pedía 999 px donde caben 963 y recortaba en todos los anchos. Seis es
+# el techo que vuelve a caber en el umbral normal de 1.024. Así que las tres
+# páginas que contestan la misma pregunta —«¿cómo es el invierno en España?»—
+# pasan a vivir detrás de esta, que las reúne y de paso ataca una consulta que
+# ninguna atacaba por separado.
+#
+# No es una lista de enlaces: lleva las cifras del propio análisis, porque un
+# hub sin contenido es un peaje. Lo que se afirma aquí sale de
+# `invierno_por_estacion.csv`, igual que las páginas que enlaza.
+PAGINA_WINTER_EN = r"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__CANONICAL__">
+<link rel="alternate" hreflang="es" href="__SITE__/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Ramón J. Lowesting">
+<meta property="og:type" content="website">
+<meta property="og:title" content="__TITLE__">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__CANONICAL__">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+ :root{--bg:#161009;--bg2:#1f1810;--panel:#241b11;--line:#3a2c1c;--paper:#efe6d6;--muted:#b3a48c;--teja:#d9744e;--teja2:#e89a73;--teal:#96b6c4;--verde:#8fb07a;--fd:"Fraunces",Georgia,serif;--fb:"Lora",Georgia,serif}
+ *{margin:0;padding:0;box-sizing:border-box}
+ body{background:var(--bg);color:var(--paper);font-family:var(--fb);line-height:1.68;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:min(94vw,900px);margin:0 auto;padding:0 24px}
+ a{color:var(--teal)}a:hover{text-decoration:underline}
+ header.h{padding:44px 0 10px;background:radial-gradient(120% 80% at 50% -10%,#2a1d10,var(--bg) 60%)}
+ .crumb{font-size:13px;color:var(--muted)}.crumb a{color:var(--muted)}
+ .kick{font:600 12px/1 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:var(--teja);margin:20px 0 12px}
+ h1{font-family:var(--fd);font-weight:900;font-size:clamp(29px,5.4vw,46px);line-height:1.1;letter-spacing:-.01em}
+ h2{font-family:var(--fd);font-weight:700;font-size:clamp(21px,3.5vw,27px);line-height:1.2;margin:40px 0 12px}
+ .lead{margin:22px 0 0}.lead p{font-size:clamp(17px,2.6vw,19px);color:#e7dcc8;margin:0 0 15px}
+ .lead p b,p b{color:var(--paper)}
+ p{margin:0 0 15px;color:var(--muted)}
+ section{padding:6px 0 10px}
+ .big{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:26px 0 8px}
+ .big .c{background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:17px 18px}
+ .big .v{font-family:var(--fd);font-weight:900;font-size:clamp(28px,5.5vw,42px);line-height:1;color:var(--teja2)}
+ .big .c.ok .v{color:var(--verde)}
+ .big .k{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5}
+ .tarjetas{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 6px}
+ .t{display:block;background:linear-gradient(180deg,var(--bg2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px 22px;text-decoration:none;transition:border-color .15s}
+ .t:hover{border-color:var(--teja);text-decoration:none}
+ .t h3{font-family:var(--fd);font-weight:700;font-size:19px;color:var(--paper);margin:0 0 7px;line-height:1.25}
+ .t p{font-size:14.5px;color:var(--muted);margin:0}
+ .t .cifra{display:block;font-family:var(--fd);font-weight:900;font-size:26px;color:var(--teja2);margin:0 0 6px;line-height:1}
+ .aviso{background:#1b140c;border:1px solid var(--line);border-left:3px solid var(--teja);border-radius:12px;padding:15px 17px;font-size:14px;line-height:1.65;margin:26px 0}
+ .aviso b{color:var(--paper)}
+ footer.f{border-top:1px solid var(--line);margin-top:46px;padding:30px 0 50px;font-size:13.5px;color:var(--muted)}
+ @media(max-width:700px){.big{grid-template-columns:1fr}.tarjetas{grid-template-columns:1fr}}
+ __NAVCSS__
+ __FOOTERCSS__
+</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <p class="crumb"><a href="__SITE__/en/">NocheTropical.es</a> · Winter in Spain</p>
+  <p class="kick">__KICK__</p>
+  <h1>Winter in Spain, <em>measured</em></h1>
+  <div class="lead">
+   <p>Not “mild” as a brochure adjective. Mild as a count: how many nights the
+   heating goes on, how many mornings there is frost on the car, how many days
+   are warm enough to sit outside — at <b>__N_EST__ AEMET weather stations</b>,
+   winter by winter, over __TEMPS__ winters.</p>
+   <p>A Spanish winter runs here from <b>1 November to 31 March</b>: 151 days.
+   And it is not one winter but many: at the median station <b>__TERRAZA_N__</b> of those 151
+   days are warm enough to sit outside, while __MEJOR_NOMBRE__ manages
+   <b>all __MEJOR_TERRAZA_N__</b>. That spread is the whole point — which is why the useful
+   question is not “how is winter in Spain” but
+   <a href="__SITE__/en/climate-in-your-town/">how is winter where you are going</a>.</p>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="big">
+    <div class="c ok"><div class="v">__N_SIN_HELADA__</div>
+      <div class="k">stations that have never recorded a single frost, in any winter measured</div></div>
+    <div class="c ok"><div class="v">__N_CIEN__</div>
+      <div class="k">stations where more than 100 of the 151 winter days are warm enough to
+      sit outside. The median station gets __TERRAZA__</div></div>
+    <div class="c"><div class="v">__CALEF__</div>
+      <div class="k">nights below 10&nbsp;°C at that median station — the ones you heat.
+      At __MEJOR_CALEF__ it is none at all</div></div>
+  </div>
+
+  <div class="aviso">
+    <p style="margin-bottom:0"><b>There are no shoulder months.</b> November and March
+    are 40.4&nbsp;% of the winter and take 37.2&nbsp;% of the heating nights — almost
+    exactly their share. The cold is not concentrated in December-February; it is
+    spread. Frost is the exception: 22.8&nbsp;% of it falls in those two months, a
+    little over half their share. So an October-to-April stay is not two mild months
+    wrapped around three hard ones.</p>
+  </div>
+
+  <h2>Start with the question you actually have</h2>
+  <div class="tarjetas">
+    <a class="t" href="__SITE__/en/climate-in-your-town/">
+      <span class="cifra">__N_PUEBLOS__</span>
+      <h3>I already know the town</h3>
+      <p>Type it and get its numbers month by month, from its own weather station —
+      with the distance and altitude difference shown, because the figure belongs to
+      the station and not to the town square.</p></a>
+    <a class="t" href="__SITE__/en/find-your-winter-address/">
+      <h3>I know what I want, not where</h3>
+      <p>Set your own thresholds — terrace days, heating nights, frost, rain — pick
+      the month you arrive and how long you stay, and see which stations clear them.</p></a>
+    <a class="t" href="__SITE__/en/frost-free-towns-spain/">
+      <h3>Where it simply does not freeze</h3>
+      <p>Towns whose reference station recorded no night at or below 0&nbsp;°C, judged
+      one winter at a time. The threshold moves from −4 to 20&nbsp;°C if frost is not
+      your line.</p></a>
+    <a class="t" href="__SITE__/en/spains-mildest-winters/">
+      <h3>How the cities compare</h3>
+      <p>Eight Spanish cities side by side on frost nights, nights below 5&nbsp;°C and
+      nights below 10&nbsp;°C. The gap between them is larger than the brochures suggest.</p></a>
+    <a class="t" href="__SITE__/en/winter-in-spain-long-stay/">
+      <h3>I am staying three months</h3>
+      <p>For a long stay the median lies: what decides is the <b>longest run</b> with
+      no day warm enough to sit outside. Across the mainland and Balearics that run is
+      90 days at the median — and only eight stations keep it short without freezing you.</p></a>
+    <a class="t" href="__SITE__/en/best-climate-in-spain-year-round/">
+      <h3>I want both halves of the year</h3>
+      <p>Mild winter and a summer you can sleep through are close to incompatible on
+      the mainland: the correlation is −0.70. Two stations in all of Spain manage both,
+      and both are in the Canaries.</p></a>
+  </div>
+
+  <h2>What “mild” is worth as a label</h2>
+  <p>The <a href="__SITE__/en/mild-winter/">Mild Winter seal</a> goes to the stations
+  that clear a fixed bar rather than the ones that rank highest: it is a threshold, not
+  a league table, so a place either clears it or does not. __N_SELLO__ hold it.</p>
+  <p>Everything on these pages comes from AEMET's official daily records — the day's
+  high and low at a named station. Nothing is interpolated, modelled or averaged across
+  neighbours. Where a figure is a median we say so, and where the extreme matters more
+  than the middle we publish the extreme.</p>
+</div></section>
+
+__FOOTER__
+</body>
+</html>
+"""
+
+
+def construir_pagina_winter_en(site: str) -> str | None:
+    """El hub de invierno. Sus tres cifras salen del mismo CSV que las páginas
+    que enlaza, para que nadie pueda encontrarlas en desacuerdo."""
+    csv_inv = AEMET_DIR / "analisis" / "invierno_por_estacion.csv"
+    if not csv_inv.exists():
+        return None
+    import statistics as _st
+    filas = []
+    with csv_inv.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            try:
+                filas.append({
+                    "terraza": float(r["terraza_mediana"]),
+                    "calef": float(r["calefaccion_mediana"]),
+                    "temporadas": int(float(r["temporadas"])),
+                    "sin_helada": int(float(r["temporadas_sin_helada"]))})
+            except (ValueError, KeyError):
+                continue
+    if not filas:
+        return None
+    temps = max(f["temporadas"] for f in filas)
+    # «Nunca una helada» = TODAS sus temporadas limpias, no la mediana: es el
+    # mismo criterio que usa la página de heladas, invierno a invierno.
+    sin_helada = sum(1 for f in filas if f["sin_helada"] == f["temporadas"])
+    terraza = round(_st.median(f["terraza"] for f in filas))
+    calef = round(_st.median(f["calef"] for f in filas))
+    # La mediana sola engaña aquí: son 30 de 151 días porque el reparto incluye
+    # toda la montaña, donde no inverna nadie. Publicar solo esa cifra en un hub
+    # titulado «winter in Spain» leería como un veredicto sobre el país. La
+    # dispersión es el dato: 69 estaciones pasan de 100 días y una llega a 151.
+    n_cien = sum(1 for f in filas if f["terraza"] >= 100)
+
+    # La mejor del país, con nombre: una cifra sin dueño no se comprueba.
+    mejor_t, mejor_n = 0.0, ""
+    mejor_calef_n = ""
+    with csv_inv.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            try:
+                t_, c_ = float(r["terraza_mediana"]), float(r["calefaccion_mediana"])
+            except (ValueError, KeyError):
+                continue
+            if t_ > mejor_t:
+                # El catálogo de AEMET escribe «Tuineje,Puerto Gran Tarajal»
+                # sin espacio tras la coma, y así canta en una frase.
+                mejor_t = t_
+                mejor_n = titular(r["nombre"]).replace(",", ", ").replace(",  ", ", ")
+            if c_ == 0 and not mejor_calef_n:
+                mejor_calef_n = (titular(r["nombre"]).replace(",", ", ")
+                                 .replace(",  ", ", "))
+
+    n_pueblos = 0
+    cruce = AEMET_DIR / "datos" / "municipios_estaciones.json"
+    if cruce.exists():
+        try:
+            n_pueblos = len(json.loads(cruce.read_text(encoding="utf-8"))["municipios"])
+        except (ValueError, KeyError):
+            n_pueblos = 0
+
+    url = f"{site}/en/winter/"
+    title = "Winter in Spain, measured: frost, heating nights and terrace days"
+    desc = ("How mild a Spanish winter really is, counted at AEMET weather stations: "
+            "frost nights, nights below 10 °C and days warm enough to sit outside, "
+            "from 1 November to 31 March.")
+    schema = json.dumps({
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "NocheTropical.es",
+                 "item": f"{site}/en/"},
+                {"@type": "ListItem", "position": 2, "name": "Winter in Spain",
+                 "item": url}]},
+            {"@type": "CollectionPage", "name": title, "description": desc, "url": url,
+             "inLanguage": "en-GB",
+             "author": {"@type": "Person", "name": "Ramón J. Lowesting"}}]},
+        ensure_ascii=False)
+    return (PAGINA_WINTER_EN
+            .replace("__NAVCSS__", CSS_NAV_ESCUETO)
+            .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
+            .replace("__NAV__", nav_en_html(site))
+            .replace("__FOOTER__", footer_en_html(site))
+            .replace("__SCHEMA__", schema)
+            .replace("__TITLE__", title)
+            .replace("__DESC__", desc)
+            .replace("__CANONICAL__", url)
+            .replace("__KICK__", f"{temps} winters · AEMET data")
+            .replace("__N_EST__", f"{len(filas):,}")
+            .replace("__TEMPS__", str(temps))
+            .replace("__N_SIN_HELADA__", str(sin_helada))
+            .replace("__TERRAZA__", f"{terraza} of 151")
+            .replace("__N_CIEN__", str(n_cien))
+            .replace("__TERRAZA_N__", str(terraza))
+            .replace("__MEJOR_TERRAZA_N__", str(round(mejor_t)))
+            .replace("__MEJOR_NOMBRE__", mejor_n or "the mildest station")
+            .replace("__MEJOR_TERRAZA__", f"{round(mejor_t)} of 151")
+            .replace("__MEJOR_CALEF__", mejor_calef_n or "the mildest of all")
+            .replace("__CALEF__", str(calef))
+            .replace("__N_PUEBLOS__", f"{n_pueblos:,} towns")
+            .replace("__N_SELLO__", "67")
+            .replace("__SITE__", site))
+
+
 PAGINA_TUHOTEL = r"""<!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17996,6 +18290,18 @@ def main() -> int:
     else:
         print("   /en/climate-in-your-town/: faltan municipios_estaciones.json "
               "o los CSV de invierno/estancia; se omite")
+    # /en/winter/ — el hub que sostiene la pestaña «Winter» del menú de seis.
+    # Si falta el CSV de invierno NO se escribe, y entonces el menú apuntaría a
+    # una página inexistente: por eso el revisor de enlaces del final del build
+    # lo cazaría como enlace roto en vez de publicarlo en silencio.
+    _winter = construir_pagina_winter_en(site)
+    if _winter:
+        (DOCS_DIR / "en" / "winter").mkdir(parents=True, exist_ok=True)
+        (DOCS_DIR / "en" / "winter" / "index.html").write_text(_winter, encoding="utf-8")
+        print("   /en/winter/: hub de invierno generado")
+    else:
+        print("   /en/winter/: falta invierno_por_estacion.csv; se omite "
+              "(ojo: el menú inglés lo enlaza)")
     print("   versión EN: /en/ + /en/coolest-towns-spain/"
           + (" + /en/frost-free-towns-spain/" if sin_heladas_en else "")
           + (" + /en/spains-mildest-winters/" if inviernos_en else "")

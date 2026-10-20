@@ -103,16 +103,16 @@
    "prov": "León"
   },
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": -2.3,
-   "prov": "Granada"
-  },
-  {
    "id": "1541B",
    "nombre": "Villablino",
    "min": -2.2,
    "prov": "León"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": -2.2,
+   "prov": "Granada"
   },
   {
    "id": "2276B",

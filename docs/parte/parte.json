@@ -1,88 +1,88 @@
 {
- "fecha": "2026-10-19",
- "total": 847,
- "tropicales": 22,
+ "fecha": "2026-10-20",
+ "total": 850,
+ "tropicales": 17,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C329Z",
-  "nombre": "San Sebastián de la Gomera",
-  "min": 22.3,
+  "id": "C129V",
+  "nombre": "Fuencaliente-Salinas",
+  "min": 22.1,
   "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
-  "id": "2737E",
-  "nombre": "Lagunas de Somoza",
-  "min": -3.2,
-  "prov": "León"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": -3.1,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 22.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 21.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 21.3,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 21.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "B434X",
-   "nombre": "Portocolom",
-   "min": 21.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "C689E",
-   "nombre": "Maspalomas",
-   "min": 21.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C919K",
-   "nombre": "Tacorón-Lapillas-Tortuga",
-   "min": 20.9,
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
+   "min": 22.1,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C449C",
    "nombre": "Santa Cruz de Tenerife",
-   "min": 20.8,
+   "min": 22.0,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 21.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C439J",
+   "nombre": "Tenerife-Güimar",
+   "min": 20.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 20.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 20.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
    "min": 20.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C319W",
+   "nombre": "Vallehermoso-Dama",
+   "min": 20.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C429I",
+   "nombre": "Tenerife/Sur",
+   "min": 20.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 20.5,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "2737E",
-   "nombre": "Lagunas de Somoza",
-   "min": -3.2,
-   "prov": "León"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": -3.1,
+   "prov": "Zamora"
   },
   {
    "id": "1735X",
@@ -91,51 +91,51 @@
    "prov": "Ourense"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": -2.4,
-   "prov": "Zamora"
-  },
-  {
-   "id": "2401X",
-   "nombre": "Palencia-Granja Viñalta",
-   "min": -2.3,
-   "prov": "Palencia"
-  },
-  {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": -2.1,
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": -2.7,
    "prov": "Cantabria"
   },
   {
-   "id": "2626Y",
-   "nombre": "Sahechores-Helipuerto",
-   "min": -2.1,
+   "id": "2737E",
+   "nombre": "Lagunas de Somoza",
+   "min": -2.4,
    "prov": "León"
+  },
+  {
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": -2.3,
+   "prov": "Granada"
   },
   {
    "id": "1541B",
    "nombre": "Villablino",
-   "min": -1.8,
+   "min": -2.2,
    "prov": "León"
   },
   {
-   "id": "9001S",
-   "nombre": "Alto Campoo",
+   "id": "2276B",
+   "nombre": "Villaeles de Valdavia",
+   "min": -2.0,
+   "prov": "Palencia"
+  },
+  {
+   "id": "2626Y",
+   "nombre": "Sahechores-Helipuerto",
+   "min": -1.9,
+   "prov": "León"
+  },
+  {
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
    "min": -1.7,
-   "prov": "Cantabria"
+   "prov": "Palencia"
   },
   {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": -1.3,
-   "prov": "Asturias"
-  },
-  {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": -0.9,
+   "id": "9016X",
+   "nombre": "Cubillo de Ebro",
+   "min": -1.5,
    "prov": "Cantabria"
   }
  ]

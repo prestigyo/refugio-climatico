@@ -1,6 +1,6 @@
 {
  "fecha": "2026-10-21",
- "total": 851,
+ "total": 849,
  "tropicales": 32,
  "ecuatoriales": 0,
  "peor": {
@@ -61,13 +61,13 @@
   {
    "id": "C029O",
    "nombre": "Lanzarote/Aeropuerto",
-   "min": 21.9,
+   "min": 22.0,
    "prov": "Las Palmas"
   },
   {
    "id": "C839X",
    "nombre": "Teguise la Graciosa-Helipuerto",
-   "min": 21.7,
+   "min": 21.9,
    "prov": "Las Palmas"
   },
   {
@@ -87,7 +87,7 @@
   {
    "id": "9677",
    "nombre": "Port Aine L?orri",
-   "min": -3.1,
+   "min": -2.4,
    "prov": "Lleida"
   },
   {
@@ -99,7 +99,7 @@
   {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": -0.7,
+   "min": -0.1,
    "prov": "Huesca"
   },
   {

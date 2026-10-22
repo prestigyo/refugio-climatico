@@ -1,13 +1,13 @@
 {
- "fecha": "2026-10-21",
- "total": 849,
- "tropicales": 32,
+ "fecha": "2026-10-22",
+ "total": 850,
+ "tropicales": 16,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C619X",
-  "nombre": "Agaete-Casco",
-  "min": 22.6,
-  "prov": "Las Palmas"
+  "id": "C929I",
+  "nombre": "El Hierro/Aeropuerto",
+  "min": 22.3,
+  "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
   "id": "9988B",
@@ -17,64 +17,64 @@
  },
  "top_calor": [
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 22.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C129V",
-   "nombre": "Fuencaliente-Salinas",
-   "min": 22.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C429I",
-   "nombre": "Tenerife/Sur",
-   "min": 22.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C019V",
-   "nombre": "Yaiza-Playa Blanca",
-   "min": 22.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 22.4,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
    "min": 22.3,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 22.2,
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
+   "min": 21.5,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C029O",
-   "nombre": "Lanzarote/Aeropuerto",
-   "min": 22.0,
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
+   "min": 21.4,
    "prov": "Las Palmas"
   },
   {
-   "id": "C839X",
-   "nombre": "Teguise la Graciosa-Helipuerto",
-   "min": 21.9,
+   "id": "C919K",
+   "nombre": "Tacorón-Lapillas-Tortuga",
+   "min": 21.4,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 21.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C689E",
+   "nombre": "Maspalomas",
+   "min": 20.9,
    "prov": "Las Palmas"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 21.5,
+   "min": 20.8,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 20.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 20.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 20.6,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
@@ -85,58 +85,58 @@
    "prov": "Lleida"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": -2.4,
-   "prov": "Lleida"
-  },
-  {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": -1.4,
-   "prov": "Cantabria"
-  },
-  {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": -0.1,
+   "min": -2.8,
    "prov": "Huesca"
   },
   {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 0.3,
-   "prov": "Cantabria"
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": -2.3,
+   "prov": "Zamora"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": -2.2,
+   "prov": "Segovia"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": -2.0,
+   "prov": "Lleida"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": 0.6,
+   "min": -1.1,
    "prov": "Salamanca"
   },
   {
-   "id": "2017Y",
-   "nombre": "Barriomartin-el Robledo",
-   "min": 0.7,
-   "prov": "Soria"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": -1.0,
+   "prov": "León"
   },
   {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 0.7,
-   "prov": "Ávila"
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": -1.0,
+   "prov": "Huesca"
   },
   {
-   "id": "2462",
-   "nombre": "Navacerrada Puerto",
-   "min": 0.8,
-   "prov": "Madrid"
+   "id": "2302N",
+   "nombre": "Monterrubio de la Demanda",
+   "min": -0.9,
+   "prov": "Burgos"
   },
   {
-   "id": "5511",
-   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 0.8,
-   "prov": "Granada"
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": -0.9,
+   "prov": "Zamora"
   }
  ]
 }

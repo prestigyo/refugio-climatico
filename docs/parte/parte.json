@@ -1,36 +1,72 @@
 {
- "fecha": "2026-10-22",
- "total": 850,
- "tropicales": 16,
+ "fecha": "2026-10-23",
+ "total": 851,
+ "tropicales": 22,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C929I",
-  "nombre": "El Hierro/Aeropuerto",
-  "min": 22.3,
+  "id": "C329Z",
+  "nombre": "San Sebastián de la Gomera",
+  "min": 22.8,
   "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
   "id": "9988B",
   "nombre": "Cap de Vaqueira",
-  "min": -3.7,
+  "min": -1.9,
   "prov": "Lleida"
  },
  "top_calor": [
   {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 22.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 22.3,
+   "min": 22.8,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 22.5,
+   "prov": "Las Palmas"
   },
   {
    "id": "C129V",
    "nombre": "Fuencaliente-Salinas",
-   "min": 21.5,
+   "min": 22.1,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 21.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 21.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
+   "min": 21.6,
+   "prov": "Las Palmas"
   },
   {
    "id": "C649R",
    "nombre": "Telde-Melenara",
+   "min": 21.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
    "min": 21.4,
    "prov": "Las Palmas"
   },
@@ -39,104 +75,68 @@
    "nombre": "Tacorón-Lapillas-Tortuga",
    "min": 21.4,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 21.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C689E",
-   "nombre": "Maspalomas",
-   "min": 20.9,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 20.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 20.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 20.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 20.6,
-   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": -3.7,
+   "min": -1.9,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": -1.4,
    "prov": "Lleida"
   },
   {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": -2.4,
+   "min": -0.6,
    "prov": "Huesca"
   },
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": -2.3,
-   "prov": "Zamora"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": -2.1,
-   "prov": "Segovia"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": -2.0,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": -1.1,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "1541B",
-   "nombre": "Villablino",
-   "min": -1.0,
-   "prov": "León"
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": -0.4,
+   "prov": "Cuenca"
   },
   {
    "id": "9839V",
    "nombre": "Cerler Cogulla",
-   "min": -1.0,
+   "min": 0.0,
    "prov": "Huesca"
   },
   {
-   "id": "2302N",
-   "nombre": "Monterrubio de la Demanda",
-   "min": -0.9,
-   "prov": "Burgos"
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 0.1,
+   "prov": "Cantabria"
   },
   {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": -0.9,
-   "prov": "Zamora"
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 0.4,
+   "prov": "Cuenca"
+  },
+  {
+   "id": "1542",
+   "nombre": "Puerto de Leitariegos",
+   "min": 0.8,
+   "prov": "Asturias"
+  },
+  {
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 0.9,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "1221D",
+   "nombre": "Pajares - Valgrande",
+   "min": 1.5,
+   "prov": "Asturias"
   }
  ]
 }

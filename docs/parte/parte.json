@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-23",
- "total": 851,
- "tropicales": 22,
+ "fecha": "2026-10-24",
+ "total": 849,
+ "tropicales": 35,
  "ecuatoriales": 0,
  "peor": {
   "id": "C329Z",
   "nombre": "San Sebastián de la Gomera",
-  "min": 22.8,
+  "min": 23.8,
   "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
-  "id": "9988B",
-  "nombre": "Cap de Vaqueira",
-  "min": -1.9,
-  "prov": "Lleida"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": -3.9,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 22.8,
+   "min": 23.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 23.5,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 22.8,
+   "min": 23.3,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 22.6,
-   "prov": "Las Palmas"
   },
   {
    "id": "C129V",
    "nombre": "Fuencaliente-Salinas",
-   "min": 22.1,
+   "min": 23.1,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 21.9,
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 23.1,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 23.0,
    "prov": "Las Palmas"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 21.6,
+   "min": 22.9,
    "prov": "Las Palmas"
   },
   {
-   "id": "C639U",
-   "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 21.6,
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 22.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 22.9,
    "prov": "Las Palmas"
   },
   {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 21.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 21.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C919K",
-   "nombre": "Tacorón-Lapillas-Tortuga",
-   "min": 21.4,
+   "id": "C429I",
+   "nombre": "Tenerife/Sur",
+   "min": 22.8,
    "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": -3.9,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": -3.9,
+   "prov": "Zamora"
+  },
+  {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": -1.9,
+   "min": -3.6,
    "prov": "Lleida"
   },
   {
    "id": "9677",
    "nombre": "Port Aine L?orri",
-   "min": -1.4,
+   "min": -3.2,
    "prov": "Lleida"
+  },
+  {
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": -3.0,
+   "prov": "Zamora"
   },
   {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": -0.6,
+   "min": -2.4,
    "prov": "Huesca"
   },
   {
-   "id": "8245Y",
-   "nombre": "Mira",
-   "min": -0.4,
-   "prov": "Cuenca"
+   "id": "2626Y",
+   "nombre": "Sahechores-Helipuerto",
+   "min": -2.1,
+   "prov": "León"
   },
   {
-   "id": "9839V",
-   "nombre": "Cerler Cogulla",
-   "min": 0.0,
-   "prov": "Huesca"
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": -2.0,
+   "prov": "León"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 0.1,
-   "prov": "Cantabria"
+   "id": "2737E",
+   "nombre": "Lagunas de Somoza",
+   "min": -2.0,
+   "prov": "León"
   },
   {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 0.4,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "1542",
-   "nombre": "Puerto de Leitariegos",
-   "min": 0.8,
-   "prov": "Asturias"
-  },
-  {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 0.9,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "1221D",
-   "nombre": "Pajares - Valgrande",
-   "min": 1.5,
-   "prov": "Asturias"
+   "id": "2777K",
+   "nombre": "Santibañez de Vidriales",
+   "min": -1.9,
+   "prov": "Zamora"
   }
  ]
 }

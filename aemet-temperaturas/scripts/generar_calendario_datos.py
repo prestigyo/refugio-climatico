@@ -36,10 +36,13 @@ def main() -> int:
     prov_de = {r.indicativo: canon(r.provincia) for r in rank.itertuples()}
     validos = set(prov_de)
 
-    # 2) cargar diarios (solo verano y solo estaciones del calculador)
+    # 2) cargar diarios (solo verano y solo estaciones del calculador).
+    # diarios_AAAA.csv solo lo rellena el backfill; el día a día entra en el
+    # rolling diarios_estaciones.csv. Va PRIMERO y manda si una fecha está en
+    # los dos (es la fuente fresca), igual que g.rutas_diarios().
+    rutas = [DATOS_DIR / "diarios_estaciones.csv"] + [DATOS_DIR / f"diarios_{a}.csv" for a in ANIOS]
     trozos = []
-    for a in ANIOS:
-        f = DATOS_DIR / f"diarios_{a}.csv"
+    for f in rutas:
         if not f.exists():
             continue
         d = pd.read_csv(f, usecols=["fecha", "indicativo", "tmin", "tmax"])
@@ -48,6 +51,8 @@ def main() -> int:
     df = pd.concat(trozos, ignore_index=True)
     df["fecha"] = pd.to_datetime(df["fecha"], errors="coerce")
     df = df.dropna(subset=["fecha"])
+    df = df.drop_duplicates(subset=["indicativo", "fecha"], keep="first")
+    df = df[df["fecha"].dt.year.isin(ANIOS)]
     df = df[df["fecha"].dt.month.between(5, 9)].copy()
     df["anio"] = df["fecha"].dt.year
     df["mes"] = df["fecha"].dt.month

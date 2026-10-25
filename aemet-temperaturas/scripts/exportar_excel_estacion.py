@@ -29,7 +29,9 @@ TEJA = "D9744E"
 def cargar_diarios(indicativo: str) -> tuple[list[dict], str, str]:
     """Todas las filas diarias de la estación, ordenadas por fecha."""
     filas, nombre, prov = [], "", ""
-    for ruta in sorted((g.AEMET_DIR / "datos").glob("diarios_2*.csv")):
+    # rutas_diarios(): el rolling diarios_estaciones.csv primero y luego los
+    # anuales; el glob "diarios_2*.csv" solo no lo cogía y se perdía el verano
+    for ruta in g.rutas_diarios():
         with ruta.open(newline="", encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 if r["indicativo"] != indicativo:
@@ -47,7 +49,8 @@ def cargar_diarios(indicativo: str) -> tuple[list[dict], str, str]:
                               "prec": num("prec")})
     filas.sort(key=lambda x: x["fecha"])
     # el rolling (diarios_estaciones.csv) puede solapar con el año en curso:
-    # deduplicado por fecha, la primera aparición gana
+    # deduplicado por fecha, la primera aparición gana (el sort es estable,
+    # así que es la del rolling, que se leyó antes)
     vistas, unicas = set(), []
     for f in filas:
         if f["fecha"] in vistas:

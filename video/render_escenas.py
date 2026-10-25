@@ -42,7 +42,7 @@ GEOJSON = AQUI.parent / "aemet-temperaturas" / "datos" / "spain-provinces.geojso
 #    no se escribe a mano. Ver la función duraciones_desde_audio() abajo.
 #
 #    Cifras de la escena 1 sacadas de video/preparar_datos_video.py (panel fijo
-#    de 687 estaciones, veranos 2017-2025, jun-sep, tmin >= 20 °C). Si cambia el
+#    de 654 estaciones, veranos 2017-2026, jun-sep, tmin >= 20 °C). Si cambia el
 #    JSON, vuelve a mirar su resumen antes de grabar la voz.
 # ---------------------------------------------------------------------------
 
@@ -50,8 +50,8 @@ GUION = {
     "escena_01_mapa": [
         ("En 2017, estas eran las estaciones de AEMET", 3.2),
         ("que registraban al menos una noche tropical en verano.", 3.4),
-        ("Ocho veranos después, así está el mapa.", 3.0),
-        ("Suben 564 de las 687 estaciones. Bajan 29.", 4.4),
+        ("Nueve veranos después, así está el mapa.", 3.0),
+        ("Suben 556 de las 654 estaciones. Bajan 23.", 4.4),
     ],
     "escena_02_curva": [
         ("Una noche tropical es una noche en la que la temperatura", 3.4),

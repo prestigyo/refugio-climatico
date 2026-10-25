@@ -1,0 +1,49 @@
+{
+ "generado": "2026-09-15",
+ "fuente": "AEMET",
+ "estacion": {
+  "indicativo": "8293X",
+  "nombre": "Xàtiva",
+  "provincia": "Valencia",
+  "altitud": 88
+ },
+ "noche": "2026-09-02",
+ "ventana": "23:00-07:00 hora local",
+ "horas_locales": [
+  "23:00",
+  "00:00",
+  "01:00",
+  "02:00",
+  "03:00",
+  "04:00",
+  "05:00",
+  "06:00",
+  "07:00"
+ ],
+ "ta": [
+  24.3,
+  23.9,
+  23.0,
+  22.4,
+  22.1,
+  21.6,
+  21.5,
+  20.8,
+  20.2
+ ],
+ "tamin": [
+  24.3,
+  23.6,
+  22.9,
+  22.4,
+  21.8,
+  21.6,
+  21.1,
+  20.6,
+  20.2
+ ],
+ "tmin_diaria_validada": 20.1,
+ "provisional": false,
+ "tipo": "tropical cerrada",
+ "forma": "descendente"
+}

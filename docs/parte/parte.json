@@ -1,7 +1,7 @@
 {
  "fecha": "2026-10-25",
- "total": 844,
- "tropicales": 42,
+ "total": 843,
+ "tropicales": 43,
  "ecuatoriales": 0,
  "peor": {
   "id": "C329Z",
@@ -61,7 +61,7 @@
   {
    "id": "C939T",
    "nombre": "Sabinosa-Balneario",
-   "min": 22.6,
+   "min": 22.7,
    "prov": "Santa Cruz de Tenerife"
   },
   {

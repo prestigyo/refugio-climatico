@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-25",
- "total": 843,
- "tropicales": 43,
- "ecuatoriales": 0,
+ "fecha": "2026-10-26",
+ "total": 847,
+ "tropicales": 53,
+ "ecuatoriales": 1,
  "peor": {
-  "id": "C329Z",
-  "nombre": "San Sebastián de la Gomera",
-  "min": 23.6,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "C229J",
+  "nombre": "Pájara-Puerto Morro Jable",
+  "min": 25.4,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "2192C",
-  "nombre": "Cuellar",
-  "min": -2.5,
-  "prov": "Segovia"
+  "id": "2766E",
+  "nombre": "El Puente (Casa Forestal)",
+  "min": -1.4,
+  "prov": "Zamora"
  },
  "top_calor": [
   {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 23.6,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 23.3,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 23.1,
+   "min": 25.4,
    "prov": "Las Palmas"
   },
   {
    "id": "C619X",
    "nombre": "Agaete-Casco",
-   "min": 23.0,
+   "min": 24.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "C639U",
-   "nombre": "San Bartolome Tirajana (el Matorral)",
-   "min": 22.9,
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 24.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 22.9,
+   "id": "C648N",
+   "nombre": "Telde-Centro Forestal Doramas",
+   "min": 24.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 22.8,
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 24.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
+   "min": 24.3,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C648C",
+   "nombre": "Agüimes-el Milano",
+   "min": 24.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 24.0,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C939T",
-   "nombre": "Sabinosa-Balneario",
-   "min": 22.7,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 22.6,
+   "id": "C689E",
+   "nombre": "Maspalomas",
+   "min": 24.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 22.5,
+   "id": "C628B",
+   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "min": 23.9,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": -2.5,
-   "prov": "Segovia"
-  },
-  {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": -1.7,
-   "prov": "Burgos"
-  },
-  {
-   "id": "2626Y",
-   "nombre": "Sahechores-Helipuerto",
-   "min": -1.0,
-   "prov": "León"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": -1.0,
-   "prov": "Cantabria"
-  },
-  {
    "id": "2766E",
    "nombre": "El Puente (Casa Forestal)",
-   "min": -0.8,
+   "min": -1.4,
    "prov": "Zamora"
   },
   {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": -0.7,
-   "prov": "Palencia"
-  },
-  {
-   "id": "2624C",
-   "nombre": "Riaño-Ermita Quintanilla",
-   "min": -0.5,
-   "prov": "León"
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": -0.9,
+   "prov": "Segovia"
   },
   {
    "id": "2930Y",
    "nombre": "Navasfrias",
-   "min": -0.3,
+   "min": 0.3,
    "prov": "Salamanca"
   },
   {
-   "id": "2777K",
-   "nombre": "Santibañez de Vidriales",
-   "min": 0.1,
+   "id": "2885K",
+   "nombre": "Fresno de Sayago",
+   "min": 0.4,
    "prov": "Zamora"
   },
   {
-   "id": "2828Y",
-   "nombre": "Barco de Avila",
-   "min": 0.1,
-   "prov": "Ávila"
+   "id": "9001D",
+   "nombre": "Nestares",
+   "min": 0.5,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": 0.6,
+   "prov": "Zamora"
+  },
+  {
+   "id": "2847X",
+   "nombre": "Pedrosillo de los Aires-Castillejo",
+   "min": 0.7,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "2867",
+   "nombre": "Salamanca/Matacan",
+   "min": 0.7,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "3013",
+   "nombre": "Molina de Aragón",
+   "min": 1.1,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": 1.1,
+   "prov": "Madrid"
   }
  ]
 }

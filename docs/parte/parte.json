@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-26",
- "total": 845,
- "tropicales": 55,
- "ecuatoriales": 1,
+ "fecha": "2026-10-27",
+ "total": 852,
+ "tropicales": 51,
+ "ecuatoriales": 0,
  "peor": {
   "id": "C229J",
   "nombre": "Pájara-Puerto Morro Jable",
-  "min": 25.8,
+  "min": 24.5,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": -1.4,
-  "prov": "Zamora"
+  "id": "2192C",
+  "nombre": "Cuellar",
+  "min": -1.1,
+  "prov": "Segovia"
  },
  "top_calor": [
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 25.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 24.6,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
    "min": 24.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 24.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C648N",
-   "nombre": "Telde-Centro Forestal Doramas",
-   "min": 24.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 24.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C648C",
-   "nombre": "Agüimes-el Milano",
-   "min": 24.2,
    "prov": "Las Palmas"
   },
   {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 24.0,
+   "min": 24.4,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C689E",
-   "nombre": "Maspalomas",
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 24.3,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
    "min": 24.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "C628B",
-   "nombre": "San Nicolas T.-Tasarte/Coparlita",
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
    "min": 23.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 23.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
+   "min": 23.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 23.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619Y",
+   "nombre": "La Aldea de San Nicolas",
+   "min": 23.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 23.8,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": -1.4,
-   "prov": "Zamora"
-  },
-  {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": -0.9,
+   "min": -1.1,
    "prov": "Segovia"
   },
   {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": 0.2,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "2885K",
-   "nombre": "Fresno de Sayago",
-   "min": 0.4,
-   "prov": "Zamora"
-  },
-  {
-   "id": "9001D",
-   "nombre": "Nestares",
-   "min": 0.5,
-   "prov": "Cantabria"
-  },
-  {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": 0.6,
-   "prov": "Zamora"
-  },
-  {
-   "id": "2847X",
-   "nombre": "Pedrosillo de los Aires-Castillejo",
-   "min": 0.7,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "2867",
-   "nombre": "Salamanca/Matacan",
-   "min": 0.7,
-   "prov": "Salamanca"
+   "id": "8210Y",
+   "nombre": "Salvacañete",
+   "min": 0.1,
+   "prov": "Cuenca"
   },
   {
    "id": "3013",
    "nombre": "Molina de Aragón",
-   "min": 1.1,
+   "min": 0.2,
    "prov": "Guadalajara"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": 1.1,
-   "prov": "Madrid"
+   "id": "8245Y",
+   "nombre": "Mira",
+   "min": 0.3,
+   "prov": "Cuenca"
+  },
+  {
+   "id": "3130C",
+   "nombre": "Sigüenza",
+   "min": 0.9,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "2084Y",
+   "nombre": "Ucero",
+   "min": 1.3,
+   "prov": "Soria"
+  },
+  {
+   "id": "2092",
+   "nombre": "Burgo de Osma-Pozuelos",
+   "min": 1.3,
+   "prov": "Soria"
+  },
+  {
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 1.5,
+   "prov": "Burgos"
+  },
+  {
+   "id": "9998X",
+   "nombre": "Bello",
+   "min": 1.5,
+   "prov": "Teruel"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": 1.7,
+   "prov": "Zamora"
   }
  ]
 }

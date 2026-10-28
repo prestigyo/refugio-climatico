@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-27",
- "total": 852,
- "tropicales": 51,
+ "fecha": "2026-10-28",
+ "total": 853,
+ "tropicales": 49,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C229J",
-  "nombre": "Pájara-Puerto Morro Jable",
-  "min": 24.5,
+  "id": "C619X",
+  "nombre": "Agaete-Casco",
+  "min": 24.1,
   "prov": "Las Palmas"
  },
  "mejor": {
   "id": "2192C",
   "nombre": "Cuellar",
-  "min": -1.1,
+  "min": -3.0,
   "prov": "Segovia"
  },
  "top_calor": [
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 24.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 24.4,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 24.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 24.0,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 23.9,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
    "id": "C619X",
    "nombre": "Agaete-Casco",
-   "min": 23.9,
+   "min": 24.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 23.9,
+   "id": "C029O",
+   "nombre": "Lanzarote/Aeropuerto",
+   "min": 23.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C239N",
    "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 23.8,
+   "min": 23.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
-   "min": 23.8,
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 23.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
+   "min": 23.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C629Q",
    "nombre": "Mogan (Puerto Rico)",
-   "min": 23.8,
+   "min": 23.4,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
+   "min": 23.3,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 23.3,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 23.2,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 23.1,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
    "id": "2192C",
    "nombre": "Cuellar",
+   "min": -3.0,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": -1.2,
+   "prov": "Burgos"
+  },
+  {
+   "id": "2135A",
+   "nombre": "Fresno de Cantiespino",
    "min": -1.1,
    "prov": "Segovia"
   },
   {
-   "id": "8210Y",
-   "nombre": "Salvacañete",
-   "min": 0.1,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "3013",
-   "nombre": "Molina de Aragón",
-   "min": 0.2,
-   "prov": "Guadalajara"
-  },
-  {
-   "id": "8245Y",
-   "nombre": "Mira",
-   "min": 0.3,
-   "prov": "Cuenca"
-  },
-  {
-   "id": "3130C",
-   "nombre": "Sigüenza",
-   "min": 0.9,
-   "prov": "Guadalajara"
+   "id": "3104Y",
+   "nombre": "El Paular- Rascafría (Automática)",
+   "min": -1.0,
+   "prov": "Madrid"
   },
   {
    "id": "2084Y",
    "nombre": "Ucero",
-   "min": 1.3,
+   "min": 0.0,
    "prov": "Soria"
   },
   {
    "id": "2092",
    "nombre": "Burgo de Osma-Pozuelos",
-   "min": 1.3,
+   "min": 0.0,
    "prov": "Soria"
   },
   {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 1.5,
+   "id": "3013",
+   "nombre": "Molina de Aragón",
+   "min": 0.4,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "2867",
+   "nombre": "Salamanca/Matacan",
+   "min": 0.7,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "2059B",
+   "nombre": "La Riba de Escalote",
+   "min": 0.8,
+   "prov": "Soria"
+  },
+  {
+   "id": "2117D",
+   "nombre": "Aranda de Duero",
+   "min": 0.9,
    "prov": "Burgos"
-  },
-  {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": 1.5,
-   "prov": "Teruel"
-  },
-  {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": 1.7,
-   "prov": "Zamora"
   }
  ]
 }

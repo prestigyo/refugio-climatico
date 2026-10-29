@@ -1,7 +1,7 @@
 {
  "fecha": "2026-10-29",
- "total": 852,
- "tropicales": 31,
+ "total": 849,
+ "tropicales": 32,
  "ecuatoriales": 0,
  "peor": {
   "id": "C619X",
@@ -43,7 +43,7 @@
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 22.2,
+   "min": 22.3,
    "prov": "Santa Cruz de Tenerife"
   },
   {

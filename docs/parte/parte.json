@@ -1,79 +1,79 @@
 {
- "fecha": "2026-10-28",
- "total": 853,
- "tropicales": 50,
+ "fecha": "2026-10-29",
+ "total": 852,
+ "tropicales": 31,
  "ecuatoriales": 0,
  "peor": {
   "id": "C619X",
   "nombre": "Agaete-Casco",
-  "min": 24.1,
+  "min": 23.3,
   "prov": "Las Palmas"
  },
  "mejor": {
   "id": "2192C",
   "nombre": "Cuellar",
-  "min": -3.0,
+  "min": -3.6,
   "prov": "Segovia"
  },
  "top_calor": [
   {
    "id": "C619X",
    "nombre": "Agaete-Casco",
-   "min": 24.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C029O",
-   "nombre": "Lanzarote/Aeropuerto",
-   "min": 23.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 23.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 23.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 23.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 23.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
    "min": 23.3,
    "prov": "Las Palmas"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 23.3,
+   "min": 22.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 22.3,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 22.3,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 22.2,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 22.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 21.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
+   "min": 21.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C689E",
+   "nombre": "Maspalomas",
+   "min": 21.9,
    "prov": "Las Palmas"
   },
   {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 23.2,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 23.1,
+   "min": 21.4,
    "prov": "Santa Cruz de Tenerife"
   }
  ],
@@ -81,62 +81,62 @@
   {
    "id": "2192C",
    "nombre": "Cuellar",
-   "min": -3.0,
+   "min": -3.6,
    "prov": "Segovia"
   },
   {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": -1.2,
-   "prov": "Burgos"
-  },
-  {
-   "id": "2135A",
-   "nombre": "Fresno de Cantiespino",
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
    "min": -1.1,
-   "prov": "Segovia"
+   "prov": "Soria"
   },
   {
-   "id": "3104Y",
-   "nombre": "El Paular- Rascafría (Automática)",
-   "min": -1.0,
-   "prov": "Madrid"
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": -0.9,
+   "prov": "Lleida"
   },
   {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": 0.0,
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": -0.8,
    "prov": "Soria"
   },
   {
    "id": "2092",
    "nombre": "Burgo de Osma-Pozuelos",
-   "min": 0.0,
+   "min": -0.6,
    "prov": "Soria"
+  },
+  {
+   "id": "3130C",
+   "nombre": "Sigüenza",
+   "min": -0.5,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "9744B",
+   "nombre": "Barruera",
+   "min": -0.5,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9838B",
+   "nombre": "Benasque",
+   "min": -0.5,
+   "prov": "Huesca"
   },
   {
    "id": "3013",
    "nombre": "Molina de Aragón",
-   "min": 0.4,
+   "min": -0.4,
    "prov": "Guadalajara"
   },
   {
-   "id": "2867",
-   "nombre": "Salamanca/Matacan",
-   "min": 0.7,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "2059B",
-   "nombre": "La Riba de Escalote",
-   "min": 0.8,
-   "prov": "Soria"
-  },
-  {
-   "id": "2117D",
-   "nombre": "Aranda de Duero",
-   "min": 0.9,
-   "prov": "Burgos"
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": -0.3,
+   "prov": "Palencia"
   }
  ]
 }

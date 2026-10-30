@@ -21,14 +21,18 @@ import time
 from datetime import date, timedelta
 from pathlib import Path
 
-import requests
+# `requests` se importa donde se usa, no aquí: `--solo-consolidar` promete no
+# tocar la API, y un modo que no sale a la red no debe fallar por no tener
+# instalada la librería HTTP.
 
 # ---------------------------------------------------------------------------
 # Configuración
 # ---------------------------------------------------------------------------
 
 API_KEY = os.environ.get("AEMET_API_KEY")
-if not API_KEY:
+# `--solo-consolidar` no sale a la red: vuelca el rolling en los anuales y sale.
+# Exigirle la clave sería pedir una credencial para reordenar ficheros locales.
+if not API_KEY and "--solo-consolidar" not in sys.argv:
     print("ERROR: falta variable de entorno AEMET_API_KEY", file=sys.stderr)
     sys.exit(1)
 
@@ -66,6 +70,7 @@ def aemet_get(endpoint: str, retries: int = 4):
     """Llama a OpenData. AEMET responde con un JSON intermedio cuyo campo
     "datos" apunta a la URL real con el payload; hay que hacer 2 peticiones.
     """
+    import requests
     url = f"{BASE}{endpoint}"
     for intento in range(1, retries + 1):
         try:
@@ -182,6 +187,71 @@ def descargar_diarios() -> int:
     return len(nuevos)
 
 
+def consolidar_anuales() -> dict[str, int]:
+    """Vuelca el rolling en los `diarios_AAAA.csv`, que son el registro bueno.
+
+    POR QUÉ HACE FALTA. `descargar_diarios()` solo añade al rolling
+    (`diarios_estaciones.csv`), y los anuales los escribía únicamente el
+    backfill. Resultado: `diarios_2026.csv` se quedó en el 26 de mayo de 2026
+    mientras el rolling ya traía hasta el 26 de octubre. Tres de los cuatro
+    análisis leen los DOS ficheros y no se enteraron, pero `analisis_estancia.py`
+    lee solo los anuales: la herramienta por pueblo y la de «find your winter
+    address» llevaban cinco meses mirando un 2026 que acababa en mayo, sin que
+    nada avisara. Un fichero que se llama `diarios_2026.csv` tiene que contener
+    2026 entero.
+
+    Es idempotente: la clave es (fecha, indicativo). Si AEMET corrige un valor
+    ya publicado, **gana el del rolling**, que es la descarga más reciente, y se
+    cuenta aparte para que la corrección no pase desapercibida.
+    """
+    if not CSV_DIARIOS.exists():
+        return {}
+    por_anio: dict[str, dict[tuple[str, str], dict]] = {}
+    with CSV_DIARIOS.open(newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            fecha = (r.get("fecha") or "").strip()
+            if len(fecha) < 4 or not fecha[:4].isdigit():
+                continue
+            por_anio.setdefault(fecha[:4], {})[(fecha, r.get("indicativo", ""))] = r
+
+    resumen: dict[str, int] = {}
+    for anio, filas in sorted(por_anio.items()):
+        destino = DATOS_DIR / f"diarios_{anio}.csv"
+        previas: dict[tuple[str, str], dict] = {}
+        if destino.exists():
+            with destino.open(newline="", encoding="utf-8") as fh:
+                for r in csv.DictReader(fh):
+                    previas[((r.get("fecha") or ""), r.get("indicativo", ""))] = r
+        nuevas = corregidas = 0
+        for clave, fila in filas.items():
+            anterior = previas.get(clave)
+            if anterior is None:
+                nuevas += 1
+            elif any((anterior.get(c) or "") != (fila.get(c) or "")
+                     for c in ("tmin", "tmax", "tmed", "prec")):
+                corregidas += 1
+            else:
+                continue
+            previas[clave] = fila
+        if not (nuevas or corregidas):
+            continue
+        # Se reescribe ordenado por (fecha, indicativo): así el diff del commit
+        # es legible y dos ejecuciones seguidas dan el mismo fichero.
+        tmp = destino.with_suffix(".csv.tmp")
+        with tmp.open("w", newline="", encoding="utf-8") as fh:
+            w = csv.DictWriter(fh, fieldnames=HEADERS_DIARIOS, extrasaction="ignore")
+            w.writeheader()
+            for clave in sorted(previas):
+                w.writerow(previas[clave])
+        tmp.replace(destino)
+        resumen[anio] = nuevas
+        log.info("%s: +%d filas nuevas, %d corregidas (total %d)",
+                 destino.name, nuevas, corregidas, len(previas))
+    if not resumen:
+        log.info("Anuales ya al día: nada que consolidar.")
+    return resumen
+
+
 def actualizar_estaciones() -> None:
     """Refresca el inventario de estaciones (lat/lon/altitud). Se ejecuta
     cada día pero ocupa poco; tener los metadatos al día es útil para mapas."""
@@ -211,10 +281,22 @@ def main() -> int:
     except Exception as exc:  # noqa: BLE001
         log.error("Error en descarga de diarios: %s", exc)
         return 1
+    # El rolling no basta: los anuales son el registro que leen los análisis.
+    try:
+        consolidar_anuales()
+    except Exception as exc:  # noqa: BLE001
+        log.error("Error consolidando los anuales: %s", exc)
     actualizar_estaciones()
     log.info("Resumen: %d filas nuevas añadidas.", nuevas)
     return 0
 
 
 if __name__ == "__main__":
+    # `--solo-consolidar` vuelca el rolling en los anuales y sale, sin tocar la
+    # API: sirve para poner al día un año que se quedó corto sin gastar cuota ni
+    # necesitar AEMET_API_KEY.
+    if "--solo-consolidar" in sys.argv:
+        logging.basicConfig(level=logging.INFO, format="%(message)s")
+        consolidar_anuales()
+        sys.exit(0)
     sys.exit(main())

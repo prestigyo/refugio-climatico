@@ -343,6 +343,26 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   comprobarlo contra `main`, no contra el clon de la sesión: aquí el clon mostraba
   18 huecos en el parte y 16 días perdidos del archivo horario que en `main` no
   existían.
+- **`descarga_datos.py` solo escribía el ROLLING, y los anuales se quedaban atrás.**
+  Los `diarios_AAAA.csv` los escribía únicamente el backfill, así que
+  `diarios_2026.csv` se quedó en el **26 de mayo** mientras el rolling ya traía
+  hasta el 26 de octubre. `analisis_refugios*.py` y `analisis_invierno.py` leen
+  los DOS ficheros y no lo notaron, pero **`analisis_estancia.py` lee solo los
+  anuales**: la herramienta por pueblo y la de «find your winter address»
+  llevaban cinco meses mirando un 2026 que acababa en mayo, **sin que nada
+  avisara**. Desde 2026-10-30 `descarga_datos.py` consolida al final de cada
+  descarga, y `--solo-consolidar` lo hace sin salir a la red ni pedir clave.
+  Es idempotente por (fecha, indicativo) y si AEMET corrige un valor gana el del
+  rolling, que se cuenta aparte: la primera pasada movió 125.651 filas nuevas y
+  **10 corregidas**. **La invariante es que `diarios_AAAA.csv` contiene el año
+  entero**; quien lea solo los anuales ya no se pierde nada.
+- **Una serie anual con cobertura desigual finge récords y hundimientos.**
+  L'Estartit figura con 27 noches tropicales en 2021 y 85 en 2026: parece un
+  derrumbe seguido de un pico, pero 2021 solo tiene **59 de los 122 días de
+  jun-sep** medidos. Antes de comparar años —y sobre todo antes de dárselos a un
+  periodista— hay que mirar la cobertura de cada uno: con menos del 92 % de la
+  ventana cálida la cifra no es comparable. Lo mismo vale por estación: en 2026,
+  Cabo de Creus (78 %) y Porqueres (80 %) no se pueden citar junto a Girona (98 %).
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
 - **DOS provincias vienen escritas de dos formas en el catálogo de AEMET**, en

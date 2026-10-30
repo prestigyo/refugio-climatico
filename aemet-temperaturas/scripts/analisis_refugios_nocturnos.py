@@ -181,6 +181,17 @@ def reg_multivariada(X, y):
 # resumen por estación con peor año, racha y percentiles en vez de promedios.
 # No tocan refugios_nocturnos_ranking.csv, del que vive toda la web.
 MIN_DIAS_ANIO = 300     # un año natural "casi completo"
+# Un año en curso NO es un año. 300 días se alcanzan ya a finales de octubre, así
+# que sin esta segunda condición el año corriente entra en la tabla como si
+# estuviera cerrado: el 2026-10-30, con el dato hasta el 27 de octubre, se colaron
+# 140 estaciones con 300 días que `analisis_invierno.py` tomó por años completos
+# (su filtro es justo `dias_con_dato >= 300`). Para 126 daba igual —no tienen una
+# sola noche tropical del 28 de octubre al 31 de diciembre— pero las 14 canarias
+# perdían de 2 a 25 noches de mediana, y Hierro Aeropuerto hasta 43 en su peor año.
+# Se exige además que el dato LLEGUE a diciembre, que es una prueba sobre el dato y
+# no sobre el reloj. Coste medido en 2017-2025: 36 estaciones-año de ~7.400 (0,5 %),
+# frente a las ~250 que costaría subir el umbral de días a 330.
+DIA_CIERRE_ANIO = (12, 15)
 
 
 def racha_maxima(fechas, tmins) -> int:
@@ -207,6 +218,8 @@ def noches_por_anio(diarios: pd.DataFrame, estaciones: pd.DataFrame) -> pd.DataF
     filas = []
     for (ind, anio), g in d.groupby(["indicativo", "anio"]):
         if len(g) < MIN_DIAS_ANIO:
+            continue
+        if g["fecha"].max() < pd.Timestamp(int(anio), *DIA_CIERRE_ANIO):
             continue
         g = g.sort_values("fecha")
         trop = g["tmin"] > UMBRAL_NOCHE_TROPICAL

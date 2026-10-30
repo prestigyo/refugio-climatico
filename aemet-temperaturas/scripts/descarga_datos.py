@@ -276,16 +276,27 @@ def actualizar_estaciones() -> None:
 
 
 def main() -> int:
+    fallo: Exception | None = None
+    nuevas = 0
     try:
         nuevas = descargar_diarios()
     except Exception as exc:  # noqa: BLE001
         log.error("Error en descarga de diarios: %s", exc)
-        return 1
+        fallo = exc
+
     # El rolling no basta: los anuales son el registro que leen los análisis.
+    # Va SIEMPRE, también si la descarga ha fallado: no sale a la red, y el
+    # rolling que dejó la pasada anterior puede traer días que los anuales aún
+    # no tengan. Si esto se cuelga detrás de un `return 1` —como estaba— un mal
+    # día de AEMET deja los anuales atrás sin que nada avise, que es exactamente
+    # el defecto que esta función venía a arreglar.
     try:
         consolidar_anuales()
     except Exception as exc:  # noqa: BLE001
         log.error("Error consolidando los anuales: %s", exc)
+
+    if fallo is not None:
+        return 1
     actualizar_estaciones()
     log.info("Resumen: %d filas nuevas añadidas.", nuevas)
     return 0

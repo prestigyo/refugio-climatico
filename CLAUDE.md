@@ -110,6 +110,46 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **Idempotencia**: scripts pensados para re-ejecutarse sin romper nada. Los workflows commitean solo si hay cambios reales.
 - **Métricas honestas**: para identificar refugios no usamos medias (esconden picos). Usamos P95 de Tmin de verano, racha máxima consecutiva de noches tropicales, y conteos por umbral.
 - **Nada interpolado**: todo lo que se afirma sale de una estación medida de AEMET.
+- **«Verano» hay que decir SIEMPRE cuál.** El verano físico es del **22 de junio al
+  22 de septiembre** (93 días) y es lo que entiende el lector, pero el fenómeno no
+  cabe ahí: sobre 2017-2026 (231.657 noches tropicales medidas) esa ventana deja
+  fuera el **16,7 %**. Las tres ventanas que circulan por el repo capturan cosas
+  distintas y confundirlas produce comparaciones falsas:
+
+  | Ventana | Días | Captura | Deja fuera |
+  |---|---|---|---|
+  | Astronómica, 22 jun – 22 sep | 93 | 83,3 % | 16,7 % |
+  | jun-ago | 92 | 78,1 % | **21,9 %** |
+  | jun-sep | 122 | 92,4 % | 7,6 % |
+  | Año natural | 365 | 100 % | — |
+
+  **Lo que publica hoy la web es jun-ago y no lo dice**: el campo
+  `noches_trop_anio` de `refugios_nocturnos_ranking.csv` —el 36,7 de Girona
+  capital, por ejemplo— es la media **jun-ago de diez años, 2017-2026 incluido**
+  (`n_anios` vale 10). `analisis/noches_por_anio.csv` trae en cambio el año
+  natural y el jun-ago por separado, y la herramienta de estancia va por meses de
+  llegada. **Mezclar ventanas es el error que ya se cometió** una vez: en el
+  borrador del correo a Girona (2026-10-30) una tabla ponía el recuento de 2026 en
+  jun-sep al lado de la media del ranking en jun-ago, y encima llamaba «media
+  17-25» a una media que ya incluía 2026. Cualquier tabla tiene que usar la misma
+  ventana en todas sus columnas y decir cuál es.
+
+  **La ventana NO se está desplazando, y esa no es la razón para ampliarla.** Con
+  los diez años: el inicio (p5) va a −0,80 días/año con IC95 [−2,17, +0,57] y
+  R² 0,18; el ancho p5-p95, a +0,64 con IC95 [−1,76, +3,05] y R² 0,05; el
+  porcentaje que queda fuera del astronómico, a +0,20 puntos/año, R² 0,02. Las
+  tres incluyen el cero. El argumento es otro y es más fuerte: **ya está fuera, y
+  lo ha estado los diez años** — del 10,5 % (2019) al 24,2 % (2017), sin un solo
+  año dentro. El 90 % central ocupa 93-122 días según el año y **en 8 de 10 acaba
+  en octubre**. De lo que cae fuera del astronómico, el **40,5 % son los primeros
+  21 días de junio** y el **29,4 % octubre**: las tres primeras semanas de junio
+  acumulan 15.679 noches tropicales, más que octubre entero (11.379).
+
+  Por defecto, para citar un año concreto usar **jun-sep con cobertura ≥92 % de
+  los 122 días**, que es lo comparable entre años y entre estaciones; y decir
+  «noches tropicales del año» cuando se use el año natural. **Pendiente: la web no
+  explica esto en ningún sitio** — ni `/metodologia/` ni las fichas provinciales
+  dicen en qué ventana está la cifra que publican.
 - **Para una estancia larga manda la RACHA, no la mediana.** `/en/winter-in-spain-long-stay/`
   usa `racha_sin_terraza_max` —el tramo más largo sin un solo día que llegara a 18 °C— y no
   la usa ninguna otra página. La mediana nacional son **90 días en península y Baleares**
@@ -557,12 +597,17 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 
 - Los **refugios nocturnos garantizados** son pueblos de montaña interior 600-1500 m, climas continentales secos: Sanabria, Puerto del Pico, Rascafría, Benasque, Vall de Boí, Beariz, Reinosa, Isaba...
 - La **costa mediterránea** es de los PEORES sitios de España para dormir en verano: Palma, Cartagena, Capdepera con rachas de **86 noches tropicales consecutivas**.
-- **La ventana jun-ago descarta el 21,4 % de las noches tropicales** del histórico.
-  Septiembre (13,9 % del total) tiene MÁS que junio (12,1 %). En Canarias no captura
-  ni la mitad: Hierro Aeropuerto publica 83 noches/año y tiene **170**; en 2023 tuvo
-  204, del 3 de enero al 20 de diciembre, con una **racha real de 161 seguidas**.
-  Comprobado que la ventana NO se está desplazando de forma detectable (R² de 0,01 a
-  0,11 en nueve años): no es una deriva futura, ya está fuera. Los refugios apenas
+- **La ventana jun-ago descarta el 21,9 % de las noches tropicales** del histórico
+  (recalculado con los diez años, 2017-2026; con nueve eran 21,4 %). El **verano
+  astronómico, 22 jun – 22 sep, deja fuera el 16,7 %** — ver la convención de ventanas
+  arriba. Septiembre (14,3 % del total) tiene MÁS que junio (12,7 %), y **octubre
+  (4,9 %) tiene más que mayo, abril, marzo, febrero, enero y diciembre juntos**
+  (1,5 %): la cola de la temporada está al final, no al principio. En Canarias no
+  captura ni la mitad: Hierro Aeropuerto publica 83 noches/año y tiene **170**; en
+  2023 tuvo 204, del 3 de enero al 20 de diciembre, con una **racha real de 161
+  seguidas**. Comprobado que la ventana NO se está desplazando de forma detectable
+  (R² de 0,02 a 0,18 en los diez años, las tres pendientes con el cero dentro del
+  IC95): no es una deriva futura, ya está fuera. Los refugios apenas
   cambian —solo 2 de 192 pierden el criterio de <1 noche/año contando el año entero—;
   lo que está mal medido es el contraste, y en nuestra contra: los sitios malos son
   mucho peores de lo que publicamos.
@@ -630,6 +675,16 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - Página `/prensa/`, generador de informes por lead y export a Excel por estación
 
 **Pendiente para el lanzamiento mediático:**
+- **Decir en la web en qué ventana está cada cifra.** Hoy no se dice en ningún
+  sitio: ni `/metodologia/`, ni las 52 fichas provinciales, ni el ranking. El
+  número que publican es la media **jun-ago de diez años** y el lector asume
+  «verano», que para él es del 22 de junio al 22 de septiembre. Son dos cosas
+  distintas y la diferencia es del 5,2 % de las noches. Lo mínimo: una línea en
+  cada ficha y un párrafo en metodología con la tabla de ventanas (ver la
+  convención ««Verano» hay que decir SIEMPRE cuál» arriba). El argumento de
+  venta está ahí mismo: **somos los únicos que contamos octubre**, y octubre
+  tiene más noches tropicales que enero, febrero, marzo, abril, mayo y diciembre
+  juntos.
 - ~~Press kit PDF de 2 páginas~~ **HECHO (2026-10-09)**: `generar_presskit.py` →
   `/prensa/kit/`, dos A4 que se guardan en PDF desde el navegador. Y
   `generar_pitch.py`, que escribe el correo de presentación con la cifra de CADA

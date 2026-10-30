@@ -1,31 +1,37 @@
 {
- "fecha": "2026-10-29",
- "total": 849,
- "tropicales": 32,
+ "fecha": "2026-10-30",
+ "total": 853,
+ "tropicales": 28,
  "ecuatoriales": 0,
  "peor": {
   "id": "C619X",
   "nombre": "Agaete-Casco",
-  "min": 23.3,
+  "min": 23.2,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "2192C",
-  "nombre": "Cuellar",
-  "min": -3.6,
-  "prov": "Segovia"
+  "id": "9657X",
+  "nombre": "Esterri D?aneu",
+  "min": 0.0,
+  "prov": "Lleida"
  },
  "top_calor": [
   {
    "id": "C619X",
    "nombre": "Agaete-Casco",
-   "min": 23.3,
+   "min": 23.2,
    "prov": "Las Palmas"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 22.7,
+   "min": 23.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
+   "min": 22.9,
    "prov": "Las Palmas"
   },
   {
@@ -37,106 +43,100 @@
   {
    "id": "C629Q",
    "nombre": "Mogan (Puerto Rico)",
-   "min": 22.3,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 22.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C639M",
-   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 22.0,
+   "min": 22.1,
    "prov": "Las Palmas"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
+   "min": 22.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
    "min": 21.9,
    "prov": "Las Palmas"
   },
   {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 21.9,
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
+   "min": 21.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C669B",
+   "nombre": "Arucas-Bañaderos",
+   "min": 21.8,
    "prov": "Las Palmas"
   },
   {
    "id": "C689E",
    "nombre": "Maspalomas",
-   "min": 21.9,
+   "min": 21.7,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 21.4,
-   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
-   "id": "2192C",
-   "nombre": "Cuellar",
-   "min": -3.6,
-   "prov": "Segovia"
-  },
-  {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": -1.1,
-   "prov": "Soria"
-  },
-  {
    "id": "9657X",
    "nombre": "Esterri D?aneu",
-   "min": -0.9,
+   "min": 0.0,
    "prov": "Lleida"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": -0.8,
-   "prov": "Soria"
-  },
-  {
-   "id": "2092",
-   "nombre": "Burgo de Osma-Pozuelos",
-   "min": -0.6,
-   "prov": "Soria"
-  },
-  {
-   "id": "3130C",
-   "nombre": "Sigüenza",
-   "min": -0.5,
-   "prov": "Guadalajara"
+   "id": "9590",
+   "nombre": "Martinet",
+   "min": 0.1,
+   "prov": "Lleida"
   },
   {
    "id": "9744B",
    "nombre": "Barruera",
-   "min": -0.5,
+   "min": 0.4,
    "prov": "Lleida"
   },
   {
    "id": "9838B",
    "nombre": "Benasque",
-   "min": -0.5,
+   "min": 0.7,
    "prov": "Huesca"
   },
   {
-   "id": "3013",
-   "nombre": "Molina de Aragón",
-   "min": -0.4,
-   "prov": "Guadalajara"
+   "id": "2298",
+   "nombre": "Palacios de la Sierra",
+   "min": 1.0,
+   "prov": "Burgos"
   },
   {
-   "id": "2243A",
-   "nombre": "Aguilar de Campoo",
-   "min": -0.3,
-   "prov": "Palencia"
+   "id": "2048A",
+   "nombre": "Moron de Almazan",
+   "min": 1.4,
+   "prov": "Soria"
+  },
+  {
+   "id": "9218A",
+   "nombre": "Isaba/Izaba",
+   "min": 1.8,
+   "prov": "Navarra"
+  },
+  {
+   "id": "9238X",
+   "nombre": "Navascués/Nabaskoze",
+   "min": 1.9,
+   "prov": "Navarra"
+  },
+  {
+   "id": "2092",
+   "nombre": "Burgo de Osma-Pozuelos",
+   "min": 2.0,
+   "prov": "Soria"
+  },
+  {
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": 2.0,
+   "prov": "Soria"
   }
  ]
 }

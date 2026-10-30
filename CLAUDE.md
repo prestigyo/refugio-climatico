@@ -396,6 +396,22 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   rolling, que se cuenta aparte: la primera pasada movió 125.651 filas nuevas y
   **10 corregidas**. **La invariante es que `diarios_AAAA.csv` contiene el año
   entero**; quien lea solo los anuales ya no se pierde nada.
+- **Un año EN CURSO no es un año, y 300 días se alcanzan en octubre.**
+  `noches_por_anio.csv` pedía solo `dias_con_dato >= 300` (`MIN_DIAS_ANIO`), así que
+  el 2026-10-30, con el dato hasta el 27 de octubre, **2026 entró en la tabla con 140
+  estaciones** como si estuviera cerrado — y `analisis_invierno.py` lo tomó por bueno
+  porque su filtro es exactamente el mismo `>= 300`. Para 126 de las 140 no cambiaba
+  nada (no tienen una sola noche tropical del 28 de octubre al 31 de diciembre), pero
+  las **14 canarias** perdían de 2 a 25 noches de mediana y **Hierro Aeropuerto hasta
+  43** en su peor año. Comprobado que no falseó ninguna afirmación publicada —`ambos`
+  seguía con una estación, `rho` en −0,71, el sello en 67— y que lo que sí movió fue
+  legítimo: las medianas peninsulares subieron al entrar 2026, que fue caluroso
+  (Granada-Cartuja 39 → 43, A Coruña 0 → 1). Arreglado con `DIA_CIERRE_ANIO`: se exige
+  además que **el dato llegue a diciembre**, que es una prueba sobre el dato y no sobre
+  el reloj del runner. Coste medido: 36 estaciones-año de ~7.400 en 2017-2025 (0,5 %),
+  frente a las ~250 que costaría subir el umbral a 330 días. **El patrón a vigilar**: un
+  umbral de cobertura expresado en días absolutos se cumple a mitad de año y no detecta
+  un año abierto; hace falta mirar DÓNDE está el dato, no cuánto hay.
 - **Una serie anual con cobertura desigual finge récords y hundimientos.**
   L'Estartit figura con 27 noches tropicales en 2021 y 85 en 2026: parece un
   derrumbe seguido de un pico, pero 2021 solo tiene **59 de los 122 días de

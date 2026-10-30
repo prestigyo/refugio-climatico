@@ -1,7 +1,7 @@
 {
 "": {
-"f": "2026-10-19",
-"h": "740fd9dbe92b215c"
+"f": "2026-10-30",
+"h": "72d48a25fc402bf2"
 },
 "a-coruna": {
 "f": "2026-10-30",
@@ -885,7 +885,7 @@
 },
 "confortometro": {
 "f": "2026-10-30",
-"h": "4d09760b2d49a7b5"
+"h": "be5847dea5ede9c8"
 },
 "cordoba": {
 "f": "2026-10-30",
@@ -916,8 +916,8 @@
 "h": "4a63bbcc6a9cd731"
 },
 "en/best-climate-in-spain-year-round": {
-"f": "2026-10-19",
-"h": "dab2bed716c207ff"
+"f": "2026-10-30",
+"h": "929d33c694e81107"
 },
 "en/climate-in-your-town": {
 "f": "2026-10-25",
@@ -936,8 +936,8 @@
 "h": "b167c2f57e4decdd"
 },
 "en/mild-winter": {
-"f": "2026-10-19",
-"h": "8a8269cc6779156d"
+"f": "2026-10-30",
+"h": "c17dadd1b2853ffd"
 },
 "en/mild-winter/adeje": {
 "f": "2026-10-19",
@@ -948,12 +948,12 @@
 "h": "3670c3a4022440ac"
 },
 "en/mild-winter/agaete-suerte-alta": {
-"f": "2026-10-19",
-"h": "1a89330a60e28384"
+"f": "2026-10-30",
+"h": "49e76181584b6ade"
 },
 "en/mild-winter/aguimes": {
-"f": "2026-10-19",
-"h": "df52eb47774607e2"
+"f": "2026-10-30",
+"h": "14cffbced17abcff"
 },
 "en/mild-winter/agulo": {
 "f": "2026-10-19",
@@ -1032,16 +1032,16 @@
 "h": "06ab1a4da4b30e1f"
 },
 "en/mild-winter/hierro-aeropuerto": {
-"f": "2026-10-19",
-"h": "85aa11caea8820a2"
+"f": "2026-10-30",
+"h": "ce651746d2d5b9b7"
 },
 "en/mild-winter/la-aldea-de-san-nicolas": {
 "f": "2026-10-19",
 "h": "148fe9e3747c451c"
 },
 "en/mild-winter/la-aldea-de-san-nicolas-tasarte": {
-"f": "2026-10-19",
-"h": "0a0c95183c1c1fa1"
+"f": "2026-10-30",
+"h": "1b28ab01b6bfc1b3"
 },
 "en/mild-winter/la-gomera-aeropuerto": {
 "f": "2026-10-19",
@@ -1064,12 +1064,12 @@
 "h": "e4fd081db647f888"
 },
 "en/mild-winter/las-palmas-de-g-c-tafira-cmt": {
-"f": "2026-10-19",
-"h": "a6f9cc2cbecf2d7e"
+"f": "2026-10-30",
+"h": "9843ae88e9b00473"
 },
 "en/mild-winter/las-palmas-de-gran-canaria-pl-de-la-feria": {
-"f": "2026-10-19",
-"h": "0fca8d1f52ebc0ca"
+"f": "2026-10-30",
+"h": "2a6297580bb8d906"
 },
 "en/mild-winter/las-palmas-de-gran-canaria-san-cristobal": {
 "f": "2026-10-19",
@@ -1100,8 +1100,8 @@
 "h": "493b4e0709033ddf"
 },
 "en/mild-winter/melilla": {
-"f": "2026-10-19",
-"h": "cb886561c6b2754b"
+"f": "2026-10-30",
+"h": "219dc505adfdc32a"
 },
 "en/mild-winter/mogan-puerto": {
 "f": "2026-10-19",
@@ -1116,8 +1116,8 @@
 "h": "4b036f6e049c765b"
 },
 "en/mild-winter/pajara": {
-"f": "2026-10-19",
-"h": "a8cdf4255992527a"
+"f": "2026-10-30",
+"h": "604494846945a8bb"
 },
 "en/mild-winter/puerto-de-la-cruz": {
 "f": "2026-10-19",
@@ -1132,8 +1132,8 @@
 "h": "1a248ec605cf8711"
 },
 "en/mild-winter/san-bartolome-tirajana-el-matorral": {
-"f": "2026-10-19",
-"h": "be11d5e079149cec"
+"f": "2026-10-30",
+"h": "9b1fd335a8005a7c"
 },
 "en/mild-winter/san-bartolome-tirajana-lomo-pedro-alfonso": {
 "f": "2026-10-19",
@@ -1144,8 +1144,8 @@
 "h": "62aee98bd6a40d06"
 },
 "en/mild-winter/sta-cruz-de-tenerife": {
-"f": "2026-10-19",
-"h": "25fdc3e5a907e3ec"
+"f": "2026-10-30",
+"h": "2a391dfed90caca1"
 },
 "en/mild-winter/tacoron-lapillas-tortuga": {
 "f": "2026-10-19",
@@ -1180,8 +1180,8 @@
 "h": "21088330a3ae8e91"
 },
 "en/mild-winter/tijarafe": {
-"f": "2026-10-19",
-"h": "af9d43cfac1fd72d"
+"f": "2026-10-30",
+"h": "21109504cff75d55"
 },
 "en/mild-winter/tinajo": {
 "f": "2026-10-19",
@@ -1428,8 +1428,8 @@
 "h": "6ebbc0dcded23357"
 },
 "malaga": {
-"f": "2026-10-25",
-"h": "ebd5cad0ab76fccc"
+"f": "2026-10-30",
+"h": "94b320148e2ffd02"
 },
 "mapa-estaciones": {
 "f": "2026-10-26",
@@ -1472,8 +1472,8 @@
 "h": "241273b411a6c7c0"
 },
 "observatorio-del-descanso": {
-"f": "2026-10-19",
-"h": "6ace4a00f71b65bf"
+"f": "2026-10-30",
+"h": "d2cf9869284aac9f"
 },
 "ola-de-calor": {
 "f": "2026-10-25",
@@ -1508,8 +1508,8 @@
 "h": "a08628bb0fb6de5d"
 },
 "refugios-climaticos-naturales-cerca-de-mi": {
-"f": "2026-10-19",
-"h": "45220f395346258f"
+"f": "2026-10-30",
+"h": "27051e59b9265a68"
 },
 "refugios-y-espana-vaciada": {
 "f": "2026-10-25",

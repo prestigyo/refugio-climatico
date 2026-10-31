@@ -121,7 +121,15 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   | Astronómica, 22 jun – 22 sep | 93 | 83,3 % | 16,7 % |
   | jun-ago | 92 | 78,1 % | **21,9 %** |
   | jun-sep | 122 | 92,4 % | 7,6 % |
+  | 1 jun – 20 ago | 81 | — | — |
   | Año natural | 365 | 100 % | — |
+
+  La de **81 días es la de `analisis_tendencia.py`** (`noches_posibles` = 81 en las
+  746 filas de `datos/tendencia_estaciones.csv`). Se eligió el 2026-08-27 por una
+  razón que **ya no se sostiene**: entonces 2026 no tenía septiembre y comparar un
+  verano truncado con nueve completos habría hundido el último punto, que es el que
+  más pesa en la pendiente. Desde el 2026-10-30 el 2026 está consolidado y completo,
+  así que al rehacer esa edición hay que **volver a jun-sep** y dejar de recortar.
 
   **Lo que publica hoy la web es jun-ago y no lo dice**: el campo
   `noches_trop_anio` de `refugios_nocturnos_ranking.csv` —el 36,7 de Girona
@@ -736,6 +744,63 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   única vía.
 
 **Ideas para más adelante:**
+- **Gráfica de tendencia que se apaga al pasar de 2026 — medido el 2026-10-31,
+  sin construir.** La idea: dibujar la serie de cada estación hasta 2026 con trazo
+  firme y seguir 2027-2030 mucho más suave o sin pintar, para decir «aquí dejamos
+  de medir» sin dar una previsión. **No hace falta script nuevo**:
+  `analisis_tendencia.py` ya produce por estación la pendiente, `ic95_inf`,
+  `ic95_sup`, `ic95_excluye_cero`, `r2`, `cerca_del_techo`,
+  `posible_inhomogeneidad` y la columna `serie` con el valor de cada año. El
+  trabajo es solo la visualización en `generar_calculadora.py`.
+  **Lo que dicen los números, y condiciona el diseño:**
+  - **Solo en el 26 % de las 746 estaciones el IC95 excluye el cero** (194; en mi
+    recálculo en jun-sep sobre 713 con alguna noche tropical salía el 33 %). En las
+    otras dos de cada tres la respuesta honesta es «no se distingue del ruido».
+  - **R² mediana 0,27.** La recta explica poco más de una cuarta parte de la
+    variación: manda el ruido de año a año, no la tendencia.
+  - **Extrapolar cuatro años abre un intervalo de 12,9 noches de mediana** (p25 4,9,
+    p75 18,5, máximo 44,1). Para una estación de 30 noches eso es ±20 %.
+  - **156 estaciones (21 %) van marcadas como posible inhomogeneidad** — traslado de
+    garita o cambio de sensor. A esas no se les extrapola nada.
+  - El techo y el suelo físicos casi no molestan: solo **6** estaciones se saldrían
+    por encima de 122 noches y **11** por debajo de 0 (Capdepera, con 115 en 2026,
+    la recta la pone en 128). Pocas, pero una gráfica que dibuje 128 de 122 se
+    desmonta sola: hay que recortar a [0, 122].
+  **Reglas si se construye:** el tramo futuro es un **cono que se ensancha, nunca una
+  línea** —una línea se lee como previsión por muy tenue que sea—; se dibuja **solo**
+  en las estaciones cuyo IC95 excluye el cero y sin marca de inhomogeneidad, y en el
+  resto se escribe que la subida no se distingue del ruido, que es un hallazgo y no
+  un hueco; **nunca una cifra para 2030**, el cono comunica sin número. Encaja como
+  generador de `/aumento-noches-tropicales-espana/`, hoy la única página del sitio
+  que se mantiene a mano.
+- **Fuentes preferidas de Google — poner el enlace la próxima temporada de calor
+  (consultado 2026-10-31).** El lector marca en Google los medios que quiere ver más,
+  y a partir de ahí se los enseña **a esa persona** en Top Stories y en AI Mode /
+  AI Overviews. **No es una señal de posicionamiento**: no mejora la posición para
+  los demás ni en el resto de búsquedas, así que no se optimiza, se pide.
+  - Enlace directo, que es un `<a href>` normal:
+    `https://www.google.com/preferences/source?q=nochetropical.es`
+    Abre la herramienta con el sitio escrito; el lector aún tiene que confirmar, y
+    después Google **no** le devuelve al artículo.
+  - Google ofrece además un **botón incrustable** (`<script>` desde `news.google.com`
+    + un `<div>` con `google-add-preferred-source-btn`). **No usarlo**: choca con la
+    convención «sin dependencias JS externas». El enlace da lo mismo sin romperla.
+  - Elegibilidad por **dominio o subdominio, nunca subcarpeta**: `nochetropical.es`
+    vale, `nochetropical.es/parte` no, y una ruta en el parámetro `q` falla. Un sitio
+    que no se actualiza con regularidad puede no salir en la herramienta. NO hace
+    falta Publisher Center, ni RSS, ni sitemap de noticias.
+  - **Sin resolver**: las fuentes se contradicen sobre si hace falta ser ya candidato
+    a Top Stories. No se pudo leer la documentación oficial porque
+    `developers.google.com` está fuera de los dominios permitidos por la red de la
+    sesión; comprobarlo ahí antes de montarlo.
+  - **Cuándo**: no ahora. La ventana es la primera ola de calor del verano, cuando
+    «noches tropicales» sí es consulta de actualidad y el sitio salga citado en
+    prensa. Sitio: el pie de `/parte/` y de `/prensa/`, no las 400 páginas.
+  - **Y ata una decisión pendiente**: el parte de la noche es **lo único del sitio que
+    publica a diario**; todo lo demás son páginas estables que se reconstruyen. Si la
+    frecuencia de publicación es lo que te mantiene en la herramienta, pararlo quita
+    la única cadencia editorial que hay. Inclina la balanza hacia «de temporada»
+    antes que hacia «pararlo».
 - Estudio sistemático "huella térmica de incendios" cruzando EFFIS (Copernicus) con AEMET
 - Más años de backfill si interesa serie larga
 - Análisis comparativo con normales 1991-2020 (anomalías vs clima histórico)

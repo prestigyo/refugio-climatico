@@ -112,15 +112,15 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **Nada interpolado**: todo lo que se afirma sale de una estación medida de AEMET.
 - **«Verano» hay que decir SIEMPRE cuál.** El verano físico es del **22 de junio al
   22 de septiembre** (93 días) y es lo que entiende el lector, pero el fenómeno no
-  cabe ahí: sobre 2017-2026 (231.657 noches tropicales medidas) esa ventana deja
-  fuera el **16,7 %**. Las tres ventanas que circulan por el repo capturan cosas
+  cabe ahí: sobre 2017-2026 (223.596 noches tropicales medidas, con `tmin > 20,0`) esa
+  ventana deja fuera el **16,3 %**. Las tres ventanas que circulan por el repo capturan cosas
   distintas y confundirlas produce comparaciones falsas:
 
   | Ventana | Días | Captura | Deja fuera |
   |---|---|---|---|
-  | Astronómica, 22 jun – 22 sep | 93 | 83,3 % | 16,7 % |
-  | jun-ago | 92 | 78,1 % | **21,9 %** |
-  | jun-sep | 122 | 92,4 % | 7,6 % |
+  | Astronómica, 22 jun – 22 sep | 93 | 83,7 % | 16,3 % |
+  | jun-ago | 92 | 78,4 % | **21,6 %** |
+  | jun-sep | 122 | 92,6 % | 7,4 % |
   | 1 jun – 20 ago | 81 | — | — |
   | Año natural | 365 | 100 % | — |
 
@@ -150,8 +150,8 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   lo ha estado los diez años** — del 10,5 % (2019) al 24,2 % (2017), sin un solo
   año dentro. El 90 % central ocupa 93-122 días según el año y **en 8 de 10 acaba
   en octubre**. De lo que cae fuera del astronómico, el **40,5 % son los primeros
-  21 días de junio** y el **29,4 % octubre**: las tres primeras semanas de junio
-  acumulan 15.679 noches tropicales, más que octubre entero (11.379).
+  21 días de junio** y el **29,8 % octubre**: las tres primeras semanas de junio
+  acumulan 14.753 noches tropicales, más que octubre entero (10.866).
 
   Por defecto, para citar un año concreto usar **jun-sep con cobertura ≥92 % de
   los 122 días**, que es lo comparable entre años y entre estaciones; y decir
@@ -420,6 +420,19 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   frente a las ~250 que costaría subir el umbral a 330 días. **El patrón a vigilar**: un
   umbral de cobertura expresado en días absolutos se cumple a mitad de año y no detecta
   un año abierto; hace falta mirar DÓNDE está el dato, no cuánto hay.
+- **El umbral del proyecto es `tmin > 20,0`, NO `>= 20,0`.** Lo fija
+  `UMBRAL_NOCHE_TROPICAL` en `analisis_refugios_nocturnos.py` y lo usan los cuatro
+  sitios que cuentan noches (`n_trop`, la racha, `noches_por_anio`, y por herencia
+  `analisis_tendencia.py`). **No es un detalle**: hay días con mínima exactamente
+  20,0 y son muchos — solo en Girona, jun-sep de 2026, son 16. El 2026-10-31 un
+  análisis a mano hecho con `>=` dio cifras que no cuadraban con la web para **6 de
+  14 estaciones** de Girona: Girona Aeropuerto 32 en vez de 28, Figueres 75 en vez
+  de 73. Y volteó una afirmación: con `>=` Figueres «igualaba su récord» (75 contra
+  75) y con el criterio bueno se queda **por debajo** (73 contra 74). A escala
+  nacional mueve el total de 231.657 a **223.596**. Cualquier cálculo suelto que se
+  vaya a publicar —o a mandar a un periodista— tiene que usar `> 20,0`, o contradice
+  a la propia web. El umbral de helada, en cambio, sí es `< 0,0` (`HELADA` en
+  `analisis_invierno.py`) y ahí no hay trampa.
 - **Una serie anual con cobertura desigual finge récords y hundimientos.**
   L'Estartit figura con 27 noches tropicales en 2021 y 85 en 2026: parece un
   derrumbe seguido de un pico, pero 2021 solo tiene **59 de los 122 días de
@@ -621,12 +634,12 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 
 - Los **refugios nocturnos garantizados** son pueblos de montaña interior 600-1500 m, climas continentales secos: Sanabria, Puerto del Pico, Rascafría, Benasque, Vall de Boí, Beariz, Reinosa, Isaba...
 - La **costa mediterránea** es de los PEORES sitios de España para dormir en verano: Palma, Cartagena, Capdepera con rachas de **86 noches tropicales consecutivas**.
-- **La ventana jun-ago descarta el 21,9 % de las noches tropicales** del histórico
+- **La ventana jun-ago descarta el 21,6 % de las noches tropicales** del histórico
   (recalculado con los diez años, 2017-2026; con nueve eran 21,4 %). El **verano
-  astronómico, 22 jun – 22 sep, deja fuera el 16,7 %** — ver la convención de ventanas
-  arriba. Septiembre (14,3 % del total) tiene MÁS que junio (12,7 %), y **octubre
+  astronómico, 22 jun – 22 sep, deja fuera el 16,3 %** — ver la convención de ventanas
+  arriba. Septiembre (14,3 % del total) tiene MÁS que junio (12,5 %), y **octubre
   (4,9 %) tiene más que mayo, abril, marzo, febrero, enero y diciembre juntos**
-  (1,5 %): la cola de la temporada está al final, no al principio. En Canarias no
+  (1,4 %): la cola de la temporada está al final, no al principio. En Canarias no
   captura ni la mitad: Hierro Aeropuerto publica 83 noches/año y tiene **170**; en
   2023 tuvo 204, del 3 de enero al 20 de diciembre, con una **racha real de 161
   seguidas**. Comprobado que la ventana NO se está desplazando de forma detectable

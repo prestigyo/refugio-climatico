@@ -790,7 +790,8 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
     desmonta sola: hay que recortar a [0, 122].
   **Reglas si se construye:** el tramo futuro es un **cono que se ensancha, nunca una
   línea** —una línea se lee como previsión por muy tenue que sea—; se dibuja **solo**
-  en las estaciones cuyo IC95 excluye el cero y sin marca de inhomogeneidad, y en el
+  en las estaciones cuyo IC95 excluye el cero —la marca de inhomogeneidad NO se usa
+  para filtrar, ver arriba—, y en el
   resto se escribe que la subida no se distingue del ruido, que es un hallazgo y no
   un hueco; **nunca una cifra para 2030**, el cono comunica sin número. Encaja como
   generador de `/aumento-noches-tropicales-espana/`, hoy la única página del sitio

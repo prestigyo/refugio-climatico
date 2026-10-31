@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-30",
- "total": 851,
- "tropicales": 28,
+ "fecha": "2026-10-31",
+ "total": 854,
+ "tropicales": 23,
  "ecuatoriales": 0,
  "peor": {
   "id": "C619X",
   "nombre": "Agaete-Casco",
-  "min": 23.2,
+  "min": 22.3,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "9657X",
-  "nombre": "Esterri D?aneu",
-  "min": 0.0,
-  "prov": "Lleida"
+  "id": "9287A",
+  "nombre": "San Pedro Manrique",
+  "min": -3.2,
+  "prov": "Soria"
  },
  "top_calor": [
   {
    "id": "C619X",
    "nombre": "Agaete-Casco",
-   "min": 23.2,
+   "min": 22.3,
    "prov": "Las Palmas"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 23.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 22.9,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 22.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 22.1,
+   "min": 22.2,
    "prov": "Las Palmas"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.0,
+   "min": 21.7,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 21.6,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C639M",
    "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 21.9,
+   "min": 21.5,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 21.4,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 21.0,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C649I",
    "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 21.8,
+   "min": 21.0,
    "prov": "Las Palmas"
   },
   {
-   "id": "C669B",
-   "nombre": "Arucas-Bañaderos",
-   "min": 21.8,
-   "prov": "Las Palmas"
+   "id": "C449F",
+   "nombre": "Anaga-Col. Rep. Argentina",
+   "min": 20.9,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C689E",
    "nombre": "Maspalomas",
-   "min": 21.7,
+   "min": 20.9,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 0.0,
-   "prov": "Lleida"
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": -3.2,
+   "prov": "Soria"
   },
   {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 0.1,
-   "prov": "Lleida"
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": -2.8,
+   "prov": "Segovia"
   },
   {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": 0.4,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9838B",
-   "nombre": "Benasque",
-   "min": 0.7,
-   "prov": "Huesca"
-  },
-  {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 1.0,
-   "prov": "Burgos"
+   "id": "2005Y",
+   "nombre": "Vinuesa",
+   "min": -1.5,
+   "prov": "Soria"
   },
   {
    "id": "2048A",
    "nombre": "Moron de Almazan",
-   "min": 1.4,
+   "min": -1.5,
    "prov": "Soria"
   },
   {
-   "id": "9218A",
-   "nombre": "Isaba/Izaba",
-   "min": 1.8,
-   "prov": "Navarra"
+   "id": "2243A",
+   "nombre": "Aguilar de Campoo",
+   "min": -1.4,
+   "prov": "Palencia"
   },
   {
-   "id": "9238X",
-   "nombre": "Navascués/Nabaskoze",
-   "min": 1.9,
-   "prov": "Navarra"
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": -1.3,
+   "prov": "Lleida"
   },
   {
-   "id": "2092",
-   "nombre": "Burgo de Osma-Pozuelos",
-   "min": 2.0,
-   "prov": "Soria"
+   "id": "9657X",
+   "nombre": "Esterri D?aneu",
+   "min": -1.1,
+   "prov": "Lleida"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 2.0,
-   "prov": "Soria"
+   "id": "3013",
+   "nombre": "Molina de Aragón",
+   "min": -0.9,
+   "prov": "Guadalajara"
+  },
+  {
+   "id": "9060X",
+   "nombre": "Lalastra",
+   "min": -0.8,
+   "prov": "Araba/Álava"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": -0.7,
+   "prov": "Zamora"
   }
  ]
 }

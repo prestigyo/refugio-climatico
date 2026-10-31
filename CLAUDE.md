@@ -110,6 +110,57 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - **Idempotencia**: scripts pensados para re-ejecutarse sin romper nada. Los workflows commitean solo si hay cambios reales.
 - **Métricas honestas**: para identificar refugios no usamos medias (esconden picos). Usamos P95 de Tmin de verano, racha máxima consecutiva de noches tropicales, y conteos por umbral.
 - **Nada interpolado**: todo lo que se afirma sale de una estación medida de AEMET.
+- **«Verano» hay que decir SIEMPRE cuál.** El verano físico es del **22 de junio al
+  22 de septiembre** (93 días) y es lo que entiende el lector, pero el fenómeno no
+  cabe ahí: sobre 2017-2026 (223.596 noches tropicales medidas, con `tmin > 20,0`) esa
+  ventana deja fuera el **16,3 %**. Las tres ventanas que circulan por el repo capturan cosas
+  distintas y confundirlas produce comparaciones falsas:
+
+  | Ventana | Días | Captura | Deja fuera |
+  |---|---|---|---|
+  | Astronómica, 22 jun – 22 sep | 93 | 83,7 % | 16,3 % |
+  | jun-ago | 92 | 78,4 % | **21,6 %** |
+  | jun-sep | 122 | 92,6 % | 7,4 % |
+  | 1 jun – 20 ago | 81 | — | — |
+  | Año natural | 365 | 100 % | — |
+
+  La de **81 días era la de `analisis_tendencia.py`** hasta el 2026-10-31; se eligió
+  el 2026-08-27 porque entonces 2026 no tenía septiembre y comparar un verano
+  truncado con nueve completos habría hundido el último punto, que es el que más pesa
+  en la pendiente. **Ya está en jun-sep** (`noches_posibles` = 122 en las 741 filas de
+  `datos/tendencia_estaciones.csv`): el cambio subió las tendencias detectables del
+  26 % al 32 %. **Enero de 2027: pasar al año natural**, que es la medida honesta —la
+  ventana de verano publica 83 noches en Hierro Aeropuerto cuando tiene 170—. Hoy no
+  se puede porque por año natural 2026 se cae solo y se baja de diez años a nueve,
+  con lo que las detectables caen al 16 %.
+
+  **Lo que publica hoy la web es jun-ago y no lo dice**: el campo
+  `noches_trop_anio` de `refugios_nocturnos_ranking.csv` —el 36,7 de Girona
+  capital, por ejemplo— es la media **jun-ago de diez años, 2017-2026 incluido**
+  (`n_anios` vale 10). `analisis/noches_por_anio.csv` trae en cambio el año
+  natural y el jun-ago por separado, y la herramienta de estancia va por meses de
+  llegada. **Mezclar ventanas es el error que ya se cometió** una vez: en el
+  borrador del correo a Girona (2026-10-30) una tabla ponía el recuento de 2026 en
+  jun-sep al lado de la media del ranking en jun-ago, y encima llamaba «media
+  17-25» a una media que ya incluía 2026. Cualquier tabla tiene que usar la misma
+  ventana en todas sus columnas y decir cuál es.
+
+  **La ventana NO se está desplazando, y esa no es la razón para ampliarla.** Con
+  los diez años: el inicio (p5) va a −0,80 días/año con IC95 [−2,17, +0,57] y
+  R² 0,18; el ancho p5-p95, a +0,64 con IC95 [−1,76, +3,05] y R² 0,05; el
+  porcentaje que queda fuera del astronómico, a +0,20 puntos/año, R² 0,02. Las
+  tres incluyen el cero. El argumento es otro y es más fuerte: **ya está fuera, y
+  lo ha estado los diez años** — del 10,5 % (2019) al 24,2 % (2017), sin un solo
+  año dentro. El 90 % central ocupa 93-122 días según el año y **en 8 de 10 acaba
+  en octubre**. De lo que cae fuera del astronómico, el **40,5 % son los primeros
+  21 días de junio** y el **29,8 % octubre**: las tres primeras semanas de junio
+  acumulan 14.753 noches tropicales, más que octubre entero (10.866).
+
+  Por defecto, para citar un año concreto usar **jun-sep con cobertura ≥92 % de
+  los 122 días**, que es lo comparable entre años y entre estaciones; y decir
+  «noches tropicales del año» cuando se use el año natural. **Pendiente: la web no
+  explica esto en ningún sitio** — ni `/metodologia/` ni las fichas provinciales
+  dicen en qué ventana está la cifra que publican.
 - **Para una estancia larga manda la RACHA, no la mediana.** `/en/winter-in-spain-long-stay/`
   usa `racha_sin_terraza_max` —el tramo más largo sin un solo día que llegara a 18 °C— y no
   la usa ninguna otra página. La mediana nacional son **90 días en península y Baleares**
@@ -343,6 +394,55 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   comprobarlo contra `main`, no contra el clon de la sesión: aquí el clon mostraba
   18 huecos en el parte y 16 días perdidos del archivo horario que en `main` no
   existían.
+- **`descarga_datos.py` solo escribía el ROLLING, y los anuales se quedaban atrás.**
+  Los `diarios_AAAA.csv` los escribía únicamente el backfill, así que
+  `diarios_2026.csv` se quedó en el **26 de mayo** mientras el rolling ya traía
+  hasta el 26 de octubre. `analisis_refugios*.py` y `analisis_invierno.py` leen
+  los DOS ficheros y no lo notaron, pero **`analisis_estancia.py` lee solo los
+  anuales**: la herramienta por pueblo y la de «find your winter address»
+  llevaban cinco meses mirando un 2026 que acababa en mayo, **sin que nada
+  avisara**. Desde 2026-10-30 `descarga_datos.py` consolida al final de cada
+  descarga, y `--solo-consolidar` lo hace sin salir a la red ni pedir clave.
+  Es idempotente por (fecha, indicativo) y si AEMET corrige un valor gana el del
+  rolling, que se cuenta aparte: la primera pasada movió 125.651 filas nuevas y
+  **10 corregidas**. **La invariante es que `diarios_AAAA.csv` contiene el año
+  entero**; quien lea solo los anuales ya no se pierde nada.
+- **Un año EN CURSO no es un año, y 300 días se alcanzan en octubre.**
+  `noches_por_anio.csv` pedía solo `dias_con_dato >= 300` (`MIN_DIAS_ANIO`), así que
+  el 2026-10-30, con el dato hasta el 27 de octubre, **2026 entró en la tabla con 140
+  estaciones** como si estuviera cerrado — y `analisis_invierno.py` lo tomó por bueno
+  porque su filtro es exactamente el mismo `>= 300`. Para 126 de las 140 no cambiaba
+  nada (no tienen una sola noche tropical del 28 de octubre al 31 de diciembre), pero
+  las **14 canarias** perdían de 2 a 25 noches de mediana y **Hierro Aeropuerto hasta
+  43** en su peor año. Comprobado que no falseó ninguna afirmación publicada —`ambos`
+  seguía con una estación, `rho` en −0,71, el sello en 67— y que lo que sí movió fue
+  legítimo: las medianas peninsulares subieron al entrar 2026, que fue caluroso
+  (Granada-Cartuja 39 → 43, A Coruña 0 → 1). Arreglado con `DIA_CIERRE_ANIO`: se exige
+  además que **el dato llegue a diciembre**, que es una prueba sobre el dato y no sobre
+  el reloj del runner. Coste medido: 36 estaciones-año de ~7.400 en 2017-2025 (0,5 %),
+  frente a las ~250 que costaría subir el umbral a 330 días. **El patrón a vigilar**: un
+  umbral de cobertura expresado en días absolutos se cumple a mitad de año y no detecta
+  un año abierto; hace falta mirar DÓNDE está el dato, no cuánto hay.
+- **El umbral del proyecto es `tmin > 20,0`, NO `>= 20,0`.** Lo fija
+  `UMBRAL_NOCHE_TROPICAL` en `analisis_refugios_nocturnos.py` y lo usan los cuatro
+  sitios que cuentan noches (`n_trop`, la racha, `noches_por_anio`, y por herencia
+  `analisis_tendencia.py`). **No es un detalle**: hay días con mínima exactamente
+  20,0 y son muchos — solo en Girona, jun-sep de 2026, son 16. El 2026-10-31 un
+  análisis a mano hecho con `>=` dio cifras que no cuadraban con la web para **6 de
+  14 estaciones** de Girona: Girona Aeropuerto 32 en vez de 28, Figueres 75 en vez
+  de 73. Y volteó una afirmación: con `>=` Figueres «igualaba su récord» (75 contra
+  75) y con el criterio bueno se queda **por debajo** (73 contra 74). A escala
+  nacional mueve el total de 231.657 a **223.596**. Cualquier cálculo suelto que se
+  vaya a publicar —o a mandar a un periodista— tiene que usar `> 20,0`, o contradice
+  a la propia web. El umbral de helada, en cambio, sí es `< 0,0` (`HELADA` en
+  `analisis_invierno.py`) y ahí no hay trampa.
+- **Una serie anual con cobertura desigual finge récords y hundimientos.**
+  L'Estartit figura con 27 noches tropicales en 2021 y 85 en 2026: parece un
+  derrumbe seguido de un pico, pero 2021 solo tiene **59 de los 122 días de
+  jun-sep** medidos. Antes de comparar años —y sobre todo antes de dárselos a un
+  periodista— hay que mirar la cobertura de cada uno: con menos del 92 % de la
+  ventana cálida la cifra no es comparable. Lo mismo vale por estación: en 2026,
+  Cabo de Creus (78 %) y Porqueres (80 %) no se pueden citar junto a Girona (98 %).
 - **Pillow no antialiasa polígonos**: se dibuja a 3× y se reduce con `LANCZOS`.
 - **`spain-provinces.geojson` no es topológicamente limpio**: provincias vecinas no comparten vértices, así que no se pueden unir polígonos por tramos (por eso `generar_silueta.py` rasteriza y traza el contorno).
 - **DOS provincias vienen escritas de dos formas en el catálogo de AEMET**, en
@@ -537,12 +637,17 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 
 - Los **refugios nocturnos garantizados** son pueblos de montaña interior 600-1500 m, climas continentales secos: Sanabria, Puerto del Pico, Rascafría, Benasque, Vall de Boí, Beariz, Reinosa, Isaba...
 - La **costa mediterránea** es de los PEORES sitios de España para dormir en verano: Palma, Cartagena, Capdepera con rachas de **86 noches tropicales consecutivas**.
-- **La ventana jun-ago descarta el 21,4 % de las noches tropicales** del histórico.
-  Septiembre (13,9 % del total) tiene MÁS que junio (12,1 %). En Canarias no captura
-  ni la mitad: Hierro Aeropuerto publica 83 noches/año y tiene **170**; en 2023 tuvo
-  204, del 3 de enero al 20 de diciembre, con una **racha real de 161 seguidas**.
-  Comprobado que la ventana NO se está desplazando de forma detectable (R² de 0,01 a
-  0,11 en nueve años): no es una deriva futura, ya está fuera. Los refugios apenas
+- **La ventana jun-ago descarta el 21,6 % de las noches tropicales** del histórico
+  (recalculado con los diez años, 2017-2026; con nueve eran 21,4 %). El **verano
+  astronómico, 22 jun – 22 sep, deja fuera el 16,3 %** — ver la convención de ventanas
+  arriba. Septiembre (14,3 % del total) tiene MÁS que junio (12,5 %), y **octubre
+  (4,9 %) tiene más que mayo, abril, marzo, febrero, enero y diciembre juntos**
+  (1,4 %): la cola de la temporada está al final, no al principio. En Canarias no
+  captura ni la mitad: Hierro Aeropuerto publica 83 noches/año y tiene **170**; en
+  2023 tuvo 204, del 3 de enero al 20 de diciembre, con una **racha real de 161
+  seguidas**. Comprobado que la ventana NO se está desplazando de forma detectable
+  (R² de 0,02 a 0,18 en los diez años, las tres pendientes con el cero dentro del
+  IC95): no es una deriva futura, ya está fuera. Los refugios apenas
   cambian —solo 2 de 192 pierden el criterio de <1 noche/año contando el año entero—;
   lo que está mal medido es el contraste, y en nuestra contra: los sitios malos son
   mucho peores de lo que publicamos.
@@ -610,6 +715,16 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - Página `/prensa/`, generador de informes por lead y export a Excel por estación
 
 **Pendiente para el lanzamiento mediático:**
+- **Decir en la web en qué ventana está cada cifra.** Hoy no se dice en ningún
+  sitio: ni `/metodologia/`, ni las 52 fichas provinciales, ni el ranking. El
+  número que publican es la media **jun-ago de diez años** y el lector asume
+  «verano», que para él es del 22 de junio al 22 de septiembre. Son dos cosas
+  distintas y la diferencia es del 5,2 % de las noches. Lo mínimo: una línea en
+  cada ficha y un párrafo en metodología con la tabla de ventanas (ver la
+  convención ««Verano» hay que decir SIEMPRE cuál» arriba). El argumento de
+  venta está ahí mismo: **somos los únicos que contamos octubre**, y octubre
+  tiene más noches tropicales que enero, febrero, marzo, abril, mayo y diciembre
+  juntos.
 - ~~Press kit PDF de 2 páginas~~ **HECHO (2026-10-09)**: `generar_presskit.py` →
   `/prensa/kit/`, dos A4 que se guardan en PDF desde el navegador. Y
   `generar_pitch.py`, que escribe el correo de presentación con la cifra de CADA
@@ -645,6 +760,70 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   única vía.
 
 **Ideas para más adelante:**
+- **Gráfica de tendencia que se apaga al pasar de 2026 — medido el 2026-10-31,
+  sin construir.** La idea: dibujar la serie de cada estación hasta 2026 con trazo
+  firme y seguir 2027-2030 mucho más suave o sin pintar, para decir «aquí dejamos
+  de medir» sin dar una previsión. **No hace falta script nuevo**:
+  `analisis_tendencia.py` ya produce por estación la pendiente, `ic95_inf`,
+  `ic95_sup`, `ic95_excluye_cero`, `r2`, `cerca_del_techo`,
+  `posible_inhomogeneidad` y la columna `serie` con el valor de cada año. El
+  trabajo es solo la visualización en `generar_calculadora.py`.
+  **Lo que dicen los números, y condiciona el diseño:**
+  - **Solo en el 32 % de las 741 estaciones el IC95 excluye el cero** (234, ya con la
+    ventana jun-sep del 2026-10-31; con la vieja de 81 días eran 194 de 746, el 26 %).
+    En las otras dos de cada tres la respuesta honesta es «no se distingue del ruido».
+  - **R² mediana 0,27.** La recta explica poco más de una cuarta parte de la
+    variación: manda el ruido de año a año, no la tendencia.
+  - **Extrapolar cuatro años abre un intervalo de 12,9 noches de mediana** (p25 4,9,
+    p75 18,5, máximo 44,1). Para una estación de 30 noches eso es ±20 %.
+  - **La marca `posible_inhomogeneidad` NO sirve para excluir estaciones**, y lo dice
+    el propio script en su salida: con solo nueve diferencias interanuales el test no
+    discrimina. Simulando 20.000 series gaussianas puras —sin ningún salto real— el
+    criterio marca el 22,9 % de ellas, o sea que marca **tanto como el azar**. Es un
+    cribado para mirar a mano esa serie, no evidencia de un traslado de garita. Con
+    jun-sep marca 190 de 741 (25,6 %). Ayer anoté aquí que a esas «no se les
+    extrapola nada»: era un error, dejaría fuera una de cada cuatro por una señal
+    que es ruido.
+  - El techo y el suelo físicos casi no molestan: solo **6** estaciones se saldrían
+    por encima de 122 noches y **11** por debajo de 0 (Capdepera, con 115 en 2026,
+    la recta la pone en 128). Pocas, pero una gráfica que dibuje 128 de 122 se
+    desmonta sola: hay que recortar a [0, 122].
+  **Reglas si se construye:** el tramo futuro es un **cono que se ensancha, nunca una
+  línea** —una línea se lee como previsión por muy tenue que sea—; se dibuja **solo**
+  en las estaciones cuyo IC95 excluye el cero —la marca de inhomogeneidad NO se usa
+  para filtrar, ver arriba—, y en el
+  resto se escribe que la subida no se distingue del ruido, que es un hallazgo y no
+  un hueco; **nunca una cifra para 2030**, el cono comunica sin número. Encaja como
+  generador de `/aumento-noches-tropicales-espana/`, hoy la única página del sitio
+  que se mantiene a mano.
+- **Fuentes preferidas de Google — poner el enlace la próxima temporada de calor
+  (consultado 2026-10-31).** El lector marca en Google los medios que quiere ver más,
+  y a partir de ahí se los enseña **a esa persona** en Top Stories y en AI Mode /
+  AI Overviews. **No es una señal de posicionamiento**: no mejora la posición para
+  los demás ni en el resto de búsquedas, así que no se optimiza, se pide.
+  - Enlace directo, que es un `<a href>` normal:
+    `https://www.google.com/preferences/source?q=nochetropical.es`
+    Abre la herramienta con el sitio escrito; el lector aún tiene que confirmar, y
+    después Google **no** le devuelve al artículo.
+  - Google ofrece además un **botón incrustable** (`<script>` desde `news.google.com`
+    + un `<div>` con `google-add-preferred-source-btn`). **No usarlo**: choca con la
+    convención «sin dependencias JS externas». El enlace da lo mismo sin romperla.
+  - Elegibilidad por **dominio o subdominio, nunca subcarpeta**: `nochetropical.es`
+    vale, `nochetropical.es/parte` no, y una ruta en el parámetro `q` falla. Un sitio
+    que no se actualiza con regularidad puede no salir en la herramienta. NO hace
+    falta Publisher Center, ni RSS, ni sitemap de noticias.
+  - **Sin resolver**: las fuentes se contradicen sobre si hace falta ser ya candidato
+    a Top Stories. No se pudo leer la documentación oficial porque
+    `developers.google.com` está fuera de los dominios permitidos por la red de la
+    sesión; comprobarlo ahí antes de montarlo.
+  - **Cuándo**: no ahora. La ventana es la primera ola de calor del verano, cuando
+    «noches tropicales» sí es consulta de actualidad y el sitio salga citado en
+    prensa. Sitio: el pie de `/parte/` y de `/prensa/`, no las 400 páginas.
+  - **Y ata una decisión pendiente**: el parte de la noche es **lo único del sitio que
+    publica a diario**; todo lo demás son páginas estables que se reconstruyen. Si la
+    frecuencia de publicación es lo que te mantiene en la herramienta, pararlo quita
+    la única cadencia editorial que hay. Inclina la balanza hacia «de temporada»
+    antes que hacia «pararlo».
 - Estudio sistemático "huella térmica de incendios" cruzando EFFIS (Copernicus) con AEMET
 - Más años de backfill si interesa serie larga
 - Análisis comparativo con normales 1991-2020 (anomalías vs clima histórico)

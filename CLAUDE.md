@@ -124,12 +124,15 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   | 1 jun – 20 ago | 81 | — | — |
   | Año natural | 365 | 100 % | — |
 
-  La de **81 días es la de `analisis_tendencia.py`** (`noches_posibles` = 81 en las
-  746 filas de `datos/tendencia_estaciones.csv`). Se eligió el 2026-08-27 por una
-  razón que **ya no se sostiene**: entonces 2026 no tenía septiembre y comparar un
-  verano truncado con nueve completos habría hundido el último punto, que es el que
-  más pesa en la pendiente. Desde el 2026-10-30 el 2026 está consolidado y completo,
-  así que al rehacer esa edición hay que **volver a jun-sep** y dejar de recortar.
+  La de **81 días era la de `analisis_tendencia.py`** hasta el 2026-10-31; se eligió
+  el 2026-08-27 porque entonces 2026 no tenía septiembre y comparar un verano
+  truncado con nueve completos habría hundido el último punto, que es el que más pesa
+  en la pendiente. **Ya está en jun-sep** (`noches_posibles` = 122 en las 741 filas de
+  `datos/tendencia_estaciones.csv`): el cambio subió las tendencias detectables del
+  26 % al 32 %. **Enero de 2027: pasar al año natural**, que es la medida honesta —la
+  ventana de verano publica 83 noches en Hierro Aeropuerto cuando tiene 170—. Hoy no
+  se puede porque por año natural 2026 se cae solo y se baja de diez años a nueve,
+  con lo que las detectables caen al 16 %.
 
   **Lo que publica hoy la web es jun-ago y no lo dice**: el campo
   `noches_trop_anio` de `refugios_nocturnos_ranking.csv` —el 36,7 de Girona
@@ -766,15 +769,21 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   `posible_inhomogeneidad` y la columna `serie` con el valor de cada año. El
   trabajo es solo la visualización en `generar_calculadora.py`.
   **Lo que dicen los números, y condiciona el diseño:**
-  - **Solo en el 26 % de las 746 estaciones el IC95 excluye el cero** (194; en mi
-    recálculo en jun-sep sobre 713 con alguna noche tropical salía el 33 %). En las
-    otras dos de cada tres la respuesta honesta es «no se distingue del ruido».
+  - **Solo en el 32 % de las 741 estaciones el IC95 excluye el cero** (234, ya con la
+    ventana jun-sep del 2026-10-31; con la vieja de 81 días eran 194 de 746, el 26 %).
+    En las otras dos de cada tres la respuesta honesta es «no se distingue del ruido».
   - **R² mediana 0,27.** La recta explica poco más de una cuarta parte de la
     variación: manda el ruido de año a año, no la tendencia.
   - **Extrapolar cuatro años abre un intervalo de 12,9 noches de mediana** (p25 4,9,
     p75 18,5, máximo 44,1). Para una estación de 30 noches eso es ±20 %.
-  - **156 estaciones (21 %) van marcadas como posible inhomogeneidad** — traslado de
-    garita o cambio de sensor. A esas no se les extrapola nada.
+  - **La marca `posible_inhomogeneidad` NO sirve para excluir estaciones**, y lo dice
+    el propio script en su salida: con solo nueve diferencias interanuales el test no
+    discrimina. Simulando 20.000 series gaussianas puras —sin ningún salto real— el
+    criterio marca el 22,9 % de ellas, o sea que marca **tanto como el azar**. Es un
+    cribado para mirar a mano esa serie, no evidencia de un traslado de garita. Con
+    jun-sep marca 190 de 741 (25,6 %). Ayer anoté aquí que a esas «no se les
+    extrapola nada»: era un error, dejaría fuera una de cada cuatro por una señal
+    que es ruido.
   - El techo y el suelo físicos casi no molestan: solo **6** estaciones se saldrían
     por encima de 122 noches y **11** por debajo de 0 (Capdepera, con 115 en 2026,
     la recta la pone en 128). Pocas, pero una gráfica que dibuje 128 de 122 se

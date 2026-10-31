@@ -15,10 +15,10 @@ Cuatro trampas metodológicas que este script resuelve explícitamente:
   1. VERANO INCOMPLETO. 2026 no tiene septiembre. Comparar un verano truncado
      con nueve completos hundiría el último punto, que es el que más pesa en la
      pendiente. Solución: ventana idéntica en todos los años (1 de junio hasta
-     el último día con datos, recortado como máximo al 25 de agosto), más una
+     el último día con datos, recortado como máximo al 30 de septiembre), más una
      serie de control junio-septiembre sin 2026 para verificar la dirección.
 
-  2. TECHO Y SUELO. Una estación con 80 noches sobre 81 posibles no puede
+  2. TECHO Y SUELO. Una estación con 120 noches sobre 122 posibles no puede
      crecer. Se reporta siempre el nivel de partida y se marca cuando supera el
      80 % de las noches posibles.
 
@@ -63,7 +63,21 @@ FUENTE = "AEMET"
 UMBRAL = arn.UMBRAL_NOCHE_TROPICAL      # 20,0 °C, criterio del proyecto
 
 VENTANA_INI = (6, 1)                    # 1 de junio
-VENTANA_FIN_TOPE = (8, 25)              # tope; se recorta al último día con datos
+VENTANA_FIN_TOPE = (9, 30)              # tope; se recorta al último día con datos
+# Hasta el 2026-10-31 el tope era el 25 de agosto (ventana de 81 días), elegido en
+# agosto de 2026 porque entonces 2026 no tenía septiembre y comparar un verano
+# truncado contra nueve completos habría hundido el último punto, que es el que más
+# pesa en la pendiente. Desde que `descarga_datos.py` consolida los anuales, 2026
+# está completo y ese motivo desapareció. Medido al cambiar: jun-sep da 769
+# estaciones con 10 años y el IC95 excluye el cero en el 31 %, frente a 778 con
+# 10 años y 26 % en la de 81 días. El orden de quién sube más rápido apenas se
+# mueve (Spearman 0,95 entre las dos ventanas); lo que cambia es a cuántas puedes
+# llamarlas distinguibles del ruido.
+# PRÓXIMO PASO, enero de 2027: pasar al AÑO NATURAL, que es la medida honesta —la
+# ventana de verano publica 83 noches en Hierro Aeropuerto cuando tiene 170—. Hoy
+# no se puede: por año natural 2026 se cae solo (le faltan nov y dic) y se pierde
+# un año de diez, con lo que las tendencias detectables bajan del 31 % al 16 %.
+# Cuando AEMET publique diciembre habrá diez años naturales completos.
 COBERTURA_MIN = 0.90                    # 90 % de días con dato en la ventana
 VERANOS_MIN = 8                         # de los diez posibles
 N_EXTREMOS = 3                          # veranos que promedian nivel inicial/final
@@ -330,7 +344,7 @@ def main() -> int:
     df = arn.cargar_diarios()
     fmax = df["fecha"].max().date()
 
-    # La ventana termina en el último día con datos, con tope el 25 de agosto.
+    # La ventana termina en el último día con datos, con tope el 30 de septiembre.
     # AEMET publica con 3-5 días de retraso, así que el tope rara vez se alcanza.
     tope = date(fmax.year, *VENTANA_FIN_TOPE)
     fin = (VENTANA_FIN_TOPE if fmax >= tope else (fmax.month, fmax.day))
@@ -339,7 +353,7 @@ def main() -> int:
     log.info("Ventana estival: %d/%d - %d/%d (%d días), IDÉNTICA en todos los años",
              ini[1], ini[0], fin[1], fin[0], ndias)
     if fin != VENTANA_FIN_TOPE:
-        log.info("  (el tope era el 25/8; los datos llegan al %s, así que la "
+        log.info("  (el tope era el 30/9; los datos llegan al %s, así que la "
                  "ventana se recorta ahí para que siga siendo comparable)", fmax)
 
     pts, metodo_costa = ag.puntos_de_costa()
@@ -349,7 +363,10 @@ def main() -> int:
     filas, descartes = analiza(conteos, meta, idx_costa)
     filas.sort(key=lambda f: -f["cambio_absoluto"])
 
-    # Serie de control: junio-septiembre completo, sin 2026
+    # Serie de control: la misma ventana sin el último año. Antes comprobaba que
+    # recortar en agosto no cambiara la dirección; ahora que la ventana principal YA
+    # es junio-septiembre, lo que comprueba es si el último verano —2026, el más
+    # caluroso de la serie— es el que sostiene la pendiente él solo.
     ctrl_conteos = cuenta_por_verano(df, (6, 1), (9, 30), excluir_anios=(fmax.year,))
     ctrl_filas, _ = analiza(ctrl_conteos, meta, idx_costa)
     ctrl_por = {f["indicativo"]: f["pendiente_noches_anio"] for f in ctrl_filas}

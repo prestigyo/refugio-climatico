@@ -1211,9 +1211,13 @@
 "f": "2026-10-25",
 "h": "50e4e7d4c4f9a4dc"
 },
+"en/summer-trend": {
+"f": "2026-11-01",
+"h": "fc8b89337e8fa471"
+},
 "en/winter": {
-"f": "2026-10-19",
-"h": "581e50427ffc04d7"
+"f": "2026-11-01",
+"h": "d4cfc5120160e3e9"
 },
 "en/winter-in-spain-long-stay": {
 "f": "2026-10-25",
@@ -1229,7 +1233,7 @@
 },
 "evolucion-noches-tropicales": {
 "f": "2026-11-01",
-"h": "ab63b00fedbdecac"
+"h": "5431e5c47e9b904b"
 },
 "gipuzkoa": {
 "f": "2026-11-01",

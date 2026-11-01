@@ -146,12 +146,19 @@
   var D=null, SEL={p:null,e:null};
   var $=function(x){return document.getElementById(x)};
   var AINI=2017, AFIN=2026, AMAX=2030, TECHO=122;
+  // Una sola pieza para los dos idiomas: los textos entran en T y la página
+  // decide cuáles. Duplicar el dibujo para traducirlo garantizaría que un
+  // arreglo entrase en uno y no en el otro.
+  var T={coma:true,porDefecto:'GIRONA',alt:function(n){return 'Noches tropicales por verano en '+n+', de 2017 a 2026'},corte:'aquí deja de haber medición',nNoches:function(n){return n+(n===1?' noche':' noches')},nVeranos:function(n){return n+' veranos medidos'},leyMedido:'veranos medidos',leyCono:'margen si el ritmo medido continuara',sube:function(b,lo,hi){return 'En esta estación las noches tropicales <b>suben de forma distinguible del ruido</b> de año a año: '+b+' noches más al año, con un intervalo de confianza del 95&nbsp;% de '+lo+' a '+hi+'. La zona sombreada es hasta dónde llegaría ese margen si el ritmo se mantuviera. <b>No es una previsión y no damos una cifra para 2030</b>: con diez veranos, el margen es demasiado ancho para eso.'},plana:function(b,lo,hi,n,tot){return 'En esta estación <b>la subida no se distingue del ruido</b> de año a año. La pendiente medida es '+b+' noches al año, pero su intervalo de confianza del 95&nbsp;% va de '+lo+' a '+hi+' e incluye el cero: con esta serie no se puede afirmar que suba. Por eso no se dibuja nada más allá de 2026. Le pasa a '+n+' de las '+tot+' estaciones.'},lblUlt:'noches tropicales en 2026',lblPend:'noches más al año, pendiente medida',lblR2:'R² de la recta: cuánto explica de la variación',lblSinR2:'sin R²: la serie no varía, son todo ceros',lblVeranos:'veranos con cobertura suficiente',lblTechoN:'techo',lblTecho:'ya parte de más del 80&nbsp;% de las noches posibles: le queda poco margen para crecer',fallo:'No se han podido cargar los datos. Prueba a recargar la página.'};
 
   // La R² llega a null cuando la serie es constante (todo ceros) y ahí no está
   // definida. Un dato que falta NO es un cero: se enseña una raya.
   function nes(x,d){if(x===null||x===undefined||isNaN(x))return '—';
     var s=(Math.round(x*Math.pow(10,d))/Math.pow(10,d)).toFixed(d);
-    return s.replace('.',',')}
+    return T.coma?s.replace('.',','):s}
+
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
   function pinta(e){
     // El lienzo se mide en PÍXELES REALES del contenedor, no en un viewBox fijo.
@@ -166,16 +173,13 @@
     var aMin=AINI,aMax=AMAX;
     var vals=[];for(var k in e.s)vals.push(e.s[k]);
     var top=Math.max(10,Math.ceil((Math.max.apply(null,vals)+6)/10)*10);
-    // si hay cono, el techo del eje tiene que caber el borde alto
     if(e.sig){var ext=e.s[AFIN]+e.hi*(aMax-AFIN);
       if(ext>top)top=Math.min(TECHO,Math.ceil((ext+4)/10)*10)}
     top=Math.min(top,TECHO);
     var x=function(a){return ML+(a-aMin)/(aMax-aMin)*(W-ML-MR)};
     var y=function(v){return MT+(1-v/top)*(H-MT-MB)};
     var o=['<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" '+
-           'role="img" aria-label="'+
-           'Noches tropicales por verano en '+e.n+', de '+AINI+' a '+AFIN+'">'];
-    // rejilla
+           'role="img" aria-label="'+esc(T.alt(e.n))+'">'];
     for(var v=0;v<=top;v+=(top>60?20:10)){
       o.push('<line x1="'+ML+'" y1="'+y(v)+'" x2="'+(W-MR)+'" y2="'+y(v)+
              '" stroke="rgba(255,255,255,.10)" stroke-width="1"/>');
@@ -188,12 +192,10 @@
       o.push('<text x="'+x(a)+'" y="'+(H-12)+'" text-anchor="middle" '+
              'fill="#9b8a76" font-size="12">'+a+'</text>');
     }
-    // separador: aquí se deja de medir
     o.push('<line x1="'+x(AFIN)+'" y1="'+MT+'" x2="'+x(AFIN)+'" y2="'+(H-MB)+
            '" stroke="rgba(255,255,255,.28)" stroke-width="1" stroke-dasharray="3 4"/>');
     if(W>=560)o.push('<text x="'+(x(AFIN)+6)+'" y="'+(MT+12)+
-           '" fill="#9b8a76" font-size="11">aquí deja de haber medición</text>');
-    // cono, solo si la subida es distinguible del ruido
+           '" fill="#9b8a76" font-size="11">'+esc(T.corte)+'</text>');
     if(e.sig){
       var base=e.s[AFIN], arr=[], aba=[];
       for(var a2=AFIN;a2<=aMax;a2++){
@@ -205,7 +207,6 @@
       o.push('<polygon points="'+arr.concat(aba).join(' ')+
              '" fill="rgba(217,116,78,.17)" stroke="rgba(217,116,78,.32)" stroke-width="1"/>');
     }
-    // serie medida
     var pts=[];
     for(var a3=aMin;a3<=AFIN;a3++){if(e.s[a3]!=null)pts.push([a3,e.s[a3]])}
     var seg=[],cur=[];
@@ -221,7 +222,7 @@
     }
     for(var k2=0;k2<pts.length;k2++){
       o.push('<circle cx="'+x(pts[k2][0])+'" cy="'+y(pts[k2][1])+'" r="3.5" fill="#d9744e"/>');
-      o.push('<title>'+pts[k2][0]+': '+pts[k2][1]+' noches</title>');
+      o.push('<title>'+pts[k2][0]+': '+T.nNoches(pts[k2][1])+'</title>');
     }
     o.push('</svg>');
     return o.join('');
@@ -231,42 +232,30 @@
     var e=D.estaciones.filter(function(z){return z.i===SEL.e})[0];
     if(!e)return;
     var ult=e.s[AFIN];
-    $('tficha').innerHTML='<b>'+e.n+'</b><span>'+e.p+' · '+e.alt+' m · '+
-      e.nv+' veranos medidos</span>';
+    // translate="no" en el NOMBRE de la estación: el traductor del navegador se
+    // inventa los topónimos («A Capela» -> «Una capa»), y en un sitio cuya
+    // premisa es que cada cifra sale de una estación medida, eso la desmonta.
+    $('tficha').innerHTML='<b translate="no">'+esc(e.n)+'</b><span><span '+
+      'translate="no">'+esc(e.p)+'</span> · '+e.alt+' m · '+T.nVeranos(e.nv)+'</span>';
     $('tgraf').innerHTML=pinta(e);
-    var ley='<span><i style="background:#d9744e"></i>veranos medidos</span>';
-    if(e.sig)ley+='<span><i style="background:rgba(217,116,78,.35)"></i>'+
-      'margen si el ritmo medido continuara</span>';
+    var ley='<span><i style="background:#d9744e"></i>'+T.leyMedido+'</span>';
+    if(e.sig)ley+='<span><i style="background:rgba(217,116,78,.35)"></i>'+T.leyCono+'</span>';
     $('tleyenda').innerHTML=ley;
     var v=$('tveredicto');
-    if(e.sig){
-      v.className='tveredicto';
-      v.innerHTML='En esta estación las noches tropicales <b>suben de forma '+
-        'distinguible del ruido</b> de año a año: '+nes(e.b,1)+' noches más al año, '+
-        'con un intervalo de confianza del 95&nbsp;% de '+nes(e.lo,1)+' a '+nes(e.hi,1)+
-        '. La zona sombreada es hasta dónde llegaría ese margen si el ritmo se '+
-        'mantuviera. <b>No es una previsión y no damos una cifra para '+AMAX+'</b>: '+
-        'con diez veranos, el margen es demasiado ancho para eso.';
-    }else{
-      v.className='tveredicto plano';
-      v.innerHTML='En esta estación <b>la subida no se distingue del ruido</b> de año '+
-        'a año. La pendiente medida es '+nes(e.b,1)+' noches al año, pero su intervalo '+
-        'de confianza del 95&nbsp;% va de '+nes(e.lo,1)+' a '+nes(e.hi,1)+' e incluye el '+
-        'cero: con esta serie no se puede afirmar que suba. Por eso no se dibuja nada '+
-        'más allá de '+AFIN+'. Le pasa a '+(D.estaciones.length-D.n_significativas)+
-        ' de las '+D.estaciones.length+' estaciones.';
-    }
+    v.className=e.sig?'tveredicto':'tveredicto plano';
+    v.innerHTML=e.sig?T.sube(nes(e.b,1),nes(e.lo,1),nes(e.hi,1))
+                     :T.plana(nes(e.b,1),nes(e.lo,1),nes(e.hi,1),
+                              D.estaciones.length-D.n_significativas,D.estaciones.length);
     var nums='<div><span class="n">'+(ult==null?'—':ult)+'</span>'+
-      '<span class="l">noches tropicales en '+AFIN+'</span></div>'+
+      '<span class="l">'+T.lblUlt+'</span></div>'+
       '<div><span class="n">'+nes(e.b,1)+'</span>'+
-      '<span class="l">noches más al año, pendiente medida</span></div>'+
+      '<span class="l">'+T.lblPend+'</span></div>'+
       '<div><span class="n">'+nes(e.r2,2)+'</span>'+
-      '<span class="l">'+(e.r2===null?'sin R²: la serie no varía, son todo ceros':
-        'R² de la recta: cuánto explica de la variación')+'</span></div>'+
+      '<span class="l">'+(e.r2===null?T.lblSinR2:T.lblR2)+'</span></div>'+
       '<div><span class="n">'+e.nv+'</span>'+
-      '<span class="l">veranos con cobertura suficiente</span></div>';
-    if(e.techo)nums+='<div><span class="n">techo</span><span class="l">ya parte de más '+
-      'del 80&nbsp;% de las noches posibles: le queda poco margen para crecer</span></div>';
+      '<span class="l">'+T.lblVeranos+'</span></div>';
+    if(e.techo)nums+='<div><span class="n">'+T.lblTechoN+'</span><span class="l">'+
+      T.lblTecho+'</span></div>';
     $('tnums').innerHTML=nums;
     try{history.replaceState(null,'','#e='+e.i)}catch(_){}
   }
@@ -274,7 +263,7 @@
   function llenaEst(){
     var l=D.estaciones.filter(function(z){return z.p===SEL.p});
     $('test').innerHTML=l.map(function(z){
-      return '<option value="'+z.i+'">'+z.n+'</option>'}).join('');
+      return '<option value="'+z.i+'">'+esc(z.n)+'</option>'}).join('');
     if(!l.filter(function(z){return z.i===SEL.e}).length)SEL.e=l[0].i;
     $('test').value=SEL.e;
     muestra();
@@ -286,17 +275,17 @@
     D.estaciones.forEach(function(z){if(provs.indexOf(z.p)<0)provs.push(z.p)});
     provs.sort();
     $('tprov').innerHTML=provs.map(function(z){
-      return '<option value="'+z+'">'+z+'</option>'}).join('');
+      return '<option value="'+esc(z)+'">'+esc(z)+'</option>'}).join('');
     var h=(location.hash||'').match(/e=([A-Za-z0-9]+)/);
     var ini=h?D.estaciones.filter(function(z){return z.i===h[1]})[0]:null;
-    if(!ini)ini=D.estaciones.filter(function(z){return z.n==='GIRONA'})[0]||D.estaciones[0];
+    if(!ini)ini=D.estaciones.filter(function(z){return z.n===T.porDefecto})[0]||D.estaciones[0];
     SEL.p=ini.p;SEL.e=ini.i;
     $('tprov').value=SEL.p;
     // Enseñar ANTES de dibujar: pinta() mide el contenedor en píxeles reales, y
     // un elemento dentro de un padre con display:none mide 0. Con el 0 cayendo
-    // en el `|| 760` del ancho por defecto, la primera gráfica salía siempre a
-    // tamaño de escritorio y en el móvil se escalaba al 33 %, con el texto a
-    // 4 px. No se ve en escritorio: solo aparece en pantallas estrechas.
+    // en el ancho por defecto, la primera gráfica salía siempre a tamaño de
+    // escritorio y en el móvil se escalaba al 33 %, con el texto a 4 px. No se
+    // ve en escritorio: solo aparece en pantallas estrechas.
     $('tcarga').style.display='none';
     $('tcalc').style.display='';
     llenaEst();
@@ -315,8 +304,7 @@
   fetch('/estudios/tendencia-datos.json')
     .then(function(r){if(!r.ok)throw 0;return r.json()})
     .then(arranca)
-    .catch(function(){$('tcarga').textContent=
-      'No se han podido cargar los datos. Prueba a recargar la página.'});
+    .catch(function(){$('tcarga').textContent=T.fallo});
 })();
 </script>
 </body>

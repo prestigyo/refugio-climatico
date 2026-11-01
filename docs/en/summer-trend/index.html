@@ -26,30 +26,43 @@
 .tcalc{max-width:860px;margin:0 auto}
 .tsel{display:block;margin:0 0 18px}
 .tsel .fila{margin:0 0 12px}
-.tsel label{display:block;font:600 13px/1.4 var(--sans,inherit);letter-spacing:.04em;
-  text-transform:uppercase;color:var(--tenue,#9b8a76);margin:0 0 6px}
-.tsel select{width:100%;max-width:420px;padding:11px 12px;font-size:16px;
-  font-family:inherit;color:var(--tinta,#efe6d6);background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.18);border-radius:8px}
-.tsel select:focus{outline:2px solid var(--teja,#d9744e);outline-offset:2px}
+.tsel label{display:block;font:600 13px/1.4 var(--fb);letter-spacing:.04em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+/* El desplegable va con appearance:none y fondo opaco propio, como el resto de
+   los <select> del sitio. Sin eso el navegador pinta su control NATIVO —fondo
+   blanco— e ignora el background, pero sí respeta el color del texto: salía
+   texto claro sobre blanco y no se distinguía nada. El envoltorio .sw existe
+   para colgar la flecha, que appearance:none se lleva por delante. */
+.tsel .sw{position:relative;display:block;max-width:420px}
+.tsel select{width:100%;background:#2c2216;border:1.5px solid #5f5138;
+  border-radius:11px;color:var(--paper);font-size:16px;padding:12px 40px 12px 14px;
+  font-family:var(--fb);cursor:pointer;appearance:none;-webkit-appearance:none}
+.tsel select:focus{outline:2px solid var(--teja);outline-offset:1px}
+.tsel .sw::after{content:"";position:absolute;right:16px;top:50%;width:9px;height:9px;
+  border-right:2.5px solid var(--teja);border-bottom:2.5px solid var(--teja);
+  transform:translateY(-70%) rotate(45deg);pointer-events:none}
+/* La lista desplegada la pinta el sistema. En Windows y Linux respeta estas dos
+   reglas; macOS las ignora y usa su propio tema, que también se lee. Aquí
+   importa más que en ningún otro <select> del sitio: son 741 estaciones. */
+.tsel option{background:#2c2216;color:#efe6d6}
 .tficha{display:flex;flex-wrap:wrap;gap:10px 26px;align-items:baseline;margin:0 0 14px}
 .tficha b{font-size:21px}
-.tficha span{color:var(--tenue,#9b8a76);font-size:14px}
+.tficha span{color:var(--muted);font-size:14px}
 .tgraf{position:relative;margin:0 0 6px}
 .tgraf svg{display:block;max-width:100%;height:auto;margin:0 auto}
 .tleyenda{display:flex;flex-wrap:wrap;gap:8px 20px;margin:4px 0 16px;
-  font-size:13px;color:var(--tenue,#9b8a76)}
+  font-size:13px;color:var(--muted)}
 .tleyenda i{display:inline-block;width:22px;height:3px;vertical-align:middle;
   margin-right:7px;border-radius:2px}
-.tveredicto{padding:14px 16px;border-left:3px solid var(--teja,#d9744e);
+.tveredicto{padding:14px 16px;border-left:3px solid var(--teja);
   background:rgba(217,116,78,.09);margin:0 0 16px;font-size:16px;line-height:1.6}
 .tveredicto.plano{border-left-color:#8fb07a;background:rgba(143,176,122,.09)}
 .tnums{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:12px;margin:0 0 18px}
 .tnums div{padding:11px 13px;background:rgba(255,255,255,.04);border-radius:8px}
 .tnums .n{font-size:20px;font-weight:700;display:block}
-.tnums .l{font-size:13px;color:var(--tenue,#9b8a76);line-height:1.45}
-.tavisos{font-size:14px;line-height:1.65;color:var(--tenue,#9b8a76)}
+.tnums .l{font-size:13px;color:var(--muted);line-height:1.45}
+.tavisos{font-size:14px;line-height:1.65;color:var(--muted)}
 .tavisos li{margin:0 0 8px}
 @media(max-width:520px){
   .tficha b{font-size:18px}
@@ -109,8 +122,8 @@
     <p id="tcarga">Loading data for 741 stations…</p>
     <div id="tcalc" style="display:none">
       <div class="tsel">
-        <div class="fila"><label for="tprov">Province</label><select id="tprov" translate="no"></select></div>
-        <div class="fila"><label for="test">AEMET weather station</label><select id="test" translate="no"></select></div>
+        <div class="fila"><label for="tprov">Province</label><span class="sw"><select id="tprov" translate="no"></select></span></div>
+        <div class="fila"><label for="test">AEMET weather station</label><span class="sw"><select id="test" translate="no"></select></span></div>
       </div>
       <div class="tficha" id="tficha"></div>
       <div class="tgraf" id="tgraf"></div>

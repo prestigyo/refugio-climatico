@@ -5,19 +5,19 @@
 },
 "a-coruna": {
 "f": "2026-11-01",
-"h": "f09fbfea37a69b1e"
+"h": "565292f9c94337d4"
 },
 "albacete": {
 "f": "2026-11-01",
-"h": "389d4140ec171806"
+"h": "522fcd09ecad72e1"
 },
 "alicante": {
 "f": "2026-11-01",
-"h": "f600d2d112b41274"
+"h": "cc84f1e73e2be79a"
 },
 "almeria": {
 "f": "2026-11-01",
-"h": "4d466a5916092e7a"
+"h": "3f4a087fa0069734"
 },
 "alojamiento-sin-aire-acondicionado": {
 "f": "2026-11-01",
@@ -25,11 +25,11 @@
 },
 "araba-alava": {
 "f": "2026-11-01",
-"h": "3aa8a8e04cb52cdd"
+"h": "621cf3b24ea72ab7"
 },
 "asturias": {
 "f": "2026-11-01",
-"h": "7440b9ae9ee072c7"
+"h": "60a1289766792a11"
 },
 "aumento-noches-tropicales-espana": {
 "f": "2026-10-19",
@@ -37,7 +37,7 @@
 },
 "avila": {
 "f": "2026-11-01",
-"h": "11c057719f7ca1fc"
+"h": "59356add9c5671fe"
 },
 "aviso-legal": {
 "f": "2026-11-01",
@@ -45,35 +45,35 @@
 },
 "badajoz": {
 "f": "2026-11-01",
-"h": "6f8b6c34ca915ed9"
+"h": "4793fbb49f1650fc"
 },
 "barcelona": {
 "f": "2026-11-01",
-"h": "aabe0f4e67057e94"
+"h": "c4942053a01abcd2"
 },
 "bizkaia": {
 "f": "2026-11-01",
-"h": "71526c6aa7b19e66"
+"h": "d0bd4241f5261d12"
 },
 "burgos": {
 "f": "2026-11-01",
-"h": "d1b263e64bc178cc"
+"h": "7e01aed53017fb98"
 },
 "caceres": {
 "f": "2026-11-01",
-"h": "d16a2f61b02fb680"
+"h": "092aee35b68e6e38"
 },
 "cadiz": {
 "f": "2026-11-01",
-"h": "b8be71f501f22a9f"
+"h": "45714da27cfe7094"
 },
 "cantabria": {
 "f": "2026-11-01",
-"h": "32593766fc8998c7"
+"h": "3d8fa65485c177d6"
 },
 "castellon": {
 "f": "2026-11-01",
-"h": "fa89039189d28f9a"
+"h": "687662d3ed30cba9"
 },
 "certificados": {
 "f": "2026-10-05",
@@ -881,15 +881,15 @@
 },
 "ciudad-real": {
 "f": "2026-11-01",
-"h": "c823e8241c38bfa2"
+"h": "6bb7daa8df13c1d0"
 },
 "confortometro": {
 "f": "2026-11-01",
-"h": "fb51ca5a12926a96"
+"h": "3142e031aa92f2f6"
 },
 "cordoba": {
 "f": "2026-11-01",
-"h": "f91a33ff5921b7ea"
+"h": "0e8efdecf946f55b"
 },
 "cuantas-horas-se-duerme-en-verano": {
 "f": "2026-11-01",
@@ -897,7 +897,7 @@
 },
 "cuenca": {
 "f": "2026-11-01",
-"h": "d86b556567f1056e"
+"h": "29ccedc3f787d023"
 },
 "deuda-de-sueno": {
 "f": "2026-11-01",
@@ -916,8 +916,8 @@
 "h": "4a63bbcc6a9cd731"
 },
 "en/best-climate-in-spain-year-round": {
-"f": "2026-10-30",
-"h": "929d33c694e81107"
+"f": "2026-11-01",
+"h": "de954f8e5eb85e5e"
 },
 "en/climate-in-your-town": {
 "f": "2026-10-25",
@@ -936,8 +936,8 @@
 "h": "b167c2f57e4decdd"
 },
 "en/mild-winter": {
-"f": "2026-10-30",
-"h": "c17dadd1b2853ffd"
+"f": "2026-11-01",
+"h": "4ac25016062ce6fe"
 },
 "en/mild-winter/adeje": {
 "f": "2026-10-19",
@@ -948,12 +948,12 @@
 "h": "3670c3a4022440ac"
 },
 "en/mild-winter/agaete-suerte-alta": {
-"f": "2026-10-30",
-"h": "49e76181584b6ade"
+"f": "2026-11-01",
+"h": "1a89330a60e28384"
 },
 "en/mild-winter/aguimes": {
-"f": "2026-10-30",
-"h": "14cffbced17abcff"
+"f": "2026-11-01",
+"h": "df52eb47774607e2"
 },
 "en/mild-winter/agulo": {
 "f": "2026-10-19",
@@ -1032,16 +1032,16 @@
 "h": "06ab1a4da4b30e1f"
 },
 "en/mild-winter/hierro-aeropuerto": {
-"f": "2026-10-30",
-"h": "ce651746d2d5b9b7"
+"f": "2026-11-01",
+"h": "85aa11caea8820a2"
 },
 "en/mild-winter/la-aldea-de-san-nicolas": {
 "f": "2026-10-19",
 "h": "148fe9e3747c451c"
 },
 "en/mild-winter/la-aldea-de-san-nicolas-tasarte": {
-"f": "2026-10-30",
-"h": "1b28ab01b6bfc1b3"
+"f": "2026-11-01",
+"h": "0a0c95183c1c1fa1"
 },
 "en/mild-winter/la-gomera-aeropuerto": {
 "f": "2026-10-19",
@@ -1064,12 +1064,12 @@
 "h": "e4fd081db647f888"
 },
 "en/mild-winter/las-palmas-de-g-c-tafira-cmt": {
-"f": "2026-10-30",
-"h": "9843ae88e9b00473"
+"f": "2026-11-01",
+"h": "a6f9cc2cbecf2d7e"
 },
 "en/mild-winter/las-palmas-de-gran-canaria-pl-de-la-feria": {
-"f": "2026-10-30",
-"h": "2a6297580bb8d906"
+"f": "2026-11-01",
+"h": "0fca8d1f52ebc0ca"
 },
 "en/mild-winter/las-palmas-de-gran-canaria-san-cristobal": {
 "f": "2026-10-19",
@@ -1100,8 +1100,8 @@
 "h": "493b4e0709033ddf"
 },
 "en/mild-winter/melilla": {
-"f": "2026-10-30",
-"h": "219dc505adfdc32a"
+"f": "2026-11-01",
+"h": "cb886561c6b2754b"
 },
 "en/mild-winter/mogan-puerto": {
 "f": "2026-10-19",
@@ -1116,8 +1116,8 @@
 "h": "4b036f6e049c765b"
 },
 "en/mild-winter/pajara": {
-"f": "2026-10-30",
-"h": "604494846945a8bb"
+"f": "2026-11-01",
+"h": "a8cdf4255992527a"
 },
 "en/mild-winter/puerto-de-la-cruz": {
 "f": "2026-10-19",
@@ -1132,20 +1132,20 @@
 "h": "1a248ec605cf8711"
 },
 "en/mild-winter/san-bartolome-tirajana-el-matorral": {
-"f": "2026-10-30",
-"h": "9b1fd335a8005a7c"
+"f": "2026-11-01",
+"h": "be11d5e079149cec"
 },
 "en/mild-winter/san-bartolome-tirajana-lomo-pedro-alfonso": {
 "f": "2026-10-19",
 "h": "1d0ea8362a2d2b29"
 },
 "en/mild-winter/san-sebastian-de-la-gomera": {
-"f": "2026-10-19",
-"h": "62aee98bd6a40d06"
+"f": "2026-11-01",
+"h": "aa1d9cbd05769312"
 },
 "en/mild-winter/sta-cruz-de-tenerife": {
-"f": "2026-10-30",
-"h": "2a391dfed90caca1"
+"f": "2026-11-01",
+"h": "25fdc3e5a907e3ec"
 },
 "en/mild-winter/tacoron-lapillas-tortuga": {
 "f": "2026-10-19",
@@ -1180,8 +1180,8 @@
 "h": "21088330a3ae8e91"
 },
 "en/mild-winter/tijarafe": {
-"f": "2026-10-30",
-"h": "21109504cff75d55"
+"f": "2026-11-01",
+"h": "af9d43cfac1fd72d"
 },
 "en/mild-winter/tinajo": {
 "f": "2026-10-19",
@@ -1237,11 +1237,11 @@
 },
 "gipuzkoa": {
 "f": "2026-11-01",
-"h": "bf35b79dbb875471"
+"h": "31c6965e930bfcd1"
 },
 "girona": {
 "f": "2026-11-01",
-"h": "7de88ab26457b11b"
+"h": "d419894f254088e8"
 },
 "granada": {
 "f": "2026-11-01",
@@ -1393,47 +1393,47 @@
 },
 "huelva": {
 "f": "2026-11-01",
-"h": "d89cae10a96c1172"
+"h": "621c3da12b72a617"
 },
 "huesca": {
 "f": "2026-11-01",
-"h": "5e5c36d66ee76ff5"
+"h": "eac48a5e63dc82f4"
 },
 "illes-balears": {
 "f": "2026-11-01",
-"h": "aea646d6fd4acebb"
+"h": "bb68551376fee185"
 },
 "jaen": {
 "f": "2026-11-01",
-"h": "db8dc9254cb39982"
+"h": "60be6e0353c4f4fa"
 },
 "la-espana-que-nunca-se-colorea": {
 "f": "2026-11-01",
-"h": "6bf2c7954c4ac462"
+"h": "c31a5cb0324d2fbb"
 },
 "la-rioja": {
 "f": "2026-11-01",
-"h": "feccf05e1a72e3bf"
+"h": "761dfc4e5ad7236e"
 },
 "las-palmas": {
 "f": "2026-11-01",
-"h": "20fca50d284ce9ab"
+"h": "9b745fc32a547104"
 },
 "leon": {
 "f": "2026-11-01",
-"h": "6fe4f179b2f3e3c7"
+"h": "2d1d874dd448c887"
 },
 "lleida": {
 "f": "2026-11-01",
-"h": "035ac634584c43f4"
+"h": "417b9e735b9fb100"
 },
 "lugo": {
 "f": "2026-11-01",
-"h": "9d8fdc6ea6dfb260"
+"h": "5d5ff3eec136dc7f"
 },
 "madrid": {
 "f": "2026-11-01",
-"h": "bb7485eda678c75c"
+"h": "5218c71ac87ade0f"
 },
 "malaga": {
 "f": "2026-11-01",
@@ -1449,7 +1449,7 @@
 },
 "melilla": {
 "f": "2026-11-01",
-"h": "ce12fe094185a07b"
+"h": "e78464a8d7a4c18a"
 },
 "metodologia": {
 "f": "2026-10-25",
@@ -1465,11 +1465,11 @@
 },
 "murcia": {
 "f": "2026-11-01",
-"h": "c40266f27c937b1f"
+"h": "0cc668c7b192f45c"
 },
 "navarra": {
 "f": "2026-11-01",
-"h": "af92a8bf3a79a093"
+"h": "76c9f7658c707d45"
 },
 "noches-tropicales": {
 "f": "2026-11-01",
@@ -1489,19 +1489,19 @@
 },
 "ourense": {
 "f": "2026-11-01",
-"h": "a51bcae03389c5d3"
+"h": "4306342b4c95328b"
 },
 "palencia": {
 "f": "2026-11-01",
-"h": "fd545578361cb426"
+"h": "f357982f82f5e31c"
 },
 "parte": {
-"f": "2026-10-31",
-"h": "de00466db57ca122"
+"f": "2026-11-01",
+"h": "06b777a252026c29"
 },
 "pontevedra": {
 "f": "2026-11-01",
-"h": "b13a899e1a44b42c"
+"h": "f09fb35b79106ad2"
 },
 "prensa": {
 "f": "2026-10-19",
@@ -1529,15 +1529,15 @@
 },
 "santa-cruz-de-tenerife": {
 "f": "2026-11-01",
-"h": "8cf86d1222eaa543"
+"h": "1aceac149caffb15"
 },
 "segovia": {
 "f": "2026-11-01",
-"h": "aae4f67135b69d9e"
+"h": "8539561eb612c16b"
 },
 "sevilla": {
 "f": "2026-11-01",
-"h": "b88a69c11378be31"
+"h": "1b4f15d43a08899c"
 },
 "sobre-el-proyecto": {
 "f": "2026-11-01",
@@ -1549,15 +1549,15 @@
 },
 "tarragona": {
 "f": "2026-11-01",
-"h": "8cec7eb043713ada"
+"h": "6f451c01359fc78a"
 },
 "teruel": {
 "f": "2026-11-01",
-"h": "861105eb60abdbde"
+"h": "ab3bb1e43ae136d1"
 },
 "toledo": {
 "f": "2026-11-01",
-"h": "3e6528d430ff16a3"
+"h": "a5abc2fe0bba1af3"
 },
 "tu-hotel": {
 "f": "2026-11-01",
@@ -1573,18 +1573,18 @@
 },
 "valencia": {
 "f": "2026-11-01",
-"h": "0727478806fdb8bf"
+"h": "c2f15b4d0b67d1a4"
 },
 "valladolid": {
 "f": "2026-11-01",
-"h": "f3d52a95dc092c68"
+"h": "ae93181170963a16"
 },
 "zamora": {
 "f": "2026-11-01",
-"h": "6a40e7b4ffaad2fc"
+"h": "ac507f0d3f80d671"
 },
 "zaragoza": {
 "f": "2026-11-01",
-"h": "b93f250144f3e682"
+"h": "bf58778d5da389ad"
 }
 }

@@ -17694,7 +17694,8 @@ __NAV__
    days are warm enough to sit outside, while __MEJOR_NOMBRE__ manages
    <b>all __MEJOR_TERRAZA_N__</b>. That spread is the whole point — which is why the useful
    question is not “how is winter in Spain” but
-   <a href="__SITE__/en/climate-in-your-town/">how is winter where you are going</a>.</p>
+   <a href="__SITE__/en/climate-in-your-town/">how is winter where you are going</a>, or
+   <a href="__SITE__/en/summer-trend/">whether the summers there are getting hotter</a>.</p>
   </div>
 </div></header>
 
@@ -17731,6 +17732,11 @@ __NAV__
       <h3>I know what I want, not where</h3>
       <p>Set your own thresholds — terrace days, heating nights, frost, rain — pick
       the month you arrive and how long you stay, and see which stations clear them.</p></a>
+    <a class="t" href="__SITE__/en/summer-trend/">
+      <h3>Is it getting worse?</h3>
+      <p>The measured record of any station, summer by summer over ten years — and
+      where the rise stands out from the noise, how wide the range really is. No
+      forecasts, on purpose.</p></a>
     <a class="t" href="__SITE__/en/frost-free-towns-spain/">
       <h3>Where it simply does not freeze</h3>
       <p>Towns whose reference station recorded no night at or below 0&nbsp;°C, judged
@@ -17928,12 +17934,19 @@ JS_TEND = r"""
   var D=null, SEL={p:null,e:null};
   var $=function(x){return document.getElementById(x)};
   var AINI=__AINI__, AFIN=__AFIN__, AMAX=__AMAX__, TECHO=__TECHO__;
+  // Una sola pieza para los dos idiomas: los textos entran en T y la página
+  // decide cuáles. Duplicar el dibujo para traducirlo garantizaría que un
+  // arreglo entrase en uno y no en el otro.
+  var T=__T__;
 
   // La R² llega a null cuando la serie es constante (todo ceros) y ahí no está
   // definida. Un dato que falta NO es un cero: se enseña una raya.
   function nes(x,d){if(x===null||x===undefined||isNaN(x))return '—';
     var s=(Math.round(x*Math.pow(10,d))/Math.pow(10,d)).toFixed(d);
-    return s.replace('.',',')}
+    return T.coma?s.replace('.',','):s}
+
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
   function pinta(e){
     // El lienzo se mide en PÍXELES REALES del contenedor, no en un viewBox fijo.
@@ -17948,16 +17961,13 @@ JS_TEND = r"""
     var aMin=AINI,aMax=AMAX;
     var vals=[];for(var k in e.s)vals.push(e.s[k]);
     var top=Math.max(10,Math.ceil((Math.max.apply(null,vals)+6)/10)*10);
-    // si hay cono, el techo del eje tiene que caber el borde alto
     if(e.sig){var ext=e.s[AFIN]+e.hi*(aMax-AFIN);
       if(ext>top)top=Math.min(TECHO,Math.ceil((ext+4)/10)*10)}
     top=Math.min(top,TECHO);
     var x=function(a){return ML+(a-aMin)/(aMax-aMin)*(W-ML-MR)};
     var y=function(v){return MT+(1-v/top)*(H-MT-MB)};
     var o=['<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" '+
-           'role="img" aria-label="'+
-           'Noches tropicales por verano en '+e.n+', de '+AINI+' a '+AFIN+'">'];
-    // rejilla
+           'role="img" aria-label="'+esc(T.alt(e.n))+'">'];
     for(var v=0;v<=top;v+=(top>60?20:10)){
       o.push('<line x1="'+ML+'" y1="'+y(v)+'" x2="'+(W-MR)+'" y2="'+y(v)+
              '" stroke="rgba(255,255,255,.10)" stroke-width="1"/>');
@@ -17970,12 +17980,10 @@ JS_TEND = r"""
       o.push('<text x="'+x(a)+'" y="'+(H-12)+'" text-anchor="middle" '+
              'fill="#9b8a76" font-size="12">'+a+'</text>');
     }
-    // separador: aquí se deja de medir
     o.push('<line x1="'+x(AFIN)+'" y1="'+MT+'" x2="'+x(AFIN)+'" y2="'+(H-MB)+
            '" stroke="rgba(255,255,255,.28)" stroke-width="1" stroke-dasharray="3 4"/>');
     if(W>=560)o.push('<text x="'+(x(AFIN)+6)+'" y="'+(MT+12)+
-           '" fill="#9b8a76" font-size="11">aquí deja de haber medición</text>');
-    // cono, solo si la subida es distinguible del ruido
+           '" fill="#9b8a76" font-size="11">'+esc(T.corte)+'</text>');
     if(e.sig){
       var base=e.s[AFIN], arr=[], aba=[];
       for(var a2=AFIN;a2<=aMax;a2++){
@@ -17987,7 +17995,6 @@ JS_TEND = r"""
       o.push('<polygon points="'+arr.concat(aba).join(' ')+
              '" fill="rgba(217,116,78,.17)" stroke="rgba(217,116,78,.32)" stroke-width="1"/>');
     }
-    // serie medida
     var pts=[];
     for(var a3=aMin;a3<=AFIN;a3++){if(e.s[a3]!=null)pts.push([a3,e.s[a3]])}
     var seg=[],cur=[];
@@ -18003,7 +18010,7 @@ JS_TEND = r"""
     }
     for(var k2=0;k2<pts.length;k2++){
       o.push('<circle cx="'+x(pts[k2][0])+'" cy="'+y(pts[k2][1])+'" r="3.5" fill="#d9744e"/>');
-      o.push('<title>'+pts[k2][0]+': '+pts[k2][1]+' noches</title>');
+      o.push('<title>'+pts[k2][0]+': '+T.nNoches(pts[k2][1])+'</title>');
     }
     o.push('</svg>');
     return o.join('');
@@ -18013,42 +18020,30 @@ JS_TEND = r"""
     var e=D.estaciones.filter(function(z){return z.i===SEL.e})[0];
     if(!e)return;
     var ult=e.s[AFIN];
-    $('tficha').innerHTML='<b>'+e.n+'</b><span>'+e.p+' · '+e.alt+' m · '+
-      e.nv+' veranos medidos</span>';
+    // translate="no" en el NOMBRE de la estación: el traductor del navegador se
+    // inventa los topónimos («A Capela» -> «Una capa»), y en un sitio cuya
+    // premisa es que cada cifra sale de una estación medida, eso la desmonta.
+    $('tficha').innerHTML='<b translate="no">'+esc(e.n)+'</b><span><span '+
+      'translate="no">'+esc(e.p)+'</span> · '+e.alt+' m · '+T.nVeranos(e.nv)+'</span>';
     $('tgraf').innerHTML=pinta(e);
-    var ley='<span><i style="background:#d9744e"></i>veranos medidos</span>';
-    if(e.sig)ley+='<span><i style="background:rgba(217,116,78,.35)"></i>'+
-      'margen si el ritmo medido continuara</span>';
+    var ley='<span><i style="background:#d9744e"></i>'+T.leyMedido+'</span>';
+    if(e.sig)ley+='<span><i style="background:rgba(217,116,78,.35)"></i>'+T.leyCono+'</span>';
     $('tleyenda').innerHTML=ley;
     var v=$('tveredicto');
-    if(e.sig){
-      v.className='tveredicto';
-      v.innerHTML='En esta estación las noches tropicales <b>suben de forma '+
-        'distinguible del ruido</b> de año a año: '+nes(e.b,1)+' noches más al año, '+
-        'con un intervalo de confianza del 95&nbsp;% de '+nes(e.lo,1)+' a '+nes(e.hi,1)+
-        '. La zona sombreada es hasta dónde llegaría ese margen si el ritmo se '+
-        'mantuviera. <b>No es una previsión y no damos una cifra para '+AMAX+'</b>: '+
-        'con diez veranos, el margen es demasiado ancho para eso.';
-    }else{
-      v.className='tveredicto plano';
-      v.innerHTML='En esta estación <b>la subida no se distingue del ruido</b> de año '+
-        'a año. La pendiente medida es '+nes(e.b,1)+' noches al año, pero su intervalo '+
-        'de confianza del 95&nbsp;% va de '+nes(e.lo,1)+' a '+nes(e.hi,1)+' e incluye el '+
-        'cero: con esta serie no se puede afirmar que suba. Por eso no se dibuja nada '+
-        'más allá de '+AFIN+'. Le pasa a '+(D.estaciones.length-D.n_significativas)+
-        ' de las '+D.estaciones.length+' estaciones.';
-    }
+    v.className=e.sig?'tveredicto':'tveredicto plano';
+    v.innerHTML=e.sig?T.sube(nes(e.b,1),nes(e.lo,1),nes(e.hi,1))
+                     :T.plana(nes(e.b,1),nes(e.lo,1),nes(e.hi,1),
+                              D.estaciones.length-D.n_significativas,D.estaciones.length);
     var nums='<div><span class="n">'+(ult==null?'—':ult)+'</span>'+
-      '<span class="l">noches tropicales en '+AFIN+'</span></div>'+
+      '<span class="l">'+T.lblUlt+'</span></div>'+
       '<div><span class="n">'+nes(e.b,1)+'</span>'+
-      '<span class="l">noches más al año, pendiente medida</span></div>'+
+      '<span class="l">'+T.lblPend+'</span></div>'+
       '<div><span class="n">'+nes(e.r2,2)+'</span>'+
-      '<span class="l">'+(e.r2===null?'sin R²: la serie no varía, son todo ceros':
-        'R² de la recta: cuánto explica de la variación')+'</span></div>'+
+      '<span class="l">'+(e.r2===null?T.lblSinR2:T.lblR2)+'</span></div>'+
       '<div><span class="n">'+e.nv+'</span>'+
-      '<span class="l">veranos con cobertura suficiente</span></div>';
-    if(e.techo)nums+='<div><span class="n">techo</span><span class="l">ya parte de más '+
-      'del 80&nbsp;% de las noches posibles: le queda poco margen para crecer</span></div>';
+      '<span class="l">'+T.lblVeranos+'</span></div>';
+    if(e.techo)nums+='<div><span class="n">'+T.lblTechoN+'</span><span class="l">'+
+      T.lblTecho+'</span></div>';
     $('tnums').innerHTML=nums;
     try{history.replaceState(null,'','#e='+e.i)}catch(_){}
   }
@@ -18056,7 +18051,7 @@ JS_TEND = r"""
   function llenaEst(){
     var l=D.estaciones.filter(function(z){return z.p===SEL.p});
     $('test').innerHTML=l.map(function(z){
-      return '<option value="'+z.i+'">'+z.n+'</option>'}).join('');
+      return '<option value="'+z.i+'">'+esc(z.n)+'</option>'}).join('');
     if(!l.filter(function(z){return z.i===SEL.e}).length)SEL.e=l[0].i;
     $('test').value=SEL.e;
     muestra();
@@ -18068,17 +18063,17 @@ JS_TEND = r"""
     D.estaciones.forEach(function(z){if(provs.indexOf(z.p)<0)provs.push(z.p)});
     provs.sort();
     $('tprov').innerHTML=provs.map(function(z){
-      return '<option value="'+z+'">'+z+'</option>'}).join('');
+      return '<option value="'+esc(z)+'">'+esc(z)+'</option>'}).join('');
     var h=(location.hash||'').match(/e=([A-Za-z0-9]+)/);
     var ini=h?D.estaciones.filter(function(z){return z.i===h[1]})[0]:null;
-    if(!ini)ini=D.estaciones.filter(function(z){return z.n==='GIRONA'})[0]||D.estaciones[0];
+    if(!ini)ini=D.estaciones.filter(function(z){return z.n===T.porDefecto})[0]||D.estaciones[0];
     SEL.p=ini.p;SEL.e=ini.i;
     $('tprov').value=SEL.p;
     // Enseñar ANTES de dibujar: pinta() mide el contenedor en píxeles reales, y
     // un elemento dentro de un padre con display:none mide 0. Con el 0 cayendo
-    // en el `|| 760` del ancho por defecto, la primera gráfica salía siempre a
-    // tamaño de escritorio y en el móvil se escalaba al 33 %, con el texto a
-    // 4 px. No se ve en escritorio: solo aparece en pantallas estrechas.
+    // en el ancho por defecto, la primera gráfica salía siempre a tamaño de
+    // escritorio y en el móvil se escalaba al 33 %, con el texto a 4 px. No se
+    // ve en escritorio: solo aparece en pantallas estrechas.
     $('tcarga').style.display='none';
     $('tcalc').style.display='';
     llenaEst();
@@ -18097,8 +18092,7 @@ JS_TEND = r"""
   fetch('/estudios/tendencia-datos.json')
     .then(function(r){if(!r.ok)throw 0;return r.json()})
     .then(arranca)
-    .catch(function(){$('tcarga').textContent=
-      'No se han podido cargar los datos. Prueba a recargar la página.'});
+    .catch(function(){$('tcarga').textContent=T.fallo});
 })();
 """
 
@@ -18181,30 +18175,196 @@ __FOOTER__
 """
 
 
-def construir_pagina_tendencia_calc(d: dict, site: str) -> str:
+
+# Los textos de la calculadora, en los dos idiomas. Van aquí y no dentro del JS
+# para que el dibujo sea uno solo: si se duplicara el JS para traducirlo, el
+# próximo arreglo entraría en una versión y no en la otra.
+PAGINA_TENDENCIA_CALC_EN = r"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="__SITE__/en/summer-trend/">
+<link rel="alternate" hreflang="es" href="__SITE__/evolucion-noches-tropicales/">
+<link rel="alternate" hreflang="en" href="__SITE__/en/summer-trend/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__TITLE__">
+<meta property="og:description" content="__DESC__">
+<meta property="og:url" content="__SITE__/en/summer-trend/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__SITE__/og.png">
+<link rel="icon" type="image/svg+xml" href="__SITE__/favicon.svg">
+<script type="application/ld+json">__SCHEMA__</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900&family=Lora:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>__CSS__ __CSSART__ __NAVCSS__ __FOOTERCSS__ __CSSTEND__</style>
+</head>
+<body>
+__NAV__
+<header class="h"><div class="wrap">
+  <nav class="crumb" aria-label="breadcrumb"><a href="__SITE__/en/">Noche Tropical</a> · Summer trend</nav>
+  <div class="kick">Tool · __NEST__ weather stations · Summers __AINI__-__AFIN__</div>
+  <h1>Are the summers getting hotter <em>where you are buying?</em></h1>
+  <p class="intro">Pick a Spanish weather station and you get its measured record, summer by summer, for the last ten years. Where the rise stands out from the year-to-year noise, the chart carries on as <b>a range that widens</b> towards __AMAX__. <b>It is not a forecast, and you will deliberately find no figure for __AMAX__ anywhere on this page</b> — with ten summers the range is far too wide to put a number on it.</p>
+</div></header>
+
+<section><div class="wrap">
+  <div class="tcalc">
+    <p id="tcarga">Loading data for __NEST__ stations…</p>
+    <div id="tcalc" style="display:none">
+      <div class="tsel">
+        <div class="fila"><label for="tprov">Province</label><select id="tprov" translate="no"></select></div>
+        <div class="fila"><label for="test">AEMET weather station</label><select id="test" translate="no"></select></div>
+      </div>
+      <div class="tficha" id="tficha"></div>
+      <div class="tgraf" id="tgraf"></div>
+      <div class="tleyenda" id="tleyenda"></div>
+      <div class="tveredicto" id="tveredicto"></div>
+      <div class="tnums" id="tnums"></div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Why there is no number for __AMAX__</h2>
+  <p>Because nobody honestly has one, and the three reasons are measured on these same __NEST__ stations:</p>
+  <ul>
+    <li><b>At only __NSIG__ of the __NEST__ does the rise stand out from the noise.</b> At the other __NNOSIG__ the confidence interval includes zero: with ten summers you cannot claim they are rising. Those get no range drawn, and that absence is the finding, not a gap.</li>
+    <li><b>The line explains little.</b> Its median R² is 0.27, so nearly three quarters of what changes from one summer to the next is swing, not trend.</li>
+    <li><b>Stretching four years ahead opens a range of 12.9 nights at the median</b>, and more than 40 at some stations. For a place with thirty nights a year, that is saying "somewhere between a good deal fewer and a good deal more".</li>
+  </ul>
+  <p>That is why the shaded area is <b>a cone that opens, not a line</b>. However faintly you draw a line, the eye follows it and reads it as a prediction. A widening cone says the true thing: the further out you look, the less anyone knows.</p>
+
+  <h2>What the range does NOT cover</h2>
+  <p>Worth being blunt about: <b>the cone carries only the uncertainty in the slope</b> — how poorly the rate of rise is known. <b>It does not carry the year-to-year swing</b>, which is larger. A single summer can fall outside the cone without contradicting anything: look at the measured series and you will see jumps of twenty nights between consecutive years. The cone describes where the <em>trend</em> would sit, not where <em>one particular summer</em> will land.</p>
+  <p>It also carries nothing that is not climate. AEMET's daily series are not homogenised, so a moved screen or a replaced sensor can produce a step that has nothing to do with the weather.</p>
+
+  <h2>If you are buying a house</h2>
+  <p>This answers one question and only one: <b>how the nights at the nearest weather station have behaved over ten summers</b>. It will not tell you what your terrace feels like in August. For that, start with <a href="__SITE__/en/climate-in-your-town/">what the climate is actually like in that town</a>, which gives you terrace days, heating nights and tropical nights for any of 4,113 Spanish towns, and tells you which station the figures come from, how far away it sits and how much higher or lower.</p>
+  <p>And treat the station as a station, not as the house. The figure is measured where the thermometer is. A valley floor and a hillside three kilometres apart can differ by several degrees on a still night — that is the whole subject of this site.</p>
+
+  <h2>How it is counted</h2>
+  <p>A <b>tropical night</b> is a night when the minimum temperature stayed <b>above __UMBRAL__ °C</b>, which is the WHO threshold and the same one used across this site. The window runs from <b>1 June to 30 September</b>, identical in all ten summers, and a summer only counts if AEMET measured at least 90% of its __NDIAS__ days. A station enters the tool with eight valid summers or more.</p>
+  <p>The summer window leaves out real tropical nights — in the Canaries, more than half of them — so these figures describe the summer, not the year. In January 2027, once AEMET publishes December and there are ten complete calendar years, this tool will switch to counting them whole.</p>
+  <p class="fuente">Source: AEMET OpenData, daily climatological values. Nothing is interpolated: every point comes from a measured station. <a href="__SITE__/evolucion-noches-tropicales/">Versión en español</a></p>
+</div></section>
+
+__FOOTER__
+<script>__JS__</script>
+</body>
+</html>
+"""
+
+
+def _textos_tend(lang: str, afin: int, amax: int) -> str:
+    """Devuelve el objeto JS `T` ya serializado, con funciones incluidas."""
+    if lang == "en":
+        return ("{coma:false,porDefecto:'GIRONA',"
+                "alt:function(n){return 'Tropical nights per summer at '+n+', "
+                f"{afin - 9} to {afin}'" "},"
+                f"corte:'measurement stops here',"
+                "nNoches:function(n){return n+(n===1?' night':' nights')},"
+                "nVeranos:function(n){return n+' summers measured'},"
+                "leyMedido:'summers measured',"
+                "leyCono:'range if the measured pace held',"
+                "sube:function(b,lo,hi){return 'At this station tropical nights are "
+                "<b>rising in a way that stands out from the year-to-year noise</b>: '"
+                "+b+' more nights a year, with a 95% confidence interval of '+lo+' to '"
+                "+hi+'. The shaded area is how far that range would reach if the pace "
+                f"held. <b>This is not a forecast and we give no figure for {amax}</b>: "
+                "with ten summers the range is far too wide for that.'},"
+                "plana:function(b,lo,hi,n,tot){return 'At this station <b>the rise does "
+                "not stand out from the year-to-year noise</b>. The measured slope is '"
+                "+b+' nights a year, but its 95% confidence interval runs from '+lo+' to '"
+                "+hi+' and includes zero: with this series we cannot claim it is rising. "
+                f"That is why nothing is drawn beyond {afin}. It happens at '+n+' of the '"
+                "+tot+' stations.'},"
+                f"lblUlt:'tropical nights in {afin}',"
+                "lblPend:'more nights a year, measured slope',"
+                "lblR2:'R² of the line: how much of the variation it explains',"
+                "lblSinR2:'no R²: the series never varies, it is all zeros',"
+                "lblVeranos:'summers with enough coverage',"
+                "lblTechoN:'ceiling',"
+                "lblTecho:'already starts above 80% of the possible nights, so it has "
+                "little room left to grow',"
+                "fallo:'The data could not be loaded. Try reloading the page.'}")
+    return ("{coma:true,porDefecto:'GIRONA',"
+            "alt:function(n){return 'Noches tropicales por verano en '+n+', de "
+            f"{afin - 9} a {afin}'" "},"
+            "corte:'aquí deja de haber medición',"
+            "nNoches:function(n){return n+(n===1?' noche':' noches')},"
+            "nVeranos:function(n){return n+' veranos medidos'},"
+            "leyMedido:'veranos medidos',"
+            "leyCono:'margen si el ritmo medido continuara',"
+            "sube:function(b,lo,hi){return 'En esta estación las noches tropicales "
+            "<b>suben de forma distinguible del ruido</b> de año a año: '+b+' noches más "
+            "al año, con un intervalo de confianza del 95&nbsp;% de '+lo+' a '+hi+'. La "
+            "zona sombreada es hasta dónde llegaría ese margen si el ritmo se mantuviera. "
+            f"<b>No es una previsión y no damos una cifra para {amax}</b>: con diez "
+            "veranos, el margen es demasiado ancho para eso.'},"
+            "plana:function(b,lo,hi,n,tot){return 'En esta estación <b>la subida no se "
+            "distingue del ruido</b> de año a año. La pendiente medida es '+b+' noches al "
+            "año, pero su intervalo de confianza del 95&nbsp;% va de '+lo+' a '+hi+' e "
+            "incluye el cero: con esta serie no se puede afirmar que suba. Por eso no se "
+            f"dibuja nada más allá de {afin}. Le pasa a '+n+' de las '+tot+' estaciones.'" "},"
+            f"lblUlt:'noches tropicales en {afin}',"
+            "lblPend:'noches más al año, pendiente medida',"
+            "lblR2:'R² de la recta: cuánto explica de la variación',"
+            "lblSinR2:'sin R²: la serie no varía, son todo ceros',"
+            "lblVeranos:'veranos con cobertura suficiente',"
+            "lblTechoN:'techo',"
+            "lblTecho:'ya parte de más del 80&nbsp;% de las noches posibles: le queda "
+            "poco margen para crecer',"
+            "fallo:'No se han podido cargar los datos. Prueba a recargar la página.'}")
+
+
+def construir_pagina_tendencia_calc(d: dict, site: str, lang: str = "es") -> str:
     """La calculadora de evolución. Devuelve el HTML; None lo decide quien llama.
 
     `d` es docs/estudios/tendencia-datos.json, que escribe analisis_tendencia.py.
+    lang="es" → /evolucion-noches-tropicales/ · lang="en" → /en/summer-trend/.
+    Mismo JSON y mismo dibujo en los dos; solo cambian los textos (ver
+    `_textos_tend`) y el envoltorio.
     """
+    en = lang == "en"
     nest = len(d["estaciones"])
     nsig = d["n_significativas"]
     aini, afin = int(d["anio_ini"]), int(d["anio_fin"])
     amax = afin + 4
     techo = int(d["noches_posibles"])
-    title = "Evolución de las noches tropicales por estación | Noche Tropical"
-    desc = (f"La serie de los {afin - aini + 1} veranos de cada una de las {nest} "
-            f"estaciones de AEMET, con el margen de la tendencia donde se distingue "
-            f"del ruido. Sin previsiones: en {nest - nsig} de las {nest} la subida no "
-            f"es distinguible.")
-    url = site + "/evolucion-noches-tropicales/"
+    if en:
+        title = "Are Spanish summers getting hotter? Station by station | Noche Tropical"
+        desc = (f"The measured record of all {nest} AEMET weather stations, summer by "
+                f"summer, with the trend range where it stands out from the noise. No "
+                f"forecasts: at {nest - nsig} of {nest} stations the rise is not "
+                f"distinguishable.")
+        url = site + "/en/summer-trend/"
+    else:
+        title = "Evolución de las noches tropicales por estación | Noche Tropical"
+        desc = (f"La serie de los {afin - aini + 1} veranos de cada una de las {nest} "
+                f"estaciones de AEMET, con el margen de la tendencia donde se distingue "
+                f"del ruido. Sin previsiones: en {nest - nsig} de las {nest} la subida no "
+                f"es distinguible.")
+        url = site + "/evolucion-noches-tropicales/"
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
-            {"@type": "ListItem", "position": 2, "name": "Evolución por estación", "item": url}]},
-        {"@type": "WebApplication", "name": "Evolución de las noches tropicales",
+            {"@type": "ListItem", "position": 1,
+             "name": "Noche Tropical" if en else "Refugio Climático",
+             "item": site + ("/en/" if en else "/")},
+            {"@type": "ListItem", "position": 2,
+             "name": "Summer trend" if en else "Evolución por estación", "item": url}]},
+        {"@type": "WebApplication",
+         "name": "Are Spanish summers getting hotter?" if en
+                 else "Evolución de las noches tropicales",
          "description": desc, "url": url, "applicationCategory": "ReferenceApplication",
          "operatingSystem": "Any", "browserRequirements": "JavaScript",
-         "inLanguage": "es-ES",
+         "inLanguage": "en-GB" if en else "es-ES",
          "creator": {"@type": "Organization", "name": "nochetropical.es"},
          "isBasedOn": "https://opendata.aemet.es"},
         {"@type": "Dataset",
@@ -18221,8 +18381,10 @@ def construir_pagina_tendencia_calc(d: dict, site: str) -> str:
          "license": "https://creativecommons.org/licenses/by/4.0/"}]}, ensure_ascii=False)
     js = (JS_TEND.replace("__AINI__", str(aini)).replace("__AFIN__", str(afin))
           .replace("__AMAX__", str(amax)).replace("__TECHO__", str(techo))
+          .replace("__T__", _textos_tend(lang, afin, amax))
           .replace("__SITE__", site))
-    return (PAGINA_TENDENCIA_CALC
+    plantilla = PAGINA_TENDENCIA_CALC_EN if en else PAGINA_TENDENCIA_CALC
+    return (plantilla
             .replace("__SCHEMA__", schema)
             .replace("__CSS__", _CSS_CHROME)
             .replace("__CSSART__", _CSS_ARTICULO)
@@ -18230,8 +18392,8 @@ def construir_pagina_tendencia_calc(d: dict, site: str) -> str:
             .replace("__FOOTERCSS__", CSS_FOOTER_ESCUETO)
             .replace("__CSSATAJO__", CSS_ATAJO)
             .replace("__CSSTEND__", CSS_TEND)
-            .replace("__NAV__", nav_escueto_html(site))
-            .replace("__FOOTER__", footer_escueto_html(site))
+            .replace("__NAV__", nav_en_html(site) if en else nav_escueto_html(site))
+            .replace("__FOOTER__", footer_en_html(site) if en else footer_escueto_html(site))
             .replace("__ATAJO__", ATAJO_CERCA)
             .replace("__JS__", js)
             .replace("__TITLE__", title)
@@ -18243,7 +18405,7 @@ def construir_pagina_tendencia_calc(d: dict, site: str) -> str:
             .replace("__AFIN__", str(afin))
             .replace("__AMAX__", str(amax))
             .replace("__NDIAS__", str(techo))
-            .replace("__UMBRAL__", _n_es(d["umbral_c"]))
+            .replace("__UMBRAL__", f'{d["umbral_c"]:g}' if en else _n_es(d["umbral_c"]))
             .replace("__SITE__", site)
             .replace("__HOME__", site + "/"))
 
@@ -18549,7 +18711,11 @@ def main() -> int:
             (DOCS_DIR / "evolucion-noches-tropicales").mkdir(parents=True, exist_ok=True)
             (DOCS_DIR / "evolucion-noches-tropicales" / "index.html").write_text(
                 construir_pagina_tendencia_calc(datos_tend, site), encoding="utf-8")
-            print(f"   evolucion: calculadora con {len(datos_tend['estaciones'])} "
+            (DOCS_DIR / "en" / "summer-trend").mkdir(parents=True, exist_ok=True)
+            (DOCS_DIR / "en" / "summer-trend" / "index.html").write_text(
+                construir_pagina_tendencia_calc(datos_tend, site, lang="en"),
+                encoding="utf-8")
+            print(f"   evolucion: calculadora ES + EN con {len(datos_tend['estaciones'])} "
                   f"estaciones ({datos_tend['n_significativas']} con subida "
                   f"distinguible del ruido)")
         else:

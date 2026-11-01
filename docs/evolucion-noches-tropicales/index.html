@@ -46,10 +46,12 @@
 .tpar:empty{display:none}
 .tpar b{color:var(--paper)}
 .tpar .conf{display:inline-block;font-size:11.5px;letter-spacing:.06em;
-  text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-left:6px}
+  text-transform:uppercase;padding:2px 9px;border-radius:999px;margin-left:6px;
+  white-space:nowrap}
 .tpar .c2{background:rgba(143,176,122,.18);color:var(--verde)}
 .tpar .c1{background:rgba(217,116,78,.18);color:var(--teja2)}
 .tpar .c0{background:rgba(255,255,255,.10);color:var(--muted)}
+.tpar .regla{display:block;margin:5px 0 0;font-size:13px;color:var(--muted);opacity:.85}
 .tpar.sinserie{border-left:3px solid var(--muted);padding-left:13px}
 .tsel{display:block;margin:0 0 18px}
 .tsel .fila{margin:0 0 12px}
@@ -199,7 +201,7 @@
   // Una sola pieza para los dos idiomas: los textos entran en T y la página
   // decide cuáles. Duplicar el dibujo para traducirlo garantizaría que un
   // arreglo entrase en uno y no en el otro.
-  var T={coma:true,porDefecto:'GIRONA',alt:function(n){return 'Noches tropicales por verano en '+n+', de 2017 a 2026'},corte:'aquí deja de haber medición',nNoches:function(n){return n+(n===1?' noche':' noches')},nVeranos:function(n){return n+' veranos medidos'},leyMedido:'veranos medidos',leyCono:'margen si el ritmo medido continuara',sube:function(b,lo,hi){return 'En esta estación las noches tropicales <b>suben de forma distinguible del ruido</b> de año a año: '+b+' noches más al año, con un intervalo de confianza del 95&nbsp;% de '+lo+' a '+hi+'. La zona sombreada es hasta dónde llegaría ese margen si el ritmo se mantuviera. <b>No es una previsión y no damos una cifra para 2030</b>: con diez veranos, el margen es demasiado ancho para eso.'},plana:function(b,lo,hi,n,tot){return 'En esta estación <b>la subida no se distingue del ruido</b> de año a año. La pendiente medida es '+b+' noches al año, pero su intervalo de confianza del 95&nbsp;% va de '+lo+' a '+hi+' e incluye el cero: con esta serie no se puede afirmar que suba. Por eso no se dibuja nada más allá de 2026. Le pasa a '+n+' de las '+tot+' estaciones.'},busPh:'Dénia, Teruel, Ayamonte…',conf:['orientativa','media','alta'],km:function(k){return String(k).replace('.',',')},parea:function(pueblo,est,km,dalt,chip){return '<b>'+pueblo+'</b> no tiene estación propia. La cifra es la de <b>'+est+'</b>, a '+km+'&nbsp;km'+(dalt?' y '+(dalt>0?'+':'')+dalt+'&nbsp;m de desnivel':' y al mismo nivel')+'.'+chip},sinSerie:function(pueblo,prov,km){return '<b>'+pueblo+'</b> ('+prov+'): su estación más cercana, a '+km+'&nbsp;km, <b>no tiene ocho veranos medidos</b>, que es lo mínimo para calcular una tendencia. Le pasa a 432 de los 4.113 municipios. Puedes mirar una estación cercana en los desplegables, teniendo en cuenta que estará más lejos.'},lblUlt:'noches tropicales en 2026',lblPend:'noches más al año, pendiente medida',lblR2:'R² de la recta: cuánto explica de la variación',lblSinR2:'sin R²: la serie no varía, son todo ceros',lblVeranos:'veranos con cobertura suficiente',lblTechoN:'techo',lblTecho:'ya parte de más del 80&nbsp;% de las noches posibles: le queda poco margen para crecer',fallo:'No se han podido cargar los datos. Prueba a recargar la página.'};
+  var T={coma:true,porDefecto:'GIRONA',alt:function(n){return 'Noches tropicales por verano en '+n+', de 2017 a 2026'},corte:'aquí deja de haber medición',nNoches:function(n){return n+(n===1?' noche':' noches')},nVeranos:function(n){return n+' veranos medidos'},leyMedido:'veranos medidos',leyCono:'margen si el ritmo medido continuara',sube:function(b,lo,hi){return 'En esta estación las noches tropicales <b>suben de forma distinguible del ruido</b> de año a año: '+b+' noches más al año, con un intervalo de confianza del 95&nbsp;% de '+lo+' a '+hi+'. La zona sombreada es hasta dónde llegaría ese margen si el ritmo se mantuviera. <b>No es una previsión y no damos una cifra para 2030</b>: con diez veranos, el margen es demasiado ancho para eso.'},plana:function(b,lo,hi,n,tot){return 'En esta estación <b>la subida no se distingue del ruido</b> de año a año. La pendiente medida es '+b+' noches al año, pero su intervalo de confianza del 95&nbsp;% va de '+lo+' a '+hi+' e incluye el cero: con esta serie no se puede afirmar que suba. Por eso no se dibuja nada más allá de 2026. Le pasa a '+n+' de las '+tot+' estaciones.'},busPh:'Dénia, Teruel, Ayamonte…',conf:['precisión orientativa','precisión media','precisión alta'],confRegla:['Orientativa: la estación más cercana queda a menos de 35 km y 300 m de desnivel. A esa distancia el dato describe la comarca, no el pueblo.','Media: la estación queda a menos de 25 km y 200 m de desnivel.','Alta: la estación queda a menos de 15 km y 100 m de desnivel.'],km:function(k){return String(k).replace('.',',')},parea:function(pueblo,est,km,dalt,chip){return '<b>'+pueblo+'</b> no tiene estación propia. La cifra es la de <b>'+est+'</b>, a '+km+'&nbsp;km'+(dalt?' y '+(dalt>0?'+':'')+dalt+'&nbsp;m de desnivel':' y al mismo nivel')+'.'+chip},sinSerie:function(pueblo,prov,km){return '<b>'+pueblo+'</b> ('+prov+'): su estación más cercana, a '+km+'&nbsp;km, <b>no tiene ocho veranos medidos</b>, que es lo mínimo para calcular una tendencia. Le pasa a 432 de los 4.113 municipios. Puedes mirar una estación cercana en los desplegables, teniendo en cuenta que estará más lejos.'},lblUlt:'noches tropicales en 2026',lblPend:'noches más al año, pendiente medida',lblR2:'R² de la recta: cuánto explica de la variación',lblSinR2:'sin R²: la serie no varía, son todo ceros',lblVeranos:'veranos con cobertura suficiente',lblTechoN:'techo',lblTecho:'ya parte de más del 80&nbsp;% de las noches posibles: le queda poco margen para crecer',fallo:'No se han podido cargar los datos. Prueba a recargar la página.'};
 
   // La R² llega a null cuando la serie es constante (todo ceros) y ahí no está
   // definida. Un dato que falta NO es un cero: se enseña una raya.
@@ -348,8 +350,17 @@
       return;
     }
     par.className='tpar';
+    // El chip dice de QUÉ es el grado, y el title lleva el criterio exacto.
+    // «Confianza» a secas era doblemente malo: no es lo que mide —son umbrales
+    // de distancia y desnivel— y en esta página choca con el «intervalo de
+    // confianza del 95 %» que sale unas líneas más abajo.
+    // El criterio va VISIBLE debajo, no en un title: un tooltip no existe en
+    // móvil —no hay hover— así que la regla no estaría para medio público. Y el
+    // nivel se queda porque responde lo que la frase no responde: 8,3 km es un
+    // hecho, pero si eso es cerca o lejos solo lo dice el umbral.
     par.innerHTML=T.parea(esc(p[0]),esc(e.n),T.km(p[3]),p[4],
-                          ' <span class="conf c'+p[5]+'">'+T.conf[p[5]]+'</span>');
+                          ' <span class="conf c'+p[5]+'">'+T.conf[p[5]]+'</span>')+
+                  '<span class="regla">'+esc(T.confRegla[p[5]])+'</span>';
     SEL.p=e.p; SEL.e=e.i;
     $('tprov').value=SEL.p;
     llenaEst();

@@ -1227,6 +1227,10 @@
 "f": "2026-08-27",
 "h": "689aa526a6a5c74a"
 },
+"evolucion-noches-tropicales": {
+"f": "2026-11-01",
+"h": "ab63b00fedbdecac"
+},
 "gipuzkoa": {
 "f": "2026-11-01",
 "h": "bf35b79dbb875471"
@@ -1432,8 +1436,8 @@
 "h": "7b689e8d20e0821a"
 },
 "mapa-estaciones": {
-"f": "2026-10-31",
-"h": "b8fb5d7d0bd41c89"
+"f": "2026-11-01",
+"h": "acb54a594b90cd9e"
 },
 "margen-refugios-climaticos": {
 "f": "2026-10-19",

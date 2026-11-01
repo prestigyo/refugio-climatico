@@ -17896,6 +17896,35 @@ def construir_pagina_winter_en(site: str) -> str | None:
 # el hallazgo, y es lo que nos separa de publicar una flecha hacia arriba en todas.
 CSS_TEND = r"""
 .tcalc{max-width:860px;margin:0 auto}
+/* Buscador de pueblo. Va ENCIMA de los desplegables, no en su lugar: quien mira
+   un piso en Dénia no sabe que su estación se llama Jávea, pero el periodista que
+   quiere una estación concreta la sigue teniendo. Las dos direcciones de búsqueda. */
+.tbus{position:relative;max-width:420px;margin:0 0 16px}
+.tbus label{display:block;font:600 13px/1.4 var(--fb);letter-spacing:.04em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.tbus input{width:100%;background:#2c2216;border:1.5px solid #5f5138;border-radius:11px;
+  color:var(--paper);font-size:16px;padding:12px 14px;font-family:var(--fb)}
+.tbus input:focus{outline:2px solid var(--teja);outline-offset:1px}
+.tbus .sug{list-style:none;margin:6px 0 0;padding:0;max-height:260px;overflow-y:auto;
+  border:1px solid var(--line);border-radius:10px;background:#120d07;
+  position:absolute;z-index:5;width:100%;box-shadow:0 10px 26px rgba(0,0,0,.5)}
+.tbus .sug:empty{display:none;border:0}
+.tbus .sug li{padding:10px 13px;cursor:pointer;font-size:15px;
+  border-bottom:1px solid rgba(255,255,255,.05)}
+.tbus .sug li:last-child{border-bottom:0}
+.tbus .sug li:hover,.tbus .sug li.on{background:rgba(217,116,78,.16)}
+.tbus .pr{color:var(--muted);font-size:13px;margin-left:6px}
+/* El emparejamiento pueblo->estación se ENSEÑA SIEMPRE: el dato es de la
+   estación y no del pueblo, y callarlo sería dar por medido algo que no lo está. */
+.tpar{margin:0 0 16px;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.tpar:empty{display:none}
+.tpar b{color:var(--paper)}
+.tpar .conf{display:inline-block;font-size:11.5px;letter-spacing:.06em;
+  text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-left:6px}
+.tpar .c2{background:rgba(143,176,122,.18);color:var(--verde)}
+.tpar .c1{background:rgba(217,116,78,.18);color:var(--teja2)}
+.tpar .c0{background:rgba(255,255,255,.10);color:var(--muted)}
+.tpar.sinserie{border-left:3px solid var(--muted);padding-left:13px}
 .tsel{display:block;margin:0 0 18px}
 .tsel .fila{margin:0 0 12px}
 .tsel label{display:block;font:600 13px/1.4 var(--fb);letter-spacing:.04em;
@@ -17944,7 +17973,7 @@ CSS_TEND = r"""
 
 JS_TEND = r"""
 (function(){
-  var D=null, SEL={p:null,e:null};
+  var D=null, SEL={p:null,e:null}, PUEBLOS=null, marcado=-1;
   var $=function(x){return document.getElementById(x)};
   var AINI=__AINI__, AFIN=__AFIN__, AMAX=__AMAX__, TECHO=__TECHO__;
   // Una sola pieza para los dos idiomas: los textos entran en T y la página
@@ -18061,6 +18090,51 @@ JS_TEND = r"""
     try{history.replaceState(null,'','#e='+e.i)}catch(_){}
   }
 
+  // ---- buscador de pueblo -------------------------------------------------
+  // Reutiliza towns.json, que ya publica /en/climate-in-your-town/: 4.113
+  // municipios con su estación, distancia, desnivel y confianza. No se duplica
+  // el fichero; son 205 KB y ya los sirve Pages.
+  function plano(x){return String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().trim()}
+
+  function busca(t){
+    var k=plano(t); if(k.length<2||!PUEBLOS)return [];
+    var ini=[], med=[];
+    for(var i=0;i<PUEBLOS.length && ini.length+med.length<40;i++){
+      var p=PUEBLOS[i], j=p[7].indexOf(k);
+      if(j===0)ini.push(p); else if(j>0)med.push(p);
+    }
+    return ini.concat(med).slice(0,10);
+  }
+
+  function pintaSug(l){
+    marcado=-1;
+    $('tsug').innerHTML=l.map(function(p,i){
+      return '<li role="option" data-i="'+PUEBLOS.indexOf(p)+'">'+
+        '<span translate="no">'+esc(p[0])+'</span> '+
+        '<span class="pr" translate="no">'+esc(p[1])+'</span></li>'}).join('');
+  }
+
+  function eligePueblo(p){
+    $('tbusq').value=p[0];
+    $('tsug').innerHTML='';
+    var e=D.estaciones.filter(function(z){return z.i===p[2]})[0];
+    var par=$('tpar');
+    if(!e){
+      // Un pueblo cuya estación no llega a ocho veranos NO se esconde: si no
+      // apareciera, parecería un fallo del buscador. Se dice qué falta.
+      par.className='tpar sinserie';
+      par.innerHTML=T.sinSerie(esc(p[0]),esc(p[1]),T.km(p[3]));
+      return;
+    }
+    par.className='tpar';
+    par.innerHTML=T.parea(esc(p[0]),esc(e.n),T.km(p[3]),p[4],
+                          ' <span class="conf c'+p[5]+'">'+T.conf[p[5]]+'</span>');
+    SEL.p=e.p; SEL.e=e.i;
+    $('tprov').value=SEL.p;
+    llenaEst();
+  }
+
   function llenaEst(){
     var l=D.estaciones.filter(function(z){return z.p===SEL.p});
     $('test').innerHTML=l.map(function(z){
@@ -18092,6 +18166,42 @@ JS_TEND = r"""
     llenaEst();
     $('tprov').addEventListener('change',function(){SEL.p=this.value;llenaEst()});
     $('test').addEventListener('change',function(){SEL.e=this.value;muestra()});
+    var q=$('tbusq'), sug=$('tsug'), tq=null;
+    q.addEventListener('input',function(){
+      clearTimeout(tq); var v=this.value;
+      tq=setTimeout(function(){pintaSug(busca(v))},120);
+    });
+    sug.addEventListener('mousedown',function(ev){
+      var li=ev.target.closest('li'); if(!li)return;
+      ev.preventDefault();                       // que no se cierre antes de leerlo
+      eligePueblo(PUEBLOS[+li.dataset.i]);
+    });
+    q.addEventListener('keydown',function(ev){
+      var l=sug.children; if(!l.length)return;
+      if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){
+        ev.preventDefault();
+        if(marcado>=0&&l[marcado])l[marcado].classList.remove('on');
+        marcado=(marcado+(ev.key==='ArrowDown'?1:l.length-1))%l.length;
+        l[marcado].classList.add('on'); l[marcado].scrollIntoView({block:'nearest'});
+      }else if(ev.key==='Enter'){
+        ev.preventDefault();
+        eligePueblo(PUEBLOS[+l[marcado>=0?marcado:0].dataset.i]);
+      }else if(ev.key==='Escape'){ sug.innerHTML=''; }
+    });
+    q.addEventListener('blur',function(){setTimeout(function(){sug.innerHTML=''},120)});
+    fetch('/en/climate-in-your-town/towns.json')
+      .then(function(r){if(!r.ok)throw 0;return r.json()})
+      .then(function(P){
+        P.forEach(function(p){p.push(plano(p[0]+' '+p[1]))});   // 7: clave de busqueda
+        PUEBLOS=P;
+        q.disabled=false; q.placeholder=T.busPh;
+      })
+      .catch(function(){
+        // Sin el fichero de pueblos la calculadora sigue entera: los dos
+        // desplegables funcionan igual. Se esconde el buscador y ya.
+        var c=document.querySelector('.tbus'); if(c)c.style.display='none';
+      });
+
     var t=null, wPrev=window.innerWidth;
     window.addEventListener('resize',function(){
       if(window.innerWidth===wPrev)return;   // el teclado del móvil no cuenta
@@ -18148,6 +18258,14 @@ __NAV__
   <div class="tcalc">
     <p id="tcarga">Cargando los datos de las __NEST__ estaciones…</p>
     <div id="tcalc" style="display:none">
+      <div class="tbus">
+        <label for="tbusq">Busca tu pueblo</label>
+        <input id="tbusq" type="search" autocomplete="off" spellcheck="false"
+               role="combobox" aria-autocomplete="list" aria-controls="tsug"
+               disabled placeholder="Cargando los municipios…">
+        <ul class="sug" id="tsug" role="listbox" aria-label="Municipios"></ul>
+      </div>
+      <p class="tpar" id="tpar"></p>
       <div class="tsel">
         <div class="fila"><label for="tprov">Provincia</label><span class="sw"><select id="tprov"></select></span></div>
         <div class="fila"><label for="test">Estación de AEMET</label><span class="sw"><select id="test"></select></span></div>
@@ -18231,6 +18349,14 @@ __NAV__
   <div class="tcalc">
     <p id="tcarga">Loading data for __NEST__ stations…</p>
     <div id="tcalc" style="display:none">
+      <div class="tbus">
+        <label for="tbusq">Search for your town</label>
+        <input id="tbusq" type="search" autocomplete="off" spellcheck="false"
+               role="combobox" aria-autocomplete="list" aria-controls="tsug"
+               disabled placeholder="Loading towns…">
+        <ul class="sug" id="tsug" role="listbox" aria-label="Towns"></ul>
+      </div>
+      <p class="tpar" id="tpar"></p>
       <div class="tsel">
         <div class="fila"><label for="tprov">Province</label><span class="sw"><select id="tprov" translate="no"></select></span></div>
         <div class="fila"><label for="test">AEMET weather station</label><span class="sw"><select id="test" translate="no"></select></span></div>
@@ -18298,6 +18424,18 @@ def _textos_tend(lang: str, afin: int, amax: int) -> str:
                 "+hi+' and includes zero: with this series we cannot claim it is rising. "
                 f"That is why nothing is drawn beyond {afin}. It happens at '+n+' of the '"
                 "+tot+' stations.'},"
+                "busPh:'Dénia, Teruel, Ayamonte…',"
+                "conf:['rough','medium','high'],"
+                "km:function(k){return String(k)},"
+                "parea:function(pueblo,est,km,dalt,chip){return '<b>'+pueblo+'</b> has no "
+                "weather station of its own. The figures are those of <b>'+est+'</b>, '+km+"
+                "'&nbsp;km away'+(dalt?' and '+(dalt>0?'+':'')+dalt+'&nbsp;m in altitude':"
+                "' and at the same altitude')+'.'+chip},"
+                "sinSerie:function(pueblo,prov,km){return '<b>'+pueblo+'</b> ('+prov+'): "
+                "its nearest station, '+km+'&nbsp;km away, <b>does not have eight measured "
+                "summers</b>, which is the minimum for a trend. This affects 432 of the "
+                "4,113 towns. You can look at a nearby station in the dropdowns, bearing in "
+                "mind it will be further away.'},"
                 f"lblUlt:'tropical nights in {afin}',"
                 "lblPend:'more nights a year, measured slope',"
                 "lblR2:'R² of the line: how much of the variation it explains',"
@@ -18326,6 +18464,18 @@ def _textos_tend(lang: str, afin: int, amax: int) -> str:
             "año, pero su intervalo de confianza del 95&nbsp;% va de '+lo+' a '+hi+' e "
             "incluye el cero: con esta serie no se puede afirmar que suba. Por eso no se "
             f"dibuja nada más allá de {afin}. Le pasa a '+n+' de las '+tot+' estaciones.'" "},"
+            "busPh:'Dénia, Teruel, Ayamonte…',"
+            "conf:['orientativa','media','alta'],"
+            "km:function(k){return String(k).replace('.',',')},"
+            "parea:function(pueblo,est,km,dalt,chip){return '<b>'+pueblo+'</b> no tiene "
+            "estación propia. La cifra es la de <b>'+est+'</b>, a '+km+'&nbsp;km'+"
+            "(dalt?' y '+(dalt>0?'+':'')+dalt+'&nbsp;m de desnivel':' y al mismo nivel')+"
+            "'.'+chip},"
+            "sinSerie:function(pueblo,prov,km){return '<b>'+pueblo+'</b> ('+prov+'): su "
+            "estación más cercana, a '+km+'&nbsp;km, <b>no tiene ocho veranos medidos</b>, "
+            "que es lo mínimo para calcular una tendencia. Le pasa a 432 de los 4.113 "
+            "municipios. Puedes mirar una estación cercana en los desplegables, teniendo "
+            "en cuenta que estará más lejos.'},"
             f"lblUlt:'noches tropicales en {afin}',"
             "lblPend:'noches más al año, pendiente medida',"
             "lblR2:'R² de la recta: cuánto explica de la variación',"

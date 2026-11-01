@@ -40,6 +40,8 @@ Fuente: AEMET (valores climatológicos diarios).
 """
 from __future__ import annotations
 
+import math
+
 import argparse
 import csv
 import json
@@ -326,6 +328,78 @@ NOTA_EDITORIAL = (
 )
 
 
+DOCS = ROOT.parent / "docs"
+
+
+def escribe_json_web(filas, resumen) -> int:
+    """Vuelca lo justo para la calculadora de la web, en docs/estudios/.
+
+    Mismo trato que `analisis_invierno.py` con `invierno-datos.json`: el análisis
+    escribe el JSON y `generar_calculadora.py` monta la página. Si el fichero no
+    está, la página sencillamente no se genera.
+
+    Va aparte del CSV a propósito. El CSV lleva 27 columnas porque es el dato
+    completo para quien se lo descargue; aquí sobra casi todo, y lo que importa es
+    que pese poco: son 165 KB en disco y unos 30 KB por la red con el gzip que
+    sirve Pages, así que el visitante se lo baja entero de una vez y la
+    calculadora va instantánea sin pedir nada más.
+
+    **Lo único que se publica del futuro es el intervalo**, nunca una pendiente
+    suelta ni un valor proyectado. La página dibuja un cono que se ensancha, y lo
+    dibuja SOLO donde `sig` es cierto. Ver la nota de diseño en CLAUDE.md.
+    """
+    est = []
+    for f in filas:
+        serie = {}
+        for tramo in (f.get("serie") or "").split(";"):
+            if ":" in tramo:
+                a, v = tramo.split(":")
+                serie[a] = int(v)
+        est.append({
+            "i": f["indicativo"],
+            "n": f["nombre"].strip(),
+            "p": f["provincia"].strip(),
+            "alt": int(round(f["altitud_m"])),
+            "s": serie,
+            "b": round(f["pendiente_noches_anio"], 2),
+            "lo": round(f["ic95_inf"], 2),
+            "hi": round(f["ic95_sup"], 2),
+            # OJO: en `filas` estos dos campos son las cadenas "si"/"no", no
+            # booleanos, y bool("no") es True. Hay que comparar con "si".
+            "sig": f["ic95_excluye_cero"] == "si",
+            # OJO: la R² no está definida cuando la serie es constante (todo
+            # ceros, por ejemplo), y json.dumps escribe NaN SIN comillas, que no
+            # es JSON válido: JSON.parse lo rechaza y la página se queda en
+            # blanco. Va a null, y abajo allow_nan=False para que, si vuelve a
+            # colarse un no-finito por otro campo, reviente aquí y no en el
+            # navegador del visitante.
+            "r2": round(f["r2"], 2) if math.isfinite(f["r2"]) else None,
+            "nv": int(f["n_veranos"]),
+            "techo": f["cerca_del_techo"] == "si",
+        })
+    est.sort(key=lambda e: (e["p"], e["n"]))
+    doc = {
+        "generado": resumen["generado"],
+        "fuente": resumen["fuente"],
+        "ventana": resumen["ventana"],
+        "umbral_c": UMBRAL,
+        "anio_ini": resumen["periodo"]["anio_ini"],
+        "anio_fin": resumen["periodo"]["anio_fin"],
+        "noches_posibles": resumen["ventana"]["dias"],
+        "n_significativas": sum(1 for e in est if e["sig"]),
+        "limitaciones": resumen["limitaciones"],
+        "estaciones": est,
+    }
+    DOCS.mkdir(parents=True, exist_ok=True)
+    (DOCS / "estudios").mkdir(parents=True, exist_ok=True)
+    (DOCS / "estudios" / "tendencia-datos.json").write_text(
+        json.dumps(doc, ensure_ascii=False, separators=(",", ":"),
+                   allow_nan=False), encoding="utf-8")
+    log.info("Escrito: %s (%d estaciones, %d con subida distinta de cero)",
+             DOCS / "estudios" / "tendencia-datos.json", len(est), doc["n_significativas"])
+    return len(est)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description="Tendencia de noches tropicales por estación (Fuente: AEMET)")
@@ -441,6 +515,8 @@ def main() -> int:
             w.writerow(f)
     (DATOS / "tendencia_resumen.json").write_text(
         json.dumps(resumen, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    n_web = escribe_json_web(filas, resumen)
 
     # ------------------------------------------------------------- consola
     L = log.info

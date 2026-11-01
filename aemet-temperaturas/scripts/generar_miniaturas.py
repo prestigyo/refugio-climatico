@@ -569,6 +569,14 @@ PAGINAS_EN = [
          l1="days in a row with no day warm enough", l2="to sit outside, on the mainland",
          pie="8 days in the Canaries · median of 806 AEMET stations",
          fuente="racha_sin_terraza_max en invierno_por_estacion.csv (mediana)"),
+    # La cifra elegida es la de las que NO suben de forma distinguible, no la de
+    # las que sí. Es la que separa a este sitio de cualquier web inmobiliaria que
+    # enseñe una flecha hacia arriba en todas: decimos dónde no se puede afirmar.
+    # Sale del párrafo «At the other 507 the confidence interval includes zero».
+    dict(slug="en/summer-trend", metrica="verano", cifra="507",
+         l1="of 741 AEMET stations where", l2="the rise is not distinguishable",
+         pie="Ten summers measured · no forecasts",
+         fuente="el párrafo «at the other N the confidence interval includes zero»"),
     dict(slug="en/mild-winter", metrica="invierno", cifra="67",
          l1="places carry the", l2="Mild Winter seal",
          pie="No frost on record · at most 40 nights below 10 °C",

@@ -13336,6 +13336,7 @@ def construir_pagina_en_home(site: str, datos_estudio: dict | None = None) -> st
         '<p>Explore the mountain regions where Spain stays fresh all summer long.</p>'
         '<div class="botones">'
         f'<a class="btn pri" href="{site}/en/coolest-towns-spain/">See the coolest towns →</a>'
+        f'<a class="btn sec" href="{site}/en/summer-trend/">Are the summers getting hotter? →</a>'
         f'<a class="btn sec" href="{site}/ola-de-calor/" hreflang="es">Live heatwave map →</a>'
         '</div></div>'
         '<h2>Frequently asked questions</h2>'
@@ -13519,6 +13520,7 @@ def construir_pagina_en_pueblos(estaciones: list, site: str) -> str:
         'real time.</p>'
         '<div class="botones">'
         f'<a class="btn pri" href="{site}/" hreflang="es">Search any town →</a>'
+        f'<a class="btn sec" href="{site}/en/summer-trend/">Is it getting worse? →</a>'
         f'<a class="btn sec" href="{site}/en/frost-free-towns-spain/">Winter: frost-free towns →</a>'
         f'<a class="btn sec" href="{site}/ola-de-calor/" hreflang="es">Live heatwave map →</a>'
         '</div></div>'
@@ -17371,6 +17373,9 @@ __NAV__
   <p>If you want the opposite question — <i>where</i> in Spain fits what you need —
   use <a href="__SITE__/en/find-your-winter-address/">find your winter address</a>
   or the <a href="__SITE__/en/frost-free-towns-spain/">frost-free town finder</a>.</p>
+  <p>This page tells you what the climate there <em>is</em>. If you want to know whether
+  it is <em>changing</em> — how the summer nights at that same station have behaved over
+  ten years — see <a href="__SITE__/en/summer-trend/">are the summers getting hotter</a>.</p>
 </div></section>
 
 __FOOTER__

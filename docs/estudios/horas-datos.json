@@ -1,10 +1,10 @@
 {
  "periodo": {
   "ini": "2026-08-29",
-  "fin": "2026-10-26",
-  "noches": 56,
-  "pares": 42672,
-  "estaciones": 817
+  "fin": "2026-11-02",
+  "noches": 63,
+  "pares": 48101,
+  "estaciones": 818
  },
  "ventana": {
   "inicio": 23,
@@ -12,26 +12,8 @@
  },
  "minimas": [
   {
-   "min": 1,
-   "n": 125,
-   "peor": 1,
-   "mejor": 9,
-   "mediana": 9,
-   "p10": 9,
-   "p90": 9
-  },
-  {
-   "min": 2,
-   "n": 229,
-   "peor": 9,
-   "mejor": 9,
-   "mediana": 9,
-   "p10": 9,
-   "p90": 9
-  },
-  {
-   "min": 3,
-   "n": 242,
+   "min": 0,
+   "n": 160,
    "peor": 9,
    "mejor": 9,
    "mediana": 9.0,
@@ -39,8 +21,35 @@
    "p90": 9
   },
   {
+   "min": 1,
+   "n": 196,
+   "peor": 1,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 9,
+   "p90": 9
+  },
+  {
+   "min": 2,
+   "n": 356,
+   "peor": 9,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 9,
+   "p90": 9
+  },
+  {
+   "min": 3,
+   "n": 365,
+   "peor": 9,
+   "mejor": 9,
+   "mediana": 9,
+   "p10": 9,
+   "p90": 9
+  },
+  {
    "min": 4,
-   "n": 463,
+   "n": 671,
    "peor": 9,
    "mejor": 9,
    "mediana": 9,
@@ -49,7 +58,7 @@
   },
   {
    "min": 5,
-   "n": 526,
+   "n": 764,
    "peor": 8,
    "mejor": 9,
    "mediana": 9.0,
@@ -58,16 +67,16 @@
   },
   {
    "min": 6,
-   "n": 920,
+   "n": 1297,
    "peor": 8,
    "mejor": 9,
-   "mediana": 9.0,
+   "mediana": 9,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 7,
-   "n": 1008,
+   "n": 1372,
    "peor": 8,
    "mejor": 9,
    "mediana": 9.0,
@@ -76,7 +85,7 @@
   },
   {
    "min": 8,
-   "n": 1520,
+   "n": 1962,
    "peor": 7,
    "mejor": 9,
    "mediana": 9.0,
@@ -85,8 +94,8 @@
   },
   {
    "min": 9,
-   "n": 1535,
-   "peor": 7,
+   "n": 1917,
+   "peor": 6,
    "mejor": 9,
    "mediana": 9,
    "p10": 9,
@@ -94,16 +103,16 @@
   },
   {
    "min": 10,
-   "n": 2144,
+   "n": 2603,
    "peor": 6,
    "mejor": 9,
-   "mediana": 9.0,
+   "mediana": 9,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 11,
-   "n": 2115,
+   "n": 2487,
    "peor": 4,
    "mejor": 9,
    "mediana": 9,
@@ -112,43 +121,43 @@
   },
   {
    "min": 12,
-   "n": 2928,
+   "n": 3397,
    "peor": 3,
    "mejor": 9,
-   "mediana": 9.0,
+   "mediana": 9,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 13,
-   "n": 2572,
+   "n": 2889,
    "peor": 4,
    "mejor": 9,
-   "mediana": 9.0,
-   "p10": 8,
+   "mediana": 9,
+   "p10": 9,
    "p90": 9
   },
   {
    "min": 14,
-   "n": 3473,
+   "n": 3790,
    "peor": 2,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 7,
    "p90": 9
   },
   {
    "min": 15,
-   "n": 2837,
+   "n": 3060,
    "peor": 3,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 7,
    "p90": 9
   },
   {
    "min": 16,
-   "n": 3566,
+   "n": 3764,
    "peor": 2,
    "mejor": 9,
    "mediana": 9.0,
@@ -157,7 +166,7 @@
   },
   {
    "min": 17,
-   "n": 2575,
+   "n": 2707,
    "peor": 1,
    "mejor": 9,
    "mediana": 8,
@@ -166,7 +175,7 @@
   },
   {
    "min": 18,
-   "n": 3000,
+   "n": 3122,
    "peor": 1,
    "mejor": 9,
    "mediana": 6.0,
@@ -175,7 +184,7 @@
   },
   {
    "min": 19,
-   "n": 2183,
+   "n": 2263,
    "peor": 1,
    "mejor": 9,
    "mediana": 3,
@@ -184,7 +193,7 @@
   },
   {
    "min": 20,
-   "n": 2400,
+   "n": 2470,
    "peor": 0,
    "mejor": 9,
    "mediana": 0.0,
@@ -193,16 +202,16 @@
   },
   {
    "min": 21,
-   "n": 1588,
+   "n": 1647,
    "peor": 0,
    "mejor": 0,
-   "mediana": 0.0,
+   "mediana": 0,
    "p10": 0,
    "p90": 0
   },
   {
    "min": 22,
-   "n": 1648,
+   "n": 1718,
    "peor": 0,
    "mejor": 0,
    "mediana": 0.0,
@@ -211,16 +220,7 @@
   },
   {
    "min": 23,
-   "n": 1238,
-   "peor": 0,
-   "mejor": 0,
-   "mediana": 0.0,
-   "p10": 0,
-   "p90": 0
-  },
-  {
-   "min": 24,
-   "n": 963,
+   "n": 1279,
    "peor": 0,
    "mejor": 0,
    "mediana": 0,
@@ -228,11 +228,20 @@
    "p90": 0
   },
   {
-   "min": 25,
-   "n": 348,
+   "min": 24,
+   "n": 986,
    "peor": 0,
    "mejor": 0,
    "mediana": 0.0,
+   "p10": 0,
+   "p90": 0
+  },
+  {
+   "min": 25,
+   "n": 351,
+   "peor": 0,
+   "mejor": 0,
+   "mediana": 0,
    "p10": 0,
    "p90": 0
   },
@@ -249,68 +258,68 @@
  "cruces": [
   {
    "hora": 0,
-   "n": 2118
+   "n": 2171
   },
   {
    "hora": 1,
-   "n": 1756
+   "n": 1792
   },
   {
    "hora": 2,
-   "n": 1404
+   "n": 1423
   },
   {
    "hora": 3,
-   "n": 1169
+   "n": 1188
   },
   {
    "hora": 4,
-   "n": 1106
+   "n": 1119
   },
   {
    "hora": 5,
-   "n": 938
+   "n": 945
   },
   {
    "hora": 6,
-   "n": 757
+   "n": 769
   },
   {
    "hora": 7,
-   "n": 690
+   "n": 696
   },
   {
    "hora": 23,
-   "n": 25293
+   "n": 30326
   },
   {
    "hora": "nunca",
-   "n": 7441
+   "n": 7672
   }
  ],
  "tramos": [
   {
    "etq": "ni una hora",
-   "n": 85
+   "n": 73
   },
   {
    "etq": "menos de 4 h",
-   "n": 61
+   "n": 35
   },
   {
    "etq": "de 4 a 7 h",
-   "n": 86
+   "n": 88
   },
   {
    "etq": "7 h o más",
-   "n": 582
+   "n": 620
   }
  ],
- "estaciones_resumidas": 814,
+ "estaciones_resumidas": 816,
  "mediana_h20": 9.0,
- "mediana_h18": 7.0,
+ "mediana_h18": 8.0,
  "sin_respiro": {
-  "n": 9,
+  "n": 8,
   "lista": [
    {
     "nombre": "PÁJARA",
@@ -343,10 +352,6 @@
    {
     "nombre": "SAN SEBASTIÁN DE LA GOMERA",
     "provincia": "STA. CRUZ DE TENERIFE"
-   },
-   {
-    "nombre": "TACORON-LAPILLAS-TORTUGA",
-    "provincia": "STA. CRUZ DE TENERIFE"
    }
   ]
  },
@@ -358,7 +363,7 @@
    "h20_mediana": 9,
    "h20_peor": 9,
    "h20_mejor": 9,
-   "noches": 53,
+   "noches": 61,
    "noches_sin_alivio": 0,
    "cruce_20_tipico": 23,
    "tira": [
@@ -626,6 +631,46 @@
      "noche": "2026-10-25",
      "tmin": 7.7,
      "h": 9
+    },
+    {
+     "noche": "2026-10-26",
+     "tmin": 2.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-27",
+     "tmin": 1.8,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-28",
+     "tmin": -0.6,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-29",
+     "tmin": 0.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-30",
+     "tmin": 3.6,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-31",
+     "tmin": 1.8,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-01",
+     "tmin": 0.1,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-02",
+     "tmin": -1.5,
+     "h": 9
     }
    ]
   },
@@ -633,10 +678,10 @@
    "nombre": "MADRID, RETIRO",
    "provincia": "MADRID",
    "altitud": 667,
-   "h20_mediana": 7.0,
+   "h20_mediana": 8,
    "h20_peor": 0,
    "h20_mejor": 9,
-   "noches": 56,
+   "noches": 63,
    "noches_sin_alivio": 16,
    "cruce_20_tipico": 23,
    "tira": [
@@ -919,6 +964,41 @@
      "noche": "2026-10-26",
      "tmin": 11.2,
      "h": 9
+    },
+    {
+     "noche": "2026-10-27",
+     "tmin": 12.2,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-28",
+     "tmin": 12.0,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-29",
+     "tmin": 10.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-30",
+     "tmin": 12.1,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-31",
+     "tmin": 11.2,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-01",
+     "tmin": 10.9,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-02",
+     "tmin": 7.8,
+     "h": 9
     }
    ]
   },
@@ -926,11 +1006,11 @@
    "nombre": "CAPDEPERA",
    "provincia": "BALEARES",
    "altitud": 57,
-   "h20_mediana": 0.0,
+   "h20_mediana": 0,
    "h20_peor": 0,
    "h20_mejor": 9,
-   "noches": 56,
-   "noches_sin_alivio": 45,
+   "noches": 63,
+   "noches_sin_alivio": 46,
    "cruce_20_tipico": 23,
    "tira": [
     {
@@ -1212,6 +1292,41 @@
      "noche": "2026-10-26",
      "tmin": 19.0,
      "h": 6
+    },
+    {
+     "noche": "2026-10-27",
+     "tmin": 19.6,
+     "h": 2
+    },
+    {
+     "noche": "2026-10-28",
+     "tmin": 20.7,
+     "h": 0
+    },
+    {
+     "noche": "2026-10-29",
+     "tmin": 18.7,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-30",
+     "tmin": 19.0,
+     "h": 9
+    },
+    {
+     "noche": "2026-10-31",
+     "tmin": 19.5,
+     "h": 7
+    },
+    {
+     "noche": "2026-11-01",
+     "tmin": 18.7,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-02",
+     "tmin": 17.1,
+     "h": 9
     }
    ]
   }

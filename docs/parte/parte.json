@@ -1,142 +1,142 @@
 {
- "fecha": "2026-11-03",
- "total": 828,
- "tropicales": 14,
+ "fecha": "2026-11-04",
+ "total": 847,
+ "tropicales": 8,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C839X",
-  "nombre": "Teguise la Graciosa-Helipuerto",
-  "min": 23.0,
+  "id": "C229J",
+  "nombre": "Pájara-Puerto Morro Jable",
+  "min": 20.9,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "2766E",
-  "nombre": "El Puente (Casa Forestal)",
-  "min": -5.4,
-  "prov": "Zamora"
+  "id": "3319D",
+  "nombre": "Puerto el Pico",
+  "min": -8.3,
+  "prov": "Ávila"
  },
  "top_calor": [
   {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 20.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 20.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 20.8,
+   "prov": "Las Palmas"
+  },
+  {
    "id": "C839X",
    "nombre": "Teguise la Graciosa-Helipuerto",
-   "min": 23.0,
+   "min": 20.7,
    "prov": "Las Palmas"
   },
   {
    "id": "C019V",
    "nombre": "Yaiza-Playa Blanca",
-   "min": 22.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.0,
+   "min": 20.6,
    "prov": "Las Palmas"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 21.4,
+   "min": 20.4,
    "prov": "Las Palmas"
   },
   {
    "id": "C449C",
    "nombre": "Santa Cruz de Tenerife",
-   "min": 21.2,
+   "min": 20.1,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C649I",
    "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 20.9,
+   "min": 19.7,
    "prov": "Las Palmas"
   },
   {
-   "id": "C239N",
-   "nombre": "Tuineje-Puerto Gran Tarajal",
-   "min": 20.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C429I",
-   "nombre": "Tenerife/Sur",
-   "min": 20.4,
+   "id": "C919K",
+   "nombre": "Tacorón-Lapillas-Tortuga",
+   "min": 19.7,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C689E",
-   "nombre": "Maspalomas",
-   "min": 20.4,
-   "prov": "Las Palmas"
   },
   {
    "id": "C038N",
    "nombre": "Haría-Cementerio",
-   "min": 20.0,
+   "min": 19.5,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "2766E",
-   "nombre": "El Puente (Casa Forestal)",
-   "min": -5.4,
-   "prov": "Zamora"
+   "id": "3319D",
+   "nombre": "Puerto el Pico",
+   "min": -8.3,
+   "prov": "Ávila"
   },
   {
-   "id": "2092",
-   "nombre": "Burgo de Osma-Pozuelos",
-   "min": -5.1,
+   "id": "2135A",
+   "nombre": "Fresno de Cantiespino",
+   "min": -7.2,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": -7.1,
+   "prov": "Segovia"
+  },
+  {
+   "id": "9287A",
+   "nombre": "San Pedro Manrique",
+   "min": -7.1,
    "prov": "Soria"
   },
   {
-   "id": "3013",
-   "nombre": "Molina de Aragón",
-   "min": -4.9,
-   "prov": "Guadalajara"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": -4.5,
-   "prov": "Lleida"
-  },
-  {
-   "id": "2084Y",
-   "nombre": "Ucero",
-   "min": -4.3,
-   "prov": "Soria"
-  },
-  {
-   "id": "2775X",
-   "nombre": "Villardeciervos",
-   "min": -4.2,
-   "prov": "Zamora"
+   "id": "2863C",
+   "nombre": "Pedraza de Alba-Vallelargo",
+   "min": -6.8,
+   "prov": "Salamanca"
   },
   {
    "id": "2048A",
    "nombre": "Moron de Almazan",
-   "min": -4.0,
+   "min": -6.7,
    "prov": "Soria"
+  },
+  {
+   "id": "2930Y",
+   "nombre": "Navasfrias",
+   "min": -6.6,
+   "prov": "Salamanca"
   },
   {
    "id": "9998X",
    "nombre": "Bello",
-   "min": -3.5,
+   "min": -6.3,
    "prov": "Teruel"
   },
   {
-   "id": "2471Y",
-   "nombre": "San Rafael",
-   "min": -3.4,
-   "prov": "Segovia"
+   "id": "2092",
+   "nombre": "Burgo de Osma-Pozuelos",
+   "min": -6.2,
+   "prov": "Soria"
   },
   {
-   "id": "9238X",
-   "nombre": "Navascués/Nabaskoze",
-   "min": -3.2,
-   "prov": "Navarra"
+   "id": "2626Y",
+   "nombre": "Sahechores-Helipuerto",
+   "min": -6.2,
+   "prov": "León"
   }
  ]
 }

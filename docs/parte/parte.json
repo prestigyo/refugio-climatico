@@ -1,7 +1,7 @@
 {
  "fecha": "2026-11-04",
- "total": 847,
- "tropicales": 8,
+ "total": 833,
+ "tropicales": 7,
  "ecuatoriales": 0,
  "peor": {
   "id": "C229J",
@@ -41,12 +41,6 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C019V",
-   "nombre": "Yaiza-Playa Blanca",
-   "min": 20.6,
-   "prov": "Las Palmas"
-  },
-  {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
    "min": 20.4,
@@ -75,6 +69,12 @@
    "nombre": "Haría-Cementerio",
    "min": 19.5,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 19.5,
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [

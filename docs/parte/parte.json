@@ -1,26 +1,44 @@
 {
- "fecha": "2026-11-04",
- "total": 833,
- "tropicales": 7,
+ "fecha": "2026-11-05",
+ "total": 844,
+ "tropicales": 15,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C229J",
-  "nombre": "Pájara-Puerto Morro Jable",
-  "min": 20.9,
+  "id": "C019V",
+  "nombre": "Yaiza-Playa Blanca",
+  "min": 21.9,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "3319D",
-  "nombre": "Puerto el Pico",
-  "min": -8.3,
-  "prov": "Ávila"
+  "id": "2192C",
+  "nombre": "Cuellar",
+  "min": -8.6,
+  "prov": "Segovia"
  },
  "top_calor": [
   {
+   "id": "C019V",
+   "nombre": "Yaiza-Playa Blanca",
+   "min": 21.9,
+   "prov": "Las Palmas"
+  },
+  {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
+   "min": 21.3,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
    "min": 20.9,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 20.8,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C619X",
@@ -29,114 +47,96 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
-   "min": 20.8,
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 20.7,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 20.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C249I",
+   "nombre": "Fuerteventura/Aeropuerto",
+   "min": 20.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C029O",
+   "nombre": "Lanzarote/Aeropuerto",
+   "min": 20.3,
    "prov": "Las Palmas"
   },
   {
    "id": "C839X",
    "nombre": "Teguise la Graciosa-Helipuerto",
-   "min": 20.7,
+   "min": 20.3,
    "prov": "Las Palmas"
-  },
-  {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 20.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 20.1,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 19.7,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C919K",
-   "nombre": "Tacorón-Lapillas-Tortuga",
-   "min": 19.7,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C038N",
-   "nombre": "Haría-Cementerio",
-   "min": 19.5,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 19.5,
-   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
   {
+   "id": "2192C",
+   "nombre": "Cuellar",
+   "min": -8.6,
+   "prov": "Segovia"
+  },
+  {
+   "id": "2766E",
+   "nombre": "El Puente (Casa Forestal)",
+   "min": -7.6,
+   "prov": "Zamora"
+  },
+  {
    "id": "3319D",
    "nombre": "Puerto el Pico",
-   "min": -8.3,
+   "min": -7.2,
    "prov": "Ávila"
   },
   {
-   "id": "2135A",
-   "nombre": "Fresno de Cantiespino",
-   "min": -7.2,
-   "prov": "Segovia"
-  },
-  {
-   "id": "2192C",
-   "nombre": "Cuellar",
+   "id": "1735X",
+   "nombre": "Xinzo de Limia",
    "min": -7.1,
-   "prov": "Segovia"
+   "prov": "Ourense"
   },
   {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": -7.1,
-   "prov": "Soria"
+   "id": "2775X",
+   "nombre": "Villardeciervos",
+   "min": -6.9,
+   "prov": "Zamora"
   },
   {
-   "id": "2863C",
-   "nombre": "Pedraza de Alba-Vallelargo",
-   "min": -6.8,
-   "prov": "Salamanca"
+   "id": "2172Y",
+   "nombre": "Sardón de Duero",
+   "min": -6.0,
+   "prov": "Valladolid"
   },
   {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": -6.7,
-   "prov": "Soria"
+   "id": "2604B",
+   "nombre": "Medina de Rioseco",
+   "min": -6.0,
+   "prov": "Valladolid"
   },
   {
-   "id": "2930Y",
-   "nombre": "Navasfrias",
-   "min": -6.6,
-   "prov": "Salamanca"
-  },
-  {
-   "id": "9998X",
-   "nombre": "Bello",
-   "min": -6.3,
-   "prov": "Teruel"
-  },
-  {
-   "id": "2092",
-   "nombre": "Burgo de Osma-Pozuelos",
-   "min": -6.2,
-   "prov": "Soria"
-  },
-  {
-   "id": "2626Y",
-   "nombre": "Sahechores-Helipuerto",
-   "min": -6.2,
+   "id": "1541B",
+   "nombre": "Villablino",
+   "min": -5.9,
    "prov": "León"
+  },
+  {
+   "id": "2867",
+   "nombre": "Salamanca/Matacan",
+   "min": -5.8,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "2290Y",
+   "nombre": "Pedrosa del Príncipe",
+   "min": -5.7,
+   "prov": "Burgos"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "fecha": "2026-11-06",
- "total": 851,
+ "total": 828,
  "tropicales": 21,
  "ecuatoriales": 0,
  "peor": {
@@ -26,6 +26,12 @@
    "id": "C129V",
    "nombre": "Fuencaliente-Salinas",
    "min": 22.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C429I",
+   "nombre": "Tenerife/Sur",
+   "min": 21.8,
    "prov": "Santa Cruz de Tenerife"
   },
   {
@@ -67,12 +73,6 @@
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 21.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
    "min": 21.1,
    "prov": "Las Palmas"
   }

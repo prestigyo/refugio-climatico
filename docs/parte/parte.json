@@ -1,12 +1,12 @@
 {
  "fecha": "2026-11-11",
- "total": 847,
- "tropicales": 56,
- "ecuatoriales": 0,
+ "total": 829,
+ "tropicales": 58,
+ "ecuatoriales": 1,
  "peor": {
   "id": "C619X",
   "nombre": "Agaete-Casco",
-  "min": 24.9,
+  "min": 25.2,
   "prov": "Las Palmas"
  },
  "mejor": {
@@ -19,14 +19,20 @@
   {
    "id": "C619X",
    "nombre": "Agaete-Casco",
-   "min": 24.9,
+   "min": 25.2,
    "prov": "Las Palmas"
   },
   {
    "id": "C619Y",
    "nombre": "La Aldea de San Nicolas",
-   "min": 24.4,
+   "min": 24.6,
    "prov": "Las Palmas"
+  },
+  {
+   "id": "C939T",
+   "nombre": "Sabinosa-Balneario",
+   "min": 24.3,
+   "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C929I",
@@ -37,13 +43,13 @@
   {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 23.9,
+   "min": 24.0,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C449F",
    "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 23.8,
+   "min": 23.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {
@@ -65,16 +71,10 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C629Q",
-   "nombre": "Mogan (Puerto Rico)",
+   "id": "C429I",
+   "nombre": "Tenerife/Sur",
    "min": 23.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 23.4,
-   "prov": "Las Palmas"
+   "prov": "Santa Cruz de Tenerife"
   }
  ],
  "top_fresco": [
@@ -103,16 +103,16 @@
    "prov": "Huesca"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 3.4,
-   "prov": "Cantabria"
-  },
-  {
    "id": "9677",
    "nombre": "Port Aine L?orri",
    "min": 3.5,
    "prov": "Lleida"
+  },
+  {
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 3.7,
+   "prov": "Cantabria"
   },
   {
    "id": "6299I",
@@ -127,16 +127,16 @@
    "prov": "Lleida"
   },
   {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 4.5,
-   "prov": "Cantabria"
-  },
-  {
    "id": "9590D",
    "nombre": "Cap de Rec",
    "min": 4.5,
    "prov": "Lleida"
+  },
+  {
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 4.8,
+   "prov": "Cantabria"
   }
  ]
 }

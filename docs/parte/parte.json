@@ -1,141 +1,141 @@
 {
- "fecha": "2026-11-11",
- "total": 829,
- "tropicales": 58,
- "ecuatoriales": 1,
+ "fecha": "2026-11-12",
+ "total": 845,
+ "tropicales": 32,
+ "ecuatoriales": 0,
  "peor": {
-  "id": "C619X",
-  "nombre": "Agaete-Casco",
-  "min": 25.2,
+  "id": "C629X",
+  "nombre": "Puerto de Mogán",
+  "min": 22.9,
   "prov": "Las Palmas"
  },
  "mejor": {
   "id": "5511",
   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": 0.4,
+  "min": -3.0,
   "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 25.2,
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
+   "min": 22.9,
    "prov": "Las Palmas"
   },
   {
-   "id": "C619Y",
-   "nombre": "La Aldea de San Nicolas",
-   "min": 24.6,
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 22.8,
    "prov": "Las Palmas"
   },
   {
-   "id": "C939T",
-   "nombre": "Sabinosa-Balneario",
-   "min": 24.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 24.2,
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 22.7,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C329Z",
    "nombre": "San Sebastián de la Gomera",
-   "min": 24.0,
+   "min": 22.3,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C429I",
+   "nombre": "Tenerife/Sur",
+   "min": 22.2,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C319W",
+   "nombre": "Vallehermoso-Dama",
+   "min": 21.8,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C449F",
    "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 23.9,
+   "min": 21.8,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 23.7,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C129V",
-   "nombre": "Fuencaliente-Salinas",
-   "min": 23.6,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C629X",
-   "nombre": "Puerto de Mogán",
-   "min": 23.6,
+   "id": "C689E",
+   "nombre": "Maspalomas",
+   "min": 21.7,
    "prov": "Las Palmas"
   },
   {
-   "id": "C429I",
-   "nombre": "Tenerife/Sur",
-   "min": 23.4,
-   "prov": "Santa Cruz de Tenerife"
+   "id": "C239N",
+   "nombre": "Tuineje-Puerto Gran Tarajal",
+   "min": 21.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639M",
+   "nombre": "San Bartolome Tirajana-C.Insular Turismo",
+   "min": 21.6,
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 0.4,
+   "min": -3.0,
    "prov": "Granada"
   },
   {
    "id": "5516D",
    "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": 1.9,
+   "min": -1.1,
    "prov": "Granada"
-  },
-  {
-   "id": "9839V",
-   "nombre": "Cerler Cogulla",
-   "min": 3.2,
-   "prov": "Huesca"
-  },
-  {
-   "id": "9195C",
-   "nombre": "Astún - la Raca",
-   "min": 3.3,
-   "prov": "Huesca"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 3.5,
-   "prov": "Lleida"
-  },
-  {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 3.7,
-   "prov": "Cantabria"
   },
   {
    "id": "6299I",
    "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
-   "min": 3.9,
+   "min": 2.6,
    "prov": "Granada"
   },
   {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 4.1,
+   "min": 3.5,
    "prov": "Lleida"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 4.5,
+   "id": "5103E",
+   "nombre": "Camarate 2 Parque Nacional Sierra Nevada",
+   "min": 3.7,
+   "prov": "Granada"
+  },
+  {
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 3.7,
+   "prov": "Huesca"
+  },
+  {
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": 3.8,
+   "prov": "Huesca"
+  },
+  {
+   "id": "2491C",
+   "nombre": "La Covatilla Estación de Esquí",
+   "min": 3.9,
+   "prov": "Salamanca"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 4.0,
    "prov": "Lleida"
   },
   {
-   "id": "1167J",
-   "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 4.8,
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 4.2,
    "prov": "Cantabria"
   }
  ]

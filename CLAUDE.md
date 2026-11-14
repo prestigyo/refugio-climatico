@@ -1,6 +1,6 @@
 # refugio-climatico — contexto del proyecto para Claude Code
 
-> Última revisión: 2026-10-10. Este fichero no se actualiza solo: si cambias la
+> Última revisión: 2026-11-14. Este fichero no se actualiza solo: si cambias la
 > estructura, añades un workflow o publicas una sección nueva, actualízalo en el
 > mismo commit.
 
@@ -63,7 +63,7 @@ refugio-climatico/
 |---|---|---|
 | `main.yml` | cron 10:30 UTC | `descarga_aemet.py` (mapas PNG) + `descarga_datos.py` (OpenData) |
 | `construir-web.yml` | cron 11:00 UTC + push a los generadores + manual | Reconstruye **toda** la web: estudios → miniaturas → calculadora → mapa → **dosier de prensa**. **Ya no genera los GIFs** (2026-10-07) |
-| `parte-nocturno.yml` | cron 07:15 UTC (+ 08:50 de red de seguridad) | `parte_nocturno.py` (parte + **archivo horario**) + `publicar_x.py` |
+| `parte-nocturno.yml` | cron 01:07, 03:07, 07:15 y 08:50 UTC + manual (campo `fecha` para rehacer una noche pasada) | `parte_nocturno.py` (parte + **archivo horario**) + `publicar_x.py`. Los cron de madrugada existen por el retraso de GitHub: antes de las 07:00 UTC el script sale sin hacer nada. **Grupo propio** (`parte-nocturno`). Acaba en rojo si hoy no hay parte o si X lo rechaza |
 | `actualizar-gifs.yml` | **cron 11:00 UTC de abril a octubre** (`0 11 * 4-10 *`) + manual con año/recorte | Solo `generar_gif.py`. Fuera de temporada no dispara; el botón «Run workflow» funciona los 365 días |
 | `datos-calendario.yml` | lunes 05:00 UTC | `generar_calendario_datos.py` |
 | `analisis.yml` | mensual (día 1, 06:00 UTC) | `analisis_refugios.py` + `analisis_refugios_nocturnos.py` |
@@ -78,7 +78,7 @@ refugio-climatico/
 
 Los workflows que escriben en `docs/` comparten `concurrency: group: commit-docs` para no pisarse, y el push reintenta con `pull --rebase --autostash` hasta 5 veces.
 
-**Cuidado con `commit-docs`**: GitHub solo guarda **una** ejecución en cola por grupo, y cuando llega otra **cancela la que esperaba**, aunque `cancel-in-progress` sea `false`. Un workflow esporádico metido en ese grupo se queda en la cola detrás de `construir-web` y muere sin arrancar (cero jobs). Le pasó a `estudio-invierno.yml` el 2026-09-24. Por eso `archivo-horario.yml`, `estudio-horario.yml`, `estudio-invierno.yml` y `estudio-estancia.yml` tienen **grupo propio**: escriben ficheros que no toca nadie más, y la colisión real en el push ya la resuelve el reintento con rebase.
+**Cuidado con `commit-docs`**: GitHub solo guarda **una** ejecución en cola por grupo, y cuando llega otra **cancela la que esperaba**, aunque `cancel-in-progress` sea `false`. Un workflow esporádico metido en ese grupo se queda en la cola detrás de `construir-web` y muere sin arrancar (cero jobs). Le pasó a `estudio-invierno.yml` el 2026-09-24. Por eso `archivo-horario.yml`, `parte-nocturno.yml`, `estudio-horario.yml`, `estudio-invierno.yml` y `estudio-estancia.yml` tienen **grupo propio**: escriben ficheros que no toca nadie más, y la colisión real en el push ya la resuelve el reintento con rebase.
 
 **Secrets**: `AEMET_API_KEY`, y para publicar el parte en X (`@nochetropicales`): `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_SECRET`. `publicar_x.py` sale limpio sin fallar si faltan.
 
@@ -91,7 +91,7 @@ Los workflows que escriben en `docs/` comparten `concurrency: group: commit-docs
 3. `backfill_historico.py` — backfill por año en chunks de 14 días, idempotente
 4. `descarga_normales.py` — normales 1991-2020 por estación (ejecución única)
 5. `analisis_refugios*.py` — rankings diurno y nocturno → `analisis/*.csv` + PNGs
-6. `parte_nocturno.py` — observación en tiempo real (últimas 24 h), sin el retraso de los climatológicos; los datos son **provisionales** y así se indica en la página
+6. `parte_nocturno.py` — observación en tiempo real, sin el retraso de los climatológicos. La noche (18:00-08:00 UTC) se calcula con la API **más el archivo horario**, porque la API solo conserva ~12 h y el cron llega tarde; los datos son **provisionales** y así se indica en la página
 7. `parte_nocturno.py` — además del parte, **archiva las lecturas horarias** en
    `datos/horarias/AAAA/AAAA-MM-DD.csv.gz` (fint, idema, ta, tamin, tamax, hr, prec).
    AEMET no publica ningún histórico horario: la observación se borra a las ~12 h, así
@@ -407,6 +407,58 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
   rolling, que se cuenta aparte: la primera pasada movió 125.651 filas nuevas y
   **10 corregidas**. **La invariante es que `diarios_AAAA.csv` contiene el año
   entero**; quien lea solo los anuales ya no se pierde nada.
+- **GitHub NO ejecuta los cron a su hora, y el retraso crece.** Medido sobre las 262
+  ejecuciones programadas del parte (cron 07:15 y 08:50 UTC): en julio y la primera
+  mitad de agosto de 2026 salía con 30-100 minutos de retraso de mediana; la semana
+  del 24 de agosto saltó a ~4 horas y no ha vuelto a bajar de 3,6 — 5,7 h a finales
+  de octubre, 6,7 h la primera semana de noviembre y **7,8 h la del 9 de noviembre**,
+  con el parte «de la mañana» saliendo entre las 15:00 y las 19:00 UTC. Le pasa a todos los workflows (el build de
+  las 11:00 corre hacia las 18:00). No es configuración nuestra y no sé la causa.
+  **Tres consecuencias que ya costaron algo:**
+  - *Partes perdidos.* La API de observación conserva ~12 h. Una ejecución pasadas las
+    ~17:00 UTC ya no encontraba la madrugada y el script salía **en verde** («no es un
+    fallo»). Así se perdieron el **2 y el 9 de noviembre**.
+  - *Partes sesgados.* Peor, porque no se veía: una ejecución a las 15:30 solo tenía en
+    la API de las 04:00 a las 08:00, así que la «mínima de la noche» era la mínima de
+    cuatro horas. Comparando lo publicado con la noche entera en 70 noches: **el
+    recuento de noches tropicales salía inflado en 51**, y en noviembre entre 60 y 300
+    estaciones cada noche llevaban una mínima demasiado alta (el 11 de noviembre se publicaron 58
+    tropicales y fueron 46). Las más afectadas son justo las del foehn: Tejeda marcó
+    21,8 °C a las 21:00 y luego 26 toda la madrugada; se publicó 25,5.
+  - *El orden entre workflows no está garantizado.* La cadena análisis (06:00) →
+    invierno (08:00) → estancia (09:00) → build (11:00) depende de la hora. Pendiente
+    encadenarla con `workflow_run`.
+
+  **Arreglo (2026-11-14):** el parte calcula la noche con **la API más el archivo
+  horario del repo**, fundidos por (hora, estación), así que da lo mismo a qué hora
+  corra y siempre mira la ventana entera de 18:00 a 08:00 UTC. Y hay dos cron más de
+  madrugada (01:07 y 03:07) que con el retraso actual acaban llegando por la mañana;
+  el que llega antes de las 07:00 UTC sale sin hacer nada (`HORA_MIN_PARTE`). Si no
+  basta, el siguiente paso es un disparador externo que llame a `workflow_dispatch`.
+  **Antes de fiarse de un cron, mirar la hora REAL de sus últimos commits**, no el
+  `.yml`.
+- **«Verde» no era «publicado».** Dos pasos del parte tapaban su fallo:
+  `parte_nocturno.py` devolvía 0 sin parte, y `publicar_x.py` iba con
+  `continue-on-error` devolviendo **«401 Unauthorized» en cada ejecución** — el
+  fichero-candado `docs/parte/ultimo-tuit.txt`, que se escribe tras cada tuit, **no
+  existe en el repo**: desde que hay candado no ha salido ninguno. Lo de «autopublicado
+  en X» no era cierto y nada avisaba. Ahora el script sale con **código 3** cuando
+  archiva pero no hay parte, el workflow commitea igualmente el archivo horario —que
+  no se recupera— y un último paso pone el job en rojo si falta el parte o si X lo
+  rechaza. `publicar_x.py` además comprueba que `parte.json` es de hoy: antes, un día
+  sin parte habría tuiteado el de ayer. **Regla: un `continue-on-error` necesita un
+  paso posterior que mire `steps.<id>.outcome`**, o es un fallo escondido.
+- **Los sensores fallan y el titular del parte es la mínima más baja de España.**
+  Reus Aeropuerto marcó −20,9 °C el 10 de septiembre; Bañobarez da un pico de frío
+  suelto cada pocas semanas. Medido en 70 noches (~890.000 lecturas): solo 8 lecturas
+  son 5 °C o más frías que la hora anterior **y** la siguiente, todas de sensor roto,
+  y solo 14 caen más de 12 °C bajo la mediana de la noche de su estación.
+  `parte_nocturno.py` las descarta (`SALTO_V`, `DESPLOME`), las lista en el registro y
+  las guarda en `docs/parte/dias/AAAA-MM-DD.json` (`descartadas`): se ve qué se quitó,
+  no solo que se quitó. Solo filtra por abajo.
+- **El parte cuenta noche tropical con `>= 20`, el resto del proyecto con `> 20,0`.**
+  Sin tocar todavía: la página dice «no bajaron de 20 °C», que es coherente consigo
+  misma, pero el recuento del parte y el de la web no son comparables noche a noche.
 - **Un año EN CURSO no es un año, y 300 días se alcanzan en octubre.**
   `noches_por_anio.csv` pedía solo `dias_con_dato >= 300` (`MIN_DIAS_ANIO`), así que
   el 2026-10-30, con el dato hasta el 27 de octubre, **2026 entró en la tabla con 140
@@ -707,7 +759,7 @@ Los outputs se commitean automáticamente (los workflows tienen permiso de escri
 - Pipeline diario funcionando (mapas + OpenData)
 - Backfill de 10 años
 - Web completa en producción en **nochetropical.es**: reportaje, calculadora, 52 landings provinciales, mapa interactivo, metodología, versión en inglés
-- Parte de la noche diario, autopublicado en X (`@nochetropicales`)
+- Parte de la noche diario en la web (127 de 131 noches desde el 6 de julio). **La publicación en X NO funciona**: devuelve 401 y hay que renovar los cuatro secretos `X_*` (ver gotcha «Verde no era publicado»)
 - Certificados "Refugio Climático de España 2026" para 25 ayuntamientos
 - Observatorio del Descanso y Confortómetro con backend en Apps Script
 - Sello para hoteles + landing `/tu-hotel/`
@@ -869,6 +921,11 @@ python scripts/backfill_historico.py --desde 2024-01-01 --hasta 2024-12-31
 python scripts/evolucion_estacion.py --buscar "MOSQUERUELA"
 python scripts/generar_informe_lead.py --estacion 8293X
 python scripts/exportar_excel_estacion.py --estacion 8293X
+
+# Rehacer el parte de una noche pasada desde el archivo horario (sin clave ni red).
+# Escribe la página fechada y su JSON; no toca el parte de hoy ni tuitea.
+# Sirve para las noches de septiembre de 2026 en adelante. Desde la web: «Run workflow» en parte-nocturno.yml, campo fecha.
+python scripts/parte_nocturno.py --fecha 2026-11-09
 
 # El parte, sin clave de AEMET (datos sintéticos)
 python scripts/parte_nocturno.py --demo

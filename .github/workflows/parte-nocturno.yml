@@ -1,23 +1,52 @@
 name: El parte de la noche
 
-# Cada mañana: lee la observación en tiempo real de AEMET (últimas 24 h) y
-# publica docs/parte/ (página + texto listo para tuitear). Es el arma diaria:
-# los datos de ANOCHE, sin el retraso de 3-5 días de los climatológicos.
+# Cada mañana: la mínima de ANOCHE en ~850 estaciones de AEMET, sin el retraso de
+# 3-5 días de los climatológicos. Publica docs/parte/ y lo tuitea.
+#
+# DOS cosas que este workflow ya NO da por supuestas (noviembre de 2026):
+#
+# 1. Que GitHub ejecute el cron a su hora. No lo hace: el de las 07:15 UTC salía
+#    con 30-90 minutos de retraso en julio y con 5-10 HORAS desde finales de
+#    agosto (mediana de 7,8 h en la semana del 9 de noviembre). Dos remedios:
+#      · el parte ya no depende de la hora: calcula la noche con el archivo
+#        horario del repo y no solo con la API, que a las 12 h la ha borrado;
+#      · hay cron repartidos por la madrugada. El que llega antes de las 07:00
+#        UTC sale sin hacer nada (parte_nocturno.py, HORA_MIN_PARTE) y el
+#        primero que llega después publica. Si GitHub vuelve a ser puntual, el
+#        de las 07:15 publica a su hora y los demás no molestan.
+#
+# 2. Que «verde» signifique «publicado». Antes el script salía en verde sin
+#    parte cuando llegaba tarde (así se perdieron el 2 y el 9 de noviembre), y
+#    el paso de X llevaba continue-on-error con un 401 diario que nadie veía.
+#    Ahora el archivo horario se commitea SIEMPRE —no se puede recuperar— y el
+#    último paso pone el job en rojo si hoy no hay parte o si X lo ha rechazado.
+#    Para dejar de publicar en X sin que esto se ponga rojo: borrar los
+#    secretos X_*; sin ellos publicar_x.py sale limpio.
 
 on:
   workflow_dispatch:
+    inputs:
+      fecha:
+        description: "Rehacer el parte de una noche pasada (AAAA-MM-DD). Vacío = el parte de hoy."
+        required: false
+        default: ""
   schedule:
-    - cron: "15 7 * * *"       # 07:15 UTC = 09:15 hora peninsular en verano
-    - cron: "50 8 * * *"       # red de seguridad: GitHub a veces se salta un cron.
-                               # Si el primero ya publicó, este no duplica nada
-                               # (candado de publicar_x.py + upsert del histórico).
+    - cron: "7 1 * * *"        # ver el punto 1 de arriba: con el retraso medido,
+    - cron: "7 3 * * *"        # estos dos son los que acaban llegando por la mañana
+    - cron: "15 7 * * *"       # la hora buena: 09:15 peninsular en verano
+    - cron: "50 8 * * *"       # repaso con la ventana completa (hasta las 08:00 UTC).
+                               # No duplica: candado de publicar_x.py + upsert del histórico.
 
 permissions:
   contents: write
 
-# Un solo run a la vez de este workflow (los que se solapan se encolan).
+# Grupo PROPIO, no commit-docs. GitHub guarda una sola ejecución en cola por
+# grupo y cancela la que esperaba cuando llega otra: con cuatro cron al día
+# aquí, compartirlo era tumbar construir-web o que construir-web tumbara el
+# parte. Lo que escribe (docs/parte, datos/horarias) no lo toca el build, y la
+# colisión real en el push ya la resuelve el reintento con rebase.
 concurrency:
-  group: commit-docs
+  group: parte-nocturno
   cancel-in-progress: false
 
 jobs:
@@ -37,12 +66,32 @@ jobs:
         run: pip install requests tweepy
 
       - name: Generar el parte de la noche
+        id: parte
         working-directory: aemet-temperaturas/scripts
         env:
           AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
-        run: python parte_nocturno.py
+          FECHA: ${{ inputs.fecha }}
+        run: |
+          # El shell de Actions lleva -e. Se quita aquí a propósito: el código 3
+          # («archivado, pero hoy no hay parte») no puede cortar el job antes
+          # del commit del archivo horario. Lo juzga el último paso.
+          set +e
+          if [ -n "$FECHA" ]; then
+            python parte_nocturno.py --fecha "$FECHA"
+          else
+            python parte_nocturno.py
+          fi
+          codigo=$?
+          set -e
+          echo "codigo=$codigo" >> "$GITHUB_OUTPUT"
+          if [ "$codigo" -ne 0 ] && [ "$codigo" -ne 3 ]; then
+            exit "$codigo"
+          fi
 
       - name: Publicar en X (@nochetropicales)
+        id: x
+        # Un parte rehecho no se tuitea: es de otro día.
+        if: steps.parte.outputs.codigo == '0' && inputs.fecha == ''
         working-directory: aemet-temperaturas/scripts
         env:
           X_API_KEY: ${{ secrets.X_API_KEY }}
@@ -50,7 +99,7 @@ jobs:
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         run: python publicar_x.py
-        continue-on-error: true
+        continue-on-error: true    # que X falle no impide commitear; se juzga al final
 
       - name: Commit si hay cambios
         run: |
@@ -67,3 +116,22 @@ jobs:
             done
             echo "No se pudo empujar tras 5 intentos"; exit 1
           fi
+
+      - name: ¿Ha salido todo?
+        env:
+          CODIGO: ${{ steps.parte.outputs.codigo }}
+          RESULTADO_X: ${{ steps.x.outcome }}
+        run: |
+          mal=0
+          if [ "$CODIGO" = "3" ]; then
+            echo "::error title=Hoy no hay parte::No había datos de la noche ni en la API ni en el archivo horario. Mira el registro del paso «Generar el parte de la noche»."
+            mal=1
+          fi
+          if [ "$RESULTADO_X" = "failure" ]; then
+            echo "::error title=El parte NO se ha publicado en X::X ha rechazado la publicación. El parte sí está en la web. Mira el registro del paso «Publicar en X»; si es un 401, hay que renovar los 4 secretos X_*."
+            mal=1
+          fi
+          if [ "$mal" -eq 1 ]; then
+            exit 1
+          fi
+          echo "Todo en orden."

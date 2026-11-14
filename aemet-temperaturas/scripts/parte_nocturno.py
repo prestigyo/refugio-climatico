@@ -16,6 +16,12 @@ Los datos de observación son PROVISIONALES (sin validar) y así se indica.
 Requiere: requests + variable de entorno AEMET_API_KEY.
 Uso local sin clave:  python parte_nocturno.py --demo   (datos sintéticos)
 Solo archivar:        python parte_nocturno.py --solo-archivo
+Rehacer una noche:    python parte_nocturno.py --fecha 2026-11-09
+                      (sin clave ni red: sale del archivo horario del repo)
+
+Códigos de salida: 0 hay parte · 1 fallo · 3 se archivó pero HOY NO HAY PARTE.
+El 3 existe para que el workflow pueda commitear el archivo horario —que no se
+puede recuperar— y aun así acabar en rojo: un parte que no sale tiene que verse.
 """
 from __future__ import annotations
 
@@ -24,6 +30,7 @@ import gzip
 import json
 import os
 import random
+import statistics
 import sys
 import time
 from datetime import datetime, timedelta, timezone
@@ -41,6 +48,26 @@ ESTACIONES_CSV = g.AEMET_DIR / "datos" / "estaciones.csv"
 H_INICIO, H_FIN = 18, 8
 MIN_ESTACIONES = 200      # si hay menos con datos, algo falló: no publicar
 MIN_LECTURAS = 5          # lecturas mínimas por estación en la ventana
+
+# Lecturas imposibles. Un sensor que falla da un frío que no existe (Reus
+# Aeropuerto marcó −20,9 °C el 10 de septiembre de 2026) y, como el parte titula
+# con la mínima más baja de España, un solo fallo se lleva el titular. Medido
+# sobre 70 noches del archivo horario (~890.000 lecturas, sept-nov de 2026):
+#   · solo 12 lecturas son 3 °C más frías que la hora anterior Y la siguiente,
+#     y de 5 °C en adelante quedan 8, todas de sensores averiados (5 de ellas,
+#     de la misma estación). El aire no baja 5 grados y los recupera en una hora.
+#   · solo 14 lecturas caen más de 12 °C bajo la mediana de la noche de su
+#     estación, en 8 noches-estación: las rachas de varias horas rotas, que el
+#     criterio anterior no ve porque sus vecinas también están mal.
+# Solo se filtra por abajo: un pico de calor no cambia la mínima.
+# Antes de esta hora UTC la noche no ha terminado y no hay parte que dar. Existe
+# porque el workflow lleva varios cron repartidos por la madrugada (GitHub los
+# ejecuta con horas de retraso; ver parte-nocturno.yml): el que llegue pronto
+# sale sin hacer nada, y el primero que llegue a partir de aquí publica.
+HORA_MIN_PARTE = 7
+
+SALTO_V = 5.0             # °C bajo la hora anterior y la siguiente
+DESPLOME = 12.0           # °C bajo la mediana de la noche de la estación
 
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
          "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
@@ -89,6 +116,26 @@ def _pedir(url: str, intentos: int = 4, **kw):
                   f"{i + 1}/{intentos - 1} en {espera}s", file=sys.stderr)
             time.sleep(espera)
     raise ultimo
+
+
+def cargar_nombres() -> dict[str, str]:
+    """indicativo -> nombre, para la estación que no está en la API en vivo (un
+    parte rehecho días después, o una ejecución muy tardía). Manda el nombre con
+    que ya salió en un parte anterior —el de la API, que es el que conoce el
+    lector— y, si nunca salió, el del catálogo."""
+    nombres = {}
+    if ESTACIONES_CSV.exists():
+        with open(ESTACIONES_CSV, encoding="utf-8") as f:
+            for fila in csv.DictReader(f):
+                nombres[fila["indicativo"].strip()] = g.titular(fila["nombre"])
+    for f in sorted((OUT_DIR / "dias").glob("????-??-??.json"))[-7:]:
+        try:
+            for e in json.loads(f.read_text(encoding="utf-8")).get("estaciones", []):
+                if e.get("nombre") and e["nombre"] != e.get("id"):
+                    nombres[e["id"]] = e["nombre"]
+        except (OSError, ValueError, KeyError, TypeError):
+            continue
+    return nombres
 
 
 def obtener_observaciones() -> list[dict]:
@@ -162,17 +209,43 @@ def _num(v) -> float | None:
     return None
 
 
-def minimas_de_la_noche(obs: list[dict]) -> dict[str, dict]:
-    """Por estación, la mínima registrada en la ventana nocturna."""
-    hoy = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
-    ini = hoy - timedelta(days=1) + timedelta(hours=H_INICIO)
-    fin = hoy + timedelta(hours=H_FIN)
-    est: dict[str, dict] = {}
+def ventana_nocturna(ahora: datetime | None = None) -> tuple[datetime, datetime]:
+    """La noche que cierra en el día de `ahora`: 18:00 UTC de ayer → 08:00 de hoy."""
+    ahora = ahora or datetime.now(timezone.utc)
+    hoy = ahora.astimezone(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    return hoy - timedelta(days=1) + timedelta(hours=H_INICIO), hoy + timedelta(hours=H_FIN)
+
+
+def minimas_de_la_noche(obs: list[dict], archivadas: list[dict] | None = None,
+                        ahora: datetime | None = None) -> dict[str, dict]:
+    """Por estación, la mínima registrada en la ventana nocturna.
+
+    `archivadas` son las lecturas de esa misma ventana que ya guardó el archivo
+    horario. Se funden con las de la API por (hora, estación), sin contar dos
+    veces la que esté en los dos sitios. Hacen falta porque la API de
+    observación solo conserva ~12 h y GitHub ejecuta los cron cuando puede: en
+    noviembre de 2026 el de las 07:15 UTC salía entre las 14:00 y las 19:00. A
+    esa hora la API ya solo trae el final de la madrugada (o nada), y el parte
+    salía calculado sobre un trozo de noche, o no salía. El archivo sí la tiene
+    entera: sus pasadas de 23:30, 02:30 y 05:30 la fueron guardando.
+    """
+    ini, fin = ventana_nocturna(ahora)
+    # El nombre legible («ubi») solo viene en la API, no en el archivo. Se toma
+    # de CUALQUIER lectura en vivo, también de las de fuera de la ventana: por
+    # la tarde todas lo están y aun así dicen cómo se llama la estación.
+    nombres: dict[str, str] = {}
     for o in obs:
+        if isinstance(o, dict) and o.get("ubi") and o.get("idema"):
+            nombres.setdefault(str(o["idema"]).strip(), g.titular(str(o["ubi"])))
+    series: dict[str, dict[datetime, float]] = {}
+    for o in list(obs) + list(archivadas or ()):
         if not isinstance(o, dict):
             continue
         t = parsear_fint(o.get("fint", ""))
         if t is None or not (ini <= t <= fin):
+            continue
+        idema = str(o.get("idema") or "?").strip()
+        if t in series.get(idema, ()):  # misma hora y estación, en vivo y en archivo
             continue
         candidatos = [x for x in (_num(o.get("tamin")), _num(o.get("ta"))) if x is not None]
         if not candidatos:
@@ -180,12 +253,33 @@ def minimas_de_la_noche(obs: list[dict]) -> dict[str, dict]:
         v = min(candidatos)
         if not -35 <= v <= 45:      # descartar lecturas absurdas
             continue
-        e = est.setdefault(o.get("idema", "?"),
-                           {"nombre": g.titular(str(o.get("ubi", "—"))),
-                            "min": v, "n": 0})
-        e["min"] = min(e["min"], v)
-        e["n"] += 1
-    return {k: v for k, v in est.items() if v["n"] >= MIN_LECTURAS}
+        series.setdefault(idema, {})[t] = v
+    est: dict[str, dict] = {}
+    for idema, serie in series.items():
+        buenas, fuera = _sin_lecturas_imposibles(serie)
+        if len(buenas) < MIN_LECTURAS:
+            continue
+        est[idema] = {"nombre": nombres.get(idema, ""), "min": min(buenas.values()),
+                      "n": len(buenas), "descartadas": fuera}
+    return est
+
+
+def _sin_lecturas_imposibles(serie: dict[datetime, float]) -> tuple[dict, list]:
+    """Quita de la serie horaria de una estación los fríos que no pueden ser
+    (ver SALTO_V y DESPLOME). Devuelve la serie limpia y lo descartado, como
+    [(hora ISO, valor)], para que quede escrito qué se quitó y no solo que se quitó."""
+    if len(serie) < MIN_LECTURAS:
+        return serie, []
+    mediana = statistics.median(serie.values())
+    hora = timedelta(hours=1)
+    fuera = []
+    for t, v in serie.items():
+        antes, despues = serie.get(t - hora), serie.get(t + hora)
+        en_v = antes is not None and despues is not None and min(antes, despues) - v >= SALTO_V
+        if en_v or mediana - v > DESPLOME:
+            fuera.append(t)
+    buenas = {t: v for t, v in serie.items() if t not in fuera}
+    return buenas, [(t.strftime("%Y-%m-%dT%H:%MZ"), serie[t]) for t in sorted(fuera)]
 
 
 def dec(v: float) -> str:
@@ -473,7 +567,7 @@ PLANTILLA = r"""<!doctype html>
   <nav class="crumb" aria-label="breadcrumb"><a href="__SITE__/">Refugio Climático</a> · El parte de la noche</nav>
   <div class="kick">El parte de la noche · se actualiza cada mañana</div>
   <h1>¿Quién durmió fresco anoche en España?</h1>
-  <p class="fecha">Noche del __FECHA_LARGA__ · observación de AEMET</p>
+  <p class="fecha">Noche del __FECHA_LARGA__ · observación de AEMET</p>__NOTA_REHECHO__
 </div></header>
 
 <section><div class="wrap">
@@ -519,7 +613,7 @@ PLANTILLA = r"""<!doctype html>
 
   __ARCHIVO__
 
-  <p class="nota">Datos de la red de observación de AEMET (últimas 24 h, provisionales y sin validar; ventana nocturna 18:00–08:00 UTC). La media histórica, pueblo a pueblo y con diez veranos validados, está en la <a href="__SITE__/">calculadora</a>.</p>
+  <p class="nota">Datos de la red de observación de AEMET (provisionales y sin validar; ventana nocturna 18:00–08:00 UTC, hora a hora). Una lectura suelta que cae 5 °C o más y los recupera a la hora siguiente se descarta como fallo del sensor. La media histórica, pueblo a pueblo y con diez veranos validados, está en la <a href="__SITE__/">calculadora</a>.</p>
 
   <div class="cta"><a href="__SITE__/">¿Y tu pueblo? Míralo en la calculadora →</a></div>
 
@@ -609,14 +703,83 @@ def archivar_horarias(obs: list, dir_base: Path = None) -> str:
             f"-> {donde} ({kb:.0f} KB)")
 
 
+def lecturas_archivadas(ini: datetime, fin: datetime,
+                        dir_base: Path = None) -> list[dict]:
+    """Lecturas del archivo horario que caen en [ini, fin].
+
+    Una noche (18:00 UTC de ayer → 08:00 de hoy) está repartida entre el fichero
+    de ayer y el de hoy: cada pasada escribe en el del día de su lectura más
+    reciente. Se leen los dos y se filtra por hora; lo repetido lo descarta
+    quien llama, que funde por (hora, estación)."""
+    base = dir_base or DIR_HORARIAS
+    filas: list[dict] = []
+    dia = ini.date()
+    while dia <= fin.date():
+        f = base / f"{dia.year}" / f"{dia.isoformat()}.csv.gz"
+        dia += timedelta(days=1)
+        if not f.exists():
+            continue
+        try:
+            with gzip.open(f, "rt", encoding="utf-8", newline="") as fh:
+                for r in csv.DictReader(fh):
+                    t = parsear_fint(r.get("fint", ""))
+                    if t is not None and ini <= t <= fin:
+                        filas.append(r)
+        except (OSError, EOFError, csv.Error) as e:   # un fichero roto no tumba el parte
+            print(f"   AVISO: no se pudo leer {f.name} ({e})", file=sys.stderr)
+    return filas
+
+
+def _fecha_pedida() -> str | None:
+    """Valor de --fecha AAAA-MM-DD (o --fecha=AAAA-MM-DD), validado."""
+    valor = None
+    for i, a in enumerate(sys.argv):
+        if a == "--fecha" and i + 1 < len(sys.argv):
+            valor = sys.argv[i + 1]
+        elif a.startswith("--fecha="):
+            valor = a.split("=", 1)[1]
+    if valor is None or not valor.strip():
+        return None
+    try:
+        return datetime.strptime(valor.strip(), "%Y-%m-%d").strftime("%Y-%m-%d")
+    except ValueError:
+        print(f"ERROR: --fecha espera AAAA-MM-DD y ha llegado «{valor}»", file=sys.stderr)
+        sys.exit(1)
+
+
+SIN_PARTE = 3   # se archivó, pero el parte de hoy no existe (ver la cabecera)
+
+
 def main() -> int:
     demo = "--demo" in sys.argv
     solo_archivo = "--solo-archivo" in sys.argv
-    obs = observaciones_demo() if demo else obtener_observaciones()
+    # --fecha: rehacer el parte de una noche pasada SOLO con el archivo horario.
+    # No sale a la red, no pide clave y no toca lo que es «el parte de hoy»
+    # (index.html, parte.txt, parte.json): escribe la página fechada y su JSON.
+    fecha_pedida = _fecha_pedida()
+    rehacer = fecha_pedida is not None
+    if rehacer and (demo or solo_archivo):
+        print("ERROR: --fecha no se combina con --demo ni con --solo-archivo", file=sys.stderr)
+        return 1
+    if rehacer:
+        ahora = datetime.strptime(fecha_pedida, "%Y-%m-%d").replace(hour=12, tzinfo=timezone.utc)
+        if ahora.date() >= datetime.now(timezone.utc).date():
+            print("ERROR: --fecha es para noches pasadas; el parte de hoy se genera sin ella.",
+                  file=sys.stderr)
+            return 1
+        obs = []
+    else:
+        ahora = datetime.now(timezone.utc)
+        if not demo and not solo_archivo and ahora.hour < HORA_MIN_PARTE:
+            print(f"Son las {ahora:%H:%M} UTC: la noche no ha terminado (el parte sale a partir "
+                  f"de las {HORA_MIN_PARTE:02d}:00). No se hace nada; del archivo horario se "
+                  "encarga archivo-horario.yml.")
+            return 0
+        obs = observaciones_demo() if demo else obtener_observaciones()
     # Archivar ANTES de nada: aunque el parte no se pueda publicar (pocas
     # estaciones, fuera de la ventana horaria...), las lecturas de esta noche
     # ya no volverán a estar disponibles. Se guardan igual.
-    if not demo:
+    if not demo and not rehacer:
         try:
             print("   archivo horario:", archivar_horarias(obs))
         except Exception as e:                      # nunca tumbar el parte
@@ -630,37 +793,49 @@ def main() -> int:
         print("   modo --solo-archivo: no se genera el parte ni se publica en X.")
         return 0
 
-    minimas = minimas_de_la_noche(obs)
+    ini, fin = ventana_nocturna(ahora)
+    archivadas = [] if demo else lecturas_archivadas(ini, fin)
+    minimas = minimas_de_la_noche(obs, archivadas, ahora)
+    if not demo:
+        solo_api = len(minimas_de_la_noche(obs, None, ahora))
+        print(f"   ventana {ini:%d/%m %H:%M} → {fin:%d/%m %H:%M} UTC: {len(minimas)} estaciones "
+              f"({solo_api} solo con la API en vivo; el resto, gracias al archivo horario)")
     if len(minimas) < MIN_ESTACIONES:
-        # La API de observación solo conserva ~12 horas: por la tarde-noche la
-        # última madrugada ya no está disponible. No es un fallo: simplemente
-        # el parte se genera por la mañana (cron de las 07:15 UTC).
-        hora = datetime.now(timezone.utc).hour
-        if hora >= 12 or hora < 4:
-            print(f"AVISO: solo {len(minimas)} estaciones en la ventana nocturna. "
-                  "La observación de AEMET conserva ~12 h, así que fuera de la mañana "
-                  "la última noche ya no está disponible. No se publica nada ahora; "
-                  "el run automático de las 07:15 UTC generará el parte de mañana.")
+        fecha_falta = ahora.strftime("%Y-%m-%d")
+        if rehacer:
+            print(f"ERROR: el archivo horario solo tiene {len(minimas)} estaciones para la "
+                  f"noche del {fecha_falta}; no se puede rehacer ese parte "
+                  "(el archivo empieza el 2026-08-29).", file=sys.stderr)
+            return 1
+        # A estas alturas (pasadas las 07:00 UTC) que falte ES un fallo. Antes se salía en verde a
+        # partir de las 12:00 UTC («la API ya no conserva la noche»), y así se
+        # perdieron el 2 y el 9 de noviembre de 2026 sin que nada avisara. Con el
+        # archivo horario la hora ya no es excusa: si aun así no hay 200
+        # estaciones, faltan la API y las pasadas de madrugada a la vez.
+        ya_existe = (OUT_DIR / fecha_falta / "index.html").exists()
+        print(f"ERROR: solo {len(minimas)} estaciones con datos en la ventana nocturna "
+              f"(API en vivo + archivo horario); no se publica el parte.", file=sys.stderr)
+        fints = [str(o.get("fint")) for o in obs if isinstance(o, dict) and o.get("fint")]
+        if fints:
+            print(f"DEBUG API en vivo: {len(obs)} lecturas, fint {min(fints)} → {max(fints)}",
+                  file=sys.stderr)
+        print(f"DEBUG archivo horario: {len(archivadas)} lecturas en la ventana", file=sys.stderr)
+        if ya_existe:
+            print(f"   (el parte del {fecha_falta} ya estaba publicado por una ejecución "
+                  "anterior: no se toca)")
             return 0
-        print(f"ERROR: solo {len(minimas)} estaciones con datos; no se publica el parte.",
-              file=sys.stderr)
-        # Diagnóstico: qué devuelve la API de verdad, para afinar el parser.
-        print(f"DEBUG: {len(obs) if isinstance(obs, list) else type(obs)} observaciones recibidas.",
-              file=sys.stderr)
-        if isinstance(obs, list) and obs and isinstance(obs[0], dict):
-            ej = obs[0]
-            muestra = {k: ej.get(k) for k in list(ej)[:14]}
-            print("DEBUG ejemplo de observación:", muestra, file=sys.stderr)
-            fints = [str(o.get("fint")) for o in obs
-                     if isinstance(o, dict) and o.get("fint")]
-            if fints:
-                print(f"DEBUG rango de fint: {min(fints)} → {max(fints)}", file=sys.stderr)
-            print(f"DEBUG ventana buscada: últimas {H_INICIO}:00 UTC de ayer → "
-                  f"{H_FIN}:00 UTC de hoy", file=sys.stderr)
-        return 1
+        return SIN_PARTE
+
+    descartadas = [{"id": k, "hora": h, "valor": v}
+                   for k, e in sorted(minimas.items()) for h, v in e.get("descartadas", [])]
+    if descartadas:
+        print(f"   {len(descartadas)} lecturas descartadas por imposibles (sensor): "
+              + ", ".join(f"{d['id']} {d['hora'][11:16]} {dec(d['valor'])}°" for d in descartadas[:12])
+              + (" …" if len(descartadas) > 12 else ""))
 
     prov_de = cargar_provincias()
-    lista = [{"id": k, "nombre": v["nombre"], "min": v["min"],
+    nombre_de = cargar_nombres()
+    lista = [{"id": k, "nombre": v["nombre"] or nombre_de.get(k) or k, "min": v["min"],
               "prov": prov_de.get(k, "")} for k, v in minimas.items()]
     lista.sort(key=lambda e: -e["min"])
 
@@ -671,13 +846,13 @@ def main() -> int:
     trop = sum(1 for e in lista if e["min"] >= 20)
     ecua = sum(1 for e in lista if e["min"] >= 25)
     frescas = total - trop
-    conocidas = [e for e in lista if e["prov"] and "_" not in e["nombre"]]
+    conocidas = [e for e in lista
+                 if e["prov"] and "_" not in e["nombre"] and e["nombre"] != e["id"]]
     sel = conocidas if len(conocidas) >= 100 else lista
     peor, mejor = sel[0], sel[-1]
     top_calor = sel[:10]
     top_fresco = sorted(sel, key=lambda e: e["min"])[:10]
 
-    ahora = datetime.now(timezone.utc)
     ayer = ahora - timedelta(days=1)
     if ayer.month == ahora.month:
         fecha_larga = f"{ayer.day} al {ahora.day} de {MESES[ahora.month - 1]} de {ahora.year}"
@@ -700,6 +875,16 @@ def main() -> int:
             f"La más cálida: {peor['nombre']} {dec(peor['min'])}°.\n"
             f"Aún hay refugios → {dominio}/parte/{fecha_iso_tuit}/")
 
+    # Un parte rehecho lo dice: no se publicó esa mañana y el lector tiene que
+    # poder distinguirlo de los que sí.
+    nota_rehecho = ""
+    if rehacer:
+        hoy_real = datetime.now(timezone.utc)
+        nota_rehecho = (
+            '\n  <p class="nota">Este parte no se publicó en su día. Se reconstruyó el '
+            f'{hoy_real.day} de {MESES[hoy_real.month - 1]} de {hoy_real.year} con las mismas '
+            'lecturas horarias de AEMET, que el proyecto archiva cada noche.</p>')
+
     schema = json.dumps({"@context": "https://schema.org", "@graph": [
         {"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Refugio Climático", "item": site + "/"},
@@ -718,6 +903,7 @@ def main() -> int:
     html = (PLANTILLA
             .replace("__SCHEMA__", schema)
             .replace("__FECHA_LARGA__", fecha_larga)
+            .replace("__NOTA_REHECHO__", nota_rehecho)
             .replace("__FECHA_CORTA__", fecha_corta)
             .replace("__FRESCAS__", str(frescas))
             .replace("__TROP__", str(trop))
@@ -740,11 +926,22 @@ def main() -> int:
                 "ecuatoriales": ecua,
                 "peor": peor["nombre"], "peor_prov": peor["prov"], "peor_min": peor["min"],
                 "mejor": mejor["nombre"], "mejor_prov": mejor["prov"], "mejor_min": mejor["min"]}
-    base = [f for f in cargar_historial() if f["fecha"] != fecha_iso]
-    base = backfill_desde_diarios(base, fecha_iso)
-    historial = base + [fila_hoy]
-    if not demo:
-        guardar_historial(historial)
+    if rehacer:
+        # Una noche pasada puede tener ya su fila con el dato VALIDADO de AEMET
+        # (backfill_desde_diarios): esa manda. Solo se añade si falta. Y la
+        # gráfica de esa página llega hasta su noche, no hasta hoy.
+        todo = cargar_historial()
+        if not any(f["fecha"] == fecha_iso for f in todo):
+            todo.append(fila_hoy)
+            guardar_historial(todo)
+        historial = sorted((f for f in todo if f["fecha"] <= fecha_iso),
+                           key=lambda x: x["fecha"])
+    else:
+        base = [f for f in cargar_historial() if f["fecha"] != fecha_iso]
+        base = backfill_desde_diarios(base, fecha_iso)
+        historial = base + [fila_hoy]
+        if not demo:
+            guardar_historial(historial)
     if demo and len(historial) < 5:   # datos de relleno SOLO para ver el gráfico en local
         historial = [{"fecha": (ahora - timedelta(days=d)).strftime("%Y-%m-%d"),
                       "tropicales": str(int(100 + 140 * abs((25 - d) / 25) + d % 7 * 9))}
@@ -795,7 +992,8 @@ def main() -> int:
         f'({len(todas)} noches desde el {int(todas[0][8:10])} de '
         f'{MESES[int(todas[0][5:7]) - 1]})</summary>'
         + "".join(meses) + "</details>")
-    (OUT_DIR / "index.html").write_text(html, encoding="utf-8")
+    if not rehacer:
+        (OUT_DIR / "index.html").write_text(html, encoding="utf-8")
     # Página FECHADA del día: URL propia por noche (/parte/AAAA-MM-DD/), con su
     # canonical/og propios -> cada tuit enlaza a SU noche y X trae tarjeta fresca.
     html_fecha = html.replace(f'{site}/parte/"', f'{site}/parte/{fecha_iso}/"')
@@ -810,8 +1008,14 @@ def main() -> int:
         {"fecha": fecha_iso, "total": total, "tropicales": trop, "ecuatoriales": ecua,
          "peor": peor, "mejor": mejor, "top_calor": top_calor, "top_fresco": top_fresco,
          "estaciones": [{"id": e["id"], "nombre": e["nombre"], "prov": e["prov"],
-                         "min": round(e["min"], 1)} for e in lista]},
+                         "min": round(e["min"], 1)} for e in lista],
+         "descartadas": descartadas},
         ensure_ascii=False), encoding="utf-8")
+    if rehacer:
+        print(f"OK -> parte del {fecha_iso} REHECHO desde el archivo horario · {total} "
+              f"estaciones · {trop} tropicales ({ecua} ecuatoriales). No se toca el parte "
+              "de hoy ni se publica en X.")
+        return 0
     (OUT_DIR / "parte.txt").write_text(tuit + "\n", encoding="utf-8")
     (OUT_DIR / "parte.json").write_text(json.dumps(
         {"fecha": ahora.strftime("%Y-%m-%d"), "total": total, "tropicales": trop,

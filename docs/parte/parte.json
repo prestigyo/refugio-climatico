@@ -1,142 +1,142 @@
 {
- "fecha": "2026-10-30",
- "total": 851,
- "tropicales": 28,
+ "fecha": "2026-11-13",
+ "total": 820,
+ "tropicales": 17,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C619X",
-  "nombre": "Agaete-Casco",
-  "min": 23.2,
+  "id": "C629Q",
+  "nombre": "Mogan (Puerto Rico)",
+  "min": 21.5,
   "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "9657X",
-  "nombre": "Esterri D?aneu",
-  "min": 0.0,
-  "prov": "Lleida"
+  "id": "5511",
+  "nombre": "Pradollano Parque Nacional Sierra Nevada",
+  "min": -2.3,
+  "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 23.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 23.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 22.9,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 22.3,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
    "id": "C629Q",
    "nombre": "Mogan (Puerto Rico)",
-   "min": 22.1,
+   "min": 21.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 22.0,
+   "min": 21.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 21.0,
    "prov": "Las Palmas"
   },
   {
    "id": "C639M",
    "nombre": "San Bartolome Tirajana-C.Insular Turismo",
-   "min": 21.9,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 21.8,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C669B",
-   "nombre": "Arucas-Bañaderos",
-   "min": 21.8,
+   "min": 21.0,
    "prov": "Las Palmas"
   },
   {
    "id": "C689E",
    "nombre": "Maspalomas",
-   "min": 21.7,
+   "min": 21.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 20.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 20.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 20.6,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C629X",
+   "nombre": "Puerto de Mogán",
+   "min": 20.5,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
+   "min": 20.3,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": 0.0,
+   "id": "5511",
+   "nombre": "Pradollano Parque Nacional Sierra Nevada",
+   "min": -2.3,
+   "prov": "Granada"
+  },
+  {
+   "id": "9195C",
+   "nombre": "Astún - la Raca",
+   "min": -0.6,
+   "prov": "Huesca"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": -0.6,
    "prov": "Lleida"
   },
   {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": 0.1,
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": -0.5,
+   "prov": "Granada"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": -0.5,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": 0.7,
+   "prov": "Huesca"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 0.9,
    "prov": "Lleida"
   },
   {
    "id": "9744B",
    "nombre": "Barruera",
-   "min": 0.4,
+   "min": 2.1,
    "prov": "Lleida"
   },
   {
-   "id": "9838B",
-   "nombre": "Benasque",
-   "min": 0.7,
-   "prov": "Huesca"
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 2.3,
+   "prov": "Cantabria"
   },
   {
-   "id": "2298",
-   "nombre": "Palacios de la Sierra",
-   "min": 1.0,
-   "prov": "Burgos"
-  },
-  {
-   "id": "2048A",
-   "nombre": "Moron de Almazan",
-   "min": 1.4,
-   "prov": "Soria"
-  },
-  {
-   "id": "9218A",
-   "nombre": "Isaba/Izaba",
-   "min": 1.8,
-   "prov": "Navarra"
-  },
-  {
-   "id": "9238X",
-   "nombre": "Navascués/Nabaskoze",
-   "min": 1.9,
-   "prov": "Navarra"
-  },
-  {
-   "id": "2092",
-   "nombre": "Burgo de Osma-Pozuelos",
-   "min": 2.0,
-   "prov": "Soria"
-  },
-  {
-   "id": "9287A",
-   "nombre": "San Pedro Manrique",
-   "min": 2.0,
-   "prov": "Soria"
+   "id": "9001S",
+   "nombre": "Alto Campoo",
+   "min": 2.3,
+   "prov": "Cantabria"
   }
  ]
 }

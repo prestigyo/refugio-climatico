@@ -1,6 +1,6 @@
 {
  "fecha": "2026-11-14",
- "total": 847,
+ "total": 846,
  "tropicales": 11,
  "ecuatoriales": 0,
  "peor": {
@@ -91,15 +91,15 @@
    "prov": "Granada"
   },
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 0.6,
-   "prov": "Lleida"
-  },
-  {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
    "min": 0.7,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": 0.9,
    "prov": "Lleida"
   },
   {

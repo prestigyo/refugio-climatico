@@ -1,6 +1,6 @@
 {
  "fecha": "2026-11-15",
- "total": 844,
+ "total": 840,
  "tropicales": 6,
  "ecuatoriales": 0,
  "peor": {
@@ -103,12 +103,6 @@
    "prov": "Lleida"
   },
   {
-   "id": "5516D",
-   "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": -0.4,
-   "prov": "Granada"
-  },
-  {
    "id": "9195C",
    "nombre": "Astún - la Raca",
    "min": -0.4,
@@ -121,22 +115,28 @@
    "prov": "Lleida"
   },
   {
-   "id": "6299I",
-   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
-   "min": 0.9,
-   "prov": "Granada"
-  },
-  {
    "id": "C406G",
    "nombre": "Cañadas Parador",
    "min": 0.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": 1.1,
+   "prov": "Granada"
+  },
+  {
    "id": "9814I",
    "nombre": "Torla-Ordesa el Cebollar",
    "min": 1.5,
    "prov": "Huesca"
+  },
+  {
+   "id": "6299I",
+   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
+   "min": 1.7,
+   "prov": "Granada"
   }
  ]
 }

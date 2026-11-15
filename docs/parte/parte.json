@@ -1,79 +1,79 @@
 {
- "fecha": "2026-11-14",
- "total": 846,
- "tropicales": 11,
+ "fecha": "2026-11-15",
+ "total": 844,
+ "tropicales": 6,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C229J",
-  "nombre": "Pájara-Puerto Morro Jable",
-  "min": 21.4,
+  "id": "C659M",
+  "nombre": "Las Palmas de Gc. Plaza de la Feria",
+  "min": 20.5,
   "prov": "Las Palmas"
  },
  "mejor": {
   "id": "5511",
   "nombre": "Pradollano Parque Nacional Sierra Nevada",
-  "min": -3.1,
+  "min": -5.7,
   "prov": "Granada"
  },
  "top_calor": [
   {
-   "id": "C229J",
-   "nombre": "Pájara-Puerto Morro Jable",
-   "min": 21.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 21.2,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C619X",
-   "nombre": "Agaete-Casco",
-   "min": 20.8,
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
+   "min": 20.5,
    "prov": "Las Palmas"
   },
   {
    "id": "C929I",
    "nombre": "El Hierro/Aeropuerto",
-   "min": 20.6,
+   "min": 20.3,
    "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 20.2,
+   "prov": "Las Palmas"
   },
   {
    "id": "C629Q",
    "nombre": "Mogan (Puerto Rico)",
-   "min": 20.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C659M",
-   "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 20.2,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
    "min": 20.1,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C329Z",
-   "nombre": "San Sebastián de la Gomera",
-   "min": 20.0,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 20.0,
    "prov": "Las Palmas"
   },
   {
    "id": "C919K",
    "nombre": "Tacorón-Lapillas-Tortuga",
-   "min": 19.8,
+   "min": 20.0,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C619X",
+   "nombre": "Agaete-Casco",
+   "min": 19.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "B051A",
+   "nombre": "Sóller",
+   "min": 19.7,
+   "prov": "Illes Balears"
+  },
+  {
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
+   "min": 19.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C329Z",
+   "nombre": "San Sebastián de la Gomera",
+   "min": 19.5,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C449C",
+   "nombre": "Santa Cruz de Tenerife",
+   "min": 19.5,
    "prov": "Santa Cruz de Tenerife"
   }
  ],
@@ -81,62 +81,62 @@
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": -3.1,
+   "min": -5.7,
    "prov": "Granada"
-  },
-  {
-   "id": "5516D",
-   "nombre": "Sierra Nevada - Radiotelescopio",
-   "min": -1.4,
-   "prov": "Granada"
-  },
-  {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": 0.7,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 0.9,
-   "prov": "Lleida"
   },
   {
    "id": "9839V",
    "nombre": "Cerler Cogulla",
-   "min": 0.9,
+   "min": -0.8,
    "prov": "Huesca"
   },
   {
-   "id": "6299I",
-   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
-   "min": 1.4,
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": -0.7,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": -0.7,
+   "prov": "Lleida"
+  },
+  {
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": -0.4,
    "prov": "Granada"
   },
   {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": 1.5,
+   "min": -0.4,
    "prov": "Huesca"
   },
   {
-   "id": "2491C",
-   "nombre": "La Covatilla Estación de Esquí",
-   "min": 2.6,
-   "prov": "Salamanca"
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": -0.3,
+   "prov": "Lleida"
+  },
+  {
+   "id": "6299I",
+   "nombre": "Laguna Seca Parque Nacional Sierra Nevada",
+   "min": 0.9,
+   "prov": "Granada"
   },
   {
    "id": "C406G",
    "nombre": "Cañadas Parador",
-   "min": 2.9,
+   "min": 0.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "1167G",
-   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 3.0,
-   "prov": "Cantabria"
+   "id": "9814I",
+   "nombre": "Torla-Ordesa el Cebollar",
+   "min": 1.5,
+   "prov": "Huesca"
   }
  ]
 }

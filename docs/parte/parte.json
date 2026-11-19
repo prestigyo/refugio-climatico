@@ -1,142 +1,142 @@
 {
- "fecha": "2026-11-18",
- "total": 823,
- "tropicales": 52,
+ "fecha": "2026-11-19",
+ "total": 818,
+ "tropicales": 61,
  "ecuatoriales": 0,
  "peor": {
-  "id": "6367X",
-  "nombre": "Huercal Overa",
-  "min": 22.5,
-  "prov": "Almería"
+  "id": "C929I",
+  "nombre": "El Hierro/Aeropuerto",
+  "min": 22.7,
+  "prov": "Santa Cruz de Tenerife"
  },
  "mejor": {
-  "id": "9677",
-  "nombre": "Port Aine L?orri",
-  "min": 2.4,
+  "id": "9988B",
+  "nombre": "Cap de Vaqueira",
+  "min": -4.8,
   "prov": "Lleida"
  },
  "top_calor": [
   {
-   "id": "6367X",
-   "nombre": "Huercal Overa",
+   "id": "C929I",
+   "nombre": "El Hierro/Aeropuerto",
+   "min": 22.7,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C659M",
+   "nombre": "Las Palmas de Gc. Plaza de la Feria",
    "min": 22.5,
-   "prov": "Almería"
+   "prov": "Las Palmas"
   },
   {
-   "id": "8057C",
-   "nombre": "Pego",
-   "min": 22.4,
-   "prov": "Alicante"
+   "id": "C229J",
+   "nombre": "Pájara-Puerto Morro Jable",
+   "min": 22.2,
+   "prov": "Las Palmas"
   },
   {
-   "id": "8058Y",
-   "nombre": "Miramar",
-   "min": 22.4,
-   "prov": "Valencia"
-  },
-  {
-   "id": "8058X",
-   "nombre": "Oliva",
-   "min": 22.3,
-   "prov": "Valencia"
-  },
-  {
-   "id": "B780X",
-   "nombre": "Port Pollença-Aerodrom",
-   "min": 22.1,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "B760X",
-   "nombre": "Pollença-Poliesportiu",
+   "id": "C019V",
+   "nombre": "Yaiza-Playa Blanca",
    "min": 22.0,
-   "prov": "Illes Balears"
+   "prov": "Las Palmas"
   },
   {
-   "id": "B228",
-   "nombre": "Palma-Portopí",
+   "id": "C649R",
+   "nombre": "Telde-Melenara",
+   "min": 22.0,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C029O",
+   "nombre": "Lanzarote/Aeropuerto",
+   "min": 21.9,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
    "min": 21.8,
-   "prov": "Illes Balears"
+   "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "7012D",
-   "nombre": "Cartagena - Tentegorra",
+   "id": "C429I",
+   "nombre": "Tenerife/Sur",
+   "min": 21.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C649I",
+   "nombre": "Las Palmas de Gran Canaria/Gando",
+   "min": 21.8,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C639U",
+   "nombre": "San Bartolome Tirajana (el Matorral)",
    "min": 21.6,
-   "prov": "Murcia"
-  },
-  {
-   "id": "B051A",
-   "nombre": "Sóller",
-   "min": 21.6,
-   "prov": "Illes Balears"
-  },
-  {
-   "id": "8293X",
-   "nombre": "Xátiva",
-   "min": 21.3,
-   "prov": "Valencia"
+   "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "9677",
-   "nombre": "Port Aine L?orri",
-   "min": 2.4,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9839V",
-   "nombre": "Cerler Cogulla",
-   "min": 2.7,
-   "prov": "Huesca"
-  },
-  {
    "id": "9988B",
    "nombre": "Cap de Vaqueira",
-   "min": 2.7,
+   "min": -4.8,
    "prov": "Lleida"
   },
   {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": 3.1,
+   "min": -4.0,
    "prov": "Huesca"
+  },
+  {
+   "id": "9677",
+   "nombre": "Port Aine L?orri",
+   "min": -2.8,
+   "prov": "Lleida"
   },
   {
    "id": "1167G",
    "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
-   "min": 3.4,
+   "min": -1.6,
    "prov": "Cantabria"
   },
   {
    "id": "5511",
    "nombre": "Pradollano Parque Nacional Sierra Nevada",
-   "min": 3.9,
+   "min": -1.2,
    "prov": "Granada"
   },
   {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": 4.3,
-   "prov": "Lleida"
+   "id": "9839V",
+   "nombre": "Cerler Cogulla",
+   "min": -1.2,
+   "prov": "Huesca"
+  },
+  {
+   "id": "2491C",
+   "nombre": "La Covatilla Estación de Esquí",
+   "min": -0.9,
+   "prov": "Salamanca"
   },
   {
    "id": "1167J",
    "nombre": "Coriscao Parque Nacional Picos de Europa",
-   "min": 4.4,
+   "min": -0.7,
    "prov": "Cantabria"
   },
   {
-   "id": "1178Y",
-   "nombre": "Soto de Valdeón (Automatica)",
-   "min": 5.0,
-   "prov": "León"
+   "id": "5516D",
+   "nombre": "Sierra Nevada - Radiotelescopio",
+   "min": -0.4,
+   "prov": "Granada"
   },
   {
-   "id": "9814I",
-   "nombre": "Torla-Ordesa el Cebollar",
-   "min": 5.1,
-   "prov": "Huesca"
+   "id": "2462",
+   "nombre": "Navacerrada Puerto",
+   "min": -0.2,
+   "prov": "Madrid"
   }
  ]
 }

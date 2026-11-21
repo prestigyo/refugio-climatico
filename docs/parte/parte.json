@@ -1,6 +1,6 @@
 {
  "fecha": "2026-11-21",
- "total": 844,
+ "total": 820,
  "tropicales": 10,
  "ecuatoriales": 0,
  "peor": {
@@ -29,15 +29,15 @@
    "prov": "Las Palmas"
   },
   {
-   "id": "C129V",
-   "nombre": "Fuencaliente-Salinas",
-   "min": 20.9,
+   "id": "C139E",
+   "nombre": "La Palma/Aeropuerto",
+   "min": 21.1,
    "prov": "Santa Cruz de Tenerife"
   },
   {
-   "id": "C139E",
-   "nombre": "La Palma/Aeropuerto",
-   "min": 20.8,
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
+   "min": 20.9,
    "prov": "Santa Cruz de Tenerife"
   },
   {

@@ -1,142 +1,142 @@
 {
- "fecha": "2026-11-20",
- "total": 828,
- "tropicales": 15,
+ "fecha": "2026-11-21",
+ "total": 844,
+ "tropicales": 10,
  "ecuatoriales": 0,
  "peor": {
-  "id": "C449C",
-  "nombre": "Santa Cruz de Tenerife",
-  "min": 21.8,
-  "prov": "Santa Cruz de Tenerife"
+  "id": "C625O",
+  "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+  "min": 21.6,
+  "prov": "Las Palmas"
  },
  "mejor": {
-  "id": "9988B",
-  "nombre": "Cap de Vaqueira",
-  "min": -3.9,
+  "id": "9677",
+  "nombre": "Port Aine L?orri",
+  "min": -2.3,
   "prov": "Lleida"
  },
  "top_calor": [
   {
-   "id": "C449C",
-   "nombre": "Santa Cruz de Tenerife",
-   "min": 21.8,
+   "id": "C625O",
+   "nombre": "San Bartolome Tirajana-Lomo Pedro Alfonso",
+   "min": 21.6,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C614H",
+   "nombre": "Tejeda Casco",
+   "min": 21.2,
+   "prov": "Las Palmas"
+  },
+  {
+   "id": "C129V",
+   "nombre": "Fuencaliente-Salinas",
+   "min": 20.9,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C139E",
+   "nombre": "La Palma/Aeropuerto",
+   "min": 20.8,
+   "prov": "Santa Cruz de Tenerife"
+  },
+  {
+   "id": "C117Z",
+   "nombre": "Tijarafe-Mirador Time",
+   "min": 20.6,
    "prov": "Santa Cruz de Tenerife"
   },
   {
    "id": "C659M",
    "nombre": "Las Palmas de Gc. Plaza de la Feria",
-   "min": 21.8,
+   "min": 20.5,
    "prov": "Las Palmas"
   },
   {
-   "id": "C449F",
-   "nombre": "Anaga-Col. Rep. Argentina",
-   "min": 21.5,
+   "id": "C917E",
+   "nombre": "Dehesa-Refugio",
+   "min": 20.2,
    "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C929I",
-   "nombre": "El Hierro/Aeropuerto",
-   "min": 21.5,
-   "prov": "Santa Cruz de Tenerife"
-  },
-  {
-   "id": "C614H",
-   "nombre": "Tejeda Casco",
-   "min": 21.4,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C839X",
-   "nombre": "Teguise la Graciosa-Helipuerto",
-   "min": 21.4,
-   "prov": "Las Palmas"
   },
   {
    "id": "C229J",
    "nombre": "Pájara-Puerto Morro Jable",
-   "min": 21.3,
+   "min": 20.1,
    "prov": "Las Palmas"
   },
   {
-   "id": "C649I",
-   "nombre": "Las Palmas de Gran Canaria/Gando",
-   "min": 21.3,
+   "id": "C629Q",
+   "nombre": "Mogan (Puerto Rico)",
+   "min": 20.0,
    "prov": "Las Palmas"
   },
   {
    "id": "C249I",
    "nombre": "Fuerteventura/Aeropuerto",
-   "min": 21.1,
-   "prov": "Las Palmas"
-  },
-  {
-   "id": "C649R",
-   "nombre": "Telde-Melenara",
-   "min": 21.0,
+   "min": 19.9,
    "prov": "Las Palmas"
   }
  ],
  "top_fresco": [
   {
-   "id": "9988B",
-   "nombre": "Cap de Vaqueira",
-   "min": -3.9,
-   "prov": "Lleida"
-  },
-  {
    "id": "9677",
    "nombre": "Port Aine L?orri",
-   "min": -3.8,
+   "min": -2.3,
    "prov": "Lleida"
   },
   {
    "id": "9839V",
    "nombre": "Cerler Cogulla",
-   "min": -3.7,
+   "min": -2.2,
    "prov": "Huesca"
+  },
+  {
+   "id": "9988B",
+   "nombre": "Cap de Vaqueira",
+   "min": -2.0,
+   "prov": "Lleida"
   },
   {
    "id": "9195C",
    "nombre": "Astún - la Raca",
-   "min": -3.0,
+   "min": -1.8,
    "prov": "Huesca"
-  },
-  {
-   "id": "9590D",
-   "nombre": "Cap de Rec",
-   "min": -2.4,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9590",
-   "nombre": "Martinet",
-   "min": -1.3,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9585",
-   "nombre": "La Molina",
-   "min": -1.1,
-   "prov": "Girona"
-  },
-  {
-   "id": "9744B",
-   "nombre": "Barruera",
-   "min": -0.9,
-   "prov": "Lleida"
-  },
-  {
-   "id": "9657X",
-   "nombre": "Esterri D?aneu",
-   "min": -0.6,
-   "prov": "Lleida"
   },
   {
    "id": "9814I",
    "nombre": "Torla-Ordesa el Cebollar",
    "min": -0.5,
    "prov": "Huesca"
+  },
+  {
+   "id": "1167G",
+   "nombre": "Mirador del Cable Parque Nacional Picos de Europa",
+   "min": 0.2,
+   "prov": "Cantabria"
+  },
+  {
+   "id": "9590D",
+   "nombre": "Cap de Rec",
+   "min": 0.4,
+   "prov": "Lleida"
+  },
+  {
+   "id": "9451F",
+   "nombre": "Panticosa Petrosos",
+   "min": 0.6,
+   "prov": "Huesca"
+  },
+  {
+   "id": "9445L",
+   "nombre": "Formigal Sarrios",
+   "min": 0.8,
+   "prov": "Huesca"
+  },
+  {
+   "id": "1167J",
+   "nombre": "Coriscao Parque Nacional Picos de Europa",
+   "min": 0.9,
+   "prov": "Cantabria"
   }
  ]
 }

@@ -1,9 +1,9 @@
 {
  "periodo": {
   "ini": "2026-08-29",
-  "fin": "2026-11-16",
-  "noches": 77,
-  "pares": 58775,
+  "fin": "2026-11-23",
+  "noches": 84,
+  "pares": 64005,
   "estaciones": 818
  },
  "ventana": {
@@ -13,7 +13,7 @@
  "minimas": [
   {
    "min": -2,
-   "n": 163,
+   "n": 185,
    "peor": 9,
    "mejor": 9,
    "mediana": 9,
@@ -22,43 +22,43 @@
   },
   {
    "min": -1,
-   "n": 213,
+   "n": 242,
    "peor": 9,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 0,
-   "n": 341,
+   "n": 404,
    "peor": 9,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 1,
-   "n": 365,
+   "n": 442,
    "peor": 1,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 2,
-   "n": 581,
+   "n": 674,
    "peor": 9,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 3,
-   "n": 590,
+   "n": 672,
    "peor": 9,
    "mejor": 9,
    "mediana": 9.0,
@@ -67,16 +67,25 @@
   },
   {
    "min": 4,
-   "n": 1013,
+   "n": 1126,
    "peor": 9,
+   "mejor": 9,
+   "mediana": 9.0,
+   "p10": 9,
+   "p90": 9
+  },
+  {
+   "min": 5,
+   "n": 1231,
+   "peor": 8,
    "mejor": 9,
    "mediana": 9,
    "p10": 9,
    "p90": 9
   },
   {
-   "min": 5,
-   "n": 1078,
+   "min": 6,
+   "n": 2056,
    "peor": 8,
    "mejor": 9,
    "mediana": 9.0,
@@ -84,17 +93,8 @@
    "p90": 9
   },
   {
-   "min": 6,
-   "n": 1723,
-   "peor": 8,
-   "mejor": 9,
-   "mediana": 9,
-   "p10": 9,
-   "p90": 9
-  },
-  {
    "min": 7,
-   "n": 1788,
+   "n": 2074,
    "peor": 8,
    "mejor": 9,
    "mediana": 9.0,
@@ -103,7 +103,7 @@
   },
   {
    "min": 8,
-   "n": 2586,
+   "n": 3016,
    "peor": 7,
    "mejor": 9,
    "mediana": 9.0,
@@ -112,7 +112,7 @@
   },
   {
    "min": 9,
-   "n": 2590,
+   "n": 3018,
    "peor": 6,
    "mejor": 9,
    "mediana": 9.0,
@@ -121,16 +121,16 @@
   },
   {
    "min": 10,
-   "n": 3503,
+   "n": 4004,
    "peor": 6,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 9,
    "p90": 9
   },
   {
    "min": 11,
-   "n": 3299,
+   "n": 3653,
    "peor": 4,
    "mejor": 9,
    "mediana": 9,
@@ -139,25 +139,25 @@
   },
   {
    "min": 12,
-   "n": 4363,
+   "n": 4808,
    "peor": 3,
-   "mejor": 9,
-   "mediana": 9,
-   "p10": 9,
-   "p90": 9
-  },
-  {
-   "min": 13,
-   "n": 3686,
-   "peor": 4,
    "mejor": 9,
    "mediana": 9.0,
    "p10": 9,
    "p90": 9
   },
   {
+   "min": 13,
+   "n": 3979,
+   "peor": 4,
+   "mejor": 9,
+   "mediana": 9,
+   "p10": 9,
+   "p90": 9
+  },
+  {
    "min": 14,
-   "n": 4645,
+   "n": 4965,
    "peor": 2,
    "mejor": 9,
    "mediana": 9,
@@ -166,16 +166,16 @@
   },
   {
    "min": 15,
-   "n": 3593,
+   "n": 3796,
    "peor": 2,
    "mejor": 9,
-   "mediana": 9,
+   "mediana": 9.0,
    "p10": 7,
    "p90": 9
   },
   {
    "min": 16,
-   "n": 4266,
+   "n": 4502,
    "peor": 2,
    "mejor": 9,
    "mediana": 9.0,
@@ -184,34 +184,34 @@
   },
   {
    "min": 17,
-   "n": 3016,
+   "n": 3180,
    "peor": 1,
    "mejor": 9,
-   "mediana": 8.0,
+   "mediana": 9.0,
    "p10": 4,
    "p90": 9
   },
   {
    "min": 18,
-   "n": 3453,
+   "n": 3641,
    "peor": 1,
    "mejor": 9,
-   "mediana": 6,
+   "mediana": 7,
    "p10": 3,
    "p90": 9
   },
   {
    "min": 19,
-   "n": 2498,
+   "n": 2644,
    "peor": 1,
    "mejor": 9,
    "mediana": 4.0,
    "p10": 1,
-   "p90": 8
+   "p90": 9
   },
   {
    "min": 20,
-   "n": 2657,
+   "n": 2813,
    "peor": 0,
    "mejor": 9,
    "mediana": 0,
@@ -220,16 +220,7 @@
   },
   {
    "min": 21,
-   "n": 1742,
-   "peor": 0,
-   "mejor": 0,
-   "mediana": 0.0,
-   "p10": 0,
-   "p90": 0
-  },
-  {
-   "min": 22,
-   "n": 1775,
+   "n": 1805,
    "peor": 0,
    "mejor": 0,
    "mediana": 0,
@@ -237,8 +228,8 @@
    "p90": 0
   },
   {
-   "min": 23,
-   "n": 1318,
+   "min": 22,
+   "n": 1808,
    "peor": 0,
    "mejor": 0,
    "mediana": 0.0,
@@ -246,8 +237,17 @@
    "p90": 0
   },
   {
+   "min": 23,
+   "n": 1323,
+   "peor": 0,
+   "mejor": 0,
+   "mediana": 0,
+   "p10": 0,
+   "p90": 0
+  },
+  {
    "min": 24,
-   "n": 1004,
+   "n": 1006,
    "peor": 0,
    "mejor": 0,
    "mediana": 0.0,
@@ -276,75 +276,71 @@
  "cruces": [
   {
    "hora": 0,
-   "n": 2237
+   "n": 2276
   },
   {
    "hora": 1,
-   "n": 1836
+   "n": 1871
   },
   {
    "hora": 2,
-   "n": 1468
+   "n": 1496
   },
   {
    "hora": 3,
-   "n": 1220
+   "n": 1250
   },
   {
    "hora": 4,
-   "n": 1169
+   "n": 1197
   },
   {
    "hora": 5,
-   "n": 980
+   "n": 990
   },
   {
    "hora": 6,
-   "n": 797
+   "n": 820
   },
   {
    "hora": 7,
-   "n": 710
+   "n": 728
   },
   {
    "hora": 23,
-   "n": 40376
+   "n": 45208
   },
   {
    "hora": "nunca",
-   "n": 7982
+   "n": 8169
   }
  ],
  "tramos": [
   {
    "etq": "ni una hora",
-   "n": 52
+   "n": 43
   },
   {
    "etq": "menos de 4 h",
-   "n": 24
+   "n": 23
   },
   {
    "etq": "de 4 a 7 h",
-   "n": 57
+   "n": 36
   },
   {
    "etq": "7 h o más",
-   "n": 684
+   "n": 715
   }
  ],
  "estaciones_resumidas": 817,
- "mediana_h20": 9,
+ "mediana_h20": 9.0,
  "mediana_h18": 9,
  "sin_respiro": {
-  "n": 2,
+  "n": 1,
   "lista": [
    {
     "nombre": "PÁJARA",
-    "provincia": "LAS PALMAS"
-   },
-   {
-    "nombre": "MOGÁN, PUERTO RICO",
     "provincia": "LAS PALMAS"
    }
   ]
@@ -354,10 +350,10 @@
    "nombre": "RASCAFRÍA",
    "provincia": "MADRID",
    "altitud": 1159,
-   "h20_mediana": 9.0,
+   "h20_mediana": 9,
    "h20_peor": 9,
    "h20_mejor": 9,
-   "noches": 74,
+   "noches": 81,
    "noches_sin_alivio": 0,
    "cruce_20_tipico": 23,
    "tira": [
@@ -730,6 +726,41 @@
      "noche": "2026-11-16",
      "tmin": 9.1,
      "h": 9
+    },
+    {
+     "noche": "2026-11-17",
+     "tmin": 8.3,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-18",
+     "tmin": 13.1,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-19",
+     "tmin": 6.9,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-20",
+     "tmin": 6.9,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-21",
+     "tmin": 7.0,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-22",
+     "tmin": 5.0,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-23",
+     "tmin": -2.5,
+     "h": 9
     }
    ]
   },
@@ -737,10 +768,10 @@
    "nombre": "MADRID, RETIRO",
    "provincia": "MADRID",
    "altitud": 667,
-   "h20_mediana": 9,
+   "h20_mediana": 9.0,
    "h20_peor": 0,
    "h20_mejor": 9,
-   "noches": 77,
+   "noches": 84,
    "noches_sin_alivio": 16,
    "cruce_20_tipico": 23,
    "tira": [
@@ -1128,6 +1159,41 @@
      "noche": "2026-11-16",
      "tmin": 10.9,
      "h": 9
+    },
+    {
+     "noche": "2026-11-17",
+     "tmin": 10.9,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-18",
+     "tmin": 15.1,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-19",
+     "tmin": 11.4,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-20",
+     "tmin": 9.3,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-21",
+     "tmin": 10.8,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-22",
+     "tmin": 9.1,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-23",
+     "tmin": 5.5,
+     "h": 9
     }
    ]
   },
@@ -1135,11 +1201,11 @@
    "nombre": "CAPDEPERA",
    "provincia": "BALEARES",
    "altitud": 57,
-   "h20_mediana": 0,
+   "h20_mediana": 0.0,
    "h20_peor": 0,
    "h20_mejor": 9,
-   "noches": 77,
-   "noches_sin_alivio": 49,
+   "noches": 84,
+   "noches_sin_alivio": 51,
    "cruce_20_tipico": 23,
    "tira": [
     {
@@ -1525,6 +1591,41 @@
     {
      "noche": "2026-11-16",
      "tmin": 17.5,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-17",
+     "tmin": 18.1,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-18",
+     "tmin": 21.0,
+     "h": 0
+    },
+    {
+     "noche": "2026-11-19",
+     "tmin": 20.2,
+     "h": 0
+    },
+    {
+     "noche": "2026-11-20",
+     "tmin": 16.3,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-21",
+     "tmin": 16.4,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-22",
+     "tmin": 17.7,
+     "h": 9
+    },
+    {
+     "noche": "2026-11-23",
+     "tmin": 16.2,
      "h": 9
     }
    ]
